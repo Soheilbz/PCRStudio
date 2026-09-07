@@ -19,7 +19,7 @@ pcr-projects = { path = "crates/pcr-projects" }
 pcr-security = { path = "crates/pcr-security" }
 pcr-storage = { path = "crates/pcr-storage" }
 pcr-worker-client = { path = "crates/pcr-worker-client" }
-argon2 = "0.5"
+argon2 = "0.6"
 chrono = { version = "0.4", features = ["serde"] }
 hex = "0.4"
 rand = "0.10"
