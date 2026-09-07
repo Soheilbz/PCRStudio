@@ -79,7 +79,10 @@ jobs:
       - name: Rust lint
         run: cargo clippy --locked --workspace --all-targets -- -D warnings
       - name: Rust tests
-        run: cargo test --locked --workspace
+        # Database-backed integration tests create isolated schemas and pools;
+        # serialising them keeps the CI Postgres service within its connection
+        # budget while still running the complete workspace suite.
+        run: cargo test --locked --workspace -- --test-threads=1
       - name: Web typecheck
         run: pnpm --filter web typecheck
       - name: Web lint
