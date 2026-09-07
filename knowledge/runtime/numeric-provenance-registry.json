@@ -5367,7 +5367,7 @@
     "tools/tests/test_engine_authority_contract.py": "99398fa4789831903d77bcc00ca70e98c31dd32140f460d3a466478bc0c6878f",
     "crates/pcr-core/tests/engine_differential_contract.rs": "00b82165793b32a04483afa24aae6ced00ccf176c33b04d5a06bb30edfa421c8",
     "scripts/check-engine-web-contract.js": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34",
-    "scripts/generate-engine-authorities.py": "0ceda2b688ef481c052104f9b585fad4794c59a45bc7d10418bd23cad6f780aa",
+    "scripts/generate-engine-authorities.py": "1f27f23c7034881090ddaed8135c2829e5d34d9a04a6d0af47cbffa8e763a0cf",
     "scripts/generate-engine-contracts.py": "571687383b22e2a4587dba2c47a274fbf974eefdd333f3483793e6d8d1004fa5",
     "contracts/chemistry/flanking-differential-corpus.json": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
     "contracts/chemistry/flanking-protocols.toml": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",

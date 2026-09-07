@@ -136,19 +136,24 @@ def python_registry() -> str:
     all_domains = [*sorted(GENERIC_SPECS), *sorted(SPECIALIZED)]
     lines = [
         '"""Generated unified scientific-authority loader for all PCRStudio engines."""',
+        "",
         "from __future__ import annotations",
+        "",
         "import json",
         "from importlib.resources import files",
         "from typing import Any",
+        "",
         "",
         "def _load(filename: str) -> dict[str, Any]:",
         '    return json.loads(files("pcr_tools").joinpath(f"data/{filename}").read_text(encoding="utf-8"))',
         "",
     ]
+    lines.append("")
     for name in all_domains:
         filename = SPECIALIZED[name]["generated"] if name in SPECIALIZED else f"{name}-authority.generated.json"
         lines.append(f'{cname(name)}_AUTHORITY = _load("{filename}")')
     lines.extend([
+        "",
         "",
         "def record(authority: dict[str, Any], record_id: str) -> dict[str, Any]:",
         "    try:",

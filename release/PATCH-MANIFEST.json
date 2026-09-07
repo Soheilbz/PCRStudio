@@ -11,9 +11,9 @@
       "sha256": "3e5a4687ade4fcff12dc5999f65528d670fac8f4535fdcde3c902ec06572565c"
     },
     {
-      "bytes": 443,
+      "bytes": 1192,
       "path": ".github/workflows/linux-source-qualification.yml",
-      "sha256": "91feb5b123142732170bbb07985ca9b787adb6d48a661f2b4560297727dfb7e5"
+      "sha256": "c37bf74d8e4d89c172fd12b0cd8079671917d50b59c0ded7a524b27c85b81545"
     },
     {
       "bytes": 2041,
@@ -523,7 +523,7 @@
     {
       "bytes": 159756,
       "path": "knowledge/reviews/EXPERT-MODULE-AUDIT.json",
-      "sha256": "87daffa1858ba1c56c0d716a26072b7bb1707b36f4e8a03c40402eb6bb44ebf2"
+      "sha256": "4707557a922a96de1396ed8dd775ac257e8210a6ea6310369a2d21e45de12848"
     },
     {
       "bytes": 21081,
@@ -548,7 +548,7 @@
     {
       "bytes": 49732,
       "path": "knowledge/reviews/UI-UX-MODULE-AUDIT.json",
-      "sha256": "92ce91f953068b46fb171b6f68831d0d4310ed61f47e9b212fc2103fe57e8c64"
+      "sha256": "60a78c96e0372adb329a65b0979b8ed6321b4930a5870a013f7990e350e0fd2b"
     },
     {
       "bytes": 2148,
@@ -901,9 +901,9 @@
       "sha256": "17f65ea1e20361d5946725ce898fe2e709745dea1f618b9b84dad6cc0b7f233c"
     },
     {
-      "bytes": 11220,
+      "bytes": 11289,
       "path": "scripts/generate-engine-authorities.py",
-      "sha256": "0ceda2b688ef481c052104f9b585fad4794c59a45bc7d10418bd23cad6f780aa"
+      "sha256": "1f27f23c7034881090ddaed8135c2829e5d34d9a04a6d0af47cbffa8e763a0cf"
     },
     {
       "bytes": 16328,
@@ -1191,9 +1191,9 @@
       "sha256": "fc7f31015b77c223a07984b994064fe8c81baaef1d72b8a540e781c107bb6ce2"
     },
     {
-      "bytes": 1351,
+      "bytes": 1356,
       "path": "tools/src/pcr_tools/registries/authorities.py",
-      "sha256": "9074b0a0dd3e58cce97278a2b76649f168fd7081fe063b79be6e1fcbc2bbbac4"
+      "sha256": "b12cb6fa30cd8db156e2499e99b9e195087d9694666264a824f85b639516d148"
     },
     {
       "bytes": 5314,
@@ -2524,7 +2524,7 @@
     },
     {
       "after_bytes": 23822,
-      "after_sha256": "2686d318c03bb93775cd828a1e2c2a5f00265a658e92cf4de9a02caeae2d96e2",
+      "after_sha256": "529810c280034b1cc01bf123d0787369447738a77e1df2e2c7ee73821870604e",
       "before_bytes": 20481,
       "before_sha256": "6b6700eac78e1098c7ea4e7f242f1d80645ea8f0da81410048e9633eddbc284b",
       "path": "knowledge/reviews/EXPERT-UPGRADE-BACKLOG.json"
@@ -2552,7 +2552,7 @@
     },
     {
       "after_bytes": 63684,
-      "after_sha256": "2c9f7e16e07db33ceca1cbcaf28c1c382a059592b6b3a3239ccc8e8ef22ecc90",
+      "after_sha256": "b1e338121696d3b61b9a475da4d81adf2be23bf980ad0b3a9b7477e36bf4f433",
       "before_bytes": 56488,
       "before_sha256": "38e8d902db411ad80e85808dc131e5e832158b0657abf32a123f86a6ad37426b",
       "path": "knowledge/reviews/MODULE-TOOLCHAIN-MATRIX.json"
@@ -2566,7 +2566,7 @@
     },
     {
       "after_bytes": 14899,
-      "after_sha256": "cb2baccf9e9f48112ed89d0bbcaab038c03b577049a8fc5c1b2ace0444dc8377",
+      "after_sha256": "bccf71715d56403b57a586ea3b45a2d01444f690c65ec160cbd009f19d6bfdc9",
       "before_bytes": 9132,
       "before_sha256": "3018f0d195988f1a0b8a7170e02c29752850cfc705c2ca8e6dc8f0de7bfc9390",
       "path": "knowledge/reviews/SCIENTIFIC-RISK-REGISTER.json"
@@ -2678,7 +2678,7 @@
     },
     {
       "after_bytes": 200204,
-      "after_sha256": "685a9338c53bb445ae8009217a134d9779f66bc9b07a0b8dff896cea5605599a",
+      "after_sha256": "41e12da83a43fc08e022d6d3050e3da0f2688a5318f114a055730a1dadfb9182",
       "before_bytes": 187193,
       "before_sha256": "cf739c04f1764865d5a373b96a6a6b5011b96a8640083e41956f7ee74e0670bc",
       "path": "knowledge/runtime/numeric-provenance-registry.json"
