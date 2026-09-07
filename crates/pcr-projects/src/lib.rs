@@ -13,8 +13,8 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use sqlx::{PgPool, Postgres, Transaction};
 
-mod save_run_input;
 mod run_summary_query;
+mod save_run_input;
 pub use save_run_input::SaveRunForJobInput;
 
 /// How many projects one account may keep.
@@ -1478,7 +1478,9 @@ impl Projects {
     pub async fn runs(&self, user_id: &str, project_id: &str) -> Result<Vec<RunSummary>> {
         self.get(user_id, project_id).await?;
 
-        let rows = sqlx::query_as::<_, RunSummaryRow>(run_summary_query::RUNS)
+        let rows = sqlx::query_as::<_, RunSummaryRow>(
+            run_summary_query::RUNS,
+        )
         .bind(project_id)
         .fetch_all(&self.pool)
         .await
