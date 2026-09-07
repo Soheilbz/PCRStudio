@@ -1478,9 +1478,7 @@ impl Projects {
     pub async fn runs(&self, user_id: &str, project_id: &str) -> Result<Vec<RunSummary>> {
         self.get(user_id, project_id).await?;
 
-        let rows = sqlx::query_as::<_, RunSummaryRow>(
-            run_summary_query::RUNS,
-        )
+        let rows = sqlx::query_as::<_, RunSummaryRow>(run_summary_query::RUNS)
         .bind(project_id)
         .fetch_all(&self.pool)
         .await
