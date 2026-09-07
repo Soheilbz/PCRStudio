@@ -23,7 +23,7 @@ argon2 = "0.5"
 chrono = { version = "0.4", features = ["serde"] }
 hex = "0.4"
 rand = "0.10"
-sha2 = "0.10"
+sha2 = "0.11"
 sqlx = { version = "0.9", default-features = false, features = ["runtime-tokio", "postgres", "migrate", "macros", "chrono", "tls-rustls-ring-native-roots"] }
 uuid = { version = "1", features = ["v4"] }
 axum = "0.8"
