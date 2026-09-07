@@ -23,11 +23,11 @@ jobs:
       - name: Check out source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14f4a4a
+        uses: github/codeql-action/init@42213152a85ae7569bdb6bec7bcd74cd691bfe41
         with:
           languages: rust
           queries: security-extended
       - name: Build Rust workspace
         run: cargo build --locked --workspace
       - name: Analyze
-        uses: github/codeql-action/analyze@28deaeda66b76a05916b6923827895f2b14f4a4a
+        uses: github/codeql-action/analyze@42213152a85ae7569bdb6bec7bcd74cd691bfe41

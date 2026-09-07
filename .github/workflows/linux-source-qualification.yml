@@ -17,5 +17,4 @@ jobs:
       - name: Run dependency-independent source qualification
         env:
           PYTHONDONTWRITEBYTECODE: "1"
-          PATH: /opt/node/bin:${{ env.PATH }}
         run: python3 scripts/qualify-source.py --no-write
