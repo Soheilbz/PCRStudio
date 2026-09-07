@@ -106,6 +106,11 @@ async fn account_with_a_draft(router: &Router) -> String {
         })),
     )
     .await;
+    assert_eq!(
+        status,
+        StatusCode::OK,
+        "registration should succeed before the project fixture is built: {registered}"
+    );
     let token = registered["token"].as_str().expect("a token").to_owned();
 
     let (status, project) = send(
@@ -116,7 +121,11 @@ async fn account_with_a_draft(router: &Router) -> String {
         Some(json!({ "name": "TP53 exon 7", "moduleId": "standard-pcr" })),
     )
     .await;
-    assert_eq!(status, StatusCode::CREATED, "the project should be created");
+    assert_eq!(
+        status,
+        StatusCode::CREATED,
+        "the project should be created: {project}"
+    );
 
     let id = project["id"].as_str().expect("an id");
     let (status, _) = send(
