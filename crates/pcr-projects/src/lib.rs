@@ -14,6 +14,7 @@ use sha2::{Digest, Sha256};
 use sqlx::{PgPool, Postgres, Transaction};
 
 mod save_run_input;
+mod run_summary_query;
 pub use save_run_input::SaveRunForJobInput;
 
 /// How many projects one account may keep.
@@ -1477,50 +1478,7 @@ impl Projects {
     pub async fn runs(&self, user_id: &str, project_id: &str) -> Result<Vec<RunSummary>> {
         self.get(user_id, project_id).await?;
 
-        /*
-         * Results were written by engines across versions — plus, since
-         * imports existed, by whatever a document claimed. Older rows do not
-         * have the derived result metadata, so calculate a safe fallback for
-         * those rows in the same query. Every JSON array length is guarded by
-         * `jsonb_typeof`; one malformed legacy result must not take down the
-         * whole project listing.
-         */
-        let rows = sqlx::query_as::<_, RunSummaryRow>(
-            "WITH summaries AS (
-                 SELECT id, label, created_at, target_name,
-                        share_hash IS NOT NULL AS shared,
-                        CASE
-                            WHEN result_unit <> 'result' THEN result_count
-                            WHEN jsonb_typeof(result -> 'sets') = 'array' THEN jsonb_array_length(result -> 'sets')
-                            WHEN jsonb_typeof(result -> 'pairs') = 'array' THEN jsonb_array_length(result -> 'pairs')
-                            WHEN jsonb_typeof(result -> 'assays') = 'array' THEN jsonb_array_length(result -> 'assays')
-                            WHEN jsonb_typeof(result -> 'tiles') = 'array' THEN jsonb_array_length(result -> 'tiles')
-                            WHEN jsonb_typeof(result -> 'primers') = 'array' THEN jsonb_array_length(result -> 'primers')
-                            WHEN jsonb_typeof(result -> 'junctions') = 'array' THEN jsonb_array_length(result -> 'junctions')
-                            ELSE 0
-                        END AS result_count,
-                        CASE
-                            WHEN result_unit <> 'result' THEN result_unit
-                            WHEN jsonb_typeof(result -> 'sets') = 'array' THEN 'set'
-                            WHEN jsonb_typeof(result -> 'pairs') = 'array' THEN 'pair'
-                            WHEN jsonb_typeof(result -> 'assays') = 'array' THEN 'assay'
-                            WHEN jsonb_typeof(result -> 'tiles') = 'array' THEN 'tile'
-                            WHEN jsonb_typeof(result -> 'primers') = 'array' THEN 'primer'
-                            WHEN jsonb_typeof(result -> 'junctions') = 'array' THEN 'junction'
-                            ELSE 'result'
-                        END AS result_unit
-                 FROM runs
-                 WHERE project_id = $1
-             )
-             SELECT id, label, created_at,
-                    CASE WHEN result_unit = 'pair' THEN result_count ELSE 0 END AS pair_count,
-                    result_count,
-                    result_unit,
-                    target_name,
-                    shared
-             FROM summaries
-             ORDER BY created_at DESC",
-        )
+        let rows = sqlx::query_as::<_, RunSummaryRow>(run_summary_query::RUNS)
         .bind(project_id)
         .fetch_all(&self.pool)
         .await
