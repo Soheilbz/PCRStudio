@@ -1478,23 +1478,47 @@ impl Projects {
         self.get(user_id, project_id).await?;
 
         /*
-         * The summary is computed in the database, and the results there were
-         * written by engines across versions — plus, since imports existed, by
-         * whatever a document claimed. A result whose `pairs` is not an array
-         * would make `jsonb_array_length` refuse the whole query, so one bad
-         * row would turn every listing of the project into an error. Each
-         * extraction therefore asks what it is holding before using it, and
-         * answers "none" rather than refusing.
+         * Results were written by engines across versions — plus, since
+         * imports existed, by whatever a document claimed. Older rows do not
+         * have the derived result metadata, so calculate a safe fallback for
+         * those rows in the same query. Every JSON array length is guarded by
+         * `jsonb_typeof`; one malformed legacy result must not take down the
+         * whole project listing.
          */
         let rows = sqlx::query_as::<_, RunSummaryRow>(
-            "SELECT id, label, created_at,
+            "WITH summaries AS (
+                 SELECT id, label, created_at, target_name,
+                        share_hash IS NOT NULL AS shared,
+                        CASE
+                            WHEN result_unit <> 'result' THEN result_count
+                            WHEN jsonb_typeof(result -> 'sets') = 'array' THEN jsonb_array_length(result -> 'sets')
+                            WHEN jsonb_typeof(result -> 'pairs') = 'array' THEN jsonb_array_length(result -> 'pairs')
+                            WHEN jsonb_typeof(result -> 'assays') = 'array' THEN jsonb_array_length(result -> 'assays')
+                            WHEN jsonb_typeof(result -> 'tiles') = 'array' THEN jsonb_array_length(result -> 'tiles')
+                            WHEN jsonb_typeof(result -> 'primers') = 'array' THEN jsonb_array_length(result -> 'primers')
+                            WHEN jsonb_typeof(result -> 'junctions') = 'array' THEN jsonb_array_length(result -> 'junctions')
+                            ELSE 0
+                        END AS result_count,
+                        CASE
+                            WHEN result_unit <> 'result' THEN result_unit
+                            WHEN jsonb_typeof(result -> 'sets') = 'array' THEN 'set'
+                            WHEN jsonb_typeof(result -> 'pairs') = 'array' THEN 'pair'
+                            WHEN jsonb_typeof(result -> 'assays') = 'array' THEN 'assay'
+                            WHEN jsonb_typeof(result -> 'tiles') = 'array' THEN 'tile'
+                            WHEN jsonb_typeof(result -> 'primers') = 'array' THEN 'primer'
+                            WHEN jsonb_typeof(result -> 'junctions') = 'array' THEN 'junction'
+                            ELSE 'result'
+                        END AS result_unit
+                 FROM runs
+                 WHERE project_id = $1
+             )
+             SELECT id, label, created_at,
                     CASE WHEN result_unit = 'pair' THEN result_count ELSE 0 END AS pair_count,
                     result_count,
                     result_unit,
                     target_name,
-                    share_hash IS NOT NULL AS shared
-             FROM runs
-             WHERE project_id = $1
+                    shared
+             FROM summaries
              ORDER BY created_at DESC",
         )
         .bind(project_id)
