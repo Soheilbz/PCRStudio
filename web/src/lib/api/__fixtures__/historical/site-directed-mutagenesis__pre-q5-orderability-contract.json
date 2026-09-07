@@ -1,0 +1,185 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 1,
+      "gc_max": 65.0,
+      "gc_min": 40.0,
+      "length_max": 35,
+      "length_min": 22,
+      "length_opt": 28,
+      "max_end_gc": 3,
+      "max_poly_x": 4,
+      "tm_max": 72.0,
+      "tm_min": 60.0,
+      "tm_opt": 65.0
+    },
+    "id": "site-directed-mutagenesis",
+    "name": "Site-directed Mutagenesis",
+    "overruled": [],
+    "purposes": ["general", "cloning"]
+  },
+  "constraints": {
+    "gc_clamp": 1,
+    "gc_max": 65.0,
+    "gc_min": 40.0,
+    "length_max": 35,
+    "length_min": 22,
+    "length_opt": 28,
+    "max_end_gc": 3,
+    "max_poly_x": 4,
+    "min_three_prime_distance": 5,
+    "product_max": 1000,
+    "product_min": 200,
+    "tm_max": 72.0,
+    "tm_min": 60.0,
+    "tm_opt": 65.0,
+    "tm_pair_max_difference": 3.0
+  },
+  "edit": {
+    "at": 445,
+    "becomes": "TGCAGGCATGTAAGCTTGGCG",
+    "describes": "1 base(s) at 445 replaced by T",
+    "kind": "substitute",
+    "product_length": 2686,
+    "replacing": 1,
+    "to": "T",
+    "was": "TGCAGGCATGCAAGCTTGGCG"
+  },
+  "engine": "mutagenic-pair",
+  "order_sheet": [
+    {
+      "gc_percent": 45.7,
+      "length": 35,
+      "name": "template_1F",
+      "note": "Carries the edit: 1 base(s) at 445 replaced by T.",
+      "sequence": "GTAAGCTTGGCGTAATCATGGTCATAGCTGTTTCC",
+      "tm": 71.2
+    },
+    {
+      "gc_percent": 57.1,
+      "length": 28,
+      "name": "template_1R",
+      "sequence": "ATGCCTGCAGGTCGACTCTAGAGGATCC",
+      "tm": 71.7
+    },
+    {
+      "gc_percent": 42.4,
+      "length": 33,
+      "name": "template_2F",
+      "note": "Carries the edit: 1 base(s) at 445 replaced by T.",
+      "sequence": "TAAGCTTGGCGTAATCATGGTCATAGCTGTTTC",
+      "tm": 69.6
+    },
+    {
+      "gc_percent": 57.7,
+      "length": 26,
+      "name": "template_2R",
+      "sequence": "CATGCCTGCAGGTCGACTCTAGAGGA",
+      "tm": 70.5
+    }
+  ],
+  "pairs": [
+    {
+      "cross_dimer_dg": -3.61,
+      "edit": { "at": 445, "describes": "1 base(s) at 445 replaced by T", "kind": "substitute" },
+      "forward": {
+        "at": 444,
+        "carries": "T",
+        "gc_percent": 45.7,
+        "hairpin": { "dg": 0.3, "found": true, "tm": 33.8 },
+        "length": 35,
+        "self_dimer": { "dg": -6.13, "found": true, "tm": 17.2 },
+        "sequence": "GTAAGCTTGGCGTAATCATGGTCATAGCTGTTTCC",
+        "three_prime_dg": -2.37,
+        "tm": 71.2
+      },
+      "melting": {
+        "gap": -0.5,
+        "note": "The edit is small enough that both temperatures agree to within -0.5 degrees, so the first cycles behave like the rest.",
+        "on_product": 71.2,
+        "on_template": 71.7,
+        "reverse": 71.7
+      },
+      "reverse": {
+        "at": 416,
+        "gc_percent": 57.1,
+        "hairpin": { "dg": -0.05, "found": true, "tm": 37.7 },
+        "length": 28,
+        "self_dimer": { "dg": -10.24, "found": true, "tm": 38.8 },
+        "sequence": "ATGCCTGCAGGTCGACTCTAGAGGATCC",
+        "three_prime_dg": -2.58,
+        "tm": 71.7
+      }
+    },
+    {
+      "cross_dimer_dg": -3.61,
+      "edit": { "at": 445, "describes": "1 base(s) at 445 replaced by T", "kind": "substitute" },
+      "forward": {
+        "at": 445,
+        "carries": "T",
+        "gc_percent": 42.4,
+        "hairpin": { "dg": 0.3, "found": true, "tm": 33.8 },
+        "length": 33,
+        "self_dimer": { "dg": -6.13, "found": true, "tm": 17.2 },
+        "sequence": "TAAGCTTGGCGTAATCATGGTCATAGCTGTTTC",
+        "three_prime_dg": -2.05,
+        "tm": 69.6
+      },
+      "melting": {
+        "gap": -0.9,
+        "note": "The edit is small enough that both temperatures agree to within -0.9 degrees, so the first cycles behave like the rest.",
+        "on_product": 69.6,
+        "on_template": 70.5,
+        "reverse": 70.5
+      },
+      "reverse": {
+        "at": 419,
+        "gc_percent": 57.7,
+        "hairpin": { "dg": -0.05, "found": true, "tm": 37.7 },
+        "length": 26,
+        "self_dimer": { "dg": -10.24, "found": true, "tm": 38.8 },
+        "sequence": "CATGCCTGCAGGTCGACTCTAGAGGA",
+        "three_prime_dg": -2.94,
+        "tm": 70.5
+      }
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 500.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 2.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "proofreading",
+    "polymerase_name": "Proofreading polymerase"
+  },
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 50.6,
+    "length": 2686,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2686,
+    "soft_masked": false
+  },
+  "why_nothing": ""
+}

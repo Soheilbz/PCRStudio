@@ -1,0 +1,141 @@
+{
+  "authority_id": "single-current-corpus",
+  "cases": [
+    {
+      "expects": {
+        "read_direction": "reverse"
+      },
+      "id": "generacer-5prime",
+      "request": {
+        "raceChemistry": "generacer-kit-25-0355-vl",
+        "raceDirection": "5prime",
+        "raceRound": "primary"
+      }
+    },
+    {
+      "expects": {
+        "read_direction": "forward"
+      },
+      "id": "generacer-3prime",
+      "request": {
+        "raceChemistry": "generacer-kit-25-0355-vl",
+        "raceDirection": "3prime",
+        "raceRound": "nested"
+      }
+    },
+    {
+      "expects": {
+        "length_max": 24,
+        "length_min": 18,
+        "tm_max": 60,
+        "tm_min": 56
+      },
+      "id": "azenta-profile",
+      "request": {
+        "sequencingDesignProfile": "azenta-genewiz"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "none",
+        "submission_primer_concentration": 10
+      },
+      "id": "eurofins-submission-no-ranking",
+      "request": {
+        "sequencingDesignProfile": "eurofins"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "route-or-design-reuse",
+        "requires_exact_unique_binding": true
+      },
+      "id": "universal-primer-exact-unique-legacy-shape",
+      "request": {
+        "sequencingUniversalPrimerScan": true
+      }
+    },
+    {
+      "expects": {
+        "execution_status": "executable",
+        "partner_sequence": "GCTGATGGCGATGAATGAACACTG",
+        "read_direction": "reverse"
+      },
+      "id": "firstchoice-5prime-primary",
+      "request": {
+        "raceChemistry": "firstchoice-rlm-race",
+        "raceDirection": "5prime",
+        "raceRound": "primary"
+      }
+    },
+    {
+      "expects": {
+        "execution_status": "executable",
+        "partner_sequence": "CGCGGATCCGAATTAATACGACTCACTATAGG",
+        "read_direction": "forward"
+      },
+      "id": "firstchoice-3prime-nested",
+      "request": {
+        "raceChemistry": "firstchoice-rlm-race",
+        "raceDirection": "3prime",
+        "raceRound": "nested"
+      }
+    },
+    {
+      "expects": {
+        "execution_status": "executable-if-complete",
+        "polyA_required_for_3prime": true
+      },
+      "id": "smarter-race-complete-context",
+      "request": {
+        "raceChemistry": "smarter-race-current",
+        "raceDirection": "3prime",
+        "racePartnerSequence": "explicit-partner",
+        "racePolyadenylated": true,
+        "raceRound": "primary",
+        "raceSopRevision": "SMARTer-current-test-SOP-rev1",
+        "raceSopSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "design-planning",
+        "overlap_less_than_usable_read": true
+      },
+      "id": "primer-walking",
+      "request": {
+        "sequencingPrimerWalking": true,
+        "sequencingWalkingOverlap": 80
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "evidence-only",
+        "trace_status": "reviewed-abif"
+      },
+      "id": "ab1-trace-review",
+      "request": {
+        "sequencingTraceAb1Base64": "bounded-abif-evidence"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "route-or-design-reuse",
+        "requires_exact_unique_binding": true
+      },
+      "id": "universal-primer-exact-unique",
+      "request": {
+        "sequencingUniversalPrimerScan": true
+      }
+    }
+  ],
+  "engine": "single-primer",
+  "metamorphic": [
+    "5prime-and-3prime-race-mirror-direction",
+    "sequencing-provider-submission-values-do-not-change-ranking",
+    "historical-race-adapter-migration-preserves-partner-sequence",
+    "trace-evidence-never-reorders-design-candidates",
+    "smarter-3prime-without-polya-confirmation-fails-closed"
+  ],
+  "schema_version": "1.0.0"
+}

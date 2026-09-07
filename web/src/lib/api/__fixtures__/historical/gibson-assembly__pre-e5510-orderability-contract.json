@@ -1,0 +1,277 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 1,
+      "gc_max": 60.0,
+      "gc_min": 40.0,
+      "length_max": 25,
+      "length_min": 18,
+      "length_opt": 20,
+      "max_end_gc": 3,
+      "max_poly_x": 4,
+      "product_max": 10000,
+      "product_min": 200,
+      "tm_max": 65.0,
+      "tm_min": 58.0,
+      "tm_opt": 60.0,
+      "tm_pair_max_difference": 3.0
+    },
+    "id": "gibson-assembly",
+    "name": "Gibson Assembly",
+    "overruled": [],
+    "purposes": ["general", "cloning"]
+  },
+  "clashes": [],
+  "considered": {
+    "insert": "considered 6, unacceptable product size 2, primer in pair overlaps a primer in a better pair 21, ok 4",
+    "vector": "considered 12, unacceptable product size 7, primer in pair overlaps a primer in a better pair 24, ok 5"
+  },
+  "constraints": {
+    "gc_clamp": 1,
+    "gc_max": 60.0,
+    "gc_min": 40.0,
+    "length_max": 25,
+    "length_min": 18,
+    "length_opt": 20,
+    "max_end_gc": 3,
+    "max_poly_x": 4,
+    "min_three_prime_distance": 5,
+    "product_max": 10000,
+    "product_min": 200,
+    "tm_max": 65.0,
+    "tm_min": 58.0,
+    "tm_opt": 60.0,
+    "tm_pair_max_difference": 3.0
+  },
+  "construct": {
+    "circular": true,
+    "length": 2618,
+    "note": "2,618 bases in 3 fragments, closed into a circle. Every overlap below is a stretch of this finished sequence rather than of any one fragment, which is why they are checked against each other as a set.",
+    "segments": [
+      { "kind": "amplified", "length": 1800, "name": "vector", "tailable": true },
+      { "kind": "literal", "length": 18, "name": "his-tag", "tailable": false },
+      { "kind": "amplified", "length": 800, "name": "insert", "tailable": true }
+    ]
+  },
+  "engine": "junction-primers",
+  "junctions": [
+    {
+      "alternates": 66,
+      "at": 1800,
+      "between": ["vector", "insert"],
+      "carries": ["his-tag"],
+      "from_downstream": 1,
+      "from_upstream": 1,
+      "hairpin_tm": null,
+      "index": 0,
+      "interposed": 18,
+      "length": 20,
+      "note": "20 bases spanning the join, 1 of them from vector and 1 from insert, with 18 bases in between that are on neither — so both primers write them in, which is why the two tails share sequence here rather than dividing it. Melts at 60.0 °C by the 2/4 rule, which is the unit NEBuilder HiFi states its 48.0 °C floor in. This is the shortest overlap that cleared the gate — a longer one buys nothing and lengthens both oligos that carry it.",
+      "sequence": "ACATCACCATCACCATCACC",
+      "wallace_tm": 60.0
+    },
+    {
+      "alternates": 297,
+      "at": 2618,
+      "between": ["insert", "vector"],
+      "carries": [],
+      "from_downstream": 8,
+      "from_upstream": 7,
+      "hairpin_tm": null,
+      "index": 1,
+      "interposed": 0,
+      "length": 15,
+      "note": "15 bases spanning the join, 7 of them from insert and 8 from vector. Melts at 48.0 °C by the 2/4 rule, which is the unit NEBuilder HiFi states its 48.0 °C floor in. This is the shortest overlap that cleared the gate — a longer one buys nothing and lengthens both oligos that carry it.",
+      "sequence": "AGAGGAATCGCGCGT",
+      "wallace_tm": 48.0
+    }
+  ],
+  "method": {
+    "assembly_temperature": 50.0,
+    "id": "nebuilder",
+    "name": "NEBuilder HiFi",
+    "note": "15–30 bases melting at 48 °C or above. The master mix's exonuclease dose and its fifteen-minute reaction were optimised around 15–20, so a longer overlap is not a safer one.",
+    "overlap_max": 30,
+    "overlap_min": 15,
+    "overlap_tm_min": 48.0
+  },
+  "order_sheet": [
+    {
+      "gc_percent": 44.4,
+      "length": 27,
+      "name": "vector_F",
+      "note": "The temperature here is the annealing portion's, not the whole oligo's — 7 of its 27 bases are the join and are not on the template in the first cycle.",
+      "sequence": "AGAGGAAAAAACCTCTGACACATGCAG",
+      "tm": 60.0,
+      "tube": "vector"
+    },
+    {
+      "gc_percent": 51.3,
+      "length": 39,
+      "name": "vector_R",
+      "note": "The temperature here is the annealing portion's, not the whole oligo's — 19 of its 39 bases are the join and are not on the template in the first cycle.",
+      "sequence": "GGTGATGGTGATGGTGATGCCTGATGCGGTATTTTCTCC",
+      "tm": 60.0,
+      "tube": "vector"
+    },
+    {
+      "gc_percent": 48.7,
+      "length": 39,
+      "name": "insert_F",
+      "note": "The temperature here is the annealing portion's, not the whole oligo's — 19 of its 39 bases are the join and are not on the template in the first cycle.",
+      "sequence": "ACATCACCATCACCATCACCATCTACAAGCAGTCACAGC",
+      "tm": 60.2,
+      "tube": "insert"
+    },
+    {
+      "gc_percent": 57.1,
+      "length": 28,
+      "name": "insert_R",
+      "note": "The temperature here is the annealing portion's, not the whole oligo's — 8 of its 28 bases are the join and are not on the template in the first cycle.",
+      "sequence": "ACGCGCGATGTAGTGGATGGTGGTACAG",
+      "tm": 60.1,
+      "tube": "insert"
+    }
+  ],
+  "primers": [
+    {
+      "anneals": {
+        "gc_percent": 45.0,
+        "length": 20,
+        "note": "Set the block by this: 60.0 °C. It is the only part of the oligo that is on the template in the first cycle.",
+        "sequence": "AAAACCTCTGACACATGCAG",
+        "tm": 60.0
+      },
+      "direction": "forward",
+      "fragment": "vector",
+      "length": 27,
+      "name": "vector_F",
+      "sequence": "AGAGGAAAAAACCTCTGACACATGCAG",
+      "tail": {
+        "length": 7,
+        "note": "Not on this fragment's template at all — it is the join to the neighbouring fragment, and it is judged at 50.0 °C in the assembly rather than in the PCR.",
+        "sequence": "AGAGGAA",
+        "wallace_tm": 20.0
+      },
+      "whole_oligo": {
+        "hairpin_tm": 57.1,
+        "note": "The whole oligo melts at 66.7 °C, which is not a number to set anything to — it describes the molecule after the tail has been copied into the product, not the first cycles. It is here because it is what gets synthesised, and because its own folding matters.",
+        "tm": 66.7
+      }
+    },
+    {
+      "anneals": {
+        "gc_percent": 50.0,
+        "length": 20,
+        "note": "Set the block by this: 60.0 °C. It is the only part of the oligo that is on the template in the first cycle.",
+        "sequence": "CCTGATGCGGTATTTTCTCC",
+        "tm": 60.0
+      },
+      "direction": "reverse",
+      "fragment": "vector",
+      "length": 39,
+      "name": "vector_R",
+      "sequence": "GGTGATGGTGATGGTGATGCCTGATGCGGTATTTTCTCC",
+      "tail": {
+        "length": 19,
+        "note": "Not on this fragment's template at all — it is the join to the neighbouring fragment, and it is judged at 50.0 °C in the assembly rather than in the PCR.",
+        "sequence": "GGTGATGGTGATGGTGATG",
+        "wallace_tm": 58.0
+      },
+      "whole_oligo": {
+        "hairpin_tm": 45.8,
+        "note": "The whole oligo melts at 75.5 °C, which is not a number to set anything to — it describes the molecule after the tail has been copied into the product, not the first cycles. It is here because it is what gets synthesised, and because its own folding matters.",
+        "tm": 75.5
+      }
+    },
+    {
+      "anneals": {
+        "gc_percent": 50.0,
+        "length": 20,
+        "note": "Set the block by this: 60.2 °C. It is the only part of the oligo that is on the template in the first cycle.",
+        "sequence": "CATCTACAAGCAGTCACAGC",
+        "tm": 60.2
+      },
+      "direction": "forward",
+      "fragment": "insert",
+      "length": 39,
+      "name": "insert_F",
+      "sequence": "ACATCACCATCACCATCACCATCTACAAGCAGTCACAGC",
+      "tail": {
+        "length": 19,
+        "note": "Not on this fragment's template at all — it is the join to the neighbouring fragment, and it is judged at 50.0 °C in the assembly rather than in the PCR.",
+        "sequence": "ACATCACCATCACCATCAC",
+        "wallace_tm": 56.0
+      },
+      "whole_oligo": {
+        "hairpin_tm": null,
+        "note": "The whole oligo melts at 75.0 °C, which is not a number to set anything to — it describes the molecule after the tail has been copied into the product, not the first cycles. It is here because it is what gets synthesised, and because its own folding matters.",
+        "tm": 75.0
+      }
+    },
+    {
+      "anneals": {
+        "gc_percent": 50.0,
+        "length": 20,
+        "note": "Set the block by this: 60.1 °C. It is the only part of the oligo that is on the template in the first cycle.",
+        "sequence": "TGTAGTGGATGGTGGTACAG",
+        "tm": 60.1
+      },
+      "direction": "reverse",
+      "fragment": "insert",
+      "length": 28,
+      "name": "insert_R",
+      "sequence": "ACGCGCGATGTAGTGGATGGTGGTACAG",
+      "tail": {
+        "length": 8,
+        "note": "Not on this fragment's template at all — it is the join to the neighbouring fragment, and it is judged at 50.0 °C in the assembly rather than in the PCR.",
+        "sequence": "ACGCGCGA",
+        "wallace_tm": 28.0
+      },
+      "whole_oligo": {
+        "hairpin_tm": 42.2,
+        "note": "The whole oligo melts at 72.9 °C, which is not a number to set anything to — it describes the molecule after the tail has been copied into the product, not the first cycles. It is here because it is what gets synthesised, and because its own folding matters.",
+        "tm": 72.9
+      }
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 500.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 2.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "proofreading",
+    "polymerase_name": "Proofreading polymerase"
+  },
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 54.2,
+    "length": 2618,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2618,
+    "soft_masked": false
+  },
+  "tubes": { "insert": ["insert_F", "insert_R"], "vector": ["vector_F", "vector_R"] },
+  "why_nothing": ""
+}

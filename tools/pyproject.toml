@@ -1,0 +1,61 @@
+[project]
+name = "pcrstudio-tools"
+version = "17.0.0"
+description = "The Python worker PCRStudio's Rust core calls for primer design and oligo thermodynamics."
+requires-python = ">=3.11"
+license = { text = "GPL-2.0-or-later" }
+dependencies = [
+    # GPLv2. Imported here and nowhere else, which is what keeps the rest of
+    # PCRStudio under its own licence -- see README.md.
+    "primer3-py==2.3.0",
+]
+
+# PrimalScheme3 and pydna are deliberately provisioned as separately audited
+# scientific tools by scripts/provision-tools.py. Keeping them out of this
+# worker lock prevents a stale optional/CLI dependency graph from invalidating
+# `uv sync --frozen`, while the provisioner still pins their top-level versions
+# and records the installed environment fingerprint for every run.
+
+[project.optional-dependencies]
+# ViennaRNA, for template accessibility. Optional because a design without a
+# folding check is still a design, and because its terms differ from this
+# package's -- it is used through a separate process for that reason.
+folding = ["viennarna==2.7.2"]
+dev = ["pytest>=8", "pytest-xdist>=3.6", "viennarna==2.7.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+# Two packages, deliberately. `pcr_accessibility` imports ViennaRNA and never
+# Primer3; `pcr_tools` imports Primer3 and never ViennaRNA. See LICENSE.
+packages = ["src/pcr_tools", "src/pcr_accessibility"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Keep pytest's writable cache in the repository-local runtime area. This also
+# avoids relying on a machine-level TEMP directory with restrictive ACLs.
+cache_dir = "../.local/tmp/pytest-cache"
+# So `from corpus import record` works: the evaluation suite reads its real
+# sequences from tests/corpus, and importing it by path rather than by package
+# is what keeps the fixtures beside the tests that explain them.
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["tests/goldens", "tests/corpus"]
+
+[tool.ruff.lint]
+# Start from the standard set plus the correctness rules that matter for
+# numeric/scientific code; noise rules are pruned here rather than by
+# sprinkling `noqa` through modules that never asked for it.
+select = ["E", "F", "W", "I", "B", "UP", "RUF"]
+ignore = [
+    "E501",  # line length is enforced by ruff format instead
+    "B008",  # function calls in defaults are used deliberately for presets
+    "RUF001", "RUF002", "RUF003",  # scientific prose uses proper minus signs
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pcr_tools", "pcr_accessibility"]

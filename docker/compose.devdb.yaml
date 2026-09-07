@@ -1,0 +1,47 @@
+# Local development database for machines where port 5432 is taken (which is
+# the case this `.env` documents: PCR_DATABASE_URL points at 55432). The
+# launcher may override PCR_DATABASE_PORT when that preference is occupied.
+#
+# Self-contained on purpose — it is run directly rather than merged over
+# compose.yaml, so the production template's `POSTGRES_PASSWORD:?` guard never
+# gets in the way of a dev command:
+#
+#   docker compose -f docker/compose.devdb.yaml up -d --wait
+#   docker compose -f docker/compose.devdb.yaml down          # keeps volume
+#   docker volume rm pcrstudio-devdb_data                     # also deletes data
+#
+# Same discipline as every other service here: loopback-only publishing, a
+# named volume so the data survives container recreation and is attributable
+# (`docker volume ls` shows exactly who owns it), capped memory, rotated logs.
+
+name: pcrstudio-devdb
+
+services:
+  db:
+    image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
+    environment:
+      POSTGRES_USER: pcr
+      POSTGRES_PASSWORD: pcr
+      POSTGRES_DB: pcrstudio
+    command: ["postgres", "-c", "max_connections=${POSTGRES_MAX_CONNECTIONS:-100}"]
+    volumes:
+      # Postgres 18+ images want the mount at /var/lib/postgresql; they place
+      # the cluster in a major-version subdirectory beneath it themselves.
+      - db_data:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:${PCR_DATABASE_PORT:-55432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pcr -d pcrstudio"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    mem_limit: 1g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  db_data:

@@ -1,0 +1,108 @@
+{
+  "authority_id": "pcrstudio-nested-authority",
+  "catalogue_snapshot": "2026-09",
+  "groups": {
+    "carryover_strategies": [
+      "not-selected",
+      "dutp-ung-strategy-only",
+      "named-protocol"
+    ],
+    "cleanup_protocols": [
+      "not-selected",
+      "neb-msz-exonuclease-i",
+      "neb-thermolabile-exonuclease-i"
+    ],
+    "topologies": [
+      "fully-nested-two-tube",
+      "semi-nested-forward-two-tube",
+      "semi-nested-reverse-two-tube",
+      "one-tube-reference-only"
+    ],
+    "transfer_modes": [
+      "direct-transfer",
+      "diluted-transfer",
+      "msz-exonuclease-i",
+      "thermolabile-exonuclease-i",
+      "purified-product",
+      "custom-sop"
+    ]
+  },
+  "policies": {
+    "causal_specificity": "An outer-round off-target that contains compatible inner sites is a higher-priority nested false-product risk than a simple independent four-primer scan.",
+    "contamination": "Physical separation, round-specific NTCs and transfer provenance are evidence requirements, not properties inferable from primer geometry.",
+    "round_independence": "Round 1 and Round 2 are separate reactions and may carry independent polymerase, chemistry and thermal-program identities."
+  },
+  "records": {
+    "dutp-ung-strategy-only": {
+      "execution_status": "strategy-only",
+      "kind": "carryover-strategy",
+      "lifecycle": {
+        "status": "current-boundary"
+      },
+      "selection": "dUTP/UNG carry-over prevention",
+      "sequence_decision_impact": "none",
+      "source_identity": "PCRStudio contamination-control boundary",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.cdc.gov/mmwr/preview/mmwrhtml/rr5806a1.htm",
+      "unresolved": [
+        "polymerase compatibility",
+        "dUTP substitution",
+        "UNG identity and amount",
+        "incubation",
+        "inactivation"
+      ]
+    },
+    "neb-msz-exonuclease-i": {
+      "enzyme_uL": 1,
+      "execution_status": "executable-protocol",
+      "first_round_product_uL_max": 20,
+      "inactivation_c": 80,
+      "inactivation_min": 1,
+      "incubation_c": 55,
+      "incubation_min": 15,
+      "kind": "cleanup-protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEB Msz Exonuclease I nested-PCR primer removal",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Msz Exonuclease I nested PCR FAQ",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en-us/faqs/2022/09/01/can-msz-exonuclease-i-remove-primers-in-nested-pcr-reactions"
+    },
+    "neb-thermolabile-exonuclease-i": {
+      "enzyme_uL": 1,
+      "execution_status": "executable-protocol",
+      "first_round_product_uL_max": 20,
+      "inactivation_c": 80,
+      "inactivation_min": 1,
+      "incubation_c": 37,
+      "incubation_min": 10,
+      "kind": "cleanup-protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEB Thermolabile Exonuclease I nested-PCR primer removal",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Thermolabile Exonuclease I nested PCR FAQ",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/faqs/can-thermolabile-exonuclease-i-remove-primers-in-nested-pcr-reactions"
+    },
+    "one-tube-reference-only": {
+      "claim_boundary": "Assay-specific research topology; does not activate a generic one-tube mode.",
+      "execution_status": "reference-only",
+      "kind": "topology",
+      "lifecycle": {
+        "status": "watchlist"
+      },
+      "selection": "One-tube nested PCR research precedent",
+      "sequence_decision_impact": "none",
+      "source_identity": "One-tube nested PCR + CRISPR-Cas12a study",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pubs.acs.org/doi/10.1021/acsomega.4c05624"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "source_policy": "Only public primary/vendor/official sources are executable authorities. Literature/tool precedents may guide diagnostics or characterization but do not become universal biological rules without a versioned protocol/evidence contract."
+}

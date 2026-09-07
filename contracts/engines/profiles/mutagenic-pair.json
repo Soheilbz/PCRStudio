@@ -1,0 +1,137 @@
+{
+  "authority_domains": [
+    {
+      "id": "mutagenesis",
+      "source": "contracts/chemistry/mutagenesis-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/mutagenesis-differential-corpus.json"
+  ],
+  "engine_id": "mutagenic-pair",
+  "feature_capabilities": {
+    "NNK-library": {
+      "status": "diagnostic-only"
+    },
+    "NNS-library": {
+      "status": "diagnostic-only"
+    },
+    "amino-acid-edit": {
+      "status": "executable"
+    },
+    "clone-verification": {
+      "status": "evidence-only"
+    },
+    "custom-codon-library": {
+      "status": "diagnostic-only"
+    },
+    "library-abundance-prediction": {
+      "reason": "theoretical codon space is not synthesis/clone abundance",
+      "status": "fail-closed"
+    },
+    "multi-edit-normalization": {
+      "status": "executable"
+    },
+    "nebuilder-multisite": {
+      "authority": "neb-nebuilder-multisite",
+      "route": "junction-primers",
+      "status": "route-only"
+    },
+    "q5-back-to-back": {
+      "authority": "neb-q5-e0554",
+      "status": "executable"
+    },
+    "q5-insertion-over-100nt": {
+      "route": "junction-primers",
+      "status": "route-only"
+    },
+    "q5-small-insertion-0-6nt": {
+      "authority": "neb-q5-e0554",
+      "status": "executable"
+    },
+    "q5-split-insertion-7-100nt": {
+      "authority": "neb-q5-e0554",
+      "status": "executable"
+    },
+    "quikchange-lightning-multi": {
+      "authority": "agilent-quikchange-lightning-multi-210513-210516",
+      "status": "executable"
+    },
+    "quikchange-lightning-single": {
+      "authority": "agilent-quikchange-lightning-210518",
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "design",
+        "python": "mutagenesis_topology",
+        "rust": "mutagenesis_topology",
+        "web": "mutagenesisTopology"
+      },
+      {
+        "owner": "reaction",
+        "python": "post_amplification_protocol",
+        "rust": "post_amplification_protocol",
+        "web": "postAmplificationProtocol"
+      },
+      {
+        "owner": "design",
+        "python": "edit",
+        "rust": "edit",
+        "web": "edit"
+      },
+      {
+        "owner": "design",
+        "python": "edits",
+        "rust": "edits",
+        "web": "edits"
+      },
+      {
+        "owner": "design",
+        "python": "amino_acid_edit",
+        "rust": "amino_acid_edit",
+        "web": "aminoAcidEdit"
+      },
+      {
+        "owner": "design",
+        "python": "codon_policy",
+        "rust": "codon_policy",
+        "web": "codonPolicy"
+      },
+      {
+        "owner": "design",
+        "python": "codon_usage",
+        "rust": "codon_usage",
+        "web": "codonUsage"
+      },
+      {
+        "owner": "design",
+        "python": "library_mode",
+        "rust": "library_mode",
+        "web": "libraryMode"
+      },
+      {
+        "owner": "design",
+        "python": "library_edit",
+        "rust": "library_edit",
+        "web": "libraryEdit"
+      },
+      {
+        "owner": "reaction",
+        "python": "template_methylation_status",
+        "rust": "template_methylation_status",
+        "web": "templateMethylationStatus"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "authority_domains": [
+    {
+      "id": "consensus",
+      "source": "contracts/chemistry/consensus-profiles.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/consensus-differential-corpus.json"
+  ],
+  "engine_id": "consensus-pair",
+  "feature_capabilities": {
+    "amplicon-informativeness": {
+      "status": "diagnostic-only"
+    },
+    "coverage-threshold-consensus": {
+      "status": "executable"
+    },
+    "defined-oligo-pool": {
+      "status": "executable"
+    },
+    "discrete-subprimer-mixture": {
+      "status": "executable"
+    },
+    "exact-degenerate-member-enumeration": {
+      "limit": 4096,
+      "status": "executable"
+    },
+    "finite-target-vs-nontarget": {
+      "claim_boundary": "supplied finite panels only",
+      "status": "executable"
+    },
+    "mafft-primary": {
+      "authority": "mafft-7.526",
+      "status": "executable-if-installed"
+    },
+    "majority-consensus": {
+      "status": "executable"
+    },
+    "mixed-base-formulation": {
+      "status": "executable"
+    },
+    "muscle-alignment-sensitivity": {
+      "authority": "muscle-5.3-audit",
+      "status": "diagnostic-only"
+    },
+    "population-universality": {
+      "reason": "requires an explicit population sampling frame/evidence",
+      "status": "fail-closed"
+    },
+    "prealigned-reviewed": {
+      "authority": "prealigned-reviewed",
+      "status": "executable"
+    },
+    "split-pool-alternative": {
+      "status": "diagnostic-only"
+    },
+    "stratified-consensus": {
+      "status": "executable"
+    },
+    "strict-consensus": {
+      "status": "executable"
+    },
+    "user-defined-formulation": {
+      "status": "executable"
+    },
+    "weighted-consensus": {
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "design",
+        "python": "consensus_policy",
+        "rust": "consensus_policy",
+        "web": "consensusPolicy"
+      },
+      {
+        "owner": "target",
+        "python": "panel_metadata",
+        "rust": "panel_metadata",
+        "web": "panelMetadata"
+      },
+      {
+        "owner": "reaction",
+        "python": "formulation_mode",
+        "rust": "formulation_mode",
+        "web": "formulationMode"
+      },
+      {
+        "owner": "reaction",
+        "python": "formulation_total_concentration_nm",
+        "rust": "formulation_total_concentration_nm",
+        "web": "formulationTotalConcentrationNm"
+      },
+      {
+        "owner": "validation",
+        "python": "nontarget",
+        "rust": "nontarget",
+        "web": "nontarget"
+      },
+      {
+        "owner": "validation",
+        "python": "alternative_alignment",
+        "rust": "alternative_alignment",
+        "web": "alternativeAlignment"
+      },
+      {
+        "owner": "validation",
+        "python": "alignment_audit_backend",
+        "rust": "alignment_audit_backend",
+        "web": "alignmentAuditBackend"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

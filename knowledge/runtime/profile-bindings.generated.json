@@ -1,0 +1,692 @@
+{
+  "profiles": {
+    "arms-pcr": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 75.0,
+          "gc_min": 30.0,
+          "length_max": 30,
+          "length_min": 17,
+          "length_opt": 22,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "product_max": 500,
+          "product_min": 120,
+          "tm_max": 68.0,
+          "tm_min": 55.0,
+          "tm_opt": 61.0,
+          "tm_pair_max_difference": 5.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "discriminating-pair",
+      "enzyme": [
+        "no-proofreading"
+      ],
+      "goal": "genotype",
+      "modifiers": [
+        "variant-masking"
+      ],
+      "name": "ARMS-PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "colony-pcr": {
+      "defaults": {
+        "defaultPurpose": "screen",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "screen",
+          "sanger"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "amplify",
+      "modifiers": [
+        "multiplex"
+      ],
+      "name": "Colony PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "digital-pcr": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 60.0,
+          "gc_min": 40.0,
+          "length_max": 24,
+          "length_min": 18,
+          "length_opt": 20,
+          "max_end_gc": 3,
+          "max_poly_x": 3,
+          "product_max": 150,
+          "product_min": 60,
+          "tm_max": 65.0,
+          "tm_min": 59.0,
+          "tm_opt": 60.0,
+          "tm_pair_max_difference": 2.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "digital-pcr",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "quantify",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "Digital PCR — EvaGreen / Dye",
+      "requires": [],
+      "status": "experimental"
+    },
+    "gibson-assembly": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 60.0,
+          "gc_min": 40.0,
+          "length_max": 25,
+          "length_min": 18,
+          "length_opt": 20,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "product_max": 10000,
+          "product_min": 51,
+          "tm_max": 65.0,
+          "tm_min": 58.0,
+          "tm_opt": 60.0,
+          "tm_pair_max_difference": 3.0
+        },
+        "defaultPurpose": "cloning",
+        "polymerase": "proofreading",
+        "purposes": [
+          "general",
+          "cloning"
+        ]
+      },
+      "engine": "junction-primers",
+      "enzyme": [],
+      "goal": "assemble",
+      "modifiers": [],
+      "name": "Gibson Assembly",
+      "requires": [],
+      "status": "experimental"
+    },
+    "inverse-pcr": {
+      "defaults": {
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "sanger"
+        ]
+      },
+      "engine": "outward-pair",
+      "enzyme": [],
+      "goal": "amplify",
+      "modifiers": [
+        "tails"
+      ],
+      "name": "Inverse PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "kasp": {
+      "defaults": {
+        "chemistryFamily": "kasp-endpoint-fret",
+        "constraintPolicy": {
+          "product_max": "bounded"
+        },
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 75.0,
+          "gc_min": 30.0,
+          "length_max": 30,
+          "length_min": 17,
+          "length_opt": 22,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "product_max": 100,
+          "product_min": 1,
+          "tm_max": 68.0,
+          "tm_min": 55.0,
+          "tm_opt": 61.0,
+          "tm_pair_max_difference": 5.0
+        },
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "discriminating-pair",
+      "enzyme": [
+        "no-proofreading"
+      ],
+      "goal": "genotype",
+      "modifiers": [
+        "tails",
+        "variant-masking"
+      ],
+      "name": "KASP",
+      "requires": [],
+      "status": "experimental"
+    },
+    "lamp": {
+      "defaults": {
+        "polymerase": "bst",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "loop-set",
+      "enzyme": [
+        "strand-displacing"
+      ],
+      "goal": "detect",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "LAMP",
+      "requires": [],
+      "status": "experimental"
+    },
+    "long-range-pcr": {
+      "defaults": {
+        "constraintPolicy": {
+          "length_max": "bounded",
+          "length_min": "bounded",
+          "max_end_gc": "bounded",
+          "product_max": "bounded",
+          "product_min": "bounded",
+          "tm_pair_max_difference": "bounded"
+        },
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 60.0,
+          "gc_min": 40.0,
+          "length_max": 36,
+          "length_min": 20,
+          "length_opt": 30,
+          "max_end_gc": 5,
+          "product_max": 20000,
+          "product_min": 5000,
+          "tm_max": 74.0,
+          "tm_min": 55.0,
+          "tm_opt": 65.0,
+          "tm_pair_max_difference": 5.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "long-range",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [
+        "proofreading"
+      ],
+      "goal": "amplify",
+      "modifiers": [
+        "variant-masking"
+      ],
+      "name": "Long-range PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "nested-pcr": {
+      "defaults": {
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "screen",
+          "sanger"
+        ]
+      },
+      "engine": "nested",
+      "enzyme": [],
+      "goal": "amplify",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "Nested PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "qpcr-probe": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 65.0,
+          "gc_min": 30.0,
+          "length_max": 27,
+          "length_min": 18,
+          "length_opt": 20,
+          "max_end_gc": 4,
+          "max_poly_x": 4,
+          "product_max": 200,
+          "product_min": 70,
+          "tm_max": 65.0,
+          "tm_min": 59.0,
+          "tm_opt": 60.0,
+          "tm_pair_max_difference": 3.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "qpcr-dye",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "pair-and-probe",
+      "enzyme": [
+        "five-prime-exonuclease"
+      ],
+      "goal": "quantify",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "qPCR — Hydrolysis Probe",
+      "requires": [],
+      "status": "experimental"
+    },
+    "qpcr-sybr": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 60.0,
+          "gc_min": 40.0,
+          "length_max": 24,
+          "length_min": 18,
+          "length_opt": 20,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "product_max": 200,
+          "product_min": 80,
+          "tm_max": 65.0,
+          "tm_min": 59.0,
+          "tm_opt": 60.0,
+          "tm_pair_max_difference": 3.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "qpcr-dye",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "quantify",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "qPCR — Intercalating Dye",
+      "requires": [],
+      "status": "experimental"
+    },
+    "race": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 65.0,
+          "gc_min": 45.0,
+          "length_max": 30,
+          "length_min": 23,
+          "length_opt": 26,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "tm_max": 72.0,
+          "tm_min": 64.0,
+          "tm_opt": 68.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "race-gsp-screening",
+        "purposes": [
+          "general",
+          "cloning",
+          "sequencing"
+        ]
+      },
+      "engine": "single-primer",
+      "enzyme": [],
+      "goal": "sequence",
+      "modifiers": [
+        "tails"
+      ],
+      "name": "RACE",
+      "requires": [],
+      "status": "experimental"
+    },
+    "restriction-cloning": {
+      "defaults": {
+        "defaultPurpose": "cloning",
+        "polymerase": "proofreading",
+        "purposes": [
+          "cloning"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "assemble",
+      "modifiers": [
+        "tails"
+      ],
+      "name": "Restriction Cloning",
+      "requires": [],
+      "status": "experimental"
+    },
+    "rpa": {
+      "defaults": {
+        "constraintEnvelope": {
+          "length_max": {
+            "max": 45
+          },
+          "product_max": {
+            "max": 500
+          },
+          "product_min": {
+            "max": 500
+          }
+        },
+        "constraintPolicy": {
+          "tm_max": "locked",
+          "tm_min": "locked",
+          "tm_opt": "locked",
+          "tm_pair_max_difference": "locked"
+        },
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 70.0,
+          "gc_min": 30.0,
+          "length_max": 35,
+          "length_min": 30,
+          "length_opt": 32,
+          "max_poly_x": 5,
+          "min_three_prime_distance": 1,
+          "product_max": 200,
+          "product_min": 100,
+          "tm_max": 150.0,
+          "tm_min": 0.0,
+          "tm_opt": 75.0,
+          "tm_pair_max_difference": 150.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "rpa",
+        "purposes": [
+          "general",
+          "screen"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [
+        "rpa-compatible"
+      ],
+      "goal": "detect",
+      "modifiers": [
+        "reverse-transcription",
+        "variant-masking"
+      ],
+      "name": "RPA",
+      "requires": [],
+      "status": "experimental"
+    },
+    "sequencing-primer": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 60.0,
+          "gc_min": 40.0,
+          "length_max": 27,
+          "length_min": 18,
+          "length_opt": 20,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "tm_max": 62.0,
+          "tm_min": 52.0,
+          "tm_opt": 55.0
+        },
+        "polymerase": "sanger-primer-screening",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "single-primer",
+      "enzyme": [],
+      "goal": "sequence",
+      "modifiers": [],
+      "name": "Sequencing Primer",
+      "requires": [],
+      "status": "experimental"
+    },
+    "site-directed-mutagenesis": {
+      "defaults": {
+        "chemistryFamily": "neb-q5-e0554",
+        "constraintPolicy": {
+          "gc_clamp": "locked",
+          "gc_max": "locked",
+          "gc_min": "locked",
+          "length_max": "locked",
+          "length_min": "locked",
+          "length_opt": "locked",
+          "max_end_gc": "locked",
+          "max_poly_x": "locked",
+          "tm_max": "locked",
+          "tm_min": "locked",
+          "tm_opt": "locked"
+        },
+        "constraints": {
+          "gc_clamp": 0,
+          "gc_max": 100.0,
+          "gc_min": 0.0,
+          "length_max": 60,
+          "length_min": 15,
+          "length_opt": 30,
+          "max_end_gc": 5,
+          "max_poly_x": 10,
+          "tm_max": 100.0,
+          "tm_min": 0.0,
+          "tm_opt": 60.0
+        },
+        "defaultPurpose": "cloning",
+        "polymerase": "q5-sdm-screening",
+        "purposes": [
+          "cloning"
+        ]
+      },
+      "engine": "mutagenic-pair",
+      "enzyme": [],
+      "goal": "engineer",
+      "modifiers": [
+        "tails"
+      ],
+      "name": "Site-directed Mutagenesis",
+      "requires": [],
+      "status": "experimental"
+    },
+    "species-specific-pcr": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "screen",
+          "sanger"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "detect",
+      "modifiers": [
+        "multiplex",
+        "variant-masking"
+      ],
+      "name": "Species-specific PCR",
+      "requires": [
+        "background",
+        "inclusivity"
+      ],
+      "status": "experimental"
+    },
+    "standard-pcr": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "screen",
+          "sanger",
+          "cloning"
+        ]
+      },
+      "engine": "flanking-pair",
+      "enzyme": [],
+      "goal": "amplify",
+      "modifiers": [
+        "multiplex",
+        "reverse-transcription",
+        "tails",
+        "variant-masking"
+      ],
+      "name": "Standard PCR",
+      "requires": [],
+      "status": "experimental"
+    },
+    "tetra-primer-arms": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 75.0,
+          "gc_min": 30.0,
+          "length_max": 30,
+          "length_min": 17,
+          "length_opt": 22,
+          "max_end_gc": 3,
+          "max_poly_x": 4,
+          "product_max": 500,
+          "product_min": 120,
+          "tm_max": 68.0,
+          "tm_min": 55.0,
+          "tm_opt": 61.0,
+          "tm_pair_max_difference": 5.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general"
+        ]
+      },
+      "engine": "discriminating-pair",
+      "enzyme": [
+        "no-proofreading"
+      ],
+      "goal": "genotype",
+      "modifiers": [
+        "variant-masking"
+      ],
+      "name": "Tetra-primer ARMS",
+      "requires": [],
+      "status": "experimental"
+    },
+    "tiled-scheme": {
+      "defaults": {
+        "constraints": {
+          "gc_clamp": 1,
+          "gc_max": 65.0,
+          "gc_min": 30.0,
+          "length_max": 30,
+          "length_min": 20,
+          "length_opt": 24,
+          "max_end_gc": 3,
+          "max_poly_x": 5,
+          "product_max": 500,
+          "product_min": 300,
+          "tm_max": 64.0,
+          "tm_min": 59.0,
+          "tm_opt": 61.0,
+          "tm_pair_max_difference": 2.0
+        },
+        "defaultPurpose": "sequencing",
+        "polymerase": "proofreading",
+        "purposes": [
+          "general",
+          "sequencing"
+        ]
+      },
+      "engine": "tiling-scheme",
+      "enzyme": [],
+      "goal": "sequence",
+      "modifiers": [],
+      "name": "Tiled Amplicon Scheme",
+      "requires": [],
+      "status": "experimental"
+    },
+    "universal-primers": {
+      "defaults": {
+        "constraints": {
+          "conserved_end": 3,
+          "gc_max": 78.0,
+          "gc_min": 25.0,
+          "length_max": 27,
+          "length_min": 17,
+          "length_opt": 20,
+          "max_degeneracy": 64,
+          "max_poly_x": 5,
+          "min_coverage": 1.0,
+          "min_three_prime_distance": 5,
+          "product_max": 1500,
+          "product_min": 250,
+          "tm_max": 71.0,
+          "tm_min": 47.0,
+          "tm_pair_max_difference": 16.0,
+          "tm_spread_max": 5.0
+        },
+        "defaultPurpose": "general",
+        "polymerase": "taq-standard",
+        "purposes": [
+          "general",
+          "sanger",
+          "screen"
+        ]
+      },
+      "engine": "consensus-pair",
+      "enzyme": [],
+      "goal": "detect",
+      "modifiers": [
+        "reverse-transcription"
+      ],
+      "name": "Universal Primers",
+      "requires": [],
+      "status": "experimental"
+    }
+  },
+  "schema_version": "1.1.0",
+  "semantics": {
+    "generation_policy": "Generated from crates/pcr-core/profiles.toml by scripts/generate-runtime-artifacts.py; do not hand-edit.",
+    "numeric_policy": "Only values bound in the active profile are runtime defaults. Numeric Evidence in the Atlas remains source-/study-/vendor-scoped unless a named overlay or explicit implementation rule activates it.",
+    "override_policy": "Hard engine/assay/chemistry invariants cannot be broken; bounded/recommended values may be user-overridden only where the runtime contract allows it and provenance records the resolution.",
+    "purpose": "Exact active module/profile bindings used by Generation-1 runtime."
+  },
+  "source": "crates/pcr-core/profiles.toml",
+  "source_sha256": "25686988fa4ed104fb4e86a3f366567618717a25836583a48f512352e1ec2d20"
+}

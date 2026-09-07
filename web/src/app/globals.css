@@ -1,0 +1,616 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Bridges the raw design tokens below into Tailwind's colour utilities, so
+   `bg-background`, `text-success` and friends resolve without a config file. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* The mark, and anything decorative that carries the product's identity
+     rather than an action. */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+  --color-surface-wash: var(--surface-wash);
+  --color-surface-warm: var(--surface-warm);
+  --color-surface-lilac: var(--surface-lilac);
+  --color-surface-sage: var(--surface-sage);
+
+  /* Outcomes. Used by the module status badges and by form feedback. */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* A categorical ramp for when a module has something to plot. */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --radius-sm: calc(var(--radius) - 3px);
+  --radius-md: calc(var(--radius) - 1px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 3px);
+}
+
+:root {
+  --radius: 0.5rem;
+  color-scheme: light;
+
+  --background: oklch(0.965 0.008 85);
+  --foreground: oklch(0.22 0.015 55);
+  --card: oklch(0.995 0.003 90);
+  --card-foreground: oklch(0.22 0.015 55);
+  --popover: oklch(0.995 0.003 90);
+  --popover-foreground: oklch(0.22 0.015 55);
+
+  --primary: oklch(0.485 0.145 38);
+  --primary-foreground: oklch(0.985 0.006 90);
+
+  --secondary: oklch(0.925 0.012 85);
+  --secondary-foreground: oklch(0.28 0.016 50);
+  --muted: oklch(0.928 0.012 85);
+  --muted-foreground: oklch(0.465 0.02 60);
+  --accent: oklch(0.91 0.028 62);
+  --accent-foreground: oklch(0.32 0.055 42);
+  --border: oklch(0.858 0.016 80);
+  --input: oklch(0.64 0.014 80);
+  --ring: oklch(0.485 0.145 38);
+
+  --brand: oklch(0.673 0.131 39);
+  --brand-foreground: oklch(0.99 0.005 90);
+  --brand-muted: oklch(0.885 0.042 72);
+
+  /* Editorial surfaces shared by the auth gate and the workbench. */
+  --surface-wash: oklch(0.982 0.012 78);
+  --surface-warm: oklch(0.928 0.035 62);
+  --surface-lilac: oklch(0.948 0.025 315);
+  --surface-sage: oklch(0.944 0.028 145);
+
+  --success: oklch(0.492 0.108 152);
+  --success-foreground: oklch(0.99 0.005 90);
+  --warning: oklch(0.562 0.116 86);
+  --warning-foreground: oklch(0.99 0.005 90);
+  --info: oklch(0.512 0.098 244);
+  --info-foreground: oklch(0.99 0.005 90);
+  --destructive: oklch(0.478 0.198 19);
+  --destructive-foreground: oklch(0.99 0.005 90);
+
+  --chart-1: oklch(0.632 0.132 39);
+  --chart-2: oklch(0.572 0.098 178);
+  --chart-3: oklch(0.652 0.108 92);
+  --chart-4: oklch(0.512 0.108 258);
+  --chart-5: oklch(0.552 0.118 322);
+
+  --sidebar: oklch(0.95 0.016 78);
+  --sidebar-foreground: oklch(0.275 0.014 55);
+  --sidebar-primary: oklch(0.485 0.145 38);
+  --sidebar-primary-foreground: oklch(0.985 0.006 90);
+  --sidebar-accent: var(--surface-warm);
+  --sidebar-accent-foreground: oklch(0.32 0.058 42);
+  --sidebar-border: oklch(0.858 0.016 78);
+  --sidebar-ring: oklch(0.485 0.145 38);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Keep the dark workbench layered: canvas, cards, and tinted surfaces
+     should be easy to distinguish without resorting to loud colours. */
+  --background: oklch(0.155 0.012 58);
+  --foreground: oklch(0.945 0.008 88);
+  --card: oklch(0.245 0.018 52);
+  --card-foreground: oklch(0.945 0.008 88);
+  --popover: oklch(0.265 0.022 52);
+  --popover-foreground: oklch(0.945 0.008 88);
+
+  --primary: oklch(0.702 0.132 42);
+  --primary-foreground: oklch(0.205 0.028 44);
+
+  --secondary: oklch(0.285 0.025 54);
+  --secondary-foreground: oklch(0.945 0.008 88);
+  --muted: oklch(0.275 0.02 58);
+  --muted-foreground: oklch(0.72 0.014 70);
+  --accent: oklch(0.34 0.055 48);
+  --accent-foreground: oklch(0.925 0.032 70);
+  --border: oklch(0.38 0.025 55);
+  --input: oklch(0.52 0.012 56);
+  --ring: oklch(0.702 0.132 42);
+
+  --brand: oklch(0.722 0.128 44);
+  --brand-foreground: oklch(0.205 0.028 44);
+  --brand-muted: oklch(0.4 0.07 48);
+
+  --surface-wash: oklch(0.205 0.022 72);
+  --surface-warm: oklch(0.315 0.065 48);
+  --surface-lilac: oklch(0.285 0.05 315);
+  --surface-sage: oklch(0.27 0.05 145);
+
+  --success: oklch(0.732 0.132 152);
+  --success-foreground: oklch(0.202 0.032 152);
+  --warning: oklch(0.812 0.132 88);
+  --warning-foreground: oklch(0.212 0.04 88);
+  --info: oklch(0.712 0.108 244);
+  --info-foreground: oklch(0.198 0.032 244);
+  --destructive: oklch(0.712 0.185 19);
+  --destructive-foreground: oklch(0.192 0.042 19);
+
+  --chart-1: oklch(0.722 0.128 44);
+  --chart-2: oklch(0.712 0.108 178);
+  --chart-3: oklch(0.782 0.118 92);
+  --chart-4: oklch(0.672 0.118 258);
+  --chart-5: oklch(0.692 0.128 322);
+
+  --sidebar: oklch(0.205 0.02 50);
+  --sidebar-foreground: oklch(0.925 0.008 88);
+  --sidebar-primary: oklch(0.722 0.128 44);
+  --sidebar-primary-foreground: oklch(0.205 0.028 44);
+  --sidebar-accent: var(--surface-warm);
+  --sidebar-accent-foreground: oklch(0.925 0.032 70);
+  --sidebar-border: oklch(0.34 0.025 50);
+  --sidebar-ring: oklch(0.722 0.128 44);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    min-height: 100svh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--brand) 28%, transparent);
+    color: var(--foreground);
+  }
+
+  /* Text links share the same quiet focus language as buttons. Individual
+     links can still add a stronger treatment when their surface calls for it,
+     but no navigation target should fall back to an inconsistent browser
+     outline or become invisible to keyboard users. */
+  a {
+    @apply outline-none;
+  }
+
+  a:focus-visible {
+    @apply rounded-sm ring-2 ring-ring/50 ring-offset-1 ring-offset-background;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+    background-clip: content-box;
+  }
+}
+
+@layer utilities {
+  .font-sequence {
+    font-family: var(--font-mono);
+    font-variant-ligatures: none;
+    letter-spacing: 0.06em;
+    word-break: break-all;
+    hyphens: none;
+  }
+
+  .measure {
+    max-width: 48rem;
+  }
+
+  .workbench-shell {
+    background-image: radial-gradient(
+      circle at 80% -10%,
+      color-mix(in oklch, var(--brand) 5%, transparent),
+      transparent 30rem
+    );
+  }
+
+  .workbench-card[data-surface="default"] {
+    background-color: color-mix(in oklch, var(--card) 94%, var(--surface-warm) 6%);
+  }
+
+  .workbench-card {
+    border-color: color-mix(in oklch, var(--border) 80%, var(--brand) 20%);
+    box-shadow: 0 10px 30px -24px color-mix(in oklch, var(--foreground) 28%, transparent);
+  }
+
+  .workbench-hero {
+    background:
+      radial-gradient(
+        circle at 92% 10%,
+        color-mix(in oklch, var(--surface-lilac) 80%, transparent),
+        transparent 18rem
+      ),
+      radial-gradient(
+        circle at 8% 100%,
+        color-mix(in oklch, var(--surface-warm) 72%, transparent),
+        transparent 22rem
+      ),
+      var(--card);
+  }
+
+  .workbench-result {
+    background: radial-gradient(
+      circle at 92% 0%,
+      color-mix(in oklch, var(--surface-sage) 45%, transparent),
+      transparent 26rem
+    );
+  }
+
+  /* Result cards are dense by necessity. A quiet editorial tint on their
+     frames and headers keeps the report readable without turning every
+     measurement into a loud coloured panel. */
+  .workbench-result [data-slot="card"] {
+    border-color: color-mix(in oklch, var(--border) 86%, var(--brand) 14%);
+  }
+
+  .workbench-result [data-slot="card-header"] {
+    background: color-mix(in oklch, var(--surface-wash) 34%, transparent);
+  }
+
+  .workbench-result [data-slot="card-title"] {
+    /* Individual result renderers keep compact size and weight utilities for
+       dense reports. The family comes from CardTitle itself, so every card
+       shares the same editorial voice without a cascade override. */
+    letter-spacing: -0.01em;
+  }
+
+  .workbench-result thead {
+    background: color-mix(in oklch, var(--surface-warm) 42%, var(--muted));
+  }
+
+  .workbench-result tbody tr {
+    transition: background-color 150ms ease;
+  }
+
+  .workbench-result tbody tr:hover {
+    background: color-mix(in oklch, var(--surface-warm) 24%, transparent);
+  }
+
+  /* Every result engine uses details for secondary evidence. Give the
+     disclosure itself a consistent, generous target while keeping the data
+     inside it compact. */
+  .workbench-result details {
+    overflow: hidden;
+    border-color: color-mix(in oklch, var(--border) 82%, var(--brand) 18%);
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklch, var(--surface-wash) 32%, transparent);
+  }
+
+  .workbench-result details > summary {
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    transition: background-color 150ms ease;
+  }
+
+  .workbench-result details > summary:hover {
+    background: color-mix(in oklch, var(--surface-warm) 26%, transparent);
+  }
+
+  .workbench-result details[open] > summary {
+    border-bottom: 1px solid color-mix(in oklch, var(--border) 72%, transparent);
+  }
+
+  /* Result renderers share the same report frame but are intentionally split
+     into separate engine components. This selector gives their section
+     headings one voice without enlarging the compact CardTitle metadata. */
+  .workbench-result h2:not([data-slot="card-title"]) {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .workbench-result h3,
+  .workbench-result h4 {
+    /* Keep the small sizes used for dense report sub-sections, but give every
+       semantic heading the same editorial voice as the report title. */
+    font-family: var(--font-serif);
+  }
+}
+
+/* Text that exists for screen readers only. */
+@utility sr-only-focusable {
+  &:not(:focus) {
+    @apply sr-only;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Printing a result.
+ *
+ * The frame — sidebar, header, footer, every button and toast — is how the
+ * page is worked, and none of it means anything on paper. What is left is the
+ * content itself, full width. The colours are done by re-pointing the design
+ * tokens rather than by fighting each utility: whatever theme was on screen,
+ * ink is black and paper is white, because the tokens are what every colour
+ * utility resolves through (see the bridge at the top of this file).
+ */
+@media print {
+  :root,
+  .dark {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --popover: #ffffff;
+    --popover-foreground: #000000;
+    --primary: #000000;
+    --primary-foreground: #ffffff;
+    --secondary: #eeeeee;
+    --secondary-foreground: #000000;
+    --muted: #f2f2f2;
+    --muted-foreground: #444444;
+    --accent: #eeeeee;
+    --accent-foreground: #000000;
+    --border: #999999;
+    --input: #666666;
+    --ring: #000000;
+    --brand: #000000;
+    --brand-foreground: #ffffff;
+    --brand-muted: #dddddd;
+    --surface-wash: #fafafa;
+    --surface-warm: #eeeeee;
+    --surface-lilac: #f1f1f1;
+    --surface-sage: #eeeeee;
+    --success: #222222;
+    --success-foreground: #ffffff;
+    --warning: #333333;
+    --warning-foreground: #ffffff;
+    --info: #333333;
+    --info-foreground: #ffffff;
+    --destructive: #000000;
+    --destructive-foreground: #ffffff;
+    --chart-1: #222222;
+    --chart-2: #444444;
+    --chart-3: #666666;
+    --chart-4: #888888;
+    --chart-5: #aaaaaa;
+    --sidebar: #ffffff;
+    --sidebar-foreground: #000000;
+    --sidebar-primary: #000000;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #eeeeee;
+    --sidebar-accent-foreground: #000000;
+    --sidebar-border: #999999;
+    --sidebar-ring: #000000;
+  }
+
+  [data-slot="sidebar"],
+  [data-slot="sidebar-gap"],
+  /* The bar at the top of the screen, not a page's own <header> — a project
+     name and its notes belong on the printout. */
+  header.sticky,
+  footer,
+  button,
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+
+  [data-slot="sidebar-inset"] {
+    margin: 0 !important;
+  }
+
+  #content > div {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  * {
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+
+/* The auth section's drifting helix: the drawn pattern repeats every 96px,
+   so sliding exactly one period loops seamlessly. */
+@keyframes helix-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-96px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out forwards;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* Warm, slightly botanical colour fields for the authentication gate. They
+   stay decorative and behind content, but give the otherwise quiet surface a
+   recognisable vintage character without adding image or font dependencies. */
+.auth-shell {
+  position: relative;
+  isolation: isolate;
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    color-mix(in oklch, var(--brand) 7%, transparent),
+    transparent 34rem
+  );
+}
+
+.auth-orb {
+  position: absolute;
+  z-index: -1;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 9999px;
+  filter: blur(3.5rem);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+.auth-orb-coral {
+  top: 7%;
+  left: 3%;
+  background: oklch(0.7 0.16 35);
+}
+
+.auth-orb-lilac {
+  right: 4%;
+  bottom: 14%;
+  background: oklch(0.72 0.12 315);
+}
+
+.auth-orb-sage {
+  top: 32%;
+  right: 28%;
+  width: 12rem;
+  height: 12rem;
+  background: oklch(0.75 0.1 145);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-orb {
+    filter: blur(2rem);
+  }
+}
+
+/* Staggered animation delays */
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-slide-in {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

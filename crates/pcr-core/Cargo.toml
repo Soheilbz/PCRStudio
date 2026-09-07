@@ -1,0 +1,22 @@
+[package]
+name = "pcr-core"
+description = "Domain core for PCRStudio: the design-module contract, the module registry, and shared types."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+pcr-contracts.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+
+[dev-dependencies]
+pcr-worker-client.workspace = true
+
+[lints]
+workspace = true

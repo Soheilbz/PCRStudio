@@ -1,0 +1,97 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "alignment_authority": "prealigned-reviewed",
+        "formulation": "mixed-base-synthesis",
+        "policy": "strict-all-members",
+        "population_claim": "observed-panel-only"
+      },
+      "id": "strict-prealigned-reviewed",
+      "request": {
+        "alignment_mode": "prealigned",
+        "consensus_policy": "strict-all-members",
+        "formulation_mode": "mixed-base-synthesis"
+      }
+    },
+    {
+      "expected": {
+        "policy": "weighted",
+        "population_prevalence_claim": false,
+        "weights_user_supplied": true
+      },
+      "id": "weighted-panel",
+      "request": {
+        "alignment_mode": "prealigned",
+        "consensus_policy": "weighted",
+        "panel_metadata": {
+          "A": {
+            "weight": 2.0
+          },
+          "B": {
+            "weight": 1.0
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "policy": "stratified",
+        "stratum_reporting": true
+      },
+      "id": "stratified-panel",
+      "request": {
+        "alignment_mode": "prealigned",
+        "consensus_policy": "stratified",
+        "panel_metadata": {
+          "A": {
+            "stratum": "lineage-1"
+          },
+          "B": {
+            "stratum": "lineage-2"
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "global_specificity_claim": false,
+        "specificity_scope": "finite-supplied-panel"
+      },
+      "id": "finite-nontarget",
+      "request": {
+        "nontarget": ">N1\\nACGTACGTACGTACGT"
+      }
+    },
+    {
+      "expected": {
+        "alignment_sensitivity_reported": true,
+        "sequence_decision_impact": "none-on-primary-ranking"
+      },
+      "id": "muscle-audit",
+      "request": {
+        "alignment_audit_backend": "muscle-5.3-audit",
+        "alternative_alignment": "caller-supplied"
+      }
+    },
+    {
+      "expected": {
+        "primary_ranking_mutated": false,
+        "split_pool_status": "diagnostic-only"
+      },
+      "id": "split-pool-diagnostic",
+      "request": {
+        "formulation_mode": "defined-oligo-pool"
+      }
+    }
+  ],
+  "engine": "consensus-pair",
+  "metamorphic": [
+    "FASTA case/whitespace invariance",
+    "record reorder invariance when weights/metadata follow record ids",
+    "reverse-complement composition invariance for composition-only summaries",
+    "diagnostic alignment/formulation evidence must not silently mutate primary ranking"
+  ],
+  "purpose": "Shared CURRENT Consensus Pair differential/property corpus. Cases encode cross-language policy/provenance expectations; primer sequences remain dependent on the pinned scientific runtime and are asserted in native Linux tests, not fabricated here.",
+  "schema_version": "1.0.0"
+}

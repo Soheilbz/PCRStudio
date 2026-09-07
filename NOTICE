@@ -1,0 +1,19 @@
+PCRStudio source licensing notice
+=================================
+
+The original PCRStudio source outside the `tools/` directory is proprietary
+and is protected by the PCRStudio Proprietary Source License in the repository
+root. No reuse, redistribution, hosting, or derivative-work permission is
+granted without prior written permission.
+
+The `tools/` directory is deliberately licensed GPL-2.0-or-later; see
+`tools/LICENSE` and `tools/README.md`. It contains the Python worker code that
+imports GPL-licensed Primer3 bindings. The Web and Rust tiers communicate with
+that worker over an external-process/IPC boundary and do not import its Python
+modules.
+
+Third-party packages, command-line scientific tools, container images and other
+dependencies retain their own upstream licenses. The generated CycloneDX SBOM
+and the toolchain/provenance records identify the dependencies used by this
+source release. This notice is descriptive and does not replace the terms of
+any third-party license.

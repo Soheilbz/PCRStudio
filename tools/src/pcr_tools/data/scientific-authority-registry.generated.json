@@ -1,0 +1,565 @@
+{
+  "authority": "pcrstudio-scientific-authority-registry",
+  "chemistry_file_count": 23,
+  "chemistry_files": {
+    "assembly-protocols.json": {
+      "authority_id": "assembly-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "9f8b96ae87ef292efcc2bedf2a87cca0756080d9d8a394452be3d58d4b8b4cd6",
+      "canonical_source": "contracts/chemistry/assembly-protocols.json",
+      "effective_date": "2026-09-04"
+    },
+    "consensus-differential-corpus.json": {
+      "authority_id": "consensus-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "45d31ec7a71ad654e9e8e4efd1de75e3b94939e3d11a1157d0b85b7cdb3a6dc4",
+      "canonical_source": "contracts/chemistry/consensus-differential-corpus.json",
+      "effective_date": null
+    },
+    "consensus-profiles.json": {
+      "authority_id": "consensus-profiles",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "d3cfd31ac7258ebb17f92bc917d23be45156fe483105adfe341d8263ce25eb26",
+      "canonical_source": "contracts/chemistry/consensus-profiles.json",
+      "effective_date": "2026-09-04"
+    },
+    "discriminating-differential-corpus.json": {
+      "authority_id": "discriminating-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "59643d3a3455e22041cb5b604f6477c03a75ccee971da209de3894d83a32ccb1",
+      "canonical_source": "contracts/chemistry/discriminating-differential-corpus.json",
+      "effective_date": null
+    },
+    "discriminating-protocols.json": {
+      "authority_id": "discriminating-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+      "canonical_source": "contracts/chemistry/discriminating-protocols.json",
+      "effective_date": "2026-09-04"
+    },
+    "flanking-differential-corpus.json": {
+      "authority_id": "flanking-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+      "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+      "effective_date": null
+    },
+    "flanking-protocols.toml": {
+      "authority_id": "flanking-protocol-identities",
+      "authority_revision": "1.2.0",
+      "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+      "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+      "effective_date": "2026-09-04"
+    },
+    "inverse-differential-corpus.json": {
+      "authority_id": "inverse-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "4cde56d81d0ad8c54b554541d2727314b7e8d78b77bcb83154159abf9f043cb8",
+      "canonical_source": "contracts/chemistry/inverse-differential-corpus.json",
+      "effective_date": null
+    },
+    "inverse-pcr-protocols.json": {
+      "authority_id": "inverse-pcr-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "b23d076973370a860b6c746ddbb8594d1f3c14fa2e11f73fcae84b599807e6b7",
+      "canonical_source": "contracts/chemistry/inverse-pcr-protocols.json",
+      "effective_date": "2026-09-05"
+    },
+    "junction-differential-corpus.json": {
+      "authority_id": "junction-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "9caafea441ae2ea9c0a5d860a48ba61bcc05d9f20ab5d059771c78e47de336de",
+      "canonical_source": "contracts/chemistry/junction-differential-corpus.json",
+      "effective_date": null
+    },
+    "lamp-differential-corpus.json": {
+      "authority_id": "lamp-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "b1742be23b9b69db12b55a7318c8700aa1dc26d433d0a314a87bc72408ae90f4",
+      "canonical_source": "contracts/chemistry/lamp-differential-corpus.json",
+      "effective_date": null
+    },
+    "lamp-protocols.json": {
+      "authority_id": "lamp-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "3748ebf1b562e8619d4efbff83c4cb8afe8ad099ac38c07e9e06a8338abf9880",
+      "canonical_source": "contracts/chemistry/lamp-protocols.json",
+      "effective_date": "2026-09-04"
+    },
+    "mutagenesis-differential-corpus.json": {
+      "authority_id": "mutagenesis-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "3f89bf477dc9ee89fbe5870953b1c0a2ee535f9c9ba69f19862a60c2ba9bbc36",
+      "canonical_source": "contracts/chemistry/mutagenesis-differential-corpus.json",
+      "effective_date": null
+    },
+    "mutagenesis-protocols.json": {
+      "authority_id": "mutagenesis-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "b34fb5bc2f9185e949f107f0f630dcaa6904acb712b5f46dc79711580425861d",
+      "canonical_source": "contracts/chemistry/mutagenesis-protocols.json",
+      "effective_date": "2026-09-04"
+    },
+    "nested-differential-corpus.json": {
+      "authority_id": "nested-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "eac451398eb9fac0bae1e2c83ab1d9477c065dc151e3d85eb20843d9c6d33f37",
+      "canonical_source": "contracts/chemistry/nested-differential-corpus.json",
+      "effective_date": null
+    },
+    "nested-protocols.json": {
+      "authority_id": "nested-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "3ee7d4359bebdf10ff3f29bbf5841788bb7dc60595c1017771d3f57ea365f1a6",
+      "canonical_source": "contracts/chemistry/nested-protocols.json",
+      "effective_date": "2026-09-04"
+    },
+    "probe-differential-corpus.json": {
+      "authority_id": "probe-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "1ac543857b04489525951104afdfe3ccf1e8760340803a021134b91c08abd0b8",
+      "canonical_source": "contracts/chemistry/probe-differential-corpus.json",
+      "effective_date": null
+    },
+    "qpcr-probe-protocols.json": {
+      "authority_id": "qpcr-probe-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "622b3787b92f0405b36b807e7ff84a8579a563b4d1eb0131a71c38c9d244e2c9",
+      "canonical_source": "contracts/chemistry/qpcr-probe-protocols.json",
+      "effective_date": "2026-09-05"
+    },
+    "race-protocols.json": {
+      "authority_id": "race-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "61013cb84bc32f7ec800e9feb07d09065e630e5bea724408447d78488b56b027",
+      "canonical_source": "contracts/chemistry/race-protocols.json",
+      "effective_date": "2026-09-05"
+    },
+    "sequencing-profiles.json": {
+      "authority_id": "sequencing-profiles",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "e87657c3c008d41f3206995760ba5fe365348b4a70bed8ef665043976bd2a9a7",
+      "canonical_source": "contracts/chemistry/sequencing-profiles.json",
+      "effective_date": "2026-09-05"
+    },
+    "single-differential-corpus.json": {
+      "authority_id": "single-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "0dceda90018b41443974ac8100f76f518188345538b5d1a792e362e86262f34c",
+      "canonical_source": "contracts/chemistry/single-differential-corpus.json",
+      "effective_date": null
+    },
+    "tiling-differential-corpus.json": {
+      "authority_id": "tiling-differential-corpus",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "cc7033e83f4c864cb7cd9d7dff75b395e1b3195208eca2c227a0f723d7fa8b8d",
+      "canonical_source": "contracts/chemistry/tiling-differential-corpus.json",
+      "effective_date": null
+    },
+    "tiling-protocols.json": {
+      "authority_id": "tiling-protocols",
+      "authority_revision": "1.0.0",
+      "canonical_sha256": "90d7f29422fae82bb6d9fc2eb8ed6554fe425d9af711cdd1f335d486eed6e6c4",
+      "canonical_source": "contracts/chemistry/tiling-protocols.json",
+      "effective_date": "2026-09-05"
+    }
+  },
+  "effective_date": "2026-09-05",
+  "manifest_sha256": "fb3b3015ac0564f091fba3b71a34c003cb04a6c4f4a2c3d9d1bf2ed8699f5123",
+  "modules": {
+    "arms-pcr": [
+      {
+        "authority_id": "discriminating-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_source": "contracts/chemistry/discriminating-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "discriminating-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "59643d3a3455e22041cb5b604f6477c03a75ccee971da209de3894d83a32ccb1",
+        "canonical_source": "contracts/chemistry/discriminating-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "colony-pcr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "digital-pcr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "gibson-assembly": [
+      {
+        "authority_id": "assembly-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "9f8b96ae87ef292efcc2bedf2a87cca0756080d9d8a394452be3d58d4b8b4cd6",
+        "canonical_source": "contracts/chemistry/assembly-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "junction-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "9caafea441ae2ea9c0a5d860a48ba61bcc05d9f20ab5d059771c78e47de336de",
+        "canonical_source": "contracts/chemistry/junction-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "inverse-pcr": [
+      {
+        "authority_id": "inverse-pcr-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b23d076973370a860b6c746ddbb8594d1f3c14fa2e11f73fcae84b599807e6b7",
+        "canonical_source": "contracts/chemistry/inverse-pcr-protocols.json",
+        "effective_date": "2026-09-05"
+      },
+      {
+        "authority_id": "inverse-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "4cde56d81d0ad8c54b554541d2727314b7e8d78b77bcb83154159abf9f043cb8",
+        "canonical_source": "contracts/chemistry/inverse-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "kasp": [
+      {
+        "authority_id": "discriminating-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_source": "contracts/chemistry/discriminating-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "discriminating-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "59643d3a3455e22041cb5b604f6477c03a75ccee971da209de3894d83a32ccb1",
+        "canonical_source": "contracts/chemistry/discriminating-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "lamp": [
+      {
+        "authority_id": "lamp-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "3748ebf1b562e8619d4efbff83c4cb8afe8ad099ac38c07e9e06a8338abf9880",
+        "canonical_source": "contracts/chemistry/lamp-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "lamp-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b1742be23b9b69db12b55a7318c8700aa1dc26d433d0a314a87bc72408ae90f4",
+        "canonical_source": "contracts/chemistry/lamp-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "long-range-pcr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "nested-pcr": [
+      {
+        "authority_id": "nested-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "3ee7d4359bebdf10ff3f29bbf5841788bb7dc60595c1017771d3f57ea365f1a6",
+        "canonical_source": "contracts/chemistry/nested-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "nested-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "eac451398eb9fac0bae1e2c83ab1d9477c065dc151e3d85eb20843d9c6d33f37",
+        "canonical_source": "contracts/chemistry/nested-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "qpcr-probe": [
+      {
+        "authority_id": "qpcr-probe-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "622b3787b92f0405b36b807e7ff84a8579a563b4d1eb0131a71c38c9d244e2c9",
+        "canonical_source": "contracts/chemistry/qpcr-probe-protocols.json",
+        "effective_date": "2026-09-05"
+      },
+      {
+        "authority_id": "probe-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "1ac543857b04489525951104afdfe3ccf1e8760340803a021134b91c08abd0b8",
+        "canonical_source": "contracts/chemistry/probe-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "qpcr-sybr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "race": [
+      {
+        "authority_id": "race-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "61013cb84bc32f7ec800e9feb07d09065e630e5bea724408447d78488b56b027",
+        "canonical_source": "contracts/chemistry/race-protocols.json",
+        "effective_date": "2026-09-05"
+      },
+      {
+        "authority_id": "single-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "0dceda90018b41443974ac8100f76f518188345538b5d1a792e362e86262f34c",
+        "canonical_source": "contracts/chemistry/single-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "restriction-cloning": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "rpa": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "sequencing-primer": [
+      {
+        "authority_id": "sequencing-profiles",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "e87657c3c008d41f3206995760ba5fe365348b4a70bed8ef665043976bd2a9a7",
+        "canonical_source": "contracts/chemistry/sequencing-profiles.json",
+        "effective_date": "2026-09-05"
+      },
+      {
+        "authority_id": "single-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "0dceda90018b41443974ac8100f76f518188345538b5d1a792e362e86262f34c",
+        "canonical_source": "contracts/chemistry/single-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "site-directed-mutagenesis": [
+      {
+        "authority_id": "mutagenesis-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b34fb5bc2f9185e949f107f0f630dcaa6904acb712b5f46dc79711580425861d",
+        "canonical_source": "contracts/chemistry/mutagenesis-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "mutagenesis-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "3f89bf477dc9ee89fbe5870953b1c0a2ee535f9c9ba69f19862a60c2ba9bbc36",
+        "canonical_source": "contracts/chemistry/mutagenesis-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "species-specific-pcr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "standard-pcr": [
+      {
+        "authority_id": "flanking-protocol-identities",
+        "authority_revision": "1.2.0",
+        "canonical_sha256": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+        "canonical_source": "contracts/chemistry/flanking-protocols.toml",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "flanking-source-snapshots",
+        "authority_revision": "content-addressed",
+        "canonical_sha256": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+        "canonical_source": "knowledge/sources/flanking-source-snapshots.json",
+        "effective_date": null
+      },
+      {
+        "authority_id": "flanking-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+        "canonical_source": "contracts/chemistry/flanking-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "tetra-primer-arms": [
+      {
+        "authority_id": "discriminating-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_source": "contracts/chemistry/discriminating-protocols.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "discriminating-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "59643d3a3455e22041cb5b604f6477c03a75ccee971da209de3894d83a32ccb1",
+        "canonical_source": "contracts/chemistry/discriminating-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "tiled-scheme": [
+      {
+        "authority_id": "tiling-protocols",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "90d7f29422fae82bb6d9fc2eb8ed6554fe425d9af711cdd1f335d486eed6e6c4",
+        "canonical_source": "contracts/chemistry/tiling-protocols.json",
+        "effective_date": "2026-09-05"
+      },
+      {
+        "authority_id": "tiling-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "cc7033e83f4c864cb7cd9d7dff75b395e1b3195208eca2c227a0f723d7fa8b8d",
+        "canonical_source": "contracts/chemistry/tiling-differential-corpus.json",
+        "effective_date": null
+      }
+    ],
+    "universal-primers": [
+      {
+        "authority_id": "consensus-profiles",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "d3cfd31ac7258ebb17f92bc917d23be45156fe483105adfe341d8263ce25eb26",
+        "canonical_source": "contracts/chemistry/consensus-profiles.json",
+        "effective_date": "2026-09-04"
+      },
+      {
+        "authority_id": "consensus-differential-corpus",
+        "authority_revision": "1.0.0",
+        "canonical_sha256": "45d31ec7a71ad654e9e8e4efd1de75e3b94939e3d11a1157d0b85b7cdb3a6dc4",
+        "canonical_source": "contracts/chemistry/consensus-differential-corpus.json",
+        "effective_date": null
+      }
+    ]
+  },
+  "policy": "Every canonical chemistry/protocol/differential authority that can change a scientific result is content-addressed. A run fingerprints only the authorities relevant to its canonical module, plus any explicitly attached source-snapshot registry. Remote vendor documents are not redistributed; locator/revision evidence and canonical claim snapshots remain separately traceable.",
+  "schema_version": "1.0.0"
+}

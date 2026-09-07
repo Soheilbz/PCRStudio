@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "authority": "pcrstudio-current-capability-truth",
+  "effective_date": "2026-09-05",
+  "policy": "Current public/release/review documentation must not contradict executable/refusal authority in canonical contracts and engine implementations. Historical superseded files are outside this gate.",
+  "checks": [
+    {
+      "id": "mgb-external-authority",
+      "files": [
+        "README.md",
+        "release/PUBLIC-SOURCE.md",
+        "release/RELEASE-NOTES.md",
+        "scripts/generate-expert-audit-artifacts.py",
+        "knowledge/reviews/EXPERT-MODULE-AUDIT.md"
+      ],
+      "required_any": [
+        "external-authority",
+        "external-authority-required",
+        "external-authority export/import",
+        "hash-bound MGB"
+      ],
+      "forbidden": [
+        "MGB/NFQ exact-Tm ranking remains explicitly fail-closed",
+        "MGB exact-Tm remains fail-closed",
+        "retaining MGB fail-closed behavior",
+        "strong-conventional-hydrolysis-mgb-fail-closed",
+        "Promote MGB only if"
+      ]
+    },
+    {
+      "id": "inverse-current-closure",
+      "files": [
+        "scripts/generate-expert-audit-artifacts.py",
+        "knowledge/reviews/EXPERT-MODULE-AUDIT.md",
+        "knowledge/reviews/EXPERT-UPGRADE-BACKLOG.md"
+      ],
+      "required_any": [
+        "pydna",
+        "circular",
+        "Sanger"
+      ],
+      "forbidden": [
+        "Add independent digest/circular-topology simulation with a verified pydna adapter"
+      ]
+    },
+    {
+      "id": "tiling-current-closure",
+      "files": [
+        "scripts/generate-expert-audit-artifacts.py",
+        "knowledge/reviews/EXPERT-MODULE-AUDIT.md",
+        "knowledge/reviews/EXPERT-UPGRADE-BACKLOG.md"
+      ],
+      "required_any": [
+        "native visual",
+        "depth/dropout",
+        "version/scheme diff",
+        "circular scheme-create"
+      ],
+      "forbidden": [
+        "Expose PrimalScheme3 visualise-bedfile and visualise-primer-mismatches outputs in the UI",
+        "Add versioned scheme-release diff/variant-monitoring workflows"
+      ]
+    },
+    {
+      "id": "nested-one-tube-boundary",
+      "files": [
+        "contracts/modules.toml",
+        "knowledge/reviews/MODULE-IMPLEMENTATION-COVERAGE.md",
+        "knowledge/reviews/FULL-SYSTEM-AUDIT.md"
+      ],
+      "required_any": [
+        "single_tube_generic_fail_closed_unless_supported_mechanism"
+      ],
+      "forbidden": [
+        "single_tube_internal_10c_heuristic_if_selected"
+      ]
+    },
+    {
+      "id": "scientific-authority-fingerprint",
+      "files": [
+        "tools/src/pcr_tools/fingerprints.py",
+        "tools/src/pcr_tools/orchestrator.py",
+        "release/current/CURRENT-FOUNDATION-CLOSURE.md"
+      ],
+      "required_any": [
+        "scientific_authorities",
+        "content-addressed chemistry/protocol/differential authority set"
+      ],
+      "forbidden": []
+    }
+  ]
+}

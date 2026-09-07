@@ -1,0 +1,158 @@
+{
+  "authority_domains": [
+    {
+      "id": "discriminating",
+      "source": "contracts/chemistry/discriminating-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/discriminating-differential-corpus.json"
+  ],
+  "engine_id": "discriminating-pair",
+  "feature_capabilities": {
+    "arms-indel": {
+      "reason": "not coerced to a synthetic SNV",
+      "status": "fail-closed"
+    },
+    "arms-two-tube-snv": {
+      "authority": "arms-experimental-taq",
+      "status": "executable"
+    },
+    "kasp-biallelic-genotype": {
+      "authority": "lgc-kasp-tf-v5",
+      "scope": [
+        "snv",
+        "mnv"
+      ],
+      "status": "executable"
+    },
+    "kasp-endpoint-import": {
+      "axes": {
+        "x": "FAM",
+        "y": "HEX"
+      },
+      "status": "evidence-only"
+    },
+    "kasp-plus-minus": {
+      "authority": "kasp-sequence-submission",
+      "claim_boundary": "KASP-compatible experimental design; not Kraken-equivalent",
+      "scope": [
+        "insertion",
+        "deletion",
+        "complex-replacement",
+        "presence-absence"
+      ],
+      "status": "executable"
+    },
+    "kasp-provider-call-preservation": {
+      "status": "evidence-only"
+    },
+    "kasp-threshold-auto-calling": {
+      "reason": "no source-validated universal cluster threshold",
+      "status": "fail-closed"
+    },
+    "proofreading-allele-specific-chemistry": {
+      "reason": "requires separately validated chemistry/topology",
+      "status": "fail-closed"
+    },
+    "tetra-snv": {
+      "authority": "tetra-collins-day-2001-reference",
+      "status": "executable"
+    },
+    "tetra-universal-gel-resolution": {
+      "reason": "resolution is assay/readout specific",
+      "status": "fail-closed"
+    },
+    "variant-complex-replacement": {
+      "scope": [
+        "kasp-plus-minus"
+      ],
+      "status": "executable"
+    },
+    "variant-deletion": {
+      "scope": [
+        "kasp-plus-minus"
+      ],
+      "status": "executable"
+    },
+    "variant-insertion": {
+      "scope": [
+        "kasp-plus-minus"
+      ],
+      "status": "executable"
+    },
+    "variant-mnv": {
+      "claim_boundary": "anchor-specific reduction retains complete REF/ALT provenance",
+      "status": "executable"
+    },
+    "variant-presence-absence": {
+      "scope": [
+        "kasp-plus-minus"
+      ],
+      "status": "executable"
+    },
+    "variant-snv": {
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "design",
+        "python": "variant",
+        "rust": "variant",
+        "web": "variant"
+      },
+      {
+        "owner": "design",
+        "python": "kasp_assay_mode",
+        "rust": "kasp_assay_mode",
+        "web": "kaspAssayMode"
+      },
+      {
+        "owner": "reaction",
+        "python": "kasp_protocol",
+        "rust": "kasp_protocol",
+        "web": "kaspProtocol"
+      },
+      {
+        "owner": "reaction",
+        "python": "kasp_plate_format",
+        "rust": "kasp_plate_format",
+        "web": "kaspPlateFormat"
+      },
+      {
+        "owner": "reaction",
+        "python": "kasp_instrument_model",
+        "rust": "kasp_instrument_model",
+        "web": "kaspInstrumentModel"
+      },
+      {
+        "owner": "reaction",
+        "python": "kasp_rox_policy",
+        "rust": "kasp_rox_policy",
+        "web": "kaspRoxPolicy"
+      },
+      {
+        "owner": "target",
+        "python": "nearby_variants_vcf",
+        "rust": "nearby_variants_vcf",
+        "web": "nearbyVariantsVcf"
+      },
+      {
+        "owner": "design",
+        "python": "mismatch_evidence_profile",
+        "rust": "mismatch_evidence_profile",
+        "web": "mismatchEvidenceProfile"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

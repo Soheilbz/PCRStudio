@@ -1,0 +1,166 @@
+{
+  "authority_domains": [
+    {
+      "id": "race",
+      "source": "contracts/chemistry/race-protocols.json"
+    },
+    {
+      "id": "sequencing",
+      "source": "contracts/chemistry/sequencing-profiles.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/single-differential-corpus.json"
+  ],
+  "engine_id": "single-primer",
+  "feature_capabilities": {
+    "azenta-sequencing-profile": {
+      "authority": "azenta-genewiz",
+      "status": "executable"
+    },
+    "bidirectional-plan": {
+      "authority": "generic-cycle-sequencing",
+      "status": "executable"
+    },
+    "cornell-sequencing-profile": {
+      "authority": "cornell",
+      "status": "executable"
+    },
+    "custom-race": {
+      "authority": "custom",
+      "status": "executable"
+    },
+    "eurofins-sequencing-profile": {
+      "authority": "eurofins",
+      "status": "executable"
+    },
+    "firstchoice-rlm-race": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "generacer-race": {
+      "authority": "generacer-kit-25-0355-vl",
+      "status": "executable"
+    },
+    "nested-gsp-plan": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "primer-walking": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "rlm-race": {
+      "authority": "firstchoice-rlm-race",
+      "status": "executable"
+    },
+    "smarter-race": {
+      "authority": "smarter-race-current",
+      "status": "executable-with-complete-context"
+    },
+    "trace-import": {
+      "authority": "generic-cycle-sequencing",
+      "status": "executable"
+    },
+    "universal-primer-discovery": {
+      "authority": "azenta-genewiz",
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "reaction",
+        "python": "race_chemistry",
+        "rust": "race_chemistry",
+        "web": "raceChemistry"
+      },
+      {
+        "owner": "design",
+        "python": "race_direction",
+        "rust": "race_direction",
+        "web": "raceDirection"
+      },
+      {
+        "owner": "reaction",
+        "python": "race_round",
+        "rust": "race_round",
+        "web": "raceRound"
+      },
+      {
+        "owner": "reaction",
+        "python": "race_partner_sequence",
+        "rust": "race_partner_sequence",
+        "web": "racePartnerSequence"
+      },
+      {
+        "owner": "design",
+        "python": "sequencing_design_profile",
+        "rust": "sequencing_design_profile",
+        "web": "sequencingDesignProfile"
+      },
+      {
+        "owner": "reaction",
+        "python": "sequencing_protocol",
+        "rust": "sequencing_protocol",
+        "web": "sequencingProtocol"
+      },
+      {
+        "owner": "reaction",
+        "python": "sequencing_provider",
+        "rust": "sequencing_provider",
+        "web": "sequencingProvider"
+      },
+      {
+        "owner": "validation",
+        "python": "sequencing_universal_primer_scan",
+        "rust": "sequencing_universal_primer_scan",
+        "web": "sequencingUniversalPrimerScan"
+      },
+      {
+        "owner": "design",
+        "python": "sequencing_bidirectional",
+        "rust": "sequencing_bidirectional",
+        "web": "sequencingBidirectional"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      },
+      {
+        "owner": "validation",
+        "python": "sequencing_primer_walking",
+        "rust": "sequencing_primer_walking",
+        "web": "sequencingPrimerWalking"
+      },
+      {
+        "owner": "design",
+        "python": "sequencing_walking_overlap",
+        "rust": "sequencing_walking_overlap",
+        "web": "sequencingWalkingOverlap"
+      },
+      {
+        "owner": "validation",
+        "python": "sequencing_trace_ab1_base64",
+        "rust": "sequencing_trace_ab1_base64",
+        "web": "sequencingTraceAb1Base64"
+      },
+      {
+        "owner": "validation",
+        "python": "sequencing_trace_filename",
+        "rust": "sequencing_trace_filename",
+        "web": "sequencingTraceFilename"
+      },
+      {
+        "owner": "target",
+        "python": "race_polyadenylated",
+        "rust": "race_polyadenylated",
+        "web": "racePolyadenylated"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

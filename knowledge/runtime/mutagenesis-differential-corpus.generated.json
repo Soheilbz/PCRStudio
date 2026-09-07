@@ -1,0 +1,116 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "orderable_branch": true,
+        "tail_strategy": "single-tail",
+        "topology": "q5-back-to-back"
+      },
+      "id": "q5-small-insertion",
+      "request": {
+        "edit": {
+          "at": 20,
+          "kind": "insert",
+          "to": "ACGTAC"
+        },
+        "protocol": "neb-q5-e0554",
+        "topology": "q5-back-to-back"
+      }
+    },
+    {
+      "expected": {
+        "orderable_branch": true,
+        "per_primer_tail_max_nt": 50,
+        "tail_strategy": "split-between-primers"
+      },
+      "id": "q5-split-100nt",
+      "request": {
+        "edit": {
+          "at": 20,
+          "kind": "insert",
+          "to_length": 100
+        },
+        "protocol": "neb-q5-e0554",
+        "topology": "q5-back-to-back"
+      }
+    },
+    {
+      "expected": {
+        "route": "junction-primers",
+        "status": "route-only"
+      },
+      "id": "q5-over-100nt",
+      "request": {
+        "edit": {
+          "at": 20,
+          "kind": "insert",
+          "to_length": 101
+        },
+        "protocol": "neb-q5-e0554",
+        "topology": "q5-back-to-back"
+      }
+    },
+    {
+      "expected": {
+        "amplification": "linear",
+        "primer3_tm_substitution": false,
+        "tm_metric": "Agilent-specific formula"
+      },
+      "id": "quikchange-single",
+      "request": {
+        "edit": {
+          "at": 20,
+          "kind": "substitute",
+          "replacing": 1,
+          "to": "G"
+        },
+        "protocol": "agilent-quikchange-lightning-210518",
+        "topology": "quikchange-complementary"
+      }
+    },
+    {
+      "expected": {
+        "nonoverlap_required": true,
+        "same_template_strand_required": true
+      },
+      "id": "quikchange-multi",
+      "request": {
+        "edits": 2,
+        "protocol": "agilent-quikchange-lightning-multi-210513-210516",
+        "topology": "quikchange-lightning-multi"
+      }
+    },
+    {
+      "expected": {
+        "nebasechanger_equivalent_claim": false,
+        "route": "junction-primers",
+        "status": "route-only"
+      },
+      "id": "nebuilder-multisite-route",
+      "request": {
+        "edits": 3,
+        "protocol": "neb-nebuilder-multisite",
+        "topology": "nebuilder-multisite"
+      }
+    },
+    {
+      "expected": {
+        "abundance_prediction": false,
+        "status": "diagnostic-only"
+      },
+      "id": "nnk-library",
+      "request": {
+        "library_mode": "NNK"
+      }
+    }
+  ],
+  "engine": "mutagenic-pair",
+  "metamorphic": [
+    "circular-origin edit coordinate invariance",
+    "multi-edit input reorder yields the same edited construct when edits are non-overlapping",
+    "Q5/QuikChange protocol identities cannot cross topology boundaries",
+    "clone evidence cannot mutate design ranking"
+  ],
+  "purpose": "Shared CURRENT Mutagenic Pair differential/property corpus for topology-separated Q5, QuikChange and multi-site routing.",
+  "schema_version": "1.0.0"
+}

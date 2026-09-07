@@ -1,0 +1,256 @@
+{
+  "purpose": "Mandatory high-risk Linux integration scenarios supplementing the canonical module acceptance matrix.",
+  "scenarios": [
+    {
+      "area": "specificity/toolchain",
+      "assertions": [
+        "approved-reference or production scope is explicit",
+        "FASTA SHA-256 matches manifest",
+        "every BLAST/MFEprimer index artifact SHA-256 matches manifest",
+        "corrupting one copied index artifact causes strict refusal",
+        "smoke-regression scope never becomes a production specificity claim"
+      ],
+      "id": "specificity-approved-index-integrity",
+      "mode": "strict"
+    },
+    {
+      "area": "tiled-scheme",
+      "assertions": [
+        "PrimalScheme3 and Olivar remain independent named backends and the actual primary backend/version is retained in result provenance",
+        "backend outputs are not averaged into a synthetic universal tiling score or protocol",
+        "PrimalScheme scheme-create retains artifacts/hashes and pool interaction evidence",
+        "Olivar variant-aware design retains its own risk/optimization authority and circular use remains fail-closed unless coordinate/export support is explicitly qualified",
+        "ARTIC BED/export semantics remain separate from wet-lab protocol chemistry"
+      ],
+      "id": "tiling-scheme-create"
+    },
+    {
+      "area": "tiled-scheme",
+      "assertions": [
+        "BED regions use 0-based half-open semantics",
+        "coverage denominator is the merged requested region span",
+        "absolute-reference coverage map remains correctly oriented"
+      ],
+      "id": "tiling-panel-create"
+    },
+    {
+      "area": "tiled-scheme",
+      "assertions": [
+        "reviewed BED, MSA and config are required and fingerprinted",
+        "repair artifacts are retained",
+        "malformed imports produce typed refusal"
+      ],
+      "id": "tiling-repair-mode"
+    },
+    {
+      "area": "tiled-scheme",
+      "assertions": [
+        "named primer replacement uses the exact 3.3.0 positional contract",
+        "ambiguous named replacement refuses rather than guessing",
+        "updated artifact identity is retained"
+      ],
+      "id": "tiling-scheme-replace"
+    },
+    {
+      "area": "multiplex",
+      "assertions": [
+        "external validation receives selected final oligos, not discarded candidates",
+        "PrimerPooler groups by actual tube before pool fallback",
+        "strict incomplete/limited evidence fails closed"
+      ],
+      "id": "multiplex-final-physical-panel"
+    },
+    {
+      "area": "qpcr-probe",
+      "assertions": [
+        "named Thermo Fisher conventional and IDT PrimeTime conventional hydrolysis-probe branches are executable under their own authority without averaging numeric rules",
+        "MGB/NFQ exact-Tm ranking requires a hash-bound external MGB-aware authority result; ordinary-DNA Tm is never substituted",
+        "probe salt/oligo thermodynamic context is explicit and same-reaction consistency is checked rather than silently diverging from primer context",
+        "F/R/probe self/cross interaction and independent structure evidence remain visible diagnostics/validators with provenance",
+        "MIQE/workflow evidence, multiplex optics and observed validation data never silently mutate saved design ranking"
+      ],
+      "id": "qpcr-probe-independent-structure"
+    },
+    {
+      "area": "construct-validation",
+      "assertions": [
+        "pydna is OPTIONAL unless the corresponding feature is selected",
+        "when available/selected, simulation result is attached as independent evidence",
+        "absence does not become an unrelated hard prerequisite"
+      ],
+      "id": "pydna-independent-simulation",
+      "modules": [
+        "gibson-assembly",
+        "inverse-pcr",
+        "site-directed-mutagenesis"
+      ]
+    },
+    {
+      "area": "universal-primers",
+      "assertions": [
+        "auto runs MAFFT-first policy with provenance",
+        "prealigned preserves reviewed alignment authority",
+        "alignment version/depth/width/warnings are retained"
+      ],
+      "id": "universal-alignment-authority"
+    },
+    {
+      "area": "lamp",
+      "assertions": [
+        "F3/B3/FIP/BIP are the four core oligos",
+        "LF/LB remain optional",
+        "six core target regions are modeled",
+        "readout is provenance and does not fabricate ranking evidence"
+      ],
+      "id": "lamp-core-loop-readout"
+    },
+    {
+      "area": "digital-pcr",
+      "assertions": [
+        "partition format, platform identity and fragmentation state are explicit",
+        "generic workflow says partition rather than droplet",
+        "QX200 overlay requires droplet partition format",
+        "droplet-specific terms occur only under a ddPCR/platform overlay",
+        "fragmentation is never silently inferred",
+        "threshold/rain/accepted-partition/Poisson outputs remain measured-run evidence"
+      ],
+      "id": "dpcr-partition-platform-semantics"
+    },
+    {
+      "area": "rpa",
+      "assertions": [
+        "TwistAmp Basic/Basic RT executable branch works",
+        "Exo/Nfo/Fpg/SIBA modified-probe requests never fabricate plain ACGT probes",
+        "unsupported topology returns a typed boundary/refusal"
+      ],
+      "id": "rpa-branch-boundary"
+    },
+    {
+      "area": "restriction-cloning",
+      "assertions": [
+        "same-enzyme ends are accepted as nondirectional when otherwise valid",
+        "directionality risk and control/screening requirements are visible",
+        "different-enzyme directional strategy remains supported"
+      ],
+      "id": "restriction-same-enzyme"
+    },
+    {
+      "area": "colony-pcr",
+      "assertions": [
+        "host class, crude-template preparation, protocol/SOP identity and separate source/revision provenance are required",
+        "no universal lysis hold or cycle count is inferred",
+        "result remains in-silico-screen-design until bench observations are supplied",
+        "colony-only fields refuse on unrelated flanking assays"
+      ],
+      "id": "colony-host-preparation-provenance"
+    },
+    {
+      "area": "race",
+      "assertions": [
+        "5prime/3prime direction maps to the correct single-primer read strand",
+        "GeneRacer and current FirstChoice RLM-RACE resolve exact versioned PCR partners by direction and primary/nested round",
+        "conflicting raceChemistry/raceAdapter kit identities refuse instead of cross-wiring partner sequences",
+        "SMARTer current-assisted execution requires complete context and an explicit exact partner; source-limited family metadata remains non-executable",
+        "substrate, preparation and primary/nested round are retained",
+        "result says candidate-transcript-end and never claims transcript-end completeness without sequencing evidence"
+      ],
+      "id": "race-substrate-adapter-round-boundary"
+    },
+    {
+      "area": "sequencing-primer",
+      "assertions": [
+        "design profile constraints remain separate from provider submission concentration/volume requirements",
+        "instrument family or explicit unresolved state is retained and other instrument requires a name",
+        "facility SOP may be retained independently of chemistry overlay",
+        "universal-primer reuse is executable only for exact unique template binding and cannot silently replace a ranked designed primer on ambiguous/non-unique binding",
+        "trace/basecalling/quality remain evidence from the external sequencing run and do not retroactively mutate saved ranking"
+      ],
+      "id": "sanger-instrument-trace-boundary"
+    },
+    {
+      "area": "consensus-pair",
+      "assertions": [
+        "weighted and stratified policies consume caller-supplied panel metadata without converting user weights into population prevalence claims",
+        "finite non-target specificity reports supplied-panel scope only",
+        "exact enumerated degenerate members remain traceable to mixed-base/defined-pool/discrete-mixture formulation evidence",
+        "split-pool and amplicon-informativeness outputs are diagnostic and do not silently rewrite primary ranking",
+        "alternative-alignment sensitivity is preserved as validation evidence with tool/version/provenance"
+      ],
+      "id": "consensus-panel-formulation-boundary",
+      "modules": [
+        "universal-primers"
+      ]
+    },
+    {
+      "area": "discriminating-pair",
+      "assertions": [
+        "biallelic-genotype refuses insertion/deletion/complex/presence-absence and remains the SNV/MNV single-anchor branch",
+        "presence-absence uses a reference-present representation with non-empty REF and empty ALT; reference-absence additions use insertion instead",
+        "typed insertion/deletion/presence-absence variant can execute the junction-aware plus/minus branch",
+        "current KASP protocol identity remains separate from historical lgc-standard compatibility",
+        "FAM/HEX endpoint import preserves plate/well/provider/software evidence",
+        "provider calls are preserved but PCRStudio does not invent a universal cluster threshold or hidden genotype auto-call",
+        "no result claims proprietary Kraken-equivalent design"
+      ],
+      "id": "kasp-plus-minus-endpoint-boundary",
+      "modules": [
+        "kasp"
+      ]
+    },
+    {
+      "area": "junction-primers",
+      "assertions": [
+        "neb-e5510 is executable only with method=gibson",
+        "neb-nebuilder-e2621/e5520/e2623 are executable only with method=nebuilder",
+        "Gibson and NEBuilder overlap/input numeric authorities never cross-inherit",
+        "typed fragment production and circular construct graph survive fork/export round-trip",
+        "feature/frame/molarity outputs remain diagnostic/provenance rather than fabricated measurements"
+      ],
+      "id": "junction-gibson-nebuilder-separation",
+      "modules": [
+        "gibson-assembly"
+      ]
+    },
+    {
+      "area": "mutagenic-pair",
+      "assertions": [
+        "single DNA, multi-edit, amino-acid and library input modes have independent required-context branches",
+        "Q5, QuikChange single and Lightning Multi keep distinct topology/protocol/Tm rules",
+        "Q5 7-100 nt insertion uses split tails and >100 nt routes to assembly instead of being silently truncated",
+        "NEBuilder multi-site remains a typed route to Junction Primers rather than an orderable mutagenic pair",
+        "switching away from library mode cannot leave a hidden stale library payload active"
+      ],
+      "id": "mutagenic-topology-input-separation",
+      "modules": [
+        "site-directed-mutagenesis"
+      ]
+    },
+    {
+      "area": "nested",
+      "assertions": [
+        "Round 1 and Round 2 chemistry/thermal programs remain independently identified",
+        "direct/diluted/purified/custom and named Exonuclease I transfer modes preserve explicit provenance",
+        "outer off-target products are rescanned with inner primers to produce the causal nested false-product graph",
+        "generic one-tube Nested remains fail-closed",
+        "anonymous dUTP/UNG remains strategy-only unless a named compatible protocol is selected"
+      ],
+      "id": "nested-two-round-transfer-causality",
+      "modules": [
+        "nested-pcr"
+      ]
+    },
+    {
+      "area": "inverse-pcr",
+      "assertions": [
+        "standard restriction/self-ligation requires zero internal anchor cuts and explicit digest/circularization provenance",
+        "supplied circular template does not invent a digest or ligation protocol",
+        "one-sided/internal-cut strategy remains reference-only and cannot silently substitute for the standard branch",
+        "exact, bounded and unresolved product-length states are preserved without fabricating unknown flank sequence",
+        "sequencing confirmation is a handoff/evidence route rather than duplicated sequencing-primer logic"
+      ],
+      "id": "inverse-topology-circle-boundary",
+      "mode": "strict"
+    }
+  ],
+  "schema_version": "1.0.0"
+}

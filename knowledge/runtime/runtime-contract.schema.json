@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/schemas/runtime-contract-v1.1.json",
+  "title": "PCRStudio generation-1 engine runtime contract",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "parameter_map_version",
+    "input_schema_version",
+    "output_schema_version",
+    "module_id",
+    "engine_id",
+    "coordinate_contract",
+    "pipeline_stages",
+    "parameter_precedence",
+    "override_policy",
+    "bindings"
+  ],
+  "properties": {
+    "contract_version": {"const": "1.1.0"},
+    "parameter_map_version": {"const": "gen1-2026-08-30.2"},
+    "input_schema_version": {"type": "string"},
+    "output_schema_version": {"type": "string"},
+    "module_id": {"type": "string"},
+    "engine_id": {"type": "string"},
+    "coordinate_contract": {
+      "type": "object",
+      "required": ["basis", "interval", "notation", "oligo_sequence_orientation", "single_base_position"],
+      "properties": {
+        "basis": {"const": 0},
+        "interval": {"const": "half-open"},
+        "notation": {"const": "[start,end)"},
+        "oligo_sequence_orientation": {"const": "5prime-to-3prime"},
+        "single_base_position": {"const": "0-based"}
+      },
+      "additionalProperties": true
+    },
+    "pipeline_stages": {"type": "array", "minItems": 10, "items": {"type": "string"}},
+    "parameter_precedence": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+    "override_policy": {"type": "object", "additionalProperties": {"type": "string"}},
+    "resolved_parameters": {"type": "object"},
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["tool_id", "role", "operations"],
+        "properties": {
+          "tool_id": {"type": "string"},
+          "role": {"enum": ["PRIMARY", "VALIDATOR", "FALLBACK", "OPTIONAL", "REFERENCE"]},
+          "operations": {"type": "array", "items": {"type": "string"}},
+          "purposes": {"type": "array", "items": {"type": "string"}},
+          "artifact_identity": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

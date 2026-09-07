@@ -1,0 +1,831 @@
+{
+  "schema_version": "1.0.0",
+  "engine": "loop-set",
+  "module": "lamp",
+  "generated_on": "2026-09-04",
+  "policy": {
+    "hard_mechanistic_invariant": "May reject candidates because the LAMP mechanism cannot work if violated.",
+    "versioned_compatibility_constraint": "May reject only inside the explicitly selected compatibility profile.",
+    "evidence_weighted_profile": "Separates validity envelopes from preferences and never silently changes compatibility profile semantics.",
+    "soft_risk_ranker": "May affect ranking/evidence but is not a universal wet-lab failure oracle.",
+    "set_level_specificity_evidence": "Evaluates complete LAMP-compatible topology and reports model limits.",
+    "research_watchlist": "Not allowed to influence Gen-1 selection until independently calibrated and versioned.",
+    "conditional_numeric_recipe": "May change bench recipe values only when an exact reviewed authority conditions the value on the selected assay context; it must not alter sequence ranking.",
+    "numeric_admission_boundary": "A missing public exact-product amount remains unresolved; the runtime must not invent a numeric value to make a current product executable."
+  },
+  "entries": [
+    {
+      "id": "LAMP-MECH-001",
+      "topic": "core six-region topology and composite inner primers",
+      "decision_role": "hard_mechanistic_invariant",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Loop-mediated isothermal amplification of DNA",
+          "year": 2000,
+          "doi": "10.1093/nar/28.12.e63",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC102748/",
+          "authority": "foundational_peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::check_geometry",
+        "tools/src/pcr_tools/loop_set.py::oligos"
+      ],
+      "tests": [
+        "test_the_composite_primers_are_built_back_to_front",
+        "test_the_eight_regions_are_in_order_along_the_plus_strand"
+      ],
+      "claim_boundary": "Mechanistic topology is enforceable in silico; amplification performance remains empirical."
+    },
+    {
+      "id": "LAMP-LOOP-001",
+      "topic": "optional LF/LB loop primers",
+      "decision_role": "mechanistic_optional_feature",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Accelerated reaction by loop-mediated isothermal amplification using loop primers",
+          "year": 2002,
+          "doi": "10.1006/mcpr.2002.0415",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12144774/",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::candidates",
+        "tools/src/pcr_tools/loop_set.py::sets"
+      ],
+      "tests": [
+        "test_a_four_primer_core_is_not_refused_when_no_loop_primer_can_fit",
+        "test_optional_loop_primers_survive_selection_without_overriding_interaction_risk",
+        "test_loop_alternatives_keep_no_loop_and_bounded_candidates_for_set_level_ranking"
+      ],
+      "claim_boundary": "Loop primers are optional and may accelerate LAMP; PCRStudio preserves the four-primer alternative and does not let loop count override stronger interaction-risk evidence."
+    },
+    {
+      "id": "LAMP-V5-001",
+      "topic": "PrimerExplorer V5 public-rule windows and terminal stability",
+      "decision_role": "versioned_compatibility_constraint",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "PrimerExplorer V5 Manual",
+          "year": 2026,
+          "url": "https://primerexplorer.eiken.co.jp/e/v5_manual/02.html",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed",
+          "accessed_on": "2026-09-02"
+        },
+        {
+          "title": "PrimerExplorer V5 Manual PDF",
+          "year": 2026,
+          "url": "https://primerexplorer.eiken.co.jp/e/v5_manual/pdf/PrimerExplorerV5_Manual.pdf",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed",
+          "accessed_on": "2026-09-02"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::PRIMEREXPLORER_V5_GEOMETRY",
+        "tools/src/pcr_tools/loop_set.py::primerexplorer_v5_tm",
+        "tools/src/pcr_tools/loop_set.py::primerexplorer_v5_end_dg",
+        "tools/src/pcr_tools/loop_set.py::candidates"
+      ],
+      "tests": [
+        "test_geometry_profile_is_versioned_and_does_not_silently_widen_v5",
+        "test_primerexplorer_v5_tm_matches_the_manual_figure_1_10_reference_outputs",
+        "test_primerexplorer_v5_end_dg_matches_manual_figure_1_10_reference_outputs",
+        "test_primerexplorer_v5_figure_1_4_coordinates_match_loop_geometry_convention",
+        "test_the_end_stability_threshold_is_measured_over_six_bases_not_five",
+        "test_loop_primer_uses_the_published_v5_loop_end_stability_threshold"
+      ],
+      "claim_boundary": "PCRStudio reproduces the reviewed V5 geometry convention and the public Figure 1.10 Tm/terminal-six-base ΔG numeric outputs within declared regression tolerances. Regular mechanistically critical ends use Eiken's role-specific -4 kcal/mol criterion, while LF/LB use the separate V5 loop-primer screen's published 3' stability threshold of -2 kcal/mol. PCRStudio does not claim to clone PrimerExplorer's proprietary candidate-generation/search algorithm or identity with every generic Expert-Mode 5'/3' field. PrimerExplorer's dimer-check threshold is not transplanted into Primer3 because the thermodynamic models are not assumed numerically interchangeable; set-level structure evidence is evaluated separately."
+    },
+    {
+      "id": "LAMP-NEB-2025-001",
+      "topic": "evidence profile geometry and preferred windows",
+      "decision_role": "evidence_weighted_profile",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "LAMP Primer Design using the NEB LAMP Primer Design Tool: Critical Considerations for Assay Robustness, Speed and Sensitivity",
+          "year": 2025,
+          "url": "https://media.neb.com/m/cc0bbc21ec612a7/original/LAMP_TechNote_0425.pdf",
+          "authority": "vendor_technical_note"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::PCRSTUDIO_EVIDENCE_2026_GEOMETRY",
+        "tools/src/pcr_tools/loop_set.py::Set.evidence_rank"
+      ],
+      "tests": [
+        "test_evidence_profile_outer_gap_preference_is_separate_from_validity"
+      ],
+      "claim_boundary": "0–60 bp outer-gap eligibility follows the current NEB tool default; 15–60 bp is descriptive “generally good” guidance and 40–60 bp is the active soft preference. These do not silently alter V5 compatibility."
+    },
+    {
+      "id": "LAMP-LINKER-001",
+      "topic": "FIP/BIP junction linker",
+      "decision_role": "explicit_research_variant",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Loop-mediated isothermal amplification of DNA",
+          "year": 2000,
+          "doi": "10.1093/nar/28.12.e63",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC102748/",
+          "authority": "foundational_peer_reviewed"
+        },
+        {
+          "title": "Evaluation of the effect of outer primer structure, and inner primer linker sequences, in the performance of LAMP",
+          "year": 2023,
+          "doi": "10.1016/j.talanta.2023.124642",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0039914023003934",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::inner_linker_for",
+        "tools/src/pcr_tools/loop_set.py::oligos",
+        "tools/src/pcr_tools/external_validation.py::_lamp_blast_region_queries"
+      ],
+      "tests": [
+        "test_tttt_linker_is_explicit_and_kept_separate_from_target_tail",
+        "test_lamp_blast_queries_split_composite_oligos_and_exclude_synthetic_linker"
+      ],
+      "claim_boundary": "TTTT is an explicit option, not a universal-best default; genomic searches exclude the synthetic linker."
+    },
+    {
+      "id": "LAMP-STRUCT-001",
+      "topic": "hairpin/self-dimer/cross-dimer/3-prime interaction",
+      "decision_role": "soft_risk_ranker",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "LAMPrimers iQ: New primer design software for loop-mediated isothermal amplification",
+          "year": 2024,
+          "doi": "10.1016/j.ab.2023.115376",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37924966/",
+          "authority": "peer_reviewed"
+        },
+        {
+          "title": "High-temperature ssBP-LAMP breaks the barrier of nonspecific amplification and unlocks the full potential of LAMP diagnostics",
+          "year": 2026,
+          "doi": "10.1186/s11658-026-00926-8",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13281569/",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::three_prime_interaction_risk",
+        "tools/src/pcr_tools/loop_set.py::interactions",
+        "tools/src/pcr_tools/loop_set.py::_thermodynamic_structure_rank"
+      ],
+      "tests": [
+        "test_a_deliberately_complementary_pair_is_flagged",
+        "test_uncomputed_pairwise_structure_does_not_rank_as_best_evidence"
+      ],
+      "claim_boundary": "Structure evidence changes risk/ranking but no universal ΔG threshold is treated as a wet-lab success/failure oracle."
+    },
+    {
+      "id": "LAMP-SPEC-001",
+      "topic": "finite-background six-region specificity with mismatches",
+      "decision_role": "set_level_specificity_evidence",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "GLAPD: Whole Genome Based LAMP Primer Design for a Set of Target Genomes",
+          "year": 2020,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6923652/",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::_lamp_sequence_sites",
+        "tools/src/pcr_tools/loop_set.py::_lamp_background_topology_audit"
+      ],
+      "tests": [
+        "test_six_region_background_topology_detects_exact_and_mismatch_tolerant_loci",
+        "test_six_region_background_topology_is_orientation_invariant"
+      ],
+      "claim_boundary": "Direct matcher is ungapped, substitution-only, <=2 mismatches per region and finite-background scoped; a clean result is only clean within that model."
+    },
+    {
+      "id": "LAMP-SPEC-002",
+      "topic": "indexed BLAST six-region locus reconstruction",
+      "decision_role": "external_set_level_specificity_evidence",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "GLAPD: Whole Genome Based LAMP Primer Design for a Set of Target Genomes",
+          "year": 2020,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6923652/",
+          "authority": "peer_reviewed"
+        },
+        {
+          "title": "NCBI BLAST+",
+          "year": 2026,
+          "url": "https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html",
+          "authority": "primary_tool_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/external_validation.py::_lamp_blast_region_queries",
+        "tools/src/pcr_tools/external_validation.py::_blast_lamp_topology"
+      ],
+      "tests": [
+        "test_blast_lamp_topology_detects_reverse_complement_locus",
+        "test_blast_lamp_topology_surfaces_upstream_hit_truncation_without_clean_claim",
+        "test_blast_lamp_topology_indexes_out_geometrically_impossible_decoys",
+        "test_lamp_blast_queries_split_composite_oligos_and_exclude_synthetic_linker"
+      ],
+      "claim_boundary": "All six core regions are queried for topology reconstruction and optional LF/LB are queried as site-level evidence without becoming required topology roles. Hit truncation and bounded topology assembly are surfaced; incomplete hit collection cannot yield a clean proof."
+    },
+    {
+      "id": "LAMP-INCL-001",
+      "topic": "target-panel inclusivity/conservation",
+      "decision_role": "target_coverage_evidence",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "GLAPD: Whole Genome Based LAMP Primer Design for a Set of Target Genomes",
+          "year": 2020,
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6923652/",
+          "authority": "peer_reviewed"
+        },
+        {
+          "title": "Profiling RT-LAMP tolerance of sequence variation for SARS-CoV-2 RNA detection",
+          "year": 2022,
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35324900/",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::_prepare_target_inclusivity",
+        "tools/src/pcr_tools/loop_set.py::_target_inclusivity_audit"
+      ],
+      "tests": [
+        "test_loop_set_runtime_contract_declares_conditional_mafft_and_mfe_structure_ops",
+        "test_lamp_target_inclusivity_audit_is_position_and_role_aware"
+      ],
+      "claim_boundary": "No homologous target panel means no population-coverage claim. Mismatch effects are role/position-aware evidence, not deterministic failure calls."
+    },
+    {
+      "id": "LAMP-SEARCH-001",
+      "topic": "bounded branch/top-K search",
+      "decision_role": "engineering_search_policy",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "GLAPD source/usage notes",
+          "year": 2026,
+          "url": "https://github.com/jiqingxiaoxi/GLAPD",
+          "authority": "upstream_software_reference"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::_round_robin_partner_schedule",
+        "tools/src/pcr_tools/loop_set.py::_core_pair_expansion_pool",
+        "tools/src/pcr_tools/loop_set.py::_loop_variants",
+        "tools/src/pcr_tools/loop_set.py::_spatial_sample",
+        "tools/src/pcr_tools/loop_set.py::_risk_rank_pool"
+      ],
+      "tests": [
+        "test_round_robin_core_partner_budget_reaches_all_jobs_before_second_pass",
+        "test_core_pair_expansion_pool_keeps_best_and_target_wide_diversity",
+        "test_loop_alternatives_keep_no_loop_and_bounded_candidates_for_set_level_ranking",
+        "test_outer_pair_topk_truncation_is_disclosed_as_bounded_search",
+        "test_bounded_search_is_reverse_complement_invariant_for_both_geometry_profiles",
+        "test_repeated_bounded_search_is_deterministic_for_identical_input"
+      ],
+      "claim_boundary": "Every known computational truncation layer (half cap, loop-alternative pruning, partner sampling, core expansion, outer-candidate/pair top-K, and risk-rank pool) is surfaced in search provenance; any such pruning disables global-optimum claims."
+    },
+    {
+      "id": "LAMP-EXT-001",
+      "topic": "independent ordered-oligo and specificity validators",
+      "decision_role": "external_validation",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "MFEprimer",
+          "year": 2026,
+          "url": "https://github.com/quwubin/MFEprimer-3.0",
+          "authority": "upstream_tool"
+        },
+        {
+          "title": "MAFFT",
+          "year": 2026,
+          "url": "https://mafft.cbrc.jp/alignment/software/",
+          "authority": "upstream_tool"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/runtime_contract.py::ENGINE_BINDINGS[loop-set]",
+        "tools/src/pcr_tools/external_validation.py::validate_result",
+        "tools/src/pcr_tools/external_validation.py::_mfeprimer_oligo_qc"
+      ],
+      "tests": [
+        "test_loop_set_runtime_contract_declares_conditional_mafft_and_mfe_structure_ops",
+        "test_loop_set_mfeprimer_ordered_oligo_qc_executes_dimer_and_hairpin",
+        "test_loop_set_mfeprimer_qc_never_crosses_alternative_lamp_sets"
+      ],
+      "claim_boundary": "Strict mode requires pinned tool identities and approved specificity databases; missing external evidence cannot be silently upgraded to validated. Ordered-molecule MFEprimer dimer/hairpin evidence is evaluated per physically co-reacting LAMP candidate set, so alternative sets are never pooled into a fictitious cross-set reaction."
+    },
+    {
+      "id": "LAMP-PROTOCOL-001",
+      "topic": "named vendor protocol overlays remain bench/provenance context and do not select primer sequences",
+      "decision_role": "named_bench_protocol_overlay",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Protocol for LyoPrime WarmStart Fluorescent LAMP/RT-LAMP Mix (with UDG) (NEB L4401)",
+          "year": 2026,
+          "url": "https://www.neb.com/en-us/protocols/protocol-for-lyoprime-warmstart-fluorescent-lamp-rt-lamp-mix-with-udg-neb-l4401",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        },
+        {
+          "title": "Loop-mediated Isothermal Amplification (LAMP) Protocol using Bst-XT WarmStart DNA Polymerase (Glycerol-free) (NEB M9205)",
+          "year": 2025,
+          "url": "https://www.neb.com/en/protocols/2025/03/18/loop-mediated-isothermal-amplification-lamp-protocol-using-bst-xt-warmstart-dna-polymerase-glycerol-free",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "SuperScript IV RT-LAMP Master Mix Quick Reference MAN0025703 Rev. A.0",
+          "year": 2021,
+          "url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0025703_Superscript_IV_RT-LAMP_QR.pdf",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Nippon Gene 2x LAMP Master Mix Manual 2024/9 (NE6041/NE6043)",
+          "year": 2024,
+          "url": "https://nippongene.com/kensa/products/tds/NE6041_NE6043_Manual.pdf",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Eiken Loopamp RNA/DNA Amplification Reagent D package insert (LMP247)",
+          "year": 2015,
+          "url": "https://loopamp.eiken.co.jp/en/uploads/rna_dna_insert.pdf",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "NEB Bst-XT WarmStart DNA Polymerase current product/protocol family (M1712)",
+          "year": 2026,
+          "url": "https://www.neb.com/en-us/products/m1712-bst-xt-warmstart-dna-polymerase",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        },
+        {
+          "title": "Eiken Loopamp reagent kits current product catalogue",
+          "year": 2026,
+          "url": "https://loopamp.eiken.co.jp/en/product/",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::LAMP_PROTOCOL_REGISTRY",
+        "crates/pcr-core/src/engines/loop_set.rs::LAMP_PROTOCOLS",
+        "web/src/lib/contracts/design-requests.ts::lampProtocol",
+        "web/src/components/design/engine-fields/lamp-fields.tsx::lampProtocol"
+      ],
+      "tests": [
+        "test_reviewed_lamp_protocols_keep_their_own_concentrations_and_hold",
+        "test_protocol_overlay_does_not_change_the_selected_genomic_lamp_set",
+        "test_thermo_superscript_iv_preserves_protocol_range_and_dual_substrate_authority",
+        "test_nippon_ne6041_preserves_fluorescence_only_dna_recipe_without_invented_rt",
+        "test_neb_m9205_preserves_glycerol_free_rt_and_optional_udg_authority",
+        "test_eiken_dried_rna_dna_reagent_keeps_range_and_one_step_rt_authority",
+        "test_nippon_ne6041_turbidity_is_a_source_backed_hard_incompatibility"
+      ],
+      "claim_boundary": "Named overlays preserve vendor-specific reaction identity, thermal/substrate authority, carry-over and readout context. Selecting an overlay must not change genomic LAMP candidate generation, geometry, Tm eligibility or specificity ranking, and a computationally represented protocol does not constitute wet-lab validation."
+    },
+    {
+      "id": "LAMP-PERF-ML-001",
+      "topic": "2025 in-silico amplification predictor using F2/B2 GC and local enthalpy",
+      "decision_role": "research_watchlist",
+      "status": "not_integrated_into_ranking",
+      "sources": [
+        {
+          "title": "In silico prediction of loop-mediated isothermal amplification using a generalized linear model",
+          "year": 2025,
+          "url": "https://academic.oup.com/synbio/article/10/1/ysaf007/8100661",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [],
+      "tests": [],
+      "claim_boundary": "Promising model (reported AUC ~0.858; prospective AUC ~0.811) is based on a limited 96-set dataset; PCRStudio does not import its coefficients as a universal score without independent calibration."
+    },
+    {
+      "id": "LAMP-NSA-2026-001",
+      "topic": "primer-driven nonspecific amplification and initiator inner primers",
+      "decision_role": "research_watchlist",
+      "status": "not_sequence_predictable_yet",
+      "sources": [
+        {
+          "title": "Inner primer Blockers inhibit non-specific amplification in LAMP",
+          "year": 2026,
+          "doi": "10.1016/j.aca.2025.345020",
+          "url": "https://www.sciencedirect.com/science/article/pii/S000326702501414X",
+          "authority": "peer_reviewed"
+        },
+        {
+          "title": "High-temperature ssBP-LAMP breaks the barrier of nonspecific amplification and unlocks the full potential of LAMP diagnostics",
+          "year": 2026,
+          "doi": "10.1186/s11658-026-00926-8",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13281569/",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [],
+      "tests": [],
+      "claim_boundary": "These studies strengthen the need for FIP/BIP-focused risk review and wet-lab NTC screening but do not yet supply a general sequence-only rule that PCRStudio can safely hard-code."
+    },
+    {
+      "id": "LAMP-ML-2026-PREPRINT-001",
+      "topic": "multi-feature LAMP fidelity classification with scarce negative assay data",
+      "decision_role": "research_watchlist",
+      "status": "preprint_not_integrated_into_ranking",
+      "sources": [
+        {
+          "title": "Multi-feature Classification to Improve Colorimetric Loop-Mediated Isothermal Amplification Fidelity",
+          "year": 2026,
+          "doi": "10.64898/2026.06.03.728514",
+          "url": "https://doi.org/10.64898/2026.06.03.728514",
+          "authority": "preprint"
+        }
+      ],
+      "implementation": [],
+      "tests": [],
+      "claim_boundary": "The small, imbalanced preprint dataset is useful for hypothesis generation, especially around F1c/B1c features, but is insufficient to import coefficients, cutoffs or calibrated probabilities into PCRStudio."
+    },
+    {
+      "id": "LAMP-SLAMP-2026-001",
+      "topic": "short-target SLAMP alternative architecture",
+      "decision_role": "separate_future_topology",
+      "status": "not_integrated_into_classic_loop_set",
+      "sources": [
+        {
+          "title": "Optimization of loop-mediated isothermal amplification harnessing a novel primer design targeting at short DNA sequence",
+          "year": 2026,
+          "doi": "10.1016/j.microc.2026.117092",
+          "url": "https://doi.org/10.1016/j.microc.2026.117092",
+          "authority": "peer_reviewed"
+        }
+      ],
+      "implementation": [],
+      "tests": [],
+      "claim_boundary": "SLAMP is a distinct primer/topology architecture and must not be represented by silently relaxing canonical LAMP geometry; it requires a separate executable contract before adoption."
+    },
+    {
+      "id": "LAMP-READOUT-002",
+      "topic": "source-backed hard readout incompatibility for Nippon Gene NE6041/NE6043",
+      "decision_role": "named_protocol_readout_gate",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Nippon Gene 2x LAMP Master Mix Manual 2024/9 (NE6041/NE6043)",
+          "year": 2024,
+          "url": "https://nippongene.com/kensa/products/tds/NE6041_NE6043_Manual.pdf",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Nippon Gene 2x LAMP Master Mix current product page",
+          "year": 2026,
+          "url": "https://www.nippongene.com/kensa/products/amplification/2x-lamp-mix/2x-lamp-master-mix.html",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::_readout_compatibility",
+        "tools/src/pcr_tools/loop_set.py::LAMP_PROTOCOL_REGISTRY",
+        "web/src/components/design/engine-fields/lamp-fields.tsx::lampReadout"
+      ],
+      "tests": [
+        "test_nippon_ne6041_turbidity_is_a_source_backed_hard_incompatibility"
+      ],
+      "claim_boundary": "Only a product/readout combination explicitly ruled out by reviewed vendor documentation is made impossible. Absence from a recommended-readout list alone remains review-required rather than a universal impossibility claim."
+    },
+    {
+      "id": "LAMP-SCENARIO-R8-001",
+      "topic": "scenario-aware specimen/formulation/readout contract",
+      "decision_role": "named_protocol_scenario_gate",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Vendor product/protocol authorities represented in the R8 LAMP registry",
+          "year": 2026,
+          "url": "https://www.neb.com/en-us/applications/dna-amplification-pcr-and-qpcr/isothermal-amplification/lamp",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::_sample_scenario_compatibility",
+        "tools/src/pcr_tools/loop_set.py::_formulation_compatibility",
+        "tools/src/pcr_tools/loop_set.py::_readout_chemistry_compatibility"
+      ],
+      "tests": [
+        "test_direct_sample_lamp_cannot_bypass_named_matrix_authority",
+        "test_direct_sample_matrix_mismatch_fails_closed",
+        "test_readout_chemistry_broad_branch_mismatch_fails_closed"
+      ],
+      "claim_boundary": "Scenario gates are exact to reviewed named authorities; they do not generalize inhibitor tolerance or modify sequence ranking."
+    },
+    {
+      "id": "LAMP-MDX126-001",
+      "topic": "Meridian MDX126 air-dryable direct blood LAMP",
+      "decision_role": "named_protocol_scenario_gate",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "MDX126 Air-Dryable Direct DNA LAMP Blood Product Handling Guide",
+          "year": 2026,
+          "url": "https://www.meridianbioscience.com/uploads/ls-uploads/mdx-phg/MDX126-phg.pdf",
+          "authority": "vendor_primary_documentation",
+          "year_basis": "accessed/current",
+          "accessed_on": "2026-09-03"
+        }
+      ],
+      "implementation": [
+        "contracts/chemistry/lamp-protocols.json::meridian-mdx126",
+        "tools/src/pcr_tools/data/lamp-protocol-authority.generated.json::meridian-mdx126",
+        "web/src/lib/lamp-protocol-authority.generated.json::meridian-mdx126"
+      ],
+      "tests": [
+        "test_meridian_mdx126_preserves_air_dryable_direct_blood_authority",
+        "test_direct_sample_matrix_mismatch_fails_closed"
+      ],
+      "claim_boundary": "Direct blood/plasma/serum and air-dryable authority applies only to the exact MDX126 branch; it is not transferred to generic LAMP chemistry."
+    },
+    {
+      "id": "LAMP-TAKARA-RR385-001",
+      "topic": "Takara BcaBEST RR385 DNA/RNA TB Green/UNG chemistry",
+      "decision_role": "named_protocol_readout_gate",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "BcaBEST Isothermal FluorDetect Kit (DNA/RNA) Product Manual v202504Da",
+          "year": 2025,
+          "url": "https://takara.co.kr/file/manual/pdf/RR385S_RR385A_e.v2504Da.pdf",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::takara-rr385",
+        "tools/src/pcr_tools/loop_set.py::_readout_compatibility"
+      ],
+      "tests": [
+        "test_takara_rr385_preserves_dna_rna_tb_green_ung_and_melt_authority",
+        "test_takara_rr385_turbidity_is_a_source_backed_hard_incompatibility",
+        "test_takara_rr385_pyrophosphate_turbidity_chemistry_is_hard_incompatible"
+      ],
+      "claim_boundary": "RR385 supports the reviewed fluorescent TB Green branch; inorganic-pyrophosphatase chemistry makes pyrophosphate turbidity unavailable. Melt analysis is product-uniformity evidence, not sequence identity proof."
+    },
+    {
+      "id": "LAMP-NUMERIC-R9-001",
+      "topic": "source-conditioned numeric recipe resolution",
+      "decision_role": "conditional_numeric_recipe",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "NEB Bst-XT WarmStart Multi-Purpose LAMP/RT-LAMP M1712 current guidance",
+          "year": 2026,
+          "url": "https://www.neb.com/en-us/products/m1712-bst-xt-warmstart-multi-purpose-lamp-rt-lamp-2x-master-mix-with-udg",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Thermo Fisher SuperScript IV RT-LAMP Master Mix",
+          "year": 2026,
+          "url": "https://www.thermofisher.com/order/catalog/product/A51802",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Eiken Loopamp Fluorescent Detection Reagent LMP221 insert",
+          "year": 2026,
+          "url": "https://loopamp.eiken.co.jp/en/uploads/fd_insert.pdf",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/lamp_numeric_recipes.py::resolve_numeric_recipe",
+        "web/src/lib/lamp-contract.ts::resolveLampNumericPreview",
+        "tools/src/pcr_tools/loop_set.py::_bench_optimization"
+      ],
+      "tests": [
+        "test_m1712_readout_numbers_change",
+        "test_thermo_calcein_and_syto9_are_distinct_numeric_recipes",
+        "test_bst_xt_substrate_and_carryover_add_numbers",
+        "test_eiken_and_ph_colorimetric_fail_closed_for_wrong_buffer_context"
+      ],
+      "claim_boundary": "R9 separates baseline values, conditional overlays, reviewed ranges, bounded user overrides, derived stoichiometry and unresolved dependencies. None of these bench values changes genomic candidate ranking."
+    },
+    {
+      "id": "LAMP-GLOBAL-R9-001",
+      "topic": "68-identity exact-product global runtime catalogue",
+      "decision_role": "named_bench_protocol_overlay",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Jena Bioscience Saphir RT-LAMP Kit PCR-540",
+          "year": 2026,
+          "url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp/rt-lamp-master-mixes/pcr-540-saphir-rt-lamp-kit",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "NZYtech MD0696 IFU V2402",
+          "year": 2026,
+          "url": "https://www.nzytech.com/media/dds/brochurescertificates/md0696_ifu_en_v2402.pdf",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Yeasen 16730 RT-LAMP Lyo-Ready Fluorescent Assay Kit",
+          "year": 2026,
+          "url": "https://www.yeasenbio.com/products/16730",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/loop_set.py::LAMP_PROTOCOL_REGISTRY",
+        "crates/pcr-core/src/engines/loop_set.rs::LAMP_PROTOCOLS",
+        "web/src/lib/contracts/design-requests.ts::lampProtocol",
+        "web/src/components/design/engine-fields/lamp-fields.tsx::lampProtocol"
+      ],
+      "tests": [
+        "test_current_protocol_catalogue_and_substrate_partition",
+        "test_grouped_vendor_primer_table_normalizes_to_explicit_roles"
+      ],
+      "claim_boundary": "Catalogue breadth is not a claim of universal equivalence. Each identity preserves exact-product substrate/formulation/readout authority; products lacking sufficient public numeric authority remain watchlist-only."
+    },
+    {
+      "id": "LAMP-VAZYME-R9-001",
+      "topic": "instrument-conditioned Vazyme RP711 fluorescent-dye recipe",
+      "decision_role": "conditional_numeric_recipe",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Vazyme RP711 Fluorescent LAMP/RT-LAMP Kit V25.1/current product guidance",
+          "year": 2026,
+          "url": "https://bio.vazyme.com/product/763.html",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/lamp_numeric_recipes.py::LAMP_NUMERIC_CONDITIONAL_RULES",
+        "web/src/lib/lamp-contract.ts::resolveLampNumericPreview",
+        "crates/pcr-core/src/engines/loop_set.rs::lamp_instrument_profile"
+      ],
+      "tests": [
+        "test_vazyme_instrument_stoichiometry_and_other_instrument_unresolved_exact",
+        "test_current_protocol_catalogue_and_substrate_partition"
+      ],
+      "claim_boundary": "SLAN-96P resolves to the reviewed 0.1X dye branch and named reviewed platforms to 1X. Other qPCR instruments retain the published 0.1–1X range rather than an invented exact setting."
+    },
+    {
+      "id": "LAMP-AGDIA-R9-001",
+      "topic": "Agdia LMX 54700 RNA/external-RT and AmpliFire numeric branch",
+      "decision_role": "conditional_numeric_recipe",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+          "year": 2025,
+          "url": "https://orders.agdia.com/assets/site/docs/m472.pdf",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/lamp_numeric_recipes.py::LAMP_NUMERIC_CONDITIONAL_RULES",
+        "tools/src/pcr_tools/loop_set.py::LAMP_PROTOCOL_REGISTRY",
+        "web/src/lib/lamp-contract.ts::resolveLampNumericPreview"
+      ],
+      "tests": [
+        "test_agdia_rna_adds_external_rt_only_when_needed",
+        "test_current_protocol_catalogue_and_substrate_partition"
+      ],
+      "claim_boundary": "The reviewed external RT amount is added only for RNA input; the AmpliFire 65°C/20 min branch is instrument-specific and is not generalized to arbitrary readers."
+    },
+    {
+      "id": "LAMP-NUMERIC-BOUNDARY-R9-001",
+      "topic": "unresolved numeric dependency and no-fabrication rule",
+      "decision_role": "numeric_admission_boundary",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "NEB M1712 current exact-product LAMP/RT-LAMP guidance",
+          "year": 2026,
+          "url": "https://www.neb.com/en-us/products/m1712-bst-xt-warmstart-multi-purpose-lamp-rt-lamp-2x-master-mix-with-udg",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/lamp_numeric_recipes.py::LAMP_NUMERIC_UNRESOLVED_DEPENDENCIES",
+        "web/src/lib/lamp-contract.ts::resolveLampNumericPreview",
+        "tools/src/pcr_tools/loop_set.py::_bench_optimization"
+      ],
+      "tests": [
+        "test_unsourced_ranges_are_not_resurrected",
+        "test_unsourced_override_ranges_are_removed_from_worker_authority"
+      ],
+      "claim_boundary": "A known dependency with no sufficiently specific public value is surfaced as unresolved. Baseline values are not silently promoted to optimization ranges, and current-product marketing is not used to synthesize missing chemistry."
+    },
+    {
+      "id": "LAMP-GLOBAL-R15-001",
+      "topic": "72-identity canonical exact-product LAMP runtime catalogue",
+      "evidence_class": "exact-product/source-bounded catalogue authority",
+      "implementation": [
+        "contracts/chemistry/lamp-protocols.json::catalogue_snapshot",
+        "tools/src/pcr_tools/registries/lamp.py::LAMP_PROTOCOL_REGISTRY",
+        "web/src/lib/lamp-protocol-authority.generated.ts::LAMP_PROTOCOLS",
+        "crates/pcr-core/src/engines/lamp_protocol_ids.generated.rs::LAMP_PROTOCOLS"
+      ],
+      "claim_boundary": "R15 snapshot 2026-09 contains 72 named identities excluding not-selected: 35 DNA-only, 4 RNA-only, 33 DNA+RNA. Catalogue membership is not chemistry equivalence and missing numeric facts remain unresolved.",
+      "decision_role": "named_bench_protocol_overlay",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "PrimerExplorer V5 Manual",
+          "year": 2026,
+          "url": "https://primerexplorer.jp/e/v5_manual/02.html",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Vazyme ColorDetect LAMP/RT-LAMP Master Mix RP712",
+          "year": 2026,
+          "url": "https://bio.vazyme.com/products_7/142.html",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Hyasen RT-LAMP Fluorescent Master Mix HYB413",
+          "year": 2026,
+          "url": "https://www.hyasen.com/rt-lamp-fluorenscent-master-mix-hyb413-product/",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "tests": [
+        "test_lamp_catalogue_partition_tracks_canonical_72_protocol_authority"
+      ]
+    },
+    {
+      "id": "LAMP-GEOMETRY-R15-001",
+      "topic": "PrimerExplorer V5 automatic GC profile boundary",
+      "evidence_class": "reference-tool documented semantics",
+      "implementation": [
+        "contracts/chemistry/lamp-protocols.json::automatic_judgment",
+        "tools/src/pcr_tools/loop_set.py::windows_for"
+      ],
+      "claim_boundary": "AT-rich <=45%, Normal >45% and <60%, GC-rich >=60%. This is a versioned compatibility profile, not a universal empirical success predictor.",
+      "decision_role": "versioned_compatibility_constraint",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "PrimerExplorer V5 Manual — automatic judgment",
+          "year": 2026,
+          "url": "https://primerexplorer.jp/e/v5_manual/02.html",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "tests": [
+        "test_primerexplorer_v5_automatic_judgment_exact_gc_boundaries_are_inclusive"
+      ]
+    },
+    {
+      "id": "LAMP-DIFFERENTIAL-R15-001",
+      "topic": "shared Python/Rust/Web LAMP numeric differential corpus",
+      "evidence_class": "executable implementation-parity regression",
+      "implementation": [
+        "contracts/chemistry/lamp-differential-corpus.json::schema_version",
+        "scripts/check-lamp-web-numeric.js::resolveLampNumericPreview",
+        "tools/src/pcr_tools/lamp_numeric_recipes.py::resolve_numeric_recipe"
+      ],
+      "claim_boundary": "The corpus verifies cross-language numeric and thermal-stage parity; it does not replace vendor evidence.",
+      "decision_role": "cross_language_numeric_regression",
+      "status": "implemented",
+      "sources": [
+        {
+          "title": "Hyasen RT-LAMP Fluorescent Master Mix HYB413",
+          "year": 2026,
+          "url": "https://www.hyasen.com/rt-lamp-fluorenscent-master-mix-hyb413-product/",
+          "authority": "vendor_primary_documentation"
+        },
+        {
+          "title": "Vazyme ColorDetect LAMP/RT-LAMP Master Mix RP712",
+          "year": 2026,
+          "url": "https://bio.vazyme.com/products_7/142.html",
+          "authority": "vendor_primary_documentation"
+        }
+      ],
+      "tests": [
+        "test_lamp_shared_numeric_differential_corpus_matches_python_authority"
+      ]
+    }
+  ]
+}

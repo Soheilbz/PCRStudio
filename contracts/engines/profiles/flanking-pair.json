@@ -1,0 +1,19 @@
+{
+  "authority_domains": [
+    {
+      "id": "flanking",
+      "source": "contracts/chemistry/flanking-protocols.toml"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/flanking-differential-corpus.json"
+  ],
+  "engine_id": "flanking-pair",
+  "feature_capabilities": {},
+  "schema_version": "1.0.0",
+  "transport": {
+    "authority": "contracts/http-api.toml",
+    "fields": [],
+    "mode": "canonical-http-contract"
+  }
+}

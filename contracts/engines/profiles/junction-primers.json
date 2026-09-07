@@ -1,0 +1,102 @@
+{
+  "authority_domains": [
+    {
+      "id": "assembly",
+      "source": "contracts/chemistry/assembly-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/junction-differential-corpus.json"
+  ],
+  "engine_id": "junction-primers",
+  "feature_capabilities": {
+    "construct-graph": {
+      "status": "executable"
+    },
+    "feature-integrity": {
+      "status": "diagnostic-only"
+    },
+    "fragment-molarity": {
+      "claim_boundary": "approximate when computed from dsDNA mass/length",
+      "status": "diagnostic-only"
+    },
+    "gibson-e5510": {
+      "authority": "neb-e5510",
+      "status": "executable"
+    },
+    "golden-gate": {
+      "reason": "separate Type IIS topology",
+      "status": "fail-closed"
+    },
+    "nebuilder-e2621": {
+      "authority": "neb-nebuilder-e2621",
+      "status": "executable"
+    },
+    "nebuilder-e2623": {
+      "authority": "neb-nebuilder-e2623",
+      "status": "executable"
+    },
+    "nebuilder-e5520": {
+      "authority": "neb-nebuilder-e5520",
+      "status": "executable"
+    },
+    "nebuilder-proprietary-tool-equivalence": {
+      "reason": "PCRStudio does not claim NEBuilder web-tool ranking equivalence",
+      "status": "fail-closed"
+    },
+    "typed-annealed-oligos": {
+      "status": "executable"
+    },
+    "typed-existing-linear": {
+      "status": "executable"
+    },
+    "typed-pcr-fragment": {
+      "status": "executable"
+    },
+    "typed-restriction-fragment": {
+      "status": "executable"
+    },
+    "typed-ssdna-oligo": {
+      "status": "executable"
+    },
+    "typed-synthetic-dsdna": {
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "design",
+        "python": "method",
+        "rust": "method",
+        "web": "assemblyMethod"
+      },
+      {
+        "owner": "reaction",
+        "python": "assembly_protocol",
+        "rust": "assembly_protocol",
+        "web": "assemblyProtocol"
+      },
+      {
+        "owner": "target",
+        "python": "fragments",
+        "rust": "fragments",
+        "web": "fragments"
+      },
+      {
+        "owner": "design",
+        "python": "circular",
+        "rust": "circular",
+        "web": "circular"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

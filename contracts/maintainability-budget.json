@@ -1,0 +1,34 @@
+{
+  "extractions": [
+    "web/src/components/design/engine-fields/advanced-fields.tsx",
+    "web/src/components/design/evidence-input.tsx",
+    "web/src/components/design/probe-fields.tsx",
+    "web/src/components/design/probe-multiplex-editor.tsx",
+    "web/src/components/design/protocol-result-cards.tsx",
+    "web/src/components/project/use-draft-autosave.ts",
+    "web/src/components/project/use-workspace-run.ts",
+    "web/src/components/project/workspace-readiness.ts",
+    "web/src/lib/api/project-limits.ts",
+    "web/src/lib/projects/draft-codec.ts"
+  ],
+  "max_lines": {
+    "crates/pcr-core/src/engines/flanking_pair.rs": 2513,
+    "crates/pcr-projects/src/lib.rs": 2165,
+    "crates/pcr-storage/src/lib.rs": 1970,
+    "tools/src/pcr_tools/loop_set.py": 4201,
+    "tools/src/pcr_tools/pipeline.py": 3866,
+    "tools/src/pcr_tools/registries/flanking_protocols.py": 2478,
+    "web/src/components/design/engine-fields.tsx": 3258,
+    "web/src/components/project/workspace.tsx": 3104,
+    "web/src/lib/api/types.ts": 4225
+  },
+  "policy": "no-growth-until-extracted",
+  "rationale": "Known hotspots are explicit debt budgets, not broad allowances. Unbudgeted files/functions above architecture review thresholds fail review; every listed hotspot is no-growth until a behavior-preserving extraction is natively qualified.",
+  "release_line": "CURRENT",
+  "schema_version": "1.0.0",
+  "max_function_lines": {
+    "tools/src/pcr_tools/pipeline.py::run": 2124,
+    "tools/src/pcr_tools/loop_set.py::run": 904
+  },
+  "function_review_lines": 600
+}

@@ -1,0 +1,627 @@
+{
+  "authority_id": "pcrstudio-current-engine-transport-parity",
+  "engine_count": 11,
+  "engine_registry": "contracts/engines.toml",
+  "engines": {
+    "consensus-pair": {
+      "fields": [
+        {
+          "owner": "design",
+          "python": "consensus_policy",
+          "rust": "consensus_policy",
+          "web": "consensusPolicy"
+        },
+        {
+          "owner": "target",
+          "python": "panel_metadata",
+          "rust": "panel_metadata",
+          "web": "panelMetadata"
+        },
+        {
+          "owner": "reaction",
+          "python": "formulation_mode",
+          "rust": "formulation_mode",
+          "web": "formulationMode"
+        },
+        {
+          "owner": "reaction",
+          "python": "formulation_total_concentration_nm",
+          "rust": "formulation_total_concentration_nm",
+          "web": "formulationTotalConcentrationNm"
+        },
+        {
+          "owner": "validation",
+          "python": "nontarget",
+          "rust": "nontarget",
+          "web": "nontarget"
+        },
+        {
+          "owner": "validation",
+          "python": "alternative_alignment",
+          "rust": "alternative_alignment",
+          "web": "alternativeAlignment"
+        },
+        {
+          "owner": "validation",
+          "python": "alignment_audit_backend",
+          "rust": "alignment_audit_backend",
+          "web": "alignmentAuditBackend"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "discriminating-pair": {
+      "fields": [
+        {
+          "owner": "design",
+          "python": "variant",
+          "rust": "variant",
+          "web": "variant"
+        },
+        {
+          "owner": "design",
+          "python": "kasp_assay_mode",
+          "rust": "kasp_assay_mode",
+          "web": "kaspAssayMode"
+        },
+        {
+          "owner": "reaction",
+          "python": "kasp_protocol",
+          "rust": "kasp_protocol",
+          "web": "kaspProtocol"
+        },
+        {
+          "owner": "reaction",
+          "python": "kasp_plate_format",
+          "rust": "kasp_plate_format",
+          "web": "kaspPlateFormat"
+        },
+        {
+          "owner": "reaction",
+          "python": "kasp_instrument_model",
+          "rust": "kasp_instrument_model",
+          "web": "kaspInstrumentModel"
+        },
+        {
+          "owner": "reaction",
+          "python": "kasp_rox_policy",
+          "rust": "kasp_rox_policy",
+          "web": "kaspRoxPolicy"
+        },
+        {
+          "owner": "target",
+          "python": "nearby_variants_vcf",
+          "rust": "nearby_variants_vcf",
+          "web": "nearbyVariantsVcf"
+        },
+        {
+          "owner": "design",
+          "python": "mismatch_evidence_profile",
+          "rust": "mismatch_evidence_profile",
+          "web": "mismatchEvidenceProfile"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "flanking-pair": {
+      "authority": "contracts/http-api.toml",
+      "fields": [],
+      "mode": "canonical-http-contract"
+    },
+    "junction-primers": {
+      "fields": [
+        {
+          "owner": "design",
+          "python": "method",
+          "rust": "method",
+          "web": "assemblyMethod"
+        },
+        {
+          "owner": "reaction",
+          "python": "assembly_protocol",
+          "rust": "assembly_protocol",
+          "web": "assemblyProtocol"
+        },
+        {
+          "owner": "target",
+          "python": "fragments",
+          "rust": "fragments",
+          "web": "fragments"
+        },
+        {
+          "owner": "design",
+          "python": "circular",
+          "rust": "circular",
+          "web": "circular"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "loop-set": {
+      "authority": "contracts/http-api.toml",
+      "fields": [],
+      "mode": "canonical-http-contract"
+    },
+    "mutagenic-pair": {
+      "fields": [
+        {
+          "owner": "design",
+          "python": "mutagenesis_topology",
+          "rust": "mutagenesis_topology",
+          "web": "mutagenesisTopology"
+        },
+        {
+          "owner": "reaction",
+          "python": "post_amplification_protocol",
+          "rust": "post_amplification_protocol",
+          "web": "postAmplificationProtocol"
+        },
+        {
+          "owner": "design",
+          "python": "edit",
+          "rust": "edit",
+          "web": "edit"
+        },
+        {
+          "owner": "design",
+          "python": "edits",
+          "rust": "edits",
+          "web": "edits"
+        },
+        {
+          "owner": "design",
+          "python": "amino_acid_edit",
+          "rust": "amino_acid_edit",
+          "web": "aminoAcidEdit"
+        },
+        {
+          "owner": "design",
+          "python": "codon_policy",
+          "rust": "codon_policy",
+          "web": "codonPolicy"
+        },
+        {
+          "owner": "design",
+          "python": "codon_usage",
+          "rust": "codon_usage",
+          "web": "codonUsage"
+        },
+        {
+          "owner": "design",
+          "python": "library_mode",
+          "rust": "library_mode",
+          "web": "libraryMode"
+        },
+        {
+          "owner": "design",
+          "python": "library_edit",
+          "rust": "library_edit",
+          "web": "libraryEdit"
+        },
+        {
+          "owner": "reaction",
+          "python": "template_methylation_status",
+          "rust": "template_methylation_status",
+          "web": "templateMethylationStatus"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "nested": {
+      "fields": [
+        {
+          "owner": "reaction",
+          "python": "transfer_mode",
+          "rust": "transfer_mode",
+          "web": "transferMode"
+        },
+        {
+          "owner": "reaction",
+          "python": "cleanup_protocol",
+          "rust": "cleanup_protocol",
+          "web": "cleanupProtocol"
+        },
+        {
+          "owner": "reaction",
+          "python": "transfer_volume_ul",
+          "rust": "transfer_volume_ul",
+          "web": "transferVolumeUl"
+        },
+        {
+          "owner": "reaction",
+          "python": "transfer_dilution_factor",
+          "rust": "transfer_dilution_factor",
+          "web": "transferDilutionFactor"
+        },
+        {
+          "owner": "reaction",
+          "python": "custom_transfer_sop",
+          "rust": "custom_transfer_sop",
+          "web": "customTransferSop"
+        },
+        {
+          "owner": "reaction",
+          "python": "round1_polymerase",
+          "rust": "round1_polymerase",
+          "web": "round1Polymerase"
+        },
+        {
+          "owner": "reaction",
+          "python": "round2_polymerase",
+          "rust": "round2_polymerase",
+          "web": "round2Polymerase"
+        },
+        {
+          "owner": "reaction",
+          "python": "round1_thermal_program",
+          "rust": "round1_thermal_program",
+          "web": "round1ThermalProgram"
+        },
+        {
+          "owner": "reaction",
+          "python": "round2_thermal_program",
+          "rust": "round2_thermal_program",
+          "web": "round2ThermalProgram"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "outward-pair": {
+      "fields": [
+        {
+          "owner": "strategy",
+          "python": "inverse_branch",
+          "rust": "inverse_branch",
+          "web": "inverseBranch"
+        },
+        {
+          "owner": "strategy",
+          "python": "enzyme",
+          "rust": "enzyme",
+          "web": "enzyme"
+        },
+        {
+          "owner": "strategy",
+          "python": "circle_length",
+          "rust": "circle_length",
+          "web": "circleLength"
+        },
+        {
+          "owner": "validation",
+          "python": "enzyme_cohort_size",
+          "rust": "enzyme_cohort_size",
+          "web": "enzymeCohortSize"
+        },
+        {
+          "owner": "strategy",
+          "python": "mapping_use_case",
+          "rust": "mapping_use_case",
+          "web": "mappingUseCase"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        },
+        {
+          "owner": "target",
+          "python": "inverse_reference_sequence",
+          "rust": "inverse_reference_sequence",
+          "web": "inverseReferenceSequence"
+        },
+        {
+          "owner": "target",
+          "python": "inverse_reference_circular",
+          "rust": "inverse_reference_circular",
+          "web": "inverseReferenceCircular"
+        },
+        {
+          "owner": "validation",
+          "python": "inverse_candidate_enzymes",
+          "rust": "inverse_candidate_enzymes",
+          "web": "inverseCandidateEnzymes"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "pair-and-probe": {
+      "fields": [
+        {
+          "owner": "design",
+          "python": "probe_protocol",
+          "rust": "probe_protocol",
+          "web": "probeProtocol"
+        },
+        {
+          "owner": "design",
+          "python": "probe_chemistry",
+          "rust": "probe_chemistry",
+          "web": "probeChemistry"
+        },
+        {
+          "owner": "reaction",
+          "python": "probe_reporter",
+          "rust": "probe_reporter",
+          "web": "probeReporter"
+        },
+        {
+          "owner": "reaction",
+          "python": "probe_quencher",
+          "rust": "probe_quencher",
+          "web": "probeQuencher"
+        },
+        {
+          "owner": "reaction",
+          "python": "probe_internal_quencher",
+          "rust": "probe_internal_quencher",
+          "web": "probeInternalQuencher"
+        },
+        {
+          "owner": "reaction",
+          "python": "probe_instrument_profile",
+          "rust": "probe_instrument_profile",
+          "web": "probeInstrumentProfile"
+        },
+        {
+          "owner": "target",
+          "python": "probe_transcript_mode",
+          "rust": "probe_transcript_mode",
+          "web": "probeTranscriptMode"
+        },
+        {
+          "owner": "design",
+          "python": "probe_multiplex_panel",
+          "rust": "probe_multiplex_panel",
+          "web": "probeMultiplexPanel"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        },
+        {
+          "owner": "validation",
+          "python": "probe_optical_authority_payload",
+          "rust": "probe_optical_authority_payload",
+          "web": "probeOpticalAuthorityPayload"
+        },
+        {
+          "owner": "validation",
+          "python": "probe_mgb_authority_mode",
+          "rust": "probe_mgb_authority_mode",
+          "web": "probeMgbAuthorityMode"
+        },
+        {
+          "owner": "validation",
+          "python": "probe_mgb_authority_payload",
+          "rust": "probe_mgb_authority_payload",
+          "web": "probeMgbAuthorityPayload"
+        },
+        {
+          "owner": "target",
+          "python": "probe_transcript_junctions",
+          "rust": "probe_transcript_junctions",
+          "web": "probeTranscriptJunctions"
+        },
+        {
+          "owner": "validation",
+          "python": "probe_variant_positions",
+          "rust": "probe_variant_positions",
+          "web": "probeVariantPositions"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "single-primer": {
+      "fields": [
+        {
+          "owner": "reaction",
+          "python": "race_chemistry",
+          "rust": "race_chemistry",
+          "web": "raceChemistry"
+        },
+        {
+          "owner": "design",
+          "python": "race_direction",
+          "rust": "race_direction",
+          "web": "raceDirection"
+        },
+        {
+          "owner": "reaction",
+          "python": "race_round",
+          "rust": "race_round",
+          "web": "raceRound"
+        },
+        {
+          "owner": "reaction",
+          "python": "race_partner_sequence",
+          "rust": "race_partner_sequence",
+          "web": "racePartnerSequence"
+        },
+        {
+          "owner": "design",
+          "python": "sequencing_design_profile",
+          "rust": "sequencing_design_profile",
+          "web": "sequencingDesignProfile"
+        },
+        {
+          "owner": "reaction",
+          "python": "sequencing_protocol",
+          "rust": "sequencing_protocol",
+          "web": "sequencingProtocol"
+        },
+        {
+          "owner": "reaction",
+          "python": "sequencing_provider",
+          "rust": "sequencing_provider",
+          "web": "sequencingProvider"
+        },
+        {
+          "owner": "validation",
+          "python": "sequencing_universal_primer_scan",
+          "rust": "sequencing_universal_primer_scan",
+          "web": "sequencingUniversalPrimerScan"
+        },
+        {
+          "owner": "design",
+          "python": "sequencing_bidirectional",
+          "rust": "sequencing_bidirectional",
+          "web": "sequencingBidirectional"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        },
+        {
+          "owner": "validation",
+          "python": "sequencing_primer_walking",
+          "rust": "sequencing_primer_walking",
+          "web": "sequencingPrimerWalking"
+        },
+        {
+          "owner": "design",
+          "python": "sequencing_walking_overlap",
+          "rust": "sequencing_walking_overlap",
+          "web": "sequencingWalkingOverlap"
+        },
+        {
+          "owner": "validation",
+          "python": "sequencing_trace_ab1_base64",
+          "rust": "sequencing_trace_ab1_base64",
+          "web": "sequencingTraceAb1Base64"
+        },
+        {
+          "owner": "validation",
+          "python": "sequencing_trace_filename",
+          "rust": "sequencing_trace_filename",
+          "web": "sequencingTraceFilename"
+        },
+        {
+          "owner": "target",
+          "python": "race_polyadenylated",
+          "rust": "race_polyadenylated",
+          "web": "racePolyadenylated"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    },
+    "tiling-scheme": {
+      "fields": [
+        {
+          "owner": "strategy",
+          "python": "tiling_backend",
+          "rust": "tiling_backend",
+          "web": "tilingBackend"
+        },
+        {
+          "owner": "strategy",
+          "python": "tilingOperation",
+          "rust": "tiling_operation",
+          "web": "tilingOperation"
+        },
+        {
+          "owner": "strategy",
+          "python": "tilingAlignmentMode",
+          "rust": "tiling_alignment_mode",
+          "web": "tilingAlignmentMode"
+        },
+        {
+          "owner": "design",
+          "python": "tilingMinBaseFrequency",
+          "rust": "tiling_min_base_frequency",
+          "web": "tilingMinBaseFrequency"
+        },
+        {
+          "owner": "design",
+          "python": "tilingBacktrack",
+          "rust": "tiling_backtrack",
+          "web": "tilingBacktrack"
+        },
+        {
+          "owner": "design",
+          "python": "tilingHighGc",
+          "rust": "tiling_high_gc",
+          "web": "tilingHighGc"
+        },
+        {
+          "owner": "design",
+          "python": "olivarSeed",
+          "rust": "olivar_seed",
+          "web": "olivarSeed"
+        },
+        {
+          "owner": "design",
+          "python": "olivarDegenerateMode",
+          "rust": "olivar_degenerate_mode",
+          "web": "olivarDegenerateMode"
+        },
+        {
+          "owner": "strategy",
+          "python": "schemeVersion",
+          "rust": "scheme_version",
+          "web": "schemeVersion"
+        },
+        {
+          "owner": "validation",
+          "python": "workflow_evidence",
+          "rust": "workflow_evidence",
+          "web": "workflowEvidence"
+        },
+        {
+          "owner": "strategy",
+          "python": "circular",
+          "rust": "circular",
+          "web": "circular"
+        },
+        {
+          "owner": "validation",
+          "python": "tiling_depth_tsv",
+          "rust": "tiling_depth_tsv",
+          "web": "tilingDepthTsv"
+        },
+        {
+          "owner": "validation",
+          "python": "tiling_dropout_threshold",
+          "rust": "tiling_dropout_threshold",
+          "web": "tilingDropoutThreshold"
+        }
+      ],
+      "mode": "explicit-field-parity"
+    }
+  },
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,16 @@
+{
+  "authority_id": "pcrstudio-current-engine-capability-status-vocabulary",
+  "schema_version": "1.0.0",
+  "status_vocabulary": {
+    "diagnostic-only": "does not own primary ranking",
+    "evidence-only": "run/validation evidence only",
+    "executable": "qualified source path implemented",
+    "executable-if-installed": "implemented but requires external tool",
+    "executable-with-complete-context": "implemented and executable only when all protocol-specific context and partner inputs are supplied",
+    "external-authority-required": "source path is implemented, but ranking/acceptance requires imported values from a named external authority",
+    "fail-closed": "explicit refusal",
+    "historical": "compatibility/reproducibility only",
+    "reference-only": "documented but intentionally not executable",
+    "route-only": "routes to another engine"
+  }
+}

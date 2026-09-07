@@ -1,0 +1,3380 @@
+{
+  "api_version": "v1",
+  "canonical_sources": {
+    "contracts/engines.toml": "059ad75636dcaa5277dbd132396ac769ce498ac5a24aeaf39707d8e747c23ee8",
+    "contracts/foundation.toml": "6e692d6b548333dcd1f2a0f7133efd9ad03b49da7970840b84d22025ba127fad",
+    "contracts/modules.toml": "9d1f56b2095ba045bb2892a304f3a6fa32a37fec27211d14a3511048f1dda48d",
+    "contracts/tools.toml": "78bb324f34a1aeb96613c28c332f49e31c898b3b1b8cc75d3603cca6958ec2e3"
+  },
+  "counts": {
+    "engines": 11,
+    "http_operations": 58,
+    "modules": 21,
+    "tools": 12
+  },
+  "draft_schema_version": 2,
+  "engines": {
+    "consensus-pair": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_concrete_oligos",
+            "design_pair_from_conserved_window"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_member_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_member_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_conservation",
+            "expand_degenerate_members",
+            "aggregate_coverage",
+            "filter_rank"
+          ],
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_consensus_resolver"
+        }
+      ],
+      "command": "universal",
+      "display_order": 8,
+      "id": "consensus-pair",
+      "input": "an alignment",
+      "label": "Consensus pair",
+      "resource_weight": 4
+    },
+    "discriminating-pair": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_allele_specific_cores",
+            "design_common_or_outer_primers"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_allelic_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_variant",
+            "construct_allele_templates",
+            "enumerate_orientation_and_mismatches",
+            "evaluate_discrimination",
+            "filter_rank"
+          ],
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_allele_wrapper"
+        }
+      ],
+      "command": "discriminate",
+      "display_order": 5,
+      "id": "discriminating-pair",
+      "input": "a sequence and a variant",
+      "label": "Discriminating pair",
+      "resource_weight": 2
+    },
+    "flanking-pair": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "command": "run",
+      "display_order": 1,
+      "id": "flanking-pair",
+      "input": "one sequence",
+      "label": "Flanking pair",
+      "resource_weight": 2
+    },
+    "junction-primers": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_annealing_cores"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_background_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_background_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "report_dna_fold_without_changing_selection"
+          ],
+          "purposes": [
+            "overlap_structure_diagnostic"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_amplified_fragment_pcr_products"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_construct",
+            "resolve_junctions",
+            "compose_full_oligos",
+            "reconstruct_construct",
+            "filter_rank"
+          ],
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_junction_composer"
+        }
+      ],
+      "command": "junction",
+      "display_order": 10,
+      "id": "junction-primers",
+      "input": "a construct plan",
+      "label": "Junction primers",
+      "resource_weight": 2
+    },
+    "loop-set": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_role_oligos",
+            "evaluate_composite_oligos"
+          ],
+          "purposes": [
+            "thermodynamics"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_role_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity",
+            "ordered_oligo_structure"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_role_specificity"
+          ],
+          "purposes": [
+            "specificity",
+            "lamp_set_topology"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "target_inclusivity"
+          ],
+          "role": "CONDITIONAL_PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "report_rt_lamp_rna_accessibility_without_changing_selection"
+          ],
+          "purposes": [
+            "rna_target_accessibility"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "enumerate_role_sites",
+            "compose_inner_primers",
+            "design_loop_primers",
+            "validate_set_geometry",
+            "filter_rank_sets"
+          ],
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        }
+      ],
+      "command": "loop_set",
+      "display_order": 4,
+      "id": "loop-set",
+      "input": "one sequence",
+      "label": "Loop set",
+      "resource_weight": 4
+    },
+    "mutagenic-pair": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_annealing_cores"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_background_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_background_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_selected_primer_product"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_edit",
+            "construct_edited_reference",
+            "enumerate_mutagenic_pair",
+            "verify_edit_product",
+            "filter_rank"
+          ],
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_edit_normalizer"
+        }
+      ],
+      "command": "mutagenic",
+      "display_order": 11,
+      "id": "mutagenic-pair",
+      "input": "a sequence and a wanted change",
+      "label": "Mutagenic pair",
+      "resource_weight": 2
+    },
+    "nested": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_outer",
+            "design_inner"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_round_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_round_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_cross_round_interactions"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "derive_inner_template",
+            "validate_containment",
+            "map_inner_to_source",
+            "filter_rank_pair_of_pairs"
+          ],
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_nested_containment"
+        }
+      ],
+      "command": "nested",
+      "display_order": 3,
+      "id": "nested",
+      "input": "one sequence",
+      "label": "Nested",
+      "resource_weight": 3
+    },
+    "outward-pair": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_outward_pair"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_inverse_circular_product"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_topology",
+            "construct_search_representation",
+            "map_to_source",
+            "reconstruct_inverse_product",
+            "filter_rank"
+          ],
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_topology_resolver"
+        }
+      ],
+      "command": "inverse",
+      "display_order": 7,
+      "id": "outward-pair",
+      "input": "one sequence",
+      "label": "Outward pair",
+      "resource_weight": 2
+    },
+    "pair-and-probe": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair_and_internal_oligo",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation",
+            "internal_oligo"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_product_and_probe_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_product_and_probe_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_probe_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "validate_probe_geometry",
+            "validate_optical_configuration",
+            "filter_rank_triplets"
+          ],
+          "purposes": [
+            "probe_geometry",
+            "optics"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_probe_wrapper"
+        }
+      ],
+      "command": "probe",
+      "display_order": 2,
+      "id": "pair-and-probe",
+      "input": "one sequence",
+      "label": "Pair and probe",
+      "resource_weight": 2
+    },
+    "single-primer": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_single_oligo"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_single_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_single_binding_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_branch_boundary",
+            "resolve_extension_direction",
+            "plan_read_or_extension_span",
+            "filter_rank"
+          ],
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        }
+      ],
+      "command": "single",
+      "display_order": 6,
+      "id": "single-primer",
+      "input": "a sequence and a point",
+      "label": "Single primer",
+      "resource_weight": 1
+    },
+    "tiling-scheme": {
+      "bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "scheme_create",
+            "panel_create",
+            "repair_mode",
+            "scheme_replace",
+            "inspect_interactions",
+            "visualise_bedfile",
+            "visualise_primer_mismatches"
+          ],
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primalscheme3"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "build_reference",
+            "scheme_create",
+            "specificity",
+            "sensitivity"
+          ],
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "olivar"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_interactions",
+            "audit_selected_pool_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_scheme_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_scheme_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_scheme",
+            "analyze_variant_risk",
+            "audit_coverage",
+            "manage_repair_history",
+            "release_scheme",
+            "import_depth_evidence",
+            "diff_scheme_versions",
+            "route_dropout_repair"
+          ],
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        }
+      ],
+      "command": "tiling",
+      "display_order": 9,
+      "id": "tiling-scheme",
+      "input": "a genome, or several",
+      "label": "Tiling scheme",
+      "resource_weight": 4
+    }
+  },
+  "foundation_release": "CURRENT",
+  "ipc_protocol_version": "2.0.0",
+  "module_contract_version": "2.2.0",
+  "modules": {
+    "arms-pcr": {
+      "atlas_document": "knowledge/atlas/engines/discriminating-pair/02-arms-pcr.md",
+      "command": "discriminate",
+      "conditional_required_context": [],
+      "engine": "discriminating-pair",
+      "fallback": "preserve_discrimination",
+      "field_owners": {
+        "armsKnownGenotypeControls": "validation",
+        "armsNtcStatus": "validation",
+        "armsObservedDiscrimination": "validation",
+        "armsRawDataReference": "validation",
+        "armsValidationNotes": "validation",
+        "mismatchEvidenceProfile": "design",
+        "nearbyVariantsVcf": "validation",
+        "variantAlt": "design",
+        "variantAssembly": "target",
+        "variantAt": "design",
+        "variantCoordinateSystem": "target",
+        "variantRef": "design",
+        "variantReferenceAccession": "target",
+        "variantRsid": "target",
+        "variantStrand": "target",
+        "variantType": "design"
+      },
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "three_prime_allele_identity",
+        "polymerase_scoped_mismatch_evidence",
+        "differential_extension",
+        "paired_allele_empirical_validation_boundary"
+      ],
+      "goal": "genotype",
+      "id": "arms-pcr",
+      "input_model": "sequence-plus-variant",
+      "page": {
+        "asks": [],
+        "fixed": {
+          "geometry": "arms-two-tube"
+        },
+        "initial": {},
+        "tools": [],
+        "unit": {
+          "how": "How many assays to return",
+          "many": "assays",
+          "one": "assay"
+        }
+      },
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ]
+    },
+    "colony-pcr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/04-colony-pcr.md",
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_invent_colony_lysis_or_bench_status",
+      "field_owners": {
+        "colonyHostClass": "target",
+        "colonyInitialDenaturationMin": "reaction",
+        "colonyPreparation": "reaction",
+        "colonyProtocolId": "reaction",
+        "colonyProtocolName": "reaction",
+        "colonyProtocolProvenance": "reaction",
+        "colonySampleInputUl": "reaction",
+        "flankingPrimerEachUm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction"
+      },
+      "gates": [
+        "screen_product_geometry",
+        "host_class",
+        "colony_preparation_provenance",
+        "colony_lysis_profile",
+        "optional_vector_context",
+        "predicted_screen_status"
+      ],
+      "goal": "amplify",
+      "id": "colony-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "circular": "false",
+          "colonyScreenStrategy": "insert-specific-pair",
+          "vectorPrimerReadsInto": "start"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ]
+    },
+    "digital-pcr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/06-digital-pcr.md",
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_infer_platform_identity_or_invent_partition_threshold_or_fragmentation",
+      "field_owners": {
+        "digitalConsumableId": "reaction",
+        "digitalEffectivePartitionVolumeNl": "validation",
+        "digitalFragmentationEnzyme": "target",
+        "digitalFragmentationState": "target",
+        "digitalMultiplexMode": "reaction",
+        "digitalMultiplexPanel": "design",
+        "digitalPartitionFormat": "reaction",
+        "digitalPartitionFormatDetail": "reaction",
+        "digitalPlatformId": "reaction",
+        "digitalPlatformName": "reaction",
+        "digitalRunEvidence": "validation",
+        "flankingPrimerEachNm": "reaction",
+        "flankingPrimerEachUm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateClass": "target",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction"
+      },
+      "gates": [
+        "short_product",
+        "partition_compatible_assay",
+        "partition_format",
+        "platform_identity",
+        "platform_protocol_identity_consistency",
+        "fragmentation_state",
+        "digital_multiplex_architecture",
+        "digital_multiplex_platform_bound",
+        "specificity",
+        "shared_tm",
+        "measured_run_quantification_boundary"
+      ],
+      "goal": "quantify",
+      "id": "digital-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "digitalMultiplexMode": "none",
+          "digitalProtocol": "not-selected"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ]
+    },
+    "gibson-assembly": {
+      "atlas_document": "knowledge/atlas/engines/junction-primers/02-gibson-assembly.md",
+      "command": "junction",
+      "conditional_required_context": [],
+      "engine": "junction-primers",
+      "fallback": "preserve_junction_identity",
+      "field_owners": {
+        "assemblyColonyCount": "validation",
+        "assemblyColonyPcrEvidence": "validation",
+        "assemblyConcentrationReference": "validation",
+        "assemblyFragmentQc": "validation",
+        "assemblyIncubationEvidence": "validation",
+        "assemblyInputFragmentCount": "validation",
+        "assemblyMethod": "design",
+        "assemblyMixLot": "validation",
+        "assemblyNegativeControlColonies": "validation",
+        "assemblyProtocol": "reaction",
+        "assemblyRestrictionVerification": "validation",
+        "assemblySequenceVerification": "validation",
+        "assemblyTransformationMethod": "validation",
+        "assemblyValidationNotes": "validation",
+        "assemblyVerifiedCloneCount": "validation",
+        "circular": "design"
+      },
+      "gates": [
+        "fragment_order",
+        "typed_fragment_production",
+        "junction_normalization",
+        "annealing_cores",
+        "method_specific_overlap_authority",
+        "overlap_composition",
+        "whole_oligo_structure",
+        "construct_reconstruction",
+        "circular_rotation_semantics",
+        "feature_integrity",
+        "fragment_molarity_provenance",
+        "validation_evidence_separation"
+      ],
+      "goal": "assemble",
+      "id": "gibson-assembly",
+      "input_model": "ordered-fragments",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "assemblyMethod": "gibson",
+          "assemblyProtocol": "neb-e5510"
+        },
+        "tools": [],
+        "unit": {
+          "how": null,
+          "many": "plans",
+          "one": "plan"
+        }
+      },
+      "required_context": [
+        "assembly_protocol",
+        "assembly_method",
+        "circular"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "assembly_protocol",
+        "method",
+        "circular"
+      ]
+    },
+    "inverse-pcr": {
+      "atlas_document": "knowledge/atlas/engines/outward-pair/02-inverse-pcr.md",
+      "command": "inverse",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "engine": "outward-pair",
+      "fallback": "never_invent_topology_unknown_flank_fragment_length_or_bench_status",
+      "field_owners": {
+        "circleLength": "target",
+        "circularizationProvenance": "strategy",
+        "enzyme": "strategy",
+        "enzymeCohortSize": "validation",
+        "inverseBranch": "strategy",
+        "inverseCandidateEnzymes": "validation",
+        "inverseReferenceCircular": "target",
+        "inverseReferenceSequence": "target",
+        "leftEndPhosphate": "strategy",
+        "linearControlProvenance": "strategy",
+        "mappingUseCase": "strategy",
+        "methylationBranch": "strategy",
+        "rightEndPhosphate": "strategy",
+        "workflowEvidence": "validation"
+      },
+      "gates": [
+        "circular_or_digest_topology",
+        "named_branch_identity",
+        "outward_orientation",
+        "junction_reconstruction",
+        "restriction_enzyme_suitability",
+        "per_end_phosphate_state",
+        "circularization_provenance",
+        "linear_control_provenance",
+        "methylation_branch",
+        "unknown_flank_bounds",
+        "fragment_circle_feasibility",
+        "diagnostic_enzyme_cohort",
+        "full_reference_topology_validation",
+        "explicit_full_reference_enzyme_cohort",
+        "sequencing_handoff",
+        "predicted_result_status",
+        "validation_evidence_separation"
+      ],
+      "goal": "amplify",
+      "id": "inverse-pcr",
+      "input_model": "known-anchor-plus-preparation",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "inverseBranch": "restriction-self-ligation"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ]
+    },
+    "kasp": {
+      "atlas_document": "knowledge/atlas/engines/discriminating-pair/03-kasp.md",
+      "command": "discriminate",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "engine": "discriminating-pair",
+      "fallback": "never_relax_discrimination_chemistry_or_standard_lgc_product_ceiling",
+      "field_owners": {
+        "kaspAmbiguousWells": "validation",
+        "kaspAssayMode": "design",
+        "kaspCallRatePercent": "validation",
+        "kaspCalledSamples": "validation",
+        "kaspClusterReview": "validation",
+        "kaspControlConcordancePercent": "validation",
+        "kaspEndpointDataReference": "validation",
+        "kaspInstrumentModel": "reaction",
+        "kaspInstrumentSoftware": "validation",
+        "kaspKnownGenotypeControls": "validation",
+        "kaspNtcStatus": "validation",
+        "kaspPlateFormat": "reaction",
+        "kaspProtocol": "reaction",
+        "kaspRareAlleleControl": "validation",
+        "kaspRoxPolicy": "reaction",
+        "kaspSamples": "validation",
+        "kaspValidationNotes": "validation",
+        "mismatchEvidenceProfile": "design",
+        "nearbyVariantsVcf": "validation",
+        "variantAlt": "design",
+        "variantAssembly": "target",
+        "variantAt": "design",
+        "variantCoordinateSystem": "target",
+        "variantRef": "design",
+        "variantReferenceAccession": "target",
+        "variantRsid": "target",
+        "variantStrand": "target",
+        "variantType": "design"
+      },
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "explicit_assay_mode",
+        "kasp_endpoint_fret_chemistry",
+        "nonproofreading_polymerase",
+        "allele_specific_or_plus_minus_geometry",
+        "common_primer_geometry",
+        "protocol_specific_product_envelope",
+        "fixed_fam_hex_tail_assignment",
+        "singleplex_readout",
+        "annealing_vs_ordered_sequence",
+        "target_aware_specificity",
+        "endpoint_evidence_separation",
+        "no_proprietary_kraken_equivalence_claim"
+      ],
+      "goal": "genotype",
+      "id": "kasp",
+      "input_model": "sequence-plus-variant",
+      "page": {
+        "asks": [],
+        "fixed": {
+          "geometry": "kasp",
+          "kaspAssayMode": "biallelic-genotype"
+        },
+        "initial": {},
+        "tools": [],
+        "unit": {
+          "how": "How many assays to return",
+          "many": "assays",
+          "one": "assay"
+        }
+      },
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ]
+    },
+    "lamp": {
+      "atlas_document": "knowledge/atlas/engines/loop-set/02-lamp.md",
+      "command": "loop_set",
+      "conditional_required_context": [],
+      "engine": "loop-set",
+      "fallback": "role_by_role_search_with_unchanged_lamp_geometry",
+      "field_owners": {},
+      "gates": [
+        "f3_b3",
+        "f2_b2",
+        "f1c_b1c",
+        "inner_primer_composition",
+        "spacing_geometry",
+        "loop_primer_geometry",
+        "target_inclusivity_when_supplied",
+        "finite_six_region_background_topology_when_supplied",
+        "indexed_lamp_specificity_evidence_for_large_scope",
+        "set_interaction_risk_review",
+        "independent_lamp_specificity_evidence"
+      ],
+      "goal": "detect",
+      "id": "lamp",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "circular": "false",
+          "lampConfirmationMode": "not-specified",
+          "lampDesignIntent": "standard",
+          "lampDetectionTopology": "nonspecific-dsdna",
+          "lampFormulation": "not-specified",
+          "lampGeometryProfile": "primerexplorer-v5-compat",
+          "lampInnerLinker": "none",
+          "lampLoopPolicy": "prefer-six",
+          "lampReadout": "not-specified",
+          "lampReadoutChemistry": "not-specified",
+          "lampSampleMatrix": "not-specified",
+          "lampSamplePreparation": "not-specified"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many sets to return",
+          "many": "sets",
+          "one": "set"
+        }
+      },
+      "required_context": [],
+      "resource_weight": 4,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": []
+    },
+    "long-range-pcr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/03-long-range-pcr.md",
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "long_range_target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "long_range_target_length_kb",
+            "flanking_template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_substitute_anonymous_long_range_chemistry_or_relax_polymerase_capability",
+      "field_owners": {
+        "flankingPrimerEachUm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateClass": "target",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction",
+        "longRangeHmwTemplateVerified": "validation",
+        "longRangeProtocol": "reaction",
+        "longRangeTargetLengthKb": "reaction"
+      },
+      "gates": [
+        "long_product_geometry",
+        "proofreading_capability",
+        "protocol_identity",
+        "extension_protocol_compatibility"
+      ],
+      "goal": "amplify",
+      "id": "long-range-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "circular": "false"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "long_range_protocol"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb",
+            "flanking_numeric_context.template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "long_range_protocol"
+      ]
+    },
+    "nested-pcr": {
+      "atlas_document": "knowledge/atlas/engines/nested/02-nested-pcr.md",
+      "command": "nested",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "engine": "nested",
+      "fallback": "outer_and_inner_search_expand_only_within_unchanged_round_profiles_and_never_invent_transfer_cleanup_or_carryover_chemistry",
+      "field_owners": {
+        "carryoverPrevention": "reaction",
+        "cleanupProtocol": "reaction",
+        "customTransferSop": "reaction",
+        "margin": "design",
+        "nestedDestinationTubeWell": "validation",
+        "nestedPositiveControl": "validation",
+        "nestedPrePcrArea": "validation",
+        "nestedRawDataReference": "validation",
+        "nestedRound1Area": "validation",
+        "nestedRound1Ntc": "validation",
+        "nestedRound1ObservedBandBp": "validation",
+        "nestedRound2Area": "validation",
+        "nestedRound2Ntc": "validation",
+        "nestedRound2ObservedBandBp": "validation",
+        "nestedSequenceConfirmation": "validation",
+        "nestedSourceTubeWell": "validation",
+        "nestedTransferArea": "validation",
+        "nestedTransferRunId": "validation",
+        "round1Conditions": "reaction",
+        "round1Polymerase": "reaction",
+        "round1ThermalProgram": "reaction",
+        "round2Conditions": "reaction",
+        "round2Polymerase": "reaction",
+        "round2ThermalProgram": "reaction",
+        "shares": "design",
+        "singleTube": "design",
+        "transferDilutionFactor": "reaction",
+        "transferMode": "reaction",
+        "transferVolumeUl": "reaction"
+      },
+      "gates": [
+        "outer_pair",
+        "inner_pair",
+        "strict_containment",
+        "round_specificity",
+        "causal_nested_false_product_graph",
+        "cross_round_interaction",
+        "round_specific_reaction_identity",
+        "transfer_cleanup_provenance",
+        "contamination_evidence_separation",
+        "single_tube_generic_fail_closed_unless_supported_mechanism"
+      ],
+      "goal": "amplify",
+      "id": "nested-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {
+          "singleTube": "false"
+        },
+        "initial": {},
+        "tools": [],
+        "unit": {
+          "how": "How many nested schemes to return",
+          "many": "schemes",
+          "one": "scheme"
+        }
+      },
+      "required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ],
+      "resource_weight": 3,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ]
+    },
+    "qpcr-probe": {
+      "atlas_document": "knowledge/atlas/engines/pair-and-probe/02-qpcr-probe.md",
+      "command": "probe",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "engine": "pair-and-probe",
+      "fallback": "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model",
+      "field_owners": {
+        "probeChemistry": "design",
+        "probeInstrumentProfile": "reaction",
+        "probeInternalQuencher": "reaction",
+        "probeMgbAuthorityMode": "validation",
+        "probeMgbAuthorityPayload": "validation",
+        "probeMultiplexPanel": "design",
+        "probeOpticalAuthorityPayload": "validation",
+        "probeProtocol": "design",
+        "probeQuencher": "reaction",
+        "probeReporter": "reaction",
+        "probeTranscriptJunctions": "target",
+        "probeTranscriptMode": "target",
+        "probeVariantPositions": "validation",
+        "workflowEvidence": "validation"
+      },
+      "gates": [
+        "primer_pair",
+        "probe_inside_product",
+        "chemistry_specific_probe_tm_model",
+        "probe_structure",
+        "same_buffer_thermodynamics",
+        "primer_probe_interactions",
+        "named_probe_chemistry",
+        "probe_optical_configuration",
+        "probe_signal_specificity",
+        "transcript_provenance",
+        "multiplex_channel_compatibility",
+        "miqe_evidence_separation",
+        "mgb_exact_tm_fail_closed_without_authority",
+        "mgb_external_authority_exchange",
+        "mgb_candidate_set_hash_integrity",
+        "combined_amplicon_probe_specificity"
+      ],
+      "goal": "quantify",
+      "id": "qpcr-probe",
+      "input_model": "sequence",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "probeChemistry": "conventional-hydrolysis",
+          "probeProtocol": "thermofisher-taqman-conventional"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many assays to return",
+          "many": "assays",
+          "one": "assay"
+        }
+      },
+      "required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ],
+      "resource_weight": 3,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ]
+    },
+    "qpcr-sybr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/05-qpcr-sybr.md",
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "qpcr_cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "search_expand_only_within_qpcr_profile",
+      "field_owners": {
+        "flankingAdditive": "reaction",
+        "flankingPrimerEachNm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateClass": "target",
+        "flankingTemplateFractionPercent": "reaction",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction",
+        "qpcrCyclingProfile": "reaction",
+        "qpcrInstrumentProfile": "reaction",
+        "qpcrProtocol": "reaction"
+      },
+      "gates": [
+        "short_qpcr_product",
+        "primer_specificity",
+        "dimer_sensitivity",
+        "shared_tm"
+      ],
+      "goal": "quantify",
+      "id": "qpcr-sybr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "circular": "false",
+          "qpcrProtocol": "not-selected"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": []
+    },
+    "race": {
+      "atlas_document": "knowledge/atlas/engines/single-primer/02-race.md",
+      "command": "single",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback": "boundary_aware_search_without_cross_wiring_race_chemistries",
+      "field_owners": {
+        "raceAdapter": "reaction",
+        "raceChemistry": "reaction",
+        "raceDirection": "design",
+        "racePartnerSequence": "reaction",
+        "racePolyadenylated": "target",
+        "racePreparation": "reaction",
+        "raceRound": "reaction",
+        "raceSopRevision": "reaction",
+        "raceSopSha256": "reaction",
+        "raceSubstrate": "reaction",
+        "workflowEvidence": "validation"
+      },
+      "gates": [
+        "boundary",
+        "extension_direction",
+        "chemistry_specific_gsp_profile",
+        "adapter_partner_identity",
+        "substrate_preparation_provenance",
+        "nested_round_state",
+        "single_primer_specificity",
+        "unknown_end_product_semantics",
+        "sequencing_confirmation_handoff",
+        "candidate_transcript_end_claim_boundary",
+        "smarter_complete_context",
+        "nested_gsp_plan",
+        "polyA_guard_for_3prime_smarter",
+        "validation_evidence_separation"
+      ],
+      "goal": "sequence",
+      "id": "race",
+      "input_model": "sequence-plus-boundary",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "raceChemistry": "generacer-kit-25-0355-vl"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many primers to return",
+          "many": "primers",
+          "one": "primer"
+        }
+      },
+      "required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ],
+      "resource_weight": 1,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ]
+    },
+    "restriction-cloning": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/09-restriction-cloning.md",
+      "command": "run",
+      "conditional_required_context": [],
+      "engine": "flanking-pair",
+      "fallback": "preserve_required_sites_and_product",
+      "field_owners": {
+        "cloningCdsEnd": "vector",
+        "cloningCdsStart": "vector",
+        "cloningCodingIntent": "vector",
+        "cloningFusionTag": "vector",
+        "cloningLinkerAa": "vector",
+        "cloningStopCodonPolicy": "vector",
+        "cloningVectorJunctionFrame": "vector",
+        "forwardEnzyme": "vector",
+        "forwardProtectiveSequence": "vector",
+        "restrictionDephosphorylationProtocol": "reaction",
+        "restrictionDigestProtocol": "reaction",
+        "restrictionLigationProtocol": "reaction",
+        "reverseEnzyme": "vector",
+        "reverseProtectiveSequence": "vector",
+        "tailProtocol": "vector"
+      },
+      "gates": [
+        "restriction_site_policy",
+        "tail_composition",
+        "frame_or_product_verification",
+        "annealing_core_quality"
+      ],
+      "goal": "assemble",
+      "id": "restriction-cloning",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {
+          "tailProtocol": "neb-general-6bp"
+        },
+        "initial": {
+          "cloningSimulationMode": "pydna-if-available",
+          "cloningVectorTopology": "circular"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ]
+    },
+    "rpa": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/08-rpa.md",
+      "command": "run",
+      "conditional_required_context": [],
+      "engine": "flanking-pair",
+      "fallback": "preserve_rpa_chemistry",
+      "field_owners": {
+        "flankingPrimerEachNm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateClass": "target",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction",
+        "rpaBstUnitsPerUl": "reaction",
+        "rpaMultiplex": "reaction",
+        "rpaMultiplexPanel": "validation",
+        "rpaProtocol": "reaction",
+        "rpaTemperatureC": "reaction",
+        "rpaTimeMin": "reaction"
+      },
+      "gates": [
+        "rpa_compatible_chemistry",
+        "rpa_primer_profile",
+        "target_specificity"
+      ],
+      "goal": "detect",
+      "id": "rpa",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "rpa_protocol"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "rpa_protocol"
+      ]
+    },
+    "sequencing-primer": {
+      "atlas_document": "knowledge/atlas/engines/single-primer/03-sequencing-primer.md",
+      "command": "single",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback": "read_window_search_without_mixing_service_submission_values_into_design_ranking",
+      "field_owners": {
+        "deadZone": "design",
+        "direction": "design",
+        "readLength": "design",
+        "sequencingBidirectional": "design",
+        "sequencingDesignProfile": "design",
+        "sequencingInstrumentName": "reaction",
+        "sequencingPrimerWalking": "validation",
+        "sequencingProtocol": "reaction",
+        "sequencingProvider": "reaction",
+        "sequencingTraceAb1Base64": "validation",
+        "sequencingTraceFilename": "validation",
+        "sequencingUniversalPrimerScan": "validation",
+        "sequencingWalkingOverlap": "design",
+        "workflowEvidence": "validation"
+      },
+      "gates": [
+        "read_direction",
+        "provider_specific_design_envelope",
+        "readable_distance",
+        "single_binding",
+        "submission_values_separated_from_ranking",
+        "bidirectional_route",
+        "instrument_handoff",
+        "universal_primer_exact_unique_reuse",
+        "primer_walking_geometry",
+        "bounded_abif_trace_review",
+        "trace_evidence_separated_from_ranking",
+        "validation_evidence_separation"
+      ],
+      "goal": "sequence",
+      "id": "sequencing-primer",
+      "input_model": "sequence-plus-boundary",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "circular": "false",
+          "sequencingDesignProfile": "generic-cycle-sequencing",
+          "sequencingInstrument": "unresolved"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many primers to return",
+          "many": "primers",
+          "one": "primer"
+        }
+      },
+      "required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ],
+      "resource_weight": 1,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ]
+    },
+    "site-directed-mutagenesis": {
+      "atlas_document": "knowledge/atlas/engines/mutagenic-pair/02-site-directed-mutagenesis.md",
+      "command": "mutagenic",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "edit.kind",
+            "edit.at"
+          ],
+          "when": {
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to",
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "substitute",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to"
+          ],
+          "when": {
+            "edit.kind": "insert",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "delete",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edits_json"
+          ],
+          "when": {
+            "edit_input_mode": "multi"
+          }
+        },
+        {
+          "required_context": [
+            "aa_cds_start",
+            "aa_residue",
+            "aa_to",
+            "codon_policy"
+          ],
+          "when": {
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "aa_codon"
+          ],
+          "when": {
+            "codon_policy": "user-selected-codon",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "codon_usage"
+          ],
+          "when": {
+            "codon_policy": "host-codon-usage",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "library_mode",
+            "library_at"
+          ],
+          "when": {
+            "edit_input_mode": "library"
+          }
+        },
+        {
+          "required_context": [
+            "library_codon"
+          ],
+          "when": {
+            "edit_input_mode": "library",
+            "library_mode": "custom"
+          }
+        }
+      ],
+      "engine": "mutagenic-pair",
+      "fallback": "never_relax_edit_identity",
+      "field_owners": {
+        "aaCdsStart": "design",
+        "aaCodon": "design",
+        "aaFrom": "design",
+        "aaResidue": "design",
+        "aaTo": "design",
+        "codonPolicy": "design",
+        "codonUsage": "design",
+        "editAt": "design",
+        "editInputMode": "design",
+        "editKind": "design",
+        "editReplacing": "design",
+        "editTo": "design",
+        "editsJson": "design",
+        "libraryAt": "design",
+        "libraryCodon": "design",
+        "libraryMode": "design",
+        "mutagenesisClonesScreened": "validation",
+        "mutagenesisColonyCount": "validation",
+        "mutagenesisDpnIKldEvidence": "validation",
+        "mutagenesisPcrEvidence": "validation",
+        "mutagenesisSequenceReference": "validation",
+        "mutagenesisTopology": "design",
+        "mutagenesisTransformationEvidence": "validation",
+        "mutagenesisUnintendedMutationStatus": "validation",
+        "mutagenesisValidationNotes": "validation",
+        "mutagenesisVerifiedCloneCount": "validation",
+        "postAmplificationProtocol": "reaction",
+        "templateMethylationStatus": "reaction"
+      },
+      "gates": [
+        "edit_normalization",
+        "multi_edit_overlap_validation",
+        "edited_reference",
+        "topology_specific_geometry",
+        "whole_oligo_quality",
+        "exact_edited_construct",
+        "protein_consequence_when_declared",
+        "library_design_boundary",
+        "protocol_topology_compatibility",
+        "edited_product_verification"
+      ],
+      "goal": "engineer",
+      "id": "site-directed-mutagenesis",
+      "input_model": "sequence-plus-edit",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "editInputMode": "dna",
+          "libraryMode": "none",
+          "mutagenesisTopology": "q5-back-to-back",
+          "postAmplificationProtocol": "neb-q5-e0554"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol",
+        "edit_input_mode"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [
+        [
+          "edit",
+          "edits",
+          "amino_acid_edit",
+          "library_edit"
+        ]
+      ],
+      "wire_required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol"
+      ]
+    },
+    "species-specific-pcr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/07-species-specific-pcr.md",
+      "command": "run",
+      "conditional_required_context": [],
+      "engine": "flanking-pair",
+      "fallback": "never_drop_exclusion_background",
+      "field_owners": {
+        "background": "specificity",
+        "backgroundPanelProvenance": "specificity",
+        "inclusivity": "specificity",
+        "inclusivityPanelProvenance": "specificity",
+        "speciesDatabaseSnapshot": "specificity",
+        "speciesPanelAccessionManifest": "specificity",
+        "speciesPanelRecordMetadataManifest": "specificity",
+        "speciesPanelRetrievedDate": "specificity",
+        "speciesPanelSelectionRationale": "specificity",
+        "speciesTargetTaxid": "specificity",
+        "speciesTaxonomySnapshot": "specificity"
+      },
+      "gates": [
+        "target_inclusivity",
+        "required_exclusion_background",
+        "product_specificity"
+      ],
+      "goal": "detect",
+      "id": "species-specific-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ]
+    },
+    "standard-pcr": {
+      "atlas_document": "knowledge/atlas/engines/flanking-pair/02-standard-pcr.md",
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_additive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "search_more_candidates_within_unchanged_hard_gates",
+      "field_owners": {
+        "flankingAdditive": "reaction",
+        "flankingGcEnhancerPercent": "reaction",
+        "flankingPrimerEachUm": "reaction",
+        "flankingReactionVolumeUl": "reaction",
+        "flankingTemplateClass": "target",
+        "flankingTemplateInputNg": "reaction",
+        "flankingTemplateInputUl": "reaction",
+        "standardPcrProtocol": "reaction"
+      },
+      "gates": [
+        "flanking_geometry",
+        "primer_thermodynamics",
+        "template_specificity"
+      ],
+      "goal": "amplify",
+      "id": "standard-pcr",
+      "input_model": "sequence",
+      "page": {
+        "asks": [
+          "circular"
+        ],
+        "fixed": {},
+        "initial": {
+          "assayMode": "design",
+          "circular": "false",
+          "standardPcrProtocol": "not-selected"
+        },
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_numeric_context.additive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": []
+    },
+    "tetra-primer-arms": {
+      "atlas_document": "knowledge/atlas/engines/discriminating-pair/04-tetra-primer-arms.md",
+      "command": "discriminate",
+      "conditional_required_context": [],
+      "engine": "discriminating-pair",
+      "fallback": "preserve_diagnostic_geometry",
+      "field_owners": {
+        "mismatchEvidenceProfile": "design",
+        "nearbyVariantsVcf": "validation",
+        "tetraGelImageReference": "validation",
+        "tetraGelPercent": "validation",
+        "tetraKnownGenotypeControls": "validation",
+        "tetraLadder": "validation",
+        "tetraMinBandSeparationBp": "validation",
+        "tetraNtcStatus": "validation",
+        "tetraObservedBands": "validation",
+        "tetraOuterControlBand": "validation",
+        "tetraReadout": "validation",
+        "tetraRunContext": "validation",
+        "tetraValidationNotes": "validation",
+        "variantAlt": "design",
+        "variantAssembly": "target",
+        "variantAt": "design",
+        "variantCoordinateSystem": "target",
+        "variantRef": "design",
+        "variantReferenceAccession": "target",
+        "variantRsid": "target",
+        "variantStrand": "target",
+        "variantType": "design"
+      },
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "four_primer_geometry",
+        "diagnostic_band_separation",
+        "readout_context",
+        "multi_oligo_interactions",
+        "empirical_genotype_evidence_boundary"
+      ],
+      "goal": "genotype",
+      "id": "tetra-primer-arms",
+      "input_model": "sequence-plus-variant",
+      "page": {
+        "asks": [],
+        "fixed": {
+          "geometry": "tetra"
+        },
+        "initial": {},
+        "tools": [],
+        "unit": {
+          "how": "How many assays to return",
+          "many": "assays",
+          "one": "assay"
+        }
+      },
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ],
+      "resource_weight": 2,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ]
+    },
+    "tiled-scheme": {
+      "atlas_document": "knowledge/atlas/engines/tiling-scheme/02-tiled-scheme.md",
+      "command": "tiling",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "engine": "tiling-scheme",
+      "fallback": "no_primary_backend_substitution_or_score_blending",
+      "field_owners": {
+        "circular": "strategy",
+        "existingBed": "strategy",
+        "olivarCheckVariants": "design",
+        "olivarDegenerateMode": "design",
+        "olivarSeed": "design",
+        "overlap": "design",
+        "panelMode": "design",
+        "pools": "reaction",
+        "primerName": "strategy",
+        "schemeConfig": "strategy",
+        "schemeVersion": "strategy",
+        "tilingAlignmentMode": "strategy",
+        "tilingBackend": "strategy",
+        "tilingBacktrack": "design",
+        "tilingDepthTsv": "validation",
+        "tilingDropoutThreshold": "validation",
+        "tilingHighGc": "design",
+        "tilingMinBaseFrequency": "design",
+        "tilingOperation": "strategy",
+        "tilingTargets": "target",
+        "workflowEvidence": "validation"
+      },
+      "gates": [
+        "backend_identity",
+        "coordinate_normalization",
+        "coverage",
+        "amplicon_overlap",
+        "pool_separation",
+        "variant_risk",
+        "interaction_audit",
+        "scheme_format",
+        "repairability",
+        "backend_score_non_blending",
+        "scheme_lifecycle",
+        "measured_dropout_evidence_separation",
+        "circular_scheme_create",
+        "native_visualisation_artifacts",
+        "observed_depth_import",
+        "dropout_repair_handoff",
+        "scheme_version_diff"
+      ],
+      "goal": "sequence",
+      "id": "tiled-scheme",
+      "input_model": "sequence-or-existing-scheme",
+      "page": {
+        "asks": [
+          "excluded"
+        ],
+        "fixed": {},
+        "initial": {
+          "circular": "false",
+          "tilingBackend": "primalscheme3",
+          "tilingOperation": "scheme-create"
+        },
+        "tools": [],
+        "unit": {
+          "how": null,
+          "many": "schemes",
+          "one": "scheme"
+        }
+      },
+      "required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ],
+      "resource_weight": 4,
+      "status": "experimental",
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ]
+    },
+    "universal-primers": {
+      "atlas_document": "knowledge/atlas/engines/consensus-pair/02-universal-primers.md",
+      "command": "universal",
+      "conditional_required_context": [],
+      "engine": "consensus-pair",
+      "fallback": "declared_alignment_authority_then_search_within_degeneracy_ceiling_without_population_or_global_specificity_overclaim",
+      "field_owners": {
+        "alignmentAuditBackend": "validation",
+        "alignmentMode": "design",
+        "alternativeAlignment": "validation",
+        "consensusPolicy": "design",
+        "formulationMode": "reaction",
+        "formulationTotalConcentrationNm": "reaction",
+        "nontarget": "validation",
+        "panelMetadata": "target"
+      },
+      "gates": [
+        "msa",
+        "alignment_qc",
+        "alignment_provenance",
+        "conservation",
+        "degeneracy",
+        "exact_member_enumeration_or_explicit_ceiling",
+        "member_coverage",
+        "weighted_or_stratified_coverage_when_selected",
+        "finite_target_vs_nontarget_specificity",
+        "formulation_provenance",
+        "conserved_pair_geometry",
+        "amplicon_informativeness",
+        "alignment_sensitivity"
+      ],
+      "goal": "detect",
+      "id": "universal-primers",
+      "input_model": "multiple-sequence-alignment",
+      "page": {
+        "asks": [
+          "tails"
+        ],
+        "fixed": {},
+        "initial": {},
+        "tools": [],
+        "unit": {
+          "how": "How many pairs to return",
+          "many": "pairs",
+          "one": "pair"
+        }
+      },
+      "required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ],
+      "resource_weight": 4,
+      "status": "experimental",
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "wire_required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ]
+    }
+  },
+  "qualification_boundary": {
+    "native_entrypoint": "scripts/run-linux-qualification.py",
+    "native_linux": "external-gate-delegated-to-operator",
+    "source_integrity": "linux-native-unified-engine-source-qualified"
+  },
+  "release_class": "generation-1-unified-engine-linux-current",
+  "request_schema_version": 2,
+  "result_schema_version": 4,
+  "schema_version": "2.0.0",
+  "source_fingerprints": {
+    "contracts/http-api.generated.json": "daf4088de8c915e7b28795d1749bcd007984e14dda560b0a6d3aa751f5926180",
+    "contracts/http-api.toml": "32b98b830ab7947e700d40bbb8a6a6ff40dbb0889e975f18c8dc2aa0c671030d",
+    "crates/pcr-core/profiles.toml": "25686988fa4ed104fb4e86a3f366567618717a25836583a48f512352e1ec2d20",
+    "docs/openapi.generated.json": "bda5e46776f16c6db86a9459ad90adad60f4c602fdbdcffb17722e2033ff1754",
+    "knowledge/runtime/engine-contracts.generated.json": "ebadd32de249fca0570876f9ffdeecb46d3f022625780a662c2786f5c075ec23",
+    "knowledge/runtime/linux-acceptance-matrix.json": "653656a0031d529cb45a43b9b760e5bc32037d158110512b8acf26b8b1d92b47",
+    "knowledge/runtime/module-contracts.generated.json": "212af74a7d4101f1b435fd50034ec2e9942c8fb967f073491e1e00e4ded8bf66",
+    "knowledge/runtime/tool-contracts.generated.json": "2509d24adb25e0251ee27ec9b801a508af3be9aae58cb81f7193f0af468078c2"
+  },
+  "tools": {
+    "mafft": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "MAFFT",
+      "env_var": "PCRSTUDIO_MAFFT",
+      "excluded_range": "7.463-7.486",
+      "executable_names": [
+        "mafft"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_MAFFT_SHA256",
+      "id": "mafft",
+      "minimum_supported": "7.487",
+      "provision_archive": "mafft-7.526-linux.tgz",
+      "provision_id": "mafft",
+      "provision_url": "https://mafft.ddbj.nig.ac.jp/alignment/software/mafft-7.526-linux.tgz",
+      "qualifiers": [
+        "msa"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:7.526",
+      "source_url": "https://mafft.cbrc.jp/alignment/software/",
+      "version": "7.526",
+      "version_mode": "exact"
+    },
+    "mfeprimer": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "MFEprimer",
+      "env_var": "PCRSTUDIO_MFEPRIMER",
+      "executable_names": [
+        "mfeprimer"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_MFEPRIMER_SHA256",
+      "id": "mfeprimer",
+      "provision_archive": "mfeprimer-4.5.1-linux-amd64.gz",
+      "provision_id": "mfeprimer",
+      "provision_sha256": "56abb0789497a6273e0b7d226671d5f1d959d3bceaba5be53f0d2b2edc13c839",
+      "provision_url": "https://github.com/quwubin/MFEprimer-3.0/releases/download/v4.5.1/mfeprimer-4.5.1-linux-amd64.gz",
+      "qualifiers": [
+        "specificity"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:4.5.1",
+      "source_url": "https://www.mfeprimer.com/updates/",
+      "version": "4.5.1",
+      "version_mode": "exact"
+    },
+    "ncbi_blast_plus": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "NCBI BLAST+",
+      "env_var": "PCRSTUDIO_BLASTN",
+      "executable_names": [
+        "blastn"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_BLASTN_SHA256",
+      "id": "ncbi_blast_plus",
+      "provision_archive": "ncbi-blast-2.17.0-x64-linux.tar.gz",
+      "provision_id": "blast",
+      "provision_sha256": "3888112d8207831aa47371d93583c601f058f88b5db22dc782438b039a3a411b",
+      "provision_url": "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast%2B/2.17.0/ncbi-blast-2.17.0%2B-x64-linux.tar.gz",
+      "qualifiers": [
+        "specificity"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:2.17.0",
+      "source_url": "https://www.ncbi.nlm.nih.gov/books/NBK131777/",
+      "version": "2.17.0",
+      "version_mode": "exact"
+    },
+    "nupack4": {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NUPACK 4.x",
+      "execution_scope": "manual-reference",
+      "id": "nupack4",
+      "qualifiers": [
+        "license_blocked",
+        "structure",
+        "manual_only"
+      ],
+      "readiness_requirement": "reference",
+      "source_ref": "documentation-current-at-cutoff",
+      "source_url": "https://docs.nupack.org/",
+      "version": "4.x",
+      "version_mode": "reference_family"
+    },
+    "olivar": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Olivar",
+      "env_var": "PCRSTUDIO_OLIVAR",
+      "executable_names": [
+        "olivar"
+      ],
+      "execution_scope": "external-managed",
+      "hash_env_var": "PCRSTUDIO_OLIVAR_SHA256",
+      "id": "olivar",
+      "install_scope": "external-managed-linux-conda-environment",
+      "qualifiers": [
+        "tiling",
+        "variant-aware",
+        "multi-target",
+        "sensitivity",
+        "specificity"
+      ],
+      "readiness_requirement": "feature-gated",
+      "source_ref": "Bioconda:olivar=1.3.3",
+      "source_url": "https://github.com/treangenlab/Olivar/releases/tag/v1.3.3",
+      "version": "1.3.3",
+      "version_mode": "exact"
+    },
+    "primalscheme3": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "PrimalScheme3",
+      "env_var": "PCRSTUDIO_PRIMALSCHEME3",
+      "executable_names": [
+        "primalscheme3"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PRIMALSCHEME3_SHA256",
+      "id": "primalscheme3",
+      "install_scope": "project-local-isolated-science-venv",
+      "package_filename": "primalscheme3-3.3.0-py3-none-any.whl",
+      "package_sha256": "4ac2455c6071ddef40fd5bed881ad9c129f8590b66e7bf6b73462a0ea9aad30e",
+      "package_source": "PyPI",
+      "qualifiers": [
+        "tiling",
+        "repair"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "PyPI:3.3.0",
+      "source_url": "https://pypi.org/project/primalscheme3/",
+      "version": "3.3.0",
+      "version_mode": "exact"
+    },
+    "primer3_core": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Primer3 primer3_core",
+      "execution_scope": "embedded-package",
+      "id": "primer3_core",
+      "qualifiers": [
+        "candidate_generation"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "tag:v2.6.1",
+      "source_url": "https://github.com/primer3-org/primer3",
+      "version": "2.6.1",
+      "version_mode": "exact"
+    },
+    "primer3_py": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "primer3-py",
+      "execution_scope": "embedded-package",
+      "id": "primer3_py",
+      "qualifiers": [
+        "development_adapter"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "PyPI:2.3.0",
+      "source_url": "https://pypi.org/project/primer3-py/2.3.0/",
+      "version": "2.3.0",
+      "version_mode": "exact"
+    },
+    "primer_blast": {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NCBI Primer-BLAST",
+      "execution_scope": "remote-reference",
+      "id": "primer_blast",
+      "qualifiers": [
+        "remote",
+        "specificity"
+      ],
+      "readiness_requirement": "reference",
+      "source_ref": "NCBI-live-service",
+      "source_url": "https://www.ncbi.nlm.nih.gov/tools/primer-blast/",
+      "version": "live",
+      "version_mode": "live_service"
+    },
+    "primerpooler": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "PrimerPooler",
+      "env_var": "PCRSTUDIO_PRIMERPOOLER",
+      "executable_names": [
+        "pooler",
+        "pooler64"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PRIMERPOOLER_SHA256",
+      "id": "primerpooler",
+      "provision_archive": "PrimerPooler-v1.89.tar.gz",
+      "provision_id": "primerpooler",
+      "provision_sha256": "df07e19c8c11a4aa7e7550fca59209615c3a8483b4cba36d320bb06e30eef414",
+      "provision_url": "https://codeload.github.com/ssb22/PrimerPooler/tar.gz/refs/tags/v1.89",
+      "qualifiers": [
+        "pool_optimizer",
+        "optional_execution"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "upstream-version:1.89",
+      "source_url": "https://github.com/ssb22/PrimerPooler",
+      "version": "1.89",
+      "version_mode": "exact"
+    },
+    "pydna": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "pydna",
+      "env_var": "PCRSTUDIO_PYDNA_PYTHON",
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PYDNA_PYTHON_SHA256",
+      "id": "pydna",
+      "install_scope": "project-local-isolated-science-venv",
+      "package_filename": "pydna-5.5.16-py3-none-any.whl",
+      "package_sha256": "f89c0787da7f405286c5d4fa8a827bbefbb09c7da382860834d7103dddb452aa",
+      "package_source": "PyPI",
+      "qualifiers": [
+        "specialized"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "PyPI:5.5.16",
+      "source_url": "https://pypi.org/project/pydna/5.5.16/",
+      "version": "5.5.16",
+      "version_mode": "exact"
+    },
+    "viennarna": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "ViennaRNA",
+      "execution_scope": "optional-package",
+      "id": "viennarna",
+      "qualifiers": [
+        "structure"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "release:2.7.2",
+      "source_url": "https://github.com/ViennaRNA/ViennaRNA/releases",
+      "version": "2.7.2",
+      "version_mode": "exact"
+    }
+  }
+}

@@ -1,0 +1,4164 @@
+{
+  "authority_id": "pcrstudio-lamp-protocol-authority",
+  "automatic_judgment": {
+    "at_rich_max_percent_inclusive": 45.0,
+    "gc_rich_min_percent_inclusive": 60.0,
+    "normal_rule": "greater than 45% and less than 60%",
+    "source_identity": "PrimerExplorer V5 operation manual",
+    "source_url": "https://primerexplorer.jp/e/v5_manual/02.html"
+  },
+  "catalogue_snapshot": "2026-09",
+  "compatibility": {
+    "readout_chemistry_branch": {
+      "agarose-gel-endpoint": "other-validated",
+      "calcein": "colorimetric",
+      "eiken-fd-lmp221": "fluorescence",
+      "eriochrome-black-t": "colorimetric",
+      "hydroxynaphthol-blue": "colorimetric",
+      "not-specified": "not-specified",
+      "nzy-speedy-lamp-dye": "fluorescence",
+      "other-validated": "other-validated",
+      "ph-colorimetric": "colorimetric",
+      "supplied-intercalating-dye": "fluorescence",
+      "syto82": "fluorescence",
+      "syto9": "fluorescence",
+      "tb-green": "fluorescence",
+      "turbidity-pyrophosphate": "turbidity",
+      "vendor-visual-color-change": "colorimetric"
+    }
+  },
+  "groups": {
+    "acceleration_additives": [
+      "none",
+      "guanidine-hcl-40mm"
+    ],
+    "carryover_strategies": [
+      "protocol-default",
+      "reviewed-dutp-udg"
+    ],
+    "confirmation_modes": [
+      "not-specified",
+      "none",
+      "anneal-curve",
+      "melt-denaturation-curve",
+      "gel-ladder",
+      "sequence-confirmation",
+      "other-validated"
+    ],
+    "design_intents": [
+      "standard",
+      "panel-conservation-aware",
+      "fixed-primer-anchor",
+      "mutation-anchored-specific"
+    ],
+    "design_stages": [
+      "integrated",
+      "core-first",
+      "add-loops"
+    ],
+    "detection_topologies": [
+      "nonspecific-dsdna",
+      "sequence-specific-probe",
+      "multiplex-modified-primer-probe",
+      "lateral-flow-modified-primer"
+    ],
+    "fixed_primer_roles": [
+      "F3",
+      "B3",
+      "FIP",
+      "BIP",
+      "LF",
+      "LB"
+    ],
+    "formulations": [
+      "not-specified",
+      "liquid",
+      "lyophilized",
+      "air-dryable",
+      "dry-reagent",
+      "assembled-enzyme",
+      "lyophilizable"
+    ],
+    "geometry_profiles": [
+      "primerexplorer-v5-compat",
+      "pcrstudio-evidence-2026"
+    ],
+    "inner_linkers": [
+      "none",
+      "tttt"
+    ],
+    "instrument_profiles": [
+      "not-specified",
+      "vazyme-slan96p",
+      "vazyme-quantstudio3",
+      "vazyme-quantstudio5",
+      "vazyme-steponeplus",
+      "vazyme-lightcycler96",
+      "vazyme-cfx96-touch",
+      "vazyme-quantgene9600",
+      "vazyme-gentier96r",
+      "agdia-amplifire",
+      "other-qpcr",
+      "other-validated"
+    ],
+    "loop_policies": [
+      "prefer-six",
+      "require-six",
+      "core-four-only"
+    ],
+    "mutation_anchors": [
+      "fip-3p-f2",
+      "bip-3p-b2",
+      "fip-5p-f1c",
+      "bip-5p-b1c"
+    ],
+    "parameter_sets": [
+      "normal",
+      "at-rich",
+      "gc-rich"
+    ],
+    "preincubation_strategies": [
+      "protocol-default",
+      "takara-ung-25c-10min"
+    ],
+    "primer_kinetics_profiles": [
+      "protocol-default",
+      "optigene-standard",
+      "optigene-high"
+    ],
+    "protocols": [
+      "not-selected",
+      "neb-e1700",
+      "neb-e1708",
+      "neb-l4401",
+      "neb-m1708",
+      "neb-m1800",
+      "neb-m1804",
+      "neb-m1712",
+      "neb-m9204",
+      "neb-m9205",
+      "thermo-a5180x",
+      "nippon-ne6041",
+      "eiken-lmp204",
+      "eiken-lmp207",
+      "eiken-lmp247",
+      "eiken-lmp244",
+      "neb-m0275",
+      "neb-m0537",
+      "neb-m0538",
+      "neb-m0374",
+      "neb-m0402-m0439-rt",
+      "thermo-a56656",
+      "optigene-iso004",
+      "optigene-iso004-rt",
+      "optigene-iso004-lnl",
+      "optigene-iso004-rt-vis",
+      "optigene-dr004",
+      "optigene-dr004-rt",
+      "optigene-iso004-lyo",
+      "optigene-iso004-rt-lyo",
+      "meridian-mdx097",
+      "meridian-mdx108",
+      "meridian-mdx118",
+      "meridian-mdx119",
+      "meridian-mdx124",
+      "meridian-mdx125",
+      "meridian-mdx126",
+      "meridian-mdx134",
+      "meridian-mdx135",
+      "meridian-mdx144",
+      "meridian-mdx145",
+      "meridian-mdx154",
+      "meridian-mdx155",
+      "takara-rr385",
+      "optigene-iso001",
+      "optigene-iso001-rt",
+      "optigene-iso001-lnl",
+      "optigene-dr001",
+      "optigene-dr001-lnl",
+      "optigene-iso001-lyo",
+      "optigene-iso001-rt-lyo",
+      "optigene-iso001tin",
+      "jena-pcr387",
+      "jena-pcr393",
+      "jena-pcr398",
+      "jena-pcr395",
+      "jena-pcr540",
+      "jena-pcr541",
+      "nzy-md0696",
+      "nzy-md0697",
+      "nippon-dr0401",
+      "nippon-dr0701",
+      "nippon-heatact-fluorescence",
+      "nippon-heatact-turbidity",
+      "nippon-heatact-turbidity-visible",
+      "yeasen-16729",
+      "yeasen-16730",
+      "vazyme-rp711",
+      "agdia-lmx54700",
+      "vazyme-rp712",
+      "hyasen-hyb413",
+      "hyasen-hyb414",
+      "hyasen-hyb315"
+    ],
+    "readout_chemistries": [
+      "not-specified",
+      "supplied-intercalating-dye",
+      "syto9",
+      "syto82",
+      "tb-green",
+      "nzy-speedy-lamp-dye",
+      "eiken-fd-lmp221",
+      "calcein",
+      "hydroxynaphthol-blue",
+      "eriochrome-black-t",
+      "ph-colorimetric",
+      "vendor-visual-color-change",
+      "turbidity-pyrophosphate",
+      "agarose-gel-endpoint",
+      "other-validated"
+    ],
+    "readouts": [
+      "not-specified",
+      "fluorescence",
+      "colorimetric",
+      "turbidity",
+      "other-validated"
+    ],
+    "reconstitution_options": [
+      "protocol-default",
+      "2x",
+      "4x"
+    ],
+    "sample_buffer_types": [
+      "none",
+      "water",
+      "te",
+      "other-buffered",
+      "chelating-other"
+    ],
+    "sample_matrices": [
+      "not-specified",
+      "purified-nucleic-acid",
+      "crude-unspecified",
+      "saliva-sputum",
+      "blood-plasma-serum",
+      "stool",
+      "urine",
+      "koh-lysate",
+      "other-validated"
+    ],
+    "sample_preparations": [
+      "not-specified",
+      "purified",
+      "extracted-crude",
+      "direct-addition",
+      "koh-lyse-and-lamp",
+      "other-validated"
+    ],
+    "specificity_additives": [
+      "none",
+      "tte-uvrd-reviewed"
+    ]
+  },
+  "protocols": {
+    "agdia-lmx54700": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "master_mix_x_final": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 20,
+      "kit_id": "LMX 54700",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "2x-fluorescent-lamp-master-mix-external-rt",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "AmpliFire reviewed setup uses FAM detection at 65°C for 20 min; other instruments require independent validation."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "External RT required for RNA targets; reviewed example uses 50 U/reaction",
+      "role_concentrations_uM": {
+        "F3_B3": 0.2,
+        "FIP_BIP": 1.6,
+        "LOOP": 0.4
+      },
+      "sample_compatibility_notes": [
+        "Reviewed sample input is 1–5 µL in a 25-µL reaction; no generic direct-specimen authority is inferred."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Agdia LMX 54700 · AmplifyRP LAMP Master Mix 2X with dye",
+      "sequence_decision_impact": "none",
+      "source_identity": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://orders.agdia.com/assets/site/docs/m472.pdf",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Agdia"
+    },
+    "eiken-lmp204": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "not built into the cited kit protocol",
+        "included": false,
+        "note": "No dUTP/UDG carry-over claim is inferred for this Eiken DNA kit."
+      },
+      "controls": [
+        "Use negative and positive controls appropriate to the selected Eiken assay/primer set."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_range_c": [
+        60,
+        65
+      ],
+      "hold_time_range_min": [
+        30,
+        60
+      ],
+      "kit_id": "LMP204/LMP205/LMP206",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "Eiken recommends simple-column purification or better for initial screening and HPLC-grade purification for at least FIP and BIP once the primer set is finalized.",
+      "post_inactivation": "80 °C for 5 min or 95 °C for 2 min",
+      "primer_amounts_pmol_per_reaction": {
+        "B3": 5,
+        "BIP": 40,
+        "F3": 5,
+        "FIP": 40,
+        "LoopB": 20,
+        "LoopF": 20
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "dna-kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Eiken documents real-time turbidity and the separately supplied Loopamp Fluorescent Detection Reagent LMP221 (calcein-based) as readout branches; the latter has its own sample-chemistry caveats."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "turbidity",
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Eiken Loopamp DNA Amplification Kit LMP204/205/206",
+      "sequence_decision_impact": "none",
+      "source_identity": "Eiken Loopamp DNA Amplification Kit package insert",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "3LP2019-E",
+      "source_revision_date": "2013-10",
+      "source_revision_date_precision": "month",
+      "source_url": "https://loopamp.eiken.co.jp/en/product/cat-102/dna_e.html",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Eiken Chemical Co., Ltd."
+    },
+    "eiken-lmp207": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "not built into the cited dry-reagent protocol",
+        "included": false,
+        "note": "Keep reaction tubes closed after amplification; no dUTP/UDG carry-over claim is inferred."
+      },
+      "controls": [
+        "Use the Eiken negative/positive controls appropriate to the selected primer set and never reopen completed LAMP tubes in the setup area."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_range_c": [
+        60,
+        67
+      ],
+      "hold_time_range_min": [
+        30,
+        60
+      ],
+      "kit_id": "LMP207",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "Eiken recommends simple-column purification or better for primary screening and HPLC-grade purification for at least FIP and BIP after primer-set selection.",
+      "post_inactivation": "80 °C for 5 min or 95 °C for 2 min",
+      "primer_amounts_pmol_per_reaction": {
+        "B3": 5,
+        "BIP": 40,
+        "F3": 5,
+        "FIP": 40,
+        "LoopB": 20,
+        "LoopF": 20
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "dry-dna-reagent",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Eiken documents real-time turbidity plus the separately supplied Loopamp Fluorescent Detection Reagent LMP221 (calcein-based) for LMP207; the readout chemistry must be treated separately from primer design."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "turbidity",
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_compatibility_notes": [
+        "The cited LMP207 insert is a DNA-LAMP reagent. RNA may be used only after a separate cDNA synthesis step; PCRStudio does not promote that to one-step RT-LAMP."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Eiken Loopamp DNA Amplification Reagent D LMP207",
+      "sequence_decision_impact": "none",
+      "source_identity": "Eiken Loopamp DNA Amplification Reagent D package insert",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "380233-A",
+      "source_revision_date": "2015-04",
+      "source_revision_date_precision": "month",
+      "source_url": "https://loopamp.eiken.co.jp/en/uploads/dna_d_insert.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Eiken Chemical Co., Ltd."
+    },
+    "eiken-lmp244": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "not built into the cited kit protocol",
+        "included": false,
+        "note": "No dUTP/UDG carry-over claim is inferred for this Eiken RT-LAMP kit."
+      },
+      "controls": [
+        "Use negative and positive controls appropriate to the selected Eiken assay/primer set."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 63,
+      "hold_temperature_range_c": [
+        60,
+        65
+      ],
+      "hold_time_min": 60,
+      "kit_id": "LMP244/LMP245/LMP246",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "Eiken recommends increasing primer purification as the assay is finalized; retain final FIP/BIP purification in the laboratory ordering record.",
+      "post_inactivation": "Follow the current Eiken package insert/equipment workflow for enzyme deactivation after the selected RT-LAMP run.",
+      "primer_amounts_pmol_per_reaction": {
+        "B3": 5,
+        "BIP": 40,
+        "F3": 5,
+        "FIP": 40,
+        "LoopB": 20,
+        "LoopF": 20
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "rt-lamp-kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Eiken documents real-time turbidity and the separately supplied Loopamp Fluorescent Detection Reagent LMP221 (calcein-based) as readout branches; the latter has its own sample-chemistry caveats."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "turbidity",
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "AMV reverse transcriptase + Bst DNA polymerase (included enzyme mix)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Eiken Loopamp RNA Amplification Kit (RT-LAMP) LMP244/245/246",
+      "sequence_decision_impact": "none",
+      "source_identity": "Eiken Loopamp RNA Amplification Kit (RT-LAMP) product/package insert",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "3LP2419-E",
+      "source_url": "https://loopamp.eiken.co.jp/en/product/cat-102/rna_e.html",
+      "supports_dna": false,
+      "supports_rna": true,
+      "vendor": "Eiken Chemical Co., Ltd."
+    },
+    "eiken-lmp247": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "no dUTP/UDG claim in the cited package insert",
+        "included": false,
+        "note": "The dry-tube format and closed-tube workflow reduce handling but are not a UDG/dUTP carry-over system."
+      },
+      "controls": [
+        "Use the Eiken RNA/DNA positive and negative control branch appropriate to the assay, and never reopen completed amplification tubes in the setup area."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_range_c": [
+        60,
+        67
+      ],
+      "hold_time_range_min": [
+        30,
+        60
+      ],
+      "kit_id": "LMP247",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "Eiken recommends simple-column purification or better for primary screening and HPLC-grade purification for at least FIP and BIP after primer-set selection.",
+      "post_inactivation": "80 °C for 5 min or 95 °C for 2 min",
+      "primer_amounts_pmol_per_reaction": {
+        "B3": 5,
+        "BIP": 40,
+        "F3": 5,
+        "FIP": 40,
+        "LoopB": 20,
+        "LoopF": 20
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "dry-rna-dna-reagent",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Calcein is included in LMP247 for fluorescent/visual detection; real-time turbidity is also documented.",
+        "For visual fluorescence judgment, Eiken requires enzyme deactivation before interpretation; PCRStudio does not infer a universal fluorescence threshold or instrument channel."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "turbidity",
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "Reverse transcriptase is included in the dried reagent for one-step RT-LAMP",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_compatibility_notes": [
+        "Some specimen components can inhibit LAMP. The dried reagent must be completely dissolved and the assay-specific optimum within 60–67 °C / 30–60 min must be established for the designed primer set."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Eiken Loopamp RNA/DNA Amplification Reagent D LMP247",
+      "sequence_decision_impact": "none",
+      "source_identity": "Eiken Loopamp RNA/DNA Amplification Reagent D package insert",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "380232-A",
+      "source_revision_date": "2015-04",
+      "source_revision_date_precision": "month",
+      "source_url": "https://loopamp.eiken.co.jp/en/uploads/rna_dna_insert.pdf",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Eiken Chemical Co., Ltd."
+    },
+    "hyasen-hyb315": {
+      "bench_optimization_scope": {
+        "hold_temperature_c": [
+          62.0,
+          68.0
+        ]
+      },
+      "chemistry": {
+        "lyophilized_beads_per_reaction": 2.0,
+        "primer_mix_10x_uL": 5.0
+      },
+      "controls": [
+        "Use contamination-separated setup and template-addition areas."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_temperature_range_c": [
+        62,
+        68
+      ],
+      "hold_time_min": 30,
+      "kit_id": "HYB315",
+      "lifecycle": {
+        "availability_claim": "vendor-source-observed",
+        "note": "Official vendor source was accessible during the 2026-09-04 catalogue review; regional availability may differ.",
+        "snapshot": "2026-09-04",
+        "status": "current-reviewed"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "lamp-fluorescent-lyophilized-beads",
+      "reaction_volume_uL": 50,
+      "readout_notes": [
+        "Collect fluorescence once per 60 s interval for 30 intervals under the published 65 °C program."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "DNA template only under the reviewed product authority."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Hyasen LAMP Fluorescent Master Mix (Lyophilized beads) HYB315",
+      "sequence_decision_impact": "none",
+      "source_identity": "Hyasen LAMP Fluorescent Master Mix (Lyophilized beads) HYB315 instructions",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.hyasen.com/lamp-fluorenscent-master-mix-lyophilized-beads-hyb315-product/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Hyasen Biotech"
+    },
+    "hyasen-hyb413": {
+      "bench_optimization_scope": {
+        "hold_temperature_c": [
+          62.0,
+          68.0
+        ]
+      },
+      "chemistry": {
+        "dye_25x_uL": 2.0,
+        "lamp_buffer_uL": 12.5,
+        "primer_mix_10x_uL": 5.0,
+        "rt_enzyme_mix_uL": 2.55
+      },
+      "controls": [
+        "Use contamination-separated setup and template-addition areas."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid",
+        "lyophilizable"
+      ],
+      "hold_temperature_c": 65,
+      "hold_temperature_range_c": [
+        62,
+        68
+      ],
+      "hold_time_min": 30,
+      "kit_id": "HYB413",
+      "lifecycle": {
+        "availability_claim": "vendor-source-observed",
+        "note": "Official vendor source was accessible during the 2026-09-04 catalogue review; regional availability may differ.",
+        "snapshot": "2026-09-04",
+        "status": "current-reviewed"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "rt-lamp-fluorescent-master-mix",
+      "reaction_volume_uL": 50,
+      "readout_notes": [
+        "Collect fluorescence once per 60 s interval for 30 intervals under the published 65 °C program."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "Vendor recommends DEPC water for nucleic-acid template solution."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Hyasen RT-LAMP Fluorescent Master Mix HYB413",
+      "sequence_decision_impact": "none",
+      "source_identity": "Hyasen RT-LAMP Fluorescent Master Mix HYB413 product instructions",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.hyasen.com/rt-lamp-fluorenscent-master-mix-hyb413-product/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Hyasen Biotech"
+    },
+    "hyasen-hyb414": {
+      "bench_optimization_scope": {
+        "hold_temperature_c": [
+          62.0,
+          68.0
+        ]
+      },
+      "chemistry": {
+        "lyophilized_beads_per_reaction": 2.0,
+        "primer_mix_10x_uL": 5.0
+      },
+      "controls": [
+        "Use contamination-separated setup and template-addition areas."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_temperature_range_c": [
+        62,
+        68
+      ],
+      "hold_time_min": 30,
+      "kit_id": "HYB414",
+      "lifecycle": {
+        "availability_claim": "vendor-source-observed",
+        "note": "Official vendor source was accessible during the 2026-09-04 catalogue review; regional availability may differ.",
+        "snapshot": "2026-09-04",
+        "status": "current-reviewed"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "rt-lamp-fluorescent-lyophilized-beads",
+      "reaction_volume_uL": 50,
+      "readout_notes": [
+        "Collect fluorescence once per 60 s interval for 30 intervals under the published 65 °C program."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "Vendor recommends DEPC water for nucleic-acid template solution."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Hyasen RT-LAMP Fluorescent Master Mix (Lyophilized beads) HYB414",
+      "sequence_decision_impact": "none",
+      "source_identity": "Hyasen RT-LAMP Fluorescent Master Mix (Lyophilized beads) HYB414 instructions",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.hyasen.com/rt-lamp-fluorenscent-master-mix-lyophilized-beads-hyb414-product/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Hyasen Biotech"
+    },
+    "jena-pcr387": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "PCR-387",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "2x-fluorescent-dna-lamp-master-mix",
+      "readout_notes": [
+        "2X GreenMaster is used at 1X; reviewed run window is 60–65°C with fluorescence sampled at one-minute intervals for up to 30 min."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [
+        "Current product guidance states <500 ng DNA/assay; this is not a direct-specimen authority."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-387 · Saphir LAMP GreenMaster",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience Saphir LAMP GreenMaster current product/datasheet",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp/lamp-master-mixes/pcr-387-saphir-lamp-greenmaster",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Jena Bioscience"
+    },
+    "jena-pcr393": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "PCR-393",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "2x-turbo-fluorescent-dna-lamp-master-mix",
+      "readout_notes": [
+        "Next-generation Bst formulation; current product authority remains product-specific and is not substituted for PCR-387."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [
+        "DNA-only current product authority."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-393 · Saphir LAMP Turbo GreenMaster",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience Saphir LAMP Turbo GreenMaster current product/datasheet",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp/lamp-master-mixes/pcr-393-saphir-lamp-turbo-greenmaster",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Jena Bioscience"
+    },
+    "jena-pcr395": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "kit_id": "PCR-395",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-turbo-fluorescent-dna-lamp-master-mix",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-395 · Saphir LAMP Turbo GreenMaster Lyophilisate",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience Saphir LAMP Turbo GreenMaster Lyophilisate current authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Jena Bioscience"
+    },
+    "jena-pcr398": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "kit_id": "PCR-398",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-fluorescent-dna-lamp-master-mix",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-398 · Saphir LAMP GreenMaster Lyophilisate",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience Saphir LAMP GreenMaster Lyophilisate current authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Jena Bioscience"
+    },
+    "jena-pcr540": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "PCR-540",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "fluorescent-rt-lamp-kit",
+      "readout_notes": [
+        "Reviewed 20–50 µL setup uses 4X buffer, 20X enzyme mix and 25X dye at 1X final; 60–65°C, fluorescence every 1 min up to 30 min."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "Saphir RT-LAMP enzyme mix",
+      "sample_compatibility_notes": [
+        "RNA <100 ng/assay in current vendor setup."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-540 · Saphir RT-LAMP Kit",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience Saphir RT-LAMP Kit current product/datasheet",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp/rt-lamp-master-mixes/pcr-540-saphir-rt-lamp-kit",
+      "supports_dna": false,
+      "supports_rna": true,
+      "vendor": "Jena Bioscience"
+    },
+    "jena-pcr541": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid",
+        "lyophilized"
+      ],
+      "kit_id": "PCR-541",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "ph-colorimetric-lyo-ready-rt-lamp",
+      "readout_notes": [
+        "Visible pH-dependent pink-to-yellow branch; Tris-buffer interference remains an assay chemistry boundary."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "ph-colorimetric"
+      ],
+      "recommended_readouts": [
+        "colorimetric"
+      ],
+      "reverse_transcriptase": "included RT-LAMP enzyme system",
+      "sample_compatibility_notes": [
+        "Lyo-ready is an exact product property; final lyophilized assay qualification remains empirical."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Jena Bioscience PCR-541 · RT-LAMP Colorimetric Kit, lyo-ready",
+      "sequence_decision_impact": "none",
+      "source_identity": "Jena Bioscience RT-LAMP Colorimetric Kit lyo-ready current authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.jenabioscience.com/molecular-biology/isothermal-amplification-lamp/lamp-rt-lamp-master-mixes/pcr-541-rt-lamp-colorimetric-kit-lyo-ready",
+      "supports_dna": false,
+      "supports_rna": true,
+      "vendor": "Jena Bioscience"
+    },
+    "meridian-mdx097": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX097",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lamp-master-mix",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Meridian MDX097 LAMP Master Mix · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian MDX097 product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx108": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX108",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "rt-lamp-master-mix",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Meridian MDX108 LAMP/RT-LAMP Master Mix · DNA/RNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian MDX108 product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx118": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "kit_id": "MDX118",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Meridian MDX118 Lyophilized LAMP · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian MDX118 product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx119": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "air-dryable"
+      ],
+      "kit_id": "MDX119",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "air-dryable-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Meridian MDX119 Air-Dryable LAMP · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian MDX119 product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx124": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "blood-plasma-serum"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX124",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-blood-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid",
+        "blood-plasma-serum"
+      ],
+      "selection": "Meridian MDX124 Direct DNA LAMP Blood · liquid",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct blood LAMP product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx125": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "blood-plasma-serum"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX125",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-blood-rt-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid",
+        "blood-plasma-serum"
+      ],
+      "selection": "Meridian MDX125 Direct RT-LAMP Blood · liquid",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct blood RT-LAMP product handling authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx126": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "magnesium_mM": 8.0,
+        "master_mix_x_final": 1.0
+      },
+      "controls": [
+        "Use matrix-matched NTC and positive controls; specimen titration and wet-versus-dried equivalence remain empirical validation questions."
+      ],
+      "direct_sample_matrices": [
+        "blood-plasma-serum"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid",
+        "air-dryable"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 60,
+      "kit_id": "MDX126",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "direct-matrix-air-dryable-dna-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "syto82",
+        "other-validated"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_compatibility_notes": [
+        "Exact-product authority covers direct whole-blood/plasma/serum use and wet or air-dried formulation; do not generalize this tolerance to other LAMP mixes."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid",
+        "blood-plasma-serum"
+      ],
+      "selection": "Meridian MDX126 · Air-Dryable Direct DNA LAMP Blood 4X",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian MDX126 Air-Dryable Direct DNA LAMP Blood Product Handling Guide / current product page",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/uploads/ls-uploads/mdx-phg/MDX126-phg.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx134": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "saliva-sputum"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX134",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-saliva-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "saliva-sputum"
+      ],
+      "selection": "Meridian MDX134 Direct DNA LAMP Saliva/Sputum",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct saliva/sputum LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx135": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "saliva-sputum"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX135",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-saliva-rt-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "saliva-sputum"
+      ],
+      "selection": "Meridian MDX135 Direct RT-LAMP Saliva/Sputum",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct saliva/sputum RT-LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx144": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "stool"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX144",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-stool-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "stool"
+      ],
+      "selection": "Meridian MDX144 Direct DNA LAMP Stool",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct stool LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx145": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "stool"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX145",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-stool-rt-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "stool"
+      ],
+      "selection": "Meridian MDX145 Direct RT-LAMP Stool",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct stool RT-LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx154": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "urine"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX154",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-urine-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "urine"
+      ],
+      "selection": "Meridian MDX154 Direct DNA LAMP Urine",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct urine LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Meridian Bioscience"
+    },
+    "meridian-mdx155": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "urine"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "MDX155",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-urine-rt-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "urine"
+      ],
+      "selection": "Meridian MDX155 Direct RT-LAMP Urine",
+      "sequence_decision_impact": "none",
+      "source_identity": "Meridian direct urine RT-LAMP authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.meridianbioscience.com/lifescience/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Meridian Bioscience"
+    },
+    "neb-e1700": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "no built-in dUTP/UDG",
+        "included": false,
+        "note": "Do not infer carry-over prevention from E1700 selection alone."
+      },
+      "controls": [
+        "Run a no-template control for every assay evaluation."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "E1700",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The E1700 kit supplies LAMP fluorescent dye; other validated detection branches remain separate assay choices."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "rt_authority_status": "neb-e1700-dna-rna",
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB WarmStart LAMP Kit (DNA & RNA) E1700",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB WarmStart LAMP Kit (DNA & RNA) protocol/manual",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "Version 6.0_3/23",
+      "source_revision_date": "2023-03",
+      "source_revision_date_precision": "month",
+      "source_url": "https://www.neb.com/en/protocols/warmstart-lamp-kit-dna-rna-protocol-e1700",
+      "supports_dna": true,
+      "supports_rna": true,
+      "temperature_envelope_c": [
+        60,
+        70
+      ],
+      "vendor": "New England Biolabs"
+    },
+    "neb-e1708": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dUTP + Antarctic Thermolabile UDG",
+        "included": true,
+        "note": "Room-temperature setup enables the kit's carry-over-reduction branch; it does not eliminate contamination risk."
+      },
+      "controls": [
+        "Run a no-template control; UDG/dUTP does not replace NTC monitoring."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "E1708",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The supplied fluorescent dye is normally 1X; some instruments may require a lower dye concentration to avoid saturation."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB WarmStart Fluorescent LAMP/RT-LAMP Kit (with UDG) E1708",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB E1708 WarmStart Fluorescent LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/warmstart-fluorescent-lamp-rt-lamp-kit-with-udg-protocol-neb-e1708",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-l4401": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dUTP + Antarctic Thermolabile UDG",
+        "included": true,
+        "note": "Room-temperature setup enables the built-in carry-over-reduction branch; closed-tube practice and NTCs remain necessary."
+      },
+      "controls": [
+        "Run a no-template control using the same sample-storage buffer or water volume as the target branch."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "L4401",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "Prepare primer stocks in nuclease-free water. For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": ">80 °C for 5 min only when downstream handling requires it; otherwise keep completed tubes closed",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "lyophilized-fluorescent-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "L4401 contains LAMP Fluorescent Dye at 0.5X final concentration and is read in a SYBR/FAM-compatible channel.",
+        "The lyophilized product is normally reconstituted as a 2X mix; a 4X rehydration is supported for larger sample inputs but may slow time to detection for some targets."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included in the one-step LAMP/RT-LAMP mix)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "The vendor protocol allows DNA or RNA input. Low-copy or challenging samples may require a longer incubation; PCRStudio does not convert that qualitative note into a universal time-to-positive threshold."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB LyoPrime WarmStart Fluorescent LAMP/RT-LAMP Mix (with UDG) L4401",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB L4401 LyoPrime WarmStart Fluorescent LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/protocols/protocol-for-lyoprime-warmstart-fluorescent-lamp-rt-lamp-mix-with-udg-neb-l4401",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m0275": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "kit_id": "M0275",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "assembled-enzyme",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst DNA Polymerase, Large Fragment · M0275 assembled LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Bst DNA Polymerase, Large Fragment product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/products/m0275-bst-dna-polymerase-large-fragment",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m0374": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "kit_id": "M0374",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "assembled-enzyme",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst 3.0 DNA Polymerase · M0374 assembled LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Bst 3.0 DNA Polymerase product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/products/m0374-bst-30-dna-polymerase",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m0402-m0439-rt": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "kit_id": "M0402/M0439",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "assembled-enzyme-rt-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst-family + WarmStart RTx assembled RT-LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB WarmStart RTx + Bst-family RT-LAMP assembly guidance",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/products/m0380-warmstart-rtx-reverse-transcriptase",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m0537": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "kit_id": "M0537",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "assembled-enzyme",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst 2.0 DNA Polymerase · M0537 assembled LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Bst 2.0 DNA Polymerase product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/products/m0537-bst-20-dna-polymerase",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m0538": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "kit_id": "M0538",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "assembled-enzyme",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst 2.0 WarmStart DNA Polymerase · M0538 assembled LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB Bst 2.0 WarmStart DNA Polymerase product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en-us/products/m0538-bst-20-warmstart-dna-polymerase",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m1708": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dUTP + thermolabile UDG",
+        "included": true,
+        "note": "Carry-over reduction is built into the mix; closed-tube practice and NTCs remain necessary."
+      },
+      "controls": [
+        "Run a no-template control for every assay evaluation."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "M1708",
+      "lifecycle": {
+        "note": "NEB still lists M1708 but explicitly identifies M1712 as an updated Bst-XT version. PCRStudio preserves M1708 for exact bench provenance and never substitutes M1712 silently.",
+        "silent_substitution_allowed": false,
+        "status": "current",
+        "updated_generation_available": "neb-m1712",
+        "updated_generation_feature": "Bst-XT WarmStart DNA Polymerase"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "This is a fully buffered multi-purpose mix; NEB lists fluorescence, turbidity and metal-indicator colorimetric detection as compatible branches.",
+        "Sequence-specific DARQ/lateral-flow formats require modified oligo chemistry and are not synthesized by the Gen-1 LAMP engine."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB WarmStart Multi-Purpose LAMP/RT-LAMP 2X Master Mix (with UDG) M1708",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M1708 WarmStart Multi-Purpose LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/warmstart-multi-purpose-lamp-rt-lamp-2x-master-mix-with-udg-protocol-neb-m1708",
+      "supports_dna": true,
+      "supports_rna": true,
+      "temperature_envelope_c": [
+        60,
+        70
+      ],
+      "vendor": "New England Biolabs"
+    },
+    "neb-m1712": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dUTP + thermolabile UDG",
+        "included": true,
+        "note": "Carry-over reduction is built into the mix; closed-tube practice and NTCs remain necessary."
+      },
+      "controls": [
+        "NEB strongly recommends a no-template control for M1712."
+      ],
+      "direct_sample_matrices": [],
+      "fluorescent_dye_x": {
+        "component": "NEB LAMP Fluorescent Dye B1700 when fluorescence is selected",
+        "note": "The dye is sold separately for M1712 and is a readout reagent, not a primer-ranking parameter.",
+        "optimization_max": 1.0,
+        "optimization_min": 0.1,
+        "starting": 0.5
+      },
+      "forbidden_readout_chemistries": {
+        "hydroxynaphthol-blue": "NEB reports poor HNB contrast with M1712 and does not recommend this indicator for that mix."
+      },
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 20,
+      "kit_id": "M1712",
+      "lifecycle": {
+        "generation": "updated-bst-xt-generation",
+        "note": "NEB describes M1712 as the updated Bst-XT version of M1708; both identities remain independently selectable for reproducibility.",
+        "predecessor_current_product": "neb-m1708",
+        "silent_substitution_allowed": false,
+        "status": "current"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "bst-xt-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "For endpoint metal-dye colorimetry, NEB recommends Eriochrome Black T or Calcein for M1712; hydroxynaphthol blue gives poor contrast and is not recommended.",
+        "A generic 'colorimetric' selection does not identify which metal dye was actually used; record that chemistry in the laboratory SOP."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "calcein",
+        "eriochrome-black-t",
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst-XT WarmStart Multi-Purpose LAMP/RT-LAMP 2X Master Mix with UDG M1712",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M1712 Bst-XT WarmStart Multi-Purpose LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/bst-xt-warmstart-multi-purpose-lamp-rt-lamp-2x-master-mix-with-udg-protocol-neb-m1712",
+      "supports_dna": true,
+      "supports_rna": true,
+      "temperature_envelope_c": [
+        50,
+        70
+      ],
+      "vendor": "New England Biolabs"
+    },
+    "neb-m1800": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "no built-in dUTP/UDG",
+        "included": false,
+        "note": "Use a UDG-containing product/validated add-on if carry-over reduction is required; it is not inferred here."
+      },
+      "controls": [
+        "A bright-pink starting reaction and a no-template control are part of the pH-colorimetric interpretation boundary."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "M1800",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": "No universal post-inactivation is required for endpoint color reading; keep vessels closed unless a validated downstream workflow requires opening.",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "pH-colorimetric-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The built-in phenol-red branch is pH-sensitive: acidic or strongly buffered sample inputs can confound color interpretation.",
+        "NEB advises preparing primer stocks for this pH-colorimetric protocol in molecular-biology-grade water rather than TE to avoid added buffer."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "colorimetric"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "For pH-colorimetric workflows, acidic or highly buffered sample inputs can alter the starting color and must be validated. NEB also flags SDS and guanidine constraints in specific direct-sample colorimetric workflows; PCRStudio does not generalize those assay-specific thresholds to every M1800/M1804 use."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB WarmStart Colorimetric LAMP 2X Master Mix (DNA & RNA) M1800",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M1800 WarmStart Colorimetric LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/warmstart-colorimetric-lamp-2x-master-mix-typical-lamp-protocol-m1800",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m1804": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dTTP/dUTP + Antarctic Thermolabile UDG",
+        "included": true,
+        "note": "Room-temperature setup (or a validated short room-temperature pre-incubation) enables carry-over reduction; it does not replace contamination controls."
+      },
+      "controls": [
+        "A bright-pink starting reaction and a no-template control are part of the pH-colorimetric interpretation boundary."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 30,
+      "kit_id": "M1804",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "post_inactivation": "Keep endpoint vessels closed; opening amplified LAMP products increases carry-over risk even when UDG/dUTP is used.",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "pH-colorimetric-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The built-in phenol-red branch is pH-sensitive: acidic or strongly buffered sample inputs can confound color interpretation.",
+        "NEB advises preparing primer stocks in molecular-biology-grade water rather than TE for this low-buffer protocol."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "colorimetric"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (included)",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "For pH-colorimetric workflows, acidic or highly buffered sample inputs can alter the starting color and must be validated. NEB also flags SDS and guanidine constraints in specific direct-sample colorimetric workflows; PCRStudio does not generalize those assay-specific thresholds to every M1800/M1804 use."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB WarmStart Colorimetric LAMP 2X Master Mix with UDG M1804",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M1804 WarmStart Colorimetric LAMP with UDG protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/warmstart-colorimetric-lamp-2x-master-mix-with-udg-typical-lamp-protocol-neb-m1804",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "New England Biolabs"
+    },
+    "neb-m9204": {
+      "baseline_formulation": {
+        "bst_xt_u_per_mL": 320.0,
+        "bst_xt_units_per_25uL": 8.0,
+        "dntp_each_mM": 1.4,
+        "mgso4_from_1x_buffer_mM": 2.0,
+        "mgso4_supplement_mM": 4.0,
+        "mgso4_total_mM": 6.0,
+        "rtx_units_per_25uL_for_rna": 7.5,
+        "template_copies_guidance": ">10 copies in the reviewed vendor setup; not a universal detection limit"
+      },
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "optional add-on: dUTP + thermolabile UDG",
+        "included": false,
+        "note": "The published M9204 protocol describes a separate optional carry-over branch; selecting M9204 does not claim that branch was added."
+      },
+      "controls": [
+        "Run a no-template control; perform any opened post-amplification analysis in a separate area."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 20,
+      "kit_id": "M9204",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "optimization_ranges": {
+        "bst_xt_u_per_mL": [
+          320,
+          600
+        ],
+        "fluorescent_dye_x": [
+          0.1,
+          1.0
+        ],
+        "magnesium_mM_max": 8.0,
+        "temperature_c": [
+          50,
+          70
+        ]
+      },
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "standalone-enzyme-recipe",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The vendor protocol supports intercalating fluorescence, metal-indicator colorimetry, turbidity and sequence-specific detection; modified-probe/label design remains outside Gen-1 simplex LAMP."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase, 7.5 U per 25 µL for the vendor RT-LAMP branch",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst-XT WarmStart DNA Polymerase M9204 LAMP/RT-LAMP protocol",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M9204 Bst-XT WarmStart LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.neb.com/en/protocols/loop-mediated-isothermal-amplification-lamp-protocol-using-bst-xt-warmstart-neb-m9204",
+      "supports_dna": true,
+      "supports_rna": true,
+      "temperature_envelope_c": [
+        50,
+        70
+      ],
+      "vendor": "New England Biolabs"
+    },
+    "neb-m9205": {
+      "baseline_formulation": {
+        "bst_xt_u_per_mL": 320.0,
+        "bst_xt_units_per_25uL": 8.0,
+        "dntp_each_mM": 1.4,
+        "equivalence_note": "M9205 is the glycerol-free Bst-XT branch intended for lyo/automation workflows; equivalent enzyme performance does not by itself validate a finished lyophilized assay.",
+        "mgso4_from_1x_buffer_mM": 2.0,
+        "mgso4_supplement_mM": 4.0,
+        "mgso4_total_mM": 6.0,
+        "rtx_units_per_25uL_for_rna": 7.5
+      },
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "optional add-on: 0.7 mM dUTP + 20 U/mL thermolabile UDG",
+        "included": false,
+        "note": "The published M9205 protocol makes dUTP/UDG optional; selecting M9205 does not claim that the optional carry-over branch was added."
+      },
+      "controls": [
+        "Run a no-template control; perform any opened post-amplification analysis in a separate area."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_min": 20,
+      "kit_id": "M9205",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "For screening, standard desalting is generally sufficient; for a finalized assay, NEB recommends PAGE or HPLC purification of FIP and BIP at minimum.",
+      "optimization_ranges": {
+        "bst_xt_u_per_mL": [
+          320,
+          600
+        ],
+        "fluorescent_dye_x": [
+          0.1,
+          1.0
+        ],
+        "magnesium_mM_max": 8.0,
+        "temperature_c": [
+          50,
+          70
+        ]
+      },
+      "post_inactivation": ">80 °C for 5 min when downstream handling requires it",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "standalone-enzyme-recipe-glycerol-free",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The vendor protocol supports intercalating fluorescence, metal-indicator colorimetry, turbidity and sequence-specific detection; lateral-flow labels and modified probes remain outside Gen-1 simplex LAMP."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "turbidity",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "WarmStart RTx Reverse Transcriptase (Glycerol-free) M0439, 7.5 U per 25 µL for the vendor RT-LAMP branch",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "The Bst-XT isothermal amplification buffer in the cited M9205 protocol is lyo-compatible; this does not imply that an arbitrary assembled assay is validated as a lyophilized product."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NEB Bst-XT WarmStart DNA Polymerase (Glycerol-free) M9205 LAMP/RT-LAMP protocol",
+      "sequence_decision_impact": "none",
+      "source_identity": "NEB M9205 Bst-XT WarmStart DNA Polymerase (Glycerol-free) LAMP/RT-LAMP protocol",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision_date": "2025-03-18",
+      "source_revision_date_precision": "day",
+      "source_url": "https://www.neb.com/en/protocols/2025/03/18/loop-mediated-isothermal-amplification-lamp-protocol-using-bst-xt-warmstart-dna-polymerase-glycerol-free",
+      "supports_dna": true,
+      "supports_rna": true,
+      "temperature_envelope_c": [
+        50,
+        70
+      ],
+      "vendor": "New England Biolabs"
+    },
+    "nippon-dr0401": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "kit_id": "DR0401",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dry-dna-lamp-turbidity-visible",
+      "readout_notes": [
+        "DryADD DNA branch supports turbidity/visible-dye handling; do not map it onto fluorescence-only NE6041 chemistry."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "turbidity-pyrophosphate",
+        "vendor-visual-color-change"
+      ],
+      "recommended_readouts": [
+        "turbidity",
+        "colorimetric"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene DR0401 · DryADD DNA LAMP Master Mix (Turbidity/Visible Dye)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene DR0401 product manual",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nippongene.com/kensa/products/tds/DR0401_Manual.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Nippon Gene"
+    },
+    "nippon-dr0701": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "kit_id": "DR0701",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dry-rt-lamp-turbidity-visible",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "turbidity-pyrophosphate",
+        "vendor-visual-color-change"
+      ],
+      "recommended_readouts": [
+        "turbidity",
+        "colorimetric"
+      ],
+      "reverse_transcriptase": "included DryADD RT-LAMP system",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene DR0701 · DryADD RT-LAMP Master Mix (Turbidity/Visible Dye)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene DR0701 product manual",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://nippongene.com/kensa/products/tds/DR0701_Manual.pdf",
+      "supports_dna": false,
+      "supports_rna": true,
+      "vendor": "Nippon Gene"
+    },
+    "nippon-heatact-fluorescence": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {
+        "turbidity-pyrophosphate": "The fluorescence formulation is not the product authority for turbidity detection."
+      },
+      "forbidden_readouts": {
+        "turbidity": "The fluorescence formulation contains pyrophosphatase; use the separate turbidity formulation for pyrophosphate-turbidity detection."
+      },
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "311-09821",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "heatact-fluorescent-dna-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene 311-09821 · HeatAct LAMP MASTER for Fluorescence",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene HeatAct LAMP MASTER current product authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nippongene.com/siyaku/product/lamp/pdf/leaf_heatact-lamp-master.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Nippon Gene"
+    },
+    "nippon-heatact-turbidity": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "318-09831",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "heatact-turbidity-dna-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "turbidity-pyrophosphate"
+      ],
+      "recommended_readouts": [
+        "turbidity"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene 318-09831 · HeatAct LAMP MASTER for Turbidity",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene HeatAct LAMP MASTER current product authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nippongene.com/siyaku/product/lamp/pdf/leaf_heatact-lamp-master.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Nippon Gene"
+    },
+    "nippon-heatact-turbidity-visible": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "314-09811",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "heatact-turbidity-visible-dna-lamp",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "turbidity-pyrophosphate",
+        "vendor-visual-color-change"
+      ],
+      "recommended_readouts": [
+        "turbidity",
+        "colorimetric"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene 314-09811 · HeatAct LAMP MASTER for Turbidity (Visible Dye)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene HeatAct LAMP MASTER current product authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nippongene.com/siyaku/product/lamp/pdf/leaf_heatact-lamp-master.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Nippon Gene"
+    },
+    "nippon-ne6041": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "no built-in dUTP/UDG claim in the cited manual",
+        "included": false,
+        "note": "PCRStudio does not infer carry-over chemistry from the master-mix identity; closed-tube fluorescence and assay controls remain separate requirements."
+      },
+      "controls": [
+        "Use a no-template control and assay-specific positive control during validation; fluorescence identity does not substitute for empirical specificity controls."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {
+        "turbidity-pyrophosphate": "Thermostable inorganic pyrophosphatase removes the pyrophosphate signal required for turbidity detection."
+      },
+      "forbidden_readouts": {
+        "turbidity": "NE6041/NE6043 contains thermostable inorganic pyrophosphatase; the reviewed manual states it is not for real-time turbidity instruments."
+      },
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_range_c": [
+        60,
+        68
+      ],
+      "hold_time_min": 30,
+      "kit_id": "NE6041/NE6043",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "The cited manual defines the 10X primer-mix composition but does not prescribe a universal oligo purification grade. PCRStudio therefore records the bench recipe without inventing an ordering requirement.",
+      "post_inactivation": "No separate universal inactivation step is specified in the cited manual; follow the selected instrument/assay workflow and avoid opening completed tubes unless a validated downstream step requires it.",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "fluorescent-dna-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "The mix contains a double-stranded-DNA-binding fluorescent dye and thermostable inorganic pyrophosphatase.",
+        "The cited product is explicitly not intended for real-time turbidity instruments because pyrophosphate precipitate/turbidity is suppressed; fluorescence is the reviewed readout branch.",
+        "The manual directs annealing-curve or melting-curve analysis after the 30-min isothermal amplification when supported by the selected fluorescence instrument."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "not included in the cited NE6041/NE6043 DNA-polymerase master mix",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_compatibility_notes": [
+        "The manual permits template input up to 5 µL in a 25-µL reaction but does not establish a universal direct-sample or inhibitor-tolerance claim."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Nippon Gene 2x LAMP Master Mix NE6041/NE6043",
+      "sequence_decision_impact": "none",
+      "source_identity": "Nippon Gene 2x LAMP Master Mix Manual 2024/9",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "Manual 2024/9",
+      "source_revision_date": "2024-09",
+      "source_revision_date_precision": "month",
+      "source_url": "https://nippongene.com/kensa/products/tds/NE6041_NE6043_Manual.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Nippon Gene Co., Ltd."
+    },
+    "nzy-md0696": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "magnesium_mM": 8.0,
+        "master_mix_x_final": 1.0,
+        "speedy_lamp_dye_x": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "kit_id": "MD0696",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "4x-lyophilized-dna-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Reviewed 4X reconstituted branch uses Speedy LAMP Dye and operates at 65–70°C, optimally around 68–69°C."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "nzy-speedy-lamp-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NZYtech Polaris MD0696 · Lyo LAMP Master Mix 4X",
+      "sequence_decision_impact": "none",
+      "source_identity": "NZYtech MD0696 IFU V2402",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nzytech.com/media/dds/brochurescertificates/md0696_ifu_en_v2402.pdf",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "NZYtech"
+    },
+    "nzy-md0697": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "magnesium_mM": 8.0,
+        "master_mix_x_final": 1.0,
+        "speedy_lamp_dye_x": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "kit_id": "MD0697",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "4x-lyophilized-rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "nzy-speedy-lamp-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "included RT-LAMP activity",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "NZYtech Polaris MD0697 · Lyo RT-LAMP Master Mix 4X",
+      "sequence_decision_impact": "none",
+      "source_identity": "NZYtech Polaris Lyo RT-LAMP Master Mix 4X IFU",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.nzytech.com/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "NZYtech"
+    },
+    "optigene-dr001": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-DR001",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dried-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-DR001 · GspSSD dried DNA LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 dried reagent current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-dr001-lnl": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "koh-lysate"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-DR001-LNL",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dried-direct-koh-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "koh-lysate"
+      ],
+      "selection": "OptiGene ISO-DR001-LNL · dried Lyse & LAMP KOH",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 dried Lyse & LAMP current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-dr004": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "DR-004",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dried-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Dried LAMP formulation DR-004 · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene dried LAMP formulation authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-dr004-rt": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "dry-reagent"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "DR-004 RT",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "dried-rt-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Dried RT-LAMP formulation DR-004 · RNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene dried RT-LAMP formulation authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [
+        "anneal-curve"
+      ],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-001 · GspSSD liquid DNA LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001-lnl": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "koh-lysate"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001-LNL",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-koh-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "koh-lysate"
+      ],
+      "selection": "OptiGene ISO-001-LNL · GspSSD Lyse & LAMP KOH",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 Lyse & LAMP current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001-lyo": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001-LYO-1K",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-001-LYO · GspSSD lyophilized DNA LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 LYO current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001-rt": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001-RT",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [
+        "anneal-curve"
+      ],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "Opti-RT",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-001-RT · GspSSD + Opti-RT liquid RT-LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001-RT current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001-rt-lyo": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001-RT-LYO-1K",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-rt-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "Opti-RT",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-001-RT-LYO · GspSSD + Opti-RT lyophilized RT-LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001 RT-LYO current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/iso-001/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso001tin": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-001Tin",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "thermostable-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Current OptiGene guidance identifies ISO-001Tin as the higher-thermostability branch and permits a 95°C/5 min pre-heat workflow; PCRStudio records the branch but does not infer that pre-heat for other mixes."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene ISO-001Tin · thermostable DNA isothermal master mix",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-001Tin current reagent authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/reagents/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-004",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Isothermal Master Mix ISO-004 · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene ISO-004 product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004-lnl": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [
+        "koh-lysate"
+      ],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "Lyse & LAMP",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "direct-koh-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "koh-lysate"
+      ],
+      "selection": "OptiGene Lyse & LAMP direct KOH workflow",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene Lyse & LAMP workflow authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004-lyo": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-004 Lyo",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Lyophilized LAMP formulation · DNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene lyophilized LAMP formulation authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004-rt": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-004 RT",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Isothermal Master Mix ISO-004 · RT-LAMP",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene RT-LAMP product/protocol authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004-rt-lyo": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "lyophilized"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "ISO-004 RT Lyo",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyophilized-rt-lamp",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene Lyophilized RT-LAMP formulation · RNA",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene lyophilized RT-LAMP formulation authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "optigene-iso004-rt-vis": {
+      "bench_optimization_scope": {},
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        20,
+        30
+      ],
+      "kit_id": "RT-LAMP visual",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "rt-lamp-visual",
+      "reaction_volume_uL": 25,
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "vendor-visual-color-change"
+      ],
+      "recommended_readouts": [
+        "colorimetric"
+      ],
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "OptiGene RT-LAMP visual colour workflow",
+      "sequence_decision_impact": "none",
+      "source_identity": "OptiGene visual RT-LAMP workflow authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.optigene.co.uk/",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "OptiGene"
+    },
+    "takara-rr385": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "UNG included in the 2X mix",
+        "included": true,
+        "note": "Takara recommends 25°C for 10 min when carry-over is suspected; it is usually unnecessary otherwise.",
+        "optional_pre_hold": {
+          "celsius": 25,
+          "minutes": 10
+        }
+      },
+      "chemistry": {
+        "master_mix_x_final": 1.0,
+        "tb_green_x_final": 1.0
+      },
+      "controls": [
+        "Use NTC/positive controls and keep amplified tubes closed when possible; optional source-reviewed UNG pre-incubation applies when carry-over is suspected."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {
+        "turbidity-pyrophosphate": "The reviewed RR385 manual states that inorganic pyrophosphatase prevents this readout chemistry."
+      },
+      "forbidden_readouts": {
+        "turbidity": "The reviewed RR385 manual states that inorganic pyrophosphatase in the mix prevents pyrophosphate-turbidity detection."
+      },
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 63,
+      "hold_time_min": 20,
+      "kit_id": "RR385S/RR385A",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "fluorescent-lamp-rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "TB Green is used at 1X final and read in a FAM-compatible fluorescence channel.",
+        "A post-reaction melting curve may assess product uniformity; it is not proof of sequence identity."
+      ],
+      "recommended_confirmation_modes": [
+        "melt-denaturation-curve"
+      ],
+      "recommended_readout_chemistries": [
+        "tb-green"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "PrimeScript III Reverse Transcriptase premixed with BcaBEST DNA Polymerase ver.2.0",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.8,
+        "LF": 0.8
+      },
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Takara BcaBEST Isothermal FluorDetect Kit (DNA/RNA) · RR385S/RR385A",
+      "sequence_decision_impact": "none",
+      "source_identity": "Takara BcaBEST Isothermal FluorDetect Kit (DNA/RNA) Product Manual v202504Da",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://takara.co.kr/file/manual/pdf/RR385S_RR385A_e.v2504Da.pdf",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Takara Bio"
+    },
+    "thermo-a5180x": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "no built-in dUTP/UDG claim in the cited Quick Reference/current product identity",
+        "included": false,
+        "note": "Thermo Fisher emphasizes physical contamination control, closed NTC handling and separated post-amplification work; PCRStudio does not infer a UDG branch that is not stated for this mix."
+      },
+      "controls": [
+        "Run a no-template control and technical replicates; keep reaction setup and any opened endpoint-analysis area physically separated as specified by the vendor guidance."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_temperature_c": 65,
+      "hold_time_range_min": [
+        15,
+        30
+      ],
+      "kit_id": "A51801/A51802/A51803",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "oligo_manufacturing_guidance": "The cited Thermo protocol specifies LAMP primer design and role concentrations but does not establish one universal purification grade. Do not invent a vendor purification requirement; retain actual oligo supplier/purification provenance in the laboratory record.",
+      "post_inactivation": "95 °C for 2 min in the cited real-time and endpoint workflows",
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.4,
+        "LoopF": 0.4
+      },
+      "protocol_kind": "rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "SYTO 9 is supplied for real-time fluorescence at 5 µM in the cited 25-µL protocol; the product documentation also permits endpoint detection.",
+        "The procedural Quick Reference programs a 30-min real-time run and gives 15–30 min for endpoint incubation. Current product specifications describing detection in as little as 5–15 min are time-to-signal/performance context, not a replacement for the reviewed run window.",
+        "Thermo Fisher documents a calcein colorimetric branch as an optional detection chemistry; PCRStudio records it as readout provenance rather than altering primer ranking."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric",
+        "other-validated"
+      ],
+      "reverse_transcriptase": "SuperScript IV Reverse Transcriptase (included); RNaseOUT Recombinant Ribonuclease Inhibitor is also part of the current master-mix formulation",
+      "role_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LB": 0.4,
+        "LF": 0.4
+      },
+      "sample_compatibility_notes": [
+        "The Quick Reference is written around purified RNA; an official Thermo Fisher application note demonstrates the same 25-µL, 1.6/0.2/0.4-µM mix for genomic DNA without protocol adjustment. No universal direct-sample matrix tolerance is inferred."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Thermo Fisher SuperScript IV RT-LAMP Master Mix A51801/A51802/A51803",
+      "sequence_decision_impact": "none",
+      "source_identity": "SuperScript IV RT-LAMP Master Mix Quick Reference MAN0025703 Rev. A.0; current Thermo Fisher product page/FAQ for RNaseOUT and calcein context; DNA use cross-checked against the official Thermo Fisher application note",
+      "source_reviewed_date": "2026-09-03",
+      "source_revision": "MAN0025703 Rev. A.0",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0025703_Superscript_IV_RT-LAMP_QR.pdf",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Thermo Fisher Scientific / Invitrogen"
+    },
+    "thermo-a56656": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "enzyme_concentration_u_per_uL": 6.0,
+        "recommended_calcein_uM": 80.0,
+        "recommended_mncl2_mM": 0.25
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "assembled-enzyme"
+      ],
+      "hold_temperature_c": 65,
+      "kit_id": "A56656",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyo-ready-assembled-enzyme",
+      "reaction_time_specification": "≤10 minutes under the vendor product specification; target/assay dependent",
+      "readout_notes": [],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "syto9",
+        "calcein"
+      ],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric"
+      ],
+      "sample_compatibility_notes": [
+        "A56656 is a standalone glycerol-free lyo-ready Bst polymerase, not a pre-lyophilized RT-LAMP master mix. Thermo recommends adding SuperScript IV Reverse Transcriptase and RNaseOUT for RNA targets; use the separate RT-LAMP authority instead of treating A56656 alone as an RT enzyme."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Thermo Fisher A56656 · Lyo-ready Bst DNA Polymerase (glycerol-free standalone enzyme)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Thermo Fisher A56656 Lyo-ready Bst DNA Polymerase current product authority",
+      "source_reviewed_date": "2026-09-03",
+      "source_url": "https://www.thermofisher.com/order/catalog/product/A56656",
+      "supports_dna": true,
+      "supports_rna": false,
+      "vendor": "Thermo Fisher Scientific"
+    },
+    "vazyme-rp711": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "fluorescent_dye_stock_x": 50.0,
+        "fluorescent_dye_x": 1.0,
+        "master_mix_x_final": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "RP711",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "primer_concentrations_uM": {
+        "B3": 0.2,
+        "BIP": 1.6,
+        "F3": 0.2,
+        "FIP": 1.6,
+        "LoopB": 0.8,
+        "LoopF": 0.8
+      },
+      "protocol_kind": "2x-fluorescent-lamp-rt-lamp-master-mix",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Vazyme publishes instrument-conditioned final dye concentration: 0.1X on SLAN-96P, 1X on seven named qPCR platforms, and a 0.1–1X range for other instruments; no ROX is included."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "RTv Reverse Transcriptase included",
+      "role_concentrations_uM": {
+        "F3_B3": 0.2,
+        "FIP_BIP": 1.6,
+        "LOOP": 0.8
+      },
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Vazyme RP711 · Fluorescent LAMP/RT-LAMP Kit",
+      "sequence_decision_impact": "none",
+      "source_identity": "Vazyme RP711 manual V25.1/current product authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://bio.vazyme.com/product/763.html",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Vazyme"
+    },
+    "vazyme-rp712": {
+      "bench_optimization_scope": {},
+      "carryover_prevention": {
+        "chemistry": "dUTP + UDG",
+        "included": true,
+        "note": "Vendor product page states an integrated UDG/dUTP anti-contamination system."
+      },
+      "controls": [
+        "Run a no-template control; the built-in carry-over system does not replace contamination monitoring."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "formats": [
+        "liquid"
+      ],
+      "hold_time_min": 30,
+      "kit_id": "RP712-01/02",
+      "lifecycle": {
+        "availability_claim": "vendor-source-observed",
+        "note": "Official vendor product page and V25.1 manual landing-page identity were reviewed on 2026-09-05; regional availability may differ.",
+        "snapshot": "2026-09-05",
+        "status": "current-reviewed"
+      },
+      "manual_locator": "https://bio.vazyme.com/download_xq/1715.html",
+      "manual_metadata_snapshot": {
+        "authority_boundary": "Manual identity is pinned, but exact reagent-table numbers are not promoted until the manual bytes are locally content-addressed and reviewed.",
+        "document_revision": "V25.1",
+        "file_size_kb_reported": 489.5,
+        "remote_document_bytes_status": "remote-document-not-redistributed-or-locally-content-addressed",
+        "remote_document_sha256": null,
+        "reviewed_date": "2026-09-05"
+      },
+      "numeric_authority_status": "current-v25.1-manual-identity-pinned; exact vendor reagent table unresolved until local content-addressed review",
+      "protocol_kind": "2x-colorimetric-fluorescent-master-mix",
+      "readout_notes": [
+        "Vendor states negative reactions are red and positive reactions yellow; fluorescent monitoring is also supported."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye",
+        "vendor-visual-color-change"
+      ],
+      "recommended_readouts": [
+        "fluorescence",
+        "colorimetric"
+      ],
+      "sample_compatibility_notes": [
+        "Exact public sample-matrix limits were not promoted; use purified nucleic acid unless a validated local SOP supplies additional authority."
+      ],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Vazyme ColorDetect LAMP/RT-LAMP Mix RP712",
+      "sequence_decision_impact": "none",
+      "source_identity": "Vazyme ColorDetect LAMP/RT-LAMP Mix product page + RP712 instruction manual V25.1",
+      "source_reviewed_date": "2026-09-05",
+      "source_revision": "V25.1",
+      "source_url": "https://bio.vazyme.com/products_7/142.html",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Vazyme"
+    },
+    "yeasen-16729": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "buffer_x_final": 1.0,
+        "fluorescent_dye_x": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid"
+      ],
+      "kit_id": "16729ES",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "fluorescent-lamp-rt-lamp-kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "4X buffer and 25X fluorescent dye are source-backed product components; exact branch remains DNA/RNA capable."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "Hifair III Reverse Transcriptase included",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Yeasen 16729ES · RT-LAMP Fluorescent Assay Kit (Bst Plus)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Yeasen 16729 current product/manual",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.yeasenbio.com/products/16729",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Yeasen Biotechnology"
+    },
+    "yeasen-16730": {
+      "bench_optimization_scope": {},
+      "chemistry": {
+        "buffer_x_final": 1.0,
+        "fluorescent_dye_x": 1.0
+      },
+      "controls": [
+        "Run a no-template control and a target-appropriate positive control."
+      ],
+      "direct_sample_matrices": [],
+      "forbidden_readout_chemistries": {},
+      "forbidden_readouts": {},
+      "formats": [
+        "liquid",
+        "lyophilized"
+      ],
+      "kit_id": "16730ES",
+      "lifecycle": {
+        "availability_claim": "none",
+        "note": "Presence in this catalogue records reviewed source identity; regional/current commercial availability is not inferred.",
+        "snapshot": "2026-09-04",
+        "status": "reviewed-at-catalogue-snapshot"
+      },
+      "protocol_kind": "lyo-ready-fluorescent-lamp-rt-lamp-kit",
+      "reaction_volume_uL": 25,
+      "readout_notes": [
+        "Glycerol-free lyo-ready branch includes a separate lyophilization stabilizer; the numeric stabilizer overlay is applied only when lyophilized formulation is selected."
+      ],
+      "recommended_confirmation_modes": [],
+      "recommended_readout_chemistries": [
+        "supplied-intercalating-dye"
+      ],
+      "recommended_readouts": [
+        "fluorescence"
+      ],
+      "reverse_transcriptase": "glycerol-free Hifair III RT enzyme mix included",
+      "sample_compatibility_notes": [],
+      "sample_matrices": [
+        "purified-nucleic-acid"
+      ],
+      "selection": "Yeasen 16730ES · RT-LAMP Lyo-Ready Fluorescent Assay Kit (Bst Plus)",
+      "sequence_decision_impact": "none",
+      "source_identity": "Yeasen 16730 current product/manual",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.yeasenbio.com/products/16730",
+      "supports_dna": true,
+      "supports_rna": true,
+      "vendor": "Yeasen Biotechnology"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "screening_cohort": {
+    "claim": "empirical screening recommendation, not an in-silico success probability",
+    "recommended_max": 4,
+    "recommended_min": 2,
+    "source_identity": "NEB LAMP primer design FAQ",
+    "source_url": "https://www.neb.com/en-us/faqs/how-do-i-design-lamp-primers1"
+  },
+  "source_policy": {
+    "availability": "region-and-date-observation-not-global-stock-claim",
+    "remote_source_hashing": "not-claimed-unless-snapshotted",
+    "sequence_decision_impact": "bench chemistry and provenance never alter sequence ranking unless a named design intent explicitly owns a sequence constraint"
+  }
+}

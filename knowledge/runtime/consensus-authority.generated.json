@@ -1,0 +1,166 @@
+{
+  "authority_id": "pcrstudio-consensus-authority",
+  "catalogue_snapshot": "2026-09",
+  "groups": {
+    "alignment_backends": [
+      "mafft-7.526",
+      "prealigned-reviewed",
+      "muscle-5.3-audit"
+    ],
+    "capability_statuses": [
+      "executable",
+      "executable-if-installed",
+      "diagnostic-only",
+      "reference-only",
+      "unresolved",
+      "historical"
+    ],
+    "characterization_tools": [
+      "degeprime-reference",
+      "degenprime-2024-reference",
+      "varvamp-2025-reference",
+      "decipher-designprimers-reference",
+      "consensusprime-reference"
+    ],
+    "consensus_policies": [
+      "strict-all-members",
+      "coverage-threshold",
+      "majority",
+      "weighted",
+      "stratified"
+    ],
+    "coverage_modes": [
+      "observed-panel",
+      "weighted-panel",
+      "stratified-panel",
+      "target-vs-nontarget"
+    ],
+    "formulation_modes": [
+      "mixed-base-synthesis",
+      "defined-oligo-pool",
+      "discrete-subprimer-mixture",
+      "user-defined-formulation"
+    ]
+  },
+  "policies": {
+    "alignment_sensitivity": "A candidate that changes materially across plausible alternative alignments is reported as alignment-sensitive, not rejected or promoted silently.",
+    "degenerate_formulation": "IUPAC sequence identity does not establish equal physical abundance of concrete oligo members; formulation is first-class provenance.",
+    "population_claim": "Observed panel coverage is descriptive of the supplied panel. Population-wide universality requires an explicit sampling frame or external population evidence."
+  },
+  "records": {
+    "consensusprime-reference": {
+      "execution_status": "reference-only",
+      "kind": "characterization-tool",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "ConsensusPrime",
+      "sequence_decision_impact": "none",
+      "source_identity": "ConsensusPrime pipeline publication",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.mdpi.com/2673-7426/2/4/41"
+    },
+    "decipher-designprimers-reference": {
+      "execution_status": "reference-only",
+      "kind": "characterization-tool",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "DECIPHER DesignPrimers",
+      "sequence_decision_impact": "none",
+      "source_identity": "DECIPHER DesignPrimers documentation",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://decipher.codes/DesignPrimers.html"
+    },
+    "degenprime-2024-reference": {
+      "execution_status": "reference-only",
+      "kind": "characterization-tool",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "DeGenPrime 2024",
+      "sequence_decision_impact": "none",
+      "source_identity": "DeGenPrime publication",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11001487/"
+    },
+    "degeprime-reference": {
+      "execution_status": "reference-only",
+      "kind": "characterization-tool",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "DegePrime",
+      "sequence_decision_impact": "none",
+      "source_identity": "DegePrime primary publication",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4135748/"
+    },
+    "mafft-7.526": {
+      "execution_status": "executable-if-installed",
+      "kind": "alignment-backend",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "MAFFT 7.526",
+      "sequence_decision_impact": "alignment-coordinate-system",
+      "source_identity": "MAFFT official software page",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://mafft.cbrc.jp/alignment/software/index.html",
+      "tool_role": "PRIMARY",
+      "version": "7.526",
+      "warnings": [
+        "MAFFT versions 7.463–7.486 had a serious FFT-NS-i/--auto memory bug; do not treat those versions as equivalent to 7.526."
+      ]
+    },
+    "muscle-5.3-audit": {
+      "execution_status": "diagnostic-only",
+      "kind": "alignment-backend",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "MUSCLE 5.3 alignment-sensitivity audit",
+      "sequence_decision_impact": "none-on-primary-ranking",
+      "source_identity": "MUSCLE upstream releases",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://github.com/rcedgar/muscle/releases",
+      "tool_role": "VALIDATOR",
+      "version": "5.3",
+      "warnings": [
+        "Alternative alignments are sensitivity evidence; they do not silently replace the declared primary alignment."
+      ]
+    },
+    "prealigned-reviewed": {
+      "execution_status": "executable",
+      "kind": "alignment-backend",
+      "lifecycle": {
+        "status": "current"
+      },
+      "selection": "Caller-supplied reviewed alignment",
+      "sequence_decision_impact": "alignment-coordinate-system",
+      "source_identity": "PCRStudio explicit prealigned-input contract",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://mafft.cbrc.jp/alignment/software/index.html",
+      "tool_role": "INPUT",
+      "version": "not-applicable",
+      "warnings": [
+        "PCRStudio validates width/symbols but does not infer biological homology or reconstruct the supplied alignment."
+      ]
+    },
+    "varvamp-2025-reference": {
+      "execution_status": "reference-only",
+      "kind": "characterization-tool",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "varVAMP 2025",
+      "sequence_decision_impact": "none",
+      "source_identity": "varVAMP publication",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12126543/"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "source_policy": "Only public primary/vendor/official sources are executable authorities. Literature/tool precedents may guide diagnostics or characterization but do not become universal biological rules without a versioned protocol/evidence contract."
+}

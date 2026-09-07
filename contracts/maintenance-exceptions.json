@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "release_line": "CURRENT",
+  "exceptions": [
+    {
+      "id": "web-eslint-9-peer-compatibility",
+      "package": "eslint",
+      "current_major": 9,
+      "target_major": 10,
+      "expires_on": "2026-11-05",
+      "scope": "web-dev-tooling-only",
+      "reason": "ESLint 9 is EOL, but the current React lint dependency chain still contains packages whose declared peer ranges do not cleanly include ESLint 10. Do not force-install or override peer dependencies in a public release.",
+      "upstream_tracking": [
+        "https://eslint.org/version-support/",
+        "https://github.com/jsx-eslint/eslint-plugin-react/issues/4027",
+        "https://github.com/facebook/react/issues/35758"
+      ],
+      "resolution": "Dependabot remains enabled weekly. Remove this exception and upgrade to ESLint 10 as soon as the resolved lint dependency graph declares compatible peers; the static source audit fails after the expiry date."
+    }
+  ]
+}

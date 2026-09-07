@@ -1,0 +1,1023 @@
+# The assays PCRStudio offers.
+#
+# One entry per assay. Adding one is an entry here and nothing else: the
+# sidebar, the command palette, the sitemap and the assay pages all ask the
+# core what it has rather than knowing.
+#
+# Every entry must name an engine from the closed list in `taxonomy.rs`, and
+# may only list modifiers that engine declares it accepts. Both are checked
+# when the registry is built, so an impossible assay stops the server rather
+# than surprising somebody mid-run.
+#
+# `status` is the only field a bench scientist relies on for judgement. It is
+# `planned` until the engine computes, `experimental` until the output has been
+# checked against a reference result, and `stable` after.
+
+
+# ── Amplify a region ──────────────────────────────────────────────────────
+
+[[profile]]
+id = "standard-pcr"
+name = "Standard PCR"
+summary = "Primer pairs for one endpoint-PCR product."
+guidance = "Choose this when you have one known template and want to see one defined product on a gel or confirm its sequence. Add related background sequences when they must be excluded; choose qPCR when the result needs to be quantitative."
+checks = "PCRStudio searches for a forward/reverse pair flanking the selected locus, then evaluates oligonucleotide length, Tm, GC fraction, homopolymer runs, hairpin propensity, self- and hetero-dimer complementarity, amplicon size and any supplied off-target background. The record reports these in-silico constraints and the sequence context that produced them; gel mobility, product identity, yield and cycling conditions still require bench verification."
+engine = "flanking-pair"
+goal = "amplify"
+status = "experimental"
+modifiers = ["multiplex", "reverse-transcription", "tails", "variant-masking"]
+
+# Onodera & Melcher's analysis of 2,137 successful PCR primers found
+# context-dependent 3'-triplet frequencies and recommends selecting from a
+# larger candidate pool with a score, not imposing one universal GC clamp.
+# The Python flanking-pair pipeline applies that soft score only to this
+# conventional endpoint-PCR assay; the other chemistry-specific profiles keep
+# their own terminal rules.
+
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general", "screen", "sanger", "cloning"]
+
+[profile.defaults.constraints]
+gc_clamp = 0
+
+[[profile]]
+id = "long-range-pcr"
+name = "Long-range PCR"
+summary = "Primer pairs for long amplicons where polymerase, template quality and extension time matter."
+guidance = "Use this for products of roughly 5 kb or more. Select the exact polymerase and cycling protocol, then confirm template quality before ordering; length alone does not determine whether a long-range reaction will work."
+checks = "The primer pair is evaluated for long-amplicon placement, target topology, 3′-end compatibility, secondary structure and compatibility with the selected long-range polymerase and extension protocol. A predicted product length does not establish template integrity, processivity, extension success, full-length recovery or the absence of truncated products."
+engine = "flanking-pair"
+goal = "amplify"
+status = "experimental"
+modifiers = ["variant-masking"]
+
+# Supported-family capability gate, not a universal definition of long PCR.
+# The currently executable Gen-1 long-range branches are reviewed
+# proofreading-capable long-range systems (including blend/proofreading
+# architectures), so the profile prevents unrelated standard-PCR adapters from
+# being offered here. This flag does not reconstruct a proprietary formulation,
+# imply one enzyme ratio/mechanism, or prove a vendor-specific fidelity value.
+enzyme = ["proofreading"]
+
+# Long-range PCR is not standard PCR with a bigger product_max. The base
+# profile is deliberately a cross-protocol *search envelope*: named vendor
+# branches may narrow it through `selected_protocol.constraints`, but no one
+# vendor's primer rules are allowed to masquerade as universal long-PCR rules.
+[profile.defaults]
+polymerase = "long-range"
+defaultPurpose = "general"
+# Only `general`. Every other purpose is a statement about product size, and
+# product size is exactly what this assay decides -- a purpose whose range is
+# hundreds of bases has nothing useful to say about a fifteen-kilobase product.
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Cross-protocol Gen-1 envelope. NEB LongAmp documents 20–40 nt, but Primer3's
+# executable size ceiling in this stack is 36 nt, so 20–36 is an explicit
+# implementation subset rather than a claim that 37–40 nt primers are invalid.
+# Takara and historical Thermo branches narrow this range below at protocol
+# selection time; the base profile itself does not inherit either vendor's rule.
+length_min = 20
+length_opt = 30
+length_max = 36
+# This Primer3 nearest-neighbour range is a sequence-screening envelope, not a
+# vendor annealing-temperature formula. 55 C preserves the lower end of the
+# current Takara <=10 kb design guidance; 74 C preserves the historical K018x
+# search ceiling. Named protocol overlays may narrow it where the source and Tm
+# model are numerically compatible, but vendor-specific Tm formulas are never
+# silently reinterpreted as Primer3 Tm.
+tm_min = 55.0
+tm_opt = 65.0
+tm_max = 74.0
+# A 5 C pair-difference remains a conservative shared screening reference:
+# historical K018x makes it explicit and NEB's current Taq primer guidance uses
+# the same value. It is not asserted as a universal mechanistic failure limit.
+tm_pair_max_difference = 5.0
+# Zero is retained because a GC clamp of one rejects published long-range
+# primers whose terminal base is A. The cross-protocol base envelope therefore
+# does not invent a universal 3'-terminal G/C requirement.
+gc_clamp = 0
+# Five is Primer3's no-extra-cap value. Historical K018x narrows this to three;
+# Takara's qualitative warning to avoid high 3'-end GC is retained in protocol
+# provenance rather than converted into an unsupported numeric threshold.
+max_end_gc = 5
+# NEB LongAmp's documented general primer GC range is suitable as the broad
+# current-chemistry screening envelope; named branches may tighten it later if
+# a protocol supplies a numeric rule.
+gc_min = 40.0
+gc_max = 60.0
+product_min = 5000
+product_max = 20000
+
+[profile.defaults.constraintPolicy]
+# These are the Gen-1 executable search bounds. A caller may tighten them but
+# cannot widen beyond Primer3's represented 20–36 nt subset while keeping this
+# profile identity. Named protocols may narrow the same fields further.
+length_min = "bounded"
+length_max = "bounded"
+# Five is no additional end-GC ceiling; named branches can impose a lower
+# reviewed maximum and that protocol-owned value becomes bounded automatically.
+max_end_gc = "bounded"
+# These product bounds define PCRStudio Gen-1's executable long-range scope,
+# not any manufacturer's biological reach. Current and historical chemistries
+# document branches beyond 20 kb; those require product/template-specific
+# modelling before they can be claimed by this generation.
+product_min = "bounded"
+product_max = "bounded"
+# Shared screening reference; callers may make the pair stricter but not wider
+# while retaining this long-range profile identity.
+tm_pair_max_difference = "bounded"
+
+[[profile]]
+id = "colony-pcr"
+name = "Colony PCR"
+summary = "Short primer pairs for screening transformants directly from colonies."
+guidance = "Use this when crude colony material and a vector/insert junction can tell you whether a construct is present and oriented correctly. Keep the shared colony preparation and named protocol with the design."
+checks = "The primer pair is evaluated against the supplied insert/vector junction or colony target, expected orientation and product geometry, primer structure and the declared host, lysis and SOP context. The record preserves which construct context was tested; colony accessibility, band identity, insert orientation and Sanger or miniprep confirmation remain bench evidence."
+engine = "flanking-pair"
+goal = "amplify"
+status = "experimental"
+modifiers = ["multiplex"]
+
+# What a colony screen is, as against ordinary PCR from purified template.
+#
+# Deliberately short. Almost everything people say about colony PCR is about
+# the screen rather than about the lysate, and the screen is already what the
+# `screen` purpose describes. What genuinely belongs to the assay is the lysis.
+#
+# No product ceiling here on purpose. An assay default replaces the purpose's
+# number rather than tightening it, so a ceiling of 2000 would turn the screen
+# purpose's 150-500 into 200-2000 -- looser, which is the opposite of what a
+# ceiling is for. The only published ceiling is 2 kb for yeast (Pereira, Silva
+# & Johansson, Methods Mol Biol 2023;2967:209-221), it does not apply to E.
+# coli, and it belongs in a warning rather than in a number that quietly
+# widens somebody's screen.
+[profile.defaults]
+# Taq-standard remains the conservative colony-screen design chemistry. Lysis
+# and the final cycling programme are not encoded here: the Atlas records
+# conflicting host/vendor branches, so the request must carry an explicit
+# host/preparation/SOP provenance instead of inheriting a universal heat step.
+polymerase = "taq-standard"
+defaultPurpose = "screen"
+# Not cloning: a colony screen is not how you make a product you keep.
+# Sanger is here because sequencing a colony PCR amplicon is a documented
+# workflow, not an abuse of one.
+purposes = ["general", "screen", "sanger"]
+
+[[profile]]
+id = "nested-pcr"
+name = "Nested PCR"
+summary = "Outer and inner primer pairs for a documented two-round PCR."
+guidance = "Use this when one PCR does not provide enough specificity or sensitivity. Record transfer, cleanup and contamination controls for both rounds; the design does not assume an undocumented one-tube nested chemistry."
+checks = "Round-one and round-two oligos are evaluated as separate reactions, including outer-to-inner nesting geometry, transfer or cleanup assumptions, product containment, primer structure and inner-product specificity. The computational record does not establish contamination control, transfer recovery, carry-over suppression or second-round product identity."
+engine = "nested"
+goal = "amplify"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general", "screen", "sanger"]
+
+[[profile]]
+id = "inverse-pcr"
+name = "Inverse PCR"
+summary = "Outward-facing primers for amplifying sequence beside a known region."
+guidance = "Use this after circularisation or digestion when the unknown sequence lies outside a known anchor. Confirm the template topology and end-preparation details because the product depends on the complete construct."
+checks = "Outward-facing primers are evaluated against the complete linear or circular template, the restriction-digest or self-ligation topology, the origin-spanning product path and oligo secondary structure. The reconstructed amplicon and end-preparation assumptions are computational outputs; digest completeness, circularisation efficiency, amplification and sequence confirmation remain experimental."
+engine = "outward-pair"
+goal = "amplify"
+status = "experimental"
+modifiers = ["tails"]
+
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general", "sanger"]
+
+
+# ── Quantify ──────────────────────────────────────────────────────────────
+
+[[profile]]
+id = "qpcr-sybr"
+name = "qPCR — Intercalating Dye"
+summary = "Primer pairs for dye-based real-time quantification."
+guidance = "Use this when a fluorescent dye will report any double-stranded product and specificity must come from the primers. Keep the amplicon short and review the melt curve; it is evidence about product behaviour, not proof of sequence identity."
+checks = "The primer pair and short amplicon are evaluated under the selected intercalating-dye chemistry, thermodynamic model and specificity or background context, with the expected melt-domain behaviour kept explicit. A single melt peak does not establish sequence identity; amplification efficiency, calibration, quantification range and multiplex separation must be measured experimentally."
+engine = "flanking-pair"
+goal = "quantify"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+# Real-time with an intercalating dye. Every double-stranded product is signal,
+# so a primer dimer is not noise here -- it is a peak.
+[profile.defaults]
+# Primer Tm is evaluated in a declared qPCR screening calculation context.
+# This is not a universal master-mix composition: MIQE 2.0 requires actual
+# reagent/ion conditions and instrument protocol to remain part of experimental
+# provenance, and named vendor overlays are kept separate from primer ranking.
+polymerase = "qpcr-dye"
+defaultPurpose = "general"
+# Only `general`. Every other purpose is a statement about product size, and
+# this assay's size is fixed by amplification efficiency rather than by what
+# happens to the product afterwards.
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Short amplicons are a qPCR efficiency/readout preference, not a polymerase
+# reach law. Bio-Rad's iTaq guide calls 70-150 bp the best-efficiency range and
+# explicitly permits products above 250 bp when annealing/extension is lengthened.
+# This profile therefore keeps 80-200 bp only as a conservative, user-tunable
+# starting search envelope. The lower end also helps separate intended product
+# from primer-dimer in dye-based melt review, but it is not a universal validity
+# threshold (Bustin & Huggett 2017, doi:10.1016/j.bdq.2017.11.001).
+product_min = 80
+product_max = 200
+tm_min = 59.0
+tm_opt = 60.0
+tm_max = 65.0
+tm_pair_max_difference = 3.0
+length_min = 18
+length_opt = 20
+length_max = 24
+gc_min = 40.0
+gc_max = 60.0
+# No clamp, and a ceiling instead. A 3' end that grips hard extends from
+# somewhere wrong as well, and in a dye assay that mispriming is counted.
+gc_clamp = 0
+max_end_gc = 3
+max_poly_x = 4
+
+[[profile]]
+id = "qpcr-probe"
+name = "qPCR — Hydrolysis Probe"
+summary = "Primer pairs with a matched hydrolysis probe for real-time detection."
+guidance = "Use this when probe signal should add a sequence-specific layer beyond the primer pair. Multiple targets can share one reaction only with compatible reporters, instrument channels and assay interactions, so the probes and primers are treated as one coupled panel."
+checks = "The forward primer, reverse primer and hydrolysis probe are evaluated as one coupled assay for probe placement within the amplicon, probe- and primer-structure risk, reporter/quencher chemistry, strand orientation and optical channel configuration. Efficiency, calibration, LoD, fluorescence separation, inhibition tolerance and multiplex competition require measured qPCR evidence."
+engine = "pair-and-probe"
+goal = "quantify"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+# The activity is the read-out here rather than a side effect, so an enzyme
+# without it amplifies perfectly and reports nothing — which on a plate reads
+# as absent template.
+#
+# The worker already refused this, after somebody had chosen. Declaring it
+# takes the choice off the list instead: the same check, in the place where it
+# costs nobody a run.
+enzyme = ["five-prime-exonuclease"]
+
+[profile.defaults]
+# The executable hydrolysis-probe branch requires 5'->3' exonuclease activity,
+# while Primer3 thermodynamics use the declared qPCR screening calculation
+# context below. The context is not a universal probe master-mix recipe.
+polymerase = "qpcr-dye"
+defaultPurpose = "general"
+# Only `general`, for the same reason as the dye assay: every other purpose is
+# a statement about what happens to the product afterwards, and nothing happens
+# to this one.
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Keep a short product as a user-tunable qPCR/probe starting envelope, not as a
+# claim that longer products cannot amplify. The lower end is likewise design
+# geometry/readout guidance rather than a universal hydrolysis-probe minimum:
+# primer and probe lengths, spacing and chemistry determine the realizable
+# product for a particular assay.
+product_min = 70
+product_max = 200
+tm_min = 59.0
+tm_opt = 60.0
+tm_max = 65.0
+tm_pair_max_difference = 3.0
+# Longer and wider on GC than the dye assay, and for a reason that only applies
+# here: most probe assays are pathogen assays, and pathogens are often AT-rich.
+#
+# The melting temperature is the real constraint; length and GC content are two
+# ways of reaching it, and on an AT-rich target only one of them is available.
+# Holding a probe assay to 40-60% GC in 24 bases means holding it to targets
+# that are not AT-rich, which excludes much of what these assays are for.
+#
+# Measured against the published E_Sarbeco assay (Corman et al. 2020): its
+# forward primer is 26 bases at 34.6% GC and melts at 60.6 °C — squarely inside
+# the temperature window and outside both of the others. A 40% floor and a
+# 24-base ceiling would have refused the assay a hundred countries ran.
+length_min = 18
+length_opt = 20
+length_max = 27
+gc_min = 30.0
+gc_max = 65.0
+# A clamp of zero, as in the dye assay, but one step less strict at the other
+# end. In a dye assay any mispriming is counted, because the dye stains
+# whatever double-stranded thing appears. Here a mispriming event has to also
+# match the probe before it is counted, so the 3' end can be allowed the
+# ordinary limit rather than the dye assay's tightened one.
+gc_clamp = 0
+max_end_gc = 4
+max_poly_x = 4
+
+[[profile]]
+id = "digital-pcr"
+name = "Digital PCR — EvaGreen / Dye"
+summary = "Primer pairs for partitioned counting on a declared digital-PCR platform."
+guidance = "Use this when the reaction will be partitioned and positive partitions will be counted to estimate concentration. Choose the platform and optical setup explicitly; thresholding, accepted wells and uncertainty come from the run, not from a universal primer rule."
+checks = "The primer pair and short amplicon are evaluated against the selected partitioned-counting chemistry, platform and partition format, while the declared optical or multiplex architecture remains distinct from empirical thresholds and cluster calls. Absolute concentration, partition occupancy, rain, accepted-well quality, inhibition and LoD are properties of the digital-PCR run."
+engine = "flanking-pair"
+goal = "quantify"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+# Endpoint amplification inside partitions. The primers are a qPCR design; what
+# changes is the amplicon/readout envelope, which must fit the selected partition platform and separate cleanly. Droplet-specific limits belong only to ddPCR overlays such as QX200.
+[profile.defaults]
+polymerase = "digital-pcr"
+defaultPurpose = "general"
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Shorter than qPCR again. A short amplicon reaches endpoint in every partition
+# it is in, which is what makes the counting binary rather than a gradient.
+product_min = 60
+product_max = 150
+# dMIQE2020 treats dPCR primer design as qPCR-like. Make the common short
+# primer/60-degree starting contract explicit instead of inheriting generic
+# worker defaults silently.
+length_min = 18
+length_opt = 20
+length_max = 24
+tm_min = 59.0
+tm_opt = 60.0
+tm_max = 65.0
+gc_min = 40.0
+gc_max = 60.0
+gc_clamp = 0
+max_end_gc = 3
+tm_pair_max_difference = 2.0
+max_poly_x = 3
+
+
+# ── Genotype a variant ────────────────────────────────────────────────────
+
+[[profile]]
+id = "arms-pcr"
+name = "ARMS-PCR"
+summary = "Allele-specific primers whose 3′ end distinguishes two variant alleles."
+guidance = "Use this when a primer should match one allele at its 3′ end and discriminate against the other. A proposed near-terminal mismatch is a candidate-design aid, not proof of allele discrimination; paired wet-lab validation is still required."
+checks = "The allele-specific 3′ anchor is evaluated against the declared reference and alternate alleles, nearby masked variants and the selected terminal-mismatch evidence model. Candidate arms are screened for allele geometry, local structure, self-complementarity and pair compatibility; discrimination, genotype calls and failure-mode rates still require matched positive and negative controls."
+engine = "discriminating-pair"
+goal = "genotype"
+status = "experimental"
+modifiers = ["variant-masking"]
+
+# No proofreading: this is a chemistry requirement, not a yield preference.
+# A proofreading polymerase can alter or remove the terminal mismatch that
+# allele-specific PCR relies on, collapsing the intended discrimination. The
+# worker therefore refuses this combination unless a separate validated
+# chemistry contract is introduced.
+#
+# The worker already refused this after somebody chose. Declaring it takes the
+# choice off the list, which is the same check where it costs nobody a run.
+enzyme = ["no-proofreading"]
+
+[profile.defaults]
+# Taq, and the absence of proofreading is the requirement rather than an
+# incidental property: proofreading can alter or remove the terminal mismatch
+# that the assay relies on, collapsing intended discrimination. This is a
+# chemistry-risk gate, not a deterministic claim about every sample or enzyme.
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Wider on both counts than an ordinary window, and for one reason: the 3' end
+# of an allele-specific primer is the variant, so it cannot be moved. Length is
+# the only lever it has, and a variant in a GC-rich or an AT-rich stretch has to
+# be reachable by lengthening or shortening alone.
+#
+# Measured across 200 variant sites in TP53: the ordinary 57-63 °C, 40-60% GC
+# window gave both allele primers at 55 of them; widening it to what is below
+# gave 128. That is the difference between an assay this can design and one it
+# refuses for reasons that have nothing to do with the variant.
+tm_min = 55.0
+tm_opt = 61.0
+tm_max = 68.0
+tm_pair_max_difference = 5.0
+length_min = 17
+length_opt = 22
+length_max = 30
+gc_min = 30.0
+gc_max = 75.0
+# These apply to the common primer only. The allele-specific primer's 3' end is
+# the variant, and no rule about where to put a 3' end can be obeyed by a primer
+# that was not free to choose one.
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+product_min = 120
+product_max = 500
+
+
+[[profile]]
+id = "tetra-primer-arms"
+name = "Tetra-primer ARMS"
+summary = "Four-primer allele assay with two allele bands and one reaction control."
+guidance = "Use this when both alleles and a control should be read from one tube. The three products must be separated clearly on the chosen gel or readout, which determines where the outer primers can sit."
+checks = "The four-primer system is evaluated for the two allele-specific inner products, the outer control amplicon, variant placement, expected product-size separation, primer interactions and compatibility with the selected readout. In-silico separation does not guarantee gel resolution or reliable genotype discrimination; both require a representative control panel."
+engine = "discriminating-pair"
+goal = "genotype"
+status = "experimental"
+modifiers = ["variant-masking"]
+
+# No proofreading: this is a chemistry requirement, not a yield preference.
+# A proofreading polymerase can alter or remove the terminal mismatch that
+# allele-specific PCR relies on, collapsing the intended discrimination. The
+# worker therefore refuses this combination unless a separate validated
+# chemistry contract is introduced.
+#
+# The worker already refused this after somebody chose. Declaring it takes the
+# choice off the list, which is the same check where it costs nobody a run.
+enzyme = ["no-proofreading"]
+
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Wider on both counts than an ordinary window, and for one reason: the 3' end
+# of an allele-specific primer is the variant, so it cannot be moved. Length is
+# the only lever it has, and a variant in a GC-rich or an AT-rich stretch has to
+# be reachable by lengthening or shortening alone.
+#
+# Measured across 200 variant sites in TP53: the ordinary 57-63 °C, 40-60% GC
+# window gave both allele primers at 55 of them; widening it to what is below
+# gave 128. That is the difference between an assay this can design and one it
+# refuses for reasons that have nothing to do with the variant.
+tm_min = 55.0
+tm_opt = 61.0
+tm_max = 68.0
+tm_pair_max_difference = 5.0
+length_min = 17
+length_opt = 22
+length_max = 30
+gc_min = 30.0
+gc_max = 75.0
+# These apply to the common primer only. The allele-specific primer's 3' end is
+# the variant, and no rule about where to put a 3' end can be obeyed by a primer
+# that was not free to choose one.
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+product_min = 120
+product_max = 500
+
+
+[[profile]]
+id = "kasp"
+name = "KASP"
+summary = "KASP-compatible allele-specific primers with fixed reporter tails."
+guidance = "Use this for biallelic genotyping or suitable presence/absence variants with endpoint FAM/HEX readout. The reporter tails are part of the ordered oligos, while cluster calls and thresholds remain run evidence supplied by the instrument or provider."
+checks = "The allele-specific primers are evaluated against the declared variant identity, plus/minus orientation, fixed reporter-tail topology, terminal-discrimination model and cross-primer interactions. The result establishes a KASP-compatible oligo proposal, but cluster separation, controls, call thresholds and genotype assignment are measured properties of the endpoint fluorescence run."
+engine = "discriminating-pair"
+goal = "genotype"
+status = "experimental"
+modifiers = ["tails", "variant-masking"]
+
+# No proofreading: this is a chemistry requirement, not a yield preference.
+# A proofreading polymerase can alter or remove the terminal mismatch that
+# allele-specific PCR relies on, collapsing the intended discrimination. The
+# worker therefore refuses this combination unless a separate validated
+# chemistry contract is introduced.
+#
+# The worker already refused this after somebody chose. Declaring it takes the
+# choice off the list, which is the same check where it costs nobody a run.
+enzyme = ["no-proofreading"]
+
+[profile.defaults]
+# The thermodynamic calculation uses the ordinary non-proofreading Taq preset.
+# Chemistry identity is separate: KASP is endpoint competitive allele-specific
+# PCR with FRET cassettes, not intercalating-dye qPCR.
+polymerase = "taq-standard"
+chemistryFamily = "kasp-endpoint-fret"
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Wider on both counts than an ordinary window, and for one reason: the 3' end
+# of an allele-specific primer is the variant, so it cannot be moved. Length is
+# the only lever it has, and a variant in a GC-rich or an AT-rich stretch has to
+# be reachable by lengthening or shortening alone.
+#
+# Measured across 200 variant sites in TP53: the ordinary 57-63 °C, 40-60% GC
+# window gave both allele primers at 55 of them; widening it to what is below
+# gave 128. That is the difference between an assay this can design and one it
+# refuses for reasons that have nothing to do with the variant.
+tm_min = 55.0
+tm_opt = 61.0
+tm_max = 68.0
+tm_pair_max_difference = 5.0
+length_min = 17
+length_opt = 22
+length_max = 30
+gc_min = 30.0
+gc_max = 75.0
+# These apply to the common primer only. The allele-specific primer's 3' end is
+# the variant, and no rule about where to put a 3' end can be obeyed by a primer
+# that was not free to choose one.
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+# LGC's current service FAQ gives an approximate 100-bp maximum but does not
+# publish a universal KASP minimum. `1` is an implementation sentinel meaning
+# "no extra KASP-specific lower product bound"; actual primer geometry decides
+# the shortest constructible product.
+product_min = 1
+product_max = 100
+
+[profile.defaults.constraintPolicy]
+# The Generation-1 KASP contract implements the standard LGC short-amplicon
+# branch. A user may tighten the ceiling, but widening it beyond 100 bp would
+# silently change assay branch and is therefore blocked. Other KASP search
+# values remain recommended starting points rather than universal laws.
+product_max = "bounded"
+
+
+# ── Detect an organism ────────────────────────────────────────────────────
+
+[[profile]]
+id = "species-specific-pcr"
+name = "Species-specific PCR"
+summary = "Primer pairs that identify one organism against a declared background panel."
+guidance = "Use this when a positive band should identify one organism and remain silent on its relatives. Supply the inclusivity and exclusivity panels so specificity is checked against the organisms you actually need to distinguish."
+checks = "Primer candidates are evaluated against the declared inclusivity panel, exclusion background, within-species variant context, product geometry and the selected chemistry and readout. The finite panel bounds the claim and is not a whole-database specificity proof; inclusivity, exclusivity, cross-reactivity, competition and matrix performance require validation."
+engine = "flanking-pair"
+goal = "detect"
+status = "experimental"
+modifiers = ["multiplex", "variant-masking"]
+# Not optional here, unlike everywhere else. Every other assay treats a
+# background as a check worth doing; this one is *defined* by it, and a run
+# without one produces primers specific to nothing in particular under a name
+# that says otherwise.
+requires = ["background", "inclusivity"]
+
+# Defined by what it must *not* amplify, which is a different problem from
+# amplifying something.
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general", "screen", "sanger"]
+
+[profile.defaults.constraints]
+# No clamp. The discriminating base sits at the 3' end, and a clamp constrains
+# exactly the position this assay needs free to be whatever the difference
+# between the species is.
+gc_clamp = 0
+
+[[profile]]
+id = "lamp"
+name = "LAMP"
+summary = "Primer sets for loop-mediated isothermal amplification without a thermocycler."
+guidance = "Use this when you need isothermal amplification at one temperature. Four to six primers recognise six target regions and must be designed as one set; optional multiplex signal methods require their own named chemistry and evidence."
+checks = "F3/B3, FIP/BIP and optional loop primers are evaluated as one ordered six-region geometry against the target, spacing and orientation rules, stem-primer structure limits and the selected LAMP authority. Set ranking is computational; amplification kinetics, nonspecific products, carry-over risk, signal chemistry and multiplex readout require empirical screening."
+engine = "loop-set"
+goal = "detect"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+# A strand-displacing enzyme, and not a preference.
+#
+# There is no denaturation step in this reaction, so nothing separates the
+# strands for a primer to find — the polymerase has to open the duplex as it
+# copies. Recorded in the isothermal literature as the defining property of the
+# enzymes these methods use: "the Bst DNA polymerase most used in LAMP shows a
+# high strand displacement activity, which eliminates the DNA denaturation
+# stage" (Soroka, Wasowicz and Rymaszewska, Cells 2021,
+# doi:10.3390/cells10081931).
+#
+# Until this was written, this page offered all eight PCR enzymes, and a
+# proofreading polymerase in a LAMP tube produces nothing whatever the primers
+# are.
+enzyme = ["strand-displacing"]
+
+[profile.defaults]
+# A strand-displacing polymerase, which is the whole reaction rather than a
+# preference. There is no melting step here — nothing separates the strands for
+# a primer to find — so the enzyme has to push the old strand off as it copies,
+# and an ordinary Taq simply stops.
+#
+# Bst, now the catalogue has one. This said `rpa` because that was the only
+# isothermal entry there was, which put every melting temperature in the design
+# out: a loop set is judged in a buffer with several times the magnesium and
+# the dNTPs of a PCR, and the recombinase reaction is a different buffer again.
+polymerase = "bst"
+# Only `general`. Every other purpose is a statement about a product somebody
+# does something with afterwards, and this one is read as turbidity or a colour
+# change in the same tube it was made in.
+purposes = ["general"]
+
+# Deliberately no [profile.defaults.constraints] block.
+#
+# Every other assay here is held to one window, and this one cannot be: its four
+# core oligos (plus optional LF/LB) fall into role classes with different Tm targets,
+# and which set of three depends on the template's own GC content. The engine
+# carries all three published sets and picks between them by composition, which
+# is what the guidance says to do — putting a single window here would override
+# that with numbers that suit one target in three.
+#
+# Nor is there a product size. The read-out is not a band, and what the amplicon
+# length actually constrains is whether the six required regions and any selected
+# optional loop-primer sites fit in valid order, which the engine checks before search.
+
+[[profile]]
+id = "rpa"
+name = "RPA"
+summary = "Primer candidates for reviewed RPA and RT-RPA chemistries."
+guidance = "Use this for recombinase polymerase amplification with a named DNA or RT-RPA protocol. RPA performance must be screened experimentally; conventional PCR Tm is not a validated RPA performance measure, and RNA use requires an explicitly selected RT protocol."
+checks = "Primer candidates are evaluated for short-product placement, sequence composition, secondary structure and compatibility with the selected named DNA or RT-RPA protocol envelope; probe or nuclease branches remain explicitly scoped. RPA yield, time-to-signal, specificity, temperature tolerance and matrix effects require an empirical screen rather than PCR-Tm extrapolation."
+engine = "flanking-pair"
+goal = "detect"
+status = "experimental"
+modifiers = ["reverse-transcription", "variant-masking"]
+
+# RPA is not defined by strand displacement alone. A recombinase loads the
+# primers onto duplex DNA, SSB stabilises the invaded strand and a compatible
+# polymerase extends from there, at 37–42 degrees, with nothing ever heated
+# apart (Tan et al., Front Cell Infect Microbiol 2022,
+# doi:10.3389/fcimb.2022.1019071).
+#
+# This assay shares the pair engine with seven others, so without saying so it
+# was offered all eight of their enzymes — every one of which stops dead at the
+# first base pair it meets in a reaction with no melting step.
+enzyme = ["rpa-compatible"]
+
+# Isothermal, which is why the numbers below look nothing like a PCR design. The
+# recombinase opens the duplex, so primer Tm is not a PCR annealing-temperature performance criterion. A broad Tm window can still serve as a software guard while the
+# longer-primer envelope carries the assay-specific search. The engine's *search* serves this; its
+# thermal programme does not, and the polymerase preset says so by carrying a
+# hold rather than a cycle. The current TwistAmp assay-design manual supports
+# 30–35 nt as the preferred primer range, 100–200 bp as the preferred rapid
+# product range, and a broader 30–36 nt / 20–70% GC / Tm 50–100 °C software
+# exploration envelope. This profile chooses the narrower preferred envelope
+# by default. Those preferred values remain tunable because TwistDx explicitly
+# says shorter/longer primers can work and RPA performance is empirical. A
+# separate qualification envelope below prevents Gen-1 from extrapolating the
+# named Basic branch beyond the range it has deliberately reviewed while still
+# keeping the preferred search defaults distinct from validity.
+[profile.defaults]
+polymerase = "rpa"
+defaultPurpose = "general"
+purposes = ["general", "screen"]
+
+[profile.defaults.constraints]
+length_min = 30
+length_opt = 32
+length_max = 35
+# Effectively off. A recombinase loads the primer onto the template; it does not
+# wait for the primer to find its own way there, so what a 32-mer melts at is
+# not a fact about whether this reaction works.
+# Computational domain only. TwistDx explicitly states that conventional Tm
+# is not directly applicable to RPA performance. These bounds prevent Primer3
+# parser/pathology failures; they are locked and are not an assay-validity gate.
+tm_min = 0.0
+tm_opt = 75.0
+tm_max = 150.0
+tm_pair_max_difference = 150.0
+gc_min = 30.0
+gc_max = 70.0
+gc_clamp = 0
+max_poly_x = 5
+product_min = 100
+product_max = 200
+min_three_prime_distance = 1
+
+[profile.defaults.constraintPolicy]
+tm_min = "locked"
+tm_opt = "locked"
+tm_max = "locked"
+tm_pair_max_difference = "locked"
+
+# Gen-1 qualification boundary for the reviewed TwistAmp Basic-family DNA branches. These are
+# not claims that RPA is biologically impossible outside them: the current
+# TwistDx assay-design manual says oligos shorter than 30 nt can still function
+# (typically with slower kinetics) and reports successful primers up to 45 nt,
+# but it does not define a scientific minimum such as 18 nt. The preferred
+# search therefore remains 30–35 nt, while only the reviewed upper length
+# boundary is enforced here. Standard TwistAmp formulation context is under
+# 500 bp; longer-product optimisation is a separately reviewed branch.
+[profile.defaults.constraintEnvelope.length_max]
+max = 45
+[profile.defaults.constraintEnvelope.product_min]
+max = 500
+[profile.defaults.constraintEnvelope.product_max]
+max = 500
+
+[[profile]]
+id = "universal-primers"
+name = "Universal Primers"
+summary = "Primer pairs designed from a reviewed multi-sequence panel."
+guidance = "Use this when one primer pair must cover a defined set of related sequences. Provide the alignment and panel authority, then review coverage, concrete degenerate members, non-target checks and the physical formulation separately."
+checks = "The consensus is evaluated against the declared alignment, duplicate and outlier policy, ambiguity formulation, target/non-target panel and observed per-sequence coverage model. Degenerate consensus members and their coverage are bounded by the submitted alignment; population-wide inclusivity, synthesis behaviour and assay performance require a defined sampling frame and bench validation."
+engine = "consensus-pair"
+goal = "detect"
+status = "experimental"
+modifiers = ["reverse-transcription"]
+
+# One degenerate pair for a whole taxonomic group, which means the window has to
+# admit the variation rather than exclude it.
+[profile.defaults]
+polymerase = "taq-standard"
+defaultPurpose = "general"
+purposes = ["general", "sanger", "screen"]
+
+[profile.defaults.constraints]
+# Wide, deliberately. These are PCRStudio's literature-informed, user-tunable
+# search starting points, not a claim that every published universal primer set
+# obeys the same bounds. A degenerate mixture melts across a range, so ordinary
+# single-sequence defaults would be an especially poor hidden fallback here.
+tm_min = 47.0
+tm_max = 71.0
+tm_pair_max_difference = 16.0
+gc_min = 25.0
+gc_max = 78.0
+length_min = 17
+length_opt = 20
+length_max = 27
+product_min = 250
+product_max = 1500
+max_poly_x = 5
+# Explicit profile-level ranking/reporting reference. It is not a universal
+# biological threshold and must not remove an otherwise valid candidate.
+tm_spread_max = 5.0
+max_degeneracy = 64
+conserved_end = 3
+min_coverage = 1.0
+min_three_prime_distance = 5
+
+
+# ── Sequence a genome ─────────────────────────────────────────────────────
+
+[[profile]]
+id = "tiled-scheme"
+name = "Tiled Amplicon Scheme"
+summary = "Overlapping amplicons that cover a genome or long sequence in traceable pools."
+guidance = "Use this for whole-genome or long-region coverage where several overlapping amplicons must be distributed across pools. Review coverage, variants, pool interactions and the exact upstream workflow; pooling reduces risk but does not guarantee perfect independence."
+checks = "The tiled scheme is evaluated for target coverage, amplicon overlap, primer structure, pool assignment, inter-pool compatibility, dropout or variant risk and the selected create, repair or replace operation. The returned scheme is a traceable computational panel plan; amplification balance, coverage depth, end-to-end uniformity and repair success come from the sequenced run."
+engine = "tiling-scheme"
+goal = "sequence"
+status = "experimental"
+# Tiling is already a whole-genome, pooled design. Variant masking is not a
+# supported modifier for this engine: the PRIMARY tiling workflow owns the
+# alignment, coverage and variant-risk policy as part of the scheme itself.
+modifiers = []
+
+[profile.defaults]
+# Proofreading, because these amplicons exist to be sequenced. A polymerase
+# error in a tiled scheme does not show up as a faint band -- it shows up as a
+# variant call, indistinguishable from a real one until somebody checks the
+# other pool covering the same base.
+polymerase = "proofreading"
+defaultPurpose = "sequencing"
+purposes = ["general", "sequencing"]
+
+[profile.defaults.constraints]
+# Around four hundred bases, which is what published schemes use: long enough
+# that a genome needs a manageable number of amplicons, short enough to survive
+# degraded template -- which is the normal condition of a clinical sample.
+product_min = 300
+product_max = 500
+# A narrow temperature window, narrower than anywhere else here, because every
+# amplicon in a pool anneals at one temperature. A scheme is only as good as
+# its worst pair, so the spread matters more than the centre.
+tm_min = 59.0
+tm_opt = 61.0
+tm_max = 64.0
+tm_pair_max_difference = 2.0
+length_min = 20
+length_opt = 24
+length_max = 30
+# Wide, and deliberately. Viral genomes are AT-rich in long stretches, and a
+# 40-60 window leaves holes in exactly the regions a tiling scheme exists to
+# cover -- a gap in the coverage is a worse outcome than a primer at 35% GC.
+gc_min = 30.0
+gc_max = 65.0
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 5
+
+
+[[profile]]
+id = "race"
+name = "RACE"
+summary = "A gene-specific primer for reaching an unknown transcript end by RACE."
+guidance = "Use this when an adapter is attached to the unknown 5′ or 3′ transcript end. The gene-specific primer carries the specificity of the reaction, so confirm the adapter, substrate preparation and direction before ordering."
+checks = "The gene-specific primer is evaluated against the declared RNA or cDNA direction, 5′-cap or 3′-poly(A) strategy, adapter/anchor assumptions and any nested-round geometry. The record preserves the selected partner protocol and transcript sequence constraints; transcript-end identity, splice structure, template integrity and contamination control require experimental confirmation."
+engine = "single-primer"
+goal = "sequence"
+status = "experimental"
+modifiers = ["tails"]
+
+[profile.defaults]
+# RACE GSP thermodynamics need an explicit, reproducible calculation context,
+# but the actual RT/PCR enzyme and cycling belong to the selected kit/SOP.
+# Do not borrow a long-PCR vendor branch as a surrogate bench chemistry.
+polymerase = "race-gsp-screening"
+defaultPurpose = "general"
+purposes = ["general", "cloning", "sequencing"]
+
+[profile.defaults.constraints]
+# Long and hot, which is the opposite of every other window here and is the
+# whole design. The gene-specific primer works against a kit's adapter primer,
+# which it never gets to be matched against -- so it cannot be balanced, and it
+# carries the specificity alone. A touchdown programme starts above 65 degrees
+# precisely so that only this primer is binding at the start.
+tm_min = 64.0
+tm_opt = 68.0
+tm_max = 72.0
+length_min = 23
+length_opt = 26
+length_max = 30
+# Wider than usual at the top, because reaching 68 degrees in 26 bases needs
+# the GC content to help.
+gc_min = 45.0
+gc_max = 65.0
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+
+
+[[profile]]
+id = "sequencing-primer"
+name = "Sequencing Primer"
+summary = "A single primer positioned to read into a selected sequencing region."
+guidance = "Use this when the goal is a sequencing read rather than an amplified product. Place the primer far enough from the region of interest to allow for the platform’s unreliable first bases and the requested read length."
+checks = "The sequencing primer is evaluated for placement relative to the region of interest, read direction, length, Tm, GC composition, homopolymer risk and local secondary structure against the declared template. Read-start quality, usable read length, mixed-trace behaviour, phasing and template quality are properties of the sequencing run."
+engine = "single-primer"
+goal = "sequence"
+status = "experimental"
+modifiers = []
+
+[profile.defaults]
+# Primer Tm needs a reproducible calculation context, but the actual cycle-
+# sequencing polymerase/dye chemistry belongs to the named sequencing protocol.
+polymerase = "sanger-primer-screening"
+# Only `general`. Every other purpose describes what happens to a product, and
+# this reaction makes a ladder rather than a product.
+purposes = ["general"]
+
+[profile.defaults.constraints]
+# Cooler than a PCR primer, because a cycle-sequencing programme anneals at
+# around 50 degrees and holds there -- there is no second primer to match and
+# no specificity being bought by running hot.
+tm_min = 52.0
+tm_opt = 55.0
+tm_max = 62.0
+length_min = 18
+length_opt = 20
+length_max = 27
+gc_min = 40.0
+gc_max = 60.0
+# A clamp is worth having: extension starting cleanly is the whole reaction,
+# and a frayed 3-prime end shows up as a trace that never resolves.
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+
+
+
+# ── Clone or assemble ─────────────────────────────────────────────────────
+
+[[profile]]
+id = "gibson-assembly"
+name = "Gibson Assembly"
+summary = "Junction primers and typed fragments for Gibson or NEBuilder HiFi assembly."
+guidance = "Use this when the final construct, not an isolated amplicon, is the design unit. Select the named assembly method, review junctions, orientation and frame diagnostics, and remember that a predicted construct still needs clone-level verification."
+checks = "Junction primers are evaluated for fragment orientation, overlap length and junction geometry, reconstructed construct sequence, reading-frame continuity, unwanted scar sites and full-oligo structure under the selected Gibson or HiFi assembly plan. The in-silico construct is not evidence of fragment identity, assembly yield, recircularisation or clone confirmation; those require the bench workflow."
+engine = "junction-primers"
+goal = "assemble"
+status = "experimental"
+# No modifiers, and `tails` in particular is deliberately absent. Everywhere
+# else a tail is an optional extra bolted onto an ordinary primer; here it is
+# the entire mechanism, and every primer this designs already carries one
+# chosen to join two named fragments. Offering the modifier as well would ask
+# somebody for a second tail with nothing to say about what it should be.
+#
+# Sequence somebody wants to add at a join — a tag, a linker, a spacer — goes
+# in the plan as a `literal` fragment instead, which is strictly better: it
+# becomes part of the construct, so the overlaps are computed around it rather
+# than in ignorance of it, and both neighbouring primers are made to carry it.
+modifiers = []
+
+[profile.defaults]
+# Proofreading, and not as a preference. Every base of every fragment ends up
+# in the finished plasmid, so a polymerase error anywhere is carried into the
+# clone — and the sequencing that finds it costs more than the enzyme.
+polymerase = "proofreading"
+defaultPurpose = "cloning"
+purposes = ["general", "cloning"]
+
+[profile.defaults.constraints]
+# An ordinary window, and that is the point. These constraints describe the
+# annealing portion only — the part Primer3 designs against the fragment's own
+# template — and it is an ordinary primer. The tail is held to the assembly
+# chemistry's rules instead, at the assembly temperature and in the unit its
+# vendor published them in, and the two are never combined into one number.
+tm_min = 58.0
+tm_opt = 60.0
+tm_max = 65.0
+tm_pair_max_difference = 3.0
+length_min = 18
+length_opt = 20
+length_max = 25
+gc_min = 40.0
+gc_max = 60.0
+gc_clamp = 1
+max_end_gc = 3
+max_poly_x = 4
+# The fragment being amplified, not the finished construct.  The old 200-bp
+# minimum was a workflow preference (short pieces are often easier to order),
+# not a PCR/Gibson validity rule, and it wrongly refused vendor-supported short
+# inserts.  51 bp is only the current pinned-Primer3 geometry floor for a
+# profile whose maximum annealing core is 25 nt at each end (2*25 + 1); it is an
+# implementation boundary, not a biological minimum.
+product_min = 51
+product_max = 10000
+
+[[profile]]
+id = "restriction-cloning"
+name = "Restriction Cloning"
+summary = "Primer pairs with 5′ restriction-site tails for directional cloning."
+guidance = "Use this when an insert will be amplified and cloned through restriction digest and ligation. The protective bases and restriction sites are ordered but excluded from annealing calculations; confirm that the selected sites do not occur in the insert."
+checks = "The annealing cores and ordered 5′ tails are evaluated separately for product placement, restriction-site orientation, protective bases, full-oligo structure, insert/vector compatibility and preservation of the intended reading frame. The software does not establish enzyme cleavage efficiency, star activity, ligation yield, transformation or clone identity."
+engine = "flanking-pair"
+goal = "assemble"
+status = "experimental"
+modifiers = ["tails"]
+
+# The search is the ordinary one; what this assay adds is on the primers rather
+# than in them. A `tails` block on the request names the two enzymes, and the
+# worker refuses either whose site appears in the template -- an enzyme that
+# cuts inside the insert cuts the product in the middle as well as at its ends,
+# which is the failure this assay exists to avoid.
+#
+# Naming no enzyme is allowed and useful: the answer is then the list of
+# enzymes whose sites are absent from this template, with the primers untailed.
+# Which two of those are right depends on the vector's cloning site, and
+# nothing here has seen the vector.
+[profile.defaults]
+# A construct you keep is a construct worth copying accurately.
+polymerase = "proofreading"
+defaultPurpose = "cloning"
+purposes = ["cloning"]
+
+
+# ── Engineer a change ─────────────────────────────────────────────────────
+
+[[profile]]
+id = "site-directed-mutagenesis"
+name = "Site-directed Mutagenesis"
+summary = "Topology-specific primer planning for declared DNA edits."
+guidance = "Use this when you know the exact substitution, insertion, deletion or library you want to build. Select the matching Q5, QuikChange or multi-site topology, review the reconstructed edited sequence, and verify the final clone experimentally."
+checks = "The mutagenic oligos are evaluated against the exact substitution, insertion, deletion or library edit, template orientation, overlap or extension geometry, primer structure and selected Q5, QuikChange or multi-site topology. The reconstructed edited sequence is computationally reviewed; polymerase fidelity, parental-template carryover, unintended mutations and clone confirmation remain bench checks."
+engine = "mutagenic-pair"
+goal = "engineer"
+status = "experimental"
+modifiers = ["tails"]
+
+[profile.defaults]
+polymerase = "q5-sdm-screening"
+defaultPurpose = "cloning"
+purposes = ["cloning"]
+chemistryFamily = "neb-q5-e0554"
+# Generic PCR constraint boxes are not an executable part of this assay. The
+# worker uses the Q5-specific topology/rules below and refuses anonymous
+# `constraints` overrides in Scientific-Strict. These broad numerical values
+# exist only because the shared profile schema carries a Constraints object.
+
+[profile.defaults.constraints]
+tm_min = 0.0
+tm_opt = 60.0
+tm_max = 100.0
+length_min = 15
+length_opt = 30
+length_max = 60
+gc_min = 0.0
+gc_max = 100.0
+gc_clamp = 0
+max_end_gc = 5
+max_poly_x = 10
+
+[profile.defaults.constraintPolicy]
+tm_min = "locked"
+tm_opt = "locked"
+tm_max = "locked"
+length_min = "locked"
+length_opt = "locked"
+length_max = "locked"
+gc_min = "locked"
+gc_max = "locked"
+gc_clamp = "locked"
+max_end_gc = "locked"
+max_poly_x = "locked"

@@ -1,0 +1,453 @@
+{
+  "schema_version": "1.0.0",
+  "release_line": "CURRENT",
+  "states": {
+    "wired-source-tested": "Implementation is wired in source and protected by source/static tests; native runtime acceptance is a separate evidence dimension.",
+    "source-ready-host-gated": "Source implementation/harness is present but completion necessarily depends on external Linux/runtime/operator evidence.",
+    "schema-reserved": "Persistence/schema foundation exists intentionally without a CURRENT public API/UI capability.",
+    "debt-bounded": "Behavior is current, but maintainability debt remains explicitly bounded and may not grow until a natively-qualified extraction is safe.",
+    "deferred-by-design": "The capability is intentionally not enabled in CURRENT."
+  },
+  "items": [
+    {
+      "id": 1,
+      "work_item": "Canonical Module/Engine authority",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "contracts/modules.toml + engines.toml; generated projections across Rust/Python/Web."
+    },
+    {
+      "id": 2,
+      "work_item": "Discriminated DesignRequest",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Web request payload is module-discriminated and module\u2192engine binding is generated."
+    },
+    {
+      "id": 3,
+      "work_item": "Versioned typed Rust\u2194Python IPC",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "IPC v2 envelope carries protocol/request/result schema, requestId, module, engine and command."
+    },
+    {
+      "id": 4,
+      "work_item": "Persistence schema versioning/migrations",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Draft/request/result/module-contract versions plus non-destructive read migration framework."
+    },
+    {
+      "id": 5,
+      "work_item": "Generic numeric recipe resolver",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Assay-neutral baseline/overlay/range/override/derivation core; LAMP is a policy consumer."
+    },
+    {
+      "id": 6,
+      "work_item": "Scientific registries separated from algorithms",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "LAMP and flanking protocol/bench registries extracted; canonical tool/contract data is data-driven."
+    },
+    {
+      "id": 7,
+      "work_item": "Python monolith decomposition",
+      "maturity": "debt-bounded",
+      "public_surface": false,
+      "host_qualification_required": true,
+      "evidence_note": "Scientific monoliths remain explicit no-growth debt until native differential qualification makes decomposition safe."
+    },
+    {
+      "id": 8,
+      "work_item": "Web workspace/engine-field decomposition",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "LAMP-heavy field logic and contract/data layers split; specialised assay pages remain explicit by design."
+    },
+    {
+      "id": 9,
+      "work_item": "Typed Draft model",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Raw DOM strings normalize through ModuleDraft(schemaVersion,moduleId,values)."
+    },
+    {
+      "id": 10,
+      "work_item": "Universal ValidationIssue",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Shared code/severity/ownerStep/fieldPath/source/blocking vocabulary drives readiness."
+    },
+    {
+      "id": 11,
+      "work_item": "Typed coordinates",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Boundary/HalfOpenInterval/CircularPosition primitives and property tests."
+    },
+    {
+      "id": 12,
+      "work_item": "Typed units",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Unit-bearing quantities used in generic numeric derivation; unit conversions are explicit."
+    },
+    {
+      "id": 13,
+      "work_item": "Progressive Python typing",
+      "maturity": "debt-bounded",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Contracts, IPC, recipes, tool manifests, validation and provenance boundaries carry type annotations, but a repository-wide mypy/pyright CI gate is intentionally not claimed until the frozen Python environment can validate it."
+    },
+    {
+      "id": 14,
+      "work_item": "Generated HTTP route/OpenAPI operation contract",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "58 transport operations come from contracts/http-api.toml and generate OpenAPI plus Rust/Web route projections; scientific payload Zod schemas remain explicit typed no-growth debt in web/src/lib/api/types.ts."
+    },
+    {
+      "id": 15,
+      "work_item": "Pure domain core boundary",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "OS/process execution moved to pcr-worker-client; pcr-core keeps domain adapter."
+    },
+    {
+      "id": 16,
+      "work_item": "Warm-worker lifecycle manager",
+      "maturity": "deferred-by-design",
+      "public_surface": false,
+      "host_qualification_required": false,
+      "evidence_note": "Not enabled until native benchmark proves benefit; per-request isolation is retained for Gen1."
+    },
+    {
+      "id": 17,
+      "work_item": "Real cancellation",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Cancellation token kills/reaps active worker and durable jobs expose cancel."
+    },
+    {
+      "id": 18,
+      "work_item": "Measured progress",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Backend lifecycle/stage telemetry replaces timer-invented progress."
+    },
+    {
+      "id": 19,
+      "work_item": "Observability/redaction",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Operator diagnostics/metrics and stage/tool timings exclude sequence/user/project payloads."
+    },
+    {
+      "id": 20,
+      "work_item": "Weighted resource scheduling",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Module resource weights are canonical; external tool thread budget is bounded by acquired capacity."
+    },
+    {
+      "id": 21,
+      "work_item": "Canonical tool registry",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "contracts/tools.toml generates runtime/readiness/provenance tool identities."
+    },
+    {
+      "id": 22,
+      "work_item": "Toolchain fingerprint",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Run provenance includes a stable digest over contracts/tools/database authority plus the module-relevant content-addressed chemistry/protocol/differential authority set."
+    },
+    {
+      "id": 23,
+      "work_item": "Run fingerprint",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Canonical request + contract/toolchain identity supports duplicate/reproducibility checks."
+    },
+    {
+      "id": 24,
+      "work_item": "Sequence assets",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Sequence assets are wired through persistence/job/run boundaries; native DB qualification remains host-bound."
+    },
+    {
+      "id": 25,
+      "work_item": "Materialized immutable run summaries",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Module/engine/result count/unit/target/schema metadata is persisted for indexed history."
+    },
+    {
+      "id": 26,
+      "work_item": "Migration authority separation",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Database migrations live behind pcr-storage rather than account-domain ownership."
+    },
+    {
+      "id": 27,
+      "work_item": "Static audit decomposition",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "audit-source.py is a small orchestrator over concern-specific audit modules."
+    },
+    {
+      "id": 28,
+      "work_item": "Property-based/large generated checks",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Deterministic property loops cover coordinates, numeric bounds and IUPAC reverse-complement."
+    },
+    {
+      "id": 29,
+      "work_item": "Cross-language differential testing",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Canonical 21-module differential corpus is consumed independently by Python, Web and Rust tests."
+    },
+    {
+      "id": 30,
+      "work_item": "Metamorphic scientific tests",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Involution, overlay-order invariance and hard-bound monotonicity checks are present."
+    },
+    {
+      "id": 31,
+      "work_item": "Performance regression architecture",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Portable benchmark records wall time/RSS/stage/tool telemetry; native budgets are a reviewed baseline."
+    },
+    {
+      "id": 32,
+      "work_item": "Benchmark before worker pooling",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Source benchmark evidence recorded; native Linux baseline is explicitly external before optimization."
+    },
+    {
+      "id": 33,
+      "work_item": "Container hardening",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "API/Web read-only, tmpfs, cap-drop, no-new-privileges and PID limits; DB/Caddy retain only required write/capability behavior."
+    },
+    {
+      "id": 34,
+      "work_item": "Container digest pinning",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Every external Compose/Dockerfile image is tag+sha256 pinned."
+    },
+    {
+      "id": 35,
+      "work_item": "GitHub Action SHA pinning",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "All action references use immutable commit SHA and Dependabot maintains updates."
+    },
+    {
+      "id": 36,
+      "work_item": "SBOM/signing/attestation",
+      "maturity": "source-ready-host-gated",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Deterministic CycloneDX SBOM + in-toto source/archive attestations + cosign signing entrypoints; real signature needs operator/CI identity."
+    },
+    {
+      "id": 37,
+      "work_item": "cargo-deny",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "License/source/duplicate/banned dependency policy added alongside cargo-audit."
+    },
+    {
+      "id": 38,
+      "work_item": "Linux first-class CI",
+      "maturity": "source-ready-host-gated",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Pinned Linux workflow compiles/tests Rust, installs frozen Python/Web environments; native scientific host qualification remains operator gate."
+    },
+    {
+      "id": 39,
+      "work_item": "Machine-readable API errors",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Stable code/kind/detail/fieldPath/stage/retryable/requestId contract; storage internals are not exposed."
+    },
+    {
+      "id": 40,
+      "work_item": "RunJob lifecycle",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Durable queued/running/cancel_requested/cancelled/completed/failed model."
+    },
+    {
+      "id": 41,
+      "work_item": "Idempotency",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Idempotency-Key is request-fingerprint bound; conflicting payload reuse fails closed."
+    },
+    {
+      "id": 42,
+      "work_item": "Generic scientific ToolAdapter",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Capabilities/version/fingerprint/run lifecycle is unified; run_tool is compatibility wrapper."
+    },
+    {
+      "id": 43,
+      "work_item": "Execution context separation",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Execution resource settings are structurally separate from design/reaction/validation context."
+    },
+    {
+      "id": 44,
+      "work_item": "AssayQualification entity",
+      "maturity": "schema-reserved",
+      "public_surface": false,
+      "host_qualification_required": false,
+      "evidence_note": "Immutable qualification persistence exists as a reserved foundation capability; it has no public HTTP/UI surface in CURRENT."
+    },
+    {
+      "id": 45,
+      "work_item": "Attachment architecture",
+      "maturity": "schema-reserved",
+      "public_surface": false,
+      "host_qualification_required": false,
+      "evidence_note": "Immutable attachment persistence metadata exists as a reserved foundation capability; it has no public HTTP/UI upload surface in CURRENT."
+    },
+    {
+      "id": 46,
+      "work_item": "Three-way autosave merge",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Base/local/remote field merge auto-resolves independent edits and surfaces true same-field conflicts."
+    },
+    {
+      "id": 47,
+      "work_item": "Release authority organization",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "release/current holds active authority; release/baseline preserves only the immutable baseline required by current release tooling."
+    },
+    {
+      "id": 48,
+      "work_item": "Architecture Decision Records",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Seven load-bearing ADRs document boundary, coordinates, evidence, pinning, authority, recipes and persistence."
+    },
+    {
+      "id": 49,
+      "work_item": "Generated artifact graph",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Machine-readable source\u2192generated graph plus generator --check gates."
+    },
+    {
+      "id": 50,
+      "work_item": "Operator diagnostics surface",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Operator-token protected diagnostics/Prometheus-compatible metrics expose versions/queue/tools, never sample data."
+    },
+    {
+      "id": 51,
+      "work_item": "Backup/restore drill",
+      "maturity": "source-ready-host-gated",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Script creates backup, restores to temporary DB and verifies migrations/tables; runtime execution needs Docker/DB host."
+    },
+    {
+      "id": 52,
+      "work_item": "Secret delivery",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "Database URL/password-file pattern supports secret-file delivery; plaintext secret is not required."
+    },
+    {
+      "id": 53,
+      "work_item": "Egress hardening",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "HTTPS-only compiled host allowlist, exact-host redirects, proxy opt-in and segregated egress network."
+    },
+    {
+      "id": 54,
+      "work_item": "API versioning",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "/api/v1 is stable; /api compatibility alias preserves legacy clients without duplicate implementation."
+    },
+    {
+      "id": 55,
+      "work_item": "Scientific cache fingerprint policy",
+      "maturity": "wired-source-tested",
+      "public_surface": true,
+      "host_qualification_required": true,
+      "evidence_note": "No shared scientific cache in Gen1; future cache key must include canonical request + contract/toolchain/reference DB fingerprints."
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/schemas/ux-contract-v1.json",
+  "title": "PCRStudio generation-1 UX contract",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "scope",
+    "principles",
+    "input_contract",
+    "interaction_contract",
+    "result_contract",
+    "accessibility_reference"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "const": "generation-1-ui-contract"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "modules",
+        "engines",
+        "surface"
+      ],
+      "properties": {
+        "modules": {
+          "const": 21
+        },
+        "engines": {
+          "const": 11
+        },
+        "surface": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "principles": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "input_contract": {
+      "type": "object"
+    },
+    "interaction_contract": {
+      "type": "object",
+      "required": [
+        "minimum_pointer_target_css_px",
+        "dragging",
+        "focus",
+        "status_messages",
+        "errors",
+        "motion",
+        "running"
+      ],
+      "properties": {
+        "minimum_pointer_target_css_px": {
+          "type": "integer",
+          "minimum": 24
+        }
+      },
+      "additionalProperties": true
+    },
+    "result_contract": {
+      "type": "object"
+    },
+    "accessibility_reference": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

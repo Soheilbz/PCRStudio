@@ -1,0 +1,174 @@
+{
+  "authority_id": "pcrstudio-race-authority-current-2026-09-05",
+  "groups": {
+    "chemistries": [
+      "generacer-kit-25-0355-vl",
+      "firstchoice-rlm-race",
+      "smarter-race-source-limited",
+      "custom",
+      "smarter-race-current"
+    ],
+    "directions": [
+      "5prime",
+      "3prime"
+    ],
+    "rounds": [
+      "primary",
+      "nested"
+    ],
+    "substrates": [
+      "total-rna",
+      "mrna",
+      "cdna"
+    ]
+  },
+  "records": {
+    "custom": {
+      "execution_status": "executable-if-complete",
+      "kind": "race-chemistry",
+      "lifecycle": "custom",
+      "note": "No adapter sequence, RT chemistry or cycling is inferred.",
+      "requires": [
+        "partner_sequence",
+        "preparation_provenance",
+        "direction",
+        "round",
+        "sop_revision",
+        "sop_sha256"
+      ],
+      "selection": "Custom reviewed RACE SOP",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "caller-supplied reviewed SOP",
+      "source_kind": "caller-supplied-sop",
+      "source_reviewed_date": "2026-09-05",
+      "source_revision_required": true,
+      "source_sha256_required": true
+    },
+    "firstchoice-rlm-race": {
+      "claim_boundary": "Sequencing the product is required to establish the transcript end.",
+      "execution_status": "executable",
+      "gsp_profile": {
+        "forbid_three_prime_g": true,
+        "gc_target_percent": 50.0,
+        "length_max": 24,
+        "length_min": 20,
+        "note": "Current manual general GSP guidance. GSP is evaluated with the corresponding exact kit RACE primer; this profile is not shared with GeneRacer/SMARTer.",
+        "three_prime_last5_max_gc": 3
+      },
+      "kind": "race-chemistry",
+      "lifecycle": "current-versioned-manual",
+      "partner_resolution": "exact PCR partner selected by direction and primary/nested round from MAN1001624 Rev A",
+      "partners": {
+        "3prime:nested": {
+          "name": "3′ RACE Inner Primer",
+          "sequence": "CGCGGATCCGAATTAATACGACTCACTATAGG"
+        },
+        "3prime:primary": {
+          "name": "3′ RACE Outer Primer",
+          "sequence": "GCGAGCACAGAATTAATACGACT"
+        },
+        "5prime:nested": {
+          "name": "5′ RACE Inner Primer",
+          "sequence": "CGCGGATCCGAACACTGCGTTTGCTGGCTTTGATG"
+        },
+        "5prime:primary": {
+          "name": "5′ RACE Outer Primer",
+          "sequence": "GCTGATGGCGATGAATGAACACTG"
+        }
+      },
+      "selection": "Thermo Fisher FirstChoice RLM-RACE Kit AM1700, User Guide MAN1001624 Rev A",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "FirstChoice RLM-RACE Kit User Guide MAN1001624 Rev A",
+      "source_reviewed_date": "2026-09-05",
+      "source_revision": "Rev A",
+      "source_revision_date": "2025-06-09",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN1001624_FirstChoice_RLM_RACE_Kit_UG.pdf"
+    },
+    "generacer-kit-25-0355-vl": {
+      "claim_boundary": "RACE band is a candidate transcript end until sequence evidence confirms it.",
+      "execution_status": "executable",
+      "gsp_profile": {
+        "gc_max": 70.0,
+        "gc_min": 50.0,
+        "length_max": 28,
+        "length_min": 23,
+        "three_prime_last5_max_gc": 2,
+        "tm_min": 72.0,
+        "tm_relation": "high-annealing-temperature"
+      },
+      "kind": "race-chemistry",
+      "lifecycle": "current-support/historical-kit-manual",
+      "partners": {
+        "3prime:nested": {
+          "name": "GeneRacer 3′ Nested Primer",
+          "sequence": "CGCTACGTAACGGCATGACAGTG"
+        },
+        "3prime:primary": {
+          "name": "GeneRacer 3′ Primer",
+          "sequence": "GCTGTCAACGATACGCTACGTAACG"
+        },
+        "5prime:nested": {
+          "name": "GeneRacer 5′ Nested Primer",
+          "sequence": "GGACACTGACATGGACTGAAGGAGTA"
+        },
+        "5prime:primary": {
+          "name": "GeneRacer 5′ Primer",
+          "sequence": "CGACTGGAGCACGAGGACACTGA"
+        }
+      },
+      "selection": "Thermo Fisher GeneRacer kit, manual 25-0355 Version L exact PCR partners",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "GeneRacer Kit manual/support",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://www.thermofisher.com/order/catalog/product/L150201/faqs"
+    },
+    "smarter-race-current": {
+      "authority_boundary": "Exact current PCR partner sequence remains caller-supplied and content-addressed; catalog identity alone does not authorize an inferred universal-primer sequence.",
+      "catalog_ids": [
+        "634858",
+        "634859"
+      ],
+      "current_catalog_reviewed_date": "2026-09-05",
+      "execution_status": "executable-if-complete",
+      "kind": "race-design-profile",
+      "lifecycle": "current-assisted",
+      "note": "Primary and nested GSPs are planned against the gene-specific region; adapter/universal partner identity must be supplied exactly from the current kit/SOP.",
+      "partner_resolution": "caller-supplied exact current kit/SOP partner; PCRStudio does not infer a proprietary current universal primer sequence from obsolete documentation",
+      "requires": {
+        "partner_sequence": true,
+        "preparation_provenance": true,
+        "race_direction": true,
+        "round": true,
+        "sop_revision": true,
+        "sop_sha256": true,
+        "substrate": "cdna"
+      },
+      "selection": "SMARTer 5-prime/3-prime RACE with exact caller-supplied current kit/SOP PCR partner",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "Takara Bio SMARTer RACE current product/guidance",
+      "source_reviewed_date": "2026-09-05",
+      "source_revision_required": true,
+      "source_sha256_required": true,
+      "source_url": "https://www.takarabio.com/products/mrna-and-cdna-synthesis/full-length-cdna-and-race-cdna/smarter-race-cdna-amplification-kit",
+      "three_prime_requires_polyadenylated_confirmation": true
+    },
+    "smarter-race-source-limited": {
+      "catalog_ids": [
+        "634858",
+        "634859"
+      ],
+      "execution_status": "source-limited",
+      "kind": "race-chemistry",
+      "lifecycle": "current-family-source-limited",
+      "note": "Current kit family is available, but PCRStudio remains fail-closed until the exact current manual revision and exact UPM/partner identity are canonicalized. SMARTer template-switching is never treated as RLM-RACE or GeneRacer chemistry.",
+      "partner_resolution": "exact kit/manual revision and PCR-partner sequence required before orderable execution",
+      "selection": "SMARTer RACE template-switching family",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "Takara SMARTer RACE 5′/3′ Kit family, current catalog/document index",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://catalog.takara-bio.co.jp/com/manual_info.php?unitid=U100009025"
+    }
+  },
+  "reviewed_date": "2026-09-05",
+  "schema_version": "1.0.0"
+}

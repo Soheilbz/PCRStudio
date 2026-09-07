@@ -1,0 +1,22 @@
+{
+  "policy": "Generated from contracts/tools.toml. Python scientific distributions are accepted only when exact version and approved artifact hash match.",
+  "schema_version": "2.0.0",
+  "tools": {
+    "primalscheme3": {
+      "install_scope": "project-local-isolated-science-venv",
+      "role": "PRIMARY",
+      "source": "PyPI",
+      "version": "3.3.0",
+      "wheel_filename": "primalscheme3-3.3.0-py3-none-any.whl",
+      "wheel_sha256": "4ac2455c6071ddef40fd5bed881ad9c129f8590b66e7bf6b73462a0ea9aad30e"
+    },
+    "pydna": {
+      "install_scope": "project-local-isolated-science-venv",
+      "role": "OPTIONAL",
+      "source": "PyPI",
+      "version": "5.5.16",
+      "wheel_filename": "pydna-5.5.16-py3-none-any.whl",
+      "wheel_sha256": "f89c0787da7f405286c5d4fa8a827bbefbb09c7da382860834d7103dddb452aa"
+    }
+  }
+}

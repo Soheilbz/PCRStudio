@@ -1,0 +1,71 @@
+schema_version = "1.0.0"
+release_line = "CURRENT"
+
+[backup]
+# The default Linux bootstrap installs one database backup every day with up to
+# ten minutes of randomized delay. 25h is therefore the explicit host-local RPO
+# target rather than pretending that a daily timer is exactly 24h.
+target_rpo_hours = 25
+target_rto_hours = 2
+default_retention_days = 14
+backup_on_calendar = "*-*-* 02:20:00 UTC"
+backup_randomized_delay = "10m"
+restore_drill_on_calendar = "Sun *-*-* 03:20:00 UTC"
+restore_drill_randomized_delay = "15m"
+restore_drill_interval = "weekly"
+local_backup_scope = "host-local"
+off_host_copy_required_for_host_loss_dr = true
+
+[[alert]]
+id = "PCRStudioNoFreshDurableRunner"
+severity = "critical"
+expr = "pcrstudio_durable_runner_instances < 1"
+for_duration = "2m"
+metrics = ["pcrstudio_durable_runner_instances"]
+summary = "No fresh PCRStudio durable runner is registered"
+runbook = "runner-unavailable"
+
+[[alert]]
+id = "PCRStudioDurableQueueStalled"
+severity = "critical"
+expr = "pcrstudio_durable_queued_jobs > 0 and pcrstudio_durable_oldest_queued_seconds > 120"
+for_duration = "5m"
+metrics = ["pcrstudio_durable_queued_jobs", "pcrstudio_durable_oldest_queued_seconds"]
+summary = "PCRStudio durable jobs have been queued for more than two minutes"
+runbook = "durable-queue-stalled"
+
+[[alert]]
+id = "PCRStudioDurableQueuePressure"
+severity = "warning"
+expr = "pcrstudio_durable_runner_capacity > 0 and pcrstudio_durable_queued_jobs > pcrstudio_durable_runner_capacity * 8"
+for_duration = "10m"
+metrics = ["pcrstudio_durable_runner_capacity", "pcrstudio_durable_queued_jobs"]
+summary = "PCRStudio durable queue materially exceeds fresh runner capacity"
+runbook = "durable-queue-pressure"
+
+[[alert]]
+id = "PCRStudioDatabasePoolSaturation"
+severity = "warning"
+expr = "pcrstudio_database_pool_size > 0 and (pcrstudio_database_pool_in_use / pcrstudio_database_pool_size) > 0.90"
+for_duration = "5m"
+metrics = ["pcrstudio_database_pool_size", "pcrstudio_database_pool_in_use"]
+summary = "PCRStudio API database pool is more than 90 percent utilized"
+runbook = "database-pool-saturation"
+
+[[alert]]
+id = "PCRStudioAPIServerErrorBurst"
+severity = "warning"
+expr = "increase(pcrstudio_http_server_errors_total[5m]) >= 5"
+for_duration = "2m"
+metrics = ["pcrstudio_http_server_errors_total"]
+summary = "PCRStudio API is returning repeated 5xx responses"
+runbook = "api-server-errors"
+
+[[alert]]
+id = "PCRStudioInteractiveWorkerFailures"
+severity = "warning"
+expr = "increase(pcrstudio_worker_failed_jobs_total[10m]) >= 3"
+for_duration = "2m"
+metrics = ["pcrstudio_worker_failed_jobs_total"]
+summary = "PCRStudio interactive scientific worker failures are repeating"
+runbook = "interactive-worker-failures"

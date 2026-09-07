@@ -1,0 +1,300 @@
+{
+  "executed_at": null,
+  "host": null,
+  "integration_scenarios": {
+    "colony-host-preparation-provenance": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "consensus-panel-formulation-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "dpcr-partition-platform-semantics": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "inverse-topology-circle-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "junction-gibson-nebuilder-separation": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "kasp-plus-minus-endpoint-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "lamp-core-loop-readout": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "multiplex-final-physical-panel": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "mutagenic-topology-input-separation": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "nested-two-round-transfer-causality": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "pydna-independent-simulation": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "qpcr-probe-independent-structure": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "race-substrate-adapter-round-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "restriction-same-enzyme": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "rpa-branch-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "sanger-instrument-trace-boundary": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "specificity-approved-index-integrity": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "tiling-panel-create": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "tiling-repair-mode": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "tiling-scheme-create": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "tiling-scheme-replace": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    },
+    "universal-alignment-authority": {
+      "evidence": null,
+      "notes": [],
+      "status": "not-run"
+    }
+  },
+  "modules": {
+    "arms-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "colony-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "digital-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "gibson-assembly": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "inverse-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "kasp": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "lamp": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "long-range-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "nested-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "qpcr-probe": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "qpcr-sybr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "race": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "restriction-cloning": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "rpa": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "sequencing-primer": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "site-directed-mutagenesis": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "species-specific-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "standard-pcr": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "tetra-primer-arms": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "tiled-scheme": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    },
+    "universal-primers": {
+      "evidence": null,
+      "happy_path": null,
+      "notes": [],
+      "refusal_paths": null,
+      "status": "not-run",
+      "strict_mode": null
+    }
+  },
+  "notes": [],
+  "purpose": "Manifest-bound Linux functional-acceptance evidence template. PASS rows require on-host evidence file + SHA-256 + command + test selector + zero exit code. Populate only on the real Linux host; this source file is not a claim of execution.",
+  "qualification_result": null,
+  "release_class": null,
+  "release_id": null,
+  "runtime_smoke": {
+    "health": null,
+    "ready": null,
+    "status": "not-run",
+    "web_http_200": null
+  },
+  "schema_version": "1.3.0",
+  "source_manifest": "release/FILE-MANIFEST.json",
+  "source_sha256": null
+}

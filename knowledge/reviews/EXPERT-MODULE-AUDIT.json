@@ -1,0 +1,4368 @@
+{
+  "schema_version": "1.0.0",
+  "audit_as_of": "2026-09-05",
+  "scope": "source-only multidisciplinary audit; native Linux scientific runtime/build is an independent qualification gate",
+  "release_rule": "no-result/refusal is acceptable; changing the scientific question to obtain a result is not",
+  "module_count": 21,
+  "engine_count": 11,
+  "modules": {
+    "arms-pcr": {
+      "name": "ARMS-PCR",
+      "engine": "discriminating-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-evidence-scoped",
+      "strict_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "three_prime_allele_identity",
+        "polymerase_scoped_mismatch_evidence",
+        "differential_extension",
+        "paired_allele_empirical_validation_boundary"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "preserve_discrimination",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_allele_specific_cores",
+            "design_common_or_outer_primers"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_allelic_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_variant",
+            "construct_allele_templates",
+            "enumerate_orientation_and_mismatches",
+            "evaluate_discrimination",
+            "filter_rank"
+          ],
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_allele_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 5,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_method_fidelity.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts"
+      ],
+      "ui_source_count": 7,
+      "ui_sources": [
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/request.ts"
+      ],
+      "claim_boundary": "CURRENT normalizes SNV/MNV identity with reference provenance, masks caller-supplied nearby variants, and scopes terminal/secondary mismatch ranking to a versioned Taq-like non-proofreading evidence model. ARMS remains SNV-anchor based; indels are not coerced to synthetic SNVs and empirical paired-allele discrimination remains required.",
+      "upgrade_opportunities": [
+        "Add a proofreading-compatible allele-specific chemistry only as a separately validated protocol/evidence topology."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "colony-pcr": {
+      "name": "Colony PCR",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-context-handoff",
+      "strict_gates": [
+        "screen_product_geometry",
+        "host_class",
+        "colony_preparation_provenance",
+        "colony_lysis_profile",
+        "optional_vector_context",
+        "predicted_screen_status"
+      ],
+      "required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_invent_colony_lysis_or_bench_status",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 18,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_evaluation.py",
+        "tools/tests/test_flanking_deep_closure.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_multiplex_orchestration.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_settings.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "ui_source_count": 19,
+      "ui_sources": [
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/multiplex-form.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "claim_boundary": "CURRENT uses a generated colony authority for host class, preparation and named SOP identity. Five named source-backed SOP/product branches are selectable alongside a provenance-required custom SOP, including the NEB M0689 supplemental colony-PCR protocol using OneTaq Hot Start Quick-Load. Colony sample input is first-class; unsupported host/preparation combinations fail closed in Python/Rust instead of inheriting bacterial lysis assumptions. Screening geometry remains distinct from empirical colony, gel, miniprep and Sanger evidence.",
+      "upgrade_opportunities": [
+        "Add a non-bacterial named SOP only when host-specific preparation authority is explicit; do not collapse yeast, fungi or microalgae into a bacterial direct-transfer recipe."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "digital-pcr": {
+      "name": "Digital PCR — EvaGreen / Dye",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-dmiqe-platform-boundary",
+      "strict_gates": [
+        "short_product",
+        "partition_compatible_assay",
+        "partition_format",
+        "platform_identity",
+        "platform_protocol_identity_consistency",
+        "fragmentation_state",
+        "digital_multiplex_architecture",
+        "digital_multiplex_platform_bound",
+        "specificity",
+        "shared_tm",
+        "measured_run_quantification_boundary"
+      ],
+      "required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_infer_platform_identity_or_invent_partition_threshold_or_fragmentation",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 21,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_digital_tests.rs",
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_evaluation.py",
+        "tools/tests/test_flanking_deep_closure.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_presets.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/evidence-import.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 28,
+      "ui_sources": [
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/digital-pcr-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/protocol-result-cards.tsx",
+        "web/src/components/project/workspace-evidence.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/evidence-import.test.ts",
+        "web/src/lib/evidence-import.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT keeps chemistry and platform routing explicit. Bio-Rad QX200 ddPCR EvaGreen chemistry is source-backed for QX200, QX600 and QX ONE; QX Continuum is routed to Pair+Probe rather than assigned an unverified dye chemistry. QX700/Nio/naica and QIAcuity retain separate source-backed branches and platform×consumable compatibility. QIAcuity result provenance exposes the current Software Suite 3.5 / VPF Version 13 reference while requiring the exact software/VPF actually used by the measured run. CSV/TSV plus RDML/RDES run evidence import remains non-inferential: threshold, rain, partition volume and concentration never come from primer design.",
+      "upgrade_opportunities": [
+        "Qualify vendor-native run/export parsers on Linux with versioned real evidence corpora; current generic evidence import must remain non-inferential.",
+        "Keep probe/channel/cluster-aware digital-PCR multiplex in Pair+Probe rather than approximating it with dye-only Flanking semantics."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "gibson-assembly": {
+      "name": "Gibson Assembly",
+      "engine": "junction-primers",
+      "profile_status": "experimental",
+      "science_assessment": "strong-method-separated-assembly",
+      "strict_gates": [
+        "fragment_order",
+        "typed_fragment_production",
+        "junction_normalization",
+        "annealing_cores",
+        "method_specific_overlap_authority",
+        "overlap_composition",
+        "whole_oligo_structure",
+        "construct_reconstruction",
+        "circular_rotation_semantics",
+        "feature_integrity",
+        "fragment_molarity_provenance",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "assembly_protocol",
+        "assembly_method",
+        "circular"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "assembly_protocol",
+        "method",
+        "circular"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "preserve_junction_identity",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_annealing_cores"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_background_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_background_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "report_dna_fold_without_changing_selection"
+          ],
+          "purposes": [
+            "overlap_structure_diagnostic"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_amplified_fragment_pcr_products"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_construct",
+            "resolve_junctions",
+            "compose_full_oligos",
+            "reconstruct_construct",
+            "filter_rank"
+          ],
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_junction_composer"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 11,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/stale-run-notice.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 15,
+      "ui_sources": [
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/stale-run-notice.test.ts",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT treats Gibson E5510 and NEBuilder HiFi E2621/E5520/E2623 as distinct source-backed method/protocol authorities. Ordered typed fragments, construct graph reconstruction, restriction-generated material, short oligo material, approximate molarity provenance and feature/frame diagnostics are first-class; method-specific overlap/reaction numbers never cross-inherit.",
+      "upgrade_opportunities": [
+        "Add another assembly chemistry only with an independent capability/protocol contract; Golden Gate remains a separate Type IIS topology."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "inverse-pcr": {
+      "name": "Inverse PCR",
+      "engine": "outward-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-topology-closed",
+      "strict_gates": [
+        "circular_or_digest_topology",
+        "named_branch_identity",
+        "outward_orientation",
+        "junction_reconstruction",
+        "restriction_enzyme_suitability",
+        "per_end_phosphate_state",
+        "circularization_provenance",
+        "linear_control_provenance",
+        "methylation_branch",
+        "unknown_flank_bounds",
+        "fragment_circle_feasibility",
+        "diagnostic_enzyme_cohort",
+        "full_reference_topology_validation",
+        "explicit_full_reference_enzyme_cohort",
+        "sequencing_handoff",
+        "predicted_result_status",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_invent_topology_unknown_flank_fragment_length_or_bench_status",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_outward_pair"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_inverse_circular_product"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_topology",
+            "construct_search_representation",
+            "map_to_source",
+            "reconstruct_inverse_product",
+            "filter_rank"
+          ],
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_topology_resolver"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 11,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_authority_contract.py",
+        "tools/tests/test_goldens.py",
+        "tools/tests/test_inverse.py",
+        "tools/tests/test_screen.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 10,
+      "ui_sources": [
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT validates full-reference outward topology for linear and circular templates, including origin-spanning reconstruction and multi-enzyme cohorts. Restriction/self-ligation preparation remains separately provenance-bound; pydna topology evidence and Sanger handoff are first-class evidence and never replace digest/circularisation provenance.",
+      "upgrade_opportunities": [
+        "Perform Linux/native pydna differential qualification and bench digest/circularisation/Sanger qualification before Stable promotion."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "kasp": {
+      "name": "KASP",
+      "engine": "discriminating-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-endpoint-plus-minus",
+      "strict_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "explicit_assay_mode",
+        "kasp_endpoint_fret_chemistry",
+        "nonproofreading_polymerase",
+        "allele_specific_or_plus_minus_geometry",
+        "common_primer_geometry",
+        "protocol_specific_product_envelope",
+        "fixed_fam_hex_tail_assignment",
+        "singleplex_readout",
+        "annealing_vs_ordered_sequence",
+        "target_aware_specificity",
+        "endpoint_evidence_separation",
+        "no_proprietary_kraken_equivalence_claim"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_relax_discrimination_chemistry_or_standard_lgc_product_ceiling",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_allele_specific_cores",
+            "design_common_or_outer_primers"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_allelic_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_variant",
+            "construct_allele_templates",
+            "enumerate_orientation_and_mismatches",
+            "evaluate_discrimination",
+            "filter_rank"
+          ],
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_allele_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 12,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_discriminate.py",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_contract_regressions.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_kasp.py",
+        "tools/tests/test_method_fidelity.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/kasp-endpoint.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 18,
+      "ui_sources": [
+        "web/src/components/design/discriminating-result.tsx",
+        "web/src/components/design/engine-fields/advanced-fields.tsx",
+        "web/src/components/design/kasp-endpoint-workspace.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/engine-authorities.generated.ts",
+        "web/src/lib/kasp-endpoint.test.ts",
+        "web/src/lib/kasp-endpoint.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/fork-settings.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT supports KASP-compatible biallelic genotype design and a distinct junction-aware plus/minus branch for suitable insertion/deletion/complex/presence-absence variants. Current KASP-TF V5 and historical CURRENT compatibility identities are separated. CSV/TSV FAM×HEX evidence import preserves provider/software calls and controls but does not invent genotype thresholds or claim proprietary Kraken equivalence.",
+      "upgrade_opportunities": [
+        "Add instrument-export-specific endpoint adapters only when parser/version semantics are validated; do not promote generic cluster auto-calling without a source-backed model."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "lamp": {
+      "name": "LAMP",
+      "engine": "loop-set",
+      "profile_status": "experimental",
+      "science_assessment": "strong-lamp-canonical-closure",
+      "strict_gates": [
+        "f3_b3",
+        "f2_b2",
+        "f1c_b1c",
+        "inner_primer_composition",
+        "spacing_geometry",
+        "loop_primer_geometry",
+        "target_inclusivity_when_supplied",
+        "finite_six_region_background_topology_when_supplied",
+        "indexed_lamp_specificity_evidence_for_large_scope",
+        "set_interaction_risk_review",
+        "independent_lamp_specificity_evidence"
+      ],
+      "required_context": [],
+      "conditional_required_context": [],
+      "wire_required_context": [],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "role_by_role_search_with_unchanged_lamp_geometry",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_role_oligos",
+            "evaluate_composite_oligos"
+          ],
+          "purposes": [
+            "thermodynamics"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_role_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity",
+            "ordered_oligo_structure"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_role_specificity"
+          ],
+          "purposes": [
+            "specificity",
+            "lamp_set_topology"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "target_inclusivity"
+          ],
+          "role": "CONDITIONAL_PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "report_rt_lamp_rna_accessibility_without_changing_selection"
+          ],
+          "purposes": [
+            "rna_target_accessibility"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "enumerate_role_sites",
+            "compose_inner_primers",
+            "design_loop_primers",
+            "validate_set_geometry",
+            "filter_rank_sets"
+          ],
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 34,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_benchmark.py",
+        "tools/tests/test_design.py",
+        "tools/tests/test_discriminate.py",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_evaluation.py",
+        "tools/tests/test_external_validation_grouping.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_foundation_contract.py",
+        "tools/tests/test_junction.py",
+        "tools/tests/test_lamp_numeric_recipes.py",
+        "tools/tests/test_loop_set.py",
+        "tools/tests/test_probe.py",
+        "tools/tests/test_settings.py",
+        "tools/tests/test_specificity.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/components/project/run-comparison.test.tsx",
+        "web/src/lib/api/__fixtures__/historical/rpa__pre-specificity-v5-source-mirrored.json",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/lamp-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/order-sheet.test.ts",
+        "web/src/lib/projects/comparison.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 40,
+      "ui_sources": [
+        "web/src/app/(app)/docs/page.tsx",
+        "web/src/app/(app)/organisation/page.tsx",
+        "web/src/components/design/design-result.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/lamp-fields.tsx",
+        "web/src/components/design/gel-simulator.tsx",
+        "web/src/components/design/loop-set-result.tsx",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/workflow-evidence.tsx",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/components/project/module-projects.tsx",
+        "web/src/components/project/projects-browser.tsx",
+        "web/src/components/project/run-comparison.test.tsx",
+        "web/src/components/project/workspace-evidence.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/engine-authorities.generated.ts",
+        "web/src/lib/lamp-contract.test.ts",
+        "web/src/lib/lamp-contract.ts",
+        "web/src/lib/lamp-protocol-authority.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/order-sheet.test.ts",
+        "web/src/lib/projects/comparison.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/fork-settings.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT keeps classic six-region LAMP linear-target topology with one canonical authority generated into Python/Rust/Web/runtime projections. PrimerExplorer V5 automatic semantics are AT-rich <=45%, Normal >45% and <60%, and GC-rich >=60%. Fixed-primer anchoring, mutation-position anchoring, integrated/core-first/add-loops stages and a deterministic 2-4-set empirical screening cohort are first-class without inventing wet-lab mismatch rules. Bench chemistry uses ordered source-backed thermal stages and a shared Python/Rust/Web differential corpus. Vazyme RP712 is pinned to the current V25.1 manual landing-page identity and product claims, but its exact vendor reagent table remains numeric-unresolved until the manual bytes are locally content-addressed; Hyasen HYB413/HYB414/HYB315 retain source-backed admitted recipes. Exact-product contradiction guards remain explicit for Takara RR385, Meridian MDX126 and Nippon NE6041/NE6043. Optional ViennaRNA Turner-2004 RNA accessibility remains post-selection. Modified reporter, multiplex reporter, lateral-flow and circular classic-LAMP topology remain fail-closed until independently executable; chemistry/bench/evidence stays decision_impact=none.",
+      "upgrade_opportunities": [
+        "Content-address the current RP712 V25.1 manual bytes before promoting an exact vendor reagent table.",
+        "Admit future chemistry only with exact source-bounded compatibility/numeric authority and catalogue-snapshot provenance.",
+        "Keep modified reporter and circular classic-LAMP topology non-executable until topology-specific algorithm and native qualification exist."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "long-range-pcr": {
+      "name": "Long-range PCR",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-multi-protocol",
+      "strict_gates": [
+        "long_product_geometry",
+        "proofreading_capability",
+        "protocol_identity",
+        "extension_protocol_compatibility"
+      ],
+      "required_context": [
+        "long_range_protocol"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "long_range_target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "long_range_target_length_kb",
+            "flanking_template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "long_range_protocol"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb",
+            "flanking_numeric_context.template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_substitute_anonymous_long_range_chemistry_or_relax_polymerase_capability",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 13,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_evaluation.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_pipeline.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 19,
+      "ui_sources": [
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/protocol-result-cards.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT retains seven current executable long-range branches: NEB LongAmp, Takara PrimeSTAR GXL, QIAGEN UltraRun, NEB Q5-XT, Promega GoTaq Long, Thermo Platinum SuperFi II long-range and TOYOBO KOD Long; Thermo K018x remains historical-only. GoTaq Long has a source-conditioned numeric contract including template-class reach, and long-target HMW integrity remains explicit evidence rather than an inferred guarantee.",
+      "upgrade_opportunities": [
+        "Admit another long-range chemistry only through an independently sourced product contract; do not generalize plasmid/simple-template reach to genomic DNA or reconstruct proprietary buffer thermodynamics."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "nested-pcr": {
+      "name": "Nested PCR",
+      "engine": "nested",
+      "profile_status": "experimental",
+      "science_assessment": "strong-two-round-workflow-current",
+      "strict_gates": [
+        "outer_pair",
+        "inner_pair",
+        "strict_containment",
+        "round_specificity",
+        "causal_nested_false_product_graph",
+        "cross_round_interaction",
+        "round_specific_reaction_identity",
+        "transfer_cleanup_provenance",
+        "contamination_evidence_separation",
+        "single_tube_generic_fail_closed_unless_supported_mechanism"
+      ],
+      "required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "outer_and_inner_search_expand_only_within_unchanged_round_profiles_and_never_invent_transfer_cleanup_or_carryover_chemistry",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_outer",
+            "design_inner"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_round_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_round_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_cross_round_interactions"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "derive_inner_template",
+            "validate_containment",
+            "map_inner_to_source",
+            "filter_rank_pair_of_pairs"
+          ],
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_nested_containment"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 10,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/module-documentation.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 12,
+      "ui_sources": [
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/module-documentation.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT models Round 1 and Round 2 as independent reactions with typed direct/diluted/purified/custom transfer, source-backed NEB Msz or Thermolabile Exonuclease I cleanup, causal outer-off-target to inner-product re-screening, and contamination/run evidence with decision_impact=none. Fully nested and both semi-nested two-tube topologies execute; generic one-tube nested PCR and anonymous dUTP/UNG numeric recipes remain fail-closed.",
+      "upgrade_opportunities": [
+        "Add a named one-tube branch only as a new mechanism-specific protocol contract; do not generalize an assay-specific paper into a universal switch."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "qpcr-probe": {
+      "name": "qPCR — Hydrolysis Probe",
+      "engine": "pair-and-probe",
+      "profile_status": "experimental",
+      "science_assessment": "strong-hydrolysis-mgb-external-authority",
+      "strict_gates": [
+        "primer_pair",
+        "probe_inside_product",
+        "chemistry_specific_probe_tm_model",
+        "probe_structure",
+        "same_buffer_thermodynamics",
+        "primer_probe_interactions",
+        "named_probe_chemistry",
+        "probe_optical_configuration",
+        "probe_signal_specificity",
+        "transcript_provenance",
+        "multiplex_channel_compatibility",
+        "miqe_evidence_separation",
+        "mgb_exact_tm_fail_closed_without_authority",
+        "mgb_external_authority_exchange",
+        "mgb_candidate_set_hash_integrity",
+        "combined_amplicon_probe_specificity"
+      ],
+      "required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair_and_internal_oligo",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation",
+            "internal_oligo"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_product_and_probe_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_product_and_probe_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_probe_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "validate_probe_geometry",
+            "validate_optical_configuration",
+            "filter_rank_triplets"
+          ],
+          "purposes": [
+            "probe_geometry",
+            "optics"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_probe_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 18,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_authority_contract.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_probe.py",
+        "tools/tests/test_probe_benchmark.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/stale-run-notice.test.ts",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/components/project/run-comparison.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/comparison.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts"
+      ],
+      "ui_source_count": 18,
+      "ui_sources": [
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/stale-run-notice.test.ts",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/components/project/run-comparison.test.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/comparison.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/request.ts"
+      ],
+      "claim_boundary": "CURRENT executes reviewed conventional Thermo Fisher/IDT hydrolysis chemistry directly and treats MGB/NFQ as an external-authority-required workflow. PCRStudio exports a content-bound candidate set, imports MGB-aware Tm only for the same candidate-set SHA-256 and never substitutes ordinary-DNA Tm. Optical authority, transcript-junction, probe-specific variants, combined specificity and multiplex interaction evidence are explicit; observed evidence never silently mutates sequence ranking.",
+      "upgrade_opportunities": [
+        "Qualify additional instrument/version-specific optical profiles and raw instrument evidence parsers with pinned sources."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "qpcr-sybr": {
+      "name": "qPCR — Intercalating Dye",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-miqe-protocol-boundary",
+      "strict_gates": [
+        "short_qpcr_product",
+        "primer_specificity",
+        "dimer_sensitivity",
+        "shared_tm"
+      ],
+      "required_context": [],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "qpcr_cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "wire_required_context": [],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "search_expand_only_within_qpcr_profile",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 15,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_multiplex.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/evidence-import.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 22,
+      "ui_sources": [
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/protocol-result-cards.tsx",
+        "web/src/components/project/workspace-evidence.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/evidence-import.test.ts",
+        "web/src/lib/evidence-import.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT retains 13 named dye-qPCR/one-step RT-qPCR chemistry branches, including Thermo PowerTrack, QIAGEN QuantiNova, Bio-Rad SsoAdvanced, three distinct Solis HOT FIREPol EvaGreen formulations and the source-limited Vazyme Q713 branch. qPCR instrument/ROX profile is generated from the canonical authority and source-conditioned chemistry/instrument incompatibilities fail closed. The current Vazyme Q713 product authority is pinned to the reviewed Flyer Q713 V25.1 identity and public 20-uL/SYBR Green I/dUTP-UDG/ROX claims; exact reagent stoichiometry remains unresolved until the transferable current IFU is content-addressed. CSV/TSV/TXT plus RDML/RDES-style evidence import is non-inferential. Standard-curve, efficiency, controls, melt and run evidence remain measured MIQE-oriented evidence with decision_impact=none on primer ranking.",
+      "upgrade_opportunities": [
+        "Qualify the exact current Q713 IFU/reagent table when locally content-addressed authority is available.",
+        "Add instrument/version-specific raw-curve adapters only through validated parsers; never infer absent Cq, calibration, threshold, ROX or sample-processing evidence."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "race": {
+      "name": "RACE",
+      "engine": "single-primer",
+      "profile_status": "experimental",
+      "science_assessment": "strong-boundary-aware",
+      "strict_gates": [
+        "boundary",
+        "extension_direction",
+        "chemistry_specific_gsp_profile",
+        "adapter_partner_identity",
+        "substrate_preparation_provenance",
+        "nested_round_state",
+        "single_primer_specificity",
+        "unknown_end_product_semantics",
+        "sequencing_confirmation_handoff",
+        "candidate_transcript_end_claim_boundary",
+        "smarter_complete_context",
+        "nested_gsp_plan",
+        "polyA_guard_for_3prime_smarter",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "boundary_aware_search_without_cross_wiring_race_chemistries",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_single_oligo"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_single_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_single_binding_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_branch_boundary",
+            "resolve_extension_direction",
+            "plan_read_or_extension_span",
+            "filter_rank"
+          ],
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 16,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_authority_contract.py",
+        "tools/tests/test_fold.py",
+        "tools/tests/test_sanger_trace.py",
+        "tools/tests/test_single.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/engine-authorities.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 32,
+      "ui_sources": [
+        "web/src/app/(app)/about/page.tsx",
+        "web/src/app/(app)/privacy/page.tsx",
+        "web/src/components/design/engine-closure-fields.tsx",
+        "web/src/components/design/engine-closure-panels.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/multiplex-result.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/region-picker.tsx",
+        "web/src/components/design/single-result.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/engine-result-schemas.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/api/scientific-result-schemas.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/engine-authorities.generated.ts",
+        "web/src/lib/engine-authorities.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-request-extensions.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/fork-settings.ts",
+        "web/src/lib/projects/load.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT separates biological direction, substrate, cDNA preparation, primary/nested round, exact PCR partner, nested GSP plan and poly(A) semantics. GeneRacer and FirstChoice exact partners are versioned; SMARTer current catalog identities 634858/634859 remain caller-partner-bound and require SOP/manual revision plus SHA-256. Candidate transcript ends remain unvalidated until sequence evidence confirms them.",
+      "upgrade_opportunities": [
+        "Qualify current SMARTer manual/partner identities only when redistributable or locally content-addressed authority is available; never infer proprietary universal-primer sequence from obsolete documentation."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "restriction-cloning": {
+      "name": "Restriction Cloning",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-directionality-construct-simulation",
+      "strict_gates": [
+        "restriction_site_policy",
+        "tail_composition",
+        "frame_or_product_verification",
+        "annealing_core_quality"
+      ],
+      "required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "preserve_required_sites_and_product",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 11,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_settings.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 11,
+      "ui_sources": [
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT preserves exact insert/circular donor reconstruction, frame/fusion intent and source-fact-driven digest/ligation calculators across 26 curated enzyme geometries. Current supplier buffer/temperature/heat-inactivation evidence is version-specific; SacI-HF close-to-end evidence is now pinned, while HaeIII/MspI/TaqI/HinfI near-end minima remain explicitly unresolved because no enzyme-specific row was present in the reviewed current table. Methylation evidence is enzyme/context-specific and star activity remains fail-closed rather than inferred. Golden Gate stays a separate Type IIS topology.",
+      "upgrade_opportunities": [
+        "Resolve the four remaining near-end minima only when an enzyme-specific current supplier table row is published; expand exact-enzyme evidence without cross-inheriting conditions."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "rpa": {
+      "name": "RPA",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-named-plain-primer-branches",
+      "strict_gates": [
+        "rpa_compatible_chemistry",
+        "rpa_primer_profile",
+        "target_specificity"
+      ],
+      "required_context": [
+        "rpa_protocol"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "rpa_protocol"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "preserve_rpa_chemistry",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 27,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_flanking_deep_closure.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_loop_set.py",
+        "tools/tests/test_method_fidelity.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_presets.py",
+        "tools/tests/test_scientific_integrity.py",
+        "tools/tests/test_settings.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/lib/api/__fixtures__/historical/rpa__pre-specificity-v5-source-mirrored.json",
+        "web/src/lib/api/isothermal.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-contract.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/stored-enzyme.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 37,
+      "ui_sources": [
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/design-result.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/multiplex-result.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/protocol-result-cards.tsx",
+        "web/src/components/design/result-view.tsx",
+        "web/src/components/design/workflow-evidence.tsx",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/project/workspace-evidence.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/isothermal.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/rpa-result-schemas.ts",
+        "web/src/lib/api/runtime-contract.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/flanking-protocol-authority.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/fork-settings.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/seed.ts",
+        "web/src/lib/projects/stored-enzyme.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT retains four executable plain-ACGT RPA branches: TwistAmp Basic, TwistAmp Liquid Basic, Thermo Fisher Lyo-ready RPA/RT-RPA and G-Biosciences RPA 786-2155. Thermo supports its source-backed 20–50 µL scaling envelope, and a deterministic diversity-aware shortlist preserves multiple empirical screening candidates without changing the primary in-silico ranking. Exo/Nfo/Fpg/SIBA remain typed non-executable boundaries until modified-probe/nuclease topology is represented.",
+      "upgrade_opportunities": [
+        "Support Exo/Nfo/Fpg only after fluorophore/quencher/THF-or-dSpacer/cleavage/3-prime-block semantics are first-class and independently tested."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "sequencing-primer": {
+      "name": "Sequencing Primer",
+      "engine": "single-primer",
+      "profile_status": "experimental",
+      "science_assessment": "strong-run-handoff",
+      "strict_gates": [
+        "read_direction",
+        "provider_specific_design_envelope",
+        "readable_distance",
+        "single_binding",
+        "submission_values_separated_from_ranking",
+        "bidirectional_route",
+        "instrument_handoff",
+        "universal_primer_exact_unique_reuse",
+        "primer_walking_geometry",
+        "bounded_abif_trace_review",
+        "trace_evidence_separated_from_ranking",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "read_window_search_without_mixing_service_submission_values_into_design_ranking",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_single_oligo"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_single_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_single_binding_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_branch_boundary",
+            "resolve_extension_direction",
+            "plan_read_or_extension_span",
+            "filter_rank"
+          ],
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 12,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 21,
+      "ui_sources": [
+        "web/src/components/design/engine-closure-fields.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/region-picker.tsx",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/single-result.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/engine-request-extensions.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT separates direction/dead-zone/read-length placement from instrument/facility SOP and cycle-sequencing reaction handoff. Exact universal-primer reuse requires unique binding, bidirectional planning and primer walking are first-class, and bounded AB1/ABIF chromatogram import is an evidence-only review layer that never reorders primer candidates. Provider/instrument read-window assumptions remain explicitly source- and run-bound.",
+      "upgrade_opportunities": [
+        "Qualify a real multi-provider/multi-instrument AB1 corpus on Linux and pin provider SOP/read-window source snapshots; do not infer trace quality from design-time geometry."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "site-directed-mutagenesis": {
+      "name": "Site-directed Mutagenesis",
+      "engine": "mutagenic-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-topology-separated",
+      "strict_gates": [
+        "edit_normalization",
+        "multi_edit_overlap_validation",
+        "edited_reference",
+        "topology_specific_geometry",
+        "whole_oligo_quality",
+        "exact_edited_construct",
+        "protein_consequence_when_declared",
+        "library_design_boundary",
+        "protocol_topology_compatibility",
+        "edited_product_verification"
+      ],
+      "required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol",
+        "edit_input_mode"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "edit.kind",
+            "edit.at"
+          ],
+          "when": {
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to",
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "substitute",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to"
+          ],
+          "when": {
+            "edit.kind": "insert",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "delete",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edits_json"
+          ],
+          "when": {
+            "edit_input_mode": "multi"
+          }
+        },
+        {
+          "required_context": [
+            "aa_cds_start",
+            "aa_residue",
+            "aa_to",
+            "codon_policy"
+          ],
+          "when": {
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "aa_codon"
+          ],
+          "when": {
+            "codon_policy": "user-selected-codon",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "codon_usage"
+          ],
+          "when": {
+            "codon_policy": "host-codon-usage",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "library_mode",
+            "library_at"
+          ],
+          "when": {
+            "edit_input_mode": "library"
+          }
+        },
+        {
+          "required_context": [
+            "library_codon"
+          ],
+          "when": {
+            "edit_input_mode": "library",
+            "library_mode": "custom"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [
+        [
+          "edit",
+          "edits",
+          "amino_acid_edit",
+          "library_edit"
+        ]
+      ],
+      "fallback_policy": "never_relax_edit_identity",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_annealing_cores"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_background_binding"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_background_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_selected_primer_product"
+          ],
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_edit",
+            "construct_edited_reference",
+            "enumerate_mutagenic_pair",
+            "verify_edit_product",
+            "filter_rank"
+          ],
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_edit_normalizer"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 12,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_mutagenic.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "ui_source_count": 14,
+      "ui_sources": [
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "claim_boundary": "CURRENT separates Q5 back-to-back, QuikChange Lightning complementary, Lightning Multi same-strand and NEBuilder multi-site routing topologies. Q5 split-tail insertion is source-bounded through 100 nt, multi-edit and amino-acid inputs reconstruct the exact edited construct, library modes report theoretical sequence space only, and clone evidence remains separate from primer ranking.",
+      "upgrade_opportunities": [
+        "Add further named mutagenesis families only as topology-specific authorities; never reuse Q5 or Agilent Tm rules across methods."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "species-specific-pcr": {
+      "name": "Species-specific PCR",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-fail-closed-panel-exclusivity",
+      "strict_gates": [
+        "target_inclusivity",
+        "required_exclusion_background",
+        "product_specificity"
+      ],
+      "required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "never_drop_exclusion_background",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 10,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_standard_pcr.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 12,
+      "ui_sources": [
+        "web/src/app/(app)/organisation/page.tsx",
+        "web/src/components/design/multiplex-form.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT requires separate inclusivity/exclusivity panels and canonical per-record accession.version, role and topology metadata. Linear, circular and fragment records are scanned with topology-aware semantics, including across-origin circular products. Canonical snapshot hashing, duplicate/version checks, surveillance diff, mismatch base identity and optional population-group/weight evidence are implemented; weights never relax the strict sequence gate. A finite submitted panel is explicitly not whole-RefSeq/Primer-BLAST/MFEprimer proof and external database claims require a separately fingerprinted validator/database release.",
+      "upgrade_opportunities": [
+        "Add automated accession/taxonomy fetching and suppression/replacement checks only with pinned database/taxonomy authority.",
+        "Add population/pangenome completeness claims only when the sampling frame and allele-frequency source are explicit; user-declared weights remain evidence, not proof."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "standard-pcr": {
+      "name": "Standard PCR",
+      "engine": "flanking-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-named-registry",
+      "strict_gates": [
+        "flanking_geometry",
+        "primer_thermodynamics",
+        "template_specificity"
+      ],
+      "required_context": [],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_additive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "wire_required_context": [],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_numeric_context.additive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "search_more_candidates_within_unchanged_hard_gates",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_pair",
+            "check_pair",
+            "thermo_evaluate"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_specificity",
+            "validate_dimer",
+            "validate_hairpin"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_specificity_search"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_multiplex_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_structure"
+          ],
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "viennarna"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_specificity"
+          ],
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "primer_blast"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "reference_structure"
+          ],
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "tool_id": "nupack4"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "simulate_restriction_digest_ligation_construct"
+          ],
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "tool_id": "pydna"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_input",
+            "reconstruct_product",
+            "filter_rank",
+            "bounded_search_with_unchanged_hard_gates"
+          ],
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 29,
+      "test_layers": [
+        "python-worker",
+        "rust-contract",
+        "web-ui"
+      ],
+      "test_sources": [
+        "crates/pcr-core/src/engines/flanking_pair_tests.rs",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_engine_scientific_maturity.py",
+        "tools/tests/test_evaluation.py",
+        "tools/tests/test_external_validation_grouping.py",
+        "tools/tests/test_flanking_numeric_recipes.py",
+        "tools/tests/test_flanking_pair_research.py",
+        "tools/tests/test_foundation_contract.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_method_fidelity.py",
+        "tools/tests/test_multiplex.py",
+        "tools/tests/test_multiplex_orchestration.py",
+        "tools/tests/test_optional_validator_semantics.py",
+        "tools/tests/test_pipeline.py",
+        "tools/tests/test_scientific_integrity.py",
+        "tools/tests/test_standard_pcr.py",
+        "tools/tests/test_universal.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.wiring.test.ts",
+        "web/src/components/design/run-progress.test.tsx",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/module-documentation.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 30,
+      "ui_sources": [
+        "web/src/app/(app)/organisation/page.tsx",
+        "web/src/components/design/check-primers.tsx",
+        "web/src/components/design/engine-fields.tsx",
+        "web/src/components/design/engine-fields/flanking-fields.tsx",
+        "web/src/components/design/multiplex-form.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/page-plan.wiring.test.ts",
+        "web/src/components/design/protocol-result-cards.tsx",
+        "web/src/components/design/run-progress.test.tsx",
+        "web/src/components/layout/app-sidebar.test.tsx",
+        "web/src/components/modules/module-browser.test.tsx",
+        "web/src/components/project/workspace-readiness.ts",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/types.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/flanking-contract.test.ts",
+        "web/src/lib/flanking-contract.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/module-documentation.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/actions.ts",
+        "web/src/lib/projects/draft-codec.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/wiring.test.ts",
+        "web/src/lib/try/actions.ts"
+      ],
+      "claim_boundary": "CURRENT retains 16 named executable Standard-PCR chemistry branches under one generated protocol authority: the CURRENT set plus OneTaq/OneTaq GC/Quick-Load variants, PCRBIO HS Taq Mix, QIAGEN AllTaq, Thermo Platinum II, TOYOBO KOD One and the dedicated NEB M0284 multiplex branch. Bench chemistry remains separate from sequence ranking; M0284 is multiplex-only and all source-conditioned numeric overrides remain fail-closed outside their documented envelope.",
+      "upgrade_opportunities": [
+        "Admit further named polymerase/kit overlays only when their current source, chemistry distinctions, numeric contract, full-stack wiring and native qualification are complete."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "tetra-primer-arms": {
+      "name": "Tetra-primer ARMS",
+      "engine": "discriminating-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-readout-aware",
+      "strict_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "four_primer_geometry",
+        "diagnostic_band_separation",
+        "readout_context",
+        "multi_oligo_interactions",
+        "empirical_genotype_evidence_boundary"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "preserve_diagnostic_geometry",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "design_allele_specific_cores",
+            "design_common_or_outer_primers"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_allelic_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_locus_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_variant",
+            "construct_allele_templates",
+            "enumerate_orientation_and_mismatches",
+            "evaluate_discrimination",
+            "filter_rank"
+          ],
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_allele_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 11,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_discriminate.py",
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_method_fidelity.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "ui_source_count": 14,
+      "ui_sources": [
+        "web/src/components/design/engine-fields/advanced-fields.tsx",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/project/workspace-evidence.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts"
+      ],
+      "claim_boundary": "CURRENT preserves four-primer SNV geometry, explicit outer-control/allele products, caller-declared agarose/PAGE/capillary readout context and band-separation review. It does not invent a universal gel-resolution threshold or universal inner:outer concentration ratio; empirical genotype discrimination remains wet-lab evidence.",
+      "upgrade_opportunities": [
+        "Admit additional readout-specific quantitative resolution models only when the electrophoresis authority and assay context are explicit."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "tiled-scheme": {
+      "name": "Tiled Amplicon Scheme",
+      "engine": "tiling-scheme",
+      "profile_status": "experimental",
+      "science_assessment": "strong-lifecycle-closed",
+      "strict_gates": [
+        "backend_identity",
+        "coordinate_normalization",
+        "coverage",
+        "amplicon_overlap",
+        "pool_separation",
+        "variant_risk",
+        "interaction_audit",
+        "scheme_format",
+        "repairability",
+        "backend_score_non_blending",
+        "scheme_lifecycle",
+        "measured_dropout_evidence_separation",
+        "circular_scheme_create",
+        "native_visualisation_artifacts",
+        "observed_depth_import",
+        "dropout_repair_handoff",
+        "scheme_version_diff"
+      ],
+      "required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ],
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "wire_required_any_of": [],
+      "fallback_policy": "no_primary_backend_substitution_or_score_blending",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "scheme_create",
+            "panel_create",
+            "repair_mode",
+            "scheme_replace",
+            "inspect_interactions",
+            "visualise_bedfile",
+            "visualise_primer_mismatches"
+          ],
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primalscheme3"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "build_reference",
+            "scheme_create",
+            "specificity",
+            "sensitivity"
+          ],
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "olivar"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_interactions",
+            "audit_selected_pool_interactions",
+            "assign_pools"
+          ],
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "primerpooler"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_scheme_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_scheme_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "normalize_scheme",
+            "analyze_variant_risk",
+            "audit_coverage",
+            "manage_repair_history",
+            "release_scheme",
+            "import_depth_evidence",
+            "diff_scheme_versions",
+            "route_dropout_repair"
+          ],
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 16,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_external_managed_tool_runtime.py",
+        "tools/tests/test_generation1_runtime_contract.py",
+        "tools/tests/test_primalscheme_adapter.py",
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 20,
+      "ui_sources": [
+        "web/src/components/design/number-render.test.tsx",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/result-views.test.tsx",
+        "web/src/components/design/tiling-result.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/design-requests.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/multiplex-capabilities.test.ts",
+        "web/src/lib/multiplex-capabilities.ts",
+        "web/src/lib/projects/engine-transport-parity.test.ts",
+        "web/src/lib/projects/fork-settings.test.ts",
+        "web/src/lib/projects/reachable.test.ts",
+        "web/src/lib/projects/report-markdown.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT keeps PrimalScheme3 as the primary create/panel/repair/replace backend and adds circular scheme-create, native visualisation evidence, depth/dropout review, repair handoff and version/scheme diff. Lifecycle controls remain operation-specific and no primary-backend substitution is release-grade.",
+      "upgrade_opportunities": [
+        "CURRENT closure already includes circular scheme-create, native visualisation evidence, depth/dropout review and version/scheme diff; perform Linux/native PrimalScheme3/Olivar qualification with exact version/hash/database evidence before Stable promotion."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    },
+    "universal-primers": {
+      "name": "Universal Primers",
+      "engine": "consensus-pair",
+      "profile_status": "experimental",
+      "science_assessment": "strong-panel-formulation",
+      "strict_gates": [
+        "msa",
+        "alignment_qc",
+        "alignment_provenance",
+        "conservation",
+        "degeneracy",
+        "exact_member_enumeration_or_explicit_ceiling",
+        "member_coverage",
+        "weighted_or_stratified_coverage_when_selected",
+        "finite_target_vs_nontarget_specificity",
+        "formulation_provenance",
+        "conserved_pair_geometry",
+        "amplicon_informativeness",
+        "alignment_sensitivity"
+      ],
+      "required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ],
+      "conditional_required_context": [],
+      "wire_required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ],
+      "wire_conditional_required_context": [],
+      "wire_required_any_of": [],
+      "fallback_policy": "declared_alignment_authority_then_search_within_degeneracy_ceiling_without_population_or_global_specificity_overclaim",
+      "tool_bindings": [
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "align_panel"
+          ],
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "mafft"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "evaluate_concrete_oligos",
+            "design_pair_from_conserved_window"
+          ],
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "primer3_core"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "validate_member_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "mfeprimer"
+        },
+        {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "operations": [
+            "expand_member_specificity"
+          ],
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "tool_id": "ncbi_blast_plus"
+        },
+        {
+          "artifact_identity": "internal:pcrstudio-build",
+          "operations": [
+            "resolve_conservation",
+            "expand_degenerate_members",
+            "aggregate_coverage",
+            "filter_rank"
+          ],
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "tool_id": "pcrstudio_consensus_resolver"
+        }
+      ],
+      "validation_plan_declared": true,
+      "test_source_count": 8,
+      "test_layers": [
+        "python-worker",
+        "web-ui"
+      ],
+      "test_sources": [
+        "tools/tests/test_engine_atlas_docs.py",
+        "tools/tests/test_universal.py",
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "ui_source_count": 11,
+      "ui_sources": [
+        "web/src/components/design/page-plan.test.ts",
+        "web/src/components/design/page-plan.ts",
+        "web/src/components/design/universal-result.tsx",
+        "web/src/components/project/workspace.tsx",
+        "web/src/lib/api/result-schemas.test.ts",
+        "web/src/lib/api/runtime-results.test.ts",
+        "web/src/lib/contracts/module-bindings.generated.ts",
+        "web/src/lib/module-copy.test.ts",
+        "web/src/lib/projects/request.ts",
+        "web/src/lib/projects/required-context.test.ts",
+        "web/src/lib/projects/wiring.test.ts"
+      ],
+      "claim_boundary": "CURRENT makes alignment authority, panel QC, strict/threshold/majority/weighted/stratified consensus policy, exact degenerate-member enumeration, observed weighted/stratified coverage, finite target-vs-nontarget evidence and physical oligo formulation first-class. MUSCLE is an alignment-sensitivity validator, split-pool and amplicon informativeness are diagnostic, and user weights never become population prevalence.",
+      "upgrade_opportunities": [
+        "Add external population/pangenome completeness only with a declared sampling frame and pinned source; retain panel coverage as descriptive evidence otherwise."
+      ],
+      "linux_runtime_qualification": "required-before-Linux-validated-release"
+    }
+  },
+  "source_fingerprints": {
+    "contracts/modules.toml": "9d1f56b2095ba045bb2892a304f3a6fa32a37fec27211d14a3511048f1dda48d",
+    "knowledge/runtime/engine-system.generated.json": "e3346d85f6fd4a5e3b24a69efd569be4dd1d70b96db7b8999cd89d3ef57b52c5",
+    "knowledge/runtime/engine-capability-matrix.generated.json": "4d299fd2ed1f3c9ca85ece0f7fe3b5930f12b92148dca32956e74755eb26d709",
+    "knowledge/runtime/engine-transport-parity.generated.json": "4daec2e55e788042a7ec8172c5a6eb880ee3ddaeb9242c2fc81134bd1d8c5087",
+    "contracts/chemistry/consensus-profiles.json": "d3cfd31ac7258ebb17f92bc917d23be45156fe483105adfe341d8263ce25eb26",
+    "contracts/chemistry/discriminating-protocols.json": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+    "contracts/chemistry/assembly-protocols.json": "9f8b96ae87ef292efcc2bedf2a87cca0756080d9d8a394452be3d58d4b8b4cd6",
+    "contracts/chemistry/mutagenesis-protocols.json": "b34fb5bc2f9185e949f107f0f630dcaa6904acb712b5f46dc79711580425861d",
+    "contracts/chemistry/nested-protocols.json": "3ee7d4359bebdf10ff3f29bbf5841788bb7dc60595c1017771d3f57ea365f1a6",
+    "contracts/chemistry/consensus-differential-corpus.json": "45d31ec7a71ad654e9e8e4efd1de75e3b94939e3d11a1157d0b85b7cdb3a6dc4",
+    "contracts/chemistry/discriminating-differential-corpus.json": "59643d3a3455e22041cb5b604f6477c03a75ccee971da209de3894d83a32ccb1",
+    "contracts/chemistry/junction-differential-corpus.json": "9caafea441ae2ea9c0a5d860a48ba61bcc05d9f20ab5d059771c78e47de336de",
+    "contracts/chemistry/mutagenesis-differential-corpus.json": "3f89bf477dc9ee89fbe5870953b1c0a2ee535f9c9ba69f19862a60c2ba9bbc36",
+    "contracts/chemistry/nested-differential-corpus.json": "eac451398eb9fac0bae1e2c83ab1d9477c065dc151e3d85eb20843d9c6d33f37",
+    "crates/pcr-core/profiles.toml": "25686988fa4ed104fb4e86a3f366567618717a25836583a48f512352e1ec2d20",
+    "knowledge/runtime/module-contracts.json": "a78e27fdb5f5375a566dbaada6891dfde7c47444296ddc526a10c140c4d7fe0a",
+    "knowledge/atlas/contracts/engine-tool-contracts.json": "36888de95a033d26736c321d321801665adbe4f17df4b7b81c261f89ef579bd3",
+    "knowledge/atlas/contracts/toolchain-manifest.json": "ef8b011e651d0190d59bb45ea198c3164ee53048cfaeeae1fb1509600bb8ad3f",
+    "tools/src/pcr_tools/runtime_contract.py": "f04f23c7ed94ab3df098aec7c398179c4a0cc4f3f6074f0903b1f85441a04f64",
+    "tools/src/pcr_tools/validation_plan.py": "469f07948d0bb2636a28896c5b3dd72f82b4a7f48f2fbe92a2655c8cb4d16ffd",
+    "knowledge/runtime/scientific-integrity-policy.json": "8a80a5e3c10cd30c2b1f17224368a5bbea250b1fd4d6ad4853cd86a1f6bdaba8",
+    "tools/src/pcr_tools/pipeline.py": "4803fb6bec12da40ca2f63dd7cafa83987e06943512b310a21e4296d06225307",
+    "tools/src/pcr_tools/flanking_request.py": "41fd27700044fa4943954a8f3daff506bad369858fd0e82d3fdb9d50f8b77916",
+    "tools/src/pcr_tools/loop_set.py": "54f9d743b5291f50b3332736ba1386efd8aa64c1f205ff1201e3c006b7e60643",
+    "tools/src/pcr_tools/lamp_geometry.py": "97c47ee98fbdc8655bce5f3b3ce61f1b2c9ebe2ee1b62a6c014b1238eaf68860",
+    "tools/src/pcr_tools/lamp_profiles.py": "b449277d2ac64d7d707ddde8c236c4dcdb32ac115b85eccc12e38ed9559cd5d5",
+    "tools/src/pcr_tools/registries/lamp.py": "7cec3c3f429f000fad07036587d0ac0d4ff1370b3984fbc275cb64a391c1c54e",
+    "tools/src/pcr_tools/registries/flanking_protocols.py": "1a23f09bd918edb9a06c43c88a0d98a4af7f254e1f2655deec29c491d1785903",
+    "tools/src/pcr_tools/lamp_numeric_recipes.py": "afa4f50b5a94e4a373daecaf1c791e95515e142a62e48fbd754425357249e1b0",
+    "tools/src/pcr_tools/accessibility.py": "5aff2995aa42e3ab8f1bf959ce1dfeec4c8a85505ea921a647af60f44d4e9a85",
+    "tools/src/pcr_tools/restriction.py": "8f54df2eb6591bbc923317f411f27548f1532067f02ff603107493d2774a5f1b",
+    "tools/src/pcr_tools/pydna_bridge.py": "a0342162d9b41b671181cb834f5a71ef22af84ad00e7899ba95e48da4cebb5d6",
+    "tools/src/pcr_tools/data/restriction_enzyme_registry.json": "919796a6b1e42fbd313bda86b64a9b96d3dec5a198f9fb60239c536085a8b141",
+    "tools/src/pcr_tools/multiplex.py": "56cab6ab889a57577a52c827180192e4c33ebdc274e84783a878bdfae624819a",
+    "tools/src/pcr_tools/discriminate.py": "f2eb82609052d332db9663ee09c5824b2db2dea7c1f80e0bab42c5bb04c246b7",
+    "tools/src/pcr_tools/variants.py": "58c8d1295d575a244ef589e92534d47d38f963fa3804b12139cf7022783ffc63",
+    "tools/src/pcr_tools/kasp_plus_minus.py": "980a8f90fae31ab3c063278452c8bb82acb8bdbae45e8868775debfd0a3e579a",
+    "tools/src/pcr_tools/workflow_evidence.py": "94b7eb068f1c7883cca2d32e914cbbaf3d544ce39c3b5a4eae64b52aa70eb8e7",
+    "tools/src/pcr_tools/probe.py": "69ebcfb207a3cf311d302b33a1e200be9d9267849acaa4c5cd43c7e819808056",
+    "tools/src/pcr_tools/single.py": "84f936e0c889cd83d172b3d74bdfe892b6e7e7e3e66b27803f3eb60ffac30b69",
+    "tools/src/pcr_tools/tiling.py": "dbbd8d569192a0778fd6088546c94e1adf4dd57f34d9a3aca8649fd94d9dce83",
+    "tools/src/pcr_tools/junction.py": "6566551852c582a39e7410a1412e077017fdb96ee479794850f988d890e54026",
+    "tools/src/pcr_tools/inverse.py": "0df3139aba92f46e70858d758e9b71e056000b9c479ea1bfee6a6e83375a79a4",
+    "tools/src/pcr_tools/mutagenic.py": "6c6a82493ac9a2cb2fc4659f405408755576967bc9dc7bebc8d2f88658beda91",
+    "tools/src/pcr_tools/nested.py": "aebba66b446e6fea7ced445ff11e990e926847fe96c92d82589fa516428ce915",
+    "tools/src/pcr_tools/universal.py": "326c9979238108c7d128ed75a086ae7e7ef124198b818d68c17c2ac1759c4839",
+    "tools/src/pcr_tools/universal_panel.py": "6bebfff12bd5744567ab9311b9db5216ad0e583d46dc6f9c460713471eba38df",
+    "tools/src/pcr_tools/specificity.py": "2c95f288170940257292694f0d3f518d703892c7e12410d70e6cd06d1c0b2bb0",
+    "tools/src/pcr_tools/design.py": "84c29e200373aa77d98a359b241ba2dce2af976331f6c5b4e9528e35acdf857c",
+    "web/src/components/design/page-plan.ts": "1df333dd0be34156524ff4880e476504a84e77d1c4224aca27d7032083bde42f",
+    "web/src/components/design/result-overview.tsx": "f9382510dbcfb2559ccac1a66c484523259bcccc00b7df00bf11c8c6238ec498",
+    "web/src/components/design/toolchain-status.tsx": "a275e999a26ec3473bfd71acaa85a217955ce2ab0315de1adeb58f8201312f89",
+    "web/src/components/design/design-result.tsx": "19c740b77af8c9f9025c87412b0c0fe38bbf755df581278d731104f4322ff63b",
+    "web/src/components/design/engine-fields.tsx": "9ac99fb89bf5924164e433a37b41a41f88ef0177a9c3515430b501c85fd7c4ff",
+    "web/src/components/design/engine-fields/lamp-fields.tsx": "a3e6959015e42ad7d5ff0f0978e8486432f2fa71796571f3efbd24ed4e9d95be",
+    "web/src/components/design/workflow-evidence.tsx": "b584b443043918013c499798f35e438dd5384aac744f9300f446e1e070fe962d",
+    "web/src/components/project/workspace.tsx": "7304f4af2af0ea3a70951756308e91f69e16c85127248bb0962ad351ab284f99",
+    "web/src/lib/projects/request.ts": "bfe49c3001d3747236011dabc03b036e5c6e98e1db2a731f63d0b22c8ed270bb",
+    "web/src/lib/projects/engine-request-extensions.ts": "d499e86b34c7fc1ec8cc6fe21cb9a4a86972215767af90baa2bc5512e9652029",
+    "web/src/lib/projects/required-context.ts": "f8b8b88ac23b189b3a74e19542e874741ef65a0dc1888c0803174c3f4545146f",
+    "web/src/lib/projects/fork-settings.ts": "80e1e2b7a51c0c9ac59fdea277cfef639fff38fbcdf81b430db7f60038f6f847",
+    "web/src/lib/kasp-endpoint.ts": "c76f7664ff0da67010393949280466ec13eedb2a1b2ffc9ab4ca077702cf2874",
+    "web/src/lib/contracts/design-requests.ts": "1f7bfbfce1723fa090f6ce78d534df139105e6a928a262260c258954797aedf8",
+    "tools/tests/test_engine_contract_regressions.py": "ec46489e989dcd9e3129424fecf4ad597309b395b983d2e8b78d47377cbe1119",
+    "tools/tests/test_engine_authority_contract.py": "5b7b6ae04f0d7170f6f7f2f1e7a8a131ce38d8c7b4688a294234726eb7787db1",
+    "crates/pcr-core/tests/engine_differential_contract.rs": "00b82165793b32a04483afa24aae6ced00ccf176c33b04d5a06bb30edfa421c8",
+    "scripts/check-engine-web-contract.js": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34",
+    "scripts/generate-engine-authorities.py": "0ceda2b688ef481c052104f9b585fad4794c59a45bc7d10418bd23cad6f780aa",
+    "scripts/generate-engine-contracts.py": "571687383b22e2a4587dba2c47a274fbf974eefdd333f3483793e6d8d1004fa5",
+    "contracts/chemistry/flanking-differential-corpus.json": "b71a16e86de6b1ed8c201dac6112d5f31cb5c7ae89396c82b2950775e1b33e19",
+    "contracts/chemistry/flanking-protocols.toml": "1025984b51f27ef2000cf6e6dcde6ef0a9eea4994b9b18865839cad195f5c5d8",
+    "contracts/chemistry/inverse-differential-corpus.json": "4cde56d81d0ad8c54b554541d2727314b7e8d78b77bcb83154159abf9f043cb8",
+    "contracts/chemistry/inverse-pcr-protocols.json": "b23d076973370a860b6c746ddbb8594d1f3c14fa2e11f73fcae84b599807e6b7",
+    "contracts/chemistry/lamp-differential-corpus.json": "b1742be23b9b69db12b55a7318c8700aa1dc26d433d0a314a87bc72408ae90f4",
+    "contracts/chemistry/lamp-protocols.json": "3748ebf1b562e8619d4efbff83c4cb8afe8ad099ac38c07e9e06a8338abf9880",
+    "contracts/chemistry/probe-differential-corpus.json": "1ac543857b04489525951104afdfe3ccf1e8760340803a021134b91c08abd0b8",
+    "contracts/chemistry/qpcr-probe-protocols.json": "622b3787b92f0405b36b807e7ff84a8579a563b4d1eb0131a71c38c9d244e2c9",
+    "contracts/chemistry/race-protocols.json": "61013cb84bc32f7ec800e9feb07d09065e630e5bea724408447d78488b56b027",
+    "contracts/chemistry/sequencing-profiles.json": "e87657c3c008d41f3206995760ba5fe365348b4a70bed8ef665043976bd2a9a7",
+    "contracts/chemistry/single-differential-corpus.json": "0dceda90018b41443974ac8100f76f518188345538b5d1a792e362e86262f34c",
+    "contracts/chemistry/tiling-differential-corpus.json": "cc7033e83f4c864cb7cd9d7dff75b395e1b3195208eca2c227a0f723d7fa8b8d",
+    "contracts/chemistry/tiling-protocols.json": "90d7f29422fae82bb6d9fc2eb8ed6554fe425d9af711cdd1f335d486eed6e6c4",
+    "contracts/scientific-authorities.json": "fb3b3015ac0564f091fba3b71a34c003cb04a6c4f4a2c3d9d1bf2ed8699f5123",
+    "knowledge/sources/flanking-source-snapshots.json": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
+    "knowledge/runtime/scientific-authority-registry.generated.json": "e77aec32374dd9ae442449f4a3f0a3d371c1606208aa582ea305a9d3ac6f4489",
+    "tools/src/pcr_tools/scientific_authority.py": "d9ca74eaf4bb1fb2bd215f7412e575301b9eb8719aad6c1f513b05466ffd039d",
+    "scripts/generate-scientific-authority-registry.py": "71477eb3e49a3ede063960795a0e8a629119236ca83466d0a4380838802654f1",
+    "scripts/generate-flanking-source-snapshots.py": "c811fa9eec2fce82bee18637ee74f99ae2e9d16efa7bb475bbc89d9901ca8de0",
+    "contracts/capability-truth.json": "eb2a1335b3f0c24cc4de64700c151ad7f4539c943eb15b335cf82f066a3cccb1"
+  },
+  "generator_sha256": "3338c5f2831d6c5e4a480600985961ed701599a27061d0152816af9b71820d8e"
+}

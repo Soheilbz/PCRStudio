@@ -1,0 +1,12 @@
+-- What somebody has told us about how they work.
+--
+-- One column rather than a table, and JSON rather than columns, because these
+-- are settings: they arrive one at a time over years, most accounts have none,
+-- and a migration per preference is a cost with no return. What must not go in
+-- here is anything the application *depends* on — a schemaless column is the
+-- wrong place for a value whose absence is a bug.
+--
+-- The first entry is the enzyme somebody actually keeps on their bench. Every
+-- project asks for it, the answer is the same every time for most people, and
+-- until now it had to be chosen again on every new project.
+ALTER TABLE users ADD COLUMN preferences JSONB NOT NULL DEFAULT '{}'::jsonb;

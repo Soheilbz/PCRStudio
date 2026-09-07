@@ -1,0 +1,25 @@
+# Project-local bootstrap state and downloaded scientific toolchain.
+.local/
+
+# Language and package-manager environments.
+node_modules/
+tools/.venv/
+web/.next/
+target/
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Test, coverage and local build output.
+coverage/
+test-results/
+playwright-report/
+dist/
+build/
+
+# Local secrets and deployment overrides.
+.env
+.env.*
+!.env.example
+!.env.vm.example
+compose.override.local.yaml

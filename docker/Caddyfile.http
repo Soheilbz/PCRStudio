@@ -1,0 +1,29 @@
+# Private-loopback HTTP entry point.
+#
+# This file exists only for a VM bootstrap reached through an SSH/VPN tunnel or
+# behind a separate TLS-terminating tunnel. compose.vm.yaml binds its port 80 to
+# 127.0.0.1:8080 on the host, so credentials and session cookies are never
+# intentionally exposed over cleartext public Internet transport.
+#
+# Do not change the Compose binding to 0.0.0.0. Direct public deployments use
+# docker/Caddyfile with SITE_DOMAIN and automatic HTTPS instead.
+
+:80 {
+	encode zstd gzip
+
+	@immutable path /_next/static/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options "DENY"
+		-Server
+	}
+
+	# Caddy overwrites the forwarding identity instead of trusting an incoming
+	# X-Forwarded-For chain. The public TLS deployment uses the same boundary.
+	reverse_proxy web:3000 {
+		header_up X-Forwarded-For {remote_host}
+	}
+}

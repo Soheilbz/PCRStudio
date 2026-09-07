@@ -1,0 +1,86 @@
+{
+  "authority_id": "probe-current-corpus",
+  "cases": [
+    {
+      "expects": {
+        "executable": true,
+        "probe_tm_max": 70,
+        "probe_tm_min": 68
+      },
+      "id": "thermofisher-conventional",
+      "request": {
+        "probeProtocol": "thermofisher-taqman-conventional"
+      }
+    },
+    {
+      "expects": {
+        "executable": true,
+        "probe_length_max": 28,
+        "probe_tm_delta_min_c": 6
+      },
+      "id": "idt-delta-rule",
+      "request": {
+        "probeProtocol": "idt-primetime-conventional"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "none"
+      },
+      "id": "miqe-evidence",
+      "request": {
+        "workflowEvidence": {
+          "instrument": "QS7"
+        }
+      }
+    },
+    {
+      "expects": {
+        "candidate_set_hash": true,
+        "internal_mgb_tm": false,
+        "status": "external-authority-required"
+      },
+      "id": "mgb-authority-export",
+      "request": {
+        "probeMgbAuthorityMode": "export-candidates",
+        "probeProtocol": "taqman-mgb-reference"
+      }
+    },
+    {
+      "expects": {
+        "authority_provenance_required": true,
+        "candidate_set_hash_required": true
+      },
+      "id": "mgb-authority-import",
+      "request": {
+        "probeMgbAuthorityMode": "import-results",
+        "probeMgbAuthorityPayload": "authority-bound-json",
+        "probeProtocol": "taqman-mgb-reference"
+      }
+    },
+    {
+      "expects": {
+        "combined_signal_requires_probe_site": true,
+        "layers": [
+          "amplicon",
+          "probe",
+          "combined_signal"
+        ]
+      },
+      "id": "combined-signal-specificity",
+      "request": {
+        "probeProtocol": "thermofisher-taqman-conventional"
+      }
+    }
+  ],
+  "engine": "pair-and-probe",
+  "metamorphic": [
+    "probe-remains-inside-amplicon-under-template-case-normalization",
+    "changing-reporter-does-not-change-primer-ranking",
+    "evidence-does-not-change-sequence-ranking",
+    "conventional-profile-never-borrows-mgb-tm-model",
+    "mgb-authority-result-for-different-candidate-set-is-rejected",
+    "optical-authority-never-infers-calibration"
+  ],
+  "schema_version": "1.0.0"
+}

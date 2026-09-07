@@ -1,0 +1,675 @@
+schema_version = "1.2.0"
+authority = "flanking-protocol-identities"
+effective_date = "2026-09-04"
+
+[groups]
+standard_pcr = ["not-selected", "neb-taq-m0273", "neb-q5-hot-start-m0493", "neb-q5u-hot-start-m0515", "thermo-dreamtaq-hot-start-ep170x", "thermo-phusion-plus", "promega-gotaq-m300", "thermo-platinum-superfi-ii", "neb-onetaq-hot-start-m0484", "neb-onetaq-hot-start-gc-m0485", "neb-onetaq-hot-start-quickload-m0488", "neb-onetaq-hot-start-quickload-gc-m0489", "pcrbio-hs-taq-mix-pb10-22", "qiagen-alltaq-master-mix-203144", "thermo-platinum-ii-taq-hot-start", "toyobo-kod-one-kmm101", "neb-multiplex-pcr-m0284"]
+qpcr_sybr = ["not-selected", "bio-rad-itaq-sybr", "neb-luna-universal-m3003", "neb-luna-one-step-rt-qpcr-e3005", "thermo-powerup-sybr-a2574x", "promega-gotaq-qpcr-a600x", "promega-gotaq-one-step-rt-qpcr-a6020", "thermo-powertrack-sybr-a46xxx", "qiagen-quantinova-sybr-208052", "bio-rad-ssoadvanced-sybr-172527x", "solis-hot-firepol-evagreen-rox", "solis-hot-firepol-evagreen-norox", "solis-hot-firepol-evagreen-capillary", "vazyme-q713-suprealq-ultra-hunter-sybr"]
+rpa = ["not-selected", "twistamp-basic", "twistamp-liquid-basic", "thermo-lyo-ready-rpa", "gbiosciences-rpa-786-2155", "twistamp-exo", "twistamp-nfo", "twistamp-fpg", "siba-reference"]
+rpa_executable = ["twistamp-basic", "twistamp-liquid-basic", "thermo-lyo-ready-rpa", "gbiosciences-rpa-786-2155"]
+long_range = ["not-selected", "thermo-long-pcr-k018x", "neb-longamp-taq-m0323", "takara-primestar-gxl-r050a-standard", "qiagen-ultrarun-longrange-206442-206444", "neb-q5-xt-m2499", "promega-gotaq-long-m4021", "thermo-platinum-superfi-ii-longrange", "toyobo-kod-long-kml101"]
+digital = ["not-selected", "bio-rad-qx200-evagreen", "bio-rad-qx700-naica-evagreen", "bio-rad-qx700-evagreen-supermix", "qiagen-qiacuity-eg", "qiagen-qiacuity-onestep-advanced-eg"]
+digital_partition_formats = ["chamber", "chip", "droplet", "other"]
+digital_platform_ids = ["bio-rad-naica", "bio-rad-nio", "bio-rad-qx-continuum", "bio-rad-qx-one", "bio-rad-qx200", "bio-rad-qx600", "bio-rad-qx700", "other-validated", "qiagen-qiacuity", "roche-digital-lightcycler", "thermo-absolute-q"]
+digital_fragmentation_states = ["not-assessed", "not-required", "performed", "planned"]
+qpcr_instrument_profiles = ["unresolved", "high-rox", "low-rox", "rox-compatible", "no-rox", "capillary"]
+digital_consumable_ids = ["not-specified", "qx700-rdg16", "naica-sapphire-chip", "qx-continuum-96well", "qiacuity-8.5k", "qiacuity-26k", "absolute-q-map16", "roche-universal", "roche-high-sensitivity", "roche-high-resolution", "other-validated"]
+colony_protocols = ["custom-sop", "neb-onetaq-m0482-colony", "neb-onetaq-hotstart-m0488-colony", "neb-insert-screening-e1202", "pcrbio-hs-taq-pb10-22-colony", "neb-onetaq-m0689-colony"]
+colony_host_classes = ["bacterial", "filamentous-fungus", "microalgae", "other", "yeast"]
+colony_preparations = ["buffer-lysate", "direct-transfer", "host-specific-lysis", "liquid-culture", "other", "water-lysate"]
+restriction_digest_protocols = ["neb-cutsmart-standard", "neb-cutsmart-timesaver", "thermo-fastdigest-universal"]
+restriction_dephosphorylation_protocols = ["none", "neb-quick-cip-m0525"]
+restriction_ligation_protocols = ["neb-t4-dna-ligase-m0202", "neb-quick-ligation-m2200"]
+
+[compatibility.digital_consumable_platforms]
+"not-specified" = ["bio-rad-naica", "bio-rad-nio", "bio-rad-qx200", "bio-rad-qx600", "bio-rad-qx-one", "bio-rad-qx700", "bio-rad-qx-continuum", "qiagen-qiacuity", "thermo-absolute-q", "roche-digital-lightcycler", "other-validated"]
+"qx700-rdg16" = ["bio-rad-qx700", "bio-rad-nio", "bio-rad-naica"]
+"naica-sapphire-chip" = ["bio-rad-naica"]
+"qx-continuum-96well" = ["bio-rad-qx-continuum"]
+"qiacuity-8.5k" = ["qiagen-qiacuity"]
+"qiacuity-26k" = ["qiagen-qiacuity"]
+"absolute-q-map16" = ["thermo-absolute-q"]
+"roche-universal" = ["roche-digital-lightcycler"]
+"roche-high-sensitivity" = ["roche-digital-lightcycler"]
+"roche-high-resolution" = ["roche-digital-lightcycler"]
+"other-validated" = ["other-validated"]
+
+[compatibility.digital_protocol_platforms]
+"bio-rad-qx200-evagreen" = ["bio-rad-qx200", "bio-rad-qx600", "bio-rad-qx-one"]
+"bio-rad-qx700-naica-evagreen" = ["bio-rad-qx700", "bio-rad-nio", "bio-rad-naica"]
+"bio-rad-qx700-evagreen-supermix" = ["bio-rad-qx700"]
+"qiagen-qiacuity-eg" = ["qiagen-qiacuity"]
+"qiagen-qiacuity-onestep-advanced-eg" = ["qiagen-qiacuity"]
+
+[routing.digital_platforms]
+"bio-rad-naica" = "dye-flanking"
+"bio-rad-nio" = "dye-flanking"
+"bio-rad-qx-continuum" = "pair-probe"
+"bio-rad-qx-one" = "dye-flanking"
+"bio-rad-qx200" = "dye-flanking"
+"bio-rad-qx600" = "dye-flanking"
+"bio-rad-qx700" = "dye-flanking"
+"other-validated" = "custom-validated"
+"qiagen-qiacuity" = "dye-flanking"
+"roche-digital-lightcycler" = "pair-probe"
+"thermo-absolute-q" = "pair-probe"
+
+[routing_evidence.digital_platforms]
+"bio-rad-qx-continuum" = ["bio-rad-qx-continuum-probe-route"]
+"bio-rad-qx-one" = ["bio-rad-qx-one-evagreen-compatibility"]
+"bio-rad-qx600" = ["bio-rad-qx600-evagreen-compatibility"]
+
+[labels.digital_platforms]
+"bio-rad-naica" = "Bio-Rad naica"
+"bio-rad-nio" = "Bio-Rad Nio"
+"bio-rad-qx-continuum" = "Bio-Rad QX Continuum"
+"bio-rad-qx-one" = "Bio-Rad QX ONE"
+"bio-rad-qx200" = "Bio-Rad QX200"
+"bio-rad-qx600" = "Bio-Rad QX600"
+"bio-rad-qx700" = "Bio-Rad QX700"
+"qiagen-qiacuity" = "QIAGEN QIAcuity"
+"roche-digital-lightcycler" = "Roche Digital LightCycler"
+"thermo-absolute-q" = "Thermo Fisher QuantStudio Absolute Q"
+
+[aliases.digital_platform_names]
+"bio-rad-naica" = ["bio-rad naica", "naica", "naica system"]
+"bio-rad-nio" = ["bio-rad nio", "nio", "nio digital pcr system"]
+"bio-rad-qx-continuum" = ["bio-rad qx continuum", "bio-rad qx continuum ddpcr"]
+"bio-rad-qx-one" = ["bio-rad qx one", "bio-rad qx one ddpcr"]
+"bio-rad-qx200" = ["bio-rad qx200", "bio-rad qx200 ddpcr"]
+"bio-rad-qx600" = ["bio-rad qx600", "bio-rad qx600 ddpcr"]
+"bio-rad-qx700" = ["bio-rad qx700", "bio-rad qx700 ddpcr", "bio-rad qx700 droplet digital pcr system"]
+"qiagen-qiacuity" = ["qiagen qiacuity", "qiacuity", "qiagen qiacuity digital pcr system"]
+"roche-digital-lightcycler" = ["roche digital lightcycler", "digital lightcycler", "roche digital lightcycler system"]
+"thermo-absolute-q" = ["thermo fisher quantstudio absolute q", "quantstudio absolute q", "absolute q"]
+
+[provenance."vazyme-q713-suprealq-ultra-hunter-sybr"]
+url = "https://www.vazymeglobal.com/product-center/dye-based-qpcr/suprealq-ultra-hunter-sybr-qpcr-master-mix-u"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-05"
+document_identity = "Vazyme SupRealQ Ultra Hunter SYBR qPCR Master Mix (U+) Q713"
+document_revision = "Flyer Q713 V25.1 listed on current product page"
+claim_scope = "Current product identity, 20 uL reaction reference, SYBR Green I/dUTP-UDG/ROX claims; exact recipe remains source-limited until a transferable IFU is qualified."
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "dcfed41f78d093c0f76fe2a944fe86447467eb944f6074313821737cec7016ed"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-itaq-sybr"]
+url = "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000068167.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "4400bb4524e14e6e56ad698b5f488aa90fec84311ccfcd088cdac7757b2ca06f"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx200-evagreen"]
+url = "https://www.bio-rad.com/sites/default/files/2023-11/10000162845.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-05"
+document_identity = "Bio-Rad QX200 ddPCR EvaGreen Supermix application/recipe authority"
+document_revision = "10000162845 reviewed 2026-09-05"
+claim_scope = "EvaGreen droplet-dPCR chemistry recipe; compatibility is separately corroborated for QX200, QX600 and QX ONE."
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "d315f2762ef9e601a17a5a14fd42b119c1e8e822c3d722b7017308beb1601f24"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx700-evagreen-supermix"]
+url = "https://www.bio-rad.com/sites/default/files/2025-11/3882.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "32f284e88087e765b51a9c8e762b45748ad33ccb8193057cf792e646feff1e78"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx700-naica-evagreen"]
+url = "https://www.bio-rad.com/sites/default/files/2025-11/10000171490-naica-ddPCR-Mix-IFU.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "21d05c34ed99e7d9af6949ecd4c15d1d3560f26f0d08977fb8a872f2409d8d5d"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-ssoadvanced-sybr-172527x"]
+url = "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000076382.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "4295cafed6bacf4863e5f6d9655da62c9df9c983132060cfc7a0219a475e1680"
+availability_scope = "not-asserted"
+
+[provenance."gbiosciences-rpa-786-2155"]
+url = "https://www.gbiosciences.com/Recombinase-Polymerase-Amplification-RPA-Kit"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "db97767fa82a9db28d84231af1b652f59d43e97b7912ea7ab9339b70c2de6871"
+availability_scope = "not-asserted"
+
+[provenance."neb-cutsmart-standard"]
+url = "https://www.neb.com/en/protocols/2013/12/16/restriction-endonuclease-digestion"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "8f185af1f3bf0afb71dd15f3f32ef5459d3c6214d74b1ccd01cc4c1a6d9f288a"
+availability_scope = "not-asserted"
+
+[provenance."neb-cutsmart-timesaver"]
+url = "https://www.neb.com/en/tools-and-resources/usage-guidelines/optimizing-restriction-endonuclease-reactions"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "79054ad5c13d1e19a14d9c4b773d50f894ae46b8a05a0e49b93757f25f957fee"
+availability_scope = "not-asserted"
+
+[provenance."neb-insert-screening-e1202"]
+url = "https://www.neb.com/en-us/protocols/insert-screening-protocols-e1202"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "c0337cb76250e40685de58378065f5b200d82f921cc1505578ebecfba7bf439e"
+availability_scope = "not-asserted"
+
+[provenance."neb-longamp-taq-m0323"]
+url = "https://www.neb.com/en-us/protocols/longamp-taq-pcr-kit-e5200"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "fef08c8975e963432c1aae22d0860c0d75f22b7a74d72d6d956824a76b93e86c"
+availability_scope = "not-asserted"
+
+[provenance."neb-luna-one-step-rt-qpcr-e3005"]
+url = "https://www.neb.com/en-us/protocols/luna-universal-one-step-rt-qpcr-kit-protocol-e3005"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "c7c33a1dabf8c9a6d8b20de59f27d393e5c734b2386d834c9771f343438d0997"
+availability_scope = "not-asserted"
+
+[provenance."neb-luna-universal-m3003"]
+url = "https://www.neb.com/-/media/nebus/files/manuals/manualm3003.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "133e4e181c7e3343e8e804fd942ee051f61a5ff7db2bbf6d899806a7f44c5efb"
+availability_scope = "not-asserted"
+
+[provenance."neb-multiplex-pcr-m0284"]
+url = "https://www.neb.com/en-us/products/m0284-multiplex-pcr-5x-master-mix"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "6e6fe960f7fe6e9b4b4dec32f3cd60055befe08eb311f43001b56f4156ead8e8"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-hot-start-gc-m0485"]
+url = "https://www.neb.com/en-us/products/m0485-onetaq-hot-start-2x-master-mix-with-gc-buffer"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "5a69cadc183523c28d6269674e8f727db9a0e36c29c991f39d2a71736d1865bc"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-hot-start-m0484"]
+url = "https://www.neb.com/en-us/products/m0484-onetaq-hot-start-2x-master-mix-with-standard-buffer"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "9c85666b0ea660dcc34e18dda5f5fd9f6eb27905ac36551c8be1ff7d8143702f"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-hot-start-quickload-gc-m0489"]
+url = "https://www.neb.com/en-us/products/m0489-onetaq-hot-start-quick-load-2x-master-mix-with-gc-buffer"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "1dc65ad670a09e3506bcbd0ecbba523e3a2eefe228980fffee45e3819fa85a70"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-hot-start-quickload-m0488"]
+url = "https://www.neb.com/en-us/protocols/onetaq-hot-start-2x-master-mix-with-standard-buffer-m0488"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "4c3d3a4e159454f9b3dfb63bc583341ccbafdc40f45b608922136767a7db62ca"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-hotstart-m0488-colony"]
+url = "https://www.neb.com/en-us/protocols/onetaq-hot-start-2x-master-mix-with-standard-buffer-m0488"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "3a889c3970937754a9e4fb0489223092f51c2194c9749508af7361eb9fba885a"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-m0482-colony"]
+url = "https://www.neb.com/en-us/products/m0482-onetaq-2x-master-mix-with-standard-buffer"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "20c4a5476a3ca16e4b7d1eac65deab235c75ce219562b7c8f26ab6f24f0b963b"
+availability_scope = "not-asserted"
+
+[provenance."neb-onetaq-m0689-colony"]
+url = "https://www.neb.com/en/protocols/2019/06/20/supplemental-protocol-2-using-colony-pcr-to-identify-positive-clones-neb-m0689"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "089e655629c23b6e541c136eaa897c27c85946944d8448b567c2e8ba43acf416"
+availability_scope = "not-asserted"
+
+[provenance."neb-q5-hot-start-m0493"]
+url = "https://www.neb.com/en/protocols/pcr-using-q5-hot-start-high-fidelity-dna-polymerase-m0493"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "b2cd78316bc32a762af1a9866564793d19cff513b39f2a55d66b8cdd8d354500"
+availability_scope = "not-asserted"
+
+[provenance."neb-q5-xt-m2499"]
+url = "https://www.neb.com/en-us/protocols/pcr-using-q5-xt-hot-start-high-fidelity-2x-master-mix-m2499"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "21d815825ecc9a1203abe4ffc91a04ca02ff609d7a6b4cc72dbea347e8a2d838"
+availability_scope = "not-asserted"
+
+[provenance."neb-q5u-hot-start-m0515"]
+url = "https://www.neb.com/en-us/protocols/pcr-using-q5u-hot-start-high-fidelity-dna-polymerase-neb-m0515"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "d2ac568417fd90b3d9636af80af9b27b059a7a9ade7ce7bc2d013382e6c9ded9"
+availability_scope = "not-asserted"
+
+[provenance."neb-quick-cip-m0525"]
+url = "https://www.neb.com/en-us/protocols/protocol-for-dephosphorylation-of-5-ends-of-dna-using-quick-cip-neb-m0525"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "84d4ceee34ea2cc07570b273c3a997a962d7d914574a4b1713205e40a8aa533f"
+availability_scope = "not-asserted"
+
+[provenance."neb-quick-ligation-m2200"]
+url = "https://www.neb.com/en-us/protocols/quick-ligation-protocol"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "110233f0e213208505c2721d1ba5830e4a0eb5c9874a2561ae3056473ed50b63"
+availability_scope = "not-asserted"
+
+[provenance."neb-t4-dna-ligase-m0202"]
+url = "https://www.neb.com/en/protocols/dna-ligation-with-t4-dna-ligase-m0202"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "da88c1ccf593d15d8631e501248c81ec64cee337e3bfce3da72bb5c6bca95736"
+availability_scope = "not-asserted"
+
+[provenance."neb-taq-m0273"]
+url = "https://www.neb.com/en-us/protocols/taq-dna-polymerase-with-standard-taq-buffer-m0273"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "0a3bd3bbaa625402671e2b3266d73d804cfac73e73e0df64bae321023d72dcd8"
+availability_scope = "not-asserted"
+
+[provenance."pcrbio-hs-taq-mix-pb10-22"]
+url = "https://pcrbio.com/app/uploads/PB10.22-HS-Taq-Mix.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "98f49afbfa3b7669a4efb4f3e184b8a7cd9b51e56b93b407f9f14cde4ca18fd5"
+availability_scope = "not-asserted"
+
+[provenance."pcrbio-hs-taq-pb10-22-colony"]
+url = "https://pcrbio.com/app/uploads/PB10.22-HS-Taq-Mix.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "69911139eff68339c5e644e64f829332b2d2c9d8b2055d2ab76aa0b3cd40de95"
+availability_scope = "not-asserted"
+
+[provenance."promega-gotaq-long-m4021"]
+url = "https://www.promega.com/products/pcr/pcr-master-mixes/gotaq-long-pcr-master-mix/"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "babf632beedb282ff1e2cf2831602cdc836f2359ad49a438d10fc982abbb7879"
+availability_scope = "not-asserted"
+
+[provenance."promega-gotaq-m300"]
+url = "https://worldwide.promega.com/-/media/files/resources/protocols/product-information-sheets/g/gotaq-dna-polymerase-m300.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "cb79512f72a1a34be9f7c4d8ec04ae55ace406ae8dbb8f775adbf5d9399c09cb"
+availability_scope = "not-asserted"
+
+[provenance."promega-gotaq-one-step-rt-qpcr-a6020"]
+url = "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-onestep-rt-qpcr-system-protocol/"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "ab97ecbd10cf5646f894117e986211259e16b42f9ad24a1f8ef0bb9e8c71d1c5"
+availability_scope = "not-asserted"
+
+[provenance."promega-gotaq-qpcr-a600x"]
+url = "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-qpcr-master-mix-protocol/"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "272f3367648d1e1dd024c82c4a67c486365279c2ed0a36c6925a875e42d8ab06"
+availability_scope = "not-asserted"
+
+[provenance."qiagen-alltaq-master-mix-203144"]
+url = "https://go.qiagen.com/AllTaq"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "183f67cf2489db7f77740b06f7a4126e052e257d31aba7ad229e82ac07b4e59e"
+availability_scope = "not-asserted"
+
+[provenance."qiagen-qiacuity-eg"]
+url = "https://www.qiagen.com/gb/resources/protocols/hb-2791-003-ll-qiacuityevagreenpcr-0121-ww-1123717"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "3397e2cbd06dadcd29ab715e8e9e4cd7ebe3a269ec1871acf3c327d4f87f7638"
+availability_scope = "not-asserted"
+
+[provenance."qiagen-qiacuity-onestep-advanced-eg"]
+url = "https://www.qiagen.com/us/resources/download/KitHandbook/hb-3478-003-hb-qiacuity-onestep-advanced-eg-0325-ww"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "29f8ca5ac7dba568380b400735f0f6f440be03c90a00e40d2a64f0ef252a8cd6"
+availability_scope = "not-asserted"
+
+[provenance."qiagen-quantinova-sybr-208052"]
+url = "https://www.qiagen.com/en-US/resources/download/KitHandbook/quantinova-sybr-green-pcr-handbook"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "e179ac4979e1814d0aba2ff5bec71187363d6988a302da3baa17bdced4d74e3d"
+availability_scope = "not-asserted"
+
+[provenance."qiagen-ultrarun-longrange-206442-206444"]
+url = "https://www.qiagen.com/en-US/resources/download/KitHandbook/hb-2686-002-hb-ultrarun-longrangepcr-0224-ww"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "5863502cf097137235337f63fa1874b5b39e608957205be798f459938d447f2a"
+availability_scope = "not-asserted"
+
+[provenance."siba-reference"]
+url = "https://pubmed.ncbi.nlm.nih.gov/25419812/"
+kind = "literature_reference"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "184391f7465171a2140aed3d7d188c8b8f50dadbe5cf079c0033065a03b7498e"
+availability_scope = "not-asserted"
+
+[provenance."solis-hot-firepol-evagreen-capillary"]
+url = "https://solisbiodyne.com/pics/6570_SBDproductcatalogue.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "1c6e7eb6c689e5e4b971985dcbb68ca4de8903ac0a416deb815d5a29a542e156"
+availability_scope = "not-asserted"
+
+[provenance."solis-hot-firepol-evagreen-norox"]
+url = "https://solisbiodyne.com/EN/product/name=HOT-FIREPol-EvaGreen-qPCR-Mix-Plus&catno=08-25-0000S"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "69a07b1d902ebd6ad73aba7876ae572d99984d555c26314c8d84b4b255527e34"
+availability_scope = "not-asserted"
+
+[provenance."solis-hot-firepol-evagreen-rox"]
+url = "https://solisbiodyne.com/pics/9799_DS-08-24_v3_HOT_FIREPol_EvaGreen_qPCR_Mix_Plus_ROX_revised_12.04.2022.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "0bfa18d2cf04cd7be4b729a25cc0cc979422f1fadf112c86d700910b37ab6edb"
+availability_scope = "not-asserted"
+
+[provenance."takara-primestar-gxl-r050a-standard"]
+url = "https://takara.co.kr/file/manual/pdf/R050A_e.v1906Da.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "1f333aa7466803405006ef3f761c0a3200d89ad1aa88b056ff8c75ce0b73d972"
+availability_scope = "not-asserted"
+
+[provenance."thermo-dreamtaq-hot-start-ep170x"]
+url = "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0015972_ThermoScientificDreamTaqHotStartDNAPolymerase.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "7e39defac30518cc10dce7671ab8e736c657bc0ad9034c6ef20bfb22e33d2dd4"
+availability_scope = "not-asserted"
+
+[provenance."thermo-fastdigest-universal"]
+url = "https://documents.thermofisher.com/TFS-Assets/BID/Reference-Materials/fastdigest-restriction-enzymes-labaid.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "013bf46c0012aee2cd288929e101eea72950a9dd41ddf40f144ccbc3c1600b54"
+availability_scope = "not-asserted"
+
+[provenance."thermo-long-pcr-k018x"]
+url = "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0012921_Long_PCR_Enzyme_k0182_UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "1586a3e7c8126155c1319cd8104485a33c23149843cf781ae9d946826b1d81e3"
+availability_scope = "not-asserted"
+
+[provenance."thermo-lyo-ready-rpa"]
+url = "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN1000697-LyoReadyRPA-UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "33d3bb169e088d320ae526b3ba5304be96cf2d03a57523b5dd5db289e7f7a85a"
+availability_scope = "not-asserted"
+
+[provenance."thermo-phusion-plus"]
+url = "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0025053-PhusionPlusDNAPolymerase-UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "0bcf3492ea74897a56d49791bde9a41bde4972380ab22adc1194a7c588493860"
+availability_scope = "not-asserted"
+
+[provenance."thermo-platinum-ii-taq-hot-start"]
+url = "https://documents.thermofisher.com/TFS-Assets/BID/manuals/MAN0017534_Platinum_II_Taq_HS_DNA_Pol_UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "0a031d5cea1a81cfdb97fb6898f24d5b71b222596db61ada0c26cc8eb521c437"
+availability_scope = "not-asserted"
+
+[provenance."thermo-platinum-superfi-ii"]
+url = "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018860-PlatinumSuperFi-II-PCRMasterMix-UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "e397c264d396cb2f1cf022e20497e413cd71d1bbb9e84e638abc2a4c043995d9"
+availability_scope = "not-asserted"
+
+[provenance."thermo-platinum-superfi-ii-longrange"]
+url = "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018859_Platinum_SuperFi_II_DNA_Pol_UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "c1a18b259a4299ea8d7c4831f659bd0d2300dec282d4c73c4b7deae57835604b"
+availability_scope = "not-asserted"
+
+[provenance."thermo-powertrack-sybr-a46xxx"]
+url = "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018825_PowerTrackSYBRGreenMasterMix_UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "c5cb650b7a766eadda712ef3a2e2bdd94691a7660d9fc275a1afa8750765edce"
+availability_scope = "not-asserted"
+
+[provenance."thermo-powerup-sybr-a2574x"]
+url = "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0013511_PowerUp_mastermix_UG.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "4ff6b57372e82187da46252199d7dc5cca483306230178aeb3f5c92dbae2a598"
+availability_scope = "not-asserted"
+
+[provenance."toyobo-kod-long-kml101"]
+url = "https://www.toyobo-global.com/products/lifescience/products/pcr_022/index.html"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "8d2c3681989c53aa128372f9efa9c415ec81162d35b45d60ae9299613f7dbe78"
+availability_scope = "not-asserted"
+
+[provenance."toyobo-kod-one-kmm101"]
+url = "https://www.toyobo-global.com/sites/default/static_root/products/lifescience/support/manual/KMM-101_201.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "261bb025b0c6db8e319a9b4380758a7df3e27cda4e5a8ac5410a8b1c53c269bc"
+availability_scope = "not-asserted"
+
+[provenance."twistamp-basic"]
+url = "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "96db5ffd5a442287537d061c4705e058696354663ade460a8cf851416fea2eab"
+availability_scope = "not-asserted"
+
+[provenance."twistamp-exo"]
+url = "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "5b79f9f2adcc6231f9126491ffef3bdb0b7e4f22ec1a2f93edb43e863fc131d8"
+availability_scope = "not-asserted"
+
+[provenance."twistamp-fpg"]
+url = "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "af48c520af1139c3fea412f4bd436981bc4dbd084c210835248db158561c379d"
+availability_scope = "not-asserted"
+
+[provenance."twistamp-liquid-basic"]
+url = "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "069a3f8faf5c697848e25cface426ca2b81ca13e908b41742f39181cf42087e5"
+availability_scope = "not-asserted"
+
+[provenance."twistamp-nfo"]
+url = "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-04"
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "848b6d1ac0363ac8bbd8f36e4e3fdd17842f709742a885be0b1754b19e85339e"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx600-evagreen-compatibility"]
+url = "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10043138.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-05"
+document_identity = "Bio-Rad Automated Droplet Generator Instruction Manual"
+document_revision = "10043138 reviewed 2026-09-05"
+claim_scope = "QX600 support for ddPCR EvaGreen Supermix; no partition threshold or concentration is inferred from this compatibility claim."
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "ecd80d74794ef8935c0096629d15c9f5a651b22f70b66982dd83edfeee79e8dc"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx-one-evagreen-compatibility"]
+url = "https://www.bio-rad.com/sites/default/files/2021-12/10000135487.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-05"
+document_identity = "Bio-Rad QX ONE Droplet Digital PCR System Instrument Guide"
+document_revision = "reviewed 2026-09-05"
+claim_scope = "QX ONE support for ddPCR EvaGreen Supermix; no generic cluster threshold is inferred."
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "b5e5bae96e3bcf760ab3233ff53019b53c41bbb610821f8a21cbe38e137533bb"
+availability_scope = "not-asserted"
+
+[provenance."bio-rad-qx-continuum-probe-route"]
+url = "https://www.bio-rad.com/sites/default/files/2025-06/10000167515.pdf"
+kind = "vendor_primary_locator"
+reviewed_date = "2026-09-05"
+document_identity = "Bio-Rad QX Continuum ddPCR System Instruction Manual"
+document_revision = "10000167515 reviewed 2026-09-05"
+claim_scope = "Current public QX Continuum workflow is routed to probe chemistry; flanking dye-dPCR remains unavailable rather than inferred."
+snapshot_status = "canonical-claim-snapshot-pinned"
+snapshot_registry = "knowledge/sources/flanking-source-snapshots.json"
+claim_snapshot_sha256 = "768e30e93fdf99a8aeba326845430d57e0b0a2cb1968ae2c75ab285740ce9c81"
+availability_scope = "not-asserted"

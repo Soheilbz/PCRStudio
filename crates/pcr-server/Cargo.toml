@@ -1,0 +1,36 @@
+[package]
+name = "pcr-server"
+description = "HTTP API exposing the PCRStudio design core."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+pcr-application.workspace = true
+axum.workspace = true
+chrono.workspace = true
+pcr-accounts.workspace = true
+pcr-core.workspace = true
+pcr-contracts.workspace = true
+pcr-projects.workspace = true
+pcr-storage.workspace = true
+pcr-security.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tower-http.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
+sqlx.workspace = true
+
+[lints]
+workspace = true

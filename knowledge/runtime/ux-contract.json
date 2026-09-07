@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "status": "generation-1-ui-contract",
+  "scope": {
+    "modules": 21,
+    "engines": 11,
+    "surface": "design-workbench-and-results"
+  },
+  "principles": [
+    "assay-specific-workflow-not-generic-wizard",
+    "progressive-disclosure",
+    "deterministic-recommendation-not-biological-guarantee",
+    "separate-computational-external-and-wet-lab-claims",
+    "no-fake-progress",
+    "keyboard-and-pointer-equivalence",
+    "reduced-motion-respected",
+    "advanced-parameters-available-with-default-origin-visible",
+    "verified-example-sequences-only",
+    "exportable-order-and-provenance-output"
+  ],
+  "input_contract": {
+    "accepted_entry_modes": [
+      "paste-fasta-or-sequence",
+      "local-file",
+      "accession-lookup"
+    ],
+    "verified_examples": {
+      "required": true,
+      "must_match_versioned_corpus": true,
+      "checksum": "sha256-normalized-nucleotide-sequence"
+    },
+    "long_forms": "split-into-assay-specific-logical-steps",
+    "progress_indicator": "show-current-step-and-total-when-host-workbench-renders-page-plan",
+    "optional_controls": "show-only-when-relevant-to-module",
+    "advanced_controls": "progressively-disclosed",
+    "non_default_values": "preserve-origin-and-show-overridden-values-in-result"
+  },
+  "interaction_contract": {
+    "minimum_pointer_target_css_px": 24,
+    "dragging": "must-have-non-drag-alternative",
+    "focus": "visible-and-not-obscured-by-sticky-chrome",
+    "status_messages": "programmatically-exposed",
+    "errors": "identify-field-explain-repair-and-focus-first-invalid-when-host-form-submission-fails",
+    "motion": "respect-prefers-reduced-motion",
+    "running": "do-not-display-fabricated-percent-or-stage; show elapsed-time-and-honest-phase-copy-until-real-telemetry-exists"
+  },
+  "result_contract": {
+    "first_view": [
+      "recommended-computational-design",
+      "module-and-engine",
+      "independent-evidence-state",
+      "wet-lab-claim-state"
+    ],
+    "terminology": {
+      "preferred": "top-ranked under active assay profile",
+      "forbidden_absolute_claims": [
+        "best primer",
+        "guaranteed primer",
+        "validated assay"
+      ]
+    },
+    "candidate_comparison": "summary-matrix-first; one-selected-full-card-by-default; other-full-cards-on-demand",
+    "scientific_evidence": "external database hits are evidence and affect selection only under an explicit target-aware interpretation contract",
+    "provenance": "technical tool/version/parameter/database evidence remains inspectable but collapsed for routine use",
+    "exports": [
+      "supplier-ready-order-sheet",
+      "csv",
+      "idt-csv-when-supported",
+      "fasta",
+      "printable-summary"
+    ]
+  },
+  "accessibility_reference": "WCAG-2.2-AA-target; host application must run Linux-side automated and manual accessibility checks after merge"
+}

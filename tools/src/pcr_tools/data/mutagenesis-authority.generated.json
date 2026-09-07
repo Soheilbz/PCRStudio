@@ -1,0 +1,153 @@
+{
+  "authority_id": "pcrstudio-mutagenesis-authority",
+  "catalogue_snapshot": "2026-09",
+  "groups": {
+    "codon_policies": [
+      "minimum-nucleotide-changes",
+      "user-selected-codon",
+      "host-codon-usage"
+    ],
+    "edit_kinds": [
+      "substitute",
+      "insert",
+      "delete"
+    ],
+    "library_modes": [
+      "none",
+      "NNK",
+      "NNS",
+      "custom-codon-set"
+    ],
+    "protocols": [
+      "neb-q5-e0554",
+      "agilent-quikchange-lightning-210518",
+      "agilent-quikchange-lightning-multi-210513-210516",
+      "neb-nebuilder-multisite"
+    ],
+    "topology_families": [
+      "q5-back-to-back",
+      "quikchange-complementary",
+      "quikchange-lightning-multi",
+      "nebuilder-multisite"
+    ]
+  },
+  "policies": {
+    "construct_truth": "Every result reconstructs the exact predicted edited construct and carries an explicit sequence diff; mutation success still requires clone-level empirical verification.",
+    "topology_separation": "Q5 back-to-back, QuikChange complementary, QuikChange Multi and NEBuilder multi-site are distinct topologies and cannot be represented as presets of one primer geometry."
+  },
+  "records": {
+    "agilent-quikchange-lightning-210518": {
+      "amplification": "linear",
+      "dpnI_required": true,
+      "execution_status": "executable-design-protocol",
+      "gc_percent_min_ideal": 40,
+      "gc_terminal_preference": "one-or-more-C/G-at-3prime-end",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "method_fidelity": "F2-manual-rule-faithful",
+      "mismatch_spacing_rule": "at most 3 consecutive mismatches, or 2 mismatches with at most 9 bases between; protocol-specific",
+      "mutation_min_distance_from_primer_end_nt": 10,
+      "primer_length_nt_max_preferred": 45,
+      "primer_length_nt_min_preferred": 25,
+      "primer_type": "complementary-pair",
+      "secondary_structure_review": "hairpin at or above 55 C requires review/redesign per manual",
+      "selection": "Agilent QuikChange Lightning Site-Directed Mutagenesis Kit 210518/210519",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "small_insertion_software_design_max_nt": 7,
+      "source_identity": "Agilent QuikChange Lightning Instruction Manual 210518",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.agilent.com/cs/library/usermanuals/public/210518.pdf",
+      "template_kb_max": 14,
+      "tm_c_min": 78,
+      "tm_formula": "81.5 + 0.41(%GC) - 675/N - %mismatch; modified N for insertion/deletion designs per manual",
+      "tm_formula_parameters": {
+        "gc_coefficient": 0.41,
+        "intercept": 81.5,
+        "length_coefficient": 675.0,
+        "mismatch_term": "subtract-percent-mismatch"
+      },
+      "topology": "quikchange-complementary",
+      "vendor_primer_design_program_equivalent": false
+    },
+    "agilent-quikchange-lightning-multi-210513-210516": {
+      "execution_status": "executable-design-protocol",
+      "gc_terminal_preference": "one-or-more-C/G-at-3prime-end",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "method_fidelity": "F2-manual-rule-faithful",
+      "methylation": "primers should not be methylated",
+      "mismatch_spacing_rule": "at most 3 consecutive mismatches, or 2 mismatches with at most 9 bases between; protocol-specific",
+      "mutation_min_distance_from_primer_end_nt": 10,
+      "nonoverlap_between_mutagenic_primers": true,
+      "primer_dimer_dg_min_kcal_mol": -9.0,
+      "primer_dimer_rule": "self/heterodimer DeltaG must be greater (closer to zero) than -9 kcal/mol per manual review rule",
+      "primer_length_nt_max_preferred": 45,
+      "primer_length_nt_min": 25,
+      "primers_per_mutation_site": 1,
+      "purification": "HPLC/FPLC/PAGE required by manual",
+      "same_template_strand_required": true,
+      "secondary_structure_review": "hairpin at or above 55 C requires review/redesign per manual",
+      "selection": "Agilent QuikChange Lightning Multi Site-Directed Mutagenesis Kit 210513–210516",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "Agilent QuikChange Lightning Multi manual 210514",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "210514",
+      "source_url": "https://www.agilent.com/Library/usermanuals/Public/210514.pdf",
+      "tm_c_min": 75,
+      "tm_formula": "81.5 + 0.41(%GC) - 675/N - %mismatch",
+      "tm_formula_parameters": {
+        "gc_coefficient": 0.41,
+        "intercept": 81.5,
+        "length_coefficient": 675.0,
+        "mismatch_term": "subtract-percent-mismatch"
+      },
+      "topology": "quikchange-lightning-multi",
+      "vendor_primer_design_program_equivalent": false
+    },
+    "neb-nebuilder-multisite": {
+      "claim_boundary": "This record routes an exact edited construct into PCRStudio Junction Primers/NEBuilder HiFi design. It is not NEBaseChanger primer generation, ranking, or vendor-tool equivalence.",
+      "execution_status": "executable-design-route",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "method_fidelity": "F3-compatible-approximate",
+      "selection": "PCRStudio multi-site NEBuilder HiFi routing informed by NEBaseChanger workflow",
+      "sequence_decision_impact": "routes-to-assembly-engine",
+      "source_identity": "NEBaseChanger v2.8.4 workflow reference; PCRStudio route implementation",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://nebasechanger.neb.com/",
+      "tool_version": "2.8.4",
+      "topology": "nebuilder-multisite",
+      "vendor_tool_equivalent": false
+    },
+    "neb-q5-e0554": {
+      "documented_successful_plasmid_bp": 20000,
+      "documented_successful_plasmid_claim_boundary": "NEB states that no upper limit has been found; 20 kb is a reported successful size, not a maximum supported plasmid size.",
+      "execution_status": "executable-protocol",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "minimum_3prime_template_complement_nt": 10,
+      "non_overlapping": true,
+      "purification_recommended_over_primer_nt": 60,
+      "routine_insertion_max_nt": 100,
+      "selection": "NEB Q5 Site-Directed Mutagenesis Kit E0554",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "small_insertion_max_nt": 6,
+      "source_identity": "NEB Q5 Site-Directed Mutagenesis current product/primer design guidance",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en-us/products/e0554-q5-site-directed-mutagenesis-kit",
+      "split_insertion_per_primer_max_nt": 50,
+      "topology": "q5-back-to-back"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "source_policy": "Only public primary/vendor/official sources are executable authorities. Literature/tool precedents may guide diagnostics or characterization but do not become universal biological rules without a versioned protocol/evidence contract."
+}

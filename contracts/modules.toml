@@ -1,0 +1,1243 @@
+schema_version = "2.1.0"
+contract_version = "generation1-current-2026-09-06"
+profile_source = "crates/pcr-core/profiles.toml"
+
+# Architectural module authority. Scientific numeric profile defaults remain in profiles.toml.
+
+[[module]]
+id = "standard-pcr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "amplify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/02-standard-pcr.md"
+resource_weight = 2
+required_context = []
+wire_required_context = []
+gates = ["flanking_geometry", "primer_thermodynamics", "template_specificity"]
+fallback = "search_more_candidates_within_unchanged_hard_gates"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+circular = "false"
+standardPcrProtocol = "not-selected"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+standardPcrProtocol = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachUm = "reaction"
+flankingAdditive = "reaction"
+flankingGcEnhancerPercent = "reaction"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+flankingTemplateClass = "target"
+[[module.conditional_required_context]]
+required_context = ["flanking_gc_enhancer_percent"]
+[module.conditional_required_context.when]
+"flanking_additive" = "high-gc-enhancer"
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.gc_enhancer_percent"]
+[module.wire_conditional_required_context.when]
+"flanking_numeric_context.additive" = "high-gc-enhancer"
+
+
+[[module]]
+id = "long-range-pcr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "amplify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/03-long-range-pcr.md"
+resource_weight = 2
+required_context = ["long_range_protocol"]
+wire_required_context = ["long_range_protocol"]
+gates = ["long_product_geometry", "proofreading_capability", "protocol_identity", "extension_protocol_compatibility"]
+fallback = "never_substitute_anonymous_long_range_chemistry_or_relax_polymerase_capability"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+circular = "false"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+longRangeProtocol = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachUm = "reaction"
+longRangeTargetLengthKb = "reaction"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+flankingTemplateClass = "target"
+longRangeHmwTemplateVerified = "validation"
+[[module.conditional_required_context]]
+required_context = ["long_range_target_length_kb"]
+[module.conditional_required_context.when]
+"long_range_protocol" = "toyobo-kod-long-kml101"
+[[module.conditional_required_context]]
+required_context = ["long_range_target_length_kb", "flanking_template_class"]
+[module.conditional_required_context.when]
+"long_range_protocol" = "promega-gotaq-long-m4021"
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.target_length_kb"]
+[module.wire_conditional_required_context.when]
+"long_range_protocol" = "toyobo-kod-long-kml101"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.target_length_kb", "flanking_numeric_context.template_class"]
+[module.wire_conditional_required_context.when]
+"long_range_protocol" = "promega-gotaq-long-m4021"
+
+
+[[module]]
+id = "colony-pcr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "amplify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/04-colony-pcr.md"
+resource_weight = 2
+required_context = ["colony_host_class", "colony_preparation", "colony_protocol_id"]
+wire_required_context = ["colony_host_class", "colony_preparation", "colony_protocol_id"]
+gates = ["screen_product_geometry", "host_class", "colony_preparation_provenance", "colony_lysis_profile", "optional_vector_context", "predicted_screen_status"]
+fallback = "never_invent_colony_lysis_or_bench_status"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+circular = "false"
+vectorPrimerReadsInto = "start"
+colonyScreenStrategy = "insert-specific-pair"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+colonyHostClass = "target"
+colonyPreparation = "reaction"
+colonyProtocolId = "reaction"
+colonyProtocolName = "reaction"
+colonyProtocolProvenance = "reaction"
+colonyInitialDenaturationMin = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachUm = "reaction"
+colonySampleInputUl = "reaction"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+[[module.conditional_required_context]]
+required_context = ["colony_protocol_name", "colony_protocol_provenance"]
+[module.conditional_required_context.when]
+"colony_protocol_id" = "custom-sop"
+[[module.wire_conditional_required_context]]
+required_context = ["colony_protocol_name", "colony_protocol_provenance"]
+[module.wire_conditional_required_context.when]
+"colony_protocol_id" = "custom-sop"
+
+
+[[module]]
+id = "nested-pcr"
+engine = "nested"
+command = "nested"
+status = "experimental"
+goal = "amplify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/nested/02-nested-pcr.md"
+resource_weight = 3
+required_context = ["shares", "margin", "single_tube", "carryover_prevention", "transfer_mode"]
+wire_required_context = ["shares", "margin", "single_tube", "carryover_prevention", "transfer_mode"]
+gates = ["outer_pair", "inner_pair", "strict_containment", "round_specificity", "causal_nested_false_product_graph", "cross_round_interaction", "round_specific_reaction_identity", "transfer_cleanup_provenance", "contamination_evidence_separation", "single_tube_generic_fail_closed_unless_supported_mechanism"]
+fallback = "outer_and_inner_search_expand_only_within_unchanged_round_profiles_and_never_invent_transfer_cleanup_or_carryover_chemistry"
+[module.page]
+unit_one = "scheme"
+unit_many = "schemes"
+unit_how = "How many nested schemes to return"
+asks = []
+tools = []
+[module.page.initial]
+[module.page.fixed]
+singleTube = "false"
+[module.field_owners]
+shares = "design"
+margin = "design"
+singleTube = "design"
+carryoverPrevention = "reaction"
+transferMode = "reaction"
+cleanupProtocol = "reaction"
+transferVolumeUl = "reaction"
+transferDilutionFactor = "reaction"
+customTransferSop = "reaction"
+round1Polymerase = "reaction"
+round2Polymerase = "reaction"
+round1Conditions = "reaction"
+round2Conditions = "reaction"
+round1ThermalProgram = "reaction"
+round2ThermalProgram = "reaction"
+nestedRound1Ntc = "validation"
+nestedRound2Ntc = "validation"
+nestedPositiveControl = "validation"
+nestedPrePcrArea = "validation"
+nestedRound1Area = "validation"
+nestedTransferArea = "validation"
+nestedRound2Area = "validation"
+nestedTransferRunId = "validation"
+nestedSourceTubeWell = "validation"
+nestedDestinationTubeWell = "validation"
+nestedRound1ObservedBandBp = "validation"
+nestedRound2ObservedBandBp = "validation"
+nestedSequenceConfirmation = "validation"
+nestedRawDataReference = "validation"
+[[module.conditional_required_context]]
+required_context = ["cleanup_protocol"]
+[module.conditional_required_context.when]
+"transfer_mode" = "msz-exonuclease-i"
+[[module.conditional_required_context]]
+required_context = ["cleanup_protocol"]
+[module.conditional_required_context.when]
+"transfer_mode" = "thermolabile-exonuclease-i"
+[[module.conditional_required_context]]
+required_context = ["transfer_dilution_factor"]
+[module.conditional_required_context.when]
+"transfer_mode" = "diluted-transfer"
+[[module.conditional_required_context]]
+required_context = ["custom_transfer_sop"]
+[module.conditional_required_context.when]
+"transfer_mode" = "custom-sop"
+[[module.wire_conditional_required_context]]
+required_context = ["cleanup_protocol"]
+[module.wire_conditional_required_context.when]
+"transfer_mode" = "msz-exonuclease-i"
+
+[[module.wire_conditional_required_context]]
+required_context = ["cleanup_protocol"]
+[module.wire_conditional_required_context.when]
+"transfer_mode" = "thermolabile-exonuclease-i"
+
+[[module.wire_conditional_required_context]]
+required_context = ["transfer_dilution_factor"]
+[module.wire_conditional_required_context.when]
+"transfer_mode" = "diluted-transfer"
+
+[[module.wire_conditional_required_context]]
+required_context = ["custom_transfer_sop"]
+[module.wire_conditional_required_context.when]
+"transfer_mode" = "custom-sop"
+
+
+[[module]]
+id = "inverse-pcr"
+engine = "outward-pair"
+command = "inverse"
+status = "experimental"
+goal = "amplify"
+input_model = "known-anchor-plus-preparation"
+atlas_document = "knowledge/atlas/engines/outward-pair/02-inverse-pcr.md"
+resource_weight = 2
+required_context = ["inverse_branch", "circularization_provenance"]
+wire_required_context = ["inverse_branch", "circularization_provenance"]
+gates = ["circular_or_digest_topology", "named_branch_identity", "outward_orientation", "junction_reconstruction", "restriction_enzyme_suitability", "per_end_phosphate_state", "circularization_provenance", "linear_control_provenance", "methylation_branch", "unknown_flank_bounds", "fragment_circle_feasibility", "diagnostic_enzyme_cohort", "full_reference_topology_validation", "explicit_full_reference_enzyme_cohort", "sequencing_handoff", "predicted_result_status", "validation_evidence_separation"]
+fallback = "never_invent_topology_unknown_flank_fragment_length_or_bench_status"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+inverseBranch = "restriction-self-ligation"
+[module.page.fixed]
+[module.field_owners]
+inverseBranch = "strategy"
+enzyme = "strategy"
+circleLength = "target"
+enzymeCohortSize = "validation"
+inverseReferenceSequence = "target"
+inverseReferenceCircular = "target"
+inverseCandidateEnzymes = "validation"
+mappingUseCase = "strategy"
+leftEndPhosphate = "strategy"
+rightEndPhosphate = "strategy"
+circularizationProvenance = "strategy"
+linearControlProvenance = "strategy"
+methylationBranch = "strategy"
+workflowEvidence = "validation"
+[[module.conditional_required_context]]
+required_context = ["enzyme", "left_end_phosphate", "right_end_phosphate", "linear_control_provenance", "methylation_branch"]
+[module.conditional_required_context.when]
+"inverse_branch" = "restriction-self-ligation"
+[[module.conditional_required_context]]
+required_context = ["circle_length"]
+[module.conditional_required_context.when]
+"inverse_branch" = "supplied-circular-template"
+[[module.wire_conditional_required_context]]
+required_context = ["enzyme", "left_end_phosphate", "right_end_phosphate", "linear_control_provenance", "methylation_branch"]
+[module.wire_conditional_required_context.when]
+"inverse_branch" = "restriction-self-ligation"
+
+[[module.wire_conditional_required_context]]
+required_context = ["circle_length"]
+[module.wire_conditional_required_context.when]
+"inverse_branch" = "supplied-circular-template"
+
+
+[[module]]
+id = "qpcr-sybr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "quantify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/05-qpcr-sybr.md"
+resource_weight = 2
+required_context = []
+wire_required_context = []
+gates = ["short_qpcr_product", "primer_specificity", "dimer_sensitivity", "shared_tm"]
+fallback = "search_expand_only_within_qpcr_profile"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+circular = "false"
+qpcrProtocol = "not-selected"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+qpcrProtocol = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachNm = "reaction"
+flankingAdditive = "reaction"
+qpcrCyclingProfile = "reaction"
+flankingTemplateFractionPercent = "reaction"
+qpcrInstrumentProfile = "reaction"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+flankingTemplateClass = "target"
+[[module.conditional_required_context]]
+required_context = ["qpcr_cycling_profile"]
+[module.conditional_required_context.when]
+"qpcr_protocol" = "thermo-powertrack-sybr-a46xxx"
+[[module.conditional_required_context]]
+required_context = ["qpcr_instrument_profile"]
+[module.conditional_required_context.when]
+"qpcr_protocol" = "qiagen-quantinova-sybr-208052"
+[[module.conditional_required_context]]
+required_context = ["qpcr_instrument_profile"]
+[module.conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-rox"
+[[module.conditional_required_context]]
+required_context = ["qpcr_instrument_profile"]
+[module.conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-norox"
+[[module.conditional_required_context]]
+required_context = ["qpcr_instrument_profile"]
+[module.conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-capillary"
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.cycling_profile"]
+[module.wire_conditional_required_context.when]
+"qpcr_protocol" = "thermo-powertrack-sybr-a46xxx"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.qpcr_instrument_profile"]
+[module.wire_conditional_required_context.when]
+"qpcr_protocol" = "qiagen-quantinova-sybr-208052"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.qpcr_instrument_profile"]
+[module.wire_conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-rox"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.qpcr_instrument_profile"]
+[module.wire_conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-norox"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.qpcr_instrument_profile"]
+[module.wire_conditional_required_context.when]
+"qpcr_protocol" = "solis-hot-firepol-evagreen-capillary"
+
+
+[[module]]
+id = "qpcr-probe"
+engine = "pair-and-probe"
+command = "probe"
+status = "experimental"
+goal = "quantify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/pair-and-probe/02-qpcr-probe.md"
+resource_weight = 3
+required_context = ["probe_protocol", "probe_chemistry", "probe_reporter", "probe_quencher"]
+wire_required_context = ["probe_protocol", "probe_chemistry", "probe_reporter", "probe_quencher"]
+gates = ["primer_pair", "probe_inside_product", "chemistry_specific_probe_tm_model", "probe_structure", "same_buffer_thermodynamics", "primer_probe_interactions", "named_probe_chemistry", "probe_optical_configuration", "probe_signal_specificity", "transcript_provenance", "multiplex_channel_compatibility", "miqe_evidence_separation", "mgb_exact_tm_fail_closed_without_authority", "mgb_external_authority_exchange", "mgb_candidate_set_hash_integrity", "combined_amplicon_probe_specificity"]
+fallback = "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model"
+[module.page]
+unit_one = "assay"
+unit_many = "assays"
+unit_how = "How many assays to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+probeProtocol = "thermofisher-taqman-conventional"
+probeChemistry = "conventional-hydrolysis"
+[module.page.fixed]
+[module.field_owners]
+probeProtocol = "design"
+probeChemistry = "design"
+probeReporter = "reaction"
+probeQuencher = "reaction"
+probeInternalQuencher = "reaction"
+probeInstrumentProfile = "reaction"
+probeOpticalAuthorityPayload = "validation"
+probeMgbAuthorityMode = "validation"
+probeMgbAuthorityPayload = "validation"
+probeTranscriptMode = "target"
+probeTranscriptJunctions = "target"
+probeVariantPositions = "validation"
+probeMultiplexPanel = "design"
+workflowEvidence = "validation"
+[[module.conditional_required_context]]
+required_context = ["probe_internal_quencher"]
+[module.conditional_required_context.when]
+"probe_protocol" = "idt-primetime-conventional"
+[[module.wire_conditional_required_context]]
+required_context = ["probe_internal_quencher"]
+[module.wire_conditional_required_context.when]
+"probe_protocol" = "idt-primetime-conventional"
+[[module.conditional_required_context]]
+required_context = ["probe_mgb_authority_mode"]
+[module.conditional_required_context.when]
+"probe_protocol" = "taqman-mgb-reference"
+[[module.wire_conditional_required_context]]
+required_context = ["probe_mgb_authority_mode"]
+[module.wire_conditional_required_context.when]
+"probe_protocol" = "taqman-mgb-reference"
+
+
+[[module]]
+id = "digital-pcr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "quantify"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/06-digital-pcr.md"
+resource_weight = 2
+required_context = ["digital_partition_format", "digital_platform_id", "digital_fragmentation_state"]
+wire_required_context = ["digital_partition_format", "digital_platform_id", "digital_fragmentation_state"]
+gates = ["short_product", "partition_compatible_assay", "partition_format", "platform_identity", "platform_protocol_identity_consistency", "fragmentation_state", "digital_multiplex_architecture", "digital_multiplex_platform_bound", "specificity", "shared_tm", "measured_run_quantification_boundary"]
+fallback = "never_infer_platform_identity_or_invent_partition_threshold_or_fragmentation"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+digitalProtocol = "not-selected"
+digitalMultiplexMode = "none"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+digitalFragmentationState = "target"
+digitalPartitionFormat = "reaction"
+digitalPlatformId = "reaction"
+digitalPlatformName = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachUm = "reaction"
+flankingPrimerEachNm = "reaction"
+digitalPartitionFormatDetail = "reaction"
+digitalConsumableId = "reaction"
+digitalEffectivePartitionVolumeNl = "validation"
+digitalFragmentationEnzyme = "target"
+digitalMultiplexMode = "reaction"
+digitalMultiplexPanel = "design"
+digitalRunEvidence = "validation"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+flankingTemplateClass = "target"
+[[module.conditional_required_context]]
+required_context = ["digital_platform_name"]
+[module.conditional_required_context.when]
+"digital_platform_id" = "other-validated"
+[[module.conditional_required_context]]
+required_context = ["digital_partition_format_detail"]
+[module.conditional_required_context.when]
+"digital_protocol" = "qiagen-qiacuity-eg"
+[[module.conditional_required_context]]
+required_context = ["digital_partition_format_detail"]
+[module.conditional_required_context.when]
+"digital_protocol" = "qiagen-qiacuity-onestep-advanced-eg"
+[[module.wire_conditional_required_context]]
+required_context = ["digital_platform_name"]
+[module.wire_conditional_required_context.when]
+"digital_platform_id" = "other-validated"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.partition_format_detail"]
+[module.wire_conditional_required_context.when]
+"digital_protocol" = "qiagen-qiacuity-eg"
+
+[[module.wire_conditional_required_context]]
+required_context = ["flanking_numeric_context.partition_format_detail"]
+[module.wire_conditional_required_context.when]
+"digital_protocol" = "qiagen-qiacuity-onestep-advanced-eg"
+
+
+[[module]]
+id = "arms-pcr"
+engine = "discriminating-pair"
+command = "discriminate"
+status = "experimental"
+goal = "genotype"
+input_model = "sequence-plus-variant"
+atlas_document = "knowledge/atlas/engines/discriminating-pair/02-arms-pcr.md"
+resource_weight = 2
+required_context = ["variant.type", "variant.at", "variant.ref", "variant.alt"]
+wire_required_context = ["variant.type", "variant.at", "variant.ref", "variant.alt"]
+gates = ["variant_normalization", "reference_provenance", "nearby_variant_masking", "three_prime_allele_identity", "polymerase_scoped_mismatch_evidence", "differential_extension", "paired_allele_empirical_validation_boundary"]
+fallback = "preserve_discrimination"
+[module.page]
+unit_one = "assay"
+unit_many = "assays"
+unit_how = "How many assays to return"
+asks = []
+tools = []
+[module.page.initial]
+[module.page.fixed]
+geometry = "arms-two-tube"
+[module.field_owners]
+variantType = "design"
+variantAt = "design"
+variantRef = "design"
+variantAlt = "design"
+variantReferenceAccession = "target"
+variantAssembly = "target"
+variantCoordinateSystem = "target"
+variantStrand = "target"
+variantRsid = "target"
+nearbyVariantsVcf = "validation"
+mismatchEvidenceProfile = "design"
+armsNtcStatus = "validation"
+armsKnownGenotypeControls = "validation"
+armsObservedDiscrimination = "validation"
+armsRawDataReference = "validation"
+armsValidationNotes = "validation"
+
+[[module]]
+id = "tetra-primer-arms"
+engine = "discriminating-pair"
+command = "discriminate"
+status = "experimental"
+goal = "genotype"
+input_model = "sequence-plus-variant"
+atlas_document = "knowledge/atlas/engines/discriminating-pair/04-tetra-primer-arms.md"
+resource_weight = 2
+required_context = ["variant.type", "variant.at", "variant.ref", "variant.alt", "tetra_min_band_separation_bp", "tetra_readout"]
+wire_required_context = ["variant.type", "variant.at", "variant.ref", "variant.alt", "tetra_min_band_separation_bp", "tetra_readout"]
+gates = ["variant_normalization", "reference_provenance", "nearby_variant_masking", "four_primer_geometry", "diagnostic_band_separation", "readout_context", "multi_oligo_interactions", "empirical_genotype_evidence_boundary"]
+fallback = "preserve_diagnostic_geometry"
+[module.page]
+unit_one = "assay"
+unit_many = "assays"
+unit_how = "How many assays to return"
+asks = []
+tools = []
+[module.page.initial]
+[module.page.fixed]
+geometry = "tetra"
+[module.field_owners]
+variantType = "design"
+variantAt = "design"
+variantRef = "design"
+variantAlt = "design"
+variantReferenceAccession = "target"
+variantAssembly = "target"
+variantCoordinateSystem = "target"
+variantStrand = "target"
+variantRsid = "target"
+nearbyVariantsVcf = "validation"
+mismatchEvidenceProfile = "design"
+tetraMinBandSeparationBp = "validation"
+tetraReadout = "validation"
+tetraGelPercent = "validation"
+tetraLadder = "validation"
+tetraRunContext = "validation"
+tetraNtcStatus = "validation"
+tetraKnownGenotypeControls = "validation"
+tetraObservedBands = "validation"
+tetraOuterControlBand = "validation"
+tetraGelImageReference = "validation"
+tetraValidationNotes = "validation"
+
+[[module]]
+id = "kasp"
+engine = "discriminating-pair"
+command = "discriminate"
+status = "experimental"
+goal = "genotype"
+input_model = "sequence-plus-variant"
+atlas_document = "knowledge/atlas/engines/discriminating-pair/03-kasp.md"
+resource_weight = 2
+required_context = ["variant.type", "variant.at", "kasp_assay_mode", "kasp_protocol"]
+wire_required_context = ["variant.type", "variant.at", "kasp_assay_mode", "kasp_protocol"]
+gates = ["variant_normalization", "reference_provenance", "nearby_variant_masking", "explicit_assay_mode", "kasp_endpoint_fret_chemistry", "nonproofreading_polymerase", "allele_specific_or_plus_minus_geometry", "common_primer_geometry", "protocol_specific_product_envelope", "fixed_fam_hex_tail_assignment", "singleplex_readout", "annealing_vs_ordered_sequence", "target_aware_specificity", "endpoint_evidence_separation", "no_proprietary_kraken_equivalence_claim"]
+fallback = "never_relax_discrimination_chemistry_or_standard_lgc_product_ceiling"
+[module.page]
+unit_one = "assay"
+unit_many = "assays"
+unit_how = "How many assays to return"
+asks = []
+tools = []
+[module.page.initial]
+[module.page.fixed]
+geometry = "kasp"
+kaspAssayMode = "biallelic-genotype"
+[module.field_owners]
+variantType = "design"
+variantAt = "design"
+variantRef = "design"
+variantAlt = "design"
+variantReferenceAccession = "target"
+variantAssembly = "target"
+variantCoordinateSystem = "target"
+variantStrand = "target"
+variantRsid = "target"
+nearbyVariantsVcf = "validation"
+mismatchEvidenceProfile = "design"
+kaspAssayMode = "design"
+kaspProtocol = "reaction"
+kaspPlateFormat = "reaction"
+kaspInstrumentModel = "reaction"
+kaspRoxPolicy = "reaction"
+kaspSamples = "validation"
+kaspCalledSamples = "validation"
+kaspCallRatePercent = "validation"
+kaspControlConcordancePercent = "validation"
+kaspNtcStatus = "validation"
+kaspKnownGenotypeControls = "validation"
+kaspRareAlleleControl = "validation"
+kaspInstrumentSoftware = "validation"
+kaspEndpointDataReference = "validation"
+kaspClusterReview = "validation"
+kaspAmbiguousWells = "validation"
+kaspValidationNotes = "validation"
+[[module.conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.conditional_required_context.when]
+"variant.type" = "snv"
+[[module.conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.conditional_required_context.when]
+"variant.type" = "mnv"
+[[module.conditional_required_context]]
+required_context = ["variant.alt"]
+[module.conditional_required_context.when]
+"variant.type" = "insertion"
+[[module.conditional_required_context]]
+required_context = ["variant.ref"]
+[module.conditional_required_context.when]
+"variant.type" = "deletion"
+[[module.conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.conditional_required_context.when]
+"variant.type" = "complex-replacement"
+[[module.conditional_required_context]]
+required_context = ["variant.ref"]
+[module.conditional_required_context.when]
+"variant.type" = "presence-absence"
+[[module.conditional_required_context]]
+required_context = ["kasp_plate_format", "kasp_instrument_model", "kasp_rox_policy"]
+[module.conditional_required_context.when]
+"kasp_protocol" = "lgc-standard"
+[[module.conditional_required_context]]
+required_context = ["kasp_plate_format", "kasp_instrument_model", "kasp_rox_policy"]
+[module.conditional_required_context.when]
+"kasp_protocol" = "lgc-kasp-tf-v5"
+[[module.wire_conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "snv"
+
+[[module.wire_conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "mnv"
+
+[[module.wire_conditional_required_context]]
+required_context = ["variant.alt"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "insertion"
+
+[[module.wire_conditional_required_context]]
+required_context = ["variant.ref"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "deletion"
+
+[[module.wire_conditional_required_context]]
+required_context = ["variant.ref", "variant.alt"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "complex-replacement"
+
+[[module.wire_conditional_required_context]]
+required_context = ["variant.ref"]
+[module.wire_conditional_required_context.when]
+"variant.type" = "presence-absence"
+
+[[module.wire_conditional_required_context]]
+required_context = ["kasp_plate_format", "kasp_instrument_model", "kasp_rox_policy"]
+[module.wire_conditional_required_context.when]
+"kasp_protocol" = "lgc-standard"
+
+[[module.wire_conditional_required_context]]
+required_context = ["kasp_plate_format", "kasp_instrument_model", "kasp_rox_policy"]
+[module.wire_conditional_required_context.when]
+"kasp_protocol" = "lgc-kasp-tf-v5"
+
+
+[[module]]
+id = "species-specific-pcr"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "detect"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/07-species-specific-pcr.md"
+resource_weight = 2
+required_context = ["background", "inclusivity", "inclusivity_panel_provenance", "background_panel_provenance", "species_panel_selection_rationale", "species_target_taxid", "species_taxonomy_snapshot", "species_database_snapshot", "species_panel_accession_manifest", "species_panel_record_metadata_manifest", "species_panel_retrieved_date"]
+wire_required_context = ["background", "inclusivity", "inclusivity_panel_provenance", "background_panel_provenance", "species_panel_selection_rationale", "species_target_taxid", "species_taxonomy_snapshot", "species_database_snapshot", "species_panel_accession_manifest", "species_panel_record_metadata_manifest", "species_panel_retrieved_date"]
+gates = ["target_inclusivity", "required_exclusion_background", "product_specificity"]
+fallback = "never_drop_exclusion_background"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+background = "specificity"
+inclusivity = "specificity"
+inclusivityPanelProvenance = "specificity"
+backgroundPanelProvenance = "specificity"
+speciesPanelSelectionRationale = "specificity"
+speciesTargetTaxid = "specificity"
+speciesTaxonomySnapshot = "specificity"
+speciesDatabaseSnapshot = "specificity"
+speciesPanelAccessionManifest = "specificity"
+speciesPanelRecordMetadataManifest = "specificity"
+speciesPanelRetrievedDate = "specificity"
+
+[[module]]
+id = "lamp"
+engine = "loop-set"
+command = "loop_set"
+status = "experimental"
+goal = "detect"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/loop-set/02-lamp.md"
+resource_weight = 4
+required_context = []
+wire_required_context = []
+gates = ["f3_b3", "f2_b2", "f1c_b1c", "inner_primer_composition", "spacing_geometry", "loop_primer_geometry", "target_inclusivity_when_supplied", "finite_six_region_background_topology_when_supplied", "indexed_lamp_specificity_evidence_for_large_scope", "set_interaction_risk_review", "independent_lamp_specificity_evidence"]
+fallback = "role_by_role_search_with_unchanged_lamp_geometry"
+[module.page]
+unit_one = "set"
+unit_many = "sets"
+unit_how = "How many sets to return"
+asks = []
+tools = []
+[module.page.initial]
+circular = "false"
+lampReadout = "not-specified"
+lampReadoutChemistry = "not-specified"
+lampSampleMatrix = "not-specified"
+lampSamplePreparation = "not-specified"
+lampFormulation = "not-specified"
+lampConfirmationMode = "not-specified"
+lampDetectionTopology = "nonspecific-dsdna"
+lampDesignIntent = "standard"
+lampLoopPolicy = "prefer-six"
+lampGeometryProfile = "primerexplorer-v5-compat"
+lampInnerLinker = "none"
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+
+[[module]]
+id = "rpa"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "detect"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/08-rpa.md"
+resource_weight = 2
+required_context = ["rpa_protocol"]
+wire_required_context = ["rpa_protocol"]
+gates = ["rpa_compatible_chemistry", "rpa_primer_profile", "target_specificity"]
+fallback = "preserve_rpa_chemistry"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+assayMode = "design"
+[module.page.fixed]
+[module.field_owners]
+rpaProtocol = "reaction"
+flankingReactionVolumeUl = "reaction"
+flankingPrimerEachNm = "reaction"
+rpaTemperatureC = "reaction"
+rpaTimeMin = "reaction"
+rpaBstUnitsPerUl = "reaction"
+rpaMultiplex = "reaction"
+rpaMultiplexPanel = "validation"
+flankingTemplateInputNg = "reaction"
+flankingTemplateInputUl = "reaction"
+flankingTemplateClass = "target"
+
+[[module]]
+id = "universal-primers"
+engine = "consensus-pair"
+command = "universal"
+status = "experimental"
+goal = "detect"
+input_model = "multiple-sequence-alignment"
+atlas_document = "knowledge/atlas/engines/consensus-pair/02-universal-primers.md"
+resource_weight = 4
+required_context = ["alignment_mode", "consensus_policy", "formulation_mode"]
+wire_required_context = ["alignment_mode", "consensus_policy", "formulation_mode"]
+gates = ["msa", "alignment_qc", "alignment_provenance", "conservation", "degeneracy", "exact_member_enumeration_or_explicit_ceiling", "member_coverage", "weighted_or_stratified_coverage_when_selected", "finite_target_vs_nontarget_specificity", "formulation_provenance", "conserved_pair_geometry", "amplicon_informativeness", "alignment_sensitivity"]
+fallback = "declared_alignment_authority_then_search_within_degeneracy_ceiling_without_population_or_global_specificity_overclaim"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = ["tails"]
+tools = []
+[module.page.initial]
+[module.page.fixed]
+[module.field_owners]
+alignmentMode = "design"
+consensusPolicy = "design"
+panelMetadata = "target"
+formulationMode = "reaction"
+formulationTotalConcentrationNm = "reaction"
+nontarget = "validation"
+alternativeAlignment = "validation"
+alignmentAuditBackend = "validation"
+
+[[module]]
+id = "tiled-scheme"
+engine = "tiling-scheme"
+command = "tiling"
+status = "experimental"
+goal = "sequence"
+input_model = "sequence-or-existing-scheme"
+atlas_document = "knowledge/atlas/engines/tiling-scheme/02-tiled-scheme.md"
+resource_weight = 4
+required_context = ["tiling_backend", "tiling_operation", "tiling_alignment_mode"]
+wire_required_context = ["tiling_backend", "tiling_operation", "tiling_alignment_mode"]
+gates = ["backend_identity", "coordinate_normalization", "coverage", "amplicon_overlap", "pool_separation", "variant_risk", "interaction_audit", "scheme_format", "repairability", "backend_score_non_blending", "scheme_lifecycle", "measured_dropout_evidence_separation", "circular_scheme_create", "native_visualisation_artifacts", "observed_depth_import", "dropout_repair_handoff", "scheme_version_diff"]
+fallback = "no_primary_backend_substitution_or_score_blending"
+[module.page]
+unit_one = "scheme"
+unit_many = "schemes"
+unit_how = ""
+asks = ["excluded"]
+tools = []
+[module.page.initial]
+tilingBackend = "primalscheme3"
+tilingOperation = "scheme-create"
+circular = "false"
+[module.page.fixed]
+[module.field_owners]
+tilingBackend = "strategy"
+tilingOperation = "strategy"
+tilingAlignmentMode = "strategy"
+circular = "strategy"
+existingBed = "strategy"
+schemeConfig = "strategy"
+primerName = "strategy"
+overlap = "design"
+panelMode = "design"
+pools = "reaction"
+tilingMinBaseFrequency = "design"
+tilingBacktrack = "design"
+tilingHighGc = "design"
+olivarSeed = "design"
+olivarDegenerateMode = "design"
+olivarCheckVariants = "design"
+tilingTargets = "target"
+schemeVersion = "strategy"
+tilingDepthTsv = "validation"
+tilingDropoutThreshold = "validation"
+workflowEvidence = "validation"
+[[module.conditional_required_context]]
+required_context = ["overlap", "pools"]
+[module.conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "scheme-create"
+[[module.conditional_required_context]]
+required_context = ["overlap", "pools"]
+[module.conditional_required_context.when]
+"tiling_backend" = "compare"
+"tiling_operation" = "scheme-create"
+[[module.conditional_required_context]]
+required_context = ["pools", "panel_mode"]
+[module.conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "panel-create"
+[[module.conditional_required_context]]
+required_context = ["existing_bed", "scheme_config"]
+[module.conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "repair-mode"
+[[module.conditional_required_context]]
+required_context = ["existing_bed", "scheme_config", "primer_name"]
+[module.conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "scheme-replace"
+[[module.wire_conditional_required_context]]
+required_context = ["overlap", "pools"]
+[module.wire_conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "scheme-create"
+
+[[module.wire_conditional_required_context]]
+required_context = ["overlap", "pools"]
+[module.wire_conditional_required_context.when]
+"tiling_backend" = "compare"
+"tiling_operation" = "scheme-create"
+
+[[module.wire_conditional_required_context]]
+required_context = ["pools", "panel_mode"]
+[module.wire_conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "panel-create"
+
+[[module.wire_conditional_required_context]]
+required_context = ["existing_bed", "scheme_config"]
+[module.wire_conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "repair-mode"
+
+[[module.wire_conditional_required_context]]
+required_context = ["existing_bed", "scheme_config", "primer_name"]
+[module.wire_conditional_required_context.when]
+"tiling_backend" = "primalscheme3"
+"tiling_operation" = "scheme-replace"
+
+
+[[module]]
+id = "race"
+engine = "single-primer"
+command = "single"
+status = "experimental"
+goal = "sequence"
+input_model = "sequence-plus-boundary"
+atlas_document = "knowledge/atlas/engines/single-primer/02-race.md"
+resource_weight = 1
+required_context = ["race_chemistry", "race_direction", "race_substrate", "race_preparation", "race_round"]
+wire_required_context = ["race_chemistry", "race_direction", "race_substrate", "race_preparation", "race_round"]
+gates = ["boundary", "extension_direction", "chemistry_specific_gsp_profile", "adapter_partner_identity", "substrate_preparation_provenance", "nested_round_state", "single_primer_specificity", "unknown_end_product_semantics", "sequencing_confirmation_handoff", "candidate_transcript_end_claim_boundary", "smarter_complete_context", "nested_gsp_plan", "polyA_guard_for_3prime_smarter", "validation_evidence_separation"]
+fallback = "boundary_aware_search_without_cross_wiring_race_chemistries"
+[module.page]
+unit_one = "primer"
+unit_many = "primers"
+unit_how = "How many primers to return"
+asks = []
+tools = []
+[module.page.initial]
+raceChemistry = "generacer-kit-25-0355-vl"
+[module.page.fixed]
+[module.field_owners]
+raceChemistry = "reaction"
+raceDirection = "design"
+raceAdapter = "reaction"
+racePartnerSequence = "reaction"
+raceSopRevision = "reaction"
+raceSopSha256 = "reaction"
+raceSubstrate = "reaction"
+racePreparation = "reaction"
+raceRound = "reaction"
+racePolyadenylated = "target"
+workflowEvidence = "validation"
+[[module.conditional_required_context]]
+required_context = ["race_partner_sequence", "race_sop_revision", "race_sop_sha256"]
+[module.conditional_required_context.when]
+"race_chemistry" = "custom"
+[[module.conditional_required_context]]
+required_context = ["race_partner_sequence", "race_sop_revision", "race_sop_sha256"]
+[module.conditional_required_context.when]
+"race_chemistry" = "smarter-race-current"
+[[module.wire_conditional_required_context]]
+required_context = ["race_partner_sequence", "race_sop_revision", "race_sop_sha256"]
+[module.wire_conditional_required_context.when]
+"race_chemistry" = "custom"
+[[module.wire_conditional_required_context]]
+required_context = ["race_partner_sequence", "race_sop_revision", "race_sop_sha256"]
+[module.wire_conditional_required_context.when]
+"race_chemistry" = "smarter-race-current"
+[[module.conditional_required_context]]
+required_context = ["race_polyadenylated"]
+[module.conditional_required_context.when]
+"race_chemistry" = "smarter-race-current"
+"race_direction" = "3prime"
+[[module.wire_conditional_required_context]]
+required_context = ["race_polyadenylated"]
+[module.wire_conditional_required_context.when]
+"race_chemistry" = "smarter-race-current"
+"race_direction" = "3prime"
+
+
+[[module]]
+id = "sequencing-primer"
+engine = "single-primer"
+command = "single"
+status = "experimental"
+goal = "sequence"
+input_model = "sequence-plus-boundary"
+atlas_document = "knowledge/atlas/engines/single-primer/03-sequencing-primer.md"
+resource_weight = 1
+required_context = ["direction", "dead_zone", "read_length", "sequencing_design_profile"]
+wire_required_context = ["direction", "dead_zone", "read_length", "sequencing_design_profile"]
+gates = ["read_direction", "provider_specific_design_envelope", "readable_distance", "single_binding", "submission_values_separated_from_ranking", "bidirectional_route", "instrument_handoff", "universal_primer_exact_unique_reuse", "primer_walking_geometry", "bounded_abif_trace_review", "trace_evidence_separated_from_ranking", "validation_evidence_separation"]
+fallback = "read_window_search_without_mixing_service_submission_values_into_design_ranking"
+[module.page]
+unit_one = "primer"
+unit_many = "primers"
+unit_how = "How many primers to return"
+asks = ["circular"]
+tools = []
+[module.page.initial]
+circular = "false"
+sequencingDesignProfile = "generic-cycle-sequencing"
+sequencingInstrument = "unresolved"
+[module.page.fixed]
+[module.field_owners]
+direction = "design"
+deadZone = "design"
+readLength = "design"
+sequencingDesignProfile = "design"
+sequencingProtocol = "reaction"
+sequencingProvider = "reaction"
+sequencingUniversalPrimerScan = "validation"
+sequencingBidirectional = "design"
+sequencingPrimerWalking = "validation"
+sequencingWalkingOverlap = "design"
+sequencingTraceAb1Base64 = "validation"
+sequencingTraceFilename = "validation"
+sequencingInstrumentName = "reaction"
+workflowEvidence = "validation"
+[[module.conditional_required_context]]
+required_context = ["sequencing_instrument_name"]
+[module.conditional_required_context.when]
+"sequencing_instrument" = "other"
+[[module.wire_conditional_required_context]]
+required_context = ["sequencing_instrument_name"]
+[module.wire_conditional_required_context.when]
+"sequencing_instrument" = "other"
+
+
+[[module]]
+id = "gibson-assembly"
+engine = "junction-primers"
+command = "junction"
+status = "experimental"
+goal = "assemble"
+input_model = "ordered-fragments"
+atlas_document = "knowledge/atlas/engines/junction-primers/02-gibson-assembly.md"
+resource_weight = 2
+required_context = ["assembly_protocol", "assembly_method", "circular"]
+wire_required_context = ["assembly_protocol", "method", "circular"]
+gates = ["fragment_order", "typed_fragment_production", "junction_normalization", "annealing_cores", "method_specific_overlap_authority", "overlap_composition", "whole_oligo_structure", "construct_reconstruction", "circular_rotation_semantics", "feature_integrity", "fragment_molarity_provenance", "validation_evidence_separation"]
+fallback = "preserve_junction_identity"
+[module.page]
+unit_one = "plan"
+unit_many = "plans"
+unit_how = ""
+asks = []
+tools = []
+[module.page.initial]
+assemblyMethod = "gibson"
+assemblyProtocol = "neb-e5510"
+[module.page.fixed]
+[module.field_owners]
+assemblyMethod = "design"
+assemblyProtocol = "reaction"
+circular = "design"
+assemblyInputFragmentCount = "validation"
+assemblyFragmentQc = "validation"
+assemblyConcentrationReference = "validation"
+assemblyMixLot = "validation"
+assemblyIncubationEvidence = "validation"
+assemblyTransformationMethod = "validation"
+assemblyColonyCount = "validation"
+assemblyNegativeControlColonies = "validation"
+assemblyColonyPcrEvidence = "validation"
+assemblyRestrictionVerification = "validation"
+assemblySequenceVerification = "validation"
+assemblyVerifiedCloneCount = "validation"
+assemblyValidationNotes = "validation"
+
+[[module]]
+id = "restriction-cloning"
+engine = "flanking-pair"
+command = "run"
+status = "experimental"
+goal = "assemble"
+input_model = "sequence"
+atlas_document = "knowledge/atlas/engines/flanking-pair/09-restriction-cloning.md"
+resource_weight = 2
+required_context = ["tails.tail_protocol", "tails.forward_enzyme", "tails.reverse_enzyme", "tails.forward_protective_sequence", "tails.reverse_protective_sequence", "restriction_digest_protocol", "restriction_dephosphorylation_protocol", "restriction_ligation_protocol"]
+wire_required_context = ["tails.tail_protocol", "tails.forward_enzyme", "tails.reverse_enzyme", "tails.forward_protective_sequence", "tails.reverse_protective_sequence", "restriction_digest_protocol", "restriction_dephosphorylation_protocol", "restriction_ligation_protocol"]
+gates = ["restriction_site_policy", "tail_composition", "frame_or_product_verification", "annealing_core_quality"]
+fallback = "preserve_required_sites_and_product"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+cloningVectorTopology = "circular"
+cloningSimulationMode = "pydna-if-available"
+[module.page.fixed]
+tailProtocol = "neb-general-6bp"
+[module.field_owners]
+tailProtocol = "vector"
+forwardEnzyme = "vector"
+reverseEnzyme = "vector"
+forwardProtectiveSequence = "vector"
+reverseProtectiveSequence = "vector"
+restrictionDigestProtocol = "reaction"
+restrictionDephosphorylationProtocol = "reaction"
+restrictionLigationProtocol = "reaction"
+cloningCodingIntent = "vector"
+cloningCdsStart = "vector"
+cloningCdsEnd = "vector"
+cloningStopCodonPolicy = "vector"
+cloningFusionTag = "vector"
+cloningLinkerAa = "vector"
+cloningVectorJunctionFrame = "vector"
+
+[[module]]
+id = "site-directed-mutagenesis"
+engine = "mutagenic-pair"
+command = "mutagenic"
+status = "experimental"
+goal = "engineer"
+input_model = "sequence-plus-edit"
+atlas_document = "knowledge/atlas/engines/mutagenic-pair/02-site-directed-mutagenesis.md"
+resource_weight = 2
+required_context = ["mutagenesis_topology", "post_amplification_protocol", "edit_input_mode"]
+wire_required_context = ["mutagenesis_topology", "post_amplification_protocol"]
+wire_required_any_of = [["edit", "edits", "amino_acid_edit", "library_edit"]]
+gates = ["edit_normalization", "multi_edit_overlap_validation", "edited_reference", "topology_specific_geometry", "whole_oligo_quality", "exact_edited_construct", "protein_consequence_when_declared", "library_design_boundary", "protocol_topology_compatibility", "edited_product_verification"]
+fallback = "never_relax_edit_identity"
+[module.page]
+unit_one = "pair"
+unit_many = "pairs"
+unit_how = "How many pairs to return"
+asks = []
+tools = []
+[module.page.initial]
+mutagenesisTopology = "q5-back-to-back"
+postAmplificationProtocol = "neb-q5-e0554"
+editInputMode = "dna"
+libraryMode = "none"
+[module.page.fixed]
+[module.field_owners]
+mutagenesisTopology = "design"
+postAmplificationProtocol = "reaction"
+editInputMode = "design"
+editKind = "design"
+editAt = "design"
+editTo = "design"
+editReplacing = "design"
+editsJson = "design"
+aaCdsStart = "design"
+aaResidue = "design"
+aaFrom = "design"
+aaTo = "design"
+aaCodon = "design"
+codonPolicy = "design"
+codonUsage = "design"
+libraryMode = "design"
+libraryAt = "design"
+libraryCodon = "design"
+templateMethylationStatus = "reaction"
+mutagenesisPcrEvidence = "validation"
+mutagenesisDpnIKldEvidence = "validation"
+mutagenesisTransformationEvidence = "validation"
+mutagenesisColonyCount = "validation"
+mutagenesisClonesScreened = "validation"
+mutagenesisVerifiedCloneCount = "validation"
+mutagenesisSequenceReference = "validation"
+mutagenesisUnintendedMutationStatus = "validation"
+mutagenesisValidationNotes = "validation"
+[[module.conditional_required_context]]
+required_context = ["edit.kind", "edit.at"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "dna"
+[[module.conditional_required_context]]
+required_context = ["edit.to", "edit.replacing"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "dna"
+"edit.kind" = "substitute"
+[[module.conditional_required_context]]
+required_context = ["edit.to"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "dna"
+"edit.kind" = "insert"
+[[module.conditional_required_context]]
+required_context = ["edit.replacing"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "dna"
+"edit.kind" = "delete"
+[[module.conditional_required_context]]
+required_context = ["edits_json"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "multi"
+[[module.conditional_required_context]]
+required_context = ["aa_cds_start", "aa_residue", "aa_to", "codon_policy"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "amino-acid"
+[[module.conditional_required_context]]
+required_context = ["aa_codon"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "amino-acid"
+"codon_policy" = "user-selected-codon"
+[[module.conditional_required_context]]
+required_context = ["codon_usage"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "amino-acid"
+"codon_policy" = "host-codon-usage"
+[[module.conditional_required_context]]
+required_context = ["library_mode", "library_at"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "library"
+[[module.conditional_required_context]]
+required_context = ["library_codon"]
+[module.conditional_required_context.when]
+"edit_input_mode" = "library"
+"library_mode" = "custom"

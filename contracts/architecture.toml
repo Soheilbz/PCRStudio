@@ -1,0 +1,109 @@
+schema_version = "1.0.0"
+architecture = "layered-modular-monolith"
+release_line = "CURRENT"
+
+[principles]
+canonical_contracts_first = true
+generated_projections_are_read_only = true
+scientific_core_is_python = true
+http_contract_is_rust_owned = true
+web_is_transport_orchestration_and_ui = true
+persistence_is_versioned_and_non_destructive = true
+experimental_evidence_never_retroactively_changes_design_ranking = true
+
+[coordinates]
+basis = 0
+interval = "half-open"
+notation = "[start,end)"
+oligo_orientation = "5prime-to-3prime"
+strand_is_explicit = true
+
+[evidence]
+canonical_result_shape = "observed"
+decision_impact = "none"
+legacy_result_shape = "fields"
+legacy_read_migration_only = true
+max_fields = 64
+max_key_chars = 80
+max_text_chars = 8000
+
+[persistence]
+request_schema_version = 2
+result_schema_version = 4
+module_contract_version = "2.2.0"
+raw_historical_documents_are_immutable = true
+migrations_are_read_only_views = true
+
+[rust]
+workspace_lints = true
+cargo_lock_required = true
+cargo_locked_qualification = true
+
+[rust.crates]
+pcr_contracts = "foundation/contracts; may depend only on serialization primitives"
+pcr_security = "opaque bearer-token primitives; no domain/database dependency"
+pcr_storage = "database connection/migrations/storage infrastructure; may use domain-neutral pcr_security identity primitives"
+pcr_accounts = "accounts/authentication; may depend on pcr_security and pcr_storage"
+pcr_projects = "projects/runs; may depend on pcr_security and pcr_contracts, never pcr_accounts at runtime"
+pcr_worker_client = "JSON worker boundary; may depend on pcr_contracts"
+pcr_core = "pure domain dispatch/profile validation; may depend only on pcr_contracts plus serialization primitives"
+pcr_application = "transport-neutral application orchestration; owns canonical design use-cases and durable job execution, never HTTP"
+pcr_runner = "dedicated Linux PostgreSQL-backed scientific executor; may depend on domain-neutral pcr_security plus application/storage, never HTTP server"
+pcr_server = "HTTP/auth composition root; may depend on domain-neutral pcr_security; production durable jobs are enqueue-only and delegated to pcr_runner"
+
+[web]
+api_transport = "web/src/lib/api/http.ts"
+transport_interface = "web/src/lib/api/transport.ts"
+result_primitives = "web/src/components/design/result-primitives.tsx"
+workflow_evidence_component = "web/src/components/design/workflow-evidence.tsx"
+direct_design_fetch_outside_transport_forbidden = true
+ui_primitives_must_live_under = "web/src/components/ui"
+
+[python]
+scientific_package = "tools/src/pcr_tools"
+workflow_evidence_validator = "tools/src/pcr_tools/workflow_evidence.py"
+canonical_contract_data = "tools/src/pcr_tools/data"
+
+[hotspots]
+# These are review thresholds, not automatic refactor mandates. Large orchestration
+# files may stay large when splitting would duplicate state or scientific truth.
+python_file_review_lines = 2200
+rust_file_review_lines = 1800
+typescript_file_review_lines = 1800
+tsx_file_review_lines = 1600
+python_function_review_lines = 600
+
+[[dependency_rule]]
+from = "pcr-projects"
+forbid = ["pcr-accounts"]
+reason = "Projects must not depend sideways on account-domain implementation; shared bearer-token behavior belongs to pcr-security."
+
+[[dependency_rule]]
+from = "pcr-accounts"
+allow = ["pcr-security", "pcr-storage"]
+reason = "Account domain depends on shared security and storage infrastructure only."
+
+[[dependency_rule]]
+from = "pcr-core"
+allow = ["pcr-contracts"]
+reason = "Scientific domain dispatch owns only an execution port; process/IPC infrastructure is injected by pcr-application."
+
+[[dependency_rule]]
+from = "pcr-worker-client"
+allow = ["pcr-contracts"]
+reason = "Worker transport must not import application domains."
+[[dependency_rule]]
+from = "pcr-application"
+allow = ["pcr-accounts", "pcr-contracts", "pcr-core", "pcr-projects", "pcr-storage", "pcr-worker-client"]
+reason = "Application orchestration may compose domain/storage boundaries but must remain independent of Axum/server transport."
+
+[[dependency_rule]]
+from = "pcr-runner"
+allow = ["pcr-accounts", "pcr-application", "pcr-core", "pcr-security", "pcr-storage"]
+reason = "The dedicated runner executes durable PostgreSQL jobs and may share domain-neutral security primitives without importing the HTTP composition root."
+
+[[dependency_rule]]
+from = "pcr-server"
+allow = ["pcr-accounts", "pcr-application", "pcr-contracts", "pcr-core", "pcr-projects", "pcr-security", "pcr-storage"]
+reason = "HTTP transport may compose application/domain crates and domain-neutral security primitives but owns no durable scientific executor implementation."
+

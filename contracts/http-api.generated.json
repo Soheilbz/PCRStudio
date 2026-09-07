@@ -1,0 +1,530 @@
+{
+  "api_version": "v1",
+  "endpoints": [
+    {
+      "api_path": "/health",
+      "auth": "public",
+      "id": "health",
+      "local_path": "/health",
+      "method": "GET",
+      "mount": "",
+      "tag": "probes"
+    },
+    {
+      "api_path": "/ready",
+      "auth": "public",
+      "id": "ready",
+      "local_path": "/ready",
+      "method": "GET",
+      "mount": "",
+      "tag": "probes"
+    },
+    {
+      "api_path": "/ready/scientific",
+      "auth": "public",
+      "id": "scientific_ready",
+      "local_path": "/ready/scientific",
+      "method": "GET",
+      "mount": "",
+      "tag": "probes"
+    },
+    {
+      "api_path": "/operator/diagnostics",
+      "auth": "operator",
+      "id": "operator_diagnostics",
+      "local_path": "/operator/diagnostics",
+      "method": "GET",
+      "mount": "",
+      "tag": "operator"
+    },
+    {
+      "api_path": "/operator/metrics",
+      "auth": "operator",
+      "id": "operator_metrics",
+      "local_path": "/operator/metrics",
+      "method": "GET",
+      "mount": "",
+      "tag": "operator"
+    },
+    {
+      "api_path": "/info",
+      "auth": "public",
+      "id": "info",
+      "local_path": "/info",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/goals",
+      "auth": "public",
+      "id": "goals",
+      "local_path": "/goals",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/engines",
+      "auth": "public",
+      "id": "engines",
+      "local_path": "/engines",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/modifiers",
+      "auth": "public",
+      "id": "modifiers",
+      "local_path": "/modifiers",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/statuses",
+      "auth": "public",
+      "id": "statuses",
+      "local_path": "/statuses",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/modules",
+      "auth": "public",
+      "id": "modules",
+      "local_path": "/modules",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/modules/{id}",
+      "auth": "public",
+      "id": "module",
+      "local_path": "/modules/{id}",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/modules/{id}/presets",
+      "auth": "public",
+      "id": "module_presets",
+      "local_path": "/modules/{id}/presets",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/presets",
+      "auth": "public",
+      "id": "presets",
+      "local_path": "/presets",
+      "method": "GET",
+      "mount": "",
+      "tag": "catalogue"
+    },
+    {
+      "api_path": "/modules/{id}/design",
+      "auth": "public",
+      "id": "module_design",
+      "local_path": "/modules/{id}/design",
+      "method": "POST",
+      "mount": "",
+      "tag": "design"
+    },
+    {
+      "api_path": "/check-primers",
+      "auth": "public",
+      "id": "check_primers",
+      "local_path": "/check-primers",
+      "method": "POST",
+      "mount": "",
+      "tag": "bench"
+    },
+    {
+      "api_path": "/enzymes",
+      "auth": "public",
+      "id": "enzymes",
+      "local_path": "/enzymes",
+      "method": "POST",
+      "mount": "",
+      "tag": "bench"
+    },
+    {
+      "api_path": "/vector-primers",
+      "auth": "public",
+      "id": "vector_primers",
+      "local_path": "/vector-primers",
+      "method": "POST",
+      "mount": "",
+      "tag": "bench"
+    },
+    {
+      "api_path": "/modules/{id}/multiplex",
+      "auth": "public",
+      "id": "module_multiplex",
+      "local_path": "/modules/{id}/multiplex",
+      "method": "POST",
+      "mount": "",
+      "tag": "bench"
+    },
+    {
+      "api_path": "/auth/register",
+      "auth": "public",
+      "id": "auth_register",
+      "local_path": "/register",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/login",
+      "auth": "public",
+      "id": "auth_login",
+      "local_path": "/login",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/logout",
+      "auth": "session",
+      "id": "auth_logout",
+      "local_path": "/logout",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/me",
+      "auth": "session",
+      "id": "auth_me",
+      "local_path": "/me",
+      "method": "GET",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/profile",
+      "auth": "session",
+      "id": "auth_profile",
+      "local_path": "/profile",
+      "method": "PATCH",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/email",
+      "auth": "session",
+      "id": "auth_email",
+      "local_path": "/email",
+      "method": "PATCH",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/preferences",
+      "auth": "session",
+      "id": "auth_preferences_get",
+      "local_path": "/preferences",
+      "method": "GET",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/preferences",
+      "auth": "session",
+      "id": "auth_preferences_put",
+      "local_path": "/preferences",
+      "method": "PUT",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/password",
+      "auth": "session",
+      "id": "auth_password",
+      "local_path": "/password",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/sessions",
+      "auth": "session",
+      "id": "auth_sessions_delete",
+      "local_path": "/sessions",
+      "method": "DELETE",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/account",
+      "auth": "session",
+      "id": "auth_account_delete",
+      "local_path": "/account",
+      "method": "DELETE",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/recover",
+      "auth": "public",
+      "id": "auth_recover",
+      "local_path": "/recover",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/recovery",
+      "auth": "session",
+      "id": "auth_recovery_get",
+      "local_path": "/recovery",
+      "method": "GET",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/auth/recovery",
+      "auth": "session",
+      "id": "auth_recovery_post",
+      "local_path": "/recovery",
+      "method": "POST",
+      "mount": "/auth",
+      "tag": "auth"
+    },
+    {
+      "api_path": "/projects",
+      "auth": "session",
+      "id": "projects_list",
+      "local_path": "/",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects",
+      "auth": "session",
+      "id": "projects_create",
+      "local_path": "/",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/{id}",
+      "auth": "session",
+      "id": "project_get",
+      "local_path": "/{id}",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/{id}",
+      "auth": "session",
+      "id": "project_patch",
+      "local_path": "/{id}",
+      "method": "PATCH",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/{id}",
+      "auth": "session",
+      "id": "project_delete",
+      "local_path": "/{id}",
+      "method": "DELETE",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/{id}/restore",
+      "auth": "session",
+      "id": "project_restore",
+      "local_path": "/{id}/restore",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/{id}/runs",
+      "auth": "session",
+      "id": "runs_list",
+      "local_path": "/{id}/runs",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/runs/{run}",
+      "auth": "session",
+      "id": "run_get",
+      "local_path": "/{id}/runs/{run}",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/runs/{run}",
+      "auth": "session",
+      "id": "run_delete",
+      "local_path": "/{id}/runs/{run}",
+      "method": "DELETE",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/runs/{run}/share",
+      "auth": "session",
+      "id": "run_share_get",
+      "local_path": "/{id}/runs/{run}/share",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/runs/{run}/share",
+      "auth": "session",
+      "id": "run_share_post",
+      "local_path": "/{id}/runs/{run}/share",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/runs/{run}/share",
+      "auth": "session",
+      "id": "run_share_delete",
+      "local_path": "/{id}/runs/{run}/share",
+      "method": "DELETE",
+      "mount": "/projects",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/projects/{id}/jobs",
+      "auth": "session",
+      "id": "jobs_create",
+      "local_path": "/{id}/jobs",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "jobs"
+    },
+    {
+      "api_path": "/projects/{id}/jobs/{job}",
+      "auth": "session",
+      "id": "job_get",
+      "local_path": "/{id}/jobs/{job}",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "jobs"
+    },
+    {
+      "api_path": "/projects/{id}/jobs/{job}",
+      "auth": "session",
+      "id": "job_cancel",
+      "local_path": "/{id}/jobs/{job}",
+      "method": "DELETE",
+      "mount": "/projects",
+      "tag": "jobs"
+    },
+    {
+      "api_path": "/projects/{id}/design",
+      "auth": "session",
+      "id": "project_design",
+      "local_path": "/{id}/design",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "design"
+    },
+    {
+      "api_path": "/projects/export",
+      "auth": "session",
+      "id": "projects_export",
+      "local_path": "/export",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/import",
+      "auth": "session",
+      "id": "projects_import",
+      "local_path": "/import",
+      "method": "POST",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/projects/limits",
+      "auth": "public",
+      "id": "project_limits",
+      "local_path": "/limits",
+      "method": "GET",
+      "mount": "/projects",
+      "tag": "projects"
+    },
+    {
+      "api_path": "/shared/{token}",
+      "auth": "public",
+      "id": "shared_run",
+      "local_path": "/shared/{token}",
+      "method": "GET",
+      "mount": "",
+      "tag": "runs"
+    },
+    {
+      "api_path": "/sequences/fetch",
+      "auth": "public",
+      "id": "sequence_fetch_availability",
+      "local_path": "/fetch",
+      "method": "GET",
+      "mount": "/sequences",
+      "tag": "sequences"
+    },
+    {
+      "api_path": "/sequences/fetch",
+      "auth": "public",
+      "id": "sequence_fetch",
+      "local_path": "/fetch",
+      "method": "POST",
+      "mount": "/sequences",
+      "tag": "sequences"
+    },
+    {
+      "api_path": "/sequences/consensus",
+      "auth": "public",
+      "id": "sequence_consensus",
+      "local_path": "/consensus",
+      "method": "POST",
+      "mount": "/sequences",
+      "tag": "sequences"
+    },
+    {
+      "api_path": "/sequences/align",
+      "auth": "public",
+      "id": "sequence_aligners",
+      "local_path": "/align",
+      "method": "GET",
+      "mount": "/sequences",
+      "tag": "sequences"
+    },
+    {
+      "api_path": "/sequences/align",
+      "auth": "public",
+      "id": "sequence_align",
+      "local_path": "/align",
+      "method": "POST",
+      "mount": "/sequences",
+      "tag": "sequences"
+    }
+  ],
+  "legacy_alias": "/api",
+  "schema_version": "1.0.0",
+  "stable_prefix": "/api/v1"
+}

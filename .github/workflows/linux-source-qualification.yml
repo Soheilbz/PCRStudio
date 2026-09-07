@@ -1,0 +1,21 @@
+name: Linux source qualification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Run dependency-independent source qualification
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          PATH: /opt/node/bin:${{ env.PATH }}
+        run: python3 scripts/qualify-source.py --no-write

@@ -1,0 +1,792 @@
+{
+  "entries": {
+    "https://doi.org/10.1006/abio.1996.9916": {
+      "citation": "Ririe KM, Rasmussen RP, Wittwer CT. Product Differentiation by Analysis of DNA Melting Curves during the Polymerase Chain Reaction. Analytical Biochemistry. 1997;245(2):154-160. doi:10.1006/abio.1996.9916.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1006/abio.2000.4635": {
+      "citation": "Ayyadevara S, Thaden JJ, Shmookler Reis RJ. Discrimination of Primer 3′-Nucleotide Mismatch by Taq DNA Polymerase during Polymerase Chain Reaction. Analytical Biochemistry. 2000;284(1):11-18. doi:10.1006/abio.2000.4635.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1006/mcpr.1993.1064": {
+      "citation": "Zazzi M, Romano L, Peruzzi F, Toneatto S, De Milito A, Botta G, et al. Optimal conditions for detection of human immunodeficiency virus type 1 DNA by polymerase chain reaction with nested primers. Molecular and Cellular Probes. 1993;7(6):431-437. doi:10.1006/mcpr.1993.1064.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1007/978-1-4939-7060-5_3": {
+      "citation": "Chua EW, Maggo S, Kennedy MA. Long Fragment Polymerase Chain Reaction. Methods in Molecular Biology. 2017:65-74. doi:10.1007/978-1-4939-7060-5_3.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1007/978-1-60761-944-4_2": {
+      "citation": "Hogrefe HH, Borns MC. Long-Range PCR with a DNA Polymerase Fusion. Methods in Molecular Biology. 2011:17-23. doi:10.1007/978-1-60761-944-4_2.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1007/s12010-012-0043-8": {
+      "citation": "Packeiser H, Lim C, Balagurunathan B, Wu J, Zhao H. An Extremely Simple and Effective Colony PCR Procedure for Bacteria, Yeasts, and Microalgae. Applied Biochemistry and Biotechnology. 2013;169(2):695-700. doi:10.1007/s12010-012-0043-8.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/0035-9203(93)90478-9": {
+      "citation": "Wilson SM, Nava E, Morales A, Godfrey-Faussett P, Gillespie S, Andersson N. Simplification of the polymerase chain reaction for detection of Mycobacterium tuberculosis in the tropics. Transactions of the Royal Society of Tropical Medicine and Hygiene. 1993;87(2):177-180. doi:10.1016/0035-9203(93)90478-9.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/0378-1119(90)90145-h": {
+      "citation": "Longo MC, Berninger MS, Hartley JL. Use of uracil DNA glycosylase to control carry-over contamination in polymerase chain reactions. Gene. 1990;93(1):125-128. doi:10.1016/0378-1119(90)90145-h.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/j.ab.2007.11.029": {
+      "citation": "Agrawal V, Roy N. Contaminating insert degradation by preincubation colony PCR: A method for avoiding false positives in transformant screening. Analytical Biochemistry. 2008;375(1):159-161. doi:10.1016/j.ab.2007.11.029.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/j.heliyon.2020.e03246": {
+      "citation": "Shatleh-Rantisi D, Tamimi A, Ashhab Y. Improving sensitivity of single tube nested PCR to detect fastidious microorganisms. Heliyon. 2020;6(1):e03246. doi:10.1016/j.heliyon.2020.e03246.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/j.jmoldx.2022.08.005": {
+      "citation": "Higgins M, Stringer OW, Ward D, Andrews JM, Forrest MS, Campino S, et al. Characterizing the Impact of Primer-Template Mismatches on Recombinase Polymerase Amplification. The Journal of Molecular Diagnostics. 2022;24(11):1207-1216. doi:10.1016/j.jmoldx.2022.08.005.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/j.mcp.2007.03.004": {
+      "citation": "Sahdev S, Saini S, Tiwari P, Saxena S, Singh Saini K. Amplification of GC-rich genes by following a combination strategy of primer design, enhancers and modified PCR cycle conditions. Molecular and Cellular Probes. 2007;21(4):303-307. doi:10.1016/j.mcp.2007.03.004.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1016/j.talanta.2023.124642": {
+      "citation": "Lamas A, Azinheiro S, Roumani F, Prado M, Garrido-Maestu A. Evaluation of the effect of outer primer structure, and inner primer linker sequences, in the performance of Loop-mediated isothermal amplification. Talanta. 2023;260:124642. doi:10.1016/j.talanta.2023.124642.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1021/bi702363u": {
+      "citation": "Owczarzy R, Moreira BG, You Y, Behlke MA, Walder JA. Predicting Stability of DNA Duplexes in Solutions Containing Magnesium and Monovalent Cations. Biochemistry. 2008;47(19):5336-5353. doi:10.1021/bi702363u.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1038/srep05737": {
+      "citation": "Jia H, Guo Y, Zhao W, Wang K. Long-range PCR in next-generation sequencing: comparison of six enzymes and evaluation on the MiSeq sequencer. Scientific Reports. 2014;4(1):5737. doi:10.1038/srep05737.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1038/srep28769": {
+      "citation": "Zhu XJ, Sun S, Xie B, Hu X, Zhang Z, Qiu M, et al. Guanine-rich sequences inhibit proofreading DNA polymerases. Scientific Reports. 2016;6(1):28769. doi:10.1038/srep28769.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1073/pnas.91.12.5695": {
+      "citation": "Cheng S, Fockler C, Barnes WM, Higuchi R. Effective amplification of long targets from cloned inserts and human genomic DNA. Proceedings of the National Academy of Sciences. 1994;91(12):5695-5699. doi:10.1073/pnas.91.12.5695.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1073/pnas.91.6.2216": {
+      "citation": "Barnes WM. PCR amplification of up to 35-kb DNA with high fidelity and high yield from lambda bacteriophage templates. Proceedings of the National Academy of Sciences. 1994;91(6):2216-2220. doi:10.1073/pnas.91.6.2216.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1073/pnas.95.4.1460": {
+      "citation": "SantaLucia J. A unified view of polymer, dumbbell, and oligonucleotide DNA nearest-neighbor thermodynamics. Proceedings of the National Academy of Sciences. 1998;95(4):1460-1465. doi:10.1073/pnas.95.4.1460.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/bib/bbq081": {
+      "citation": "von Ahsen N, Wittwer CT, Schutz E. Monovalent and divalent salt correction algorithms for Tm prediction--recommendations for Primer3 usage. Briefings in Bioinformatics. 2011;12(5):514-517. doi:10.1093/bib/bbq081.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/clinchem/hvaa125": {
+      "citation": "The dMIQE Group, Whale AS, De Spiegelaere W, Trypsteen W, Nour AA, Bae YK, et al. The Digital MIQE Guidelines Update: Minimum Information for Publication of Quantitative Digital PCR Experiments for 2020. Clinical Chemistry. 2020;66(8):1012-1029. doi:10.1093/clinchem/hvaa125.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/clinchem/hvaf043": {
+      "citation": "Bustin SA, Ruijter JM, van den Hoff MJB, Kubista M, Pfaffl MW, Shipley GL, et al. MIQE 2.0: Revision of the Minimum Information for Publication of Quantitative Real-Time PCR Experiments Guidelines. Clinical Chemistry. 2025;71(6):634-651. doi:10.1093/clinchem/hvaf043.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/ismeco/ycaf115": {
+      "citation": "Koziaeva VV, Engel K, Neufeld JD. Validating digital polymerase chain reaction for 16S rRNA gene amplification from low biomass environmental samples. ISME Communications. 2025;5(1):ycaf115. doi:10.1093/ismeco/ycaf115.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/lambio/ovae137": {
+      "citation": "de Korne-Elenbaas J, Caduff L, Lison A, McLeod R, Pitton M, Gan C, et al. Design, validation, and implementation of multiplex digital PCR assays for simultaneous quantification of multiple targets. Letters in Applied Microbiology. 2025;78(1):ovae137. doi:10.1093/lambio/ovae137.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/molbev/msm015": {
+      "citation": "Malmstrom H, Svensson EM, Gilbert MTP, Willerslev E, Gotherstrom A, Holmlund G. More on Contamination: The Use of Asymmetric Molecular Behavior to Identify Authentic Ancient Human DNA. Molecular Biology and Evolution. 2007;24(4):998-1004. doi:10.1093/molbev/msm015.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/nar/18.4.999": {
+      "citation": "Kwok S, Kellogg DE, McKinney N, Spasic D, Goda L, Levenson C, et al. Effects of primer-template mismatches on the polymerase chain reaction: Human immunodeficiency virus type 1 model studies. Nucleic Acids Research. 1990;18(4):999-1005. doi:10.1093/nar/18.4.999.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1093/nar/28.12.e63": {
+      "citation": "Notomi T. Loop-mediated isothermal amplification of DNA. Nucleic Acids Research. 2000;28(12):63e-63. doi:10.1093/nar/28.12.e63.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1101/gr.3.6.332": {
+      "citation": "Haff LA. Improved quantitative PCR using nested primers. Genome Research. 1994;3(6):332-337. doi:10.1101/gr.3.6.332.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1101/pdb.prot095158": {
+      "citation": "Green MR, Sambrook J. Long and Accurate Polymerase Chain Reaction (LA PCR). Cold Spring Harbor Protocols. 2019;2019(3):pdb.prot095158. doi:10.1101/pdb.prot095158.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1111/j.1365-2672.2012.05384.x": {
+      "citation": "Schrader C, Schielke A, Ellerbroek L, Johne R. PCR inhibitors - occurrence, properties and removal. Journal of Applied Microbiology. 2012;113(5):1014-1026. doi:10.1111/j.1365-2672.2012.05384.x.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1177/1040638720905833": {
+      "citation": "Crossley BM, Bai J, Glaser A, Maes R, Porter E, Killian ML, et al. Guidelines for Sanger sequencing and molecular assay monitoring. Journal of Veterinary Diagnostic Investigation. 2020;32(6):767-775. doi:10.1177/1040638720905833.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1371/journal.pone.0011024": {
+      "citation": "Jensen MA, Fukushima M, Davis RW. DMSO and Betaine Greatly Improve Amplification of GC-Rich Constructs in De Novo Synthesis. PLoS ONE. 2010;5(6):e11024. doi:10.1371/journal.pone.0011024.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.1385/0-89603-499-2:81": {
+      "citation": "Waggott W. Long Range PCR. Clinical Applications of PCR. None:81-92. doi:10.1385/0-89603-499-2:81.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.2144/01301bm04": {
+      "citation": "Campbell TN, Choy FYM. Large-Scale Colony Screening and Insert Orientation Determination Using PCR. BioTechniques. 2001;30(1):32-34. doi:10.2144/01301bm04.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.2144/98244bm14": {
+      "citation": "Dallas-Yang Q, Jiang G, Sladek FM. Avoiding False Positives in Colony PCR. BioTechniques. 1998;24(4):580-582. doi:10.2144/98244bm14.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.2353/jmoldx.2006.060058": {
+      "citation": "Musso M, Bocciardi R, Parodi S, Ravazzolo R, Ceccherini I. Betaine, Dimethyl Sulfoxide, and 7-Deaza-dGTP, a Powerful Mixture for Amplification of GC-Rich DNA Sequences. The Journal of Molecular Diagnostics. 2006;8(5):544-550. doi:10.2353/jmoldx.2006.060058.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.3389/fmicb.2019.02860": {
+      "citation": "Jia B, Li X, Liu W, Lu C, Lu X, Ma L, et al. GLAPD: Whole Genome Based LAMP Primer Design for a Set of Target Genomes. Frontiers in Microbiology. 2019;10:2860. doi:10.3389/fmicb.2019.02860.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.3390/cells10081931": {
+      "citation": "Soroka M, Wasowicz B, Rymaszewska A. Loop-Mediated Isothermal Amplification (LAMP): The Better Sibling of PCR?. Cells. 2021;10(8):1931. doi:10.3390/cells10081931.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://doi.org/10.64898/2026.04.17.719221": {
+      "citation": "Pinto A, Dong X, Wu W, Johnson SJ, Wen Q, Zhang C, et al. Scaling Multiplex qPCR Primer Design to 1000-plex using the Degenerate Incomplete Multiplex Primer List Extension (DIMPLE) Algorithm. . 2026. doi:10.64898/2026.04.17.719221.",
+      "kind": "journal",
+      "metadata_source": "Crossref Works"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC12104711/": {
+      "citation": "Guo J, Grojean J, Guo H. ARMSprimer3: An open-source primer design Python program for amplification refractory mutation system PCR (ARMS-PCR). J Pathol Inform. 2025;17:100442. doi:10.1016/j.jpi.2025.100442.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC126239/": {
+      "citation": "Vandesompele J, De Preter K, Pattyn F, Poppe B, Van Roy N, De Paepe A, et al. Accurate normalization of real-time quantitative RT-PCR data by geometric averaging of multiple internal control genes. Genome Biol. 2002;3(7):RESEARCH0034. doi:10.1186/gb-2002-3-7-research0034.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC152403/": {
+      "citation": "Malorny B, Hoorfar J, Bunge C, Helmuth R. Multicenter validation of the analytical accuracy of Salmonella PCR: towards an international standard. Appl Environ Microbiol. 2003;69(1):290-6. doi:10.1128/AEM.69.1.290-296.2003.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC2797725/": {
+      "citation": "Stadhouders R, Pas SD, Anber J, Voermans J, Mes TH, Schutten M. The effect of primer-template mismatches on the detection and quantification of nucleic acids using the 5' nuclease assay. J Mol Diagn. 2010;12(1):109-17. doi:10.2353/jmoldx.2010.090035.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC330356/": {
+      "citation": "Kwok S, Kellogg DE, McKinney N, Spasic D, Goda L, Levenson C, et al. Effects of primer-template mismatches on the polymerase chain reaction: human immunodeficiency virus type 1 model studies. Nucleic Acids Res. 1990;18(4):999-1005. doi:10.1093/nar/18.4.999.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC4893258/": {
+      "citation": "Yang J, Kemps-Mols B, Spruyt-Gerritse M, Anholts J, Claas F, Eikmans M. The source of SYBR green master mix determines outcome of nucleic acid amplification reactions. BMC Res Notes. 2016;9:292. doi:10.1186/s13104-016-2093-4.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC55900/": {
+      "citation": "Ye S, Dhillon S, Ke X, Collins AR, Day IN. An efficient procedure for genotyping single nucleotide polymorphisms. Nucleic Acids Res. 2001;29(17):E88-8. doi:10.1093/nar/29.17.e88.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC7034379/": {
+      "citation": "Dreier M, Berthoud H, Shani N, Wechsler D, Junier P. SpeciesPrimer: a bioinformatics pipeline dedicated to the design of qPCR primers for the quantification of bacterial species. PeerJ. 2020;8:e8544. doi:10.7717/peerj.8544.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC7127618/": {
+      "citation": "Onodera K, Melcher U. Selection for 3' end triplets for polymerase chain reaction primers. Mol Cell Probes. 2004;18(6):369-72. doi:10.1016/j.mcp.2004.05.007.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/10084106/": {
+      "citation": "Livak KJ. Allelic discrimination using fluorogenic probes and the 5' nuclease assay. Genet Anal. 1999;14(5-6):143-9. doi:10.1016/s1050-3862(98)00019-9.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/10489613/": {
+      "citation": "Buck GA, Fox JW, Gunthorpe M, Hager KM, Naeve CW, Pon RT, et al. Design strategies and performance of custom DNA sequencing primers. Biotechniques. 1999;27(3):528-36. doi:10.2144/99273rr01.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/10606668/": {
+      "citation": "Kutyavin IV, Afonina IA, Mills A, Gorn VV, Lukhtanov EA, Belousov ES, et al. 3'-minor groove binder-DNA probes increase sequence specificity at PCR extension temperatures. Nucleic Acids Res. 2000;28(2):655-61. doi:10.1093/nar/28.2.655.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/10933850/": {
+      "citation": "Ayyadevara S, Thaden JJ, Shmookler Reis RJ. Discrimination of primer 3'-nucleotide mismatch by taq DNA polymerase during polymerase chain reaction. Anal Biochem. 2000;284(1):11-8. doi:10.1006/abio.2000.4635.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/11071950/": {
+      "citation": "Schramm G, Bruchhaus I, Roeder T. A simple and reliable 5'-RACE approach. Nucleic Acids Res. 2000;28(22):E96. doi:10.1093/nar/28.22.e96.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/11156625/": {
+      "citation": "Myakishev MV, Khripin Y, Hu S, Hamer DH. High-throughput SNP genotyping by allele-specific PCR with universal energy-transfer-labeled primers. Genome Res. 2001;11(1):163-9. doi:10.1101/gr.157901.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/11522844/": {
+      "citation": "Ye S, Dhillon S, Ke X, Collins AR, Day IN. An efficient procedure for genotyping single nucleotide polymorphisms. Nucleic Acids Res. 2001;29(17):E88-8. doi:10.1093/nar/29.17.e88.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/11726702/": {
+      "citation": "Waterfall CM, Cobb BD. Single tube genotyping of sickle cell anaemia using PCR-based SNP analysis. Nucleic Acids Res. 2001;29(23):E119. doi:10.1093/nar/29.23.e119.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12136105/": {
+      "citation": "Jenssen TK, Langaas M, Kuo WP, Smith-Sørensen B, Myklebost O, Hovig E. Analysis of repeatability in spotted cDNA microarrays. Nucleic Acids Res. 2002;30(14):3235-44. doi:10.1093/nar/gkf441.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12144774/": {
+      "citation": "Nagamine K, Hase T, Notomi T. Accelerated reaction by loop-mediated isothermal amplification using loop primers. Mol Cell Probes. 2002;16(3):223-9. doi:10.1006/mcpr.2002.0415.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12184808/": {
+      "citation": "Vandesompele J, De Preter K, Pattyn F, Poppe B, Van Roy N, De Paepe A, et al. Accurate normalization of real-time quantitative RT-PCR data by geometric averaging of multiple internal control genes. Genome Biol. 2002;3(7):RESEARCH0034. doi:10.1186/gb-2002-3-7-research0034.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12223296/": {
+      "citation": "Lunge VR, Miller BJ, Livak KJ, Batt CA. Factors affecting the performance of 5' nuclease PCR assays for Listeria monocytogenes detection. J Microbiol Methods. 2002;51(3):361-8. doi:10.1016/s0167-7012(02)00113-6.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12514007/": {
+      "citation": "Malorny B, Hoorfar J, Bunge C, Helmuth R. Multicenter validation of the analytical accuracy of Salmonella PCR: towards an international standard. Appl Environ Microbiol. 2003;69(1):290-6. doi:10.1128/AEM.69.1.290-296.2003.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/12824413/": {
+      "citation": "Rose TM, Henikoff JG, Henikoff S. CODEHOP (COnsensus-DEgenerate Hybrid Oligonucleotide Primer) PCR primer design. Nucleic Acids Res. 2003;31(13):3763-6. doi:10.1093/nar/gkg524.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/1408758/": {
+      "citation": "Huang MM, Arnheim N, Goodman MF. Extension of base mispairs by Taq DNA polymerase: implications for single nucleotide discrimination in PCR. Nucleic Acids Res. 1992;20(17):4567-73. doi:10.1093/nar/20.17.4567.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/14602929/": {
+      "citation": "Giglio S, Monis PT, Saint CP. Demonstration of preferential binding of SYBR Green I to specific DNA fragments in real-time multiplex PCR. Nucleic Acids Res. 2003;31(22):e136. doi:10.1093/nar/gng135.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/14623390/": {
+      "citation": "Malorny B, Hoorfar J, Hugas M, Heuvelink A, Fach P, Ellerbroek L, et al. Interlaboratory diagnostic accuracy of a Salmonella specific PCR-based method. Int J Food Microbiol. 2003;89(2-3):241-9. doi:10.1016/s0168-1605(03)00154-5.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/15061374/": {
+      "citation": "Okayama N, Fujimura K, Nakamura J, Suehiro Y, Hamanaka Y, Hinoda Y. Evaluation of a new efficient procedure for single-nucleotide polymorphism genotyping: tetra-primer amplification refractory mutation system-polymerase chain reaction. Clin Chem Lab Med. 2004;42(1):13-6. doi:10.1515/CCLM.2004.004.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/15289330/": {
+      "citation": "Andersen CL, Jensen JL, Ørntoft TF. Normalization of real-time quantitative reverse transcription-PCR data: a model-based variance estimation approach to identify genes suited for normalization, applied to bladder and colon cancer data sets. Cancer Res. 2004;64(15):5245-50. doi:10.1158/0008-5472.CAN-04-0496.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/15488375/": {
+      "citation": "Onodera K, Melcher U. Selection for 3' end triplets for polymerase chain reaction primers. Mol Cell Probes. 2004;18(6):369-72. doi:10.1016/j.mcp.2004.05.007.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/16524557/": {
+      "citation": "Nolan T, Hands RE, Ogunkolade W, Bustin SA. SPUD: a quantitative PCR assay for the detection of inhibitors in nucleic acid preparations. Anal Biochem. 2006;351(2):308-10. doi:10.1016/j.ab.2006.01.051.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/16756388/": {
+      "citation": "Piepenburg O, Williams CH, Stemple DL, Armes NA. DNA detection using recombination proteins. PLoS Biol. 2006;4(7):e204. doi:10.1371/journal.pbio.0040204.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/17287288/": {
+      "citation": "Chun JY, Kim KJ, Hwang IT, Kim YJ, Lee DH, Lee IK, et al. Dual priming oligonucleotide system for the multiplex detection of respiratory viruses and SNP genotyping of CYP2C19 gene. Nucleic Acids Res. 2007;35(6):e40. doi:10.1093/nar/gkm051.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/17631854/": {
+      "citation": "Hu YJ, Li ZF, Diamond AM. Enhanced discrimination of single nucleotide polymorphism in genotyping by phosphorothioate proofreading allele-specific amplification. Anal Biochem. 2007;369(1):54-9. doi:10.1016/j.ab.2007.04.042.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/17996102/": {
+      "citation": "Mao F, Leung WY, Xin X. Characterization of EvaGreen and the implication of its physicochemical properties for qPCR applications. BMC Biotechnol. 2007;7:76. doi:10.1186/1472-6750-7-76.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/1871133/": {
+      "citation": "Holland PM, Abramson RD, Watson R, Gelfand DH. Detection of specific polymerase chain reaction product by utilizing the 5'----3' exonuclease activity of Thermus aquaticus DNA polymerase. Proc Natl Acad Sci U S A. 1991;88(16):7276-80. doi:10.1073/pnas.88.16.7276.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19024172/": {
+      "citation": "Azhahianambi P, Ghosh S, Ashok Kumar C, Suryanarayana VV. Cost effectiveness of colony lysis and colony PCR methods for screening of recombinant Escherichia coli colonies--a comparative study. Indian J Exp Biol. 2008;46(10):731-5.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19237396/": {
+      "citation": "Ruijter JM, Ramakers C, Hoogaars WM, Karlen Y, Bakker O, van den Hoff MJ, et al. Amplification efficiency: linking baseline and bias in the analysis of quantitative PCR data. Nucleic Acids Res. 2009;37(6):e45. doi:10.1093/nar/gkp045.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19246619/": {
+      "citation": "Bustin SA, Benes V, Garson JA, Hellemans J, Huggett J, Kubista M, et al. The MIQE guidelines: minimum information for publication of quantitative real-time PCR experiments. Clin Chem. 2009;55(4):611-22. doi:10.1373/clinchem.2008.112797.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19363495/": {
+      "citation": "Gibson DG, Young L, Chuang RY, Venter JC, Hutchison CA 3rd, Smith HO. Enzymatic assembly of DNA molecules up to several hundred kilobases. Nat Methods. 2009;6(5):343-5. doi:10.1038/nmeth.1318.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19745056/": {
+      "citation": "Gibson DG. Synthesis of DNA fragments in yeast by one-step assembly of overlapping oligonucleotides. Nucleic Acids Res. 2009;37(20):6984-90. doi:10.1093/nar/gkp687.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19797710/": {
+      "citation": "Wenzel JJ, Walch H, Bollwein M, Niller HH, Ankenbauer W, Mauritz R, et al. Library of prefabricated locked nucleic acid hydrolysis probes facilitates rapid development of reverse-transcription quantitative real-time PCR assays for detection of novel influenza A/H1N1/09 virus. Clin Chem. 2009;55(12):2218-22. doi:10.1373/clinchem.2009.136192.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19837043/": {
+      "citation": "Pinto FL, Lindblad P. A guide for in-house design of template-switch-based 5' rapid amplification of cDNA ends systems. Anal Biochem. 2010;397(2):227-32. doi:10.1016/j.ab.2009.10.022.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/19948821/": {
+      "citation": "Stadhouders R, Pas SD, Anber J, Voermans J, Mes TH, Schutten M. The effect of primer-template mismatches on the detection and quantification of nucleic acids using the 5' nuclease assay. J Mol Diagn. 2010;12(1):109-17. doi:10.2353/jmoldx.2010.090035.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/20041847/": {
+      "citation": "King C, Debruyne R, Kuch M, Schwarz C, Poinar H. A quantitative approach to detect and overcome PCR inhibition in ancient DNA extracts. Biotechniques. 2009;47(5):941-9. doi:10.2144/000113244.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2012681/": {
+      "citation": "Wu DY, Ugozzoli L, Pal BK, Qian J, Wallace RB. The effect of temperature and oligonucleotide primer length on the specificity and efficiency of amplification by the polymerase chain reaction. DNA Cell Biol. 1991;10(3):233-8. doi:10.1089/dna.1991.10.233.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/21357174/": {
+      "citation": "Cuppen E. Genotyping by Allele-Specific Amplification (KASPar). CSH Protoc. 2007;2007:pdb.prot4841. doi:10.1101/pdb.prot4841.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2179874/": {
+      "citation": "Kwok S, Kellogg DE, McKinney N, Spasic D, Goda L, Levenson C, et al. Effects of primer-template mismatches on the polymerase chain reaction: human immunodeficiency virus type 1 model studies. Nucleic Acids Res. 1990;18(4):999-1005. doi:10.1093/nar/18.4.999.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/22065444/": {
+      "citation": "Pavlopoulos A. Identification of DNA sequences that flank a known region by inverse PCR. Methods Mol Biol. 2011;772:267-75. doi:10.1007/978-1-61779-228-1_16.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2243783/": {
+      "citation": "Rychlik W, Spencer WJ, Rhoads RE. Optimization of the annealing temperature for DNA amplification in vitro. Nucleic Acids Res. 1990;18(21):6409-12. doi:10.1093/nar/18.21.6409.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/23052312/": {
+      "citation": "Cook L, Diem K, Kim W, Scott JD, Jerome KR. Allele-specific PCR for determination of IL28B genotype. J Clin Microbiol. 2012;50(12):4144-6. doi:10.1128/JCM.02084-12.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/23065821/": {
+      "citation": "Lin X, Yang F, Zhou Y, Zhu Z, Jin G, Zhang S, et al. Highly-efficient colony PCR method for red yeasts and its application to identify mutations within two leucine auxotroph mutants. Yeast. 2012;29(11):467-74. doi:10.1002/yea.2926.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2307682/": {
+      "citation": "Pääbo S, Irwin DM, Wilson AC. DNA damage promotes jumping between templates during enzymatic amplification. J Biol Chem. 1990;265(8):4718-21.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2313237/": {
+      "citation": "Linz U, Delling U, Rübsamen-Waigmann H. Systematic studies on parameters influencing the performance of the polymerase chain reaction. J Clin Chem Clin Biochem. 1990;28(1):5-13.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/23901197/": {
+      "citation": "Bhagya CH, Wijesundera Sulochana WS, Hemamali NP. Polymerase chain reaction optimization for amplification of Guanine-Cytosine rich templates using buccal cell DNA. Indian J Hum Genet. 2013;19(1):78-83. doi:10.4103/0971-6866.112898.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/24011056/": {
+      "citation": "Bergkessel M, Guthrie C. Colony PCR. Methods Enzymol. 2013;529:299-309. doi:10.1016/B978-0-12-418687-3.00025-2.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/24519268/": {
+      "citation": "Medrano RF, de Oliveira CA. Guidelines for the tetra-primer ARMS-PCR technique development. Mol Biotechnol. 2014;56(7):599-608. doi:10.1007/s12033-014-9734-4.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/24946023/": {
+      "citation": "Honardoost MA, Tabatabaeian H, Akbari M, Salehi M. Investigation of sensitivity, specificity and accuracy of Tetra primer ARMS PCR method in comparison with conventional ARMS PCR, based on sequencing technique outcomes in IVS-II-I genotyping of beta thalassemia patients. Gene. 2014;549(1):1-6. doi:10.1016/j.gene.2014.05.071.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25147026/": {
+      "citation": "Jacobs BK, Goetghebeur E, Clement L. Impact of variance components on reliability of absolute quantification using digital PCR. BMC Bioinformatics. 2014;15(1):283. doi:10.1186/1471-2105-15-283.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25253910/": {
+      "citation": "Ruijter JM, Lorenz P, Tuomi JM, Hecker M, van den Hoff MJ. Fluorescent-increase kinetics of different fluorescent reporters used for qPCR depend on monitoring chemistry, targeted sequence, type of DNA input and PCR efficiency. Mikrochim Acta. 2014;181(13-14):1689-1696. doi:10.1007/s00604-013-1155-8.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25399421/": {
+      "citation": "Xia Y, Chu W, Qi Q, Xun L. New insights into the QuikChange™ process guide the use of Phusion DNA polymerase for site-directed mutagenesis. Nucleic Acids Res. 2015;43(2):e12. doi:10.1093/nar/gku1189.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25481659/": {
+      "citation": "Daher RK, Stewart G, Boissinot M, Boudreau DK, Bergeron MG. Influence of sequence mismatches on the specificity of recombinase polymerase amplification technology. Mol Cell Probes. 2015;29(2):116-21. doi:10.1016/j.mcp.2014.11.005.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25825906/": {
+      "citation": "De Spiegelaere W, Dern-Wieloch J, Weigel R, Schumacher V, Schorle H, Nettersheim D, et al. Reference gene validation for RT-qPCR, a note on different available software packages. PLoS One. 2015;10(3):e0122515. doi:10.1371/journal.pone.0122515.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/25867513/": {
+      "citation": "Crannell ZA, Rohrman B, Richards-Kortum R. Development of a quantitative recombinase polymerase amplification assay with an internal positive control. J Vis Exp. 2015. doi:10.3791/52620.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/26536367/": {
+      "citation": "Wilcox TM, Carim KJ, McKelvey KS, Young MK, Schwartz MK. The Dual Challenges of Generality and Specificity When Developing Environmental DNA Markers for Species and Subspecies of Oncorhynchus. PLoS One. 2015;10(11):e0142008. doi:10.1371/journal.pone.0142008.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2687596/": {
+      "citation": "Sommer SS, Cassady JD, Sobell JL, Bottema CD. A novel method for detecting point mutations or polymorphisms and its application to population screening for carriers of phenylketonuria. Mayo Clin Proc. 1989;64(11):1361-72. doi:10.1016/s0025-6196(12)65378-6.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/27259280/": {
+      "citation": "Yang J, Kemps-Mols B, Spruyt-Gerritse M, Anholts J, Claas F, Eikmans M. The source of SYBR green master mix determines outcome of nucleic acid amplification reactions. BMC Res Notes. 2016;9:292. doi:10.1186/s13104-016-2093-4.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/27517337/": {
+      "citation": "Woodman ME, Savage CR, Arnold WK, Stevenson B. Direct PCR of Intact Bacteria (Colony PCR). Curr Protoc Microbiol. 2016;42:A.3D.1-A.3D.7. doi:10.1002/cpmc.14.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/27768246/": {
+      "citation": "MacDonald AJ, Sarre SD. A framework for developing and validating taxon-specific primers for specimen identification from environmental DNA. Mol Ecol Resour. 2017;17(4):708-720. doi:10.1111/1755-0998.12618.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/27802293/": {
+      "citation": "Veldhoen N, Hobbs J, Ikonomou G, Hii M, Lesperance M, Helbing CC. Implementation of Novel Design Features for qPCR-Based eDNA Assessment. PLoS One. 2016;11(11):e0164907. doi:10.1371/journal.pone.0164907.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/2785681/": {
+      "citation": "Newton CR, Graham A, Heptinstall LE, Powell SJ, Summers C, Kalsheker N, et al. Analysis of any point mutation in DNA. The amplification refractory mutation system (ARMS). Nucleic Acids Res. 1989;17(7):2503-16. doi:10.1093/nar/17.7.2503.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/28540700/": {
+      "citation": "Campos MJ, Quesada A. Strategies to Improve Efficiency and Specificity of Degenerate Primers in PCR. Methods Mol Biol. 2017;1620:75-85. doi:10.1007/978-1-4939-7060-5_4.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/28540701/": {
+      "citation": "Silva D, Santos G, Barroca M, Collins T. Inverse PCR for Point Mutation Introduction. Methods Mol Biol. 2017;1620:87-100. doi:10.1007/978-1-4939-7060-5_5.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/28540704/": {
+      "citation": "Azevedo F, Pereira H, Johansson B. Colony PCR. Methods Mol Biol. 2017;1620:129-139. doi:10.1007/978-1-4939-7060-5_8.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/28851915/": {
+      "citation": "Majumdar N, Banerjee S, Pallas M, Wessel T, Hegerich P. Poisson Plus Quantification for Digital PCR Systems. Sci Rep. 2017;7(1):9617. doi:10.1038/s41598-017-09183-4.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/29201647/": {
+      "citation": "Bustin S, Huggett J. qPCR primer design revisited. Biomol Detect Quantif. 2017;14:19-28. doi:10.1016/j.bdq.2017.11.001.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/29717052/": {
+      "citation": "Green MR, Sambrook J. Hot Start Polymerase Chain Reaction (PCR). Cold Spring Harb Protoc. 2018;2018(5). doi:10.1101/pdb.prot095125.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/30101656/": {
+      "citation": "Fan H, Wang J, Komiyama M, Liang X. Effects of secondary structures of DNA templates on the quantification of qPCR. J Biomol Struct Dyn. 2019;37(11):2867-2874. doi:10.1080/07391102.2018.1498804.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/30107543/": {
+      "citation": "Liu F, Zheng K, Chen HC, Liu ZF. Capping-RACE: a simple, accurate, and sensitive 5' RACE method for use in prokaryotes. Nucleic Acids Res. 2018;46(21):e129. doi:10.1093/nar/gky739.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/3010776/": {
+      "citation": "Strauss EC, Kobori JA, Siu G, Hood LE. Specific-primer-directed DNA sequencing. Anal Biochem. 1986;154(1):353-60. doi:10.1016/0003-2697(86)90536-1.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/30335370/": {
+      "citation": "Potapov V, Ong JL, Kucera RB, Langhorst BW, Bilotti K, Pryor JM, et al. Comprehensive Profiling of Four Base Overhang Ligation Fidelity by T4 DNA Ligase and Application to DNA Assembly. ACS Synth Biol. 2018;7(11):2665-2674. doi:10.1021/acssynbio.8b00333.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/30710023/": {
+      "citation": "Green MR, Sambrook J. Inverse Polymerase Chain Reaction (PCR). Cold Spring Harb Protoc. 2019;2019(2). doi:10.1101/pdb.prot095166.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/31160384/": {
+      "citation": "Green MR, Sambrook J. Screening Colonies by Polymerase Chain Reaction (PCR). Cold Spring Harb Protoc. 2019;2019(6). doi:10.1101/pdb.prot095224.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/31735123/": {
+      "citation": "Yan L, Toohey-Kurth KL, Crossley BM, Bai J, Glaser AL, Tallmadge RL, et al. Inhibition monitoring in veterinary molecular testing. J Vet Diagn Invest. 2020;32(6):758-766. doi:10.1177/1040638719889315.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/32110486/": {
+      "citation": "Dreier M, Berthoud H, Shani N, Wechsler D, Junier P. SpeciesPrimer: a bioinformatics pipeline dedicated to the design of qPCR primers for the quantification of bacterial species. PeerJ. 2020;8:e8544. doi:10.7717/peerj.8544.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/32145632/": {
+      "citation": "Ong TTX, Blanch EW, Jones OAH. Surface Enhanced Raman Spectroscopy in environmental analysis, monitoring and assessment. Sci Total Environ. 2020;720:137601. doi:10.1016/j.scitotenv.2020.137601.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/32746458/": {
+      "citation": "dMIQE Group, Huggett JF. The Digital MIQE Guidelines Update: Minimum Information for Publication of Quantitative Digital PCR Experiments for 2020. Clin Chem. 2020;66(8):1012-1029. doi:10.1093/clinchem/hvaa125.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/32877448/": {
+      "citation": "Pryor JM, Potapov V, Kucera RB, Bilotti K, Cantor EJ, Lohman GJS. Enabling one-pot Golden Gate assemblies of unprecedented complexity using data-optimized assembly design. PLoS One. 2020;15(9):e0238592. doi:10.1371/journal.pone.0238592.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/32946527/": {
+      "citation": "Itokawa K, Sekizuka T, Hashino M, Tanaka R, Kuroda M. Disentangling primer interactions improves SARS-CoV-2 genome sequencing by multiplex tiling PCR. PLoS One. 2020;15(9):e0239403. doi:10.1371/journal.pone.0239403.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/33177003/": {
+      "citation": "Kojima K, Juma KM, Akagi S, Hayashi K, Takita T, O'Sullivan CK, et al. Solvent engineering studies on recombinase polymerase amplification. J Biosci Bioeng. 2021;131(2):219-224. doi:10.1016/j.jbiosc.2020.10.001.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/33612764/": {
+      "citation": "Zen LPY, Lai MY, Lau YL. Elimination of contamination in loop-mediated isothermal amplification assay for detection of human malaria. Trop Biomed. 2020;37(4):1124-1128. doi:10.47665/tb.37.4.1124.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/35177334/": {
+      "citation": "Tayeh MK, Gaedigk A, Goetz MP, Klein TE, Lyon E, McMillin GA, et al. Clinical pharmacogenomic testing and reporting: A technical standard of the American College of Medical Genetics and Genomics (ACMG). Genet Med. 2022;24(4):759-768. doi:10.1016/j.gim.2021.12.009.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/36116701/": {
+      "citation": "Higgins M, Stringer OW, Ward D, Andrews JM, Forrest MS, Campino S, et al. Characterizing the Impact of Primer-Template Mismatches on Recombinase Polymerase Amplification. J Mol Diagn. 2022;24(11):1207-1216. doi:10.1016/j.jmoldx.2022.08.005.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/36377427/": {
+      "citation": "Berden P, Wiederkehr RS, Lagae L, Michiels J, Stakenborg T, Fauvart M, et al. Amplification Efficiency and Template Accessibility as Distinct Causes of Rain in Digital PCR: Monte Carlo Modeling and Experimental Validation. Anal Chem. 2022;94(45):15781-15789. doi:10.1021/acs.analchem.2c03534.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/36379955/": {
+      "citation": "Edgar RC. Muscle5: High-accuracy alignment ensembles enable unbiased assessments of sequence homology and phylogeny. Nat Commun. 2022;13(1):6968. doi:10.1038/s41467-022-34630-w.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/36781642/": {
+      "citation": "Brusa A, Patterson E, Fleming M. Modifications of Kompetitive Allele-Specific PCR (KASP) Genotyping for Detection of Rare Alleles. Methods Mol Biol. 2023;2638:173-189. doi:10.1007/978-1-0716-3024-2_12.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/37083935/": {
+      "citation": "Latham S, Hughes E, Budgen B, Morley A. Inhibition of the PCR by genomic DNA. PLoS One. 2023;18(4):e0284538. doi:10.1371/journal.pone.0284538.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/37167680/": {
+      "citation": "Lamas A, Azinheiro S, Roumani F, Prado M, Garrido-Maestu A. Evaluation of the effect of outer primer structure, and inner primer linker sequences, in the performance of Loop-mediated isothermal amplification. Talanta. 2023;260:124642. doi:10.1016/j.talanta.2023.124642.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/37188521/": {
+      "citation": "Figueroa-Bossi N, Balbontín R, Bossi L. Mapping Transposon Insertion Sites by Inverse Polymerase Chain Reaction and Sanger Sequencing. Cold Spring Harb Protoc. 2024;2024(5):108197. doi:10.1101/pdb.prot108197.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/37755329/": {
+      "citation": "Sikkema AP, Tabatabaei SK, Lee YJ, Lund S, Lohman GJS. High-Complexity One-Pot Golden Gate Assembly. Curr Protoc. 2023;3(9):e882. doi:10.1002/cpz1.882.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/38263813/": {
+      "citation": "Wilcox TM, Kronenberger JA, Young MK, Mason DH, Franklin TW, Schwartz MK. The unknown unknown: A framework for assessing environmental DNA assay specificity against unsampled taxa. Mol Ecol Resour. 2024;24(4):e13932. doi:10.1111/1755-0998.13932.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/38867172/": {
+      "citation": "Monfort-Lanzas P, Rusu EC, Parrakova L, Karg CA, Kernbichler DE, Rieder D, et al. ExonSurfer: a web-tool to design primers at exon-exon junctions. BMC Genomics. 2024;25(1):594. doi:10.1186/s12864-024-10456-2.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/38928080/": {
+      "citation": "Crego-Vicente B, Del Olmo MD, Muro A, Fernández-Soto P. Multiplexing LAMP Assays: A Methodological Review and Diagnostic Application. Int J Mol Sci. 2024;25(12). doi:10.3390/ijms25126374.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/39060254/": {
+      "citation": "Wang MX, Lou EG, Sapoval N, Kim E, Kalvapalle P, Kille B, et al. Olivar: towards automated variant aware primer design for multiplex tiled amplicon sequencing of pathogens. Nat Commun. 2024;15(1):6306. doi:10.1038/s41467-024-49957-9.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/40272429/": {
+      "citation": "Bustin SA, Ruijter JM, van den Hoff MJB, Kubista M, Pfaffl MW, Shipley GL, et al. MIQE 2.0: Revision of the Minimum Information for Publication of Quantitative Real-Time PCR Experiments Guidelines. Clin Chem. 2025;71(6):634-651. doi:10.1093/clinchem/hvaf043.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/40421167/": {
+      "citation": "Guo J, Grojean J, Guo H. ARMSprimer3: An open-source primer design Python program for amplification refractory mutation system PCR (ARMS-PCR). J Pathol Inform. 2025;17:100442. doi:10.1016/j.jpi.2025.100442.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/41526128/": {
+      "citation": "Mo Y, Zhu J, Huang Y, Hu J, Su Z, Zhang C. Inner primer Blockers inhibit non-specific amplification in LAMP. Anal Chim Acta. 2026;1385:345020. doi:10.1016/j.aca.2025.345020.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/41730601/": {
+      "citation": "Gleerup D, Vynck M, Gysens L, De Baere C, Trypsteen W, Vandesompele J, et al. Standardized digital PCR assay validation using PCR-ValiPal, demonstrated in cross-platform quantification of bovine papilloma virus. Anal Chim Acta. 2026;1394:345210. doi:10.1016/j.aca.2026.345210.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/42312714/": {
+      "citation": "Gupta S, Chaudhary A, Bhatnagar S. SARS-CoV-2 Evolution and Its Implications for RT-PCR Diagnostic Performance. J Med Virol. 2026;98(6):e71023. doi:10.1002/jmv.71023.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/6244210/": {
+      "citation": "Malyguine E, Vannier P, Yot P. Alteration of the specificity of restriction endonucleases in the presence of organic solvents. Gene. 1980;8(2):163-77. doi:10.1016/0378-1119(80)90035-9.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/6259621/": {
+      "citation": "Ferretti L, Sgaramella V. Temperature dependence of the joining by T4 DNA ligase of termini produced by type II restriction endonucleases. Nucleic Acids Res. 1981;9(1):85-93. doi:10.1093/nar/9.1.85.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/6323183/": {
+      "citation": "Alves J, Pingoud A, Haupt W, Langowski J, Peters F, Maass G, et al. The influence of sequences adjacent to the recognition site on the cleavage of oligodeoxynucleotides by the EcoRI endonuclease. Eur J Biochem. 1984;140(1):83-92. doi:10.1111/j.1432-1033.1984.tb08069.x.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/7537048/": {
+      "citation": "Lee AB, Cooper TA. Improved direct PCR screen for bacterial colonies: wooden toothpicks inhibit PCR amplification. Biotechniques. 1995;18(2):225-6.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/7669297/": {
+      "citation": "Moreira RF, Noren CJ. Minimum duplex requirements for restriction enzyme cleavage near the termini of linear DNA fragments. Biotechniques. 1995;19(1):56, 58-9.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/7866865/": {
+      "citation": "Huang SH. Inverse polymerase chain reaction. An efficient approach to cloning cDNA ends. Mol Biotechnol. 1994;2(1):15-22. doi:10.1007/BF02789286.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/8230215/": {
+      "citation": "Robinson CR, Sligar SG. Molecular recognition mediated by bound water. A mechanism for star activity of the restriction endonuclease EcoRI. J Mol Biol. 1993;234(2):302-6. doi:10.1006/jmbi.1993.1586.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/8264734/": {
+      "citation": "Snounou G, Viriyakosol S, Zhu XP, Jarra W, Pinheiro L, do Rosario VE, et al. High sensitivity of detection of human malaria parasites by the use of nested polymerase chain reaction. Mol Biochem Parasitol. 1993;61(2):315-20. doi:10.1016/0166-6851(93)90077-b.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/8836181/": {
+      "citation": "Cline J, Braman JC, Hogrefe HH. PCR fidelity of pfu DNA polymerase and other thermostable DNA polymerases. Nucleic Acids Res. 1996;24(18):3546-51. doi:10.1093/nar/24.18.3546.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    },
+    "https://pubmed.ncbi.nlm.nih.gov/9564528/": {
+      "citation": "Zimmermann K, Schögl D, Mannhalter JW. Digestion of terminal restriction endonuclease recognition sites on PCR products. Biotechniques. 1998;24(4):582-4. doi:10.2144/98244bm15.",
+      "kind": "journal",
+      "metadata_source": "PubMed ESummary"
+    }
+  },
+  "generated_at": "2026-09-07",
+  "provenance": "Bibliographic metadata retrieved from PubMed ESummary and Crossref Works for the external references present in module Atlas records.",
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,148 @@
+{
+  "authority_domains": [
+    {
+      "id": "probe",
+      "source": "contracts/chemistry/qpcr-probe-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/probe-differential-corpus.json"
+  ],
+  "engine_id": "pair-and-probe",
+  "feature_capabilities": {
+    "idt-primetime-conventional": {
+      "authority": "idt-primetime-conventional",
+      "status": "executable"
+    },
+    "mgb-authority-roundtrip": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "mgb-exact-tm": {
+      "authority": "taqman-mgb-reference",
+      "status": "external-authority-required"
+    },
+    "miqe-2-evidence": {
+      "authority": "miqe-2-0-evidence",
+      "status": "evidence-only"
+    },
+    "multiplex-interaction-audit": {
+      "authority": "thermofisher-taqman-conventional",
+      "status": "diagnostic-only"
+    },
+    "optical-configuration": {
+      "authority": "thermofisher-taqman-conventional",
+      "status": "executable"
+    },
+    "probe-amplicon-combined-specificity": {
+      "authority": "thermofisher-taqman-conventional",
+      "status": "executable"
+    },
+    "taqman-mgb": {
+      "authority": "taqman-mgb-reference",
+      "status": "external-authority-required"
+    },
+    "taqman-mgb-reference": {
+      "note": "Generation-1 current engine capability.",
+      "status": "external-authority-required"
+    },
+    "thermofisher-conventional": {
+      "authority": "thermofisher-taqman-conventional",
+      "status": "executable"
+    },
+    "thermofisher-taqman-conventional": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "design",
+        "python": "probe_protocol",
+        "rust": "probe_protocol",
+        "web": "probeProtocol"
+      },
+      {
+        "owner": "design",
+        "python": "probe_chemistry",
+        "rust": "probe_chemistry",
+        "web": "probeChemistry"
+      },
+      {
+        "owner": "reaction",
+        "python": "probe_reporter",
+        "rust": "probe_reporter",
+        "web": "probeReporter"
+      },
+      {
+        "owner": "reaction",
+        "python": "probe_quencher",
+        "rust": "probe_quencher",
+        "web": "probeQuencher"
+      },
+      {
+        "owner": "reaction",
+        "python": "probe_internal_quencher",
+        "rust": "probe_internal_quencher",
+        "web": "probeInternalQuencher"
+      },
+      {
+        "owner": "reaction",
+        "python": "probe_instrument_profile",
+        "rust": "probe_instrument_profile",
+        "web": "probeInstrumentProfile"
+      },
+      {
+        "owner": "target",
+        "python": "probe_transcript_mode",
+        "rust": "probe_transcript_mode",
+        "web": "probeTranscriptMode"
+      },
+      {
+        "owner": "design",
+        "python": "probe_multiplex_panel",
+        "rust": "probe_multiplex_panel",
+        "web": "probeMultiplexPanel"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      },
+      {
+        "owner": "validation",
+        "python": "probe_optical_authority_payload",
+        "rust": "probe_optical_authority_payload",
+        "web": "probeOpticalAuthorityPayload"
+      },
+      {
+        "owner": "validation",
+        "python": "probe_mgb_authority_mode",
+        "rust": "probe_mgb_authority_mode",
+        "web": "probeMgbAuthorityMode"
+      },
+      {
+        "owner": "validation",
+        "python": "probe_mgb_authority_payload",
+        "rust": "probe_mgb_authority_payload",
+        "web": "probeMgbAuthorityPayload"
+      },
+      {
+        "owner": "target",
+        "python": "probe_transcript_junctions",
+        "rust": "probe_transcript_junctions",
+        "web": "probeTranscriptJunctions"
+      },
+      {
+        "owner": "validation",
+        "python": "probe_variant_positions",
+        "rust": "probe_variant_positions",
+        "web": "probeVariantPositions"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

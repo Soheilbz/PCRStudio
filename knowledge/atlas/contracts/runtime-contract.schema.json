@@ -1,0 +1,705 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/contracts/runtime-contract.schema.json",
+  "title": "PCRStudio Generation-1 Runtime Contract",
+  "type": "object",
+  "description": "Canonical machine-readable definitions for generation-1 tool orchestration. Markdown may explain these semantics but must not redefine them.",
+  "$defs": {
+    "ToolRole": {
+      "type": "string",
+      "enum": [
+        "PRIMARY",
+        "VALIDATOR",
+        "FALLBACK",
+        "OPTIONAL",
+        "BENCHMARK",
+        "REFERENCE",
+        "WATCHLIST",
+        "REJECT"
+      ]
+    },
+    "ToolQualifier": {
+      "type": "string",
+      "enum": [
+        "msa",
+        "tiling",
+        "pool_optimizer",
+        "development_adapter",
+        "remote",
+        "license_blocked",
+        "database",
+        "standard",
+        "discovery",
+        "specialized",
+        "preflight",
+        "legacy",
+        "future_scope",
+        "also_reference",
+        "optional_execution",
+        "structure",
+        "specificity",
+        "candidate_generation",
+        "repair",
+        "manual_only"
+      ]
+    },
+    "CoordinateInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "start0",
+        "end0",
+        "strand",
+        "coordinate_system"
+      ],
+      "properties": {
+        "reference_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start0": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end0": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "strand": {
+          "type": "string",
+          "enum": [
+            "+",
+            "-"
+          ]
+        },
+        "coordinate_system": {
+          "const": "zero_based_half_open"
+        },
+        "source_coordinate": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Raw/source-tool coordinates retained for round-trip provenance; adapter performs the conversion."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "start0",
+              "end0"
+            ]
+          },
+          "then": {
+            "description": "Implementation MUST enforce end0 > start0; JSON Schema cannot express cross-field arithmetic portably."
+          }
+        }
+      ]
+    },
+    "ToolArtifactIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool_id",
+        "version",
+        "source_ref",
+        "artifact_kind",
+        "digest_policy"
+      ],
+      "properties": {
+        "tool_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "artifact_kind": {
+          "type": "string",
+          "enum": [
+            "source_tag",
+            "source_commit",
+            "binary",
+            "package",
+            "container",
+            "external_service"
+          ]
+        },
+        "artifact_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "digest_policy": {
+          "type": "string",
+          "enum": [
+            "required_at_build_or_install",
+            "not_applicable_remote_reference"
+          ]
+        }
+      }
+    },
+    "ParameterResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parameter",
+        "resolved_value",
+        "source_layer",
+        "override_policy"
+      ],
+      "properties": {
+        "parameter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolved_value": {},
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_layer": {
+          "type": "string",
+          "enum": [
+            "tool_hard_capability",
+            "assay_hard_constraint",
+            "chemistry_kit_profile_locked",
+            "user_override",
+            "chemistry_kit_profile_recommended",
+            "pcrstudio_recommended_default",
+            "tool_native_default_explicit"
+          ]
+        },
+        "override_policy": {
+          "type": "string",
+          "enum": [
+            "forbidden",
+            "bounded",
+            "allowed"
+          ]
+        },
+        "allowed_min": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "allowed_max": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "source_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "warning": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "DatabaseManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "database_id",
+        "release_or_build",
+        "content_sha256"
+      ],
+      "properties": {
+        "database_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "release_or_build": {
+          "type": "string",
+          "minLength": 1
+        },
+        "taxonomy_release": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sequence_release": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "downloaded_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "filtering": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "deduplication": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "excluded_records": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "sequence",
+        "orientation",
+        "binding_interval",
+        "length",
+        "source_tool_id",
+        "source_tool_version"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequence": {
+          "type": "string",
+          "pattern": "^[ACGTRYSWKMBDHVN]+$"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "forward",
+            "reverse",
+            "internal",
+            "single"
+          ]
+        },
+        "binding_interval": {
+          "$ref": "#/$defs/CoordinateRegion"
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "tm_c": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "gc_fraction": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "hairpin": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "self_dimer": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "heterodimer": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "specificity": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "source_tool_id": {
+          "type": "string"
+        },
+        "source_tool_version": {
+          "type": "string"
+        },
+        "raw_penalty": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ValidationEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator_tool_id",
+        "status",
+        "evidence_kind"
+      ],
+      "properties": {
+        "validator_tool_id": {
+          "type": "string"
+        },
+        "validator_tool_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_kind": {
+          "type": "string",
+          "enum": [
+            "specificity",
+            "thermodynamics",
+            "structure",
+            "interaction",
+            "alignment",
+            "assay_specific",
+            "database_coverage"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "fail",
+            "warning",
+            "unchecked",
+            "not_applicable"
+          ]
+        },
+        "metrics": {
+          "type": "object"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ErrorRefusal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "severity",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "warning",
+            "error",
+            "refusal"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "fallback_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unresolved_assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ToolRunRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_contract_version",
+        "operation_id",
+        "engine_id",
+        "tool_id",
+        "tool_role",
+        "tool_version",
+        "artifact_identity",
+        "execution_scope",
+        "parameter_map_version",
+        "input_schema_version",
+        "output_schema_version",
+        "started_at",
+        "elapsed_ms",
+        "exit_status",
+        "random_seed_or_determinism",
+        "warnings",
+        "unresolved_assumptions"
+      ],
+      "properties": {
+        "engine_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Engine that resolved this run role and operation."
+        },
+        "module_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Owning assay module when the run is module-scoped."
+        },
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Engine-defined operation executed by the tool or internal worker."
+        },
+        "binding_contract_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Version of engine-tool-contracts used to resolve role/operation."
+        },
+        "tool_id": {
+          "type": "string"
+        },
+        "tool_role": {
+          "$ref": "#/$defs/ToolRole"
+        },
+        "tool_qualifiers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ToolQualifier"
+          }
+        },
+        "tool_version": {
+          "type": "string"
+        },
+        "artifact_identity": {
+          "$ref": "#/$defs/ToolArtifactIdentity"
+        },
+        "execution_scope": {
+          "type": "string",
+          "enum": [
+            "local",
+            "remote",
+            "manual_reference"
+          ]
+        },
+        "license_class": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "command_or_api": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parameter_map_version": {
+          "type": "string"
+        },
+        "input_schema_version": {
+          "type": "string"
+        },
+        "output_schema_version": {
+          "type": "string"
+        },
+        "database": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DatabaseManifest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "elapsed_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exit_status": {
+          "type": "integer"
+        },
+        "stdout_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "stderr_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "random_seed_or_determinism": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unresolved_assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SegmentedCoordinateRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "coordinate_system",
+        "strand",
+        "segments"
+      ],
+      "properties": {
+        "reference_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "coordinate_system": {
+          "const": "zero_based_half_open"
+        },
+        "strand": {
+          "type": "string",
+          "enum": [
+            "+",
+            "-"
+          ]
+        },
+        "segments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/CoordinateInterval"
+          }
+        },
+        "circular_reference_length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "source_coordinate": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "CoordinateRegion": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CoordinateInterval"
+        },
+        {
+          "$ref": "#/$defs/SegmentedCoordinateRegion"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "tool_run": {
+      "$ref": "#/$defs/ToolRunRecord"
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Candidate"
+      }
+    },
+    "parameter_resolution": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ParameterResolution"
+      }
+    },
+    "validation_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ValidationEvidence"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ErrorRefusal"
+      }
+    }
+  }
+}

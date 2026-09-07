@@ -1,0 +1,22 @@
+packages:
+  - web
+
+# Linux x86_64 is the canonical development, CI and production target.
+# `current` keeps installs correct on the active Linux host while the explicit
+# architecture makes lockfile/install intent reproducible for release tooling.
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - current
+    - x64
+
+allowBuilds:
+  unrs-resolver: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - "@tailwindcss/oxide"
+  - unrs-resolver

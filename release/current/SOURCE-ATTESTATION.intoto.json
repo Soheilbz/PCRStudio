@@ -1,0 +1,78 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "apiVersion": "v1",
+    "foundationRelease": "CURRENT",
+    "ipcProtocolVersion": "2.0.0",
+    "moduleContractVersion": "2.2.0",
+    "nativeLinuxQualification": {
+      "claim": "not asserted by this source attestation",
+      "entrypoint": "scripts/run-linux-qualification.py",
+      "status": "delegated-external-gate"
+    },
+    "qualificationScope": "source-integrity-and-environment-independent-gates",
+    "releaseClass": "generation-1-unified-engine-linux-current",
+    "reproducibility": {
+      "deterministicArchiveBuilder": "scripts/build-deterministic-zip.py",
+      "manifest": "release/FILE-MANIFEST.json",
+      "sbom": "release/current/SBOM.cdx.json"
+    }
+  },
+  "predicateType": "https://pcrstudio.local/attestation/source-qualification/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "f86e05ea0e85ef4b402af0a78f8e57471e44a792e1118d617fab5f54797f9565"
+      },
+      "name": "release/FILE-MANIFEST.json"
+    },
+    {
+      "digest": {
+        "sha256": "7d1b70ceed492984de87fad745fec52b49f1f2f3960bede1a0d14e77143ea503"
+      },
+      "name": "release/PATCH-MANIFEST.json"
+    },
+    {
+      "digest": {
+        "sha256": "88b6f130a91c4626bfe3939f00e96838ec9816184df41ea14261214939ecbfb7"
+      },
+      "name": "release/RUNTIME-CONTRACT-MANIFEST.json"
+    },
+    {
+      "digest": {
+        "sha256": "3de32cb1bb09e5665d4686884e62e5a9b4d04baa8c9482a90432ce2db47c476d"
+      },
+      "name": "release/current/SBOM.cdx.json"
+    },
+    {
+      "digest": {
+        "sha256": "682e168eacfe50c383f3ce4138cf206b966dd8b948cb1ecd1f290137d54bd5c9"
+      },
+      "name": "knowledge/runtime/foundation.generated.json"
+    },
+    {
+      "digest": {
+        "sha256": "212af74a7d4101f1b435fd50034ec2e9942c8fb967f073491e1e00e4ded8bf66"
+      },
+      "name": "knowledge/runtime/module-contracts.generated.json"
+    },
+    {
+      "digest": {
+        "sha256": "ebadd32de249fca0570876f9ffdeecb46d3f022625780a662c2786f5c075ec23"
+      },
+      "name": "knowledge/runtime/engine-contracts.generated.json"
+    },
+    {
+      "digest": {
+        "sha256": "2509d24adb25e0251ee27ec9b801a508af3be9aae58cb81f7193f0af468078c2"
+      },
+      "name": "knowledge/runtime/tool-contracts.generated.json"
+    },
+    {
+      "digest": {
+        "sha256": "bda5e46776f16c6db86a9459ad90adad60f4c602fdbdcffb17722e2033ff1754"
+      },
+      "name": "docs/openapi.generated.json"
+    }
+  ]
+}

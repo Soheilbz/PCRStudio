@@ -1,0 +1,99 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "cleanup_authority": null,
+        "rounds": 2,
+        "topology": "fully-nested-two-tube"
+      },
+      "id": "two-tube-direct",
+      "request": {
+        "shares": "nothing",
+        "single_tube": false,
+        "transfer_mode": "direct-transfer"
+      }
+    },
+    {
+      "expected": {
+        "enzyme_uL": 1,
+        "first_round_product_uL_max": 20,
+        "inactivation_c": 80,
+        "inactivation_min": 1,
+        "incubation_c": 55,
+        "incubation_min": 15
+      },
+      "id": "msz-cleanup",
+      "request": {
+        "cleanup_protocol": "neb-msz-exonuclease-i",
+        "single_tube": false,
+        "transfer_mode": "msz-exonuclease-i"
+      }
+    },
+    {
+      "expected": {
+        "enzyme_uL": 1,
+        "first_round_product_uL_max": 20,
+        "inactivation_c": 80,
+        "inactivation_min": 1,
+        "incubation_c": 37,
+        "incubation_min": 10
+      },
+      "id": "thermolabile-cleanup",
+      "request": {
+        "cleanup_protocol": "neb-thermolabile-exonuclease-i",
+        "single_tube": false,
+        "transfer_mode": "thermolabile-exonuclease-i"
+      }
+    },
+    {
+      "expected": {
+        "dilution_explicit": true
+      },
+      "id": "diluted-transfer",
+      "request": {
+        "single_tube": false,
+        "transfer_dilution_factor": 10,
+        "transfer_mode": "diluted-transfer"
+      }
+    },
+    {
+      "expected": {
+        "authority": "one-tube-reference-only",
+        "status": "fail-closed"
+      },
+      "id": "one-tube-refusal",
+      "request": {
+        "single_tube": true
+      }
+    },
+    {
+      "expected": {
+        "graph_status": "diagnostic-only",
+        "outer_offtarget_rescanned_with_inner": true
+      },
+      "id": "causal-false-product",
+      "request": {
+        "background": "finite-background"
+      }
+    },
+    {
+      "expected": {
+        "execution_status": "strategy-only",
+        "numeric_recipe_inferred": false
+      },
+      "id": "dutp-ung-strategy-only",
+      "request": {
+        "carryover_prevention": "dutp-ung-strategy-only"
+      }
+    }
+  ],
+  "engine": "nested",
+  "metamorphic": [
+    "outer/inner FASTA case invariance",
+    "round-specific chemistry identities may differ without changing primer coordinates",
+    "background record reorder invariance",
+    "transfer/cleanup evidence cannot mutate primer ranking"
+  ],
+  "purpose": "Shared CURRENT Nested PCR differential/property corpus for two-round chemistry, transfer/cleanup and causal false-product evidence.",
+  "schema_version": "1.0.0"
+}

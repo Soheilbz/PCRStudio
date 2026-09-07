@@ -1,0 +1,1399 @@
+{
+  "modules": {
+    "arms-pcr": {
+      "active_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "three_prime_allele_identity",
+        "polymerase_scoped_mismatch_evidence",
+        "differential_extension",
+        "paired_allele_empirical_validation_boundary"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "discriminating-pair",
+      "fallback_policy": "preserve_discrimination",
+      "happy_path_assertions": [
+        "UI request resolves module arms-pcr to engine discriminating-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Variant normalization preserves type, REF/ALT, strand, coordinate system and optional accession/build/rsID provenance.",
+        "SNV/single-anchor allele-specific geometry places the declared discriminating base at the intended 3-prime anchor; an MNV anchor reduction preserves the other differences as context.",
+        "Caller-supplied nearby-variant VCF masking can veto affected primer-binding sites without creating population-frequency claims.",
+        "Terminal/near-terminal mismatch evidence is labelled heuristic/source/polymerase scoped and is not a universal mismatch law.",
+        "Paired wild-type/alternate controls remain empirical validation evidence rather than guaranteed specificity."
+      ],
+      "intentional_boundaries": [
+        "ARMS remains an SNV/single-anchor discrimination topology. Indel/complex events are not coerced into fake SNVs, and no mismatch class guarantees allele discrimination across polymerases/sequence contexts."
+      ],
+      "refusal_scenarios": [
+        "missing/contradictory typed variant context",
+        "REF does not match the declared template/reference coordinate",
+        "indel/complex variant requested under ordinary ARMS geometry",
+        "proofreading/incompatible polymerase context without a supported discrimination contract",
+        "nearby declared variant invalidates the required anchor",
+        "no candidate preserves allele-specific 3-prime identity and hard gates"
+      ],
+      "required_user_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ]
+    },
+    "colony-pcr": {
+      "active_gates": [
+        "screen_product_geometry",
+        "host_class",
+        "colony_preparation_provenance",
+        "colony_lysis_profile",
+        "optional_vector_context",
+        "predicted_screen_status"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "colonyProtocolName",
+            "colonyProtocolProvenance"
+          ],
+          "when": {
+            "colonyProtocolId": "custom-sop"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback_policy": "never_invent_colony_lysis_or_bench_status",
+      "happy_path_assertions": [
+        "UI request resolves module colony-pcr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Host/preparation/SOP provenance is explicit. PCRStudio does not invent a universal lysis hold/cycle count or promote an in-silico screen design to a verified clone."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "colonyHostClass",
+        "colonyPreparation",
+        "colonyProtocolId"
+      ]
+    },
+    "digital-pcr": {
+      "active_gates": [
+        "short_product",
+        "partition_compatible_assay",
+        "partition_format",
+        "platform_identity",
+        "platform_protocol_identity_consistency",
+        "fragmentation_state",
+        "digital_multiplex_architecture",
+        "digital_multiplex_platform_bound",
+        "specificity",
+        "shared_tm",
+        "measured_run_quantification_boundary"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "digitalPlatformName"
+          ],
+          "when": {
+            "digitalPlatformId": "other-validated"
+          }
+        },
+        {
+          "required_user_context": [
+            "digitalPartitionFormatDetail"
+          ],
+          "when": {
+            "digitalProtocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_user_context": [
+            "digitalPartitionFormatDetail"
+          ],
+          "when": {
+            "digitalProtocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback_policy": "never_infer_platform_identity_or_invent_partition_threshold_or_fragmentation",
+      "happy_path_assertions": [
+        "UI request resolves module digital-pcr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Accepted partitions, threshold/rain classification, occupancy/Poisson concentration and run QC are measured-run evidence; the design records platform/partition/fragmentation provenance only.",
+        "Digital multiplex channel/amplitude/probe-mix metadata is planning and measured-run evidence. The dye-flanking engine does not claim to design peer probe assays, infer cluster thresholds, or convert the software 12-target planning bound into wet-lab qualification."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "digitalPartitionFormat",
+        "digitalPlatformId",
+        "digitalFragmentationState"
+      ]
+    },
+    "gibson-assembly": {
+      "active_gates": [
+        "fragment_order",
+        "typed_fragment_production",
+        "junction_normalization",
+        "annealing_cores",
+        "method_specific_overlap_authority",
+        "overlap_composition",
+        "whole_oligo_structure",
+        "construct_reconstruction",
+        "circular_rotation_semantics",
+        "feature_integrity",
+        "fragment_molarity_provenance",
+        "validation_evidence_separation"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "junction-primers",
+      "fallback_policy": "preserve_junction_identity",
+      "happy_path_assertions": [
+        "UI request resolves module gibson-assembly to engine junction-primers.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Typed PCR, restriction-digest, synthetic-dsDNA, ssDNA-oligo, annealed-oligo and existing-linear fragments preserve orientation and provenance.",
+        "neb-e5510 is accepted only with method=gibson; E2621/E5520/E2623 are accepted only with method=nebuilder.",
+        "Gibson and NEBuilder numeric overlap/input/capability values never cross-inherit.",
+        "Linear/circular construct graph is reconstructed and circular display-origin rotation does not change junction identity.",
+        "Declared restriction end metadata, feature/CDS/ORF integrity and approximate molarity are diagnostic/provenance outputs, not fabricated measurements.",
+        "Clone/colony/junction-PCR/restriction/Sanger evidence remains measured validation evidence."
+      ],
+      "intentional_boundaries": [
+        "PCRStudio does not claim NEBuilder web-tool ranking equivalence or silently execute GeneArt/Golden-Gate chemistry. NEBuilder mismatch-removal remains chemistry-scoped diagnostic/reference capability unless explicitly modeled for the junction."
+      ],
+      "refusal_scenarios": [
+        "missing ordered fragments, method or explicit protocol",
+        "Gibson method paired with NEBuilder protocol or vice versa",
+        "unsupported Golden Gate/type-IIS or GeneArt chemistry selected as executable",
+        "fragment orientation/sequence makes required junction impossible",
+        "method-specific overlap/input envelope cannot be resolved",
+        "construct reconstruction is inconsistent or ambiguous"
+      ],
+      "required_user_context": [
+        "assemblyProtocol",
+        "assemblyMethod",
+        "circular"
+      ]
+    },
+    "inverse-pcr": {
+      "active_gates": [
+        "circular_or_digest_topology",
+        "named_branch_identity",
+        "outward_orientation",
+        "junction_reconstruction",
+        "restriction_enzyme_suitability",
+        "per_end_phosphate_state",
+        "circularization_provenance",
+        "linear_control_provenance",
+        "methylation_branch",
+        "unknown_flank_bounds",
+        "fragment_circle_feasibility",
+        "diagnostic_enzyme_cohort",
+        "full_reference_topology_validation",
+        "explicit_full_reference_enzyme_cohort",
+        "sequencing_handoff",
+        "predicted_result_status",
+        "validation_evidence_separation"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "enzyme",
+            "leftEndPhosphate",
+            "rightEndPhosphate",
+            "linearControlProvenance",
+            "methylationBranch"
+          ],
+          "when": {
+            "inverseBranch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_user_context": [
+            "circleLength"
+          ],
+          "when": {
+            "inverseBranch": "supplied-circular-template"
+          }
+        }
+      ],
+      "engine": "outward-pair",
+      "fallback_policy": "never_invent_topology_unknown_flank_fragment_length_or_bench_status",
+      "happy_path_assertions": [
+        "UI request resolves module inverse-pcr to engine outward-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Gen-1 executes restriction-self-ligation and explicit supplied-circular-template as separate branches. Full-reference restriction topology is exact only when the known anchor maps uniquely; one-sided/internal-cut strategies remain non-executable.",
+        "Design-stage result_status is predicted. Amplified/sequence-confirmed require external bench evidence. Unknown flank/product length is never invented; explicit bounds or unresolved state are serialized."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "inverseBranch",
+        "circularizationProvenance"
+      ]
+    },
+    "kasp": {
+      "active_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "explicit_assay_mode",
+        "kasp_endpoint_fret_chemistry",
+        "nonproofreading_polymerase",
+        "allele_specific_or_plus_minus_geometry",
+        "common_primer_geometry",
+        "protocol_specific_product_envelope",
+        "fixed_fam_hex_tail_assignment",
+        "singleplex_readout",
+        "annealing_vs_ordered_sequence",
+        "target_aware_specificity",
+        "endpoint_evidence_separation",
+        "no_proprietary_kraken_equivalence_claim"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_user_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_user_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_user_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_user_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_user_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_user_context": [
+            "kaspPlateFormat",
+            "kaspInstrumentModel",
+            "kaspRoxPolicy"
+          ],
+          "when": {
+            "kaspProtocol": "lgc-standard"
+          }
+        },
+        {
+          "required_user_context": [
+            "kaspPlateFormat",
+            "kaspInstrumentModel",
+            "kaspRoxPolicy"
+          ],
+          "when": {
+            "kaspProtocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "engine": "discriminating-pair",
+      "fallback_policy": "never_relax_discrimination_chemistry_or_standard_lgc_product_ceiling",
+      "happy_path_assertions": [
+        "UI request resolves module kasp to engine discriminating-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Historical lgc-standard results reopen under historical provenance; new current/source-limited protocol selection remains explicit.",
+        "Biallelic SNV/MNV-compatible design and junction-aware plus-minus indel/presence-absence design use different typed geometries.",
+        "Ordered allele-specific oligos include fixed FAM/HEX reporter tails while annealing cores remain separately scored.",
+        "Endpoint CSV/TSV import preserves sample/plate/well, FAM, HEX and existing provider/software call fields.",
+        "Cluster review renders FAM on X and HEX on Y without hidden threshold/auto-call logic.",
+        "No output claims equivalence to proprietary LGC Kraken design software."
+      ],
+      "intentional_boundaries": [
+        "Endpoint fluorescence is measured evidence. PCRStudio preserves provider/software calls and supports manual/review status but does not invent an instrument-independent cluster threshold, auto-call genotype, vendor performance guarantee or Kraken-equivalent design."
+      ],
+      "refusal_scenarios": [
+        "missing/contradictory typed variant, assay mode or protocol context",
+        "biallelic mode requested for incompatible presence/absence event without an explicit normalization path",
+        "plus-minus event cannot produce a valid allele-junction/common-primer geometry",
+        "protocol/method/plate/ROX context is incompatible or unresolved",
+        "endpoint file lacks declared FAM/HEX numeric measurements",
+        "request attempts hidden auto-calling/universal threshold or unsupported multiplex/tri-allelic interpretation"
+      ],
+      "required_user_context": [
+        "variant.type",
+        "variant.at",
+        "kaspAssayMode",
+        "kaspProtocol"
+      ]
+    },
+    "lamp": {
+      "active_gates": [
+        "f3_b3",
+        "f2_b2",
+        "f1c_b1c",
+        "inner_primer_composition",
+        "spacing_geometry",
+        "loop_primer_geometry",
+        "target_inclusivity_when_supplied",
+        "finite_six_region_background_topology_when_supplied",
+        "indexed_lamp_specificity_evidence_for_large_scope",
+        "set_interaction_risk_review",
+        "independent_lamp_specificity_evidence"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "loop-set",
+      "fallback_policy": "role_by_role_search_with_unchanged_lamp_geometry",
+      "happy_path_assertions": [
+        "UI request resolves module lamp to engine loop-set.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Set-level hairpin/dimer/3-prime interaction evidence is surfaced as risk/ranking evidence; no universal interaction cutoff is promoted to a wet-lab success/failure oracle.",
+        "Default geometry profile remains primerexplorer-v5-compat; pcrstudio-evidence-2026 must be explicit and preserve its own source-scoped provenance.",
+        "PrimerExplorer V5 regular-primer critical ends retain the reviewed -4 kcal/mol terminal-six-base criterion; LF/LB use the separate V5 loop-primer 3-prime stability threshold of -2 kcal/mol and must not inherit the regular cutoff.",
+        "Evidence-2026 outer-gap eligibility is 0-60 bases; 15-60 is descriptive generally-good guidance and 40-60 is ranking preference only; V5 compatibility remains 0-20 and is not silently widened.",
+        "Evidence-2026 may activate its source-backed geometry preferences, but NEB loop-Tm guidance remains documentation-only until a matching versioned NEB thermodynamic model exists; the V5 Tm scale must not be silently used as a surrogate.",
+        "Optional FIP/BIP TTTT linker is excluded from genomic specificity queries but included in ordered-oligo structure diagnostics and order-sheet provenance.",
+        "When a homologous inclusivity panel is supplied, pinned MAFFT evidence is attached and target-region changes are ranked role/position-aware; without a panel no population-coverage claim is made.",
+        "Finite exclusion backgrounds are reviewed for orientation-invariant six-region LAMP-compatible topology with the declared <=2-substitution model; genome-scale backgrounds require indexed validation rather than being called clean.",
+        "Core-pair search-budget allocation is target-wide round-robin and all active truncation stages are surfaced; bounded runs do not claim a global optimum.",
+        "Unavailable pairwise structure evidence is represented as incomplete and cannot outrank a successfully computed low-risk interaction matrix merely because values are missing.",
+        "When pasted exclusion background exceeds the direct LAMP scope, the request fails closed before candidate-specific scanning; PCRStudio must not silently substitute a separately configured indexed database for user-supplied raw sequence.",
+        "MFEprimer ordered-molecule dimer/hairpin validation groups alternative LAMP candidates by lamp_set_index; oligos from different candidate sets are never pooled into one fictitious physical reaction."
+      ],
+      "intentional_boundaries": [
+        "Core contract is four primers targeting six core regions; LF/LB are optional, yielding up to six oligos.",
+        "No in-silico rank, dimer score, background scan, or conservation panel is a wet-lab sensitivity/specificity guarantee.",
+        "The direct <=2-substitution topology matcher is ungapped and finite-background scoped; indel/polymerase-mediated nonspecific amplification remains outside that model.",
+        "Genome-scale specificity is an explicit indexed-database scope. Oversized pasted raw background is refused because its bases cannot be assumed equivalent to the configured database; indexed evidence cannot be represented as zero direct hits."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": []
+    },
+    "long-range-pcr": {
+      "active_gates": [
+        "long_product_geometry",
+        "proofreading_capability",
+        "protocol_identity",
+        "extension_protocol_compatibility"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "longRangeTargetLengthKb"
+          ],
+          "when": {
+            "longRangeProtocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_user_context": [
+            "longRangeTargetLengthKb",
+            "flankingTemplateClass"
+          ],
+          "when": {
+            "longRangeProtocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback_policy": "never_substitute_anonymous_long_range_chemistry_or_relax_polymerase_capability",
+      "happy_path_assertions": [
+        "UI request resolves module long-range-pcr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Wet-lab performance/diagnostic validity is not inferred from computational design; experimental status remains explicit."
+      ],
+      "refusal_scenarios": [
+        "missing explicit supported long-range protocol identity",
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "longRangeProtocol"
+      ]
+    },
+    "nested-pcr": {
+      "active_gates": [
+        "outer_pair",
+        "inner_pair",
+        "strict_containment",
+        "round_specificity",
+        "causal_nested_false_product_graph",
+        "cross_round_interaction",
+        "round_specific_reaction_identity",
+        "transfer_cleanup_provenance",
+        "contamination_evidence_separation",
+        "single_tube_generic_fail_closed_unless_supported_mechanism"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "cleanupProtocol"
+          ],
+          "when": {
+            "transferMode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_user_context": [
+            "cleanupProtocol"
+          ],
+          "when": {
+            "transferMode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_user_context": [
+            "transferDilutionFactor"
+          ],
+          "when": {
+            "transferMode": "diluted-transfer"
+          }
+        },
+        {
+          "required_user_context": [
+            "customTransferSop"
+          ],
+          "when": {
+            "transferMode": "custom-sop"
+          }
+        }
+      ],
+      "engine": "nested",
+      "fallback_policy": "outer_and_inner_search_expand_only_within_unchanged_round_profiles_and_never_invent_transfer_cleanup_or_carryover_chemistry",
+      "happy_path_assertions": [
+        "UI request resolves module nested-pcr to engine nested.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Round 1 and Round 2 preserve independent polymerase/reaction/thermal-program identities.",
+        "Direct, diluted, purified, custom-SOP, Msz Exonuclease I and Thermolabile Exonuclease I transfer modes preserve distinct provenance.",
+        "Named Exonuclease cleanup numeric stages resolve only from the matching authority record and never from a generic ExoI default.",
+        "Outer off-target products are reconstructed and rescanned with inner primers to produce a causal nested_false_product_graph.",
+        "Round-specific NTCs, positive control, physical work areas, transfer run/source/destination and observed bands/sequence confirmation remain measured evidence.",
+        "Historical dUTP-UNG migration resolves to the canonical strategy-only identity without creating a bench recipe."
+      ],
+      "intentional_boundaries": [
+        "Generation 1 executes explicit two-tube workflows. Generic one-tube Nested is fail-closed, and anonymous dUTP/UNG remains strategy/reference-only until a named compatible polymerase/UNG protocol owns the numeric recipe."
+      ],
+      "refusal_scenarios": [
+        "singleTube=true without a separate named/versioned one-tube protocol",
+        "cleanup transfer selected without its matching cleanup authority",
+        "diluted transfer lacks dilution factor",
+        "custom SOP transfer lacks SOP identity",
+        "inner pair is not strictly contained under selected topology/margin",
+        "round-specific reaction identity is contradictory",
+        "no causal-safe candidate survives unchanged round profiles"
+      ],
+      "required_user_context": [
+        "shares",
+        "margin",
+        "singleTube",
+        "carryoverPrevention",
+        "transferMode"
+      ]
+    },
+    "qpcr-probe": {
+      "active_gates": [
+        "primer_pair",
+        "probe_inside_product",
+        "chemistry_specific_probe_tm_model",
+        "probe_structure",
+        "same_buffer_thermodynamics",
+        "primer_probe_interactions",
+        "named_probe_chemistry",
+        "probe_optical_configuration",
+        "probe_signal_specificity",
+        "transcript_provenance",
+        "multiplex_channel_compatibility",
+        "miqe_evidence_separation",
+        "mgb_exact_tm_fail_closed_without_authority",
+        "mgb_external_authority_exchange",
+        "mgb_candidate_set_hash_integrity",
+        "combined_amplicon_probe_specificity"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "probeInternalQuencher"
+          ],
+          "when": {
+            "probeProtocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_user_context": [
+            "probeMgbAuthorityMode"
+          ],
+          "when": {
+            "probeProtocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "engine": "pair-and-probe",
+      "fallback_policy": "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model",
+      "happy_path_assertions": [
+        "UI request resolves module qpcr-probe to engine pair-and-probe.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Module status is experimental: conventional Thermo Fisher and IDT hydrolysis-probe branches are release-routable computational designs; this does not imply wet-lab validation.",
+        "TaqMan MGB/NFQ Tm is external-authority-required. PCRStudio exports stable candidates, verifies candidate-set SHA-256/candidate IDs and provenance on import, and never substitutes ordinary-DNA Tm for the MGB effect.",
+        "Multiplex interaction and MIQE observations are diagnostic/evidence layers and must not silently mutate sequence ranking."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "probeProtocol",
+        "probeChemistry",
+        "probeReporter",
+        "probeQuencher"
+      ]
+    },
+    "qpcr-sybr": {
+      "active_gates": [
+        "short_qpcr_product",
+        "primer_specificity",
+        "dimer_sensitivity",
+        "shared_tm"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "qpcrCyclingProfile"
+          ],
+          "when": {
+            "qpcrProtocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_user_context": [
+            "qpcrInstrumentProfile"
+          ],
+          "when": {
+            "qpcrProtocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_user_context": [
+            "qpcrInstrumentProfile"
+          ],
+          "when": {
+            "qpcrProtocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_user_context": [
+            "qpcrInstrumentProfile"
+          ],
+          "when": {
+            "qpcrProtocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_user_context": [
+            "qpcrInstrumentProfile"
+          ],
+          "when": {
+            "qpcrProtocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback_policy": "search_expand_only_within_qpcr_profile",
+      "happy_path_assertions": [
+        "UI request resolves module qpcr-sybr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Wet-lab performance/diagnostic validity is not inferred from computational design; experimental status remains explicit."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": []
+    },
+    "race": {
+      "active_gates": [
+        "boundary",
+        "extension_direction",
+        "chemistry_specific_gsp_profile",
+        "adapter_partner_identity",
+        "substrate_preparation_provenance",
+        "nested_round_state",
+        "single_primer_specificity",
+        "unknown_end_product_semantics",
+        "sequencing_confirmation_handoff",
+        "candidate_transcript_end_claim_boundary",
+        "smarter_complete_context",
+        "nested_gsp_plan",
+        "polyA_guard_for_3prime_smarter",
+        "validation_evidence_separation"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "racePartnerSequence",
+            "raceSopRevision",
+            "raceSopSha256"
+          ],
+          "when": {
+            "raceChemistry": "custom"
+          }
+        },
+        {
+          "required_user_context": [
+            "racePartnerSequence",
+            "raceSopRevision",
+            "raceSopSha256"
+          ],
+          "when": {
+            "raceChemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_user_context": [
+            "racePolyadenylated"
+          ],
+          "when": {
+            "raceChemistry": "smarter-race-current",
+            "raceDirection": "3prime"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback_policy": "boundary_aware_search_without_cross_wiring_race_chemistries",
+      "happy_path_assertions": [
+        "UI request resolves module race to engine single-primer.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "A RACE design nominates a candidate transcript end. Complete transcript-end identity requires product sequencing and independent experimental evidence.",
+        "SMARTer current-assisted execution requires complete context and an explicit exact partner; PCRStudio never infers a universal partner from a family name."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "raceChemistry",
+        "raceDirection",
+        "raceSubstrate",
+        "racePreparation",
+        "raceRound"
+      ]
+    },
+    "restriction-cloning": {
+      "active_gates": [
+        "restriction_site_policy",
+        "tail_composition",
+        "frame_or_product_verification",
+        "annealing_core_quality"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "flanking-pair",
+      "fallback_policy": "preserve_required_sites_and_product",
+      "happy_path_assertions": [
+        "UI request resolves module restriction-cloning to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Golden Gate/vendor assembly overlays are not silently executed by the single-pair restriction-cloning branch unless a named executable contract exists."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "tails.tailProtocol",
+        "tails.forwardEnzyme",
+        "tails.reverseEnzyme",
+        "tails.forwardProtectiveSequence",
+        "tails.reverseProtectiveSequence",
+        "restrictionDigestProtocol",
+        "restrictionDephosphorylationProtocol",
+        "restrictionLigationProtocol"
+      ]
+    },
+    "rpa": {
+      "active_gates": [
+        "rpa_compatible_chemistry",
+        "rpa_primer_profile",
+        "target_specificity"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "flanking-pair",
+      "fallback_policy": "preserve_rpa_chemistry",
+      "happy_path_assertions": [
+        "UI request resolves module rpa to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Tm is a broad software sequence guard, not a PCR annealing-performance predictor for RPA."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "rpaProtocol"
+      ]
+    },
+    "sequencing-primer": {
+      "active_gates": [
+        "read_direction",
+        "provider_specific_design_envelope",
+        "readable_distance",
+        "single_binding",
+        "submission_values_separated_from_ranking",
+        "bidirectional_route",
+        "instrument_handoff",
+        "universal_primer_exact_unique_reuse",
+        "primer_walking_geometry",
+        "bounded_abif_trace_review",
+        "trace_evidence_separated_from_ranking",
+        "validation_evidence_separation"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "sequencingInstrumentName"
+          ],
+          "when": {
+            "sequencingInstrument": "other"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback_policy": "read_window_search_without_mixing_service_submission_values_into_design_ranking",
+      "happy_path_assertions": [
+        "UI request resolves module sequencing-primer to engine single-primer.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Instrument may be explicitly unresolved at design time. Before a trace is supplied, run quality remains unresolved; imported AB1 evidence reports observed basecalls/quality/mixed peaks and never rewrites the saved primer ranking.",
+        "Curated universal primers are reusable only on exact orientation-correct unique binding; ambiguous or repeated binding fails closed."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "direction",
+        "deadZone",
+        "readLength",
+        "sequencingDesignProfile"
+      ]
+    },
+    "site-directed-mutagenesis": {
+      "active_gates": [
+        "edit_normalization",
+        "multi_edit_overlap_validation",
+        "edited_reference",
+        "topology_specific_geometry",
+        "whole_oligo_quality",
+        "exact_edited_construct",
+        "protein_consequence_when_declared",
+        "library_design_boundary",
+        "protocol_topology_compatibility",
+        "edited_product_verification"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "edit.kind",
+            "edit.at"
+          ],
+          "when": {
+            "editInputMode": "dna"
+          }
+        },
+        {
+          "required_user_context": [
+            "edit.to",
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "substitute",
+            "editInputMode": "dna"
+          }
+        },
+        {
+          "required_user_context": [
+            "edit.to"
+          ],
+          "when": {
+            "edit.kind": "insert",
+            "editInputMode": "dna"
+          }
+        },
+        {
+          "required_user_context": [
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "delete",
+            "editInputMode": "dna"
+          }
+        },
+        {
+          "required_user_context": [
+            "editsJson"
+          ],
+          "when": {
+            "editInputMode": "multi"
+          }
+        },
+        {
+          "required_user_context": [
+            "aaCdsStart",
+            "aaResidue",
+            "aaTo",
+            "codonPolicy"
+          ],
+          "when": {
+            "editInputMode": "amino-acid"
+          }
+        },
+        {
+          "required_user_context": [
+            "aaCodon"
+          ],
+          "when": {
+            "codonPolicy": "user-selected-codon",
+            "editInputMode": "amino-acid"
+          }
+        },
+        {
+          "required_user_context": [
+            "codonUsage"
+          ],
+          "when": {
+            "codonPolicy": "host-codon-usage",
+            "editInputMode": "amino-acid"
+          }
+        },
+        {
+          "required_user_context": [
+            "libraryMode",
+            "libraryAt"
+          ],
+          "when": {
+            "editInputMode": "library"
+          }
+        },
+        {
+          "required_user_context": [
+            "libraryCodon"
+          ],
+          "when": {
+            "editInputMode": "library",
+            "libraryMode": "custom"
+          }
+        }
+      ],
+      "engine": "mutagenic-pair",
+      "fallback_policy": "never_relax_edit_identity",
+      "happy_path_assertions": [
+        "UI request resolves module site-directed-mutagenesis to engine mutagenic-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Q5/E0554 back-to-back, QuikChange Lightning single-site and Lightning Multi remain distinct topology/protocol branches with no Tm-rule cross-inheritance.",
+        "Q5 insertion <=6 nt uses the small-tail branch; 7–100 nt uses the source-backed split-tail branch; >100 nt is routed/refused into an assembly strategy.",
+        "QuikChange formula Tm remains labelled as the Agilent formula and is never exported as Primer3 Tm.",
+        "Multiple edits are normalized and overlapping/ambiguous edits fail closed; exact edited construct is reconstructed before reporting.",
+        "Amino-acid/codon mode preserves the codon-selection policy and caller-supplied host-codon evidence when selected.",
+        "NNK/NNS/custom library output reports theoretical sequence space only.",
+        "NEBuilder multi-site returns a typed route to Junction Primers rather than an orderable mutagenic primer pair."
+      ],
+      "intentional_boundaries": [
+        "Clone genotype, transformation success and unintended-mutation status remain measured evidence. Q5, QuikChange single, QuikChange Multi and NEBuilder multi-site do not share topology-specific primer/Tm/protocol rules; library diversity is not synthesized abundance."
+      ],
+      "refusal_scenarios": [
+        "missing edit/topology/protocol context",
+        "protocol/topology mismatch",
+        "REF/replacing sequence disagrees with template",
+        "overlapping/ambiguous multi-edit set",
+        "Q5 insertion >100 nt without assembly routing",
+        "host-codon-usage requested without caller-supplied codon evidence",
+        "library request attempts to claim empirical clone distribution"
+      ],
+      "required_user_context": [
+        "mutagenesisTopology",
+        "postAmplificationProtocol",
+        "editInputMode"
+      ]
+    },
+    "species-specific-pcr": {
+      "active_gates": [
+        "target_inclusivity",
+        "required_exclusion_background",
+        "product_specificity"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "flanking-pair",
+      "fallback_policy": "never_drop_exclusion_background",
+      "happy_path_assertions": [
+        "UI request resolves module species-specific-pcr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Wet-lab performance/diagnostic validity is not inferred from computational design; experimental status remains explicit."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": [
+        "background",
+        "inclusivity",
+        "inclusivityPanelProvenance",
+        "backgroundPanelProvenance",
+        "speciesPanelSelectionRationale",
+        "speciesTargetTaxid",
+        "speciesTaxonomySnapshot",
+        "speciesDatabaseSnapshot",
+        "speciesPanelAccessionManifest",
+        "speciesPanelRecordMetadataManifest",
+        "speciesPanelRetrievedDate"
+      ]
+    },
+    "standard-pcr": {
+      "active_gates": [
+        "flanking_geometry",
+        "primer_thermodynamics",
+        "template_specificity"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "flankingGcEnhancerPercent"
+          ],
+          "when": {
+            "flankingAdditive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback_policy": "search_more_candidates_within_unchanged_hard_gates",
+      "happy_path_assertions": [
+        "UI request resolves module standard-pcr to engine flanking-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Wet-lab performance/diagnostic validity is not inferred from computational design; experimental status remains explicit."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact"
+      ],
+      "required_user_context": []
+    },
+    "tetra-primer-arms": {
+      "active_gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "four_primer_geometry",
+        "diagnostic_band_separation",
+        "readout_context",
+        "multi_oligo_interactions",
+        "empirical_genotype_evidence_boundary"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "discriminating-pair",
+      "fallback_policy": "preserve_diagnostic_geometry",
+      "happy_path_assertions": [
+        "UI request resolves module tetra-primer-arms to engine discriminating-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Four-primer result contains two allele-specific products plus the outer-control product with unambiguous product ordering.",
+        "Gel/PAGE readout, minimum declared band separation, optional gel percentage/ladder/run context are preserved with the assay.",
+        "Band resolvability is evaluated only against the declared readout context and is not converted into a universal base-pair threshold.",
+        "Inner:outer primer ratio is not silently synthesized as a universal default.",
+        "Observed bands/gel image/controls remain empirical evidence and do not rewrite sequence ranking."
+      ],
+      "intentional_boundaries": [
+        "Tetra-ARMS is an SNV/single-anchor four-primer topology. Gel resolution and primer balancing are assay/readout specific; PCRStudio does not invent a universal inner:outer ratio, agarose percentage or band-separation law."
+      ],
+      "refusal_scenarios": [
+        "missing typed variant or readout context",
+        "indel/complex variant requested under Tetra-ARMS geometry",
+        "expected allele/control products cannot satisfy declared band-separation context",
+        "four-primer geometry or interaction hard gates fail",
+        "no candidate survives without relaxing discrimination geometry"
+      ],
+      "required_user_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetraMinBandSeparationBp",
+        "tetraReadout"
+      ]
+    },
+    "tiled-scheme": {
+      "acceptance": [
+        "Scientific-Strict execution must refuse if pinned PrimalScheme3 3.3.0 is unavailable or mismatched; no internal backend substitution is release-grade."
+      ],
+      "active_gates": [
+        "backend_identity",
+        "coordinate_normalization",
+        "coverage",
+        "amplicon_overlap",
+        "pool_separation",
+        "variant_risk",
+        "interaction_audit",
+        "scheme_format",
+        "repairability",
+        "backend_score_non_blending",
+        "scheme_lifecycle",
+        "measured_dropout_evidence_separation",
+        "circular_scheme_create",
+        "native_visualisation_artifacts",
+        "observed_depth_import",
+        "dropout_repair_handoff",
+        "scheme_version_diff"
+      ],
+      "conditional_required_user_context": [
+        {
+          "required_user_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tilingBackend": "primalscheme3",
+            "tilingOperation": "scheme-create"
+          }
+        },
+        {
+          "required_user_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tilingBackend": "compare",
+            "tilingOperation": "scheme-create"
+          }
+        },
+        {
+          "required_user_context": [
+            "pools",
+            "panelMode"
+          ],
+          "when": {
+            "tilingBackend": "primalscheme3",
+            "tilingOperation": "panel-create"
+          }
+        },
+        {
+          "required_user_context": [
+            "existingBed",
+            "schemeConfig"
+          ],
+          "when": {
+            "tilingBackend": "primalscheme3",
+            "tilingOperation": "repair-mode"
+          }
+        },
+        {
+          "required_user_context": [
+            "existingBed",
+            "schemeConfig",
+            "primerName"
+          ],
+          "when": {
+            "tilingBackend": "primalscheme3",
+            "tilingOperation": "scheme-replace"
+          }
+        }
+      ],
+      "engine": "tiling-scheme",
+      "fallback_policy": "no_primary_backend_substitution_or_score_blending",
+      "happy_path_assertions": [
+        "UI request resolves module tiled-scheme to engine tiling-scheme.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Independent validation evidence is attached with method/tool/version/scope and is not overclaimed.",
+        "Deterministic ranking returns a top-ranked candidate under the active profile, not a universal best claim.",
+        "Result preserves ordered oligo vs annealing-core semantics wherever tails/extensions exist.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet data.",
+        "The assay-specific result view parses and renders without falling back to another engine view."
+      ],
+      "intentional_boundaries": [
+        "Wet-lab performance/diagnostic validity is not inferred from computational design; experimental status remains explicit.",
+        "Observed depth/dropout is post-run evidence and may nominate a repair review but never establishes a causal primer/variant failure.",
+        "Circular execution is supported only for upstream lifecycle operations that expose a verified circular switch; unsupported repair/panel/replace circular combinations fail closed."
+      ],
+      "refusal_scenarios": [
+        "missing or contradictory required module context",
+        "hard chemistry/enzyme/topology invariant violated",
+        "invalid coordinate/range/constraint combination",
+        "no candidate survives hard gates after bounded search inside the unchanged assay envelope",
+        "strict toolchain mode missing a required pinned artifact",
+        "Scientific-Strict auto mode must refuse if pinned PrimalScheme3 3.3.0 is unavailable/mismatched; no internal backend substitution is release-grade"
+      ],
+      "required_user_context": [
+        "tilingBackend",
+        "tilingOperation",
+        "tilingAlignmentMode"
+      ]
+    },
+    "universal-primers": {
+      "active_gates": [
+        "msa",
+        "alignment_qc",
+        "alignment_provenance",
+        "conservation",
+        "degeneracy",
+        "exact_member_enumeration_or_explicit_ceiling",
+        "member_coverage",
+        "weighted_or_stratified_coverage_when_selected",
+        "finite_target_vs_nontarget_specificity",
+        "formulation_provenance",
+        "conserved_pair_geometry",
+        "amplicon_informativeness",
+        "alignment_sensitivity"
+      ],
+      "conditional_required_user_context": [],
+      "engine": "consensus-pair",
+      "fallback_policy": "declared_alignment_authority_then_search_within_degeneracy_ceiling_without_population_or_global_specificity_overclaim",
+      "happy_path_assertions": [
+        "UI request resolves module universal-primers to engine consensus-pair.",
+        "Request carries the canonical module/runtime contract and resolved profile.",
+        "Candidate generation returns candidates or a typed explainable refusal/why_nothing; no silent empty success.",
+        "Hard assay/chemistry/topology gates run before ranking.",
+        "Measured/bench evidence is preserved separately with decision_impact=none and does not silently mutate sequence ranking.",
+        "Result carries provenance, parameter resolution, warnings/unresolved assumptions and order-sheet/orderability data.",
+        "The assay-specific result view parses and renders without falling back to another engine view.",
+        "Reviewed pre-aligned input and pinned MAFFT authority preserve tool/version/input/alignment provenance; MUSCLE 5.3 is alignment-sensitivity evidence only.",
+        "strict-all-members, coverage-threshold, majority, weighted and stratified policies are distinguishable and deterministic for the same panel metadata.",
+        "Exact concrete degenerate members are enumerated within the declared ceiling; above the ceiling the result fails/diagnoses explicitly rather than fabricating extrema.",
+        "Formulation distinguishes mixed-base synthesis, defined oligo pool, discrete sub-primer mixture and user-defined formulation; no equal synthesized abundance is assumed.",
+        "Finite non-target scanning reports finite supplied-panel scope only; user weights are not population prevalence.",
+        "Split-pool and amplicon-informativeness outputs are diagnostic and do not silently replace the primary ranking."
+      ],
+      "intentional_boundaries": [
+        "Observed panel coverage is descriptive of the supplied versioned panel. Population-wide universality/global specificity and physical member abundance require external evidence; alternative-alignment/split-pool/informativeness outputs are diagnostic unless a separate versioned decision policy promotes them."
+      ],
+      "refusal_scenarios": [
+        "missing alignment mode/policy/formulation context",
+        "invalid or unreviewed alignment input",
+        "strict alignment toolchain missing the pinned required artifact",
+        "exact-degeneracy expansion exceeds the declared computational ceiling without an explicit diagnostic path",
+        "no conserved pair survives hard geometry/thermodynamic gates",
+        "attempt to claim population prevalence/global specificity from finite panel or user weights"
+      ],
+      "required_user_context": [
+        "alignmentMode",
+        "consensusPolicy",
+        "formulationMode"
+      ]
+    }
+  },
+  "purpose": "Linux-native acceptance matrix for operational qualification of the exact prepared release snapshot. Evidence must be recorded on the supported Linux host and bound to the current source manifest.",
+  "schema_version": "1.0.0"
+}

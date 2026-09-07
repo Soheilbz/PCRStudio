@@ -1,0 +1,165 @@
+{
+  "authority_id": "pcrstudio-current-engine-system",
+  "engine_count": 11,
+  "engines": {
+    "consensus-pair": {
+      "authority_domains": [
+        {
+          "id": "consensus",
+          "source": "contracts/chemistry/consensus-profiles.json"
+        }
+      ],
+      "command": "universal",
+      "differential_corpora": [
+        "contracts/chemistry/consensus-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/consensus-pair.json",
+      "resource_weight": 4
+    },
+    "discriminating-pair": {
+      "authority_domains": [
+        {
+          "id": "discriminating",
+          "source": "contracts/chemistry/discriminating-protocols.json"
+        }
+      ],
+      "command": "discriminate",
+      "differential_corpora": [
+        "contracts/chemistry/discriminating-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/discriminating-pair.json",
+      "resource_weight": 2
+    },
+    "flanking-pair": {
+      "authority_domains": [
+        {
+          "id": "flanking",
+          "source": "contracts/chemistry/flanking-protocols.toml"
+        }
+      ],
+      "command": "run",
+      "differential_corpora": [
+        "contracts/chemistry/flanking-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/flanking-pair.json",
+      "resource_weight": 2
+    },
+    "junction-primers": {
+      "authority_domains": [
+        {
+          "id": "assembly",
+          "source": "contracts/chemistry/assembly-protocols.json"
+        }
+      ],
+      "command": "junction",
+      "differential_corpora": [
+        "contracts/chemistry/junction-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/junction-primers.json",
+      "resource_weight": 2
+    },
+    "loop-set": {
+      "authority_domains": [
+        {
+          "id": "lamp",
+          "source": "contracts/chemistry/lamp-protocols.json"
+        }
+      ],
+      "command": "loop_set",
+      "differential_corpora": [
+        "contracts/chemistry/lamp-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/loop-set.json",
+      "resource_weight": 4
+    },
+    "mutagenic-pair": {
+      "authority_domains": [
+        {
+          "id": "mutagenesis",
+          "source": "contracts/chemistry/mutagenesis-protocols.json"
+        }
+      ],
+      "command": "mutagenic",
+      "differential_corpora": [
+        "contracts/chemistry/mutagenesis-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/mutagenic-pair.json",
+      "resource_weight": 2
+    },
+    "nested": {
+      "authority_domains": [
+        {
+          "id": "nested",
+          "source": "contracts/chemistry/nested-protocols.json"
+        }
+      ],
+      "command": "nested",
+      "differential_corpora": [
+        "contracts/chemistry/nested-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/nested.json",
+      "resource_weight": 3
+    },
+    "outward-pair": {
+      "authority_domains": [
+        {
+          "id": "inverse",
+          "source": "contracts/chemistry/inverse-pcr-protocols.json"
+        }
+      ],
+      "command": "inverse",
+      "differential_corpora": [
+        "contracts/chemistry/inverse-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/outward-pair.json",
+      "resource_weight": 2
+    },
+    "pair-and-probe": {
+      "authority_domains": [
+        {
+          "id": "probe",
+          "source": "contracts/chemistry/qpcr-probe-protocols.json"
+        }
+      ],
+      "command": "probe",
+      "differential_corpora": [
+        "contracts/chemistry/probe-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/pair-and-probe.json",
+      "resource_weight": 2
+    },
+    "single-primer": {
+      "authority_domains": [
+        {
+          "id": "race",
+          "source": "contracts/chemistry/race-protocols.json"
+        },
+        {
+          "id": "sequencing",
+          "source": "contracts/chemistry/sequencing-profiles.json"
+        }
+      ],
+      "command": "single",
+      "differential_corpora": [
+        "contracts/chemistry/single-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/single-primer.json",
+      "resource_weight": 1
+    },
+    "tiling-scheme": {
+      "authority_domains": [
+        {
+          "id": "tiling",
+          "source": "contracts/chemistry/tiling-protocols.json"
+        }
+      ],
+      "command": "tiling",
+      "differential_corpora": [
+        "contracts/chemistry/tiling-differential-corpus.json"
+      ],
+      "profile": "contracts/engines/profiles/tiling-scheme.json",
+      "resource_weight": 4
+    }
+  },
+  "schema_version": "1.0.0"
+}

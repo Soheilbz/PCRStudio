@@ -1,0 +1,1767 @@
+{
+  "authority_id": "pcrstudio-current-engine-capability-matrix",
+  "engine_count": 11,
+  "engine_registry": "contracts/engines.toml",
+  "engines": {
+    "consensus-pair": {
+      "feature_capabilities": {
+        "amplicon-informativeness": {
+          "status": "diagnostic-only"
+        },
+        "coverage-threshold-consensus": {
+          "status": "executable"
+        },
+        "defined-oligo-pool": {
+          "status": "executable"
+        },
+        "discrete-subprimer-mixture": {
+          "status": "executable"
+        },
+        "exact-degenerate-member-enumeration": {
+          "limit": 4096,
+          "status": "executable"
+        },
+        "finite-target-vs-nontarget": {
+          "claim_boundary": "supplied finite panels only",
+          "status": "executable"
+        },
+        "mafft-primary": {
+          "authority": "mafft-7.526",
+          "status": "executable-if-installed"
+        },
+        "majority-consensus": {
+          "status": "executable"
+        },
+        "mixed-base-formulation": {
+          "status": "executable"
+        },
+        "muscle-alignment-sensitivity": {
+          "authority": "muscle-5.3-audit",
+          "status": "diagnostic-only"
+        },
+        "population-universality": {
+          "reason": "requires an explicit population sampling frame/evidence",
+          "status": "fail-closed"
+        },
+        "prealigned-reviewed": {
+          "authority": "prealigned-reviewed",
+          "status": "executable"
+        },
+        "split-pool-alternative": {
+          "status": "diagnostic-only"
+        },
+        "stratified-consensus": {
+          "status": "executable"
+        },
+        "strict-consensus": {
+          "status": "executable"
+        },
+        "user-defined-formulation": {
+          "status": "executable"
+        },
+        "weighted-consensus": {
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mafft:align_panel": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "mafft"
+        },
+        "mfeprimer:validate_member_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_member_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_consensus_resolver:aggregate_coverage": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_consensus_resolver"
+        },
+        "pcrstudio_consensus_resolver:expand_degenerate_members": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_consensus_resolver"
+        },
+        "pcrstudio_consensus_resolver:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_consensus_resolver"
+        },
+        "pcrstudio_consensus_resolver:resolve_conservation": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "conservation",
+            "degeneracy"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_consensus_resolver"
+        },
+        "primer3_core:design_pair_from_conserved_window": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:evaluate_concrete_oligos": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        }
+      }
+    },
+    "discriminating-pair": {
+      "feature_capabilities": {
+        "arms-indel": {
+          "reason": "not coerced to a synthetic SNV",
+          "status": "fail-closed"
+        },
+        "arms-two-tube-snv": {
+          "authority": "arms-experimental-taq",
+          "status": "executable"
+        },
+        "kasp-biallelic-genotype": {
+          "authority": "lgc-kasp-tf-v5",
+          "scope": [
+            "snv",
+            "mnv"
+          ],
+          "status": "executable"
+        },
+        "kasp-endpoint-import": {
+          "axes": {
+            "x": "FAM",
+            "y": "HEX"
+          },
+          "status": "evidence-only"
+        },
+        "kasp-plus-minus": {
+          "authority": "kasp-sequence-submission",
+          "claim_boundary": "KASP-compatible experimental design; not Kraken-equivalent",
+          "scope": [
+            "insertion",
+            "deletion",
+            "complex-replacement",
+            "presence-absence"
+          ],
+          "status": "executable"
+        },
+        "kasp-provider-call-preservation": {
+          "status": "evidence-only"
+        },
+        "kasp-threshold-auto-calling": {
+          "reason": "no source-validated universal cluster threshold",
+          "status": "fail-closed"
+        },
+        "proofreading-allele-specific-chemistry": {
+          "reason": "requires separately validated chemistry/topology",
+          "status": "fail-closed"
+        },
+        "tetra-snv": {
+          "authority": "tetra-collins-day-2001-reference",
+          "status": "executable"
+        },
+        "tetra-universal-gel-resolution": {
+          "reason": "resolution is assay/readout specific",
+          "status": "fail-closed"
+        },
+        "variant-complex-replacement": {
+          "scope": [
+            "kasp-plus-minus"
+          ],
+          "status": "executable"
+        },
+        "variant-deletion": {
+          "scope": [
+            "kasp-plus-minus"
+          ],
+          "status": "executable"
+        },
+        "variant-insertion": {
+          "scope": [
+            "kasp-plus-minus"
+          ],
+          "status": "executable"
+        },
+        "variant-mnv": {
+          "claim_boundary": "anchor-specific reduction retains complete REF/ALT provenance",
+          "status": "executable"
+        },
+        "variant-presence-absence": {
+          "scope": [
+            "kasp-plus-minus"
+          ],
+          "status": "executable"
+        },
+        "variant-snv": {
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_allelic_locus_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_locus_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_allele_wrapper:construct_allele_templates": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_allele_wrapper"
+        },
+        "pcrstudio_allele_wrapper:enumerate_orientation_and_mismatches": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_allele_wrapper"
+        },
+        "pcrstudio_allele_wrapper:evaluate_discrimination": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_allele_wrapper"
+        },
+        "pcrstudio_allele_wrapper:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_allele_wrapper"
+        },
+        "pcrstudio_allele_wrapper:normalize_variant": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "variant_normalization",
+            "allele_geometry"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_allele_wrapper"
+        },
+        "primer3_core:design_allele_specific_cores": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:design_common_or_outer_primers": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        }
+      }
+    },
+    "flanking-pair": {
+      "feature_capabilities": {},
+      "tool_capabilities": {
+        "mfeprimer:validate_dimer": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "mfeprimer:validate_hairpin": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "mfeprimer:validate_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_specificity_search": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "nupack4:reference_structure": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "structure",
+            "license_blocked"
+          ],
+          "role": "REFERENCE",
+          "status": "reference-only",
+          "tool_id": "nupack4"
+        },
+        "pcrstudio_flanking_wrapper:bounded_search_with_unchanged_hard_gates": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        },
+        "pcrstudio_flanking_wrapper:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        },
+        "pcrstudio_flanking_wrapper:normalize_input": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        },
+        "pcrstudio_flanking_wrapper:reconstruct_product": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "normalization",
+            "ranking"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_flanking_wrapper"
+        },
+        "primer3_core:check_pair": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:design_pair": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:thermo_evaluate": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer_blast:reference_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "status": "reference-only",
+          "tool_id": "primer_blast"
+        },
+        "primerpooler:assign_pools": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        },
+        "primerpooler:validate_multiplex_interactions": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        },
+        "pydna:simulate_restriction_digest_ligation_construct": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "restriction_construct_simulation"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "pydna"
+        },
+        "viennarna:validate_structure": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "viennarna"
+        }
+      }
+    },
+    "junction-primers": {
+      "feature_capabilities": {
+        "construct-graph": {
+          "status": "executable"
+        },
+        "feature-integrity": {
+          "status": "diagnostic-only"
+        },
+        "fragment-molarity": {
+          "claim_boundary": "approximate when computed from dsDNA mass/length",
+          "status": "diagnostic-only"
+        },
+        "gibson-e5510": {
+          "authority": "neb-e5510",
+          "status": "executable"
+        },
+        "golden-gate": {
+          "reason": "separate Type IIS topology",
+          "status": "fail-closed"
+        },
+        "nebuilder-e2621": {
+          "authority": "neb-nebuilder-e2621",
+          "status": "executable"
+        },
+        "nebuilder-e2623": {
+          "authority": "neb-nebuilder-e2623",
+          "status": "executable"
+        },
+        "nebuilder-e5520": {
+          "authority": "neb-nebuilder-e5520",
+          "status": "executable"
+        },
+        "nebuilder-proprietary-tool-equivalence": {
+          "reason": "PCRStudio does not claim NEBuilder web-tool ranking equivalence",
+          "status": "fail-closed"
+        },
+        "typed-annealed-oligos": {
+          "status": "executable"
+        },
+        "typed-existing-linear": {
+          "status": "executable"
+        },
+        "typed-pcr-fragment": {
+          "status": "executable"
+        },
+        "typed-restriction-fragment": {
+          "status": "executable"
+        },
+        "typed-ssdna-oligo": {
+          "status": "executable"
+        },
+        "typed-synthetic-dsdna": {
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_background_binding": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_background_search": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_junction_composer:compose_full_oligos": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_junction_composer"
+        },
+        "pcrstudio_junction_composer:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_junction_composer"
+        },
+        "pcrstudio_junction_composer:normalize_construct": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_junction_composer"
+        },
+        "pcrstudio_junction_composer:reconstruct_construct": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_junction_composer"
+        },
+        "pcrstudio_junction_composer:resolve_junctions": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "construct",
+            "overlap"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_junction_composer"
+        },
+        "primer3_core:design_annealing_cores": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "pydna:simulate_amplified_fragment_pcr_products": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "pydna"
+        },
+        "viennarna:report_dna_fold_without_changing_selection": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "overlap_structure_diagnostic"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "viennarna"
+        }
+      }
+    },
+    "loop-set": {
+      "feature_capabilities": {},
+      "tool_capabilities": {
+        "mafft:align_panel": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "target_inclusivity"
+          ],
+          "role": "CONDITIONAL_PRIMARY",
+          "status": "executable-if-installed",
+          "tool_id": "mafft"
+        },
+        "mfeprimer:validate_dimer": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity",
+            "ordered_oligo_structure"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "mfeprimer:validate_hairpin": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity",
+            "ordered_oligo_structure"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "mfeprimer:validate_role_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity",
+            "ordered_oligo_structure"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_role_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity",
+            "lamp_set_topology"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_lamp_enumerator:compose_inner_primers": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        },
+        "pcrstudio_lamp_enumerator:design_loop_primers": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        },
+        "pcrstudio_lamp_enumerator:enumerate_role_sites": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        },
+        "pcrstudio_lamp_enumerator:filter_rank_sets": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        },
+        "pcrstudio_lamp_enumerator:validate_set_geometry": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "lamp_geometry",
+            "set_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_lamp_enumerator"
+        },
+        "primer3_core:evaluate_composite_oligos": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "thermodynamics"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:evaluate_role_oligos": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "thermodynamics"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "viennarna:report_rt_lamp_rna_accessibility_without_changing_selection": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "rna_target_accessibility"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "viennarna"
+        }
+      }
+    },
+    "mutagenic-pair": {
+      "feature_capabilities": {
+        "NNK-library": {
+          "status": "diagnostic-only"
+        },
+        "NNS-library": {
+          "status": "diagnostic-only"
+        },
+        "amino-acid-edit": {
+          "status": "executable"
+        },
+        "clone-verification": {
+          "status": "evidence-only"
+        },
+        "custom-codon-library": {
+          "status": "diagnostic-only"
+        },
+        "library-abundance-prediction": {
+          "reason": "theoretical codon space is not synthesis/clone abundance",
+          "status": "fail-closed"
+        },
+        "multi-edit-normalization": {
+          "status": "executable"
+        },
+        "nebuilder-multisite": {
+          "authority": "neb-nebuilder-multisite",
+          "route": "junction-primers",
+          "status": "route-only"
+        },
+        "q5-back-to-back": {
+          "authority": "neb-q5-e0554",
+          "status": "executable"
+        },
+        "q5-insertion-over-100nt": {
+          "route": "junction-primers",
+          "status": "route-only"
+        },
+        "q5-small-insertion-0-6nt": {
+          "authority": "neb-q5-e0554",
+          "status": "executable"
+        },
+        "q5-split-insertion-7-100nt": {
+          "authority": "neb-q5-e0554",
+          "status": "executable"
+        },
+        "quikchange-lightning-multi": {
+          "authority": "agilent-quikchange-lightning-multi-210513-210516",
+          "status": "executable"
+        },
+        "quikchange-lightning-single": {
+          "authority": "agilent-quikchange-lightning-210518",
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_background_binding": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_background_search": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_edit_normalizer:construct_edited_reference": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_edit_normalizer"
+        },
+        "pcrstudio_edit_normalizer:enumerate_mutagenic_pair": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_edit_normalizer"
+        },
+        "pcrstudio_edit_normalizer:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_edit_normalizer"
+        },
+        "pcrstudio_edit_normalizer:normalize_edit": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_edit_normalizer"
+        },
+        "pcrstudio_edit_normalizer:verify_edit_product": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "edit_normalization",
+            "topology"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_edit_normalizer"
+        },
+        "primer3_core:evaluate_annealing_cores": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "pydna:simulate_selected_primer_product": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "pydna"
+        }
+      }
+    },
+    "nested": {
+      "feature_capabilities": {
+        "causal-false-product-graph": {
+          "status": "diagnostic-only"
+        },
+        "contamination-workflow-evidence": {
+          "status": "evidence-only"
+        },
+        "custom-sop-transfer": {
+          "status": "executable"
+        },
+        "diluted-transfer": {
+          "status": "executable"
+        },
+        "direct-transfer": {
+          "status": "executable"
+        },
+        "dutp-ung": {
+          "authority": "dutp-ung-strategy-only",
+          "status": "reference-only"
+        },
+        "fully-nested-two-tube": {
+          "status": "executable"
+        },
+        "generic-one-tube-nested": {
+          "authority": "one-tube-reference-only",
+          "status": "fail-closed"
+        },
+        "independent-round-chemistry": {
+          "status": "executable"
+        },
+        "independent-round-thermal-program": {
+          "status": "executable"
+        },
+        "msz-exonuclease-i": {
+          "authority": "neb-msz-exonuclease-i",
+          "status": "executable"
+        },
+        "purified-product-transfer": {
+          "status": "executable"
+        },
+        "semi-nested-forward-two-tube": {
+          "status": "executable"
+        },
+        "semi-nested-reverse-two-tube": {
+          "status": "executable"
+        },
+        "thermolabile-exonuclease-i": {
+          "authority": "neb-thermolabile-exonuclease-i",
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_round_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_round_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_nested_containment:derive_inner_template": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_nested_containment"
+        },
+        "pcrstudio_nested_containment:filter_rank_pair_of_pairs": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_nested_containment"
+        },
+        "pcrstudio_nested_containment:map_inner_to_source": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_nested_containment"
+        },
+        "pcrstudio_nested_containment:validate_containment": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "containment",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_nested_containment"
+        },
+        "primer3_core:design_inner": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:design_outer": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primerpooler:validate_cross_round_interactions": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        }
+      }
+    },
+    "outward-pair": {
+      "feature_capabilities": {
+        "full-reference-topology": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "multi-enzyme-cohort": {
+          "authority": "restriction-self-ligation",
+          "status": "executable"
+        },
+        "one-sided-internal-cut": {
+          "authority": "one-sided-internal-cut-reference",
+          "status": "reference-only"
+        },
+        "sanger-handoff": {
+          "authority": "restriction-self-ligation",
+          "status": "executable"
+        },
+        "standard-restriction-self-ligation": {
+          "authority": "restriction-self-ligation",
+          "status": "executable"
+        },
+        "supplied-circular-template": {
+          "authority": "supplied-circular-template",
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_topology_resolver:construct_search_representation": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_topology_resolver"
+        },
+        "pcrstudio_topology_resolver:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_topology_resolver"
+        },
+        "pcrstudio_topology_resolver:map_to_source": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_topology_resolver"
+        },
+        "pcrstudio_topology_resolver:reconstruct_inverse_product": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_topology_resolver"
+        },
+        "pcrstudio_topology_resolver:resolve_topology": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "topology",
+            "digest",
+            "coordinate_mapping"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_topology_resolver"
+        },
+        "primer3_core:design_outward_pair": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "pydna:simulate_inverse_circular_product": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "independent_pcr_product_simulation"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "pydna"
+        }
+      }
+    },
+    "pair-and-probe": {
+      "feature_capabilities": {
+        "idt-primetime-conventional": {
+          "authority": "idt-primetime-conventional",
+          "status": "executable"
+        },
+        "mgb-authority-roundtrip": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "mgb-exact-tm": {
+          "authority": "taqman-mgb-reference",
+          "status": "external-authority-required"
+        },
+        "miqe-2-evidence": {
+          "authority": "miqe-2-0-evidence",
+          "status": "evidence-only"
+        },
+        "multiplex-interaction-audit": {
+          "authority": "thermofisher-taqman-conventional",
+          "status": "diagnostic-only"
+        },
+        "optical-configuration": {
+          "authority": "thermofisher-taqman-conventional",
+          "status": "executable"
+        },
+        "probe-amplicon-combined-specificity": {
+          "authority": "thermofisher-taqman-conventional",
+          "status": "executable"
+        },
+        "taqman-mgb": {
+          "authority": "taqman-mgb-reference",
+          "status": "external-authority-required"
+        },
+        "taqman-mgb-reference": {
+          "note": "Generation-1 current engine capability.",
+          "status": "external-authority-required"
+        },
+        "thermofisher-conventional": {
+          "authority": "thermofisher-taqman-conventional",
+          "status": "executable"
+        },
+        "thermofisher-taqman-conventional": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_product_and_probe_binding": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_product_and_probe_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_probe_wrapper:filter_rank_triplets": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "probe_geometry",
+            "optics"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_probe_wrapper"
+        },
+        "pcrstudio_probe_wrapper:validate_optical_configuration": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "probe_geometry",
+            "optics"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_probe_wrapper"
+        },
+        "pcrstudio_probe_wrapper:validate_probe_geometry": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "probe_geometry",
+            "optics"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_probe_wrapper"
+        },
+        "primer3_core:design_pair_and_internal_oligo": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation",
+            "internal_oligo"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer3_core:thermo_evaluate": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation",
+            "internal_oligo"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        },
+        "primer_blast:reference_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "remote",
+            "specificity"
+          ],
+          "role": "REFERENCE",
+          "status": "reference-only",
+          "tool_id": "primer_blast"
+        },
+        "viennarna:validate_probe_structure": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "structure"
+          ],
+          "role": "OPTIONAL",
+          "status": "executable-if-installed",
+          "tool_id": "viennarna"
+        }
+      }
+    },
+    "single-primer": {
+      "feature_capabilities": {
+        "azenta-sequencing-profile": {
+          "authority": "azenta-genewiz",
+          "status": "executable"
+        },
+        "bidirectional-plan": {
+          "authority": "generic-cycle-sequencing",
+          "status": "executable"
+        },
+        "cornell-sequencing-profile": {
+          "authority": "cornell",
+          "status": "executable"
+        },
+        "custom-race": {
+          "authority": "custom",
+          "status": "executable"
+        },
+        "eurofins-sequencing-profile": {
+          "authority": "eurofins",
+          "status": "executable"
+        },
+        "firstchoice-rlm-race": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "generacer-race": {
+          "authority": "generacer-kit-25-0355-vl",
+          "status": "executable"
+        },
+        "nested-gsp-plan": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "primer-walking": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "rlm-race": {
+          "authority": "firstchoice-rlm-race",
+          "status": "executable"
+        },
+        "smarter-race": {
+          "authority": "smarter-race-current",
+          "status": "executable-with-complete-context"
+        },
+        "trace-import": {
+          "authority": "generic-cycle-sequencing",
+          "status": "executable"
+        },
+        "universal-primer-discovery": {
+          "authority": "azenta-genewiz",
+          "status": "executable"
+        }
+      },
+      "tool_capabilities": {
+        "mfeprimer:validate_single_binding": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_single_binding_search": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "pcrstudio_single_primer_wrapper:filter_rank": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        },
+        "pcrstudio_single_primer_wrapper:plan_read_or_extension_span": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        },
+        "pcrstudio_single_primer_wrapper:resolve_branch_boundary": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        },
+        "pcrstudio_single_primer_wrapper:resolve_extension_direction": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "race_boundary",
+            "read_direction"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_single_primer_wrapper"
+        },
+        "primer3_core:design_single_oligo": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "candidate_generation"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primer3_core"
+        }
+      }
+    },
+    "tiling-scheme": {
+      "feature_capabilities": {
+        "artic-bed-v3": {
+          "authority": "artic-primer-bed-v3",
+          "status": "executable"
+        },
+        "backend-compare": {
+          "authority": "olivar-1.3.3",
+          "status": "executable"
+        },
+        "circular-bed-v3": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable-if-installed"
+        },
+        "dropout-evidence": {
+          "authority": "artic-primer-bed-v3",
+          "status": "executable"
+        },
+        "dropout-repair-handoff": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "internal-walker": {
+          "authority": "primalscheme3-3.3.0",
+          "status": "diagnostic-only"
+        },
+        "multi-target": {
+          "authority": "olivar-1.3.3",
+          "status": "executable-if-installed"
+        },
+        "native-scheme-visualisation": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable-if-installed"
+        },
+        "olivar": {
+          "authority": "olivar-1.3.3",
+          "status": "executable-if-installed"
+        },
+        "primalscheme3": {
+          "authority": "primalscheme3-3.3.0",
+          "status": "executable-if-installed"
+        },
+        "scheme-version-diff": {
+          "note": "Generation-1 current engine capability.",
+          "status": "executable"
+        },
+        "variant-risk": {
+          "authority": "olivar-1.3.3",
+          "status": "executable-if-installed"
+        }
+      },
+      "tool_capabilities": {
+        "mafft:align_panel": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "alignment"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "mafft"
+        },
+        "mfeprimer:validate_scheme_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "mfeprimer"
+        },
+        "ncbi_blast_plus:expand_scheme_specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "specificity"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "ncbi_blast_plus"
+        },
+        "olivar:build_reference": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "olivar"
+        },
+        "olivar:scheme_create": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "olivar"
+        },
+        "olivar:sensitivity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "olivar"
+        },
+        "olivar:specificity": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "variant-aware",
+            "multi-target"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "olivar"
+        },
+        "pcrstudio_scheme_wrapper:analyze_variant_risk": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:audit_coverage": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:diff_scheme_versions": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:import_depth_evidence": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:manage_repair_history": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:normalize_scheme": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:release_scheme": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "pcrstudio_scheme_wrapper:route_dropout_repair": {
+          "artifact_identity": "internal:pcrstudio-build",
+          "purposes": [
+            "scheme_normalization",
+            "lifecycle"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "pcrstudio_scheme_wrapper"
+        },
+        "primalscheme3:inspect_interactions": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:panel_create": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:repair_mode": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:scheme_create": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:scheme_replace": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:visualise_bedfile": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primalscheme3:visualise_primer_mismatches": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "tiling",
+            "repair"
+          ],
+          "role": "PRIMARY",
+          "status": "executable",
+          "tool_id": "primalscheme3"
+        },
+        "primerpooler:assign_pools": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        },
+        "primerpooler:audit_selected_pool_interactions": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        },
+        "primerpooler:validate_interactions": {
+          "artifact_identity": "inherit:toolchain-manifest.json",
+          "purposes": [
+            "interaction",
+            "pooling"
+          ],
+          "role": "VALIDATOR",
+          "status": "executable-if-installed",
+          "tool_id": "primerpooler"
+        }
+      }
+    }
+  },
+  "profile_directory": "contracts/engines/profiles",
+  "schema_version": "1.0.0",
+  "status_vocabulary": {
+    "diagnostic-only": "does not own primary ranking",
+    "evidence-only": "run/validation evidence only",
+    "executable": "qualified source path implemented",
+    "executable-if-installed": "implemented but requires external tool",
+    "executable-with-complete-context": "implemented and executable only when all protocol-specific context and partner inputs are supplied",
+    "external-authority-required": "source path is implemented, but ranking/acceptance requires imported values from a named external authority",
+    "fail-closed": "explicit refusal",
+    "historical": "compatibility/reproducibility only",
+    "reference-only": "documented but intentionally not executable",
+    "route-only": "routes to another engine"
+  }
+}

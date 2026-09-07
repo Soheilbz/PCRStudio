@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/schemas/module-contract-registry-v1.1.json",
+  "title": "PCRStudio generation-1 assay/module contract registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "runtime_contract_version",
+    "parameter_map_version",
+    "coordinate_contract",
+    "pipeline",
+    "modules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "runtime_contract_version": {
+      "const": "1.1.0"
+    },
+    "parameter_map_version": {
+      "const": "gen1-2026-08-30.2"
+    },
+    "coordinate_contract": {
+      "type": "object",
+      "required": [
+        "version",
+        "basis",
+        "interval",
+        "notation",
+        "oligo_sequence_orientation",
+        "strand_field_required",
+        "single_base_position",
+        "junction_position",
+        "source_coordinate_policy"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "basis": {
+          "const": 0
+        },
+        "interval": {
+          "const": "half-open"
+        },
+        "notation": {
+          "const": "[start,end)"
+        },
+        "oligo_sequence_orientation": {
+          "const": "5prime-to-3prime"
+        },
+        "strand_field_required": {
+          "const": true
+        },
+        "single_base_position": {
+          "const": "0-based"
+        },
+        "junction_position": {
+          "const": "boundary-between-bases"
+        },
+        "source_coordinate_policy": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "pipeline": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "modules": {
+      "type": "object",
+      "required": [
+        "standard-pcr",
+        "long-range-pcr",
+        "colony-pcr",
+        "nested-pcr",
+        "inverse-pcr",
+        "qpcr-sybr",
+        "qpcr-probe",
+        "digital-pcr",
+        "arms-pcr",
+        "tetra-primer-arms",
+        "kasp",
+        "species-specific-pcr",
+        "lamp",
+        "rpa",
+        "universal-primers",
+        "tiled-scheme",
+        "race",
+        "sequencing-primer",
+        "gibson-assembly",
+        "restriction-cloning",
+        "site-directed-mutagenesis"
+      ],
+      "properties": {
+        "standard-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "long-range-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "colony-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "nested-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "inverse-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "qpcr-sybr": {
+          "$ref": "#/$defs/module"
+        },
+        "qpcr-probe": {
+          "$ref": "#/$defs/module"
+        },
+        "digital-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "arms-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "tetra-primer-arms": {
+          "$ref": "#/$defs/module"
+        },
+        "kasp": {
+          "$ref": "#/$defs/module"
+        },
+        "species-specific-pcr": {
+          "$ref": "#/$defs/module"
+        },
+        "lamp": {
+          "$ref": "#/$defs/module"
+        },
+        "rpa": {
+          "$ref": "#/$defs/module"
+        },
+        "universal-primers": {
+          "$ref": "#/$defs/module"
+        },
+        "tiled-scheme": {
+          "$ref": "#/$defs/module"
+        },
+        "race": {
+          "$ref": "#/$defs/module"
+        },
+        "sequencing-primer": {
+          "$ref": "#/$defs/module"
+        },
+        "gibson-assembly": {
+          "$ref": "#/$defs/module"
+        },
+        "restriction-cloning": {
+          "$ref": "#/$defs/module"
+        },
+        "site-directed-mutagenesis": {
+          "$ref": "#/$defs/module"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "module": {
+      "type": "object",
+      "required": [
+        "engine",
+        "command",
+        "gates",
+        "fallback"
+      ],
+      "properties": {
+        "engine": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "required_context": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "fallback": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

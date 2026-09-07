@@ -1,0 +1,19 @@
+{
+  "authority_domains": [
+    {
+      "id": "lamp",
+      "source": "contracts/chemistry/lamp-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/lamp-differential-corpus.json"
+  ],
+  "engine_id": "loop-set",
+  "feature_capabilities": {},
+  "schema_version": "1.0.0",
+  "transport": {
+    "authority": "contracts/http-api.toml",
+    "fields": [],
+    "mode": "canonical-http-contract"
+  }
+}

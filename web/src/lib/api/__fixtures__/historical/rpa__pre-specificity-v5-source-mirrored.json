@@ -1,0 +1,573 @@
+{
+  "accessibility": {
+    "celsius": 39.0,
+    "checked": true,
+    "model": "ViennaRNA, Mathews 2004 DNA parameters",
+    "note": "",
+    "openings": {
+      "0:left": {
+        "length": 32,
+        "start": 456,
+        "unpaired": 0.00026926024931975403
+      },
+      "0:right": {
+        "length": 32,
+        "start": 524,
+        "unpaired": 0.0012962985102633608
+      },
+      "1:left": {
+        "length": 32,
+        "start": 409,
+        "unpaired": 1.378681115963824e-5
+      },
+      "1:right": {
+        "length": 32,
+        "start": 499,
+        "unpaired": 0.0003999016044114078
+      },
+      "2:left": {
+        "length": 32,
+        "start": 408,
+        "unpaired": 1.4557397329261287e-5
+      },
+      "2:right": {
+        "length": 32,
+        "start": 493,
+        "unpaired": 0.00011745725510502224
+      }
+    }
+  },
+  "assay": {
+    "defaults": {
+      "gc_clamp": 0,
+      "gc_max": 70.0,
+      "gc_min": 30.0,
+      "length_max": 35,
+      "length_min": 30,
+      "length_opt": 32,
+      "max_poly_x": 5,
+      "min_three_prime_distance": 1,
+      "product_max": 200,
+      "product_min": 100,
+      "tm_max": 100.0,
+      "tm_min": 50.0,
+      "tm_opt": 75.0,
+      "tm_pair_max_difference": 100.0
+    },
+    "id": "rpa",
+    "name": "RPA",
+    "overruled": [],
+    "purposes": ["general", "screen"]
+  },
+  "background": {
+    "bases": 700,
+    "checked": true,
+    "clamp": 5,
+    "contigs": 1,
+    "max_mismatches": 3,
+    "note": "Only the pasted sequence was checked, because no background was given. A second site on your own sequence would have been found; nothing here speaks for anywhere else in the genome, the vector or the host.",
+    "template_only": true
+  },
+  "considered": [
+    {
+      "accepted": 2975,
+      "considered": 3606,
+      "rejections": [
+        {
+          "advice": "allow a less stable hairpin, or pick a different region",
+          "count": 251,
+          "reason": "high hairpin stability",
+          "share": 7.0
+        },
+        {
+          "advice": "widen the GC range",
+          "count": 201,
+          "reason": "GC content failed",
+          "share": 5.6
+        },
+        {
+          "advice": "allow more self-complementarity",
+          "count": 179,
+          "reason": "high any compl",
+          "share": 5.0
+        }
+      ],
+      "sentence": "3606 left primers considered, 2975 acceptable. The commonest refusal was high hairpin stability at 251 (7%) \u2014 allow a less stable hairpin, or pick a different region.",
+      "stage": "left primers"
+    },
+    {
+      "accepted": 3183,
+      "considered": 3606,
+      "rejections": [
+        {
+          "advice": "widen the GC range",
+          "count": 222,
+          "reason": "GC content failed",
+          "share": 6.2
+        },
+        {
+          "advice": "allow a less stable hairpin, or pick a different region",
+          "count": 197,
+          "reason": "high hairpin stability",
+          "share": 5.5
+        },
+        {
+          "advice": "allow more self-complementarity",
+          "count": 4,
+          "reason": "high any compl",
+          "share": 0.1
+        }
+      ],
+      "sentence": "3606 right primers considered, 3183 acceptable. The commonest refusal was GC content failed at 222 (6%) \u2014 widen the GC range.",
+      "stage": "right primers"
+    },
+    {
+      "accepted": 17,
+      "considered": 6994,
+      "rejections": [
+        {
+          "advice": "widen the product size range",
+          "count": 6977,
+          "reason": "unacceptable product size",
+          "share": 99.8
+        },
+        {
+          "advice": "",
+          "count": 290,
+          "reason": "primer in pair overlaps a primer in a better pair",
+          "share": 4.1
+        }
+      ],
+      "sentence": "6994 pairs considered, 17 acceptable. The commonest refusal was unacceptable product size at 6977 (100%) \u2014 widen the product size range.",
+      "stage": "pairs"
+    }
+  ],
+  "constraints": {
+    "gc_clamp": 0,
+    "gc_max": 70.0,
+    "gc_min": 30.0,
+    "length_max": 35,
+    "length_min": 30,
+    "length_opt": 32,
+    "max_end_gc": 5,
+    "max_end_stability": null,
+    "max_poly_x": 5,
+    "min_three_prime_distance": 1,
+    "product_max": 200,
+    "product_min": 100,
+    "tm_max": 100.0,
+    "tm_min": 50.0,
+    "tm_opt": 75.0,
+    "tm_pair_max_difference": 100.0
+  },
+  "engine": "flanking-pair",
+  "interactions": {
+    "checked": 2,
+    "found": 0,
+    "note": "Nothing in this order sticks to anything else hard enough to worry about.",
+    "threshold": -6.0,
+    "worst": []
+  },
+  "order_sheet": [
+    {
+      "gc_percent": 40.6,
+      "length": 32,
+      "name": "template_1F",
+      "sequence": "GTAATCATGGTCATAGCTGTTTCCTGTGTGAA",
+      "tm": 73.3
+    },
+    {
+      "gc_percent": 56.2,
+      "length": 32,
+      "name": "template_1R",
+      "sequence": "GGCACCCCAGGCTTTACACTTTATGCTTCCGG",
+      "tm": 80.1
+    }
+  ],
+  "pairs": [
+    {
+      "accessibility": {
+        "left": 0.00026926024931975403,
+        "right": 0.0012962985102633608
+      },
+      "amplicon": "GTAATCATGGTCATAGCTGTTTCCTGTGTGAAATTGTTATCCGCTCACAATTCCACACAACATACGAGCCGGAAGCATAAAGTGTAAAGCCTGGGGTGCC",
+      "amplicon_profile": {
+        "difficulty": "easy",
+        "gc": 46.0,
+        "length": 100,
+        "note": "The product is 46% GC, below the 70% where mixes start needing help, so nothing about its composition calls for an additive. Its richest 50 bases start at position 51 of the product and run to 52% \u2014 the richest stretch of any long product is high by construction, so read that as where to look rather than as a verdict.",
+        "one_window_only": false,
+        "window": 50,
+        "worst_window_at": 51,
+        "worst_window_gc": 52.0
+      },
+      "annealing_temperature": null,
+      "candidate": 0,
+      "cross_dimer_dg": -5.26,
+      "crosses_the_join": false,
+      "left": {
+        "gc_percent": 40.6,
+        "hairpin": {
+          "dg": 0.0,
+          "found": false,
+          "tm": 0.0
+        },
+        "length": 32,
+        "self_dimer": {
+          "dg": -4.87,
+          "found": true,
+          "tm": -0.8
+        },
+        "sequence": "GTAATCATGGTCATAGCTGTTTCCTGTGTGAA",
+        "three_prime_dg": -2.93,
+        "tm": 73.3
+      },
+      "left_at": {
+        "length": 32,
+        "start": 455
+      },
+      "off_targets": {
+        "background_bases": 700,
+        "background_name": "template (the template itself)",
+        "checked": true,
+        "clamp": 5,
+        "max_mismatches": 3,
+        "note": "",
+        "product_count": 0,
+        "products": [],
+        "serious": 0,
+        "site_count": 2,
+        "terminal_mismatch_scan": false
+      },
+      "penalty": 0.0,
+      "product_size": 100,
+      "quality": {
+        "parts": {
+          "accessibility": 0.00026926024931975403,
+          "dimer_margin": 0.1233333333333334,
+          "end_stability": 0.4644444444444445,
+          "specificity": 1.0,
+          "tm_centeredness": null
+        },
+        "score": 53
+      },
+      "right": {
+        "gc_percent": 56.2,
+        "hairpin": {
+          "dg": 0.0,
+          "found": false,
+          "tm": 0.0
+        },
+        "length": 32,
+        "self_dimer": {
+          "dg": -4.88,
+          "found": true,
+          "tm": -4.0
+        },
+        "sequence": "GGCACCCCAGGCTTTACACTTTATGCTTCCGG",
+        "three_prime_dg": -4.82,
+        "tm": 80.1
+      },
+      "right_at": {
+        "length": 32,
+        "start": 554
+      },
+      "score": 0.137,
+      "score_components": [
+        {
+          "detail": "How far the pair sits from the ideal length, melting temperature and GC it was asked for.",
+          "name": "Primer3 penalty",
+          "value": 0.0
+        },
+        {
+          "detail": "No unwanted product predicted in the background checked.",
+          "name": "Off-target products",
+          "value": 0.0
+        },
+        {
+          "detail": "The two primers bind each other at -5.3 kcal/mol, above the -6 where it starts being worth mentioning.",
+          "name": "Primer-dimer",
+          "value": 0.0
+        },
+        {
+          "detail": "The more buried of the two sites is 0.7 orders of magnitude less likely to be unpaired than the best candidate's.",
+          "name": "Template accessibility",
+          "value": 0.137
+        },
+        {
+          "detail": "Not assessed. No known variants were given, so nothing was checked against them.",
+          "name": "Known variants",
+          "value": 0.0
+        }
+      ],
+      "tm_difference": 6.8,
+      "uniformity": {
+        "max_window_gc": 52.0,
+        "min_window_gc": 38.0,
+        "note": "",
+        "window_bp": 50
+      },
+      "variants": null
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows ",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "purpose": {
+    "constraints": {
+      "product_max": 1000,
+      "product_min": 200
+    },
+    "id": "general",
+    "name": "General amplification",
+    "overridden": [],
+    "ranking_weights": {
+      "PRIMER_PAIR_WT_DIFF_TM": 0.0,
+      "PRIMER_WT_TM_GT": 0.0,
+      "PRIMER_WT_TM_LT": 0.0
+    },
+    "summary": "No particular downstream use. A clean, easy product of ordinary length."
+  },
+  "reaction": {
+    "dna_conc": 300.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 14.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 100.0,
+    "polymerase": "rpa",
+    "polymerase_name": "Recombinase amplification"
+  },
+  "reverse_transcription": null,
+  "stages": [
+    {
+      "came_out": 700,
+      "detail": "700 characters arrived and 700 bases survived. Nothing had to be stripped or converted.",
+      "dropped": 0,
+      "flagged": null,
+      "key": "intake",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [],
+      "title": "Reading the sequence",
+      "unit": "characters",
+      "went_in": 700
+    },
+    {
+      "came_out": 2975,
+      "detail": "3606 left primers considered, 2975 acceptable. The commonest refusal was high hairpin stability at 251 (7%) \u2014 allow a less stable hairpin, or pick a different region.",
+      "dropped": 631,
+      "flagged": null,
+      "key": "search:left-primers",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [
+        {
+          "advice": "allow a less stable hairpin, or pick a different region",
+          "count": 251,
+          "reason": "high hairpin stability",
+          "share": 7.0
+        },
+        {
+          "advice": "widen the GC range",
+          "count": 201,
+          "reason": "GC content failed",
+          "share": 5.6
+        },
+        {
+          "advice": "allow more self-complementarity",
+          "count": 179,
+          "reason": "high any compl",
+          "share": 5.0
+        }
+      ],
+      "title": "Primer3: left primers",
+      "unit": "left primers",
+      "went_in": 3606
+    },
+    {
+      "came_out": 3183,
+      "detail": "3606 right primers considered, 3183 acceptable. The commonest refusal was GC content failed at 222 (6%) \u2014 widen the GC range.",
+      "dropped": 423,
+      "flagged": null,
+      "key": "search:right-primers",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [
+        {
+          "advice": "widen the GC range",
+          "count": 222,
+          "reason": "GC content failed",
+          "share": 6.2
+        },
+        {
+          "advice": "allow a less stable hairpin, or pick a different region",
+          "count": 197,
+          "reason": "high hairpin stability",
+          "share": 5.5
+        },
+        {
+          "advice": "allow more self-complementarity",
+          "count": 4,
+          "reason": "high any compl",
+          "share": 0.1
+        }
+      ],
+      "title": "Primer3: right primers",
+      "unit": "right primers",
+      "went_in": 3606
+    },
+    {
+      "came_out": 12,
+      "detail": "6994 pairs considered, 17 acceptable. The commonest refusal was unacceptable product size at 6977 (100%) \u2014 widen the product size range. Primer3 counted 17 acceptable pairs while searching and handed back 12; the 12 are what everything below works from.",
+      "dropped": 6982,
+      "flagged": null,
+      "key": "search:pairs",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [
+        {
+          "advice": "widen the product size range",
+          "count": 6977,
+          "reason": "unacceptable product size",
+          "share": 99.8
+        },
+        {
+          "advice": "",
+          "count": 290,
+          "reason": "primer in pair overlaps a primer in a better pair",
+          "share": 4.1
+        }
+      ],
+      "title": "Primer3: pairs",
+      "unit": "pairs",
+      "went_in": 6994
+    },
+    {
+      "came_out": 3,
+      "detail": "Primer3 returned 12 pairs. 3 were looked at before 3 distinct designs were in hand, and the rest were never opened, and none of them duplicated each other.",
+      "dropped": 9,
+      "flagged": null,
+      "key": "diversify",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [],
+      "title": "Removing designs that are the same design",
+      "unit": "pairs",
+      "went_in": 12
+    },
+    {
+      "came_out": 3,
+      "detail": "3 pair(s) checked against 700 bases. 0 had at least one unwanted product both primers would bind firmly. Nothing is removed for this \u2014 it is scored, so you can still choose a pair we marked down.",
+      "dropped": null,
+      "flagged": 0,
+      "key": "specificity",
+      "kind": "scorer",
+      "ran": true,
+      "rejections": [],
+      "title": "Checking against the background",
+      "unit": "pairs",
+      "went_in": 3
+    },
+    {
+      "came_out": 6,
+      "detail": "6 binding sites folded with ViennaRNA, Mathews 2004 DNA parameters. Sites the template keeps closed are ranked below ones it leaves open; none is removed for it.",
+      "dropped": null,
+      "flagged": 0,
+      "key": "accessibility",
+      "kind": "scorer",
+      "ran": true,
+      "rejections": [],
+      "title": "Asking whether the template is open there",
+      "unit": "binding sites",
+      "went_in": 6
+    },
+    {
+      "came_out": 1,
+      "detail": "3 distinct designs were scored on specificity, on whether the template keeps each site open, and on how far each pair sits from the middle of its window. The best 1 are shown. The 2 not shown scored between 0.39 and 0.40, against 0.14 for the last one that is.",
+      "dropped": 2,
+      "flagged": null,
+      "key": "rank",
+      "kind": "filter",
+      "ran": true,
+      "rejections": [
+        {
+          "advice": "ask for more pairs to see them",
+          "count": 2,
+          "reason": "ranked below the ones shown",
+          "share": 66.7
+        }
+      ],
+      "title": "Ranking on everything Primer3 does not score",
+      "unit": "pairs",
+      "went_in": 3
+    }
+  ],
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 56.1,
+    "length": 700,
+    "name": "template",
+    "notes": [],
+    "raw_length": 700,
+    "soft_masked": false
+  },
+  "validation": {
+    "required": [
+      "Confirm amplification at the intended hold temperature and duration.",
+      "Run non-target and no-template controls because low-temperature reactions can amplify artifacts.",
+      "Validate the chosen detection chemistry and matrix tolerance experimentally."
+    ],
+    "status": "in-silico-only"
+  },
+  "variants": {
+    "at": [],
+    "checked": false,
+    "considered": 3,
+    "critical_bases": 5,
+    "given": 0,
+    "note": "No known variants were given, so no primer was checked against one.",
+    "rejected": 0
+  },
+  "why_nothing": "",
+  "protocol": {
+    "kind": "rpa",
+    "selection": "TwistAmp Basic (TABAS03KIT; DNA)",
+    "primer_length_nt": {
+      "rapid_preferred_min": 30,
+      "rapid_preferred_max": 35,
+      "reviewed_upper_nt": 45,
+      "below_preferred_note": "Oligos shorter than 30 nt can function, but the current TwistDx manual reports typically slower amplification kinetics; no evidence-backed hard minimum is asserted here."
+    },
+    "amplicon_bp": {
+      "preferred_rapid_min": 100,
+      "preferred_rapid_max": 200,
+      "supported_context_max": 500
+    },
+    "temperature_c": 39,
+    "incubation_minutes": 20,
+    "agitation": {
+      "after_minutes": 4,
+      "action": "vortex-and-brief-spin"
+    },
+    "primer_final_concentration_nM": 480,
+    "magnesium_acetate_mM": 14,
+    "readout": "Endpoint Basic reaction; clean amplicon before gel or downstream analysis",
+    "note": "Source-mirrored UI fixture for the named lyophilised TwistAmp Basic branch; the Liquid Basic 1.8 mM dNTP starting point is not imported into this bench handoff and this fixture is not wet-lab validation evidence."
+  }
+}

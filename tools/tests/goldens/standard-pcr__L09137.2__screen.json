@@ -1,0 +1,168 @@
+{
+  "provenance": {
+    "worker": "0.1.0",
+    "primer3_py": "2.3.0",
+    "tool_versions": {
+      "pcrstudio_tools": "0.1.0",
+      "primer3_py": "2.3.0",
+      "viennarna": "2.7.2"
+    },
+    "python": "3.12.13",
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour with SantaLucia 1998 salt correction",
+      "tm_formula": "SantaLucia 1998",
+      "salt_correction": "SantaLucia 1998",
+      "primer3_tm_formula": 1,
+      "primer3_salt_corrections": 1,
+      "oligo_concentration_parameter": "PRIMER_DNA_CONC",
+      "oligo_concentration_role": "empirical_annealing_oligo_for_tm",
+      "oligo_concentration_note": "The reported nM value is the effective annealing-oligo concentration used for thermodynamic calculations, not necessarily the initial concentration of oligos in the reaction mix.",
+      "salt_correction_policy": "SantaLucia 1998 through 5.0 mM Mg2+; Owczarzy 2008 above 5.0 mM",
+      "high_divalent_threshold_mM": 5.0,
+      "bound_fraction_supported": false
+    },
+    "methods": {
+      "specificity": {
+        "id": "bounded-ungapped-exact-seed",
+        "version": 3
+      },
+      "accessibility": {
+        "worker": "pcr_accessibility",
+        "model": "ViennaRNA, Mathews 2004 DNA parameters",
+        "optional": true
+      }
+    },
+    "platform": "Windows AMD64",
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's."
+  },
+  "result": {
+    "engine": "flanking-pair",
+    "assay": "standard-pcr",
+    "purpose": "screen",
+    "constraints": {
+      "length_min": 18,
+      "length_opt": 20,
+      "length_max": 25,
+      "tm_min": 57.0,
+      "tm_opt": 60.0,
+      "tm_max": 63.0,
+      "tm_pair_max_difference": 3.0,
+      "gc_min": 40.0,
+      "gc_max": 60.0,
+      "product_min": 150,
+      "product_max": 500,
+      "max_poly_x": 3,
+      "min_three_prime_distance": 5,
+      "gc_clamp": 1,
+      "max_end_gc": 5,
+      "max_end_stability": null
+    },
+    "why_nothing": "",
+    "stages": [
+      {
+        "key": "intake",
+        "went_in": 2777,
+        "came_out": 2686
+      },
+      {
+        "key": "search:left-primers",
+        "went_in": 12785,
+        "came_out": 2097
+      },
+      {
+        "key": "search:right-primers",
+        "went_in": 12748,
+        "came_out": 2116
+      },
+      {
+        "key": "search:pairs",
+        "went_in": 34575,
+        "came_out": 60
+      },
+      {
+        "key": "diversify",
+        "went_in": 60,
+        "came_out": 15
+      },
+      {
+        "key": "specificity",
+        "went_in": 15,
+        "came_out": 15
+      },
+      {
+        "key": "accessibility",
+        "went_in": 30,
+        "came_out": 30
+      },
+      {
+        "key": "rank",
+        "went_in": 15,
+        "came_out": 5
+      }
+    ],
+    "pairs": [
+      {
+        "left": "CCGGCTCCAGATTTATCAGC",
+        "right": "TAACACTGCGGCCAACTTAC",
+        "left_at": 1779,
+        "right_at": 2099,
+        "product_size": 321,
+        "score": 0.29,
+        "left_tm": 60.0,
+        "right_tm": 60.0
+      },
+      {
+        "left": "TGGCTTAACTATGCGGCATC",
+        "right": "TGACCATGATTACGCCAAGC",
+        "left_at": 137,
+        "right_at": 467,
+        "product_size": 331,
+        "score": 0.45,
+        "left_tm": 59.9,
+        "right_tm": 60.1
+      },
+      {
+        "left": "AGCTTGGCGTAATCATGGTC",
+        "right": "ATTACCGCCTTTGAGTGAGC",
+        "left_at": 447,
+        "right_at": 766,
+        "product_size": 320,
+        "score": 0.6,
+        "left_tm": 59.9,
+        "right_tm": 59.8
+      },
+      {
+        "left": "TCCATAGTTGCCTGACTCCC",
+        "right": "GGAACCGGAGCTGAATGAAG",
+        "left_at": 1680,
+        "right_at": 1997,
+        "product_size": 318,
+        "score": 0.66,
+        "left_tm": 60.4,
+        "right_tm": 60.1
+      },
+      {
+        "left": "TCAGCAATAAACCAGCCAGC",
+        "right": "TGCTGCCATAACCATGAGTG",
+        "left_at": 1794,
+        "right_at": 2120,
+        "product_size": 327,
+        "score": 0.76,
+        "left_tm": 60.4,
+        "right_tm": 59.8
+      }
+    ],
+    "order_sheet": [
+      "L09137.2_1F",
+      "L09137.2_1R",
+      "L09137.2_2F",
+      "L09137.2_2R",
+      "L09137.2_3F",
+      "L09137.2_3R",
+      "L09137.2_4F",
+      "L09137.2_4R",
+      "L09137.2_5F",
+      "L09137.2_5R"
+    ]
+  }
+}

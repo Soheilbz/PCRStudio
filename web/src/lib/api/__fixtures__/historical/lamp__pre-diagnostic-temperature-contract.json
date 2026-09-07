@@ -1,0 +1,444 @@
+{
+  "assay": {
+    "defaults": {},
+    "id": "lamp",
+    "name": "LAMP",
+    "overruled": [],
+    "purposes": ["general"]
+  },
+  "considered": {
+    "backward_halves": 964,
+    "forward_halves": 1168,
+    "inner_regions": 769,
+    "joined": 1952,
+    "loop_regions": 769,
+    "outer_regions": 147
+  },
+  "engine": "loop-set",
+  "order_sheet": [
+    {
+      "gc_percent": 44.4,
+      "length": 18,
+      "name": "template_1_F3",
+      "note": "",
+      "sequence": "TCAGCATCTTATCCGAGT",
+      "tm": 61.0
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 36,
+      "name": "template_1_FIP",
+      "note": "The temperature quoted is the template-binding half's, not the whole oligo's.",
+      "sequence": "GGCACCACCACACTATGTGAAGGAAATTTGCGTGTG",
+      "tm": 60.9
+    },
+    {
+      "gc_percent": 52.8,
+      "length": 36,
+      "name": "template_1_BIP",
+      "note": "The temperature quoted is the template-binding half's, not the whole oligo's.",
+      "sequence": "CCTGAGGTTGGCTCTGACGCAGGAACTGTTACACAT",
+      "tm": 60.8
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 18,
+      "name": "template_1_B3",
+      "note": "",
+      "sequence": "CAGTGTGATGATGGTGAG",
+      "tm": 61.0
+    },
+    {
+      "gc_percent": 40.9,
+      "length": 22,
+      "name": "template_1_LF",
+      "note": "",
+      "sequence": "CGAAAAGTGTTTCTGTCATCCA",
+      "tm": 65.5
+    },
+    {
+      "gc_percent": 47.6,
+      "length": 21,
+      "name": "template_1_LB",
+      "note": "",
+      "sequence": "GTACCACCATCCACTACAACT",
+      "tm": 65.7
+    },
+    {
+      "gc_percent": 42.1,
+      "length": 19,
+      "name": "template_2_F3",
+      "note": "",
+      "sequence": "TTACTGTGAGGGATGTTTG",
+      "tm": 60.8
+    },
+    {
+      "gc_percent": 47.4,
+      "length": 38,
+      "name": "template_2_FIP",
+      "note": "The temperature quoted is the template-binding half's, not the whole oligo's.",
+      "sequence": "CCCTGGTTAGTACGGTGAGTTAGTTTACAATCAGCCAC",
+      "tm": 58.8
+    },
+    {
+      "gc_percent": 47.2,
+      "length": 36,
+      "name": "template_2_BIP",
+      "note": "The temperature quoted is the template-binding half's, not the whole oligo's.",
+      "sequence": "AAGCTGTCCCTCACTGTTGCCAGCATTTCACAGATA",
+      "tm": 61.0
+    },
+    {
+      "gc_percent": 42.1,
+      "length": 19,
+      "name": "template_2_B3",
+      "note": "",
+      "sequence": "CAAGGCCAGATGTACATTA",
+      "tm": 60.6
+    },
+    {
+      "gc_percent": 55.6,
+      "length": 18,
+      "name": "template_2_LF",
+      "note": "",
+      "sequence": "TGGGCCCCTACCTAGAAT",
+      "tm": 65.3
+    },
+    {
+      "gc_percent": 42.9,
+      "length": 21,
+      "name": "template_2_LB",
+      "note": "",
+      "sequence": "TTTCTCTAACTTCAAGGCCCA",
+      "tm": 65.6
+    }
+  ],
+  "parameter_set": {
+    "chosen_from": "the template's own composition, 54.8% GC",
+    "id": "normal",
+    "inner": {
+      "length": [18, 22],
+      "tm": [64.0, 66.0]
+    },
+    "loop": {
+      "length": [18, 22],
+      "tm": [64.0, 66.0]
+    },
+    "name": "Balanced target",
+    "outer": {
+      "length": [18, 22],
+      "tm": [59.0, 61.0]
+    },
+    "why": "The template's GC content is in the ordinary range, so the published windows apply as stated."
+  },
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 300.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 8.0,
+    "hold": 65.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 100.0,
+    "note": "Isothermal Bst-family LAMP design context at about 65 °C; this is a computation/protocol handoff, not evidence of observed amplification.",
+    "polymerase": "bst-2-warmstart",
+    "polymerase_name": "Bst 2.0 WarmStart DNA Polymerase"
+  },
+  "sets": [
+    {
+      "at": 714,
+      "ends": 913,
+      "loop_primers": 2,
+      "note": "199 bases from the 5' end of F3 to the 3' end of B3c, with 2 of the two optional loop primers. Every oligo melts within 5.0 °C of every other, which is what one held temperature has to serve.",
+      "oligos": [
+        {
+          "built_from": ["F3"],
+          "composite": false,
+          "gc_percent": 44.4,
+          "hairpin_tm": null,
+          "length": 18,
+          "name": "F3",
+          "note": "Displaces the strand that FIP started, releasing the loop.",
+          "self_dimer_tm": -24.7,
+          "sequence": "TCAGCATCTTATCCGAGT",
+          "tm": 61.0
+        },
+        {
+          "anneals": {
+            "note": "The half that binds the template melts at 60.9 °C. The whole oligo's 79.9 °C describes a molecule that does not exist until the reaction has run — half of it is a tail with nothing to bind yet.",
+            "sequence": "GAAGGAAATTTGCGTGTG",
+            "tm": 60.9
+          },
+          "built_from": ["F1c", "F2"],
+          "composite": true,
+          "gc_percent": 50.0,
+          "hairpin_tm": 56.4,
+          "length": 36,
+          "name": "FIP",
+          "note": "Its F2 half anneals to the template; its F1c half is a 5' tail that is not on the template at all and becomes a primer later, folding back against the F1 copy on the strand this one makes.",
+          "self_dimer_tm": 31.4,
+          "sequence": "GGCACCACCACACTATGTGAAGGAAATTTGCGTGTG",
+          "tm": 79.9
+        },
+        {
+          "anneals": {
+            "note": "The half that binds the template melts at 60.8 °C. The whole oligo's 81.1 °C describes a molecule that does not exist until the reaction has run — half of it is a tail with nothing to bind yet.",
+            "sequence": "GCAGGAACTGTTACACAT",
+            "tm": 60.8
+          },
+          "built_from": ["B1c", "B2"],
+          "composite": true,
+          "gc_percent": 52.8,
+          "hairpin_tm": 65.1,
+          "length": 36,
+          "name": "BIP",
+          "note": "The same shape as FIP from the other end: the B2 half anneals, and the B1c half is the tail that closes the loop later.",
+          "self_dimer_tm": 14.4,
+          "sequence": "CCTGAGGTTGGCTCTGACGCAGGAACTGTTACACAT",
+          "tm": 81.1
+        },
+        {
+          "built_from": ["B3"],
+          "composite": false,
+          "gc_percent": 50.0,
+          "hairpin_tm": null,
+          "length": 18,
+          "name": "B3",
+          "note": "Displaces the strand that BIP started.",
+          "self_dimer_tm": -27.8,
+          "sequence": "CAGTGTGATGATGGTGAG",
+          "tm": 61.0
+        },
+        {
+          "built_from": ["LF"],
+          "composite": false,
+          "gc_percent": 40.9,
+          "hairpin_tm": 45.3,
+          "length": 22,
+          "name": "LF",
+          "note": "Optional, and worth having: it primes inside the forward loop, which roughly halves the time to a result. It sits strictly between F2 and F1 — overlapping either would make it a perfect dimer with FIP.",
+          "self_dimer_tm": -21.6,
+          "sequence": "CGAAAAGTGTTTCTGTCATCCA",
+          "tm": 65.5
+        },
+        {
+          "built_from": ["LB"],
+          "composite": false,
+          "gc_percent": 47.6,
+          "hairpin_tm": null,
+          "length": 21,
+          "name": "LB",
+          "note": "The backward loop's primer. It carries the plus-strand sequence rather than its complement, because the loop BIP makes is the other way round from the one FIP makes.",
+          "self_dimer_tm": -31.3,
+          "sequence": "GTACCACCATCCACTACAACT",
+          "tm": 65.7
+        }
+      ],
+      "regions": [
+        {
+          "at": 714,
+          "length": 18,
+          "name": "F3"
+        },
+        {
+          "at": 733,
+          "length": 18,
+          "name": "F2"
+        },
+        {
+          "at": 758,
+          "length": 22,
+          "name": "LF"
+        },
+        {
+          "at": 780,
+          "length": 18,
+          "name": "F1"
+        },
+        {
+          "at": 808,
+          "length": 18,
+          "name": "B1c"
+        },
+        {
+          "at": 827,
+          "length": 21,
+          "name": "LB"
+        },
+        {
+          "at": 850,
+          "length": 18,
+          "name": "B2c"
+        },
+        {
+          "at": 895,
+          "length": 18,
+          "name": "B3c"
+        }
+      ],
+      "size": 199,
+      "spread": 5.0
+    },
+    {
+      "at": 1556,
+      "ends": 1787,
+      "loop_primers": 2,
+      "note": "231 bases from the 5' end of F3 to the 3' end of B3c, with 2 of the two optional loop primers. Every oligo melts within 5.0 °C of every other, which is what one held temperature has to serve.",
+      "oligos": [
+        {
+          "built_from": ["F3"],
+          "composite": false,
+          "gc_percent": 42.1,
+          "hairpin_tm": null,
+          "length": 19,
+          "name": "F3",
+          "note": "Displaces the strand that FIP started, releasing the loop.",
+          "self_dimer_tm": -9.7,
+          "sequence": "TTACTGTGAGGGATGTTTG",
+          "tm": 60.8
+        },
+        {
+          "anneals": {
+            "note": "The half that binds the template melts at 58.8 °C. The whole oligo's 78.1 °C describes a molecule that does not exist until the reaction has run — half of it is a tail with nothing to bind yet.",
+            "sequence": "TTAGTTTACAATCAGCCAC",
+            "tm": 58.8
+          },
+          "built_from": ["F1c", "F2"],
+          "composite": true,
+          "gc_percent": 47.4,
+          "hairpin_tm": 37.0,
+          "length": 38,
+          "name": "FIP",
+          "note": "Its F2 half anneals to the template; its F1c half is a 5' tail that is not on the template at all and becomes a primer later, folding back against the F1 copy on the strand this one makes.",
+          "self_dimer_tm": -4.9,
+          "sequence": "CCCTGGTTAGTACGGTGAGTTAGTTTACAATCAGCCAC",
+          "tm": 78.1
+        },
+        {
+          "anneals": {
+            "note": "The half that binds the template melts at 61.0 °C. The whole oligo's 79.9 °C describes a molecule that does not exist until the reaction has run — half of it is a tail with nothing to bind yet.",
+            "sequence": "GCCAGCATTTCACAGATA",
+            "tm": 61.0
+          },
+          "built_from": ["B1c", "B2"],
+          "composite": true,
+          "gc_percent": 47.2,
+          "hairpin_tm": 48.8,
+          "length": 36,
+          "name": "BIP",
+          "note": "The same shape as FIP from the other end: the B2 half anneals, and the B1c half is the tail that closes the loop later.",
+          "self_dimer_tm": 30.9,
+          "sequence": "AAGCTGTCCCTCACTGTTGCCAGCATTTCACAGATA",
+          "tm": 79.9
+        },
+        {
+          "built_from": ["B3"],
+          "composite": false,
+          "gc_percent": 42.1,
+          "hairpin_tm": null,
+          "length": 19,
+          "name": "B3",
+          "note": "Displaces the strand that BIP started.",
+          "self_dimer_tm": 19.8,
+          "sequence": "CAAGGCCAGATGTACATTA",
+          "tm": 60.6
+        },
+        {
+          "built_from": ["LF"],
+          "composite": false,
+          "gc_percent": 55.6,
+          "hairpin_tm": null,
+          "length": 18,
+          "name": "LF",
+          "note": "Optional, and worth having: it primes inside the forward loop, which roughly halves the time to a result. It sits strictly between F2 and F1 — overlapping either would make it a perfect dimer with FIP.",
+          "self_dimer_tm": 31.4,
+          "sequence": "TGGGCCCCTACCTAGAAT",
+          "tm": 65.3
+        },
+        {
+          "built_from": ["LB"],
+          "composite": false,
+          "gc_percent": 42.9,
+          "hairpin_tm": null,
+          "length": 21,
+          "name": "LB",
+          "note": "The backward loop's primer. It carries the plus-strand sequence rather than its complement, because the loop BIP makes is the other way round from the one FIP makes.",
+          "self_dimer_tm": 3.7,
+          "sequence": "TTTCTCTAACTTCAAGGCCCA",
+          "tm": 65.6
+        }
+      ],
+      "regions": [
+        {
+          "at": 1556,
+          "length": 19,
+          "name": "F3"
+        },
+        {
+          "at": 1606,
+          "length": 20,
+          "name": "F2"
+        },
+        {
+          "at": 1626,
+          "length": 18,
+          "name": "LF"
+        },
+        {
+          "at": 1646,
+          "length": 18,
+          "name": "F1"
+        },
+        {
+          "at": 1664,
+          "length": 18,
+          "name": "B1c"
+        },
+        {
+          "at": 1686,
+          "length": 21,
+          "name": "LB"
+        },
+        {
+          "at": 1707,
+          "length": 18,
+          "name": "B2c"
+        },
+        {
+          "at": 1768,
+          "length": 19,
+          "name": "B3c"
+        }
+      ],
+      "size": 231,
+      "spread": 5.0
+    }
+  ],
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 54.8,
+    "length": 2000,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2000,
+    "soft_masked": false
+  },
+  "why_nothing": ""
+}

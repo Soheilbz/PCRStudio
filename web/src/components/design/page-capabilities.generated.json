@@ -1,0 +1,328 @@
+{
+  "generation_policy": "Generated from contracts/modules.toml; human-facing step copy remains page-plan.ts.",
+  "modules": {
+    "arms-pcr": {
+      "asks": [],
+      "fixed": {
+        "geometry": "arms-two-tube"
+      },
+      "initial": {},
+      "tools": [],
+      "unit": {
+        "how": "How many assays to return",
+        "many": "assays",
+        "one": "assay"
+      }
+    },
+    "colony-pcr": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "circular": "false",
+        "colonyScreenStrategy": "insert-specific-pair",
+        "vectorPrimerReadsInto": "start"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "digital-pcr": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "digitalMultiplexMode": "none",
+        "digitalProtocol": "not-selected"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "gibson-assembly": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "assemblyMethod": "gibson",
+        "assemblyProtocol": "neb-e5510"
+      },
+      "tools": [],
+      "unit": {
+        "how": null,
+        "many": "plans",
+        "one": "plan"
+      }
+    },
+    "inverse-pcr": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "inverseBranch": "restriction-self-ligation"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "kasp": {
+      "asks": [],
+      "fixed": {
+        "geometry": "kasp",
+        "kaspAssayMode": "biallelic-genotype"
+      },
+      "initial": {},
+      "tools": [],
+      "unit": {
+        "how": "How many assays to return",
+        "many": "assays",
+        "one": "assay"
+      }
+    },
+    "lamp": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "circular": "false",
+        "lampConfirmationMode": "not-specified",
+        "lampDesignIntent": "standard",
+        "lampDetectionTopology": "nonspecific-dsdna",
+        "lampFormulation": "not-specified",
+        "lampGeometryProfile": "primerexplorer-v5-compat",
+        "lampInnerLinker": "none",
+        "lampLoopPolicy": "prefer-six",
+        "lampReadout": "not-specified",
+        "lampReadoutChemistry": "not-specified",
+        "lampSampleMatrix": "not-specified",
+        "lampSamplePreparation": "not-specified"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many sets to return",
+        "many": "sets",
+        "one": "set"
+      }
+    },
+    "long-range-pcr": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "circular": "false"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "nested-pcr": {
+      "asks": [],
+      "fixed": {
+        "singleTube": "false"
+      },
+      "initial": {},
+      "tools": [],
+      "unit": {
+        "how": "How many nested schemes to return",
+        "many": "schemes",
+        "one": "scheme"
+      }
+    },
+    "qpcr-probe": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "probeChemistry": "conventional-hydrolysis",
+        "probeProtocol": "thermofisher-taqman-conventional"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many assays to return",
+        "many": "assays",
+        "one": "assay"
+      }
+    },
+    "qpcr-sybr": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "circular": "false",
+        "qpcrProtocol": "not-selected"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "race": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "raceChemistry": "generacer-kit-25-0355-vl"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many primers to return",
+        "many": "primers",
+        "one": "primer"
+      }
+    },
+    "restriction-cloning": {
+      "asks": [],
+      "fixed": {
+        "tailProtocol": "neb-general-6bp"
+      },
+      "initial": {
+        "cloningSimulationMode": "pydna-if-available",
+        "cloningVectorTopology": "circular"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "rpa": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "sequencing-primer": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "circular": "false",
+        "sequencingDesignProfile": "generic-cycle-sequencing",
+        "sequencingInstrument": "unresolved"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many primers to return",
+        "many": "primers",
+        "one": "primer"
+      }
+    },
+    "site-directed-mutagenesis": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "editInputMode": "dna",
+        "libraryMode": "none",
+        "mutagenesisTopology": "q5-back-to-back",
+        "postAmplificationProtocol": "neb-q5-e0554"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "species-specific-pcr": {
+      "asks": [],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "standard-pcr": {
+      "asks": [
+        "circular"
+      ],
+      "fixed": {},
+      "initial": {
+        "assayMode": "design",
+        "circular": "false",
+        "standardPcrProtocol": "not-selected"
+      },
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    },
+    "tetra-primer-arms": {
+      "asks": [],
+      "fixed": {
+        "geometry": "tetra"
+      },
+      "initial": {},
+      "tools": [],
+      "unit": {
+        "how": "How many assays to return",
+        "many": "assays",
+        "one": "assay"
+      }
+    },
+    "tiled-scheme": {
+      "asks": [
+        "excluded"
+      ],
+      "fixed": {},
+      "initial": {
+        "circular": "false",
+        "tilingBackend": "primalscheme3",
+        "tilingOperation": "scheme-create"
+      },
+      "tools": [],
+      "unit": {
+        "how": null,
+        "many": "schemes",
+        "one": "scheme"
+      }
+    },
+    "universal-primers": {
+      "asks": [
+        "tails"
+      ],
+      "fixed": {},
+      "initial": {},
+      "tools": [],
+      "unit": {
+        "how": "How many pairs to return",
+        "many": "pairs",
+        "one": "pair"
+      }
+    }
+  },
+  "schema_version": "1.0.0"
+}

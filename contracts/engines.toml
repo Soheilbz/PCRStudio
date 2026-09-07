@@ -1,0 +1,462 @@
+schema_version = "2.0.0"
+contract_version = "generation1-current-2026-09-06"
+
+[[engine]]
+id = "consensus-pair"
+display_order = 8
+label = "Consensus pair"
+input = "an alignment"
+command = "universal"
+resource_weight = 4
+[[engine.binding]]
+tool_id = "mafft"
+role = "PRIMARY"
+purposes = ["alignment"]
+operations = ["align_panel"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["evaluate_concrete_oligos", "design_pair_from_conserved_window"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_member_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_member_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_consensus_resolver"
+role = "PRIMARY"
+purposes = ["conservation", "degeneracy"]
+operations = ["resolve_conservation", "expand_degenerate_members", "aggregate_coverage", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "discriminating-pair"
+display_order = 5
+label = "Discriminating pair"
+input = "a sequence and a variant"
+command = "discriminate"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_allele_specific_cores", "design_common_or_outer_primers"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_allelic_locus_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_locus_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_allele_wrapper"
+role = "PRIMARY"
+purposes = ["variant_normalization", "allele_geometry"]
+operations = ["normalize_variant", "construct_allele_templates", "enumerate_orientation_and_mismatches", "evaluate_discrimination", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "flanking-pair"
+display_order = 1
+label = "Flanking pair"
+input = "one sequence"
+command = "run"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_pair", "check_pair", "thermo_evaluate"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_specificity", "validate_dimer", "validate_hairpin"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_specificity_search"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primerpooler"
+role = "OPTIONAL"
+purposes = ["interaction", "pooling"]
+operations = ["validate_multiplex_interactions", "assign_pools"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "viennarna"
+role = "OPTIONAL"
+purposes = ["structure"]
+operations = ["validate_structure"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primer_blast"
+role = "REFERENCE"
+purposes = ["remote", "specificity"]
+operations = ["reference_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "nupack4"
+role = "REFERENCE"
+purposes = ["structure", "license_blocked"]
+operations = ["reference_structure"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pydna"
+role = "OPTIONAL"
+purposes = ["restriction_construct_simulation"]
+operations = ["simulate_restriction_digest_ligation_construct"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_flanking_wrapper"
+role = "PRIMARY"
+purposes = ["normalization", "ranking"]
+operations = ["normalize_input", "reconstruct_product", "filter_rank", "bounded_search_with_unchanged_hard_gates"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "junction-primers"
+display_order = 10
+label = "Junction primers"
+input = "a construct plan"
+command = "junction"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_annealing_cores"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_background_binding"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_background_search"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "viennarna"
+role = "OPTIONAL"
+purposes = ["overlap_structure_diagnostic"]
+operations = ["report_dna_fold_without_changing_selection"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pydna"
+role = "OPTIONAL"
+purposes = ["independent_pcr_product_simulation"]
+operations = ["simulate_amplified_fragment_pcr_products"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_junction_composer"
+role = "PRIMARY"
+purposes = ["construct", "overlap"]
+operations = ["normalize_construct", "resolve_junctions", "compose_full_oligos", "reconstruct_construct", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "loop-set"
+display_order = 4
+label = "Loop set"
+input = "one sequence"
+command = "loop_set"
+resource_weight = 4
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["thermodynamics"]
+operations = ["evaluate_role_oligos", "evaluate_composite_oligos"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity", "ordered_oligo_structure"]
+operations = ["validate_role_specificity", "validate_dimer", "validate_hairpin"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity", "lamp_set_topology"]
+operations = ["expand_role_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mafft"
+role = "CONDITIONAL_PRIMARY"
+purposes = ["target_inclusivity"]
+operations = ["align_panel"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "viennarna"
+role = "OPTIONAL"
+purposes = ["rna_target_accessibility"]
+operations = ["report_rt_lamp_rna_accessibility_without_changing_selection"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_lamp_enumerator"
+role = "PRIMARY"
+purposes = ["lamp_geometry", "set_generation"]
+operations = ["enumerate_role_sites", "compose_inner_primers", "design_loop_primers", "validate_set_geometry", "filter_rank_sets"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "mutagenic-pair"
+display_order = 11
+label = "Mutagenic pair"
+input = "a sequence and a wanted change"
+command = "mutagenic"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["evaluate_annealing_cores"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_background_binding"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_background_search"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pydna"
+role = "OPTIONAL"
+purposes = ["independent_pcr_product_simulation"]
+operations = ["simulate_selected_primer_product"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_edit_normalizer"
+role = "PRIMARY"
+purposes = ["edit_normalization", "topology"]
+operations = ["normalize_edit", "construct_edited_reference", "enumerate_mutagenic_pair", "verify_edit_product", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "nested"
+display_order = 3
+label = "Nested"
+input = "one sequence"
+command = "nested"
+resource_weight = 3
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_outer", "design_inner"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_round_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_round_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primerpooler"
+role = "OPTIONAL"
+purposes = ["interaction", "pooling"]
+operations = ["validate_cross_round_interactions"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_nested_containment"
+role = "PRIMARY"
+purposes = ["containment", "coordinate_mapping"]
+operations = ["derive_inner_template", "validate_containment", "map_inner_to_source", "filter_rank_pair_of_pairs"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "outward-pair"
+display_order = 7
+label = "Outward pair"
+input = "one sequence"
+command = "inverse"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_outward_pair"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pydna"
+role = "OPTIONAL"
+purposes = ["independent_pcr_product_simulation"]
+operations = ["simulate_inverse_circular_product"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_topology_resolver"
+role = "PRIMARY"
+purposes = ["topology", "digest", "coordinate_mapping"]
+operations = ["resolve_topology", "construct_search_representation", "map_to_source", "reconstruct_inverse_product", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "pair-and-probe"
+display_order = 2
+label = "Pair and probe"
+input = "one sequence"
+command = "probe"
+resource_weight = 2
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation", "internal_oligo"]
+operations = ["design_pair_and_internal_oligo", "thermo_evaluate"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_product_and_probe_binding"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_product_and_probe_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "viennarna"
+role = "OPTIONAL"
+purposes = ["structure"]
+operations = ["validate_probe_structure"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primer_blast"
+role = "REFERENCE"
+purposes = ["remote", "specificity"]
+operations = ["reference_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_probe_wrapper"
+role = "PRIMARY"
+purposes = ["probe_geometry", "optics"]
+operations = ["validate_probe_geometry", "validate_optical_configuration", "filter_rank_triplets"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "single-primer"
+display_order = 6
+label = "Single primer"
+input = "a sequence and a point"
+command = "single"
+resource_weight = 1
+[[engine.binding]]
+tool_id = "primer3_core"
+role = "PRIMARY"
+purposes = ["candidate_generation"]
+operations = ["design_single_oligo"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_single_binding"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_single_binding_search"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_single_primer_wrapper"
+role = "PRIMARY"
+purposes = ["race_boundary", "read_direction"]
+operations = ["resolve_branch_boundary", "resolve_extension_direction", "plan_read_or_extension_span", "filter_rank"]
+artifact_identity = "internal:pcrstudio-build"
+
+[[engine]]
+id = "tiling-scheme"
+display_order = 9
+label = "Tiling scheme"
+input = "a genome, or several"
+command = "tiling"
+resource_weight = 4
+[[engine.binding]]
+tool_id = "mafft"
+role = "PRIMARY"
+purposes = ["alignment"]
+operations = ["align_panel"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primalscheme3"
+role = "PRIMARY"
+purposes = ["tiling", "repair"]
+operations = ["scheme_create", "panel_create", "repair_mode", "scheme_replace", "inspect_interactions", "visualise_bedfile", "visualise_primer_mismatches"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "olivar"
+role = "PRIMARY"
+purposes = ["tiling", "variant-aware", "multi-target"]
+operations = ["build_reference", "scheme_create", "specificity", "sensitivity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "primerpooler"
+role = "VALIDATOR"
+purposes = ["interaction", "pooling"]
+operations = ["validate_interactions", "audit_selected_pool_interactions", "assign_pools"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "mfeprimer"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["validate_scheme_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "ncbi_blast_plus"
+role = "VALIDATOR"
+purposes = ["specificity"]
+operations = ["expand_scheme_specificity"]
+artifact_identity = "inherit:toolchain-manifest.json"
+[[engine.binding]]
+tool_id = "pcrstudio_scheme_wrapper"
+role = "PRIMARY"
+purposes = ["scheme_normalization", "lifecycle"]
+operations = ["normalize_scheme", "analyze_variant_risk", "audit_coverage", "manage_repair_history", "release_scheme", "import_depth_evidence", "diff_scheme_versions", "route_dropout_repair"]
+artifact_identity = "internal:pcrstudio-build"

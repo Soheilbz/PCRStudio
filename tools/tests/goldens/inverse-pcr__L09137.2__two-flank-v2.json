@@ -1,0 +1,182 @@
+{
+  "provenance": {
+    "worker": "0.1.0",
+    "runtime_contract_version": "1.1.0",
+    "parameter_map_version": "gen1-2026-08-30.2",
+    "input_schema_version": "pcrstudio-worker-input-v1",
+    "output_schema_version": "pcrstudio-worker-output-v2",
+    "toolchain_manifest": {
+      "primer3_core": {
+        "configured_version": "2.6.1",
+        "execution_scope": "embedded-package"
+      },
+      "primer3_py": {
+        "configured_version": "2.3.0",
+        "execution_scope": "embedded-package"
+      },
+      "mfeprimer": {
+        "configured_version": "4.5.1",
+        "execution_scope": "local"
+      },
+      "ncbi_blast_plus": {
+        "configured_version": "2.17.0",
+        "execution_scope": "local"
+      },
+      "mafft": {
+        "configured_version": "7.526",
+        "execution_scope": "local"
+      },
+      "primerpooler": {
+        "configured_version": "1.89",
+        "execution_scope": "local"
+      },
+      "primalscheme3": {
+        "configured_version": "3.3.0",
+        "execution_scope": "local"
+      },
+      "viennarna": {
+        "configured_version": "2.7.2",
+        "execution_scope": "optional-package"
+      },
+      "pydna": {
+        "configured_version": "5.5.16",
+        "execution_scope": "local"
+      },
+      "primer_blast": {
+        "configured_version": "live",
+        "execution_scope": "remote-reference"
+      },
+      "nupack4": {
+        "configured_version": "4.x",
+        "execution_scope": "manual-reference"
+      }
+    },
+    "primer3_py": "2.3.0",
+    "primer3_artifact": {
+      "primer3_py_record_sha256": "f5b07beefc8b9fd32dafcea7430fefecb42048e049b9e1bc64c8e37e565ea8f4",
+      "libprimer3_carrier_record_sha256": "f5b07beefc8b9fd32dafcea7430fefecb42048e049b9e1bc64c8e37e565ea8f4",
+      "libprimer3_version_matches_contract": true,
+      "artifact_identity": "sha256(primer3-py distribution RECORD metadata)"
+    },
+    "tool_versions": {
+      "pcrstudio_tools": "0.1.0",
+      "primer3_py": "2.3.0",
+      "libprimer3": "libprimer3 release 2.6.1",
+      "viennarna": "2.7.2"
+    },
+    "python": "3.12.13",
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour with SantaLucia 1998 salt correction",
+      "tm_formula": "SantaLucia 1998",
+      "salt_correction": "SantaLucia 1998",
+      "primer3_tm_formula": 1,
+      "primer3_salt_corrections": 1,
+      "oligo_concentration_parameter": "PRIMER_DNA_CONC",
+      "oligo_concentration_role": "empirical_annealing_oligo_for_tm",
+      "oligo_concentration_note": "The reported nM value is the effective annealing-oligo concentration used for thermodynamic calculations, not necessarily the initial concentration of oligos in the reaction mix.",
+      "salt_correction_policy": "explicit-versioned-model; no Mg-threshold auto-switch",
+      "bound_fraction_supported": false,
+      "primer3_low_level_controls": {
+        "temp_c_default": 37.0,
+        "max_loop": 30,
+        "max_nn_length": 60,
+        "output_structure": false,
+        "temp_only": 0,
+        "dmso_conc": 0.0,
+        "dmso_fact": 0.6,
+        "formamide_conc": 0.0,
+        "annealing_temp_c": -10.0
+      }
+    },
+    "methods": {
+      "specificity": {
+        "id": "bounded-ungapped-mismatch-complete",
+        "version": 5
+      },
+      "accessibility": {
+        "worker": "pcr_accessibility",
+        "model": "ViennaRNA, Mathews 2004 DNA parameters",
+        "optional": true,
+        "parameters": {
+          "dangles": 2,
+          "noGU": 0,
+          "no_closingGU": 0,
+          "noLonelyPairs": 0,
+          "tetra_loop": 1,
+          "special_hp": 1,
+          "salt_m": 1.021,
+          "circ": 0,
+          "window": 150,
+          "max_base_pair_span": 150
+        }
+      }
+    },
+    "platform": "Windows AMD64",
+    "note": "Primer3 is bundled with primer3-py rather than installed separately; both the primer3-py package version and bundled libprimer3 engine version are recorded."
+  },
+  "result": {
+    "engine": "outward-pair",
+    "digest": {
+      "branch_identity": "restriction-self-ligation",
+      "enzyme": "SpeI",
+      "known_sites": [],
+      "known_length": 2686,
+      "circle_length": null,
+      "note": "The selected restriction enzyme has no site inside the known anchor, so the complete known sequence can remain on one restriction fragment. Flanking restriction sites are not inferred from the known anchor; their positions/fragment length are experimental or larger-context evidence. The digest fragment is self-ligated and one outward pair crosses the resulting flanking-sequence junction."
+    },
+    "circle": {
+      "known_length": 2686,
+      "circle_length": null,
+      "unknown_interval": {
+        "status": "unresolved",
+        "minimum": null,
+        "maximum": null,
+        "exact": null
+      }
+    },
+    "usable_enzymes": [
+      "SpeI",
+      "NcoI",
+      "XhoI",
+      "ApaI",
+      "ClaI",
+      "BglII",
+      "EcoRV",
+      "NotI"
+    ],
+    "pairs": [
+      {
+        "left": "AATTGTTGCCGGGAAGCTAG",
+        "right": "TTCACCGTCATCACCGAAAC",
+        "left_at": 1872,
+        "right_at": 25,
+        "known_span": 840,
+        "product_size": null
+      },
+      {
+        "left": "ATAAGGGCGACACGGAAATG",
+        "right": "GGTACCGAGCTCGAATTCAC",
+        "left_at": 2454,
+        "right_at": 412,
+        "known_span": 645,
+        "product_size": null
+      },
+      {
+        "left": "CTTCATTCAGCTCCGGTTCC",
+        "right": "TGATGCCGCATAGTTAAGCC",
+        "left_at": 1978,
+        "right_at": 157,
+        "known_span": 866,
+        "product_size": null
+      }
+    ],
+    "order_sheet": [
+      "L09137.2_Inv1F",
+      "L09137.2_Inv1R",
+      "L09137.2_Inv2F",
+      "L09137.2_Inv2R",
+      "L09137.2_Inv3F",
+      "L09137.2_Inv3R"
+    ]
+  }
+}

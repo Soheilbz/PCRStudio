@@ -1,0 +1,25 @@
+{
+  "name": "pcrstudio",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "description": "PCRStudio - primer design on the web.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "launch": "node scripts/start-app.mjs",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "lint": "pnpm --filter web lint",
+    "format": "pnpm --filter web format",
+    "format:check": "pnpm --filter web format:check",
+    "typecheck": "pnpm --filter web typecheck",
+    "test": "pnpm --filter web test",
+    "api": "node scripts/dev-api.mjs",
+    "admin": "node scripts/dev-admin.mjs",
+    "rust:fmt": "cargo fmt --all",
+    "rust:lint": "cargo clippy --locked --workspace --all-targets -- -D warnings",
+    "rust:test": "cargo test --locked --workspace",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm rust:lint && pnpm rust:test",
+    "capacity:smoke": "node scripts/capacity-smoke.mjs"
+  }
+}

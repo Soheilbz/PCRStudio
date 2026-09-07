@@ -1,0 +1,39 @@
+{
+  "api_version": "v1",
+  "canonical_sources": {
+    "contracts/engines.toml": "059ad75636dcaa5277dbd132396ac769ce498ac5a24aeaf39707d8e747c23ee8",
+    "contracts/foundation.toml": "6e692d6b548333dcd1f2a0f7133efd9ad03b49da7970840b84d22025ba127fad",
+    "contracts/modules.toml": "9d1f56b2095ba045bb2892a304f3a6fa32a37fec27211d14a3511048f1dda48d",
+    "contracts/tools.toml": "78bb324f34a1aeb96613c28c332f49e31c898b3b1b8cc75d3603cca6958ec2e3"
+  },
+  "coordinate_contract_version": "1.0.0",
+  "draft_schema_version": 2,
+  "foundation_release": "CURRENT",
+  "generation_policy": "Generated from contracts/foundation.toml; do not hand-edit.",
+  "ipc_protocol_version": "2.0.0",
+  "limits": {
+    "account_import_bytes": 67108864,
+    "account_job_data_bytes": 67108864,
+    "account_project_data_bytes": 58720256,
+    "backup_document_bytes": 67108864,
+    "http_body_bytes": 67108864,
+    "project_notes_bytes": 262144,
+    "project_settings_bytes": 10485760,
+    "run_document_bytes": 26214400,
+    "run_job_aux_bytes": 262144,
+    "run_job_request_bytes": 8388608,
+    "run_label_bytes": 1024,
+    "sequence_asset_externalize_bytes": 65536,
+    "sequence_bytes": 8388608,
+    "server_action_bytes": 12582912,
+    "worker_stderr_bytes": 262144,
+    "worker_stdout_bytes": 16777216
+  },
+  "module_contract_version": "2.2.0",
+  "numeric_recipe_schema_version": "2.0.0",
+  "request_schema_version": 2,
+  "result_schema_version": 4,
+  "schema_version": "1.0.0",
+  "unit_contract_version": "1.0.0",
+  "validation_issue_schema_version": "1.0.0"
+}

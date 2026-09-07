@@ -1,0 +1,444 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "neb-restriction-performance-chart-2025-26-pcrstudio-r12",
+  "source": "NEB Performance Chart for Restriction Enzymes 2025-26 / current online NEBuffer Performance Chart",
+  "source_url": "https://www.neb.com/en-us/tools-and-resources/usage-guidelines/nebuffer-performance-chart-with-restriction-enzymes",
+  "reviewed_date": "2026-09-05",
+  "activity_note": "Activities are approximate supplier chart values. Methylation observations below are enzyme/version-specific current supplier evidence. Star activity remains unresolved unless explicitly source-pinned; it is never inferred from buffer activity. Multi-site requirements remain separate exact-enzyme evidence.",
+  "buffers": [
+    "r1.1",
+    "r2.1",
+    "r3.1",
+    "rCutSmart"
+  ],
+  "enzymes": {
+    "EcoRI": {
+      "evidence_identity": "EcoRI",
+      "supplied_buffer": "NEBuffer EcoRI/SspI",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 50
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "BamHI": {
+      "evidence_identity": "BamHI",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 75,
+        "r2.1": 100,
+        "r3.1": 100,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "HindIII": {
+      "evidence_identity": "HindIII",
+      "supplied_buffer": "r2.1",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 50
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "PstI": {
+      "evidence_identity": "PstI",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 75,
+        "r2.1": 75,
+        "r3.1": 100,
+        "rCutSmart": 50
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "SalI": {
+      "evidence_identity": "SalI",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 9,
+        "r2.1": 9,
+        "r3.1": 100,
+        "rCutSmart": 9
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "less_than_values_encoded_as": 9,
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "XbaI": {
+      "evidence_identity": "XbaI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 9,
+        "r2.1": 100,
+        "r3.1": 75,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "less_than_values_encoded_as": 9,
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "KpnI": {
+      "evidence_identity": "KpnI-HF",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 100,
+        "r2.1": 25,
+        "r3.1": 9,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "variant_note": "Current chart evidence is KpnI-HF; recognition geometry is shared but formulation identity is preserved.",
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "SacI": {
+      "evidence_identity": "SacI-HF",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 10,
+        "r2.1": 50,
+        "r3.1": 9,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "variant_note": "Current chart evidence is SacI-HF.",
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "SmaI": {
+      "evidence_identity": "SmaI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 9,
+        "r2.1": 9,
+        "r3.1": 9,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "SphI": {
+      "evidence_identity": "SphI",
+      "supplied_buffer": "r2.1",
+      "activity_percent": {
+        "r1.1": 100,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "SpeI": {
+      "evidence_identity": "SpeI-HF",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 50,
+        "r3.1": 10,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "variant_note": "Current chart evidence is SpeI-HF.",
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "NcoI": {
+      "evidence_identity": "NcoI",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 100,
+        "r2.1": 100,
+        "r3.1": 100,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "NdeI": {
+      "evidence_identity": "NdeI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 75,
+        "r2.1": 100,
+        "r3.1": 100,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "XhoI": {
+      "evidence_identity": "XhoI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 75,
+        "r2.1": 100,
+        "r3.1": 100,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "ApaI": {
+      "evidence_identity": "ApaI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 25,
+        "r3.1": 9,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "ClaI": {
+      "evidence_identity": "ClaI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 10,
+        "r2.1": 50,
+        "r3.1": 50,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "BglII": {
+      "evidence_identity": "BglII",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 10,
+        "r2.1": 10,
+        "r3.1": 100,
+        "rCutSmart": 9
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "EcoRV": {
+      "evidence_identity": "EcoRV",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 10,
+        "r2.1": 50,
+        "r3.1": 100,
+        "rCutSmart": 10
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "NotI": {
+      "evidence_identity": "NotI",
+      "supplied_buffer": "r3.1",
+      "activity_percent": {
+        "r1.1": 9,
+        "r2.1": 50,
+        "r3.1": 100,
+        "rCutSmart": 25
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "Sau3AI": {
+      "evidence_identity": "Sau3AI",
+      "supplied_buffer": "r1.1",
+      "activity_percent": {
+        "r1.1": 100,
+        "r2.1": 50,
+        "r3.1": 10,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 65,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "HaeIII": {
+      "evidence_identity": "HaeIII",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 50,
+        "r2.1": 100,
+        "r3.1": 25,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred",
+      "methylation_evidence_status": "current-neb-product-evidence",
+      "methylation_note": "Current NEB product guidance reports HaeIII is not blocked by dam, dcm or CpG methylation in the listed contexts.",
+      "methylation_source_url": "https://www.neb.com/en-us/products/r0108-haeiii"
+    },
+    "MspI": {
+      "evidence_identity": "MspI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 75,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred",
+      "methylation_evidence_status": "current-neb-product-evidence-context-dependent",
+      "methylation_note": "MspI methylation response is site-position dependent; PCRStudio must preserve the exact CCGG methylation context and must not collapse it to a generic methylation-sensitive boolean.",
+      "methylation_source_url": "https://www.neb.com/en-us/products/r0106-mspi"
+    },
+    "TaqI": {
+      "evidence_identity": "TaqI-v2",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 50,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 65,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "variant_note": "Current chart evidence is TaqI-v2.",
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred",
+      "methylation_evidence_status": "current-neb-product-evidence",
+      "methylation_note": "Current TaqI-v2 supplier guidance reports blocking by overlapping dam methylation in the relevant recognition context.",
+      "methylation_source_url": "https://www.neb.com/en-us/products/r0149-taqi-v2"
+    },
+    "AluI": {
+      "evidence_identity": "AluI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 100,
+        "r3.1": 50,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "RsaI": {
+      "evidence_identity": "RsaI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 25,
+        "r2.1": 50,
+        "r3.1": 9,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "supported": false
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred"
+    },
+    "HinfI": {
+      "evidence_identity": "HinfI",
+      "supplied_buffer": "rCutSmart",
+      "activity_percent": {
+        "r1.1": 50,
+        "r2.1": 100,
+        "r3.1": 100,
+        "rCutSmart": 100
+      },
+      "incubation_temperature_c": 37,
+      "heat_inactivation": {
+        "temperature_c": 80,
+        "supported": true
+      },
+      "star_activity_status": "supplier-version-and-buffer-specific-not-inferred",
+      "methylation_evidence_status": "current-neb-product-evidence-context-dependent",
+      "methylation_note": "Current supplier guidance reports blocking in some overlapping CpG-methylated recognition contexts; preserve sequence/methylation context and do not infer a universal block.",
+      "methylation_source_url": "https://www.neb.com/en-us/products/r0155-hinfi"
+    }
+  }
+}

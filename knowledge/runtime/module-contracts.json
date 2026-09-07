@@ -1,0 +1,1398 @@
+{
+  "coordinate_contract": {
+    "basis": 0,
+    "interval": "half-open",
+    "junction_position": "boundary-between-bases",
+    "notation": "[start,end)",
+    "oligo_sequence_orientation": "5prime-to-3prime",
+    "single_base_position": "0-based",
+    "source_coordinate_policy": "preserve raw source coordinates in adapter evidence; normalize before engine use",
+    "strand_field_required": true,
+    "version": "1.0.0"
+  },
+  "modules": {
+    "arms-pcr": {
+      "command": "discriminate",
+      "engine": "discriminating-pair",
+      "fallback": "preserve_discrimination",
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "three_prime_allele_identity",
+        "polymerase_scoped_mismatch_evidence",
+        "differential_extension",
+        "paired_allele_empirical_validation_boundary"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt"
+      ]
+    },
+    "colony-pcr": {
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_invent_colony_lysis_or_bench_status",
+      "gates": [
+        "screen_product_geometry",
+        "host_class",
+        "colony_preparation_provenance",
+        "colony_lysis_profile",
+        "optional_vector_context",
+        "predicted_screen_status"
+      ],
+      "required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "colony_protocol_name",
+            "colony_protocol_provenance"
+          ],
+          "when": {
+            "colony_protocol_id": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id"
+      ]
+    },
+    "digital-pcr": {
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "digital_partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_infer_platform_identity_or_invent_partition_threshold_or_fragmentation",
+      "gates": [
+        "short_product",
+        "partition_compatible_assay",
+        "partition_format",
+        "platform_identity",
+        "platform_protocol_identity_consistency",
+        "fragmentation_state",
+        "digital_multiplex_architecture",
+        "digital_multiplex_platform_bound",
+        "specificity",
+        "shared_tm",
+        "measured_run_quantification_boundary"
+      ],
+      "required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "digital_platform_name"
+          ],
+          "when": {
+            "digital_platform_id": "other-validated"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-eg"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.partition_format_detail"
+          ],
+          "when": {
+            "digital_protocol": "qiagen-qiacuity-onestep-advanced-eg"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_fragmentation_state"
+      ]
+    },
+    "gibson-assembly": {
+      "command": "junction",
+      "engine": "junction-primers",
+      "fallback": "preserve_junction_identity",
+      "gates": [
+        "fragment_order",
+        "typed_fragment_production",
+        "junction_normalization",
+        "annealing_cores",
+        "method_specific_overlap_authority",
+        "overlap_composition",
+        "whole_oligo_structure",
+        "construct_reconstruction",
+        "circular_rotation_semantics",
+        "feature_integrity",
+        "fragment_molarity_provenance",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "assembly_protocol",
+        "assembly_method",
+        "circular"
+      ],
+      "wire_required_context": [
+        "assembly_protocol",
+        "method",
+        "circular"
+      ]
+    },
+    "inverse-pcr": {
+      "command": "inverse",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "engine": "outward-pair",
+      "fallback": "never_invent_topology_unknown_flank_fragment_length_or_bench_status",
+      "gates": [
+        "circular_or_digest_topology",
+        "named_branch_identity",
+        "outward_orientation",
+        "junction_reconstruction",
+        "restriction_enzyme_suitability",
+        "per_end_phosphate_state",
+        "circularization_provenance",
+        "linear_control_provenance",
+        "methylation_branch",
+        "unknown_flank_bounds",
+        "fragment_circle_feasibility",
+        "diagnostic_enzyme_cohort",
+        "full_reference_topology_validation",
+        "explicit_full_reference_enzyme_cohort",
+        "sequencing_handoff",
+        "predicted_result_status",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "enzyme",
+            "left_end_phosphate",
+            "right_end_phosphate",
+            "linear_control_provenance",
+            "methylation_branch"
+          ],
+          "when": {
+            "inverse_branch": "restriction-self-ligation"
+          }
+        },
+        {
+          "required_context": [
+            "circle_length"
+          ],
+          "when": {
+            "inverse_branch": "supplied-circular-template"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "inverse_branch",
+        "circularization_provenance"
+      ]
+    },
+    "kasp": {
+      "command": "discriminate",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "engine": "discriminating-pair",
+      "fallback": "never_relax_discrimination_chemistry_or_standard_lgc_product_ceiling",
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "explicit_assay_mode",
+        "kasp_endpoint_fret_chemistry",
+        "nonproofreading_polymerase",
+        "allele_specific_or_plus_minus_geometry",
+        "common_primer_geometry",
+        "protocol_specific_product_envelope",
+        "fixed_fam_hex_tail_assignment",
+        "singleplex_readout",
+        "annealing_vs_ordered_sequence",
+        "target_aware_specificity",
+        "endpoint_evidence_separation",
+        "no_proprietary_kraken_equivalence_claim"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "snv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "mnv"
+          }
+        },
+        {
+          "required_context": [
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "insertion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "deletion"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref",
+            "variant.alt"
+          ],
+          "when": {
+            "variant.type": "complex-replacement"
+          }
+        },
+        {
+          "required_context": [
+            "variant.ref"
+          ],
+          "when": {
+            "variant.type": "presence-absence"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-standard"
+          }
+        },
+        {
+          "required_context": [
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy"
+          ],
+          "when": {
+            "kasp_protocol": "lgc-kasp-tf-v5"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "kasp_assay_mode",
+        "kasp_protocol"
+      ]
+    },
+    "lamp": {
+      "command": "loop_set",
+      "engine": "loop-set",
+      "fallback": "role_by_role_search_with_unchanged_lamp_geometry",
+      "gates": [
+        "f3_b3",
+        "f2_b2",
+        "f1c_b1c",
+        "inner_primer_composition",
+        "spacing_geometry",
+        "loop_primer_geometry",
+        "target_inclusivity_when_supplied",
+        "finite_six_region_background_topology_when_supplied",
+        "indexed_lamp_specificity_evidence_for_large_scope",
+        "set_interaction_risk_review",
+        "independent_lamp_specificity_evidence"
+      ]
+    },
+    "long-range-pcr": {
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "long_range_target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "long_range_target_length_kb",
+            "flanking_template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "never_substitute_anonymous_long_range_chemistry_or_relax_polymerase_capability",
+      "gates": [
+        "long_product_geometry",
+        "proofreading_capability",
+        "protocol_identity",
+        "extension_protocol_compatibility"
+      ],
+      "required_context": [
+        "long_range_protocol"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb"
+          ],
+          "when": {
+            "long_range_protocol": "toyobo-kod-long-kml101"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.target_length_kb",
+            "flanking_numeric_context.template_class"
+          ],
+          "when": {
+            "long_range_protocol": "promega-gotaq-long-m4021"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "long_range_protocol"
+      ]
+    },
+    "nested-pcr": {
+      "command": "nested",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "engine": "nested",
+      "fallback": "outer_and_inner_search_expand_only_within_unchanged_round_profiles_and_never_invent_transfer_cleanup_or_carryover_chemistry",
+      "gates": [
+        "outer_pair",
+        "inner_pair",
+        "strict_containment",
+        "round_specificity",
+        "causal_nested_false_product_graph",
+        "cross_round_interaction",
+        "round_specific_reaction_identity",
+        "transfer_cleanup_provenance",
+        "contamination_evidence_separation",
+        "single_tube_generic_fail_closed_unless_supported_mechanism"
+      ],
+      "required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "msz-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "cleanup_protocol"
+          ],
+          "when": {
+            "transfer_mode": "thermolabile-exonuclease-i"
+          }
+        },
+        {
+          "required_context": [
+            "transfer_dilution_factor"
+          ],
+          "when": {
+            "transfer_mode": "diluted-transfer"
+          }
+        },
+        {
+          "required_context": [
+            "custom_transfer_sop"
+          ],
+          "when": {
+            "transfer_mode": "custom-sop"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "shares",
+        "margin",
+        "single_tube",
+        "carryover_prevention",
+        "transfer_mode"
+      ]
+    },
+    "qpcr-probe": {
+      "command": "probe",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "engine": "pair-and-probe",
+      "fallback": "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model",
+      "gates": [
+        "primer_pair",
+        "probe_inside_product",
+        "chemistry_specific_probe_tm_model",
+        "probe_structure",
+        "same_buffer_thermodynamics",
+        "primer_probe_interactions",
+        "named_probe_chemistry",
+        "probe_optical_configuration",
+        "probe_signal_specificity",
+        "transcript_provenance",
+        "multiplex_channel_compatibility",
+        "miqe_evidence_separation",
+        "mgb_exact_tm_fail_closed_without_authority",
+        "mgb_external_authority_exchange",
+        "mgb_candidate_set_hash_integrity",
+        "combined_amplicon_probe_specificity"
+      ],
+      "required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "probe_internal_quencher"
+          ],
+          "when": {
+            "probe_protocol": "idt-primetime-conventional"
+          }
+        },
+        {
+          "required_context": [
+            "probe_mgb_authority_mode"
+          ],
+          "when": {
+            "probe_protocol": "taqman-mgb-reference"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher"
+      ]
+    },
+    "qpcr-sybr": {
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "qpcr_cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "search_expand_only_within_qpcr_profile",
+      "gates": [
+        "short_qpcr_product",
+        "primer_specificity",
+        "dimer_sensitivity",
+        "shared_tm"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.cycling_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "thermo-powertrack-sybr-a46xxx"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "qiagen-quantinova-sybr-208052"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-rox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-norox"
+          }
+        },
+        {
+          "required_context": [
+            "flanking_numeric_context.qpcr_instrument_profile"
+          ],
+          "when": {
+            "qpcr_protocol": "solis-hot-firepol-evagreen-capillary"
+          }
+        }
+      ]
+    },
+    "race": {
+      "command": "single",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback": "boundary_aware_search_without_cross_wiring_race_chemistries",
+      "gates": [
+        "boundary",
+        "extension_direction",
+        "chemistry_specific_gsp_profile",
+        "adapter_partner_identity",
+        "substrate_preparation_provenance",
+        "nested_round_state",
+        "single_primer_specificity",
+        "unknown_end_product_semantics",
+        "sequencing_confirmation_handoff",
+        "candidate_transcript_end_claim_boundary",
+        "smarter_complete_context",
+        "nested_gsp_plan",
+        "polyA_guard_for_3prime_smarter",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "custom"
+          }
+        },
+        {
+          "required_context": [
+            "race_partner_sequence",
+            "race_sop_revision",
+            "race_sop_sha256"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current"
+          }
+        },
+        {
+          "required_context": [
+            "race_polyadenylated"
+          ],
+          "when": {
+            "race_chemistry": "smarter-race-current",
+            "race_direction": "3prime"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "race_chemistry",
+        "race_direction",
+        "race_substrate",
+        "race_preparation",
+        "race_round"
+      ]
+    },
+    "restriction-cloning": {
+      "command": "run",
+      "engine": "flanking-pair",
+      "fallback": "preserve_required_sites_and_product",
+      "gates": [
+        "restriction_site_policy",
+        "tail_composition",
+        "frame_or_product_verification",
+        "annealing_core_quality"
+      ],
+      "required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ],
+      "wire_required_context": [
+        "tails.tail_protocol",
+        "tails.forward_enzyme",
+        "tails.reverse_enzyme",
+        "tails.forward_protective_sequence",
+        "tails.reverse_protective_sequence",
+        "restriction_digest_protocol",
+        "restriction_dephosphorylation_protocol",
+        "restriction_ligation_protocol"
+      ]
+    },
+    "rpa": {
+      "command": "run",
+      "engine": "flanking-pair",
+      "fallback": "preserve_rpa_chemistry",
+      "gates": [
+        "rpa_compatible_chemistry",
+        "rpa_primer_profile",
+        "target_specificity"
+      ],
+      "required_context": [
+        "rpa_protocol"
+      ],
+      "wire_required_context": [
+        "rpa_protocol"
+      ]
+    },
+    "sequencing-primer": {
+      "command": "single",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "engine": "single-primer",
+      "fallback": "read_window_search_without_mixing_service_submission_values_into_design_ranking",
+      "gates": [
+        "read_direction",
+        "provider_specific_design_envelope",
+        "readable_distance",
+        "single_binding",
+        "submission_values_separated_from_ranking",
+        "bidirectional_route",
+        "instrument_handoff",
+        "universal_primer_exact_unique_reuse",
+        "primer_walking_geometry",
+        "bounded_abif_trace_review",
+        "trace_evidence_separated_from_ranking",
+        "validation_evidence_separation"
+      ],
+      "required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "sequencing_instrument_name"
+          ],
+          "when": {
+            "sequencing_instrument": "other"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "direction",
+        "dead_zone",
+        "read_length",
+        "sequencing_design_profile"
+      ]
+    },
+    "site-directed-mutagenesis": {
+      "command": "mutagenic",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "edit.kind",
+            "edit.at"
+          ],
+          "when": {
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to",
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "substitute",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.to"
+          ],
+          "when": {
+            "edit.kind": "insert",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edit.replacing"
+          ],
+          "when": {
+            "edit.kind": "delete",
+            "edit_input_mode": "dna"
+          }
+        },
+        {
+          "required_context": [
+            "edits_json"
+          ],
+          "when": {
+            "edit_input_mode": "multi"
+          }
+        },
+        {
+          "required_context": [
+            "aa_cds_start",
+            "aa_residue",
+            "aa_to",
+            "codon_policy"
+          ],
+          "when": {
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "aa_codon"
+          ],
+          "when": {
+            "codon_policy": "user-selected-codon",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "codon_usage"
+          ],
+          "when": {
+            "codon_policy": "host-codon-usage",
+            "edit_input_mode": "amino-acid"
+          }
+        },
+        {
+          "required_context": [
+            "library_mode",
+            "library_at"
+          ],
+          "when": {
+            "edit_input_mode": "library"
+          }
+        },
+        {
+          "required_context": [
+            "library_codon"
+          ],
+          "when": {
+            "edit_input_mode": "library",
+            "library_mode": "custom"
+          }
+        }
+      ],
+      "engine": "mutagenic-pair",
+      "fallback": "never_relax_edit_identity",
+      "gates": [
+        "edit_normalization",
+        "multi_edit_overlap_validation",
+        "edited_reference",
+        "topology_specific_geometry",
+        "whole_oligo_quality",
+        "exact_edited_construct",
+        "protein_consequence_when_declared",
+        "library_design_boundary",
+        "protocol_topology_compatibility",
+        "edited_product_verification"
+      ],
+      "required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol",
+        "edit_input_mode"
+      ],
+      "wire_required_any_of": [
+        [
+          "edit",
+          "edits",
+          "amino_acid_edit",
+          "library_edit"
+        ]
+      ],
+      "wire_required_context": [
+        "mutagenesis_topology",
+        "post_amplification_protocol"
+      ]
+    },
+    "species-specific-pcr": {
+      "command": "run",
+      "engine": "flanking-pair",
+      "fallback": "never_drop_exclusion_background",
+      "gates": [
+        "target_inclusivity",
+        "required_exclusion_background",
+        "product_specificity"
+      ],
+      "required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ],
+      "wire_required_context": [
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_record_metadata_manifest",
+        "species_panel_retrieved_date"
+      ]
+    },
+    "standard-pcr": {
+      "command": "run",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_additive": "high-gc-enhancer"
+          }
+        }
+      ],
+      "engine": "flanking-pair",
+      "fallback": "search_more_candidates_within_unchanged_hard_gates",
+      "gates": [
+        "flanking_geometry",
+        "primer_thermodynamics",
+        "template_specificity"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "flanking_numeric_context.gc_enhancer_percent"
+          ],
+          "when": {
+            "flanking_numeric_context.additive": "high-gc-enhancer"
+          }
+        }
+      ]
+    },
+    "tetra-primer-arms": {
+      "command": "discriminate",
+      "engine": "discriminating-pair",
+      "fallback": "preserve_diagnostic_geometry",
+      "gates": [
+        "variant_normalization",
+        "reference_provenance",
+        "nearby_variant_masking",
+        "four_primer_geometry",
+        "diagnostic_band_separation",
+        "readout_context",
+        "multi_oligo_interactions",
+        "empirical_genotype_evidence_boundary"
+      ],
+      "required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ],
+      "wire_required_context": [
+        "variant.type",
+        "variant.at",
+        "variant.ref",
+        "variant.alt",
+        "tetra_min_band_separation_bp",
+        "tetra_readout"
+      ]
+    },
+    "tiled-scheme": {
+      "command": "tiling",
+      "conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "engine": "tiling-scheme",
+      "fallback": "no_primary_backend_substitution_or_score_blending",
+      "gates": [
+        "backend_identity",
+        "coordinate_normalization",
+        "coverage",
+        "amplicon_overlap",
+        "pool_separation",
+        "variant_risk",
+        "interaction_audit",
+        "scheme_format",
+        "repairability",
+        "backend_score_non_blending",
+        "scheme_lifecycle",
+        "measured_dropout_evidence_separation",
+        "circular_scheme_create",
+        "native_visualisation_artifacts",
+        "observed_depth_import",
+        "dropout_repair_handoff",
+        "scheme_version_diff"
+      ],
+      "required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ],
+      "wire_conditional_required_context": [
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "overlap",
+            "pools"
+          ],
+          "when": {
+            "tiling_backend": "compare",
+            "tiling_operation": "scheme-create"
+          }
+        },
+        {
+          "required_context": [
+            "pools",
+            "panel_mode"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "panel-create"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "repair-mode"
+          }
+        },
+        {
+          "required_context": [
+            "existing_bed",
+            "scheme_config",
+            "primer_name"
+          ],
+          "when": {
+            "tiling_backend": "primalscheme3",
+            "tiling_operation": "scheme-replace"
+          }
+        }
+      ],
+      "wire_required_context": [
+        "tiling_backend",
+        "tiling_operation",
+        "tiling_alignment_mode"
+      ]
+    },
+    "universal-primers": {
+      "command": "universal",
+      "engine": "consensus-pair",
+      "fallback": "declared_alignment_authority_then_search_within_degeneracy_ceiling_without_population_or_global_specificity_overclaim",
+      "gates": [
+        "msa",
+        "alignment_qc",
+        "alignment_provenance",
+        "conservation",
+        "degeneracy",
+        "exact_member_enumeration_or_explicit_ceiling",
+        "member_coverage",
+        "weighted_or_stratified_coverage_when_selected",
+        "finite_target_vs_nontarget_specificity",
+        "formulation_provenance",
+        "conserved_pair_geometry",
+        "amplicon_informativeness",
+        "alignment_sensitivity"
+      ],
+      "required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ],
+      "wire_required_context": [
+        "alignment_mode",
+        "consensus_policy",
+        "formulation_mode"
+      ]
+    }
+  },
+  "parameter_map_version": "generation1-current",
+  "pipeline": [
+    "api-schema-validation",
+    "module-resolution",
+    "input-normalization",
+    "coordinate-normalization",
+    "chemistry-and-parameter-resolution",
+    "candidate-generation",
+    "assay-hard-filters",
+    "thermodynamic-and-structure-evaluation",
+    "request-context-specificity-and-inclusivity",
+    "deterministic-ranking",
+    "bounded-search-expansion-with-unchanged-hard-gates",
+    "independent-toolchain-validation",
+    "verification-envelope",
+    "result-schema-and-ui"
+  ],
+  "runtime_contract_version": "2.2.0",
+  "schema_version": "2.1.0"
+}

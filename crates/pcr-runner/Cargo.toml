@@ -1,0 +1,22 @@
+[package]
+name = "pcr-runner"
+description = "Dedicated Linux durable scientific-job runner for PCRStudio."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+pcr-accounts.workspace = true
+pcr-application.workspace = true
+pcr-core.workspace = true
+pcr-storage.workspace = true
+pcr-security.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[lints]
+workspace = true

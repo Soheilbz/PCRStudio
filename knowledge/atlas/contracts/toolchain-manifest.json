@@ -1,0 +1,264 @@
+{
+  "artifact_identity_policy": "Every local production artifact resolves to an exact version/ref and SHA-256; remote references have no production artifact digest.",
+  "coordinate_contract": {
+    "circular_targets": "normalize modulo reference length and represent origin-spanning regions as ordered segment arrays, never as end0 < start0",
+    "internal_system": "zero_based_half_open",
+    "interval": "[start0,end0)",
+    "oligo_sequence_orientation": "always stored 5-prime to 3-prime as synthesized/read",
+    "single_base_position": "zero_based",
+    "source_coordinates": "raw source-tool/database coordinates must be retained; conversion occurs only in the adapter",
+    "strand_field": "explicit + or -; interval coordinates always increase on the reference"
+  },
+  "effective_date": "2026-09-04",
+  "engine_binding_contract": {
+    "path": "engine-tool-contracts.json",
+    "schema": "engine-tool-contracts.schema.json",
+    "version": "2.0.0"
+  },
+  "generation": "1",
+  "override_policies": [
+    "locked",
+    "bounded",
+    "recommended"
+  ],
+  "parameter_resolution_precedence": [
+    "tool_hard_capability",
+    "assay_hard_constraint",
+    "chemistry_kit_profile_locked",
+    "chemistry_kit_profile_bounded",
+    "chemistry_kit_profile_recommended",
+    "purpose_default_within_assay_contract",
+    "pcrstudio_reviewed_default",
+    "policy_checked_user_tightening_or_within_envelope_tuning",
+    "tool_native_default_only_when_explicitly_documented_and_not_overridden"
+  ],
+  "role_scope": "engine_resolved",
+  "role_semantics": "Global tool identity is canonical in contracts/tools.toml; engine role is canonical in contracts/engines.toml.",
+  "runtime_schema": "runtime-contract.schema.json",
+  "schema_version": "2.0.0",
+  "scientific_policy_ceiling": "Strict scientific policy remains fail-closed across toolchain and validation modes.",
+  "status": "generated_canonical_projection",
+  "strict_override_semantics": {
+    "bounded": "may tighten inside the reviewed envelope; widening requires a different named/versioned profile",
+    "chemistry": "polymerase/buffer/reaction identity cannot be anonymously substituted in strict mode",
+    "locked": "cannot change in strict mode; select a different named/versioned profile",
+    "recommended": "may only move within an explicit source-backed envelope",
+    "validation_wording": "policy-checked is not experimentally validated"
+  },
+  "tool_role_enum": [
+    "PRIMARY",
+    "CONDITIONAL_PRIMARY",
+    "VALIDATOR",
+    "FALLBACK",
+    "OPTIONAL",
+    "BENCHMARK",
+    "REFERENCE",
+    "WATCHLIST",
+    "REJECT"
+  ],
+  "tools": [
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Primer3 primer3_core",
+      "execution_scope": "embedded-package",
+      "qualifiers": [
+        "candidate_generation"
+      ],
+      "source_ref": "tag:v2.6.1",
+      "source_url": "https://github.com/primer3-org/primer3",
+      "tool_id": "primer3_core",
+      "version_policy": {
+        "mode": "exact",
+        "version": "2.6.1"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "primer3-py",
+      "execution_scope": "embedded-package",
+      "qualifiers": [
+        "development_adapter"
+      ],
+      "source_ref": "PyPI:2.3.0",
+      "source_url": "https://pypi.org/project/primer3-py/2.3.0/",
+      "tool_id": "primer3_py",
+      "version_policy": {
+        "mode": "exact",
+        "version": "2.3.0"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "MFEprimer",
+      "execution_scope": "local",
+      "qualifiers": [
+        "specificity"
+      ],
+      "source_ref": "release:4.5.1",
+      "source_url": "https://www.mfeprimer.com/updates/",
+      "tool_id": "mfeprimer",
+      "version_policy": {
+        "mode": "exact",
+        "version": "4.5.1"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "NCBI BLAST+",
+      "execution_scope": "local",
+      "qualifiers": [
+        "specificity"
+      ],
+      "source_ref": "release:2.17.0",
+      "source_url": "https://www.ncbi.nlm.nih.gov/books/NBK131777/",
+      "tool_id": "ncbi_blast_plus",
+      "version_policy": {
+        "mode": "exact",
+        "version": "2.17.0"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "MAFFT",
+      "execution_scope": "local",
+      "qualifiers": [
+        "msa"
+      ],
+      "source_ref": "release:7.526",
+      "source_url": "https://mafft.cbrc.jp/alignment/software/",
+      "tool_id": "mafft",
+      "version_policy": {
+        "excluded_range": "7.463-7.486",
+        "minimum_supported": "7.487",
+        "mode": "exact",
+        "version": "7.526"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "PrimerPooler",
+      "execution_scope": "local",
+      "qualifiers": [
+        "pool_optimizer",
+        "optional_execution"
+      ],
+      "source_ref": "upstream-version:1.89",
+      "source_url": "https://github.com/ssb22/PrimerPooler",
+      "tool_id": "primerpooler",
+      "version_policy": {
+        "mode": "exact",
+        "version": "1.89"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "PrimalScheme3",
+      "execution_scope": "local",
+      "qualifiers": [
+        "tiling",
+        "repair"
+      ],
+      "source_ref": "PyPI:3.3.0",
+      "source_url": "https://pypi.org/project/primalscheme3/",
+      "tool_id": "primalscheme3",
+      "version_policy": {
+        "mode": "exact",
+        "version": "3.3.0"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "ViennaRNA",
+      "execution_scope": "optional-package",
+      "qualifiers": [
+        "structure"
+      ],
+      "source_ref": "release:2.7.2",
+      "source_url": "https://github.com/ViennaRNA/ViennaRNA/releases",
+      "tool_id": "viennarna",
+      "version_policy": {
+        "mode": "exact",
+        "version": "2.7.2"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "pydna",
+      "execution_scope": "local",
+      "qualifiers": [
+        "specialized"
+      ],
+      "source_ref": "PyPI:5.5.16",
+      "source_url": "https://pypi.org/project/pydna/5.5.16/",
+      "tool_id": "pydna",
+      "version_policy": {
+        "mode": "exact",
+        "version": "5.5.16"
+      }
+    },
+    {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NCBI Primer-BLAST",
+      "execution_scope": "remote-reference",
+      "qualifiers": [
+        "remote",
+        "specificity"
+      ],
+      "source_ref": "NCBI-live-service",
+      "source_url": "https://www.ncbi.nlm.nih.gov/tools/primer-blast/",
+      "tool_id": "primer_blast",
+      "version_policy": {
+        "mode": "live_service",
+        "version": "live"
+      }
+    },
+    {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NUPACK 4.x",
+      "execution_scope": "manual-reference",
+      "qualifiers": [
+        "license_blocked",
+        "structure",
+        "manual_only"
+      ],
+      "source_ref": "documentation-current-at-cutoff",
+      "source_url": "https://docs.nupack.org/",
+      "tool_id": "nupack4",
+      "version_policy": {
+        "mode": "reference_family",
+        "version": "4.x"
+      }
+    },
+    {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Olivar",
+      "execution_scope": "external-managed",
+      "qualifiers": [
+        "tiling",
+        "variant-aware",
+        "multi-target",
+        "sensitivity",
+        "specificity"
+      ],
+      "source_ref": "Bioconda:olivar=1.3.3",
+      "source_url": "https://github.com/treangenlab/Olivar/releases/tag/v1.3.3",
+      "tool_id": "olivar",
+      "version_policy": {
+        "mode": "exact",
+        "version": "1.3.3"
+      }
+    }
+  ]
+}

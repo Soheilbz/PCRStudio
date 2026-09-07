@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "authority": "neb-e5510",
+        "method": "gibson",
+        "nebuilder_numeric_inheritance": false
+      },
+      "id": "gibson-e5510-two-fragment",
+      "request": {
+        "assembly_protocol": "neb-e5510",
+        "circular": false,
+        "method": "gibson",
+        "segment_count": 2
+      }
+    },
+    {
+      "expected": {
+        "authority": "neb-nebuilder-e2621",
+        "overlap_policy": "protocol-specific",
+        "standard_quantity_table_applicable": true
+      },
+      "id": "nebuilder-e2621-three-fragment",
+      "request": {
+        "assembly_protocol": "neb-nebuilder-e2621",
+        "circular": false,
+        "method": "nebuilder",
+        "segment_count": 3
+      }
+    },
+    {
+      "expected": {
+        "construct_graph": true,
+        "standard_quantity_table_applicable": true
+      },
+      "id": "nebuilder-five-fragment",
+      "request": {
+        "assembly_protocol": "neb-nebuilder-e2621",
+        "circular": true,
+        "method": "nebuilder",
+        "segment_count": 5
+      }
+    },
+    {
+      "expected": {
+        "restriction_metadata_required": true,
+        "typed_fragment": true
+      },
+      "id": "restriction-linearized-vector",
+      "request": {
+        "restriction_metadata_present": true,
+        "segment_kind": "restriction-digest"
+      }
+    },
+    {
+      "expected": {
+        "molarity_from_dsdna_mass_formula": false,
+        "typed_fragment": true
+      },
+      "id": "ssdna-oligo",
+      "request": {
+        "segment_kind": "ssdna-oligo"
+      }
+    },
+    {
+      "expected": {
+        "feature_check": "diagnostic-only",
+        "sequence_annotation_inferred": false
+      },
+      "id": "feature-integrity",
+      "request": {
+        "features": [
+          {
+            "end": 300,
+            "start": 0,
+            "type": "CDS"
+          }
+        ]
+      }
+    }
+  ],
+  "engine": "junction-primers",
+  "metamorphic": [
+    "circular origin rotation invariance",
+    "reversing a fragment requires explicit orientation and reverse-complement normalization",
+    "method change never borrows numeric authority from another assembly chemistry",
+    "validation evidence never changes overlap ranking"
+  ],
+  "purpose": "Shared CURRENT Junction Primers differential/property corpus for method-specific authority, typed fragments and construct graph semantics.",
+  "schema_version": "1.0.0"
+}

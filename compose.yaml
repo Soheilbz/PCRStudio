@@ -1,0 +1,386 @@
+# One Linux host: PostgreSQL, an interactive API/scientific gateway, a dedicated
+# durable scientific runner, the Next interface, and Caddy at the edge. Only
+# Caddy is published. Durable design jobs are claimed from PostgreSQL by the
+# runner; latency-sensitive catalogue/bench/sequence operations remain explicit
+# interactive API capabilities.
+
+name: ${PCRSTUDIO_COMPOSE_PROJECT:-pcrstudio}
+
+x-build-common: &build-common
+  context: .
+  dockerfile: docker/api.Dockerfile
+  args:
+    PCRSTUDIO_BUILD_ID: ${PCRSTUDIO_BUILD_ID:?bootstrap must set PCRSTUDIO_BUILD_ID from release/FILE-MANIFEST.json}
+
+services:
+  db:
+    image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pcr}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: ${POSTGRES_DB:-pcrstudio}
+    command: ["postgres", "-c", "max_connections=${POSTGRES_MAX_CONNECTIONS:-200}"]
+    volumes:
+      # Postgres 18+ images keep the cluster in a major-version subdirectory,
+      # so the mount point is /var/lib/postgresql rather than .../data.
+      - db_data:/var/lib/postgresql
+    secrets:
+      - postgres_password
+    healthcheck:
+      # The API waits for this, so it never starts against a database that is
+      # still initialising.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pcr} -d ${POSTGRES_DB:-pcrstudio}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    stop_grace_period: 30s
+    networks:
+      - data
+    expose:
+      - "5432"
+    mem_limit: ${PCR_DB_MEMORY_LIMIT:-1g}
+    # PostgreSQL owns a writable named volume. Do not apply the application
+    # containers' read-only/capability profile here: the upstream image must
+    # initialise and manage its database process correctly. Network isolation
+    # and the dedicated volume are the primary DB sandbox in this Compose file.
+    pids_limit: 256
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  migrate:
+    image: pcrstudio-migrate:${PCRSTUDIO_IMAGE_TAG:-local}
+    build:
+      <<: *build-common
+      target: migrate-runtime
+    environment:
+      PCR_DATABASE_URL_FILE: /run/secrets/database_url
+      PCR_DB_MAX_CONNECTIONS: 4
+      PCR_DB_MIN_CONNECTIONS: 0
+      PCR_DB_ACQUIRE_TIMEOUT_SECONDS: 10
+      RUST_LOG: ${RUST_LOG_MIGRATE:-pcr_migrate=info,pcr_storage=info}
+    secrets:
+      - database_url
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - data
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "2"
+
+  api:
+    image: pcrstudio-api:${PCRSTUDIO_IMAGE_TAG:-local}
+    build:
+      <<: *build-common
+      target: api-runtime
+    environment:
+      PCR_BIND: 0.0.0.0:8080
+      # Secret-file delivery keeps the database credential out of container
+      # environment metadata and avoids URI-encoding ambiguity.
+      PCR_DATABASE_URL_FILE: /run/secrets/database_url
+      PCR_DB_MAX_CONNECTIONS: ${PCR_DB_MAX_CONNECTIONS:-32}
+      PCR_DB_MIN_CONNECTIONS: ${PCR_DB_MIN_CONNECTIONS:-2}
+      PCR_DB_ACQUIRE_TIMEOUT_SECONDS: ${PCR_DB_ACQUIRE_TIMEOUT_SECONDS:-5}
+      PCR_WORKER_TIMEOUT_SECONDS: ${PCR_WORKER_TIMEOUT_SECONDS:-120}
+      PCR_JOB_EXECUTION_MODE: external
+      PCR_DATABASE_MIGRATIONS: external
+      PCR_MAX_CONCURRENT_WORKERS: ${PCR_API_MAX_CONCURRENT_WORKERS:-2}
+      PCR_MAX_QUEUED_WORKERS: ${PCR_API_MAX_QUEUED_WORKERS:-64}
+      # Public Compose API owns interactive scientific capabilities while durable designs execute externally. Missing native
+      # scientific tools must refuse rather than fall back to approximations.
+      PCRSTUDIO_TOOLCHAIN_MODE: strict
+      # Every request this service sees arrives from the web tier; trusting
+      # that one address lets the forwarded header name the real caller, so
+      # rate limits land on people instead of all landing on one process.
+      PCR_TRUSTED_PROXIES: ${PCR_APP_SUBNET:-172.29.0.0/24}
+      PCR_CORS_ORIGINS: ${PCR_CORS_ORIGINS:-}
+      PCR_OPERATOR_TOKEN_FILE: /run/secrets/operator_token
+      PCR_NCBI_EMAIL: ${PCR_NCBI_EMAIL:-}
+      PCR_NCBI_API_KEY_FILE: /run/secrets/ncbi_api_key
+      RUST_LOG: ${RUST_LOG:-pcr_server=info,tower_http=info}
+      PCR_LOG_FORMAT: ${PCR_LOG_FORMAT:-json}
+      # Scientific executable identities are baked into the API image. The
+      # dependency freeze is approved only after image-level qualification.
+      PCRSTUDIO_APPROVED_SCIENTIFIC_PYTHON_FREEZE_SHA256: ${PCRSTUDIO_APPROVED_SCIENTIFIC_PYTHON_FREEZE_SHA256:-}
+      # Specificity data is deployment-owned and mounted read-only below. Empty
+      # defaults deliberately keep /ready/scientific red until bootstrap has
+      # built and fingerprinted an approved reference database.
+      PCRSTUDIO_MFEPRIMER_DATABASES: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.fasta
+      PCRSTUDIO_MFEPRIMER_DATABASES_SHA256: ${PCR_SCIENTIFIC_DB_SHA256:-}
+      PCRSTUDIO_MFEPRIMER_DATABASES_SCOPE: ${PCR_SCIENTIFIC_DB_SCOPE:-smoke}
+      PCRSTUDIO_MFEPRIMER_DATABASES_MANIFEST: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.manifest.json
+      PCRSTUDIO_BLAST_DATABASE: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}
+      PCRSTUDIO_BLAST_DATABASE_SHA256: ${PCR_SCIENTIFIC_DB_SHA256:-}
+      PCRSTUDIO_BLAST_DATABASE_SCOPE: ${PCR_SCIENTIFIC_DB_SCOPE:-smoke}
+      PCRSTUDIO_BLAST_DATABASE_MANIFEST: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.manifest.json
+    volumes:
+      - ${PCR_SCIENTIFIC_DB_DIR:-./.local/scientific-db}:/opt/pcrstudio/db:ro
+    secrets:
+      - database_url
+      - operator_token
+      - ncbi_api_key
+    labels:
+      org.pcrstudio.runtime-capability: "interactive-api-scientific-gateway; durable-designs delegated to runner; approved reference DB required"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    # Let in-flight requests finish before Docker sends SIGKILL. The API's
+    # request deadline is longer than Compose's ten-second default.
+    stop_grace_period: 45s
+    networks:
+      - data
+      - app
+      # Outbound-only bridge: sequence accession lookup and explicitly remote
+      # scientific references need Internet access, but no edge-facing service
+      # joins this network. PostgreSQL remains on the internal data network only.
+      - egress
+    expose:
+      - "8080"
+    healthcheck:
+      # Service readiness remains availability-oriented; strict scientific and
+      # durable-runner readiness are exposed separately to qualification and
+      # operator probes so temporary scientific degradation does not hide
+      # account/project recovery behind an orchestrator-level restart loop.
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8080/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    mem_limit: ${PCR_API_MEMORY_LIMIT:-2g}
+    # Runtime image already runs as an unprivileged UID. Make the container
+    # filesystem immutable and give scientific subprocesses only an ephemeral
+    # scratch directory. No Linux capability is required by the API.
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 512
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  runner:
+    image: pcrstudio-runner:${PCRSTUDIO_IMAGE_TAG:-local}
+    build:
+      <<: *build-common
+      target: runner-runtime
+    environment:
+      PCR_DATABASE_URL_FILE: /run/secrets/database_url
+      PCR_DB_MAX_CONNECTIONS: ${PCR_RUNNER_DB_MAX_CONNECTIONS:-8}
+      PCR_DB_MIN_CONNECTIONS: ${PCR_RUNNER_DB_MIN_CONNECTIONS:-1}
+      PCR_DB_ACQUIRE_TIMEOUT_SECONDS: ${PCR_DB_ACQUIRE_TIMEOUT_SECONDS:-5}
+      PCR_MAX_CONCURRENT_WORKERS: ${PCR_RUNNER_MAX_CONCURRENT_WORKERS:-4}
+      PCR_MAX_QUEUED_WORKERS: ${PCR_RUNNER_MAX_QUEUED_WORKERS:-256}
+      PCR_RUNNER_POLL_MILLISECONDS: ${PCR_RUNNER_POLL_MILLISECONDS:-1000}
+      PCR_WORKER_TIMEOUT_SECONDS: ${PCR_WORKER_TIMEOUT_SECONDS:-120}
+      PCRSTUDIO_TOOLCHAIN_MODE: strict
+      PCRSTUDIO_SCIENTIFIC_POLICY: strict
+      PCRSTUDIO_EXTERNAL_VALIDATION: strict
+      PCRSTUDIO_APPROVED_SCIENTIFIC_PYTHON_FREEZE_SHA256: ${PCRSTUDIO_APPROVED_SCIENTIFIC_PYTHON_FREEZE_SHA256:-}
+      PCRSTUDIO_MFEPRIMER_DATABASES: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.fasta
+      PCRSTUDIO_MFEPRIMER_DATABASES_SHA256: ${PCR_SCIENTIFIC_DB_SHA256:-}
+      PCRSTUDIO_MFEPRIMER_DATABASES_SCOPE: ${PCR_SCIENTIFIC_DB_SCOPE:-smoke}
+      PCRSTUDIO_MFEPRIMER_DATABASES_MANIFEST: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.manifest.json
+      PCRSTUDIO_BLAST_DATABASE: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}
+      PCRSTUDIO_BLAST_DATABASE_SHA256: ${PCR_SCIENTIFIC_DB_SHA256:-}
+      PCRSTUDIO_BLAST_DATABASE_SCOPE: ${PCR_SCIENTIFIC_DB_SCOPE:-smoke}
+      PCRSTUDIO_BLAST_DATABASE_MANIFEST: /opt/pcrstudio/db/${PCR_SCIENTIFIC_DB_ID:-unconfigured}/${PCR_SCIENTIFIC_DB_ID:-unconfigured}.manifest.json
+      TMPDIR: /var/lib/pcrstudio/scratch
+      TMP: /var/lib/pcrstudio/scratch
+      TEMP: /var/lib/pcrstudio/scratch
+      RUST_LOG: ${RUST_LOG_RUNNER:-pcr_runner=info,pcr_application=info}
+      PCR_LOG_FORMAT: ${PCR_LOG_FORMAT:-json}
+    volumes:
+      - ${PCR_SCIENTIFIC_DB_DIR:-./.local/scientific-db}:/opt/pcrstudio/db:ro
+      - ${PCR_RUNNER_SCRATCH_DIR:-./.local/runner-scratch}:/var/lib/pcrstudio/scratch
+    secrets:
+      - database_url
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    stop_grace_period: 45s
+    networks:
+      - data
+    mem_limit: ${PCR_RUNNER_MEMORY_LIMIT:-4g}
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 1024
+    healthcheck:
+      # Instance-scoped DB heartbeat: a different healthy replica cannot mask
+      # this container, and a wedged executor loop stops refreshing its row.
+      test: ["CMD", "pcr-runner", "healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${SITE_URL:?set SITE_URL in .env, e.g. https://pcrstudio.example.org}
+      secrets:
+        - next_server_actions_key
+    environment:
+      # Server-side only: the browser never sees this address.
+      PCR_API_URL: http://api:8080
+      NEXT_PUBLIC_SITE_URL: ${SITE_URL}
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      # node:24-alpine carries busybox wget. A plain GET of `/` is enough — the
+      # site renders even when the API behind it is unhappy.
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:3000/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+    # Next server actions and API calls need a short drain window during a
+    # rolling restart so the edge does not turn deploys into user-visible 502s.
+    stop_grace_period: 30s
+    networks:
+      - app
+      - edge
+    expose:
+      - "3000"
+    mem_limit: ${PCR_WEB_MEMORY_LIMIT:-1g}
+    # The standalone Next server runs as UID 10001 and needs no Linux
+    # capabilities. Its filesystem can remain immutable; only generic temp
+    # space is writable and ephemeral. Next's production standalone server does
+    # not need the build-time `.next/cache` directory.
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 256
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  caddy:
+    image: caddy:2-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN in .env, e.g. pcrstudio.example.org}
+    ports:
+      - "80:80"
+      - "443:443"
+      # HTTP/3 rides on UDP; without it published Caddy serves only TCP.
+      - "443:443/udp"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    healthcheck:
+      # The admin API answers on loopback even when no site block matches this
+      # host, which is exactly what a liveness check needs from a server whose
+      # public name lives in an environment variable.
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:2019/config/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+    stop_grace_period: 15s
+    networks:
+      - edge
+    mem_limit: ${PCR_CADDY_MEMORY_LIMIT:-256m}
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+secrets:
+  postgres_password:
+    file: ${PCR_POSTGRES_PASSWORD_FILE:-./.local/secrets/postgres_password}
+  database_url:
+    file: ${PCR_DATABASE_URL_FILE_HOST:-./.local/secrets/database_url}
+  next_server_actions_key:
+    file: ${PCR_NEXT_SERVER_ACTIONS_KEY_FILE:-./.local/secrets/next_server_actions_key}
+  operator_token:
+    file: ${PCR_OPERATOR_TOKEN_FILE_HOST:-./.local/secrets/operator_token}
+  ncbi_api_key:
+    file: ${PCR_NCBI_API_KEY_FILE_HOST:-./.local/secrets/ncbi_api_key}
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:
+
+networks:
+  # Segmented trust zones rather than one flat bridge. The edge can reach only
+  # the web tier; the web tier can reach only the API; only the API can reach
+  # PostgreSQL; and only the API joins the separate egress bridge used for
+  # NCBI/remote services. `app` has a fixed subnet because the API accepts
+  # forwarded client addresses only from that tier.
+  data:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${PCR_DATA_SUBNET:-172.30.0.0/24}
+  app:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${PCR_APP_SUBNET:-172.29.0.0/24}
+  egress:
+    # Non-internal by design: this is the API's route to NCBI/remote services.
+    # No published ports and no other service membership make it egress-only
+    # in this Compose topology.
+  edge:
+    ipam:
+      config:
+        - subnet: ${PCR_EDGE_SUBNET:-172.28.0.0/24}

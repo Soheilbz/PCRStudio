@@ -1,0 +1,90 @@
+{
+  "alerts": [
+    {
+      "expr": "pcrstudio_durable_runner_instances < 1",
+      "for_duration": "2m",
+      "id": "PCRStudioNoFreshDurableRunner",
+      "metrics": [
+        "pcrstudio_durable_runner_instances"
+      ],
+      "runbook": "runner-unavailable",
+      "severity": "critical",
+      "summary": "No fresh PCRStudio durable runner is registered"
+    },
+    {
+      "expr": "pcrstudio_durable_queued_jobs > 0 and pcrstudio_durable_oldest_queued_seconds > 120",
+      "for_duration": "5m",
+      "id": "PCRStudioDurableQueueStalled",
+      "metrics": [
+        "pcrstudio_durable_queued_jobs",
+        "pcrstudio_durable_oldest_queued_seconds"
+      ],
+      "runbook": "durable-queue-stalled",
+      "severity": "critical",
+      "summary": "PCRStudio durable jobs have been queued for more than two minutes"
+    },
+    {
+      "expr": "pcrstudio_durable_runner_capacity > 0 and pcrstudio_durable_queued_jobs > pcrstudio_durable_runner_capacity * 8",
+      "for_duration": "10m",
+      "id": "PCRStudioDurableQueuePressure",
+      "metrics": [
+        "pcrstudio_durable_runner_capacity",
+        "pcrstudio_durable_queued_jobs"
+      ],
+      "runbook": "durable-queue-pressure",
+      "severity": "warning",
+      "summary": "PCRStudio durable queue materially exceeds fresh runner capacity"
+    },
+    {
+      "expr": "pcrstudio_database_pool_size > 0 and (pcrstudio_database_pool_in_use / pcrstudio_database_pool_size) > 0.90",
+      "for_duration": "5m",
+      "id": "PCRStudioDatabasePoolSaturation",
+      "metrics": [
+        "pcrstudio_database_pool_size",
+        "pcrstudio_database_pool_in_use"
+      ],
+      "runbook": "database-pool-saturation",
+      "severity": "warning",
+      "summary": "PCRStudio API database pool is more than 90 percent utilized"
+    },
+    {
+      "expr": "increase(pcrstudio_http_server_errors_total[5m]) >= 5",
+      "for_duration": "2m",
+      "id": "PCRStudioAPIServerErrorBurst",
+      "metrics": [
+        "pcrstudio_http_server_errors_total"
+      ],
+      "runbook": "api-server-errors",
+      "severity": "warning",
+      "summary": "PCRStudio API is returning repeated 5xx responses"
+    },
+    {
+      "expr": "increase(pcrstudio_worker_failed_jobs_total[10m]) >= 3",
+      "for_duration": "2m",
+      "id": "PCRStudioInteractiveWorkerFailures",
+      "metrics": [
+        "pcrstudio_worker_failed_jobs_total"
+      ],
+      "runbook": "interactive-worker-failures",
+      "severity": "warning",
+      "summary": "PCRStudio interactive scientific worker failures are repeating"
+    }
+  ],
+  "backup": {
+    "backup_on_calendar": "*-*-* 02:20:00 UTC",
+    "backup_randomized_delay": "10m",
+    "default_retention_days": 14,
+    "local_backup_scope": "host-local",
+    "off_host_copy_required_for_host_loss_dr": true,
+    "restore_drill_interval": "weekly",
+    "restore_drill_on_calendar": "Sun *-*-* 03:20:00 UTC",
+    "restore_drill_randomized_delay": "15m",
+    "target_rpo_hours": 25,
+    "target_rto_hours": 2
+  },
+  "canonical_sha256": "2b9c3bc949c668a966de22105624aceb87a571a166cf7be50067c07ca005ff2e",
+  "canonical_source": "contracts/operations.toml",
+  "generated_policy": "Generated from contracts/operations.toml; do not hand-edit.",
+  "release_line": "CURRENT",
+  "schema_version": "1.0.0"
+}

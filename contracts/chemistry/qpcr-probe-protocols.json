@@ -1,0 +1,191 @@
+{
+  "authority_id": "pcrstudio-qpcr-probe-authority-current-2026-09-05",
+  "groups": {
+    "chemistries": [
+      "conventional-hydrolysis",
+      "double-quenched-hydrolysis",
+      "mgb-nfq"
+    ],
+    "evidence_standard": [
+      "MIQE-2.0"
+    ],
+    "probe_protocols": [
+      "thermofisher-taqman-conventional",
+      "idt-primetime-conventional",
+      "taqman-mgb-reference"
+    ],
+    "quenchers": [
+      "TAMRA",
+      "QSY",
+      "QSY2",
+      "Iowa Black FQ",
+      "ZEN+Iowa Black FQ",
+      "NFQ-MGB"
+    ],
+    "reporters": [
+      "FAM",
+      "VIC",
+      "HEX",
+      "ABY",
+      "JUN",
+      "Cy5",
+      "TET",
+      "NED"
+    ]
+  },
+  "records": {
+    "idt-primetime-conventional": {
+      "chemistry": "double-quenched-hydrolysis",
+      "execution_status": "executable",
+      "internal_search_defaults": {
+        "decision_authority": "PCRStudio-search-envelope-not-vendor-rule",
+        "length_max": 28,
+        "length_min": 18,
+        "length_opt": 24,
+        "note": "Bounds used to seed Primer3 internal-oligo search. Only the <=28 nt maximum and +6 C probe/primer Tm relation are attributed to the cited IDT FAQ."
+      },
+      "kind": "hydrolysis-probe-design-profile",
+      "lifecycle": "current",
+      "note": "IDT requires probe Tm at least 6 C above the flanking primers and <=28 nt; it also calls for self/heterodimer, hairpin and BLAST review. These rules are not averaged with Thermo Fisher fixed Tm windows.",
+      "probe_constraints": {
+        "length_max": 28
+      },
+      "probe_length_max_nt": 28,
+      "probe_tm_delta_min_c": 6.0,
+      "quencher_options": [
+        "Iowa Black FQ",
+        "ZEN+Iowa Black FQ"
+      ],
+      "reporter_options": [
+        "FAM",
+        "HEX",
+        "Cy5"
+      ],
+      "selection": "IDT PrimeTime conventional/double-quenched qPCR design envelope",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "IDT qPCR primer/probe design FAQ",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://www.idtdna.com/pages/support/faqs/how-can-i-design-primers-and-probes-for-qPCR",
+      "tm_model": "ordinary-DNA-nearest-neighbor-compatible"
+    },
+    "miqe-2-0-evidence": {
+      "execution_status": "evidence-only",
+      "fields": [
+        "raw_fluorescence",
+        "RDES_or_RDML",
+        "instrument",
+        "software_version",
+        "baseline_method",
+        "cq_method",
+        "efficiency",
+        "standard_curve",
+        "replicates",
+        "LoD",
+        "dynamic_range",
+        "controls",
+        "reference_genes",
+        "normalization",
+        "specificity"
+      ],
+      "kind": "evidence-reporting-standard",
+      "lifecycle": "current",
+      "note": "Observed qPCR evidence never mutates sequence ranking without a separately versioned optimization workflow.",
+      "selection": "MIQE 2.0 evidence/reporting contract",
+      "sequence_decision_impact": "none",
+      "source_identity": "MIQE 2.0, Clinical Chemistry 2025",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://academic.oup.com/clinchem/article/71/6/634/8119148"
+    },
+    "thermofisher-taqman-conventional": {
+      "chemistry": "conventional-hydrolysis",
+      "concentration_guidance": {
+        "primer_each_nM": 900,
+        "probe_nM": 250,
+        "status": "protocol-starting-point-not-design-truth"
+      },
+      "execution_status": "executable",
+      "forbid_probe_5prime_g": true,
+      "internal_search_defaults": {
+        "decision_authority": "PCRStudio-search-envelope-not-vendor-rule",
+        "length_max": 30,
+        "length_min": 18,
+        "length_opt": 24,
+        "note": "Primer3 internal-oligo search bounds are PCRStudio implementation defaults. Vendor-backed conventional TaqMan rules remain Tm/GC/5-prime-G/consecutive-G/strand-preference and primer/amplicon constraints."
+      },
+      "kind": "hydrolysis-probe-design-profile",
+      "lifecycle": "current-reviewed-guidance",
+      "max_consecutive_g": 3,
+      "note": "Conventional TaqMan/QSY/TAMRA design uses ordinary DNA Tm calculations. Reporter/channel compatibility remains instrument-specific. Internal probe-length search bounds are explicitly separated from vendor-backed rules.",
+      "prefer_probe_strand_more_c_than_g": true,
+      "primer_constraints": {
+        "gc_max": 80.0,
+        "gc_min": 20.0,
+        "length_max": 30,
+        "length_min": 15,
+        "max_gc_last5": 2,
+        "product_max": 150,
+        "product_min": 50,
+        "tm_max": 60.0,
+        "tm_min": 58.0,
+        "tm_opt": 59.0
+      },
+      "probe_constraints": {
+        "gc_max": 80.0,
+        "gc_min": 20.0,
+        "max_consecutive_g": 3,
+        "tm_max": 70.0,
+        "tm_min": 68.0,
+        "tm_opt": 69.0
+      },
+      "quencher_options": [
+        "TAMRA",
+        "QSY",
+        "QSY2"
+      ],
+      "reporter_options": [
+        "FAM",
+        "VIC",
+        "ABY",
+        "JUN",
+        "Cy5",
+        "TET",
+        "NED"
+      ],
+      "selection": "Thermo Fisher conventional TaqMan quantification design envelope",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "Applied Biosystems TaqMan PCR Reagent Kit / quantitative assay design guidance",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://tools.thermofisher.com/content/sfs/manuals/cms_039273.pdf",
+      "tm_model": "ordinary-DNA-nearest-neighbor-compatible"
+    },
+    "taqman-mgb-reference": {
+      "chemistry": "mgb-nfq",
+      "execution_status": "external-authority-required",
+      "forbid_probe_5prime_g": true,
+      "kind": "hydrolysis-probe-design-profile",
+      "lifecycle": "current-assisted",
+      "note": "PCRStudio generates bounded MGB candidates but never substitutes ordinary-DNA Tm for MGB-aware Tm. Candidate values must round-trip through a declared MGB-aware external authority with matching candidate-set hash.",
+      "probe_length_nt": {
+        "min": 13,
+        "max": 25
+      },
+      "selection": "Applied Biosystems TaqMan MGB/NFQ reference branch",
+      "sequence_decision_impact": "none",
+      "source_identity": "TaqMan MGB / Primer Express guidance",
+      "source_reviewed_date": "2026-09-05",
+      "source_url": "https://tools.thermofisher.com/content/sfs/manuals/cms_041440.pdf",
+      "tm_model": "MGB-aware-vendor-model-required",
+      "authority_exchange_id": "thermofisher-primer-express-mgb",
+      "quencher_options": [
+        "NFQ-MGB"
+      ],
+      "reporter_options": [
+        "FAM",
+        "VIC",
+        "NED"
+      ]
+    }
+  },
+  "reviewed_date": "2026-09-05",
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,98 @@
+{
+  "authority_domains": [
+    {
+      "id": "inverse",
+      "source": "contracts/chemistry/inverse-pcr-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/inverse-differential-corpus.json"
+  ],
+  "engine_id": "outward-pair",
+  "feature_capabilities": {
+    "full-reference-topology": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "multi-enzyme-cohort": {
+      "authority": "restriction-self-ligation",
+      "status": "executable"
+    },
+    "one-sided-internal-cut": {
+      "authority": "one-sided-internal-cut-reference",
+      "status": "reference-only"
+    },
+    "sanger-handoff": {
+      "authority": "restriction-self-ligation",
+      "status": "executable"
+    },
+    "standard-restriction-self-ligation": {
+      "authority": "restriction-self-ligation",
+      "status": "executable"
+    },
+    "supplied-circular-template": {
+      "authority": "supplied-circular-template",
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "strategy",
+        "python": "inverse_branch",
+        "rust": "inverse_branch",
+        "web": "inverseBranch"
+      },
+      {
+        "owner": "strategy",
+        "python": "enzyme",
+        "rust": "enzyme",
+        "web": "enzyme"
+      },
+      {
+        "owner": "strategy",
+        "python": "circle_length",
+        "rust": "circle_length",
+        "web": "circleLength"
+      },
+      {
+        "owner": "validation",
+        "python": "enzyme_cohort_size",
+        "rust": "enzyme_cohort_size",
+        "web": "enzymeCohortSize"
+      },
+      {
+        "owner": "strategy",
+        "python": "mapping_use_case",
+        "rust": "mapping_use_case",
+        "web": "mappingUseCase"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      },
+      {
+        "owner": "target",
+        "python": "inverse_reference_sequence",
+        "rust": "inverse_reference_sequence",
+        "web": "inverseReferenceSequence"
+      },
+      {
+        "owner": "target",
+        "python": "inverse_reference_circular",
+        "rust": "inverse_reference_circular",
+        "web": "inverseReferenceCircular"
+      },
+      {
+        "owner": "validation",
+        "python": "inverse_candidate_enzymes",
+        "rust": "inverse_candidate_enzymes",
+        "web": "inverseCandidateEnzymes"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

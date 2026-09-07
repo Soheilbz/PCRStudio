@@ -1,0 +1,61 @@
+{
+  "$id": "pcrstudio://schemas/validation-issue-v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "blocking": {
+      "type": "boolean"
+    },
+    "code": {
+      "pattern": "^[A-Z0-9_]+$",
+      "type": "string"
+    },
+    "fieldPath": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "message": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "ownerStep": {
+      "enum": [
+        "target",
+        "design",
+        "strategy",
+        "constraints",
+        "vector",
+        "reaction",
+        "specificity",
+        "validation",
+        "construct",
+        "review",
+        "execution"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "info",
+        "warning",
+        "error"
+      ]
+    },
+    "source": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "severity",
+    "ownerStep",
+    "fieldPath",
+    "message",
+    "source",
+    "blocking"
+  ],
+  "title": "PCRStudio ValidationIssue",
+  "type": "object"
+}

@@ -1,0 +1,28 @@
+# Caddy obtains and renews the certificate on its own; there is nothing to run
+# by hand as long as the domain's DNS points at this host and 80/443 are open.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	# Static assets are content-hashed, so they can be cached indefinitely.
+	@immutable path /_next/static/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		# Set here rather than in Next so every response carries it, including
+		# the ones Caddy answers itself during redirects.
+		Strict-Transport-Security "max-age=31536000"
+		# The edge gets DENY because a frame of this site has no legitimate
+		# caller; Next keeps its own framing header for anything it serves.
+		X-Frame-Options "DENY"
+		-Server
+	}
+
+	# Do not let a client inject a fake rate-limit identity. The Web tier may
+	# forward this header to the API because Caddy overwrites it here with the
+	# actual peer address rather than trusting an incoming X-Forwarded-For chain.
+	reverse_proxy web:3000 {
+		header_up X-Forwarded-For {remote_host}
+	}
+}

@@ -1,0 +1,146 @@
+{
+  "authority_domains": [
+    {
+      "id": "tiling",
+      "source": "contracts/chemistry/tiling-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/tiling-differential-corpus.json"
+  ],
+  "engine_id": "tiling-scheme",
+  "feature_capabilities": {
+    "artic-bed-v3": {
+      "authority": "artic-primer-bed-v3",
+      "status": "executable"
+    },
+    "backend-compare": {
+      "authority": "olivar-1.3.3",
+      "status": "executable"
+    },
+    "circular-bed-v3": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable-if-installed"
+    },
+    "dropout-evidence": {
+      "authority": "artic-primer-bed-v3",
+      "status": "executable"
+    },
+    "dropout-repair-handoff": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "internal-walker": {
+      "authority": "primalscheme3-3.3.0",
+      "status": "diagnostic-only"
+    },
+    "multi-target": {
+      "authority": "olivar-1.3.3",
+      "status": "executable-if-installed"
+    },
+    "native-scheme-visualisation": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable-if-installed"
+    },
+    "olivar": {
+      "authority": "olivar-1.3.3",
+      "status": "executable-if-installed"
+    },
+    "primalscheme3": {
+      "authority": "primalscheme3-3.3.0",
+      "status": "executable-if-installed"
+    },
+    "scheme-version-diff": {
+      "note": "Generation-1 current engine capability.",
+      "status": "executable"
+    },
+    "variant-risk": {
+      "authority": "olivar-1.3.3",
+      "status": "executable-if-installed"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "strategy",
+        "python": "tiling_backend",
+        "rust": "tiling_backend",
+        "web": "tilingBackend"
+      },
+      {
+        "owner": "strategy",
+        "python": "tilingOperation",
+        "rust": "tiling_operation",
+        "web": "tilingOperation"
+      },
+      {
+        "owner": "strategy",
+        "python": "tilingAlignmentMode",
+        "rust": "tiling_alignment_mode",
+        "web": "tilingAlignmentMode"
+      },
+      {
+        "owner": "design",
+        "python": "tilingMinBaseFrequency",
+        "rust": "tiling_min_base_frequency",
+        "web": "tilingMinBaseFrequency"
+      },
+      {
+        "owner": "design",
+        "python": "tilingBacktrack",
+        "rust": "tiling_backtrack",
+        "web": "tilingBacktrack"
+      },
+      {
+        "owner": "design",
+        "python": "tilingHighGc",
+        "rust": "tiling_high_gc",
+        "web": "tilingHighGc"
+      },
+      {
+        "owner": "design",
+        "python": "olivarSeed",
+        "rust": "olivar_seed",
+        "web": "olivarSeed"
+      },
+      {
+        "owner": "design",
+        "python": "olivarDegenerateMode",
+        "rust": "olivar_degenerate_mode",
+        "web": "olivarDegenerateMode"
+      },
+      {
+        "owner": "strategy",
+        "python": "schemeVersion",
+        "rust": "scheme_version",
+        "web": "schemeVersion"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      },
+      {
+        "owner": "strategy",
+        "python": "circular",
+        "rust": "circular",
+        "web": "circular"
+      },
+      {
+        "owner": "validation",
+        "python": "tiling_depth_tsv",
+        "rust": "tiling_depth_tsv",
+        "web": "tilingDepthTsv"
+      },
+      {
+        "owner": "validation",
+        "python": "tiling_dropout_threshold",
+        "rust": "tiling_dropout_threshold",
+        "web": "tilingDropoutThreshold"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

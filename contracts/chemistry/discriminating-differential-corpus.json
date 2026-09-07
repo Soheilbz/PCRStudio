@@ -1,0 +1,163 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "empirical_discrimination_required": true,
+        "polymerase_scope": "Taq-like non-proofreading",
+        "topology": "arms-two-tube",
+        "variant_type": "snv"
+      },
+      "id": "arms-snv",
+      "request": {
+        "geometry": "arms-two-tube",
+        "mismatch_evidence_profile": "pcrstudio-gen1-taq-terminal-mismatch-evidence-2026",
+        "variant": {
+          "alt": "G",
+          "at": 10,
+          "ref": "A",
+          "type": "snv"
+        }
+      }
+    },
+    {
+      "expected": {
+        "readout": "agarose",
+        "topology": "tetra",
+        "universal_resolution_claim": false
+      },
+      "id": "tetra-snv-gel",
+      "request": {
+        "geometry": "tetra",
+        "tetra_min_band_separation_bp": 40,
+        "tetra_readout": "agarose",
+        "variant": {
+          "alt": "T",
+          "at": 10,
+          "ref": "C",
+          "type": "snv"
+        }
+      }
+    },
+    {
+      "expected": {
+        "assay_mode": "biallelic-genotype",
+        "kraken_equivalent": false,
+        "protocol": "lgc-kasp-tf-v5"
+      },
+      "id": "kasp-snv-v5",
+      "request": {
+        "geometry": "kasp",
+        "kasp_assay_mode": "biallelic-genotype",
+        "kasp_protocol": "lgc-kasp-tf-v5",
+        "variant": {
+          "alt": "C",
+          "at": 10,
+          "ref": "A",
+          "type": "snv"
+        }
+      }
+    },
+    {
+      "expected": {
+        "assay_mode": "plus-minus-presence-absence",
+        "junction_aware": true,
+        "kraken_equivalent": false
+      },
+      "id": "kasp-plus-minus-insertion",
+      "request": {
+        "geometry": "kasp",
+        "kasp_assay_mode": "plus-minus-presence-absence",
+        "kasp_protocol": "lgc-kasp-tf-v5",
+        "variant": {
+          "alt": "ACGT",
+          "at": 10,
+          "ref": "",
+          "type": "insertion"
+        }
+      }
+    },
+    {
+      "expected": {
+        "reason_contains": "SNV",
+        "status": "fail-closed"
+      },
+      "id": "arms-indel-refusal",
+      "request": {
+        "geometry": "arms-two-tube",
+        "variant": {
+          "alt": "",
+          "at": 10,
+          "ref": "AC",
+          "type": "deletion"
+        }
+      }
+    },
+    {
+      "evidence": {
+        "columns": [
+          "sample",
+          "well",
+          "FAM",
+          "HEX",
+          "provider_call"
+        ]
+      },
+      "expected": {
+        "auto_calling": false,
+        "decision_impact": "none",
+        "x_axis": "FAM",
+        "y_axis": "HEX"
+      },
+      "id": "endpoint-evidence",
+      "request": {
+        "geometry": "kasp"
+      }
+    },
+    {
+      "expected": {
+        "reason_contains": "requires `plus-minus-presence-absence`",
+        "status": "refused"
+      },
+      "id": "kasp-biallelic-indel-refusal",
+      "request": {
+        "geometry": "kasp",
+        "kasp_assay_mode": "biallelic-genotype",
+        "kasp_protocol": "lgc-kasp-tf-v5",
+        "variant": {
+          "alt": "",
+          "at": 10,
+          "ref": "AC",
+          "type": "deletion"
+        }
+      }
+    },
+    {
+      "expected": {
+        "variant_shape": "reference-present/alternate-absent",
+        "vendor_kraken_equivalent": false
+      },
+      "id": "kasp-plus-minus-presence-absence",
+      "request": {
+        "geometry": "kasp",
+        "kasp_assay_mode": "plus-minus-presence-absence",
+        "kasp_protocol": "lgc-kasp-tf-v5",
+        "variant": {
+          "alt": "",
+          "at": 10,
+          "ref": "ACGT",
+          "type": "presence-absence"
+        }
+      }
+    }
+  ],
+  "engine": "discriminating-pair",
+  "metamorphic": [
+    "allele swap preserves geometry class and swaps allele labels",
+    "reverse-strand normalization preserves biological variant identity",
+    "nearby-variant record reorder invariance",
+    "endpoint evidence cannot change primer ranking",
+    "KASP assay-mode compatibility is invariant: SNV/MNV use biallelic single-anchor geometry, while indel/complex/presence-absence use the junction-aware plus/minus branch."
+  ],
+  "purpose": "Shared CURRENT Discriminating Pair differential/property corpus for typed variants, ARMS/Tetra/KASP topology and evidence boundaries.",
+  "schema_version": "1.0.0"
+}

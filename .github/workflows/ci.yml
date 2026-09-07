@@ -1,0 +1,193 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+  COREPACK_DEFAULT_TO_LATEST: "0"
+  RUST_BACKTRACE: "1"
+
+jobs:
+  checks:
+    name: Source, Rust, Python and Web checks
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.19.0
+          cache: pnpm
+      - name: Install Python 3.14
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: 3.14
+      - name: Install Rust 1.94
+        run: |
+          rustup toolchain install 1.94.0 --profile minimal --no-self-update
+          rustup default 1.94.0
+          rustup component add rustfmt clippy
+      - name: Enable pnpm
+        run: corepack enable
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.8"
+      - name: Install locked dependencies
+        run: |
+          uv sync --project tools --frozen --extra dev --extra folding
+          pnpm install --frozen-lockfile
+      - name: Python quality and dependency audit
+        run: |
+          uvx --from ruff==0.16.5 ruff check .
+          uvx --from ruff==0.16.5 ruff format --check .
+          uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
+          uvx --from pip-audit==2.10.1 pip-audit -r "$RUNNER_TEMP/tools-requirements.txt"
+      - name: Secret scan
+        run: python3 scripts/scan-secrets.py
+      - name: Static source qualification
+        run: python3 scripts/qualify-source.py --no-write
+      - name: Rust formatting
+        run: cargo fmt --all -- --check
+      - name: Rust lint
+        run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - name: Rust tests
+        run: cargo test --locked --workspace
+      - name: Web typecheck
+        run: pnpm --filter web typecheck
+      - name: Web lint
+        run: pnpm --filter web lint
+      - name: Web tests
+        run: pnpm --filter web test
+      - name: Web production build
+        env:
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        run: |
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
+          NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat "$key_file")" pnpm --filter web build
+      - name: Web production build with alternate local origin
+        env:
+          NEXT_PUBLIC_SITE_URL: http://localhost:3100
+        run: |
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
+          NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat "$key_file")" pnpm --filter web build
+      - name: Validate deployment configurations
+        run: |
+          docker compose -f compose.yaml config -q
+          docker compose -f compose.yaml -f compose.vm.yaml config -q
+
+  scientific-readiness-contract:
+    name: Scientific readiness contract
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate readiness response shape when a stack is available
+        run: |
+          node <<'NODE'
+          const base = process.env.PCR_API_URL || "http://127.0.0.1:8080";
+          const response = await fetch(`${base}/ready/scientific`);
+          if (![200, 503].includes(response.status)) throw new Error(`unexpected status ${response.status}; expected 200|503`);
+          const j = await response.json();
+          const requiredKeys = ["ready","database","designWorker","runner","scientificToolchain"];
+          if (typeof j.ready !== "boolean") throw new Error("ready must be boolean");
+          for (const key of requiredKeys.slice(1)) {
+            if (!j[key] || typeof j[key].ok !== "boolean") throw new Error(`${key}.ok must be boolean`);
+          }
+          NODE
+
+  image-qualification:
+    name: Linux image qualification
+    runs-on: ubuntu-24.04
+    needs: checks
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Compute source identity
+        id: identity
+        run: |
+          python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
+          echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - name: Create build-only Server Actions secret
+        run: python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$RUNNER_TEMP/next-server-actions-key"
+      - name: Install uv for image tooling
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.8"
+      - name: Verify frozen Python export for the image boundary
+        run: uv export --frozen --extra folding --no-emit-project --project tools > /dev/null
+      - name: Build API image
+        run: >-
+          docker buildx build --load --target api-runtime
+          --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
+          --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
+          -t pcrstudio-api:ci -f docker/api.Dockerfile .
+      - name: Build runner image
+        run: >-
+          docker buildx build --load --target runner-runtime
+          --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
+          --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
+          -t pcrstudio-runner:ci -f docker/api.Dockerfile .
+      - name: Build migrate image
+        run: >-
+          docker buildx build --load --target migrate-runtime
+          --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
+          --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
+          -t pcrstudio-migrate:ci -f docker/api.Dockerfile .
+      - name: Build web image
+        run: >-
+          docker buildx build --load
+          --build-arg NEXT_PUBLIC_SITE_URL=https://ci.invalid
+          --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
+          -t pcrstudio-web:ci -f docker/web.Dockerfile .
+      - name: Scan API image
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          image-ref: pcrstudio-api:ci
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+      - name: Generate image SBOMs
+        run: |
+          docker sbom --format cyclonedx-json --output image-sbom-api.cdx.json pcrstudio-api:ci
+          docker sbom --format cyclonedx-json --output image-sbom-runner.cdx.json pcrstudio-runner:ci
+          docker sbom --format cyclonedx-json --output image-sbom-migrate.cdx.json pcrstudio-migrate:ci
+          docker sbom --format cyclonedx-json --output image-sbom-web.cdx.json pcrstudio-web:ci
+      - name: Verify runtime targets are present
+        run: |
+          test -s image-sbom-api.cdx.json
+          test -s image-sbom-runner.cdx.json
+          test -s image-sbom-migrate.cdx.json
+          test -s image-sbom-web.cdx.json
+          grep -q -- "--target api-runtime" .github/workflows/ci.yml
+          grep -q -- "--target runner-runtime" .github/workflows/ci.yml
+          grep -q -- "--target migrate-runtime" .github/workflows/ci.yml
+
+  dependency-contract:
+    name: Frozen dependency contract
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.8"
+      - name: Export production folding dependencies
+        run: uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"

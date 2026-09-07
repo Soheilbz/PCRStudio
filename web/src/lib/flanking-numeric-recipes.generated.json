@@ -1,0 +1,1757 @@
+{
+  "baselines": {
+    "bio-rad-itaq-sybr": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 400.0,
+      "reaction_volume_uL": 20.0
+    },
+    "bio-rad-qx200-evagreen": {
+      "primer_each_nM": 200.0,
+      "reaction_volume_uL": 20.0
+    },
+    "bio-rad-qx700-naica-evagreen": {
+      "reaction_volume_uL": 5.0
+    },
+    "bio-rad-ssoadvanced-sybr-172527x": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 400.0,
+      "reaction_volume_uL": 20.0
+    },
+    "gbiosciences-rpa-786-2155": {
+      "enzyme_mix_stock_x": 5.0,
+      "enzyme_mix_x_final": 1.0,
+      "hold_temperature_c": 37.0,
+      "hold_time_min": 20.0,
+      "magnesium_mM": 14.0,
+      "primer_each_nM": 500.0,
+      "reaction_buffer_stock_x": 2.0,
+      "reaction_buffer_x_final": 1.0,
+      "reaction_volume_uL": 20.0
+    },
+    "neb-insert-screening-e1202": {
+      "cycles": 30.0,
+      "initial_denaturation_temperature_c": 94.0,
+      "initial_denaturation_time_min": 2.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.3,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-longamp-taq-m0323": {
+      "cycles": 30.0,
+      "dntp_each_mM": 0.3,
+      "magnesium_mM": 2.0,
+      "polymerase_units": 5.0,
+      "primer_each_uM": 0.4,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-luna-one-step-rt-qpcr-e3005": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 400.0,
+      "reaction_volume_uL": 20.0
+    },
+    "neb-luna-universal-m3003": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 250.0,
+      "reaction_volume_uL": 20.0
+    },
+    "neb-multiplex-pcr-m0284": {
+      "cycles": 35.0,
+      "master_mix_stock_x": 5.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.15,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-hot-start-gc-m0485": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 2.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-hot-start-m0484": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.8,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-hot-start-quickload-gc-m0489": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 2.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-hot-start-quickload-m0488": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.8,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-hotstart-m0488-colony": {
+      "cycles": 30.0,
+      "initial_denaturation_temperature_c": 94.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-m0482-colony": {
+      "cycles": 30.0,
+      "initial_denaturation_temperature_c": 94.0,
+      "initial_denaturation_time_min": 5.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-onetaq-m0689-colony": {
+      "cycles": 33.0,
+      "initial_denaturation_temperature_c": 95.0,
+      "initial_denaturation_time_min": 5.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-q5-hot-start-m0493": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 2.0,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-q5-xt-m2499": {
+      "magnesium_mM": 1.6,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.3,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-q5u-hot-start-m0515": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 2.0,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "neb-taq-m0273": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.5,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "pcrbio-hs-taq-mix-pb10-22": {
+      "dntp_total_mM": 1.0,
+      "magnesium_mM": 3.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.4,
+      "reaction_volume_uL": 50.0
+    },
+    "pcrbio-hs-taq-pb10-22-colony": {
+      "cycles": 40.0,
+      "initial_denaturation_temperature_c": 95.0,
+      "initial_denaturation_time_min": 10.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.4,
+      "reaction_volume_uL": 50.0
+    },
+    "promega-gotaq-long-m4021": {
+      "extension_minutes_per_kb": 1.0,
+      "magnesium_mM": 2.5,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "promega-gotaq-m300": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.5,
+      "polymerase_units": 1.25,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "promega-gotaq-one-step-rt-qpcr-a6020": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 200.0,
+      "reaction_volume_uL": 20.0
+    },
+    "promega-gotaq-qpcr-a600x": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 200.0,
+      "reaction_volume_uL": 20.0
+    },
+    "qiagen-alltaq-master-mix-203144": {
+      "master_mix_stock_x": 4.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.25,
+      "reaction_volume_uL": 20.0
+    },
+    "qiagen-qiacuity-eg": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 3.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.4
+    },
+    "qiagen-qiacuity-onestep-advanced-eg": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 4.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.75
+    },
+    "qiagen-quantinova-sybr-208052": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 700.0,
+      "reaction_volume_uL": 20.0
+    },
+    "qiagen-ultrarun-longrange-206442-206444": {
+      "master_mix_stock_x": 4.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 20.0
+    },
+    "solis-hot-firepol-evagreen-capillary": {
+      "master_mix_stock_x": 5.0,
+      "master_mix_x_final": 1.0
+    },
+    "solis-hot-firepol-evagreen-norox": {
+      "master_mix_stock_x": 5.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 250.0,
+      "reaction_volume_uL": 20.0
+    },
+    "solis-hot-firepol-evagreen-rox": {
+      "master_mix_stock_x": 5.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 250.0,
+      "reaction_volume_uL": 20.0
+    },
+    "takara-primestar-gxl-r050a-standard": {
+      "cycles": 30.0,
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.0,
+      "polymerase_units": 1.25,
+      "primer_each_uM": 0.25,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-dreamtaq-hot-start-ep170x": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 2.0,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-long-pcr-k018x": {
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.5,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-lyo-ready-rpa": {
+      "bst_polymerase_U_per_uL": 0.15,
+      "dntp_each_mM": 0.2,
+      "gene32_mg_per_mL": 0.4,
+      "hold_temperature_c": 42.0,
+      "hold_time_min": 20.0,
+      "magnesium_mM": 14.0,
+      "primer_each_nM": 300.0,
+      "reaction_volume_uL": 20.0,
+      "uvsx_mg_per_mL": 0.03,
+      "uvsy_mg_per_mL": 0.03
+    },
+    "thermo-phusion-plus": {
+      "magnesium_mM": 1.7,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-platinum-ii-taq-hot-start": {
+      "buffer_stock_x": 5.0,
+      "buffer_x_final": 1.0,
+      "dntp_each_mM": 0.2,
+      "magnesium_mM": 1.5,
+      "polymerase_U_per_uL": 0.04,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 20.0
+    },
+    "thermo-platinum-superfi-ii": {
+      "magnesium_mM": 1.75,
+      "primer_each_uM": 0.5,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-platinum-superfi-ii-longrange": {
+      "magnesium_mM": 1.75,
+      "primer_each_uM": 0.2,
+      "reaction_volume_uL": 50.0
+    },
+    "thermo-powertrack-sybr-a46xxx": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 400.0,
+      "reaction_volume_uL": 20.0
+    },
+    "thermo-powerup-sybr-a2574x": {
+      "cycles": 40.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_nM": 400.0,
+      "reaction_volume_uL": 20.0
+    },
+    "toyobo-kod-long-kml101": {
+      "cycles": 30.0,
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.15,
+      "reaction_volume_uL": 50.0
+    },
+    "toyobo-kod-one-kmm101": {
+      "master_mix_stock_x": 2.0,
+      "master_mix_x_final": 1.0,
+      "primer_each_uM": 0.3,
+      "reaction_volume_uL": 50.0
+    },
+    "twistamp-basic": {
+      "primer_each_nM": 480.0,
+      "reaction_volume_uL": 50.0
+    },
+    "twistamp-liquid-basic": {
+      "primer_each_nM": 480.0,
+      "reaction_volume_uL": 50.0
+    },
+    "vazyme-q713-suprealq-ultra-hunter-sybr": {
+      "reaction_volume_uL": 20.0
+    }
+  },
+  "conditional_rules": {
+    "neb-onetaq-hot-start-gc-m0485": [
+      {
+        "authority": "NEB M0485 protocol; 10-20% reviewed range",
+        "id": "onetaq-gc-enhancer",
+        "set": {
+          "high_gc_enhancer_percent": 10.0
+        },
+        "when": {
+          "additive": "high-gc-enhancer"
+        }
+      }
+    ],
+    "neb-onetaq-hot-start-quickload-gc-m0489": [
+      {
+        "authority": "NEB M0489 protocol; 10-20% reviewed range",
+        "id": "onetaq-quickload-gc-enhancer",
+        "set": {
+          "high_gc_enhancer_percent": 10.0
+        },
+        "when": {
+          "additive": "high-gc-enhancer"
+        }
+      }
+    ],
+    "pcrbio-hs-taq-mix-pb10-22": [
+      {
+        "authority": "PCRBIO PB10.22 colony-PCR protocol",
+        "id": "pcrbio-colony-initial-denaturation",
+        "set": {
+          "initial_denaturation_temperature_c": 95.0,
+          "initial_denaturation_time_min": 10.0
+        },
+        "when": {
+          "preparation": "direct-colony"
+        }
+      }
+    ],
+    "pcrbio-hs-taq-pb10-22-colony": [
+      {
+        "authority": "PCRBIO PB10.22 colony-PCR protocol",
+        "id": "pcrbio-overnight-culture-input",
+        "set": {
+          "liquid_culture_input_uL": 5.0
+        },
+        "when": {
+          "preparation": "liquid-culture"
+        }
+      }
+    ],
+    "qiagen-qiacuity-eg": [
+      {
+        "authority": "QIAGEN QIAcuity EG protocol Nanoplate format",
+        "id": "qiacuity-eg-26k",
+        "set": {
+          "reaction_volume_uL": 40.0
+        },
+        "when": {
+          "partition_format_detail": "26k"
+        }
+      },
+      {
+        "authority": "QIAGEN QIAcuity EG protocol Nanoplate format",
+        "id": "qiacuity-eg-8.5k",
+        "set": {
+          "reaction_volume_uL": 12.0
+        },
+        "when": {
+          "partition_format_detail": "8.5k"
+        }
+      }
+    ],
+    "qiagen-qiacuity-onestep-advanced-eg": [
+      {
+        "authority": "QIAGEN QIAcuity OneStep Advanced EvaGreen protocol",
+        "id": "qiacuity-onestep-eg-26k",
+        "set": {
+          "reaction_volume_uL": 40.0
+        },
+        "when": {
+          "partition_format_detail": "26k"
+        }
+      },
+      {
+        "authority": "QIAGEN QIAcuity OneStep Advanced EvaGreen protocol",
+        "id": "qiacuity-onestep-eg-8.5k",
+        "set": {
+          "reaction_volume_uL": 12.0
+        },
+        "when": {
+          "partition_format_detail": "8.5k"
+        }
+      }
+    ],
+    "thermo-lyo-ready-rpa": [
+      {
+        "authority": "Thermo MAN1000697 reviewed multiplex starting primer concentration",
+        "id": "rpa-multiplex-primer-start",
+        "set": {
+          "primer_each_nM": 100.0
+        },
+        "when": {
+          "multiplex": true
+        }
+      },
+      {
+        "authority": "Thermo MAN1000697 RT-RPA component concentrations",
+        "id": "rpa-rna-components",
+        "set": {
+          "reverse_transcriptase_U_per_uL": 2.0,
+          "rnase_h_U_per_uL": 0.1,
+          "rnase_inhibitor_U_per_uL": 1.6
+        },
+        "when": {
+          "from_rna": true
+        }
+      }
+    ],
+    "thermo-powertrack-sybr-a46xxx": [
+      {
+        "authority": "Thermo MAN0018825 Rev B.0 optional Yellow Sample Buffer; 40X stock to 1X final",
+        "id": "powertrack-yellow-sample-buffer",
+        "set": {
+          "yellow_sample_buffer_stock_x": 40.0,
+          "yellow_sample_buffer_x_final": 1.0
+        },
+        "when": {
+          "additive": "yellow-sample-buffer"
+        }
+      },
+      {
+        "authority": "Thermo MAN0018825 Rev B.0 fast protocol",
+        "id": "powertrack-fast",
+        "set": {
+          "activation_temperature_c": 95.0,
+          "activation_time_min": 2.0,
+          "anneal_extend_temperature_c": 60.0,
+          "anneal_extend_time_sec": 30.0,
+          "denaturation_temperature_c": 95.0,
+          "denaturation_time_sec": 5.0
+        },
+        "when": {
+          "cycling_profile": "fast"
+        }
+      },
+      {
+        "authority": "Thermo MAN0018825 Rev B.0 standard protocol",
+        "id": "powertrack-standard",
+        "set": {
+          "activation_temperature_c": 95.0,
+          "activation_time_min": 2.0,
+          "anneal_extend_temperature_c": 60.0,
+          "anneal_extend_time_sec": 60.0,
+          "denaturation_temperature_c": 95.0,
+          "denaturation_time_sec": 15.0
+        },
+        "when": {
+          "cycling_profile": "standard"
+        }
+      }
+    ],
+    "toyobo-kod-long-kml101": [
+      {
+        "authority": "TOYOBO KOD Long KML-101 manual",
+        "id": "kod-long-under-10kb",
+        "set": {
+          "extension_seconds_per_kb": 5.0
+        },
+        "when": {
+          "target_length_class": "under-10kb"
+        }
+      },
+      {
+        "authority": "TOYOBO KOD Long KML-101 manual",
+        "id": "kod-long-10kb-or-more",
+        "set": {
+          "extension_seconds_per_kb": 10.0
+        },
+        "when": {
+          "target_length_class": "10kb-or-more"
+        }
+      }
+    ]
+  },
+  "dependency_axes": [
+    "module",
+    "exact-product",
+    "formulation",
+    "template-class",
+    "reaction-volume",
+    "primer-concentration",
+    "target-length",
+    "instrument-platform",
+    "cycling-branch",
+    "direct-sample-preparation",
+    "additive",
+    "carry-over",
+    "partition-format",
+    "fragmentation-state",
+    "bench-optimization"
+  ],
+  "generation_policy": "Generated from tools/src/pcr_tools/flanking_numeric_recipes.py; do not hand-edit.",
+  "optimization_envelopes": {
+    "bio-rad-itaq-sybr": {
+      "primer_each_nM": [
+        300.0,
+        500.0
+      ]
+    },
+    "bio-rad-ssoadvanced-sybr-172527x": {
+      "primer_each_nM": [
+        250.0,
+        500.0
+      ]
+    },
+    "gbiosciences-rpa-786-2155": {
+      "hold_temperature_c": [
+        37.0,
+        40.0
+      ],
+      "hold_time_min": [
+        20.0,
+        60.0
+      ],
+      "primer_each_nM": [
+        500.0,
+        500.0
+      ]
+    },
+    "neb-longamp-taq-m0323": {
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "neb-luna-one-step-rt-qpcr-e3005": {
+      "primer_each_nM": [
+        100.0,
+        900.0
+      ]
+    },
+    "neb-luna-universal-m3003": {
+      "primer_each_nM": [
+        100.0,
+        500.0
+      ]
+    },
+    "neb-multiplex-pcr-m0284": {
+      "master_mix_x_final": [
+        0.8,
+        1.5
+      ],
+      "primer_each_uM": [
+        0.05,
+        0.4
+      ]
+    },
+    "neb-onetaq-hot-start-gc-m0485": {
+      "high_gc_enhancer_percent": [
+        10.0,
+        20.0
+      ],
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "neb-onetaq-hot-start-m0484": {
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "neb-onetaq-hot-start-quickload-gc-m0489": {
+      "high_gc_enhancer_percent": [
+        10.0,
+        20.0
+      ],
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "neb-onetaq-hot-start-quickload-m0488": {
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "neb-onetaq-hotstart-m0488-colony": {
+      "initial_denaturation_time_min": [
+        2.0,
+        5.0
+      ]
+    },
+    "neb-onetaq-m0689-colony": {
+      "primer_each_uM": [
+        0.2,
+        0.2
+      ]
+    },
+    "neb-q5-xt-m2499": {
+      "primer_each_uM": [
+        0.15,
+        1.0
+      ]
+    },
+    "neb-taq-m0273": {
+      "primer_each_uM": [
+        0.05,
+        1.0
+      ]
+    },
+    "pcrbio-hs-taq-mix-pb10-22": {
+      "primer_each_uM": [
+        0.2,
+        0.6
+      ]
+    },
+    "pcrbio-hs-taq-pb10-22-colony": {
+      "primer_each_uM": [
+        0.2,
+        0.6
+      ]
+    },
+    "promega-gotaq-m300": {
+      "primer_each_uM": [
+        0.1,
+        1.0
+      ]
+    },
+    "promega-gotaq-one-step-rt-qpcr-a6020": {
+      "primer_each_nM": [
+        50.0,
+        300.0
+      ]
+    },
+    "promega-gotaq-qpcr-a600x": {
+      "primer_each_nM": [
+        200.0,
+        1000.0
+      ]
+    },
+    "qiagen-alltaq-master-mix-203144": {
+      "primer_each_uM": [
+        0.25,
+        0.25
+      ]
+    },
+    "qiagen-quantinova-sybr-208052": {
+      "primer_each_nM": [
+        700.0,
+        700.0
+      ]
+    },
+    "solis-hot-firepol-evagreen-norox": {
+      "primer_each_nM": [
+        80.0,
+        250.0
+      ]
+    },
+    "solis-hot-firepol-evagreen-rox": {
+      "primer_each_nM": [
+        80.0,
+        250.0
+      ]
+    },
+    "thermo-dreamtaq-hot-start-ep170x": {
+      "primer_each_uM": [
+        0.1,
+        1.0
+      ]
+    },
+    "thermo-lyo-ready-rpa": {
+      "bst_polymerase_U_per_uL": [
+        0.015,
+        0.15
+      ],
+      "hold_temperature_c": [
+        34.0,
+        45.0
+      ],
+      "hold_time_min": [
+        10.0,
+        25.0
+      ],
+      "primer_each_nM": [
+        100.0,
+        300.0
+      ]
+    },
+    "thermo-platinum-ii-taq-hot-start": {
+      "primer_each_uM": [
+        0.2,
+        0.2
+      ]
+    },
+    "thermo-powertrack-sybr-a46xxx": {
+      "primer_each_nM": [
+        300.0,
+        800.0
+      ]
+    },
+    "thermo-powerup-sybr-a2574x": {
+      "primer_each_nM": [
+        300.0,
+        800.0
+      ]
+    },
+    "toyobo-kod-one-kmm101": {
+      "primer_each_uM": [
+        0.15,
+        0.5
+      ]
+    }
+  },
+  "protocol_metadata": {
+    "bio-rad-itaq-sybr": {
+      "label": "Bio-Rad iTaq Universal SYBR Green Supermix",
+      "module": "qpcr-sybr",
+      "source": "10000068167",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "4400bb4524e14e6e56ad698b5f488aa90fec84311ccfcd088cdac7757b2ca06f",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Ver B",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000068167.pdf",
+      "status": "reviewed",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx200-evagreen": {
+      "label": "Bio-Rad QX200 ddPCR EvaGreen Supermix",
+      "module": "digital-pcr",
+      "source": "10000162845",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "d315f2762ef9e601a17a5a14fd42b119c1e8e822c3d722b7017308beb1601f24",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-05",
+      "source_revision": "Ver B",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.bio-rad.com/sites/default/files/2023-11/10000162845.pdf",
+      "status": "reviewed",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx700-evagreen-supermix": {
+      "label": "Bio-Rad QX700 ddPCR EvaGreen Supermix",
+      "module": "digital-pcr",
+      "source": "Bio-Rad QX700 ddPCR Supermixes and Kits bulletin 3882",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "32f284e88087e765b51a9c8e762b45748ad33ccb8193057cf792e646feff1e78",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current portfolio bulletin reviewed 2026-09-03",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.bio-rad.com/sites/default/files/2025-11/3882.pdf",
+      "status": "reviewed",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx700-naica-evagreen": {
+      "label": "Bio-Rad naica ddPCR Mix / EvaGreen · QX700/Nio/naica",
+      "module": "digital-pcr",
+      "source": "10000171490",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "21d05c34ed99e7d9af6949ecd4c15d1d3560f26f0d08977fb8a872f2409d8d5d",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Ver D / IFU Version 1.0",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.bio-rad.com/sites/default/files/2025-11/10000171490-naica-ddPCR-Mix-IFU.pdf",
+      "status": "reviewed",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-ssoadvanced-sybr-172527x": {
+      "label": "Bio-Rad SsoAdvanced Universal SYBR Green Supermix · 172527x",
+      "module": "qpcr-sybr",
+      "source": "Bio-Rad instruction manual",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "4295cafed6bacf4863e5f6d9655da62c9df9c983132060cfc7a0219a475e1680",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000076382.pdf",
+      "status": "current",
+      "vendor": "Bio-Rad"
+    },
+    "gbiosciences-rpa-786-2155": {
+      "label": "G-Biosciences RPA Kit · 786-2155",
+      "module": "rpa",
+      "source": "G-Biosciences RPA Kit protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "db97767fa82a9db28d84231af1b652f59d43e97b7912ea7ab9339b70c2de6871",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.gbiosciences.com/Recombinase-Polymerase-Amplification-RPA-Kit",
+      "status": "current",
+      "vendor": "G-Biosciences"
+    },
+    "neb-insert-screening-e1202": {
+      "label": "NEB Insert Screening E1202 · colony PCR",
+      "module": "colony-pcr",
+      "source": "NEB E1202 insert-screening protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "c0337cb76250e40685de58378065f5b200d82f921cc1505578ebecfba7bf439e",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/insert-screening-protocols-e1202",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-longamp-taq-m0323": {
+      "label": "NEB LongAmp Taq DNA Polymerase (M0323)",
+      "module": "long-range-pcr",
+      "source": "M0323 official protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "fef08c8975e963432c1aae22d0860c0d75f22b7a74d72d6d956824a76b93e86c",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current web protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/longamp-taq-pcr-kit-e5200",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-luna-one-step-rt-qpcr-e3005": {
+      "label": "NEB Luna Universal One-Step RT-qPCR Kit (E3005)",
+      "module": "qpcr-sybr",
+      "source": "manualE3005 / E3005 protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "c7c33a1dabf8c9a6d8b20de59f27d393e5c734b2386d834c9771f343438d0997",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "5.0",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/luna-universal-one-step-rt-qpcr-kit-protocol-e3005",
+      "status": "reviewed",
+      "vendor": "NEB"
+    },
+    "neb-luna-universal-m3003": {
+      "label": "NEB Luna Universal qPCR Master Mix (M3003)",
+      "module": "qpcr-sybr",
+      "source": "M3003 protocol / manualM3003",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "133e4e181c7e3343e8e804fd942ee051f61a5ff7db2bbf6d899806a7f44c5efb",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Version 3.0",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/-/media/nebus/files/manuals/manualm3003.pdf",
+      "status": "reviewed",
+      "vendor": "NEB"
+    },
+    "neb-multiplex-pcr-m0284": {
+      "label": "NEB Multiplex PCR 5X Master Mix · M0284",
+      "module": "standard-pcr",
+      "source": "NEB M0284 protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "6e6fe960f7fe6e9b4b4dec32f3cd60055befe08eb311f43001b56f4156ead8e8",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/products/m0284-multiplex-pcr-5x-master-mix",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-hot-start-gc-m0485": {
+      "label": "NEB OneTaq Hot Start 2X Master Mix · GC Buffer · M0485",
+      "module": "standard-pcr",
+      "source": "NEB M0485 protocol/product page",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "5a69cadc183523c28d6269674e8f727db9a0e36c29c991f39d2a71736d1865bc",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/products/m0485-onetaq-hot-start-2x-master-mix-with-gc-buffer",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-hot-start-m0484": {
+      "label": "NEB OneTaq Hot Start 2X Master Mix · Standard Buffer · M0484",
+      "module": "standard-pcr",
+      "source": "NEB M0484 protocol/product page",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "9c85666b0ea660dcc34e18dda5f5fd9f6eb27905ac36551c8be1ff7d8143702f",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/products/m0484-onetaq-hot-start-2x-master-mix-with-standard-buffer",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-hot-start-quickload-gc-m0489": {
+      "label": "NEB OneTaq Hot Start Quick-Load 2X · GC Buffer · M0489",
+      "module": "standard-pcr",
+      "source": "NEB M0489 protocol/product page",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "1dc65ad670a09e3506bcbd0ecbba523e3a2eefe228980fffee45e3819fa85a70",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/products/m0489-onetaq-hot-start-quick-load-2x-master-mix-with-gc-buffer",
+      "status": "current-partial-sku",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-hot-start-quickload-m0488": {
+      "label": "NEB OneTaq Hot Start Quick-Load 2X · Standard Buffer · M0488",
+      "module": "standard-pcr",
+      "source": "NEB M0488 protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "4c3d3a4e159454f9b3dfb63bc583341ccbafdc40f45b608922136767a7db62ca",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/onetaq-hot-start-2x-master-mix-with-standard-buffer-m0488",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-hotstart-m0488-colony": {
+      "label": "NEB OneTaq Hot Start Quick-Load M0488 · colony PCR",
+      "module": "colony-pcr",
+      "source": "NEB M0488 current protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "3a889c3970937754a9e4fb0489223092f51c2194c9749508af7361eb9fba885a",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/onetaq-hot-start-2x-master-mix-with-standard-buffer-m0488",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-m0482-colony": {
+      "label": "NEB OneTaq M0482 · colony PCR",
+      "module": "colony-pcr",
+      "source": "NEB M0482 current protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "20c4a5476a3ca16e4b7d1eac65deab235c75ce219562b7c8f26ab6f24f0b963b",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/products/m0482-onetaq-2x-master-mix-with-standard-buffer",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-onetaq-m0689-colony": {
+      "label": "NEB M0689 supplemental colony-PCR protocol · OneTaq Hot Start Quick-Load",
+      "module": "colony-pcr",
+      "source": "NEB M0689 Supplemental Protocol 2",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "089e655629c23b6e541c136eaa897c27c85946944d8448b567c2e8ba43acf416",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en/protocols/2019/06/20/supplemental-protocol-2-using-colony-pcr-to-identify-positive-clones-neb-m0689",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-q5-hot-start-m0493": {
+      "label": "NEB Q5 Hot Start High-Fidelity DNA Polymerase (M0493)",
+      "module": "standard-pcr",
+      "source": "NEB M0493 protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "b2cd78316bc32a762af1a9866564793d19cff513b39f2a55d66b8cdd8d354500",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current reviewed web protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en/protocols/pcr-using-q5-hot-start-high-fidelity-dna-polymerase-m0493",
+      "status": "reviewed",
+      "vendor": "NEB"
+    },
+    "neb-q5-xt-m2499": {
+      "label": "NEB Q5-XT Hot Start High-Fidelity 2X Master Mix (M2499)",
+      "module": "long-range-pcr",
+      "source": "NEB M2499 official protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "21d815825ecc9a1203abe4ffc91a04ca02ff609d7a6b4cc72dbea347e8a2d838",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current reviewed web protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/pcr-using-q5-xt-hot-start-high-fidelity-2x-master-mix-m2499",
+      "status": "current",
+      "vendor": "NEB"
+    },
+    "neb-q5u-hot-start-m0515": {
+      "label": "NEB Q5U Hot Start High-Fidelity DNA Polymerase (M0515)",
+      "module": "standard-pcr",
+      "source": "NEB M0515 protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "d2ac568417fd90b3d9636af80af9b27b059a7a9ade7ce7bc2d013382e6c9ded9",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current reviewed web protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/pcr-using-q5u-hot-start-high-fidelity-dna-polymerase-neb-m0515",
+      "status": "reviewed",
+      "vendor": "NEB"
+    },
+    "neb-taq-m0273": {
+      "label": "NEB Taq DNA Polymerase with Standard Taq Buffer (M0273)",
+      "module": "standard-pcr",
+      "source": "NEB M0273 PCR protocol / optimization guidance",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "0a3bd3bbaa625402671e2b3266d73d804cfac73e73e0df64bae321023d72dcd8",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current reviewed web protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.neb.com/en-us/protocols/taq-dna-polymerase-with-standard-taq-buffer-m0273",
+      "status": "reviewed",
+      "vendor": "NEB"
+    },
+    "pcrbio-hs-taq-mix-pb10-22": {
+      "label": "PCR Biosystems PCRBIO HS Taq Mix · PB10.22",
+      "module": "standard-pcr",
+      "source": "PCRBIO PB10.22 manual",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "98f49afbfa3b7669a4efb4f3e184b8a7cd9b51e56b93b407f9f14cde4ca18fd5",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://pcrbio.com/app/uploads/PB10.22-HS-Taq-Mix.pdf",
+      "status": "current",
+      "vendor": "PCR Biosystems"
+    },
+    "pcrbio-hs-taq-pb10-22-colony": {
+      "label": "PCRBIO HS Taq PB10.22 · colony PCR",
+      "module": "colony-pcr",
+      "source": "PCRBIO PB10.22 manual v2.0",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "69911139eff68339c5e644e64f829332b2d2c9d8b2055d2ab76aa0b3cd40de95",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://pcrbio.com/app/uploads/PB10.22-HS-Taq-Mix.pdf",
+      "status": "current",
+      "vendor": "PCR Biosystems"
+    },
+    "promega-gotaq-long-m4021": {
+      "label": "Promega GoTaq Long PCR Master Mix (M4021)",
+      "module": "long-range-pcr",
+      "source": "TM359",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "babf632beedb282ff1e2cf2831602cdc836f2359ad49a438d10fc982abbb7879",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Revised 5/17; current product listing reviewed 2026-09-03",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.promega.com/products/pcr/pcr-master-mixes/gotaq-long-pcr-master-mix/",
+      "status": "current",
+      "vendor": "Promega"
+    },
+    "promega-gotaq-m300": {
+      "label": "Promega GoTaq DNA Polymerase (M3001/M3005/M3008)",
+      "module": "standard-pcr",
+      "source": "Promega 9PIM300",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "cb79512f72a1a34be9f7c4d8ec04ae55ace406ae8dbb8f775adbf5d9399c09cb",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Revised 10/23 / current reviewed protocol",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://worldwide.promega.com/-/media/files/resources/protocols/product-information-sheets/g/gotaq-dna-polymerase-m300.pdf",
+      "status": "reviewed",
+      "vendor": "Promega"
+    },
+    "promega-gotaq-one-step-rt-qpcr-a6020": {
+      "label": "Promega GoTaq 1-Step RT-qPCR System (A6020)",
+      "module": "qpcr-sybr",
+      "source": "TM355",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "ab97ecbd10cf5646f894117e986211259e16b42f9ad24a1f8ef0bb9e8c71d1c5",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Revised 8/23",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-onestep-rt-qpcr-system-protocol/",
+      "status": "current",
+      "vendor": "Promega"
+    },
+    "promega-gotaq-qpcr-a600x": {
+      "label": "Promega GoTaq qPCR Master Mix (A6001/A6002)",
+      "module": "qpcr-sybr",
+      "source": "TM318",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "272f3367648d1e1dd024c82c4a67c486365279c2ed0a36c6925a875e42d8ab06",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Revised 10/24",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-qpcr-master-mix-protocol/",
+      "status": "reviewed",
+      "vendor": "Promega"
+    },
+    "qiagen-alltaq-master-mix-203144": {
+      "label": "QIAGEN AllTaq Master Mix · 203144 family",
+      "module": "standard-pcr",
+      "source": "AllTaq handbook/quick-start",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "183f67cf2489db7f77740b06f7a4126e052e257d31aba7ad229e82ac07b4e59e",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://go.qiagen.com/AllTaq",
+      "status": "current",
+      "vendor": "QIAGEN"
+    },
+    "qiagen-qiacuity-eg": {
+      "label": "QIAGEN QIAcuity EG PCR Kit",
+      "module": "digital-pcr",
+      "source": "HB-2791-003 / 1123717",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "3397e2cbd06dadcd29ab715e8e9e4cd7ebe3a269ec1871acf3c327d4f87f7638",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "01/2021 quick-start protocol; current product listing reviewed 2026-09-03",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.qiagen.com/gb/resources/protocols/hb-2791-003-ll-qiacuityevagreenpcr-0121-ww-1123717",
+      "status": "reviewed",
+      "vendor": "QIAGEN"
+    },
+    "qiagen-qiacuity-onestep-advanced-eg": {
+      "label": "QIAGEN QIAcuity OneStep Advanced EvaGreen Kit",
+      "module": "digital-pcr",
+      "source": "HB-3478-003",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "29f8ca5ac7dba568380b400735f0f6f440be03c90a00e40d2a64f0ef252a8cd6",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "03/2025",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.qiagen.com/us/resources/download/KitHandbook/hb-3478-003-hb-qiacuity-onestep-advanced-eg-0325-ww",
+      "status": "reviewed",
+      "vendor": "QIAGEN"
+    },
+    "qiagen-quantinova-sybr-208052": {
+      "label": "QIAGEN QuantiNova SYBR Green PCR Kit · 208052 family",
+      "module": "qpcr-sybr",
+      "source": "QuantiNova SYBR Green PCR Handbook",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "e179ac4979e1814d0aba2ff5bec71187363d6988a302da3baa17bdced4d74e3d",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.qiagen.com/en-US/resources/download/KitHandbook/quantinova-sybr-green-pcr-handbook",
+      "status": "current",
+      "vendor": "QIAGEN"
+    },
+    "qiagen-ultrarun-longrange-206442-206444": {
+      "label": "QIAGEN UltraRun LongRange PCR Kit",
+      "module": "long-range-pcr",
+      "source": "HB-2686 / UltraRun LongRange PCR Kit Handbook",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "5863502cf097137235337f63fa1874b5b39e608957205be798f459938d447f2a",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "02/2024",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.qiagen.com/en-US/resources/download/KitHandbook/hb-2686-002-hb-ultrarun-longrangepcr-0224-ww",
+      "status": "current",
+      "vendor": "QIAGEN"
+    },
+    "siba-reference": {
+      "label": "SIBA reference branch · recognized, non-executable",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "184391f7465171a2140aed3d7d188c8b8f50dadbe5cf079c0033065a03b7498e",
+      "source_kind": "literature_reference",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25419812/",
+      "status": "recognized-non-executable",
+      "vendor": "reference"
+    },
+    "solis-hot-firepol-evagreen-capillary": {
+      "label": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus · capillary",
+      "module": "qpcr-sybr",
+      "source": "Solis current product catalogue",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "1c6e7eb6c689e5e4b971985dcbb68ca4de8903ac0a416deb815d5a29a542e156",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://solisbiodyne.com/pics/6570_SBDproductcatalogue.pdf",
+      "status": "current-source-limited",
+      "vendor": "Solis BioDyne"
+    },
+    "solis-hot-firepol-evagreen-norox": {
+      "label": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus · no ROX",
+      "module": "qpcr-sybr",
+      "source": "Solis current product catalogue",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "69a07b1d902ebd6ad73aba7876ae572d99984d555c26314c8d84b4b255527e34",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://solisbiodyne.com/EN/product/name=HOT-FIREPol-EvaGreen-qPCR-Mix-Plus&catno=08-25-0000S",
+      "status": "current",
+      "vendor": "Solis BioDyne"
+    },
+    "solis-hot-firepol-evagreen-rox": {
+      "label": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus · ROX",
+      "module": "qpcr-sybr",
+      "source": "DS-08-24 v3",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "0bfa18d2cf04cd7be4b729a25cc0cc979422f1fadf112c86d700910b37ab6edb",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://solisbiodyne.com/pics/9799_DS-08-24_v3_HOT_FIREPol_EvaGreen_qPCR_Mix_Plus_ROX_revised_12.04.2022.pdf",
+      "status": "current",
+      "vendor": "Solis BioDyne"
+    },
+    "takara-primestar-gxl-r050a-standard": {
+      "label": "Takara PrimeSTAR GXL DNA Polymerase R050A — Standard Protocol",
+      "module": "long-range-pcr",
+      "source": "R050A_e.v1906Da",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "1f333aa7466803405006ef3f761c0a3200d89ad1aa88b056ff8c75ce0b73d972",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "v201906Da",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://takara.co.kr/file/manual/pdf/R050A_e.v1906Da.pdf",
+      "status": "current",
+      "vendor": "Takara"
+    },
+    "thermo-dreamtaq-hot-start-ep170x": {
+      "label": "Thermo Scientific DreamTaq Hot Start DNA Polymerase (EP1701-EP1704)",
+      "module": "standard-pcr",
+      "source": "MAN0015972",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "7e39defac30518cc10dce7671ab8e736c657bc0ad9034c6ef20bfb22e33d2dd4",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Rev A.00 / current hosted product-information record",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0015972_ThermoScientificDreamTaqHotStartDNAPolymerase.pdf",
+      "status": "reviewed",
+      "vendor": "Thermo"
+    },
+    "thermo-long-pcr-k018x": {
+      "label": "Thermo Scientific Long PCR Enzyme Mix K0181/K0182",
+      "module": "long-range-pcr",
+      "source": "MAN0016323",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "1586a3e7c8126155c1319cd8104485a33c23149843cf781ae9d946826b1d81e3",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "A.00",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0012921_Long_PCR_Enzyme_k0182_UG.pdf",
+      "status": "discontinued",
+      "vendor": "Thermo"
+    },
+    "thermo-lyo-ready-rpa": {
+      "label": "Invitrogen Lyo-ready RPA Kit · A72127/A72128",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "33d3bb169e088d320ae526b3ba5304be96cf2d03a57523b5dd5db289e7f7a85a",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN1000697-LyoReadyRPA-UG.pdf",
+      "status": "executable",
+      "vendor": "Thermo Fisher"
+    },
+    "thermo-phusion-plus": {
+      "label": "Thermo Scientific Phusion Plus DNA Polymerase",
+      "module": "standard-pcr",
+      "source": "MAN0025053",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "0bcf3492ea74897a56d49791bde9a41bde4972380ab22adc1194a7c588493860",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "Rev B / current reviewed user guide",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0025053-PhusionPlusDNAPolymerase-UG.pdf",
+      "status": "reviewed",
+      "vendor": "Thermo"
+    },
+    "thermo-platinum-ii-taq-hot-start": {
+      "label": "Thermo Fisher Platinum II Taq Hot-Start",
+      "module": "standard-pcr",
+      "source": "Platinum II technical protocol",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "0a031d5cea1a81cfdb97fb6898f24d5b71b222596db61ada0c26cc8eb521c437",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/BID/manuals/MAN0017534_Platinum_II_Taq_HS_DNA_Pol_UG.pdf",
+      "status": "current",
+      "vendor": "Thermo Fisher Scientific"
+    },
+    "thermo-platinum-superfi-ii": {
+      "label": "Thermo Fisher Platinum SuperFi II PCR Master Mix",
+      "module": "standard-pcr",
+      "source": "MAN0018860",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "e397c264d396cb2f1cf022e20497e413cd71d1bbb9e84e638abc2a4c043995d9",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current reviewed user guide",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018860-PlatinumSuperFi-II-PCRMasterMix-UG.pdf",
+      "status": "reviewed",
+      "vendor": "Thermo"
+    },
+    "thermo-platinum-superfi-ii-longrange": {
+      "label": "Thermo Fisher Platinum SuperFi II DNA Polymerase — long-range branch",
+      "module": "long-range-pcr",
+      "source": "MAN0018859",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "c1a18b259a4299ea8d7c4831f659bd0d2300dec282d4c73c4b7deae57835604b",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "current hosted user guide; current product portfolio reviewed 2026-09-03",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018859_Platinum_SuperFi_II_DNA_Pol_UG.pdf",
+      "status": "current",
+      "vendor": "Thermo"
+    },
+    "thermo-powertrack-sybr-a46xxx": {
+      "label": "Applied Biosystems PowerTrack SYBR Green Master Mix · A46012/A46109-A46113",
+      "module": "qpcr-sybr",
+      "source": "MAN0018825 Rev B.0",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "c5cb650b7a766eadda712ef3a2e2bdd94691a7660d9fc275a1afa8750765edce",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018825_PowerTrackSYBRGreenMasterMix_UG.pdf",
+      "status": "current",
+      "vendor": "Thermo Fisher Scientific"
+    },
+    "thermo-powerup-sybr-a2574x": {
+      "label": "Applied Biosystems PowerUp SYBR Green Master Mix",
+      "module": "qpcr-sybr",
+      "source": "MAN0013511",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "4ff6b57372e82187da46252199d7dc5cca483306230178aeb3f5c92dbae2a598",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_revision": "G",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0013511_PowerUp_mastermix_UG.pdf",
+      "status": "reviewed",
+      "vendor": "Applied"
+    },
+    "toyobo-kod-long-kml101": {
+      "label": "TOYOBO KOD Long PCR Master Mix · KML-101",
+      "module": "long-range-pcr",
+      "source": "KOD Long KML-101 manual/product page",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "8d2c3681989c53aa128372f9efa9c415ec81162d35b45d60ae9299613f7dbe78",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.toyobo-global.com/products/lifescience/products/pcr_022/index.html",
+      "status": "current",
+      "vendor": "TOYOBO"
+    },
+    "toyobo-kod-one-kmm101": {
+      "label": "TOYOBO KOD One PCR Master Mix · KMM-101",
+      "module": "standard-pcr",
+      "source": "KMM-101_201",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "261bb025b0c6db8e319a9b4380758a7df3e27cda4e5a8ac5410a8b1c53c269bc",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.toyobo-global.com/sites/default/static_root/products/lifescience/support/manual/KMM-101_201.pdf",
+      "status": "current",
+      "vendor": "TOYOBO"
+    },
+    "twistamp-basic": {
+      "label": "TwistDx TwistAmp Basic",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "96db5ffd5a442287537d061c4705e058696354663ade460a8cf851416fea2eab",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+      "status": "executable",
+      "vendor": "TwistDx"
+    },
+    "twistamp-exo": {
+      "label": "TwistDx TwistAmp Exo · recognized, non-executable",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "5b79f9f2adcc6231f9126491ffef3bdb0b7e4f22ec1a2f93edb43e863fc131d8",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+      "status": "recognized-non-executable",
+      "vendor": "TwistDx"
+    },
+    "twistamp-fpg": {
+      "label": "TwistDx TwistAmp Fpg · recognized, non-executable",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "af48c520af1139c3fea412f4bd436981bc4dbd084c210835248db158561c379d",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+      "status": "recognized-non-executable",
+      "vendor": "TwistDx"
+    },
+    "twistamp-liquid-basic": {
+      "label": "TwistDx TwistAmp Liquid Basic",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "069a3f8faf5c697848e25cface426ca2b81ca13e908b41742f39181cf42087e5",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+      "status": "executable",
+      "vendor": "TwistDx"
+    },
+    "twistamp-nfo": {
+      "label": "TwistDx TwistAmp Nfo · recognized, non-executable",
+      "module": "rpa",
+      "source": "reviewed RPA registry authority",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "848b6d1ac0363ac8bbd8f36e4e3fdd17842f709742a885be0b1754b19e85339e",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-04",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+      "status": "recognized-non-executable",
+      "vendor": "TwistDx"
+    },
+    "vazyme-q713-suprealq-ultra-hunter-sybr": {
+      "label": "Vazyme SupRealQ Ultra Hunter SYBR qPCR Master Mix (U+) · Q713",
+      "module": "qpcr-sybr",
+      "source": "Vazyme Global Q713 current product page",
+      "source_availability_scope": "not-asserted",
+      "source_claim_snapshot_sha256": "dcfed41f78d093c0f76fe2a944fe86447467eb944f6074313821737cec7016ed",
+      "source_kind": "vendor_primary_locator",
+      "source_reviewed_date": "2026-09-05",
+      "source_snapshot_registry": "knowledge/sources/flanking-source-snapshots.json",
+      "source_snapshot_status": "canonical-claim-snapshot-pinned",
+      "source_url": "https://www.vazymeglobal.com/product-center/dye-based-qpcr/suprealq-ultra-hunter-sybr-qpcr-master-mix-u",
+      "status": "current-source-limited",
+      "vendor": "Vazyme"
+    }
+  },
+  "reaction_volume_options": {
+    "bio-rad-itaq-sybr": [
+      10.0,
+      20.0
+    ],
+    "bio-rad-qx200-evagreen": [
+      20.0
+    ],
+    "bio-rad-qx700-naica-evagreen": [
+      5.0
+    ],
+    "bio-rad-ssoadvanced-sybr-172527x": [
+      10.0,
+      20.0
+    ],
+    "gbiosciences-rpa-786-2155": [
+      20.0
+    ],
+    "neb-insert-screening-e1202": [
+      50.0
+    ],
+    "neb-longamp-taq-m0323": [
+      25.0,
+      50.0
+    ],
+    "neb-luna-one-step-rt-qpcr-e3005": [
+      10.0,
+      20.0
+    ],
+    "neb-luna-universal-m3003": [
+      10.0,
+      20.0
+    ],
+    "neb-onetaq-hot-start-gc-m0485": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-hot-start-m0484": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-hot-start-quickload-gc-m0489": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-hot-start-quickload-m0488": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-hotstart-m0488-colony": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-m0482-colony": [
+      25.0,
+      50.0
+    ],
+    "neb-onetaq-m0689-colony": [
+      25.0
+    ],
+    "neb-q5-hot-start-m0493": [
+      25.0,
+      50.0
+    ],
+    "neb-q5-xt-m2499": [
+      25.0,
+      50.0
+    ],
+    "neb-q5u-hot-start-m0515": [
+      25.0,
+      50.0
+    ],
+    "neb-taq-m0273": [
+      25.0,
+      50.0
+    ],
+    "pcrbio-hs-taq-mix-pb10-22": [
+      50.0
+    ],
+    "pcrbio-hs-taq-pb10-22-colony": [
+      50.0
+    ],
+    "promega-gotaq-long-m4021": [
+      50.0
+    ],
+    "promega-gotaq-m300": [
+      50.0
+    ],
+    "promega-gotaq-one-step-rt-qpcr-a6020": [
+      20.0
+    ],
+    "promega-gotaq-qpcr-a600x": [
+      20.0
+    ],
+    "qiagen-alltaq-master-mix-203144": [
+      10.0,
+      20.0
+    ],
+    "qiagen-qiacuity-eg": [
+      12.0,
+      40.0
+    ],
+    "qiagen-qiacuity-onestep-advanced-eg": [
+      12.0,
+      40.0
+    ],
+    "qiagen-quantinova-sybr-208052": [
+      10.0,
+      20.0
+    ],
+    "qiagen-ultrarun-longrange-206442-206444": [
+      10.0,
+      20.0
+    ],
+    "solis-hot-firepol-evagreen-norox": [
+      20.0
+    ],
+    "solis-hot-firepol-evagreen-rox": [
+      20.0
+    ],
+    "takara-primestar-gxl-r050a-standard": [
+      50.0
+    ],
+    "thermo-dreamtaq-hot-start-ep170x": [
+      50.0
+    ],
+    "thermo-long-pcr-k018x": [
+      50.0
+    ],
+    "thermo-lyo-ready-rpa": [
+      20.0,
+      50.0
+    ],
+    "thermo-phusion-plus": [
+      20.0,
+      50.0
+    ],
+    "thermo-platinum-ii-taq-hot-start": [
+      20.0
+    ],
+    "thermo-platinum-superfi-ii": [
+      20.0,
+      50.0
+    ],
+    "thermo-platinum-superfi-ii-longrange": [
+      50.0
+    ],
+    "thermo-powertrack-sybr-a46xxx": [
+      10.0,
+      20.0
+    ],
+    "thermo-powerup-sybr-a2574x": [
+      10.0,
+      20.0
+    ],
+    "toyobo-kod-long-kml101": [
+      50.0
+    ],
+    "toyobo-kod-one-kmm101": [
+      50.0
+    ],
+    "twistamp-liquid-basic": [
+      50.0
+    ],
+    "vazyme-q713-suprealq-ultra-hunter-sybr": [
+      20.0
+    ]
+  },
+  "schema_version": "1.0.0",
+  "source": "tools/src/pcr_tools/flanking_numeric_recipes.py",
+  "source_sha256": "0b06007ee3a74d9262ca794ad24b209a63b2f8444f99df950763a02b89837447",
+  "unresolved_numeric_dependencies": {
+    "bio-rad-qx700-evagreen-supermix": [
+      {
+        "id": "qx700-evagreen-exact-reaction",
+        "note": "The dedicated QX700 EvaGreen chemistry is recognized; retain the current vendor/application protocol for exact loading and cycling rather than inventing values from another QX platform."
+      }
+    ],
+    "bio-rad-qx700-naica-evagreen": [
+      {
+        "id": "qx700-naica-assay-program",
+        "note": "QX700/naica dye workflow requires assay-specific validated PCR-program and loading authority; a universal numeric programme is not inferred."
+      }
+    ],
+    "promega-gotaq-long-m4021": [],
+    "solis-hot-firepol-evagreen-capillary": [
+      {
+        "id": "solis-capillary-exact-reaction",
+        "note": "The current catalogue establishes the dedicated capillary formulation, but this runtime snapshot does not promote a product-specific reaction volume/primer value without its exact IFU. Confirm the current capillary IFU before bench execution."
+      }
+    ],
+    "twistamp-basic": [
+      {
+        "id": "twistamp-basic-complete-public-formulation",
+        "note": "Primer concentration is source-backed, but proprietary pellet/reagent composition is not reconstructed into invented concentrations."
+      }
+    ],
+    "vazyme-q713-suprealq-ultra-hunter-sybr": [
+      {
+        "id": "q713-exact-product-recipe",
+        "note": "The current vendor page establishes a 20 uL catalogue reaction basis, SYBR Green I readout, dUTP/heat-labile UDG and included passive-reference dye, but this release does not invent primer concentration or master-mix stoichiometry without a transferable current IFU."
+      }
+    ]
+  }
+}

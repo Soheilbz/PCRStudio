@@ -1,0 +1,10 @@
+# Development conveniences only. Compose merges this over compose.yaml
+# automatically. Production deployments should not ship it — either delete it, or
+# run against the base file alone with `docker compose -f compose.yaml up`,
+# which never reads an override at all.
+
+services:
+  db:
+    ports:
+      # Loopback only, so the database is still not reachable from off-host.
+      - "127.0.0.1:${PCR_DATABASE_PORT:-55432}:5432"

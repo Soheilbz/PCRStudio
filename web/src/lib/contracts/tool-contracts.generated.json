@@ -1,0 +1,261 @@
+{
+  "canonical_sources": {
+    "contracts/engines.toml": "059ad75636dcaa5277dbd132396ac769ce498ac5a24aeaf39707d8e747c23ee8",
+    "contracts/foundation.toml": "6e692d6b548333dcd1f2a0f7133efd9ad03b49da7970840b84d22025ba127fad",
+    "contracts/modules.toml": "9d1f56b2095ba045bb2892a304f3a6fa32a37fec27211d14a3511048f1dda48d",
+    "contracts/tools.toml": "78bb324f34a1aeb96613c28c332f49e31c898b3b1b8cc75d3603cca6958ec2e3"
+  },
+  "contract_version": "generation1-current-2026-09-06",
+  "generation_policy": "Generated from contracts/tools.toml; do not hand-edit.",
+  "schema_version": "2.0.0",
+  "tools": {
+    "mafft": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "MAFFT",
+      "env_var": "PCRSTUDIO_MAFFT",
+      "excluded_range": "7.463-7.486",
+      "executable_names": [
+        "mafft"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_MAFFT_SHA256",
+      "id": "mafft",
+      "minimum_supported": "7.487",
+      "provision_archive": "mafft-7.526-linux.tgz",
+      "provision_id": "mafft",
+      "provision_url": "https://mafft.ddbj.nig.ac.jp/alignment/software/mafft-7.526-linux.tgz",
+      "qualifiers": [
+        "msa"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:7.526",
+      "source_url": "https://mafft.cbrc.jp/alignment/software/",
+      "version": "7.526",
+      "version_mode": "exact"
+    },
+    "mfeprimer": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "MFEprimer",
+      "env_var": "PCRSTUDIO_MFEPRIMER",
+      "executable_names": [
+        "mfeprimer"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_MFEPRIMER_SHA256",
+      "id": "mfeprimer",
+      "provision_archive": "mfeprimer-4.5.1-linux-amd64.gz",
+      "provision_id": "mfeprimer",
+      "provision_sha256": "56abb0789497a6273e0b7d226671d5f1d959d3bceaba5be53f0d2b2edc13c839",
+      "provision_url": "https://github.com/quwubin/MFEprimer-3.0/releases/download/v4.5.1/mfeprimer-4.5.1-linux-amd64.gz",
+      "qualifiers": [
+        "specificity"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:4.5.1",
+      "source_url": "https://www.mfeprimer.com/updates/",
+      "version": "4.5.1",
+      "version_mode": "exact"
+    },
+    "ncbi_blast_plus": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "NCBI BLAST+",
+      "env_var": "PCRSTUDIO_BLASTN",
+      "executable_names": [
+        "blastn"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_BLASTN_SHA256",
+      "id": "ncbi_blast_plus",
+      "provision_archive": "ncbi-blast-2.17.0-x64-linux.tar.gz",
+      "provision_id": "blast",
+      "provision_sha256": "3888112d8207831aa47371d93583c601f058f88b5db22dc782438b039a3a411b",
+      "provision_url": "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast%2B/2.17.0/ncbi-blast-2.17.0%2B-x64-linux.tar.gz",
+      "qualifiers": [
+        "specificity"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "release:2.17.0",
+      "source_url": "https://www.ncbi.nlm.nih.gov/books/NBK131777/",
+      "version": "2.17.0",
+      "version_mode": "exact"
+    },
+    "nupack4": {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NUPACK 4.x",
+      "execution_scope": "manual-reference",
+      "id": "nupack4",
+      "qualifiers": [
+        "license_blocked",
+        "structure",
+        "manual_only"
+      ],
+      "readiness_requirement": "reference",
+      "source_ref": "documentation-current-at-cutoff",
+      "source_url": "https://docs.nupack.org/",
+      "version": "4.x",
+      "version_mode": "reference_family"
+    },
+    "olivar": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Olivar",
+      "env_var": "PCRSTUDIO_OLIVAR",
+      "executable_names": [
+        "olivar"
+      ],
+      "execution_scope": "external-managed",
+      "hash_env_var": "PCRSTUDIO_OLIVAR_SHA256",
+      "id": "olivar",
+      "install_scope": "external-managed-linux-conda-environment",
+      "qualifiers": [
+        "tiling",
+        "variant-aware",
+        "multi-target",
+        "sensitivity",
+        "specificity"
+      ],
+      "readiness_requirement": "feature-gated",
+      "source_ref": "Bioconda:olivar=1.3.3",
+      "source_url": "https://github.com/treangenlab/Olivar/releases/tag/v1.3.3",
+      "version": "1.3.3",
+      "version_mode": "exact"
+    },
+    "primalscheme3": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "PrimalScheme3",
+      "env_var": "PCRSTUDIO_PRIMALSCHEME3",
+      "executable_names": [
+        "primalscheme3"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PRIMALSCHEME3_SHA256",
+      "id": "primalscheme3",
+      "install_scope": "project-local-isolated-science-venv",
+      "package_filename": "primalscheme3-3.3.0-py3-none-any.whl",
+      "package_sha256": "4ac2455c6071ddef40fd5bed881ad9c129f8590b66e7bf6b73462a0ea9aad30e",
+      "package_source": "PyPI",
+      "qualifiers": [
+        "tiling",
+        "repair"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "PyPI:3.3.0",
+      "source_url": "https://pypi.org/project/primalscheme3/",
+      "version": "3.3.0",
+      "version_mode": "exact"
+    },
+    "primer3_core": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "PRIMARY",
+      "display_name": "Primer3 primer3_core",
+      "execution_scope": "embedded-package",
+      "id": "primer3_core",
+      "qualifiers": [
+        "candidate_generation"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "tag:v2.6.1",
+      "source_url": "https://github.com/primer3-org/primer3",
+      "version": "2.6.1",
+      "version_mode": "exact"
+    },
+    "primer3_py": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "primer3-py",
+      "execution_scope": "embedded-package",
+      "id": "primer3_py",
+      "qualifiers": [
+        "development_adapter"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "PyPI:2.3.0",
+      "source_url": "https://pypi.org/project/primer3-py/2.3.0/",
+      "version": "2.3.0",
+      "version_mode": "exact"
+    },
+    "primer_blast": {
+      "artifact_sha256_required": false,
+      "catalog_disposition": "REFERENCE",
+      "display_name": "NCBI Primer-BLAST",
+      "execution_scope": "remote-reference",
+      "id": "primer_blast",
+      "qualifiers": [
+        "remote",
+        "specificity"
+      ],
+      "readiness_requirement": "reference",
+      "source_ref": "NCBI-live-service",
+      "source_url": "https://www.ncbi.nlm.nih.gov/tools/primer-blast/",
+      "version": "live",
+      "version_mode": "live_service"
+    },
+    "primerpooler": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "VALIDATOR",
+      "display_name": "PrimerPooler",
+      "env_var": "PCRSTUDIO_PRIMERPOOLER",
+      "executable_names": [
+        "pooler",
+        "pooler64"
+      ],
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PRIMERPOOLER_SHA256",
+      "id": "primerpooler",
+      "provision_archive": "PrimerPooler-v1.89.tar.gz",
+      "provision_id": "primerpooler",
+      "provision_sha256": "df07e19c8c11a4aa7e7550fca59209615c3a8483b4cba36d320bb06e30eef414",
+      "provision_url": "https://codeload.github.com/ssb22/PrimerPooler/tar.gz/refs/tags/v1.89",
+      "qualifiers": [
+        "pool_optimizer",
+        "optional_execution"
+      ],
+      "readiness_requirement": "required",
+      "source_ref": "upstream-version:1.89",
+      "source_url": "https://github.com/ssb22/PrimerPooler",
+      "version": "1.89",
+      "version_mode": "exact"
+    },
+    "pydna": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "pydna",
+      "env_var": "PCRSTUDIO_PYDNA_PYTHON",
+      "execution_scope": "local",
+      "hash_env_var": "PCRSTUDIO_PYDNA_PYTHON_SHA256",
+      "id": "pydna",
+      "install_scope": "project-local-isolated-science-venv",
+      "package_filename": "pydna-5.5.16-py3-none-any.whl",
+      "package_sha256": "f89c0787da7f405286c5d4fa8a827bbefbb09c7da382860834d7103dddb452aa",
+      "package_source": "PyPI",
+      "qualifiers": [
+        "specialized"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "PyPI:5.5.16",
+      "source_url": "https://pypi.org/project/pydna/5.5.16/",
+      "version": "5.5.16",
+      "version_mode": "exact"
+    },
+    "viennarna": {
+      "artifact_sha256_required": true,
+      "catalog_disposition": "OPTIONAL",
+      "display_name": "ViennaRNA",
+      "execution_scope": "optional-package",
+      "id": "viennarna",
+      "qualifiers": [
+        "structure"
+      ],
+      "readiness_requirement": "optional",
+      "source_ref": "release:2.7.2",
+      "source_url": "https://github.com/ViennaRNA/ViennaRNA/releases",
+      "version": "2.7.2",
+      "version_mode": "exact"
+    }
+  }
+}

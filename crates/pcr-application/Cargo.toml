@@ -1,0 +1,25 @@
+[package]
+name = "pcr-application"
+description = "Application orchestration for PCRStudio designs and durable scientific jobs."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+pcr-accounts.workspace = true
+pcr-contracts.workspace = true
+pcr-core.workspace = true
+pcr-projects.workspace = true
+pcr-storage.workspace = true
+pcr-worker-client.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true

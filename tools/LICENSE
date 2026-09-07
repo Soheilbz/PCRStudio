@@ -1,0 +1,9 @@
+The contents of this directory are licensed GPL-2.0-or-later.
+
+This is deliberate and contained. `primer3-py` is GPLv2, and importing it makes
+the importing code a derivative work. Everything that imports it lives here;
+nothing here is imported by the Rust crates or by the web interface, which
+reach this worker by running it as a separate process and reading its output.
+That keeps the rest of PCRStudio under MIT.
+
+See <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.

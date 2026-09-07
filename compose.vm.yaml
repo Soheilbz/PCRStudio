@@ -1,0 +1,24 @@
+# Private bootstrap override for a single Linux VM that does not yet have a
+# TLS-capable public hostname.
+#
+# Layered over the production file:
+#
+#   docker compose -f compose.yaml -f compose.vm.yaml up -d --build
+#
+# SECURITY BOUNDARY:
+# - This override is NOT a public-Internet HTTP deployment.
+# - Caddy's HTTP listener is bound to host loopback only (127.0.0.1:8080).
+# - Reach it through an SSH tunnel, VPN, or a TLS-terminating managed tunnel.
+# - For direct public access, use compose.yaml with a real SITE_DOMAIN and
+#   HTTPS on ports 80/443. Never publish the private HTTP listener on 0.0.0.0.
+#
+# The scientific image is intentionally Linux x86_64 only because native
+# artifacts are release-pinned for that architecture. The bootstrap rejects
+# unsupported architectures before attempting a build.
+
+services:
+  caddy:
+    volumes:
+      - ./docker/Caddyfile.http:/etc/caddy/Caddyfile:ro
+    ports: !override
+      - "127.0.0.1:8080:80"

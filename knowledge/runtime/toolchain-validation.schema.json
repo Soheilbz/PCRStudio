@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/schemas/toolchain-validation-v1.1.json",
+  "title": "PCRStudio independent validation envelope v1.1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "mode",
+    "status",
+    "selected_oligos",
+    "molecule_contract",
+    "checks",
+    "warnings"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": [
+        "off",
+        "auto",
+        "strict"
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "selected_oligos": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "molecule_contract": {
+      "type": "object",
+      "required": [
+        "specificity",
+        "interaction",
+        "tail_position"
+      ],
+      "properties": {
+        "specificity": {
+          "const": "annealing_sequence"
+        },
+        "interaction": {
+          "const": "ordered_sequence"
+        },
+        "tail_position": {
+          "const": "5-prime-only"
+        }
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tool_id",
+          "configured_version",
+          "status",
+          "purpose",
+          "evidence",
+          "warnings"
+        ],
+        "properties": {
+          "tool_id": {
+            "type": "string"
+          },
+          "configured_version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "decision_impact": {
+            "type": "string"
+          },
+          "interpretation_contract": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "object"
+          },
+          "tool_run": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "selection_policy": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

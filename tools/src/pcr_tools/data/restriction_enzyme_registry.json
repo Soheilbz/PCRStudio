@@ -1,0 +1,202 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "pcrstudio-gen1-restriction-enzyme-registry-v1",
+  "effective_date": "2026-09-03",
+  "scope": "Generation-1 Type-II restriction-cloning and inverse-PCR recognition/cut metadata representable by one top-strand cut coordinate per written recognition orientation.",
+  "independent_validator": "Bio.Restriction / pydna when the construct-simulation branch is available.",
+  "limitations": [
+    "This registry is not a complete restriction-enzyme catalogue.",
+    "Type-IIS or other asymmetric cleavage requiring two explicit strand-cut coordinates is outside this one-coordinate contract.",
+    "Recognition/cut metadata does not establish methylation state, star activity, buffer compatibility, heat inactivation, digestion efficiency, ligation efficiency or transformation success.",
+    "Close-to-end activity annotations are supplier/formulation-specific evidence and are not universal cleavage guarantees."
+  ],
+  "enzymes": [
+    {
+      "name": "EcoRI",
+      "site": "GAATTC",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB EcoRI"
+    },
+    {
+      "name": "BamHI",
+      "site": "GGATCC",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB BamHI"
+    },
+    {
+      "name": "HindIII",
+      "site": "AAGCTT",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 2,
+      "end_cleavage_evidence_identity": "NEB HindIII"
+    },
+    {
+      "name": "PstI",
+      "site": "CTGCAG",
+      "cuts_after": 5,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB PstI"
+    },
+    {
+      "name": "SalI",
+      "site": "GTCGAC",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 2,
+      "end_cleavage_evidence_identity": "NEB SalI"
+    },
+    {
+      "name": "XbaI",
+      "site": "TCTAGA",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB XbaI"
+    },
+    {
+      "name": "KpnI",
+      "site": "GGTACC",
+      "cuts_after": 5,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB KpnI-HF"
+    },
+    {
+      "name": "SacI",
+      "site": "GAGCTC",
+      "cuts_after": 5,
+      "first_observed_activity_flanking_bases": 2,
+      "end_cleavage_evidence_identity": "NEB SacI-HF, Cleavage Close to the End of DNA Fragments, current table reviewed 2026-09-05 (1 bp -, 2 bp +, 3-5 bp +++)",
+      "end_cleavage_evidence_status": "published-current-table-row"
+    },
+    {
+      "name": "SmaI",
+      "site": "CCCGGG",
+      "cuts_after": 3,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB SmaI"
+    },
+    {
+      "name": "SphI",
+      "site": "GCATGC",
+      "cuts_after": 5,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB SphI"
+    },
+    {
+      "name": "SpeI",
+      "site": "ACTAGT",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB SpeI-HF"
+    },
+    {
+      "name": "NcoI",
+      "site": "CCATGG",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 2,
+      "end_cleavage_evidence_identity": "NEB NcoI"
+    },
+    {
+      "name": "NdeI",
+      "site": "CATATG",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB NdeI"
+    },
+    {
+      "name": "XhoI",
+      "site": "CTCGAG",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB XhoI"
+    },
+    {
+      "name": "ApaI",
+      "site": "GGGCCC",
+      "cuts_after": 5,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB ApaI"
+    },
+    {
+      "name": "ClaI",
+      "site": "ATCGAT",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": 3,
+      "end_cleavage_evidence_identity": "NEB ClaI"
+    },
+    {
+      "name": "BglII",
+      "site": "AGATCT",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB BglII"
+    },
+    {
+      "name": "EcoRV",
+      "site": "GATATC",
+      "cuts_after": 3,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB EcoRV"
+    },
+    {
+      "name": "NotI",
+      "site": "GCGGCCGC",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB NotI"
+    },
+    {
+      "name": "Sau3AI",
+      "site": "GATC",
+      "cuts_after": 0,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB Sau3AI"
+    },
+    {
+      "name": "HaeIII",
+      "site": "GGCC",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": null,
+      "end_cleavage_evidence_identity": "NEB product page links the general close-to-end guide; no enzyme-specific row was present in the reviewed current table, so PCRStudio does not infer a flanking-base minimum.",
+      "end_cleavage_evidence_status": "unresolved-current-neb-table-row-not-published-in-reviewed-close-to-end-table"
+    },
+    {
+      "name": "MspI",
+      "site": "CCGG",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": null,
+      "end_cleavage_evidence_identity": "NEB product page links the general close-to-end guide; no enzyme-specific row was present in the reviewed current table, so PCRStudio does not infer a flanking-base minimum.",
+      "end_cleavage_evidence_status": "unresolved-current-neb-table-row-not-published-in-reviewed-close-to-end-table"
+    },
+    {
+      "name": "TaqI",
+      "site": "TCGA",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": null,
+      "end_cleavage_evidence_identity": "NEB product page links the general close-to-end guide; no enzyme-specific row was present in the reviewed current table, so PCRStudio does not infer a flanking-base minimum.",
+      "end_cleavage_evidence_status": "unresolved-current-neb-table-row-not-published-in-reviewed-close-to-end-table"
+    },
+    {
+      "name": "AluI",
+      "site": "AGCT",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": 2,
+      "end_cleavage_evidence_identity": "NEB AluI"
+    },
+    {
+      "name": "RsaI",
+      "site": "GTAC",
+      "cuts_after": 2,
+      "first_observed_activity_flanking_bases": 1,
+      "end_cleavage_evidence_identity": "NEB RsaI"
+    },
+    {
+      "name": "HinfI",
+      "site": "GANTC",
+      "cuts_after": 1,
+      "first_observed_activity_flanking_bases": null,
+      "end_cleavage_evidence_identity": "NEB product page links the general close-to-end guide; no enzyme-specific row was present in the reviewed current table, so PCRStudio does not infer a flanking-base minimum.",
+      "end_cleavage_evidence_status": "unresolved-current-neb-table-row-not-published-in-reviewed-close-to-end-table"
+    }
+  ]
+}

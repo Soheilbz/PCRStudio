@@ -1,0 +1,193 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 1,
+      "gc_max": 75.0,
+      "gc_min": 30.0,
+      "length_max": 30,
+      "length_min": 17,
+      "length_opt": 22,
+      "max_end_gc": 3,
+      "max_poly_x": 4,
+      "product_max": 500,
+      "product_min": 120,
+      "tm_max": 68.0,
+      "tm_min": 55.0,
+      "tm_opt": 61.0,
+      "tm_pair_max_difference": 5.0
+    },
+    "id": "tetra-primer-arms",
+    "name": "Tetra-primer ARMS",
+    "overruled": [],
+    "purposes": ["general"]
+  },
+  "constraints": {
+    "gc_clamp": 1,
+    "gc_max": 75.0,
+    "gc_min": 30.0,
+    "length_max": 30,
+    "length_min": 17,
+    "length_opt": 22,
+    "max_end_gc": 3,
+    "max_poly_x": 4,
+    "min_three_prime_distance": 5,
+    "product_max": 500,
+    "product_min": 120,
+    "tm_max": 68.0,
+    "tm_min": 55.0,
+    "tm_opt": 61.0,
+    "tm_pair_max_difference": 5.0
+  },
+  "discrimination": {
+    "G": {
+      "rests_on": "terminus",
+      "second_mismatch": null,
+      "strand": "plus",
+      "terminus": "G*A",
+      "terminus_strength": "blocks"
+    },
+    "T": {
+      "rests_on": "terminus",
+      "second_mismatch": null,
+      "strand": "minus",
+      "terminus": "A*G",
+      "terminus_strength": "blocks"
+    }
+  },
+  "engine": "discriminating-pair",
+  "geometry": {
+    "id": "tetra",
+    "name": "Tetra-primer ARMS",
+    "note": "Four primers in one tube: two allele-specific ones facing each other and two outer ones. Three bands are possible and the genotype is read from which appear. The two allele-specific primers face opposite ways, which is what lets both alleles have a blocking mismatch at once.",
+    "tubes": 1
+  },
+  "order_sheet": [
+    {
+      "gc_percent": 58.8,
+      "length": 17,
+      "name": "template_G",
+      "note": "Allele-specific for G.",
+      "sequence": "TGGGACAGCCAAGTCTG",
+      "tm": 57.8
+    },
+    {
+      "gc_percent": 55.0,
+      "length": 20,
+      "name": "template_T",
+      "note": "Allele-specific for T.",
+      "sequence": "GGGGAGTACGTGCAAGTCAA",
+      "tm": 61.5
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 22,
+      "name": "template_common_G",
+      "note": "The common primer for the G reaction. It sits about 250 bases from the variant, well clear of it, so it is the same oligo whichever allele is present — which is what makes comparing the two fair.",
+      "sequence": "TCCTTCCACTCGGATAAGATGC",
+      "tm": 61.0
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 22,
+      "name": "template_common_T",
+      "note": "The common primer for the T reaction. It sits about 246 bases from the variant, well clear of it, so it is the same oligo whichever allele is present — which is what makes comparing the two fair.",
+      "sequence": "CCCGGACGATATTGAACAATGG",
+      "tm": 60.8
+    }
+  ],
+  "partners": [
+    {
+      "at": 738,
+      "cross_dimer_dg": -2.36,
+      "for_alleles": ["G"],
+      "gc_percent": 50.0,
+      "length": 22,
+      "note": "The common primer for the G reaction. It sits about 250 bases from the variant, well clear of it, so it is the same oligo whichever allele is present — which is what makes comparing the two fair.",
+      "product_size": 250,
+      "sequence": "TCCTTCCACTCGGATAAGATGC",
+      "tm": 61.0,
+      "tm_difference": 3.2
+    },
+    {
+      "at": 279,
+      "cross_dimer_dg": -4.59,
+      "for_alleles": ["T"],
+      "gc_percent": 50.0,
+      "length": 22,
+      "note": "The common primer for the T reaction. It sits about 246 bases from the variant, well clear of it, so it is the same oligo whichever allele is present — which is what makes comparing the two fair.",
+      "product_size": 246,
+      "sequence": "CCCGGACGATATTGAACAATGG",
+      "tm": 60.8,
+      "tm_difference": 0.7
+    }
+  ],
+  "primers": [
+    {
+      "allele": "G",
+      "at": 489,
+      "gc_percent": 58.8,
+      "length": 17,
+      "name": "G-specific",
+      "note": "Ends on the variant. Against the other allele that 3' base makes a G*A pair, which the polymerase extends about a hundred times more slowly — that difference is the read-out.",
+      "sequence": "TGGGACAGCCAAGTCTG",
+      "strand": "plus",
+      "tm": 57.8
+    },
+    {
+      "allele": "T",
+      "at": 505,
+      "gc_percent": 55.0,
+      "length": 20,
+      "name": "T-specific",
+      "note": "Ends on the variant. Against the other allele that 3' base makes a A*G pair, which the polymerase extends about a hundred times more slowly — that difference is the read-out.",
+      "sequence": "GGGGAGTACGTGCAAGTCAA",
+      "strand": "minus",
+      "tm": 61.5
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 200.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 1.5,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "taq-standard",
+    "polymerase_name": "Standard Taq"
+  },
+  "refused": {},
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 53.4,
+    "length": 2512,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2512,
+    "soft_masked": false
+  },
+  "variant": {
+    "alleles": ["G", "T"],
+    "at": 505,
+    "kind": "transversion",
+    "note": "G/T is a transversion, and this layout puts the two allele-specific primers on opposite strands — which is what lets both of them have a blocking terminal mismatch at once. Exactly one allele can block on any single strand, and which one it is flips with the strand, so facing them in opposite directions gets both."
+  },
+  "why_nothing": ""
+}

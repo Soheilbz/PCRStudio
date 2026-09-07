@@ -1,0 +1,994 @@
+{
+  "baselines": {
+    "agdia-lmx54700": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "loop_uM": 0.4,
+      "master_mix_uL": 12.5,
+      "primer_mix_uL": 2.5
+    },
+    "jena-pcr387": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr393": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr395": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr398": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr540": {
+      "buffer_x_final": 1.0,
+      "enzyme_mix_x_final": 1.0,
+      "fluorescent_dye_x": 1.0,
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0
+    },
+    "jena-pcr541": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "master_mix_x_final": 1.0
+    },
+    "meridian-mdx135": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 60.0,
+      "loop_uM": 0.8,
+      "magnesium_mM": 4.0,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 20.0
+    },
+    "nippon-dr0401": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-dr0701": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-fluorescence": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-turbidity": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-turbidity-visible": {
+      "reaction_volume_uL": 25.0
+    },
+    "nzy-md0696": {
+      "hold_temperature_max_c": 70.0,
+      "hold_temperature_min_c": 65.0
+    },
+    "nzy-md0697": {
+      "hold_temperature_max_c": 70.0,
+      "hold_temperature_min_c": 65.0
+    },
+    "thermo-a5180x": {
+      "hold_time_min": 30.0
+    },
+    "vazyme-rp711": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "fluorescent_dye_uL_per_25uL": 0.5,
+      "loop_uM": 0.8
+    }
+  },
+  "conditional_rules": {
+    "agdia-lmx54700": [
+      {
+        "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+        "id": "agdia-lmx54700-rna-external-rt",
+        "set": {
+          "external_rt_stock_u_per_uL": 200.0,
+          "external_rt_uL": 0.25,
+          "external_rt_units": 50.0
+        },
+        "when": {
+          "from_rna": true
+        }
+      },
+      {
+        "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+        "id": "agdia-lmx54700-amplifire-run",
+        "set": {
+          "hold_temperature_c": 65.0,
+          "hold_time_min": 20.0
+        },
+        "when": {
+          "instrument_profile": "agdia-amplifire"
+        }
+      }
+    ],
+    "eiken-lmp204": [
+      {
+        "authority": "Eiken LMP221 insert",
+        "id": "eiken-lmp221-reagent",
+        "set": {
+          "eiken_lmp221_uL_per_reaction": 1.0
+        },
+        "when": {
+          "chemistry": "eiken-fd-lmp221"
+        }
+      }
+    ],
+    "eiken-lmp207": [
+      {
+        "authority": "Eiken LMP221 insert",
+        "id": "eiken-lmp221-reagent",
+        "set": {
+          "eiken_lmp221_uL_per_reaction": 1.0
+        },
+        "when": {
+          "chemistry": "eiken-fd-lmp221"
+        }
+      }
+    ],
+    "eiken-lmp244": [
+      {
+        "authority": "Eiken LMP221 insert",
+        "id": "eiken-lmp221-reagent",
+        "set": {
+          "eiken_lmp221_uL_per_reaction": 1.0
+        },
+        "when": {
+          "chemistry": "eiken-fd-lmp221"
+        }
+      }
+    ],
+    "neb-e1700": [
+      {
+        "authority": "NEB E1700 Tte UvrD FAQ starting example",
+        "id": "neb-e1700-tte-uvrd",
+        "set": {
+          "tte_uvrd_ng_per_25uL": 10.0
+        },
+        "when": {
+          "specificity_additive": "tte-uvrd-reviewed"
+        }
+      }
+    ],
+    "neb-m1712": [
+      {
+        "authority": "NEB M1712 readout guidance",
+        "id": "m1712-calcein",
+        "set": {
+          "calcein_uM": 25.0,
+          "mncl2_mM": 0.5
+        },
+        "when": {
+          "chemistry": "calcein"
+        }
+      },
+      {
+        "authority": "NEB M1712 readout guidance",
+        "id": "m1712-ebt",
+        "set": {
+          "eriochrome_black_t_uM": 60.0
+        },
+        "when": {
+          "chemistry": "eriochrome-black-t"
+        }
+      }
+    ],
+    "neb-m1800": [
+      {
+        "authority": "NEB colorimetric LAMP guanidine guidance",
+        "id": "neb-m1800-guanidine",
+        "set": {
+          "guanidine_added_mM": 40.0
+        },
+        "when": {
+          "acceleration_additive": "guanidine-hcl-40mm"
+        }
+      }
+    ],
+    "neb-m1804": [
+      {
+        "authority": "NEB colorimetric LAMP guanidine guidance",
+        "id": "neb-m1804-guanidine",
+        "set": {
+          "guanidine_added_mM": 40.0
+        },
+        "when": {
+          "acceleration_additive": "guanidine-hcl-40mm"
+        }
+      }
+    ],
+    "neb-m9204": [
+      {
+        "authority": "NEB M9204 RT-LAMP protocol",
+        "id": "m9204-rna-rt",
+        "set": {
+          "rt_units": 7.5
+        },
+        "when": {
+          "from_rna": true
+        }
+      },
+      {
+        "authority": "NEB M9204 optional carry-over branch",
+        "id": "m9204-dutp-udg",
+        "set": {
+          "dutp_mM": 0.7,
+          "thermolabile_udg_u_per_ml": 20.0
+        },
+        "when": {
+          "carryover_strategy": "reviewed-dutp-udg"
+        }
+      }
+    ],
+    "neb-m9205": [
+      {
+        "authority": "NEB M9205 RT-LAMP protocol",
+        "id": "m9205-rna-rt",
+        "set": {
+          "rt_units": 7.5
+        },
+        "when": {
+          "from_rna": true
+        }
+      },
+      {
+        "authority": "NEB M9205 optional carry-over branch",
+        "id": "m9205-dutp-udg",
+        "set": {
+          "dutp_mM": 0.7,
+          "thermolabile_udg_u_per_ml": 20.0
+        },
+        "when": {
+          "carryover_strategy": "reviewed-dutp-udg"
+        }
+      }
+    ],
+    "optigene-dr001-lnl": [
+      {
+        "authority": "OptiGene Lyse & LAMP guidance",
+        "id": "optigene-dr001-lnl-koh",
+        "set": {
+          "koh_mM": 60.0
+        },
+        "when": {
+          "preparation": "koh-lyse-and-lamp"
+        }
+      }
+    ],
+    "optigene-iso001-lnl": [
+      {
+        "authority": "OptiGene Lyse & LAMP guidance",
+        "id": "optigene-iso001-lnl-koh",
+        "set": {
+          "koh_mM": 60.0
+        },
+        "when": {
+          "preparation": "koh-lyse-and-lamp"
+        }
+      }
+    ],
+    "optigene-iso004-lnl": [
+      {
+        "authority": "OptiGene Lyse & LAMP guidance",
+        "id": "optigene-iso004-lnl-koh",
+        "set": {
+          "koh_mM": 60.0
+        },
+        "when": {
+          "preparation": "koh-lyse-and-lamp"
+        }
+      }
+    ],
+    "takara-rr385": [
+      {
+        "authority": "Takara RR385 manual",
+        "id": "takara-rr385-preincubation",
+        "set": {
+          "preincubation_temperature_c": 25.0,
+          "preincubation_time_min": 10.0
+        },
+        "when": {
+          "preincubation_strategy": "takara-ung-25c-10min"
+        }
+      }
+    ],
+    "thermo-a5180x": [
+      {
+        "authority": "Thermo SuperScript IV RT-LAMP Quick Reference",
+        "id": "thermo-a5180x-syto9",
+        "set": {
+          "syto9_uM": 5.0
+        },
+        "when": {
+          "chemistry": "syto9"
+        }
+      },
+      {
+        "authority": "Thermo SuperScript IV RT-LAMP calcein guidance",
+        "id": "thermo-a5180x-calcein",
+        "set": {
+          "calcein_uM": 80.0,
+          "mncl2_mM": 0.25
+        },
+        "when": {
+          "chemistry": "calcein"
+        }
+      }
+    ],
+    "vazyme-rp711": [
+      {
+        "authority": "Vazyme RP711 V25.1/current product guidance",
+        "id": "vazyme-rp711-slan96p-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.05,
+          "fluorescent_dye_x": 0.1
+        },
+        "when": {
+          "instrument_profile": "vazyme-slan96p"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-quantstudio3-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-quantstudio3"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-quantstudio5-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-quantstudio5"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-steponeplus-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-steponeplus"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-lightcycler96-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-lightcycler96"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-cfx96-touch-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-cfx96-touch"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-quantgene9600-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-quantgene9600"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 instrument-specific dye guidance",
+        "id": "vazyme-rp711-vazyme-gentier96r-dye",
+        "set": {
+          "fluorescent_dye_uL_per_25uL": 0.5,
+          "fluorescent_dye_x": 1.0
+        },
+        "when": {
+          "instrument_profile": "vazyme-gentier96r"
+        }
+      },
+      {
+        "authority": "Vazyme RP711 other-instrument dye guidance",
+        "id": "vazyme-rp711-other-qpcr-dye-range",
+        "ranges": {
+          "fluorescent_dye_uL_per_25uL": [
+            0.05,
+            0.5
+          ],
+          "fluorescent_dye_x": [
+            0.1,
+            1.0
+          ]
+        },
+        "unset": [
+          "fluorescent_dye_x",
+          "fluorescent_dye_uL_per_25uL"
+        ],
+        "when": {
+          "instrument_profile": "other-qpcr"
+        }
+      }
+    ],
+    "yeasen-16730": [
+      {
+        "authority": "Yeasen 16730 manual reviewed lyo setup",
+        "id": "yeasen-16730-lyophilization-stabilizer",
+        "set": {
+          "lyophilization_stabilizer_uL_per_25uL": 6.0
+        },
+        "when": {
+          "formulation": "lyophilized"
+        }
+      }
+    ]
+  },
+  "dependency_axes": [
+    "protocol",
+    "substrate",
+    "readout",
+    "exact-readout-chemistry",
+    "instrument",
+    "formulation",
+    "reconstitution",
+    "carry-over",
+    "sample-matrix",
+    "sample-preparation",
+    "sample-input-fraction",
+    "sample-buffer",
+    "sample-pH",
+    "transport-medium",
+    "bile-salt",
+    "Cary-Blair",
+    "guanidine",
+    "specificity-additive",
+    "primer-kinetics-profile",
+    "pre-incubation",
+    "bench-optimization"
+  ],
+  "effective_baselines": {
+    "agdia-lmx54700": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 20.0,
+      "loop_uM": 0.4,
+      "master_mix_uL": 12.5,
+      "master_mix_x_final": 1.0,
+      "primer_mix_uL": 2.5,
+      "reaction_volume_uL": 25.0
+    },
+    "eiken-lmp204": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "loop_uM": 0.8,
+      "reaction_volume_uL": 25.0
+    },
+    "eiken-lmp207": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "loop_uM": 0.8,
+      "reaction_volume_uL": 25.0
+    },
+    "eiken-lmp244": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 63.0,
+      "hold_time_min": 60.0,
+      "loop_uM": 0.8,
+      "reaction_volume_uL": 25.0
+    },
+    "eiken-lmp247": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "loop_uM": 0.8,
+      "reaction_volume_uL": 25.0
+    },
+    "hyasen-hyb315": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "lyophilized_beads_per_reaction": 2.0,
+      "primer_mix_10x_uL": 5.0,
+      "reaction_volume_uL": 50.0
+    },
+    "hyasen-hyb413": {
+      "dye_25x_uL": 2.0,
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "lamp_buffer_uL": 12.5,
+      "loop_uM": 0.4,
+      "primer_mix_10x_uL": 5.0,
+      "reaction_volume_uL": 50.0,
+      "rt_enzyme_mix_uL": 2.55
+    },
+    "hyasen-hyb414": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "lyophilized_beads_per_reaction": 2.0,
+      "primer_mix_10x_uL": 5.0,
+      "reaction_volume_uL": 50.0
+    },
+    "jena-pcr387": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr393": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr395": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr398": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0,
+      "master_mix_x_final": 1.0
+    },
+    "jena-pcr540": {
+      "buffer_x_final": 1.0,
+      "enzyme_mix_x_final": 1.0,
+      "fluorescent_dye_x": 1.0,
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "hold_time_min": 30.0
+    },
+    "jena-pcr541": {
+      "hold_temperature_max_c": 65.0,
+      "hold_temperature_min_c": 60.0,
+      "master_mix_x_final": 1.0
+    },
+    "meridian-mdx126": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 60.0,
+      "loop_uM": 0.8,
+      "magnesium_mM": 8.0,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 25.0
+    },
+    "meridian-mdx135": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 60.0,
+      "loop_uM": 0.8,
+      "magnesium_mM": 4.0,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 20.0
+    },
+    "neb-e1700": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-e1708": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-l4401": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-m1708": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-m1712": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 20.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-m1800": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-m1804": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "neb-m9204": {
+      "bst_xt_u_per_mL": 320.0,
+      "dntp_each_mM": 1.4,
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 20.0,
+      "loop_uM": 0.4,
+      "magnesium_mM": 6.0,
+      "mgso4_from_1x_buffer_mM": 2.0,
+      "mgso4_supplement_mM": 4.0,
+      "polymerase_units": 8.0,
+      "reaction_volume_uL": 25.0,
+      "rt_units": 7.5
+    },
+    "neb-m9205": {
+      "bst_xt_u_per_mL": 320.0,
+      "dntp_each_mM": 1.4,
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 20.0,
+      "loop_uM": 0.4,
+      "magnesium_mM": 6.0,
+      "mgso4_from_1x_buffer_mM": 2.0,
+      "mgso4_supplement_mM": 4.0,
+      "polymerase_units": 8.0,
+      "reaction_volume_uL": 25.0,
+      "rt_units": 7.5
+    },
+    "nippon-dr0401": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-dr0701": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-fluorescence": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-turbidity": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-heatact-turbidity-visible": {
+      "reaction_volume_uL": 25.0
+    },
+    "nippon-ne6041": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.8,
+      "reaction_volume_uL": 25.0
+    },
+    "nzy-md0696": {
+      "hold_temperature_max_c": 70.0,
+      "hold_temperature_min_c": 65.0,
+      "magnesium_mM": 8.0,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 25.0,
+      "speedy_lamp_dye_x": 1.0
+    },
+    "nzy-md0697": {
+      "hold_temperature_max_c": 70.0,
+      "hold_temperature_min_c": 65.0,
+      "magnesium_mM": 8.0,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 25.0,
+      "speedy_lamp_dye_x": 1.0
+    },
+    "optigene-dr001": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-dr001-lnl": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-dr004": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-dr004-rt": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001-lnl": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001-lyo": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001-rt": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001-rt-lyo": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso001tin": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004-lnl": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004-lyo": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004-rt": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004-rt-lyo": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "optigene-iso004-rt-vis": {
+      "hold_temperature_c": 65.0,
+      "reaction_volume_uL": 25.0
+    },
+    "takara-rr385": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 63.0,
+      "hold_time_min": 20.0,
+      "loop_uM": 0.8,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 25.0,
+      "tb_green_x_final": 1.0
+    },
+    "thermo-a5180x": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "hold_temperature_c": 65.0,
+      "hold_time_min": 30.0,
+      "loop_uM": 0.4,
+      "reaction_volume_uL": 25.0
+    },
+    "thermo-a56656": {
+      "enzyme_concentration_u_per_uL": 6.0,
+      "hold_temperature_c": 65.0,
+      "recommended_calcein_uM": 80.0,
+      "recommended_mncl2_mM": 0.25
+    },
+    "vazyme-rp711": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 1.6,
+      "fluorescent_dye_stock_x": 50.0,
+      "fluorescent_dye_uL_per_25uL": 0.5,
+      "fluorescent_dye_x": 1.0,
+      "loop_uM": 0.8,
+      "master_mix_x_final": 1.0,
+      "reaction_volume_uL": 25.0
+    },
+    "vazyme-rp712": {
+      "hold_time_min": 30.0
+    },
+    "yeasen-16729": {
+      "buffer_x_final": 1.0,
+      "fluorescent_dye_x": 1.0,
+      "reaction_volume_uL": 25.0
+    },
+    "yeasen-16730": {
+      "buffer_x_final": 1.0,
+      "fluorescent_dye_x": 1.0,
+      "reaction_volume_uL": 25.0
+    }
+  },
+  "generation_policy": "Generated from tools/src/pcr_tools/lamp_numeric_recipes.py; do not hand-edit.",
+  "instrument_profiles": [
+    "not-specified",
+    "vazyme-slan96p",
+    "vazyme-quantstudio3",
+    "vazyme-quantstudio5",
+    "vazyme-steponeplus",
+    "vazyme-lightcycler96",
+    "vazyme-cfx96-touch",
+    "vazyme-quantgene9600",
+    "vazyme-gentier96r",
+    "agdia-amplifire",
+    "other-qpcr",
+    "other-validated"
+  ],
+  "optimization_envelopes": {
+    "hyasen-hyb315": {
+      "hold_temperature_c": [
+        62.0,
+        68.0
+      ]
+    },
+    "hyasen-hyb413": {
+      "hold_temperature_c": [
+        62.0,
+        68.0
+      ]
+    },
+    "hyasen-hyb414": {
+      "hold_temperature_c": [
+        62.0,
+        68.0
+      ]
+    },
+    "neb-m9204": {
+      "fluorescent_dye_x": [
+        0.1,
+        1.0
+      ],
+      "hold_temperature_c": [
+        50.0,
+        70.0
+      ],
+      "magnesium_mM": [
+        6.0,
+        8.0
+      ],
+      "polymerase_units": [
+        8.0,
+        15.0
+      ]
+    },
+    "neb-m9205": {
+      "fluorescent_dye_x": [
+        0.1,
+        1.0
+      ],
+      "hold_temperature_c": [
+        50.0,
+        70.0
+      ],
+      "magnesium_mM": [
+        6.0,
+        8.0
+      ],
+      "polymerase_units": [
+        8.0,
+        15.0
+      ]
+    },
+    "thermo-a56656": {
+      "hold_temperature_c": [
+        35.0,
+        75.0
+      ],
+      "polymerase_units": [
+        1.0,
+        6.0
+      ]
+    },
+    "vazyme-rp711": {
+      "fluorescent_dye_x": [
+        0.1,
+        1.0
+      ],
+      "hold_temperature_c": [
+        60.0,
+        65.0
+      ],
+      "hold_time_min": [
+        30.0,
+        60.0
+      ]
+    }
+  },
+  "primer_kinetics_profiles": {
+    "optigene-high": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 2.0,
+      "loop_uM": 1.0
+    },
+    "optigene-standard": {
+      "f3_b3_uM": 0.2,
+      "fip_bip_uM": 0.8,
+      "loop_uM": 0.4
+    }
+  },
+  "sample_input_limits": {
+    "meridian-mdx124": {
+      "blood-plasma-serum": 20.0
+    },
+    "meridian-mdx125": {
+      "blood-plasma-serum": 10.0
+    },
+    "meridian-mdx126": {
+      "blood-plasma-serum": 10.0
+    },
+    "meridian-mdx134": {
+      "saliva-sputum": 60.0
+    },
+    "meridian-mdx135": {
+      "saliva-sputum": 60.0
+    },
+    "meridian-mdx144": {
+      "stool": 20.0
+    },
+    "meridian-mdx145": {
+      "stool": 5.0
+    },
+    "meridian-mdx154": {
+      "urine": 20.0
+    },
+    "meridian-mdx155": {
+      "urine": 20.0
+    }
+  },
+  "schema_version": "1.2.0",
+  "source": "tools/src/pcr_tools/lamp_numeric_recipes.py",
+  "source_sha256": "afa4f50b5a94e4a373daecaf1c791e95515e142a62e48fbd754425357249e1b0",
+  "unresolved_numeric_dependencies": {
+    "optigene-iso004": [
+      {
+        "id": "optigene-turbidity-extra-mg-dntp",
+        "note": "Vendor guidance indicates extra MgSO4/dNTP optimization for some non-fluorescent workflows but does not publish one transferable universal amount.",
+        "when": "turbidity-or-gel"
+      }
+    ],
+    "vazyme-rp712": [
+      {
+        "id": "vazyme-rp712-exact-recipe",
+        "note": "The reviewed public product authority supports product/readout/carry-over identity and a 30-minute claim, but this release does not snapshot an exact transferable reagent-volume recipe; numeric bench recipe therefore remains unresolved/fail-closed.",
+        "when": "always"
+      }
+    ]
+  }
+}

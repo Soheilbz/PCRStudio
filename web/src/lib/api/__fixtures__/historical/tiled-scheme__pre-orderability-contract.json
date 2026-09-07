@@ -1,0 +1,323 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 1,
+      "gc_max": 65.0,
+      "gc_min": 30.0,
+      "length_max": 30,
+      "length_min": 20,
+      "length_opt": 24,
+      "max_end_gc": 3,
+      "max_poly_x": 5,
+      "product_max": 500,
+      "product_min": 300,
+      "tm_max": 64.0,
+      "tm_min": 59.0,
+      "tm_opt": 61.0,
+      "tm_pair_max_difference": 2.0
+    },
+    "id": "tiled-scheme",
+    "name": "Tiled Amplicon Scheme",
+    "overruled": [],
+    "purposes": ["general", "sequencing"]
+  },
+  "constraints": {
+    "gc_clamp": 1,
+    "gc_max": 65.0,
+    "gc_min": 30.0,
+    "length_max": 30,
+    "length_min": 20,
+    "length_opt": 24,
+    "max_end_gc": 3,
+    "max_poly_x": 5,
+    "min_three_prime_distance": 5,
+    "product_max": 500,
+    "product_min": 300,
+    "tm_max": 64.0,
+    "tm_min": 59.0,
+    "tm_opt": 61.0,
+    "tm_pair_max_difference": 2.0
+  },
+  "coverage": { "bases": 2285, "of": 2512, "percent": 91.0 },
+  "engine": "tiling-scheme",
+  "gaps": [
+    {
+      "bases": 175,
+      "from": 0,
+      "to": 175,
+      "why": "The walk had to slide 175 bases before a pair could be placed, so the overlap here is that much thinner."
+    }
+  ],
+  "how_it_was_laid_out": [
+    "8 amplicon(s) across 2,512 bases, in 2 pools, overlapping by 75.",
+    "1 place(s) where the walk could not place an amplicon cleanly. Each is listed with what it covers."
+  ],
+  "interactions": [
+    {
+      "oligos": 8,
+      "pool": 0,
+      "worst": [
+        { "a": "6F", "b": "4R", "badness": 70.5 },
+        { "a": "6F", "b": "0R", "badness": 41.8 },
+        { "a": "2F", "b": "6F", "badness": 21.2 },
+        { "a": "4F", "b": "2R", "badness": 18.1 },
+        { "a": "4F", "b": "0R", "badness": 8.9 }
+      ]
+    },
+    {
+      "oligos": 8,
+      "pool": 1,
+      "worst": [
+        { "a": "1F", "b": "5F", "badness": 271.0 },
+        { "a": "5F", "b": "1R", "badness": 44.8 },
+        { "a": "3R", "b": "7R", "badness": 17.4 },
+        { "a": "1F", "b": "3R", "badness": 11.6 },
+        { "a": "1F", "b": "1R", "badness": 10.8 }
+      ]
+    }
+  ],
+  "note": "Neighbouring amplicons overlap, so they are in different pools: in one tube their primers would amplify each other's short products in preference to the real ones. Run each pool as its own reaction.",
+  "order_sheet": [
+    {
+      "gc_percent": 55.0,
+      "length": 20,
+      "name": "template_0F",
+      "pool": 0,
+      "sequence": "AGTCAGATCCTAGCGTCGAG",
+      "tm": 62.2
+    },
+    {
+      "gc_percent": 39.1,
+      "length": 23,
+      "name": "template_0R",
+      "pool": 0,
+      "sequence": "AGTTGGCAAAACATCTTGTTGAG",
+      "tm": 61.7
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 22,
+      "name": "template_1F",
+      "pool": 1,
+      "sequence": "CTTCTGTCCCTTCCCAGAAAAC",
+      "tm": 62.4
+    },
+    {
+      "gc_percent": 41.7,
+      "length": 24,
+      "name": "template_1R",
+      "pool": 1,
+      "sequence": "GTTTCTGTCATCCAAATACTCCAC",
+      "tm": 61.1
+    },
+    {
+      "gc_percent": 47.6,
+      "length": 21,
+      "name": "template_2F",
+      "pool": 0,
+      "sequence": "ATCTACAAGCAGTCACAGCAC",
+      "tm": 61.9
+    },
+    {
+      "gc_percent": 45.8,
+      "length": 24,
+      "name": "template_2R",
+      "pool": 0,
+      "sequence": "CAGTAGATTACCACTGGAGTCTTC",
+      "tm": 61.4
+    },
+    {
+      "gc_percent": 40.0,
+      "length": 25,
+      "name": "template_3F",
+      "pool": 1,
+      "sequence": "CATCCACTACAACTACATGTGTAAC",
+      "tm": 60.8
+    },
+    {
+      "gc_percent": 41.7,
+      "length": 24,
+      "name": "template_3R",
+      "pool": 1,
+      "sequence": "CTGAAGGGTGAAATATTCTCCATC",
+      "tm": 60.4
+    },
+    {
+      "gc_percent": 45.5,
+      "length": 22,
+      "name": "template_4F",
+      "pool": 0,
+      "sequence": "GAAGAGAATCTCCGCAAGAAAG",
+      "tm": 60.6
+    },
+    {
+      "gc_percent": 37.5,
+      "length": 24,
+      "name": "template_4R",
+      "pool": 0,
+      "sequence": "TTCAAAGACCCAAAACCCAAAATG",
+      "tm": 62.1
+    },
+    {
+      "gc_percent": 37.5,
+      "length": 24,
+      "name": "template_5F",
+      "pool": 1,
+      "sequence": "AAAACTCATGTTCAAGACAGAAGG",
+      "tm": 60.9
+    },
+    {
+      "gc_percent": 37.5,
+      "length": 24,
+      "name": "template_5R",
+      "pool": 1,
+      "sequence": "AATGTGGCTGATTGTAAACTAACC",
+      "tm": 61.0
+    },
+    {
+      "gc_percent": 41.7,
+      "length": 24,
+      "name": "template_6F",
+      "pool": 0,
+      "sequence": "GTTTTTACTGTGAGGGATGTTTGG",
+      "tm": 61.7
+    },
+    {
+      "gc_percent": 41.7,
+      "length": 24,
+      "name": "template_6R",
+      "pool": 0,
+      "sequence": "TGGTGGATCCAGATCATCATATAC",
+      "tm": 60.8
+    },
+    {
+      "gc_percent": 41.7,
+      "length": 24,
+      "name": "template_7F",
+      "pool": 1,
+      "sequence": "TGGTGAACCTTAGTACCTAAAAGG",
+      "tm": 61.2
+    },
+    {
+      "gc_percent": 37.5,
+      "length": 24,
+      "name": "template_7R",
+      "pool": 1,
+      "sequence": "GCTTGCAGAATGTAAAAGATGTTG",
+      "tm": 60.8
+    }
+  ],
+  "pools": { "0": [0, 2, 4, 6], "1": [1, 3, 5, 7] },
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 500.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 2.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "proofreading",
+    "polymerase_name": "Proofreading polymerase"
+  },
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 53.4,
+    "length": 2512,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2512,
+    "soft_masked": false
+  },
+  "tiles": [
+    {
+      "end": 574,
+      "index": 0,
+      "left": "AGTCAGATCCTAGCGTCGAG",
+      "pool": 0,
+      "right": "AGTTGGCAAAACATCTTGTTGAG",
+      "size": 419,
+      "start": 155
+    },
+    {
+      "end": 795,
+      "index": 1,
+      "left": "CTTCTGTCCCTTCCCAGAAAAC",
+      "pool": 1,
+      "right": "GTTTCTGTCATCCAAATACTCCAC",
+      "size": 370,
+      "start": 425
+    },
+    {
+      "end": 960,
+      "index": 2,
+      "left": "ATCTACAAGCAGTCACAGCAC",
+      "pool": 0,
+      "right": "CAGTAGATTACCACTGGAGTCTTC",
+      "size": 335,
+      "start": 625
+    },
+    {
+      "end": 1158,
+      "index": 3,
+      "left": "CATCCACTACAACTACATGTGTAAC",
+      "pool": 1,
+      "right": "CTGAAGGGTGAAATATTCTCCATC",
+      "size": 324,
+      "start": 834
+    },
+    {
+      "end": 1430,
+      "index": 4,
+      "left": "GAAGAGAATCTCCGCAAGAAAG",
+      "pool": 0,
+      "right": "TTCAAAGACCCAAAACCCAAAATG",
+      "size": 433,
+      "start": 997
+    },
+    {
+      "end": 1652,
+      "index": 5,
+      "left": "AAAACTCATGTTCAAGACAGAAGG",
+      "pool": 1,
+      "right": "AATGTGGCTGATTGTAAACTAACC",
+      "size": 368,
+      "start": 1284
+    },
+    {
+      "end": 2065,
+      "index": 6,
+      "left": "GTTTTTACTGTGAGGGATGTTTGG",
+      "pool": 0,
+      "right": "TGGTGGATCCAGATCATCATATAC",
+      "size": 513,
+      "start": 1552
+    },
+    {
+      "end": 2440,
+      "index": 7,
+      "left": "TGGTGAACCTTAGTACCTAAAAGG",
+      "pool": 1,
+      "right": "GCTTGCAGAATGTAAAAGATGTTG",
+      "size": 487,
+      "start": 1953
+    }
+  ],
+  "why_nothing": ""
+}

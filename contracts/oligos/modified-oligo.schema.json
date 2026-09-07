@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/contracts/modified-oligo.schema.json",
+  "title": "PCRStudio modified oligo annotations",
+  "description": "Manufacturing/readout annotations for oligos. These annotations never alter sequence ranking unless a separately versioned topology explicitly declares otherwise.",
+  "type": "array",
+  "maxItems": 24,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["role"],
+    "properties": {
+      "role": {"type": "string", "minLength": 1, "maxLength": 40, "pattern": "^[A-Za-z0-9._-]+$"},
+      "sequence": {"type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[ACGTacgt]+$"},
+      "fivePrimeLabel": {"type": "string", "maxLength": 80},
+      "threePrimeBlock": {"type": "string", "maxLength": 80},
+      "fluorophore": {"type": "string", "maxLength": 80},
+      "quencher": {"type": "string", "maxLength": 80},
+      "affinityLabel": {"type": "string", "maxLength": 80},
+      "lateralFlowLabel": {"type": "string", "maxLength": 80},
+      "cleavageSite": {"type": "integer", "minimum": 0, "maximum": 499},
+      "manufacturerNotes": {"type": "string", "maxLength": 500},
+      "internalModifications": {
+        "type": "array",
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "position"],
+          "properties": {
+            "kind": {"type": "string", "enum": ["thf", "dSpacer", "fluorophore", "quencher", "other-reviewed"]},
+            "position": {"type": "integer", "minimum": 0, "maximum": 499},
+            "identity": {"type": "string", "maxLength": 80}
+          }
+        }
+      }
+    }
+  }
+}

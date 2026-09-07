@@ -1,0 +1,288 @@
+{
+  "authority_id": "pcrstudio-discriminating-authority",
+  "catalogue_snapshot": "2026-09",
+  "groups": {
+    "gel_readouts": [
+      "agarose",
+      "polyacrylamide",
+      "capillary",
+      "other-validated"
+    ],
+    "geometries": [
+      "arms-two-tube",
+      "tetra",
+      "kasp"
+    ],
+    "kasp_call_states": [
+      "AA",
+      "AB",
+      "BB",
+      "no-template",
+      "no-call",
+      "weak",
+      "ambiguous-cluster",
+      "failed-assay"
+    ],
+    "polymerase_classes": [
+      "taq-no-proofreading",
+      "unknown-no-proofreading",
+      "proofreading-prohibited"
+    ],
+    "protocols": [
+      "not-selected",
+      "arms-experimental-taq",
+      "tetra-collins-day-2001-reference",
+      "lgc-kasp-tf-v5",
+      "lgc-standard"
+    ],
+    "variant_classes": [
+      "snv",
+      "mnv",
+      "insertion",
+      "deletion",
+      "complex-replacement",
+      "presence-absence"
+    ]
+  },
+  "kasp_chemistry": {
+    "claim_boundary": "Tail sequences are fixed chemistry/order-sheet identities; their presence does not imply Kraken-equivalent primer ranking or endpoint genotype validity.",
+    "reporter_tails": [
+      {
+        "dye": "FAM",
+        "sequence": "GAAGGTGACCAAGTTCATGCT"
+      },
+      {
+        "dye": "HEX",
+        "sequence": "GAAGGTCGGAGTCAACGGATT"
+      }
+    ],
+    "tail_source_identity": "Standard KASP FAM/HEX-compatible tails reported in peer-reviewed KASP assay literature; LGC public guidance confirms FAM/HEX endpoint chemistry",
+    "tail_source_reviewed_date": "2026-09-05",
+    "tail_source_url": "https://onlinelibrary.wiley.com/doi/full/10.1111/pbi.12281"
+  },
+  "mismatch_model": {
+    "claim_boundary": "Candidate ranking only; never a universal polymerase-independent pass/fail rule.",
+    "classes": {
+      "blocks": [
+        "A/G",
+        "G/A",
+        "C/C"
+      ],
+      "depends": [
+        "G/G"
+      ],
+      "slows": [
+        "A/A"
+      ],
+      "tolerated": "all other terminal mismatches in this coarse model"
+    },
+    "model_id": "pcrstudio-gen1-taq-terminal-mismatch-evidence-2026",
+    "polymerase_scope": "Taq-like non-proofreading only; sequence context and conditions can change effects",
+    "secondary_mismatch_positions_from_3prime": [
+      -3,
+      -4,
+      -2
+    ],
+    "source_identity": "PCRStudio generalized Taq-terminal mismatch evidence model; ARMSprimer3 is a separate upstream reference, not this implementation",
+    "source_reviewed_date": "2026-09-04",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/40421167/",
+    "status": "evidence-scoped-heuristic"
+  },
+  "policies": {
+    "kasp_equivalence": "PCRStudio produces a KASP-compatible experimental design and does not claim equivalence to proprietary Kraken design software.",
+    "proofreading": "Proofreading polymerases are prohibited for the current ARMS/Tetra/KASP allele-specific branch unless a separately validated chemistry contract is added.",
+    "variant_normalization": "All non-SNV variants must retain exact REF/ALT sequence, coordinate system and reference provenance; no single-base coercion."
+  },
+  "records": {
+    "arms-experimental-taq": {
+      "claim_boundary": "Generalized ARMS candidate policy only; not ARMSprimer3. No mismatch class guarantees allele discrimination and empirical paired-allele validation remains required.",
+      "execution_status": "executable-design-only",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-evidence"
+      },
+      "scope": [
+        "allele-specific 3-prime anchoring",
+        "optional deliberate near-terminal mismatch candidate generation"
+      ],
+      "selection": "ARMS-PCR experimental Taq-compatible design branch",
+      "sequence_decision_impact": "mismatch-ranking-only",
+      "source_identity": "PCRStudio generalized ARMS evidence branch informed by public ARMS literature; not ARMSprimer3 execution",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/40421167/"
+    },
+    "kasp-cluster-plot-guide": {
+      "axes": {
+        "x": "FAM",
+        "y": "HEX"
+      },
+      "execution_status": "diagnostic-only",
+      "kind": "evidence",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "LGC endpoint cluster-plot analysis guide",
+      "sequence_decision_impact": "none",
+      "source_identity": "Analysis of end-point genotyping data using cluster plots",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://biosearchassets.biosearchtech.com/assetsv6/Analysis-of-KASP-genotyping-data-using-cluster-plots.pdf"
+    },
+    "kasp-faq-controls": {
+      "execution_status": "diagnostic-only",
+      "kind": "evidence",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "minimum_ntc_per_assay_per_plate": 2,
+      "recommended_min_samples_for_cluster_analysis": 22,
+      "selection": "LGC KASP assay controls FAQ",
+      "sequence_decision_impact": "none",
+      "source_identity": "LGC KASP Genotyping Assays FAQs",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.biosearchtech.com/support/faqs/kasp-genotyping-assays"
+    },
+    "kasp-sequence-submission": {
+      "execution_status": "reference-only",
+      "flank_bp_each_side": 50,
+      "kind": "evidence",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "LGC KASP sequence submission scope",
+      "sequence_decision_impact": "variant-scope",
+      "source_identity": "LGC sequence submission guidance",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.biosearchtech.com/support/resources/starting-a-genotyping-project/sequence-submission",
+      "supported_variants": [
+        "snv",
+        "insertion",
+        "deletion",
+        "presence-absence"
+      ]
+    },
+    "lgc-kasp-tf-v5": {
+      "additional_cycle_block": {
+        "anneal_extend_c": 57,
+        "anneal_extend_s": 60,
+        "cycles": 3,
+        "denaturation_c": 94,
+        "denaturation_s": 20
+      },
+      "execution_status": "executable-protocol",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "readout": {
+        "channels": [
+          "FAM",
+          "HEX"
+        ],
+        "fam_axis": "x",
+        "hex_axis": "y",
+        "read_below_c": 40,
+        "rox": "passive-reference-when-present"
+      },
+      "selection": "LGC Biosearch Technologies KASP-TF V5.0 Master Mix",
+      "sequence_decision_impact": "none",
+      "source_identity": "KASP-TF V5.0 Master Mix manual",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://biosearchassets.biosearchtech.com/assetsv6/manual_kasp-tf-master-mix.pdf",
+      "supported_variants": [
+        "snv",
+        "insertion",
+        "deletion",
+        "presence-absence"
+      ]
+    },
+    "lgc-standard": {
+      "claim_boundary": "Retained only to reopen and reproduce legacy runs. New designs should use the current lgc-kasp-tf-v5 branch where appropriate.",
+      "execution_status": "historical",
+      "kind": "protocol",
+      "legacy_numeric": {
+        "384": {
+          "assay_mix_volume_uL": 0.07,
+          "dna_volume_uL": 2.43,
+          "master_mix_volume_uL": 2.5,
+          "reaction_volume_uL": 5.0
+        },
+        "96": {
+          "assay_mix_volume_uL": 0.14,
+          "dna_volume_uL": 4.86,
+          "master_mix_volume_uL": 5.0,
+          "reaction_volume_uL": 10.0
+        },
+        "amplification": {
+          "anneal_extend_c": 55,
+          "anneal_extend_seconds": 60,
+          "cycles": 26,
+          "denature_c": 94,
+          "denature_seconds": 20
+        },
+        "dna_final_ng_per_uL": 2.5,
+        "readout": {
+          "channels": [
+            "FAM",
+            "HEX"
+          ],
+          "endpoint_note": "On a block, cool below 40 °C before the plate read.",
+          "ntc_minimum": 2,
+          "qpcr_read_stage": "30 °C for 60 s when the instrument requires a read stage"
+        },
+        "touchdown": {
+          "activation_c": 94,
+          "activation_min": 15,
+          "anneal_extend_delta_c": 0.6,
+          "anneal_extend_final_c": 55,
+          "anneal_extend_start_c": 61,
+          "cycles": 10,
+          "denature_c": 94,
+          "denature_seconds": 20,
+          "hold_seconds": 60
+        }
+      },
+      "lifecycle": {
+        "status": "historical-compatibility"
+      },
+      "selection": "LGC KASP-TF V4.0 legacy compatibility branch",
+      "sequence_decision_impact": "none",
+      "source_identity": "PCRStudio legacy LGC KASP V4 compatibility authority",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.biosearchtech.com/support/resources/kasp-genotyping-reagents/how-does-kasp-work"
+    },
+    "tetra-collins-day-2001-reference": {
+      "additional_mismatch_position_from_3prime": -2,
+      "additional_mismatch_strength_rule": {
+        "medium_terminal": "medium_second",
+        "strong_terminal": "weak_second",
+        "weak_terminal": "strong_second"
+      },
+      "claim_boundary": "PCRStudio implements the public 2001 primer-design rules (-2 mismatch, mismatch-strength pairing, >=26-nt inner primers and three-product tetra geometry). The historical 10:1 inner:outer amount and electrophoresis conditions remain assay-specific bench evidence, not universal defaults.",
+      "execution_status": "executable-manual-rule-faithful",
+      "inner_primer_length_nt_min": 26,
+      "inner_primer_length_nt_typical": 28,
+      "inner_primer_orientation": "opposite",
+      "inner_primer_tail": "none",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-named-method-authority"
+      },
+      "method_fidelity": "F2-manual-rule-faithful",
+      "product_topology": "two allele-specific products plus one outer-control product with distinguishable sizes",
+      "reported_example": {
+        "gel": "10% non-denaturing polyacrylamide",
+        "inner_primer_pmol_each": 10,
+        "outer_primer_pmol_each": 1,
+        "reaction_volume_uL": 10
+      },
+      "selection": "Ye / Collins-Day 2001 tetra-primer ARMS-PCR public method",
+      "sequence_decision_impact": "topology-and-primer-geometry",
+      "source_identity": "Nucleic Acids Research 29(17):e88",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://academic.oup.com/nar/article/29/17/e88/1065101"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "source_policy": "Only public primary/vendor/official sources are executable authorities. Literature/tool precedents may guide diagnostics or characterization but do not become universal biological rules without a versioned protocol/evidence contract."
+}

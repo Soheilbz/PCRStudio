@@ -1,0 +1,672 @@
+{
+  "_projection": {
+    "canonical_sha256": "6f86ca309f42f2a9d832c2d7b96f1a324ff284ed7ff46a3689d156befaf109f7",
+    "canonical_source": "contracts/multiplex-capabilities.json",
+    "generated_by": "scripts/generate-multiplex-capabilities.py"
+  },
+  "explicitly_not_generic_multiplex": [
+    "long-range-pcr",
+    "nested-pcr",
+    "inverse-pcr",
+    "qpcr-sybr",
+    "arms-pcr",
+    "tetra-primer-arms",
+    "kasp",
+    "universal-primers",
+    "race",
+    "sequencing-primer",
+    "gibson-assembly",
+    "restriction-cloning",
+    "site-directed-mutagenesis"
+  ],
+  "modules": {
+    "colony-pcr": {
+      "engine": "flanking-pair",
+      "kind": "endpoint-multitarget",
+      "pooling": "same as standard-pcr",
+      "primary_selection": "same as standard-pcr",
+      "required_evidence": [
+        "shared host/preparation/SOP",
+        "final-panel interaction audit",
+        "cross-product specificity"
+      ],
+      "software_target_bound": 32,
+      "status": "executable-source-qualified",
+      "wet_lab_qualified_plex": null
+    },
+    "digital-pcr": {
+      "engine": "flanking-pair",
+      "kind": "digital-partitioned",
+      "pooling": "channel/amplitude classes are platform/run authority",
+      "primary_selection": "sequence design does not infer threshold/rain/amplitude classes",
+      "required_evidence": [
+        "platform/version",
+        "channel/dye map",
+        "partition format/volume",
+        "threshold/rain/cluster evidence",
+        "crosstalk matrix when applicable",
+        "dMIQE evidence"
+      ],
+      "software_target_bound": 12,
+      "status": "probe-multiplex-planning-and-run-evidence; dye branch remains simplex",
+      "wet_lab_qualified_plex": null
+    },
+    "lamp": {
+      "engine": "loop-set",
+      "kind": "isothermal-modified-primer-probe",
+      "pooling": "DARQ/QUASR/FLOS/assimilation-like topology must be explicitly named and evidence-bound",
+      "primary_selection": "independent LAMP set design; no generic linear-PCR surrogate may select multiplex sets",
+      "required_evidence": [
+        "modified-primer/probe topology",
+        "fluorophore/channel map",
+        "cross-set interaction review",
+        "empirical target-specific signal evidence"
+      ],
+      "software_target_bound": 4,
+      "status": "typed-specialized-planning; external/empirical evidence required",
+      "wet_lab_qualified_plex": null
+    },
+    "qpcr-probe": {
+      "engine": "pair-and-probe",
+      "kind": "probe-spectral",
+      "pooling": "single reaction only",
+      "primary_selection": "independent named-chemistry assay design plus panel optical hard gates; cross-assay interactions are evidence, not a fabricated universal cutoff",
+      "required_evidence": [
+        "unique reporter/channel mapping",
+        "versioned optical authority",
+        "peer F/R/probe sequences",
+        "MIQE evidence",
+        "measured efficiency/Cq/LoD during qualification"
+      ],
+      "software_target_bound": 12,
+      "status": "executable-with-complete-optical-context",
+      "wet_lab_qualified_plex": null
+    },
+    "rpa": {
+      "engine": "flanking-pair",
+      "kind": "isothermal-empirical-low-plex",
+      "pooling": "single-reaction plan with empirical matrix per target",
+      "primary_selection": "final RPA assay selection is empirical; PCRStudio prepares candidate matrices and multiplex evidence only",
+      "required_evidence": [
+        "8-10 forward x 8-10 reverse empirical screen per target",
+        "multiplex chemistry identity",
+        "observed amplification/sensitivity evidence"
+      ],
+      "software_target_bound": 5,
+      "status": "candidate-generation-plus-external-empirical-selection",
+      "wet_lab_qualified_plex": null
+    },
+    "species-specific-pcr": {
+      "engine": "flanking-pair",
+      "kind": "endpoint-multitarget-species-panel",
+      "pooling": "same as standard-pcr",
+      "primary_selection": "same as standard-pcr",
+      "required_evidence": [
+        "per-target inclusivity/exclusivity provenance",
+        "frozen taxonomy/database manifest",
+        "cross-product specificity across supplied biological panels"
+      ],
+      "software_target_bound": 32,
+      "status": "executable-source-qualified",
+      "wet_lab_qualified_plex": null
+    },
+    "standard-pcr": {
+      "engine": "flanking-pair",
+      "kind": "endpoint-multitarget",
+      "pooling": "explicit-tube-assignment in Scientific-Strict; PrimerPooler/upstream evidence for repartitioning",
+      "primary_selection": "pcrstudio-exact-lexicographic-when-bounded; development-local-search otherwise",
+      "required_evidence": [
+        "final-panel all-oligo interaction audit",
+        "cross-product specificity",
+        "readout-specific resolution evidence",
+        "shared chemistry identity"
+      ],
+      "software_target_bound": 32,
+      "status": "executable-source-qualified",
+      "wet_lab_qualified_plex": null
+    },
+    "tiled-scheme": {
+      "engine": "tiling-scheme",
+      "kind": "pooled-high-plex",
+      "pooling": "upstream pool assignment plus PrimerPooler validation/proposal evidence",
+      "primary_selection": "PrimalScheme3 and/or Olivar upstream backends; no score blending",
+      "required_evidence": [
+        "pool interaction audit",
+        "coverage/variant risk",
+        "native backend identity",
+        "depth/dropout evidence when available"
+      ],
+      "software_target_bound": null,
+      "status": "executable-if-upstream-installed",
+      "wet_lab_qualified_plex": null
+    }
+  },
+  "platform_authorities": {
+    "bio-rad-qx-continuum": {
+      "authority_url": "https://www.bio-rad.com/sites/default/files/2025-06/Bulletin-3679.pdf",
+      "claim_boundary": "vendor four-color detector capability only; no amplitude/hybrid claim is inferred; not PCRStudio wet-lab qualification",
+      "detection_channels": 4,
+      "family": "QX Continuum",
+      "instrument_model": "bio-rad-qx-continuum",
+      "modes": [
+        "channel"
+      ],
+      "multiplex_target_bound": 4,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx-one": {
+      "authority_url": "https://www.bio-rad.com/sites/default/files/2024-06/Bulletin_3600.pdf",
+      "claim_boundary": "vendor four-color plus amplitude multiplex capability up to eight unique targets; cluster thresholds remain measured-run evidence; not PCRStudio wet-lab qualification",
+      "detection_channels": 4,
+      "family": "QX ONE",
+      "instrument_model": "bio-rad-qx-one",
+      "modes": [
+        "channel",
+        "amplitude",
+        "probe-mix"
+      ],
+      "multiplex_target_bound": 8,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx200": {
+      "authority_url": "https://www.bio-rad.com/en-gr/life-science/digital-pcr/qx200-droplet-digital-pcr-system/1864001",
+      "claim_boundary": "vendor two-color detection capability; higher-order amplitude schemes are not enabled by this static authority; not PCRStudio wet-lab qualification",
+      "detection_channels": 2,
+      "family": "QX200",
+      "instrument_model": "bio-rad-qx200",
+      "modes": [
+        "channel"
+      ],
+      "multiplex_target_bound": 2,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx600": {
+      "authority_url": "https://info.bio-rad.com/qx600-ddpcr-system-benefits.html",
+      "claim_boundary": "vendor six-color/up-to-12-target capability; amplitude/cluster thresholds remain measured-run evidence; not PCRStudio wet-lab qualification",
+      "detection_channels": 6,
+      "family": "QX600",
+      "instrument_model": "bio-rad-qx600",
+      "modes": [
+        "channel",
+        "amplitude",
+        "probe-mix"
+      ],
+      "multiplex_target_bound": 12,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Bio-Rad"
+    },
+    "bio-rad-qx700": {
+      "authority_url": "https://www.bio-rad.com/sites/default/files/2025-11/3882.pdf",
+      "claim_boundary": "vendor probe multiplex capability up to seven targets; EvaGreen is separately limited to two and is not represented by this probe-panel authority; not PCRStudio wet-lab qualification",
+      "detection_channels": 7,
+      "family": "QX700",
+      "instrument_model": "bio-rad-qx700",
+      "modes": [
+        "channel"
+      ],
+      "multiplex_target_bound": 7,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Bio-Rad"
+    },
+    "qiacuity-eight": {
+      "authority_url": "https://www.qiagen.com/us/applications/digital-pcr/beginners/dpcr-multiplexing",
+      "claim_boundary": "12 targets uses amplitude multiplexing in six standard channels; >5plex requires High Multiplex Probe PCR Kit; not PCRStudio wet-lab qualification",
+      "detection_channels": 8,
+      "family": "QIAcuity",
+      "instrument_model": "qiacuity-eight",
+      "modes": [
+        "channel",
+        "amplitude",
+        "hybrid"
+      ],
+      "multiplex_target_bound": 12,
+      "reviewed_date": "2026-09-06",
+      "vendor": "QIAGEN"
+    },
+    "qiacuity-four": {
+      "authority_url": "https://www.qiagen.com/us/applications/digital-pcr/beginners/dpcr-multiplexing",
+      "claim_boundary": "12 targets uses amplitude multiplexing in six standard channels; >5plex requires High Multiplex Probe PCR Kit; not PCRStudio wet-lab qualification",
+      "detection_channels": 8,
+      "family": "QIAcuity",
+      "instrument_model": "qiacuity-four",
+      "modes": [
+        "channel",
+        "amplitude",
+        "hybrid"
+      ],
+      "multiplex_target_bound": 12,
+      "reviewed_date": "2026-09-06",
+      "vendor": "QIAGEN"
+    },
+    "qiacuity-one-2plex": {
+      "authority_url": "https://www.qiagen.com/us/applications/digital-pcr/beginners/dpcr-multiplexing",
+      "claim_boundary": "vendor software/instrument capability; not PCRStudio wet-lab qualification",
+      "detection_channels": 2,
+      "family": "QIAcuity",
+      "instrument_model": "qiacuity-one-2plex",
+      "modes": [
+        "channel",
+        "amplitude"
+      ],
+      "multiplex_target_bound": 4,
+      "reviewed_date": "2026-09-06",
+      "vendor": "QIAGEN"
+    },
+    "qiacuity-one-5plex": {
+      "authority_url": "https://www.qiagen.com/us/applications/digital-pcr/beginners/dpcr-multiplexing",
+      "claim_boundary": "12 targets uses amplitude multiplexing in six standard channels; >5plex requires High Multiplex Probe PCR Kit; not PCRStudio wet-lab qualification",
+      "detection_channels": 8,
+      "family": "QIAcuity",
+      "instrument_model": "qiacuity-one-5plex",
+      "modes": [
+        "channel",
+        "amplitude",
+        "hybrid"
+      ],
+      "multiplex_target_bound": 12,
+      "reviewed_date": "2026-09-06",
+      "vendor": "QIAGEN"
+    },
+    "roche-digital-lightcycler": {
+      "authority_url": "https://sequencing.roche.com/content/dam/diagnostics_microsites/sequencing/us/en/resources/pdfs/brochures/Digital-LightCycler-Application-Guide-MC-US-12593.pdf",
+      "claim_boundary": "vendor discriminative multiplexing up to six targets/channels; current software explicitly does not support radius/probe-mix or amplitude multiplex analysis; not PCRStudio wet-lab qualification",
+      "detection_channels": 6,
+      "family": "Digital LightCycler",
+      "instrument_model": "roche-digital-lightcycler",
+      "modes": [
+        "channel"
+      ],
+      "multiplex_target_bound": 6,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Roche"
+    },
+    "thermo-absolute-q": {
+      "authority_url": "https://www.thermofisher.com/io/en/home/life-science/pcr/digital-pcr/quantstudio-absolute-q-system.html",
+      "claim_boundary": "current five-optical-channel/5-target vendor capability; regional/software variants must be bound in run provenance; no amplitude claim inferred; not PCRStudio wet-lab qualification",
+      "detection_channels": 5,
+      "family": "QuantStudio Absolute Q",
+      "instrument_model": "thermo-absolute-q",
+      "modes": [
+        "channel"
+      ],
+      "multiplex_target_bound": 5,
+      "reviewed_date": "2026-09-06",
+      "vendor": "Thermo Fisher Scientific"
+    }
+  },
+  "policy": {
+    "empirical_signal_thresholds_are_evidence_not_sequence_predictions": true,
+    "no_generic_multiplex_semantics_across_modalities": true,
+    "panel_identity_is_content_addressed": true,
+    "scientific_strict_requires_exact_or_upstream_primary_selection": true,
+    "software_bound_is_not_wet_lab_validation": true
+  },
+  "qpcr_optical_profiles": {
+    "agilent-ariamx-six-module": {
+      "authority_id": "agilent-ariamx-six-module",
+      "authority_scope": "six installed optical-module identities; reporter compatibility beyond the named module/dye identity and user-defined dye calibration remain instrument calibration evidence",
+      "channels": [
+        {
+          "channel": "SYBR/FAM",
+          "reporters": [
+            "FAM"
+          ]
+        },
+        {
+          "channel": "ROX",
+          "reporters": [
+            "ROX"
+          ]
+        },
+        {
+          "channel": "HEX",
+          "reporters": [
+            "HEX"
+          ]
+        },
+        {
+          "channel": "CY3",
+          "reporters": [
+            "Cy3"
+          ]
+        },
+        {
+          "channel": "CY5",
+          "reporters": [
+            "Cy5"
+          ]
+        },
+        {
+          "channel": "Atto425",
+          "reporters": [
+            "Atto425"
+          ]
+        }
+      ],
+      "instrument": "Agilent AriaMx Real-Time PCR System, six optical modules installed",
+      "max_targets": 6,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://www.agilent.com/en/product/real-time-pcr-%28qpcr%29/real-time-pcr-%28qpcr%29-instruments/optical-cartridges-for-ariamx-real-time-pcr-system/ariamx-ariadx-optical-cartridges-232743",
+      "version": "AriaMx Setup/User Guide 2024 + current optical module specifications"
+    },
+    "bio-rad-cfx-opus96-bulletin-7279": {
+      "authority_id": "bio-rad-cfx-opus96-bulletin-7279",
+      "authority_scope": "five-channel reporter compatibility reference; actual instrument dye calibration/compensation and run thresholds remain empirical calibration/run evidence",
+      "channels": [
+        {
+          "channel": "1",
+          "reporters": [
+            "FAM",
+            "SYBR Green I"
+          ]
+        },
+        {
+          "channel": "2",
+          "reporters": [
+            "HEX",
+            "VIC",
+            "TET",
+            "CAL Fluor Gold 540",
+            "CAL Fluor Orange 560"
+          ]
+        },
+        {
+          "channel": "3",
+          "reporters": [
+            "Texas Red",
+            "ROX",
+            "CAL Fluor Red 610",
+            "TEX 615"
+          ]
+        },
+        {
+          "channel": "4",
+          "reporters": [
+            "Cy5",
+            "Quasar 670"
+          ]
+        },
+        {
+          "channel": "5",
+          "reporters": [
+            "Quasar 705",
+            "Cy5.5"
+          ]
+        }
+      ],
+      "instrument": "Bio-Rad CFX Opus 96 Real-Time PCR System",
+      "max_targets": 5,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://www.bio-rad.com/sites/default/files/webroot/web/pdf/lsr/literature/Bulletin_7279.pdf",
+      "version": "Bulletin 7279"
+    },
+    "bio-rad-cfx96-bulletin-5589b": {
+      "authority_id": "bio-rad-cfx96-bulletin-5589b",
+      "authority_scope": "five-channel reporter compatibility reference; actual instrument calibration and color compensation remain run/instrument evidence",
+      "channels": [
+        {
+          "channel": "1",
+          "reporters": [
+            "FAM",
+            "SYBR Green I"
+          ]
+        },
+        {
+          "channel": "2",
+          "reporters": [
+            "VIC",
+            "HEX",
+            "TET",
+            "CAL Gold 540"
+          ]
+        },
+        {
+          "channel": "3",
+          "reporters": [
+            "ROX",
+            "Texas Red",
+            "CAL Red 610"
+          ]
+        },
+        {
+          "channel": "4",
+          "reporters": [
+            "Cy5",
+            "Quasar 670"
+          ]
+        },
+        {
+          "channel": "5",
+          "reporters": [
+            "Quasar 705"
+          ]
+        }
+      ],
+      "instrument": "Bio-Rad CFX96 Real-Time PCR Detection System",
+      "max_targets": 5,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/Bulletin_5589B.pdf",
+      "version": "Bulletin 5589B / CFX96 factory-calibrated channel map"
+    },
+    "qiagen-rotor-gene-q-six-channel": {
+      "authority_id": "qiagen-rotor-gene-q-six-channel",
+      "authority_scope": "six optical detection channels with example compatible fluorophores; exact installed filters/custom channels and any assay-specific compensation remain instrument/run calibration evidence",
+      "channels": [
+        {
+          "channel": "Blue",
+          "reporters": [
+            "Marina Blue",
+            "Edans",
+            "Bothell Blue",
+            "Alexa Fluor 350",
+            "AMCA-X"
+          ]
+        },
+        {
+          "channel": "Green",
+          "reporters": [
+            "FAM",
+            "Fluorescein",
+            "Alexa Fluor 488"
+          ]
+        },
+        {
+          "channel": "Yellow",
+          "reporters": [
+            "JOE",
+            "VIC",
+            "HEX",
+            "TET",
+            "MAX",
+            "CAL Fluor Gold 540",
+            "Yakima Yellow"
+          ]
+        },
+        {
+          "channel": "Orange",
+          "reporters": [
+            "ROX",
+            "CAL Fluor Red 610",
+            "Cy3.5",
+            "Texas Red",
+            "Alexa Fluor 568"
+          ]
+        },
+        {
+          "channel": "Red",
+          "reporters": [
+            "Cy5",
+            "Quasar 670",
+            "LightCycler Red640",
+            "Alexa Fluor 633"
+          ]
+        },
+        {
+          "channel": "Crimson",
+          "reporters": [
+            "Quasar 705",
+            "LightCycler Red705",
+            "Alexa Fluor 680"
+          ]
+        }
+      ],
+      "instrument": "QIAGEN Rotor-Gene Q, six-channel optical configuration",
+      "max_targets": 6,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://www.qiagen.com/ma/products/instruments-and-automation/pcr-instruments/rotor-gene-q-ca",
+      "version": "current Rotor-Gene Q optical-channel table reviewed 2026-09-06"
+    },
+    "thermofisher-quantstudio5-96well-man0017162-b0": {
+      "authority_id": "thermofisher-quantstudio5-96well-man0017162-b0",
+      "authority_scope": "filter/channel-to-compatible-reporter map; run-specific spectral calibration/compensation remains empirical instrument evidence",
+      "channels": [
+        {
+          "channel": "x1-m1",
+          "reporters": [
+            "FAM",
+            "SYBR Green",
+            "SYTO9"
+          ]
+        },
+        {
+          "channel": "x2-m2",
+          "reporters": [
+            "VIC",
+            "JOE",
+            "HEX",
+            "TET"
+          ]
+        },
+        {
+          "channel": "x3-m3",
+          "reporters": [
+            "NED",
+            "TAMRA",
+            "ABY",
+            "Cy3"
+          ]
+        },
+        {
+          "channel": "x4-m4",
+          "reporters": [
+            "ROX",
+            "JUN",
+            "Texas Red"
+          ]
+        },
+        {
+          "channel": "x5-m5",
+          "reporters": [
+            "Mustang Purple",
+            "Cy5",
+            "LIZ"
+          ]
+        },
+        {
+          "channel": "x6-m6",
+          "reporters": [
+            "Cy5.5"
+          ]
+        }
+      ],
+      "instrument": "Applied Biosystems QuantStudio 5 Real-Time PCR Instrument, 96-well",
+      "max_targets": 6,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0017162_QS5HIDInstrument_UG.pdf",
+      "version": "MAN0017162 B.0"
+    },
+    "thermofisher-quantstudio7pro-man0018045-p": {
+      "authority_id": "thermofisher-quantstudio7pro-man0018045-p",
+      "authority_scope": "six-by-six filter/channel-to-compatible-reporter map; custom-dye calibration and run-specific spectral compensation remain empirical instrument calibration evidence",
+      "channels": [
+        {
+          "channel": "x1-m1",
+          "reporters": [
+            "FAM",
+            "SYBR Green",
+            "SYTO9"
+          ]
+        },
+        {
+          "channel": "x2-m2",
+          "reporters": [
+            "VIC",
+            "JOE",
+            "HEX",
+            "TET"
+          ]
+        },
+        {
+          "channel": "x3-m3",
+          "reporters": [
+            "NED",
+            "TAMRA",
+            "ABY",
+            "Cy3"
+          ]
+        },
+        {
+          "channel": "x4-m4",
+          "reporters": [
+            "ROX",
+            "JUN",
+            "Texas Red"
+          ]
+        },
+        {
+          "channel": "x5-m5",
+          "reporters": [
+            "Mustang Purple",
+            "Cy5",
+            "LIZ"
+          ]
+        },
+        {
+          "channel": "x6-m6",
+          "reporters": [
+            "Cy5.5"
+          ]
+        }
+      ],
+      "instrument": "Applied Biosystems QuantStudio 7 Pro Real-Time PCR System",
+      "max_targets": 6,
+      "schema": "pcrstudio.qpcr-optical-profile.v1",
+      "source_url": "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018045_QS_6Pro_7Pro_UG.pdf",
+      "version": "MAN0018045 P"
+    }
+  },
+  "registry_id": "pcrstudio-multiplex-capability-current",
+  "reviewed_date": "2026-09-06",
+  "schema_version": "1.0.0",
+  "standards": [
+    {
+      "id": "clsi-mm17-ed2",
+      "scope": "qualitative multiplex validation/verification",
+      "url": "https://clsi.org/shop/standards/mm17/"
+    },
+    {
+      "id": "iso-21474-2-2022",
+      "scope": "multiplex molecular testing validation/verification",
+      "url": "https://clsi.org/shop/standards/iso21474-2/"
+    },
+    {
+      "id": "iso-20395-2019",
+      "scope": "qPCR/dPCR analytical performance",
+      "url": "https://www.iso.org/standard/67893.html",
+      "watch": "ISO/CD 20395.2 revision in progress"
+    },
+    {
+      "id": "miqe-2-0-2025",
+      "scope": "qPCR validation/reporting",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40272429/"
+    },
+    {
+      "id": "dmiqe-2020",
+      "scope": "dPCR including multiplex/higher-order multiplex",
+      "url": "https://academic.oup.com/clinchem/article/66/8/1012/5880117"
+    }
+  ]
+}

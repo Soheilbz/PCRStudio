@@ -1,0 +1,285 @@
+{
+  "schema_version": "1.1.0",
+  "audit_date": "2026-09-04",
+  "engine": "flanking-pair",
+  "scope": "Generation-1 source/scientific-contract audit; runtime/native Linux qualification excluded",
+  "records": [
+    {
+      "id": "FLANK-ARCH-001",
+      "area": "cross-engine",
+      "decision_role": "architectural_invariant",
+      "status": "implemented",
+      "claim": "Primer design/screening and named bench-protocol authority are separate. A named protocol may carry product-specific cycling/chemistry and, for long-range, may tighten its sequence constraint envelope; proprietary buffer thermodynamics are not reconstructed.",
+      "sources": [
+        "https://primer3.org/manual.html"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py",
+        "tools/src/pcr_tools/presets.py",
+        "web/src/components/design/design-result.tsx",
+        "web/src/components/design/result-view.tsx"
+      ],
+      "boundary": "No sequence-only result establishes yield, efficiency, sensitivity or a universal annealing programme."
+    },
+    {
+      "id": "FLANK-STD-001",
+      "area": "standard-pcr",
+      "decision_role": "named_bench_protocol_registry",
+      "status": "implemented",
+      "claim": "R13 retains 16 named executable Standard-PCR chemistry branches under the canonical generated authority, including OneTaq variants, PCRBIO HS Taq Mix, QIAGEN AllTaq, Thermo Platinum II, TOYOBO KOD One and the dedicated NEB M0284 multiplex branch in addition to the earlier named set.",
+      "sources": [
+        "https://www.neb.com/en-gb/protocols/taq-dna-polymerase-with-standard-taq-buffer-m0273",
+        "https://www.neb.com/en/protocols/pcr-using-q5-hot-start-high-fidelity-dna-polymerase-m0493",
+        "https://www.neb.com/en-us/protocols/pcr-using-q5u-hot-start-high-fidelity-dna-polymerase-neb-m0515",
+        "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0015972_ThermoScientificDreamTaqHotStartDNAPolymerase.pdf",
+        "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0025053-PhusionPlusDNAPolymerase-UG.pdf",
+        "https://worldwide.promega.com/-/media/files/resources/protocols/product-information-sheets/g/gotaq-dna-polymerase-m300.pdf",
+        "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018859_Platinum_SuperFi_II_DNA_Pol_UG.pdf",
+        "contracts/chemistry/flanking-protocols.toml"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py::standard_pcr_protocol",
+        "crates/pcr-core/src/engines/flanking_pair.rs",
+        "web/src/components/design/engine-fields.tsx"
+      ],
+      "boundary": "dUTP/uracil, UDG, hot-start mechanism, product-end chemistry and difficult-template guidance stay product-specific and are not transferred across polymerases."
+    },
+    {
+      "id": "FLANK-STD-002",
+      "area": "standard-pcr",
+      "decision_role": "multiplex_tube_invariant",
+      "status": "implemented",
+      "claim": "Standard-PCR multiplex carries one shared tube-level named chemistry and injects the same worker-side protocol into every target.",
+      "sources": [
+        "internal physical-reaction invariant"
+      ],
+      "implementation": [
+        "web/src/components/design/multiplex-form.tsx",
+        "web/src/lib/api/transport.ts",
+        "web/src/lib/projects/actions.ts",
+        "crates/pcr-server/src/bench.rs",
+        "scripts/audit-source.py"
+      ],
+      "boundary": "Mixed per-target polymerases are not represented as one physical tube."
+    },
+    {
+      "id": "FLANK-LR-001",
+      "area": "long-range-pcr",
+      "decision_role": "multi_protocol_constraint_registry",
+      "status": "implemented",
+      "claim": "Seven current executable long-range branches are retained: NEB LongAmp M0323, Takara PrimeSTAR GXL R050A, QIAGEN UltraRun 206442/206444, NEB Q5-XT M2499, Promega GoTaq Long M4021, Thermo Fisher Platinum SuperFi II long-range and TOYOBO KOD Long; Thermo K018x remains historical-only.",
+      "sources": [
+        "https://www.neb.com/en-us/protocols/longamp-taq-pcr-kit-e5200",
+        "https://takara.co.kr/file/manual/pdf/R050A_e.v1906Da.pdf",
+        "https://www.qiagen.com/en-US/resources/download/KitHandbook/hb-2686-002-hb-ultrarun-longrangepcr-0224-ww",
+        "https://documents.thermofisher.com/TFS-Assets/LSG/manuals/MAN0012921_Long_PCR_Enzyme_k0182_UG.pdf",
+        "https://www.neb.com/en-us/protocols/pcr-using-q5-xt-hot-start-high-fidelity-2x-master-mix-m2499",
+        "https://www.promega.com/products/pcr/pcr-master-mixes/gotaq-long-pcr-master-mix/",
+        "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN0018859_Platinum_SuperFi_II_DNA_Pol_UG.pdf",
+        "contracts/chemistry/flanking-protocols.toml"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py::long_range_protocol",
+        "tools/src/pcr_tools/presets.py",
+        "crates/pcr-core/src/engines/flanking_pair.rs"
+      ],
+      "boundary": "GEN1 remains 5-20 kb; vendor reach above that is evidence only. Named protocols may narrow sequence constraints but do not replace the shared thermodynamic screening model."
+    },
+    {
+      "id": "FLANK-COL-001",
+      "area": "colony-pcr",
+      "decision_role": "preanalytical_provenance_gate",
+      "status": "implemented",
+      "claim": "R13 requires canonical host class, preparation and SOP identity. Five named source-backed Colony-PCR SOP/product branches are selectable alongside a provenance-required custom SOP; the NEB M0689 supplemental colony-PCR protocol is represented as a bacterial direct-transfer branch using OneTaq Hot Start Quick-Load.",
+      "sources": [
+        "https://www.neb.com/en-us/protocols/insert-screening-protocols-e1202",
+        "https://www.neb.com/en/protocols/2019/06/20/supplemental-protocol-2-using-colony-pcr-to-identify-positive-clones-neb-m0689",
+        "contracts/chemistry/flanking-protocols.toml"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py",
+        "tools/src/pcr_tools/validation_plan.py",
+        "crates/pcr-core/src/engines/flanking_pair.rs",
+        "web/src/components/design/workspace.tsx"
+      ],
+      "boundary": "PCRStudio does not invent a universal colony lysis temperature, duration, biomass amount or cycle programme."
+    },
+    {
+      "id": "FLANK-QPCR-001",
+      "area": "qpcr-sybr",
+      "decision_role": "named_qpcr_registry",
+      "status": "implemented",
+      "claim": "R15 retains 13 named dye-qPCR/one-step RT-qPCR chemistry branches, including Thermo PowerTrack, QIAGEN QuantiNova, Bio-Rad SsoAdvanced, three distinct Solis HOT FIREPol EvaGreen formulations, and the current source-limited Vazyme SupRealQ Ultra Hunter SYBR Q713 branch. qPCR instrument/ROX profile is canonical and source-conditioned; Q713 records its public 20 µL catalogue basis, SYBR Green I, dUTP/heat-labile UDG and included passive-reference semantics while exact unsnapshotted reagent stoichiometry remains unresolved.",
+      "sources": [
+        "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000068167.pdf",
+        "https://www.neb.com/-/media/nebus/files/manuals/manualm3003.pdf",
+        "https://www.neb.com/en-us/protocols/luna-universal-one-step-rt-qpcr-kit-protocol-e3005",
+        "https://www.thermofisher.com/TFS-Assets/LSG/manuals/MAN0013511_PowerUp_mastermix_UG.pdf",
+        "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-qpcr-master-mix-protocol/",
+        "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-onestep-rt-qpcr-system-protocol/",
+        "https://www.vazymeglobal.com/product-center/dye-based-qpcr/suprealq-ultra-hunter-sybr-qpcr-master-mix-u",
+        "contracts/chemistry/flanking-protocols.toml"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py::qpcr_protocol",
+        "crates/pcr-core/src/engines/flanking_pair.rs",
+        "web/src/components/design/engine-fields.tsx"
+      ],
+      "boundary": "Sequence design cannot establish Cq, amplification efficiency, melt identity, LOD/LLOQ or diagnostic performance."
+    },
+    {
+      "id": "FLANK-QPCR-002",
+      "area": "qpcr-sybr",
+      "decision_role": "rna_rt_validation_gate",
+      "status": "implemented",
+      "claim": "RNA-derived qPCR promotes no-RT, RNA-input/quality and RT protocol provenance to required validation evidence. E3005 and Promega A6020 are executable only for explicit RNA input; each preserves its own named RT/cycling authority.",
+      "sources": [
+        "https://academic.oup.com/clinchem/article/71/6/634/8119148",
+        "https://www.neb.com/en-us/protocols/luna-universal-one-step-rt-qpcr-kit-protocol-e3005",
+        "https://www.promega.com/resources/protocols/technical-manuals/101/gotaq-onestep-rt-qpcr-system-protocol/"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/validation_plan.py",
+        "tools/src/pcr_tools/pipeline.py::qpcr_protocol"
+      ],
+      "boundary": "A named one-step RT chemistry does not prove RNA specificity or absence of genomic DNA."
+    },
+    {
+      "id": "FLANK-DPCR-001",
+      "area": "digital-pcr",
+      "decision_role": "platform_partition_registry",
+      "status": "implemented",
+      "claim": "R13 retains five executable dye/EvaGreen dPCR chemistry branches and a canonical platform×consumable matrix. Incompatible platform/consumable pairs fail closed in browser, Rust and Python; probe-oriented Absolute Q and Roche Digital LightCycler platform identities are recognized for routing rather than mis-executed as dye-only chemistry.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/32746458/",
+        "https://www.bio-rad.com/sites/default/files/2023-11/10000162845.pdf",
+        "https://www.bio-rad.com/en-us/life-science/droplet-digital-pcr?ID=M9HE2R15",
+        "https://www.qiagen.com/en-us/resources/download/usermanual/hb-2717-011-um-qiacuity-0825-ww",
+        "https://www.qiagen.com/us/resources/download/KitHandbook/hb-3478-003-hb-qiacuity-onestep-advanced-eg-0325-ww",
+        "https://www.bio-rad.com/sites/default/files/2025-11/3882.pdf"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py::digital_protocol",
+        "crates/pcr-core/src/engines/flanking_pair.rs",
+        "web/src/components/design/engine-fields.tsx",
+        "contracts/chemistry/flanking-protocols.toml",
+        "tools/src/pcr_tools/registries/flanking_protocols.py",
+        "web/src/lib/flanking-contract.ts"
+      ],
+      "boundary": "Droplet/chamber identity, accepted partitions, partition volume, VPF and software version are run/platform provenance rather than primer-ranking properties."
+    },
+    {
+      "id": "FLANK-DPCR-002",
+      "area": "digital-pcr",
+      "decision_role": "measured_run_evidence_boundary",
+      "status": "implemented",
+      "claim": "Threshold, rain/cluster classification, occupancy, Poisson concentration, dilution/rescaling and uncertainty remain measured-run evidence; full-process repeatability/reproducibility is separately required.",
+      "sources": [
+        "https://academic.oup.com/clinchem/article/66/8/1012/5880117"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/validation_plan.py",
+        "knowledge/atlas/engines/flanking-pair/06-digital-pcr.md"
+      ],
+      "boundary": "Primer design does not synthesize partition counts, fluorescence thresholds, VPF or concentration."
+    },
+    {
+      "id": "FLANK-SPEC-001",
+      "area": "species-specific-pcr",
+      "decision_role": "fail_closed_panel_exclusivity",
+      "status": "implemented",
+      "claim": "Every executable species-specific request requires separate inclusivity/exclusion evidence and canonical per-record accession.version, role and topology. Linear/circular/fragment scanning, across-origin circular matching, canonical snapshot hashing, duplicate/version checks and finite-panel surveillance diff are implemented; finite-panel evidence is never promoted to whole-database or population completeness.",
+      "sources": [
+        "https://www.ncbi.nlm.nih.gov/guide/howto/design-pcr-primers/"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py",
+        "tools/src/pcr_tools/specificity.py",
+        "tools/src/pcr_tools/multiplex.py",
+        "crates/pcr-core/src/engines/flanking_pair.rs",
+        "tools/src/pcr_tools/species_panel.py"
+      ],
+      "boundary": "A finite panel establishes only finite-panel sequence evidence, not taxonomic completeness or population representativeness."
+    },
+    {
+      "id": "FLANK-SPEC-002",
+      "area": "species-specific-pcr",
+      "decision_role": "mismatch_topology_evidence",
+      "status": "implemented",
+      "claim": "Definite mismatches are reported with 3-prime distance and base identity, while optional population group/weight evidence is recorded without relaxing strict sequence gates or changing primer ranking.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/36116701/"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/specificity.py"
+      ],
+      "boundary": "Mismatch topology is not converted into a universal amplification probability or penalty law."
+    },
+    {
+      "id": "FLANK-RPA-001",
+      "area": "rpa",
+      "decision_role": "named_plain_primer_registry",
+      "status": "implemented",
+      "claim": "Four executable plain-ACGT RPA branches are retained: TwistAmp Basic, TwistAmp Liquid Basic, Thermo Fisher Lyo-ready RPA/RT-RPA and G-Biosciences RPA 786-2155. Exo/Nfo/Fpg/SIBA remain typed non-executable modified-oligo boundaries.",
+      "sources": [
+        "https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf",
+        "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN1000697-LyoReadyRPA-UG.pdf",
+        "https://cdn.gbiosciences.com/pdfs/protocol/786-2155_v2.pdf",
+        "contracts/chemistry/flanking-protocols.toml"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py::rpa_protocol",
+        "crates/pcr-core/src/engines/flanking_pair.rs"
+      ],
+      "boundary": "Modified probes/reporters/nuclease topologies cannot be represented safely as ordinary ACGT primer text."
+    },
+    {
+      "id": "FLANK-RPA-002",
+      "area": "rpa",
+      "decision_role": "protocol_amplicon_composition_gate",
+      "status": "implemented",
+      "claim": "The Thermo branch retains its protocol-specific amplicon-composition gate and source-backed reaction-volume envelope; R13 additionally emits a deterministic diversity-aware screening cohort for empirical RPA screening without changing primary in-silico ranking.",
+      "sources": [
+        "https://assets.thermofisher.com/TFS-Assets/LSG/manuals/MAN1000697-LyoReadyRPA-UG.pdf"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/pipeline.py",
+        "tools/src/pcr_tools/rpa_screening.py"
+      ],
+      "boundary": "The gate is protocol-specific and does not become a universal RPA GC rule."
+    },
+    {
+      "id": "FLANK-CLONE-001",
+      "area": "restriction-cloning",
+      "decision_role": "explicit_tail_and_directionality_contract",
+      "status": "implemented",
+      "claim": "R13 restriction cloning supports exact insert input or circular donor-plasmid extraction by 0-based start+length with origin wrapping, coding/fusion/frame validation, molar/insert-mass/enzyme-volume/glycerol calculators, and source-fact-driven double-digest planning against the pinned 26-enzyme supplier-performance snapshot.",
+      "sources": [
+        "https://www.neb.com/en-us/tools-and-resources/usage-guidelines/cleavage-close-to-the-end-of-dna-fragments"
+      ],
+      "implementation": [
+        "tools/src/pcr_tools/tails.py",
+        "tools/src/pcr_tools/pipeline.py",
+        "web/src/components/design/workspace.tsx",
+        "tools/src/pcr_tools/cloning_coding.py",
+        "tools/src/pcr_tools/restriction_calculators.py",
+        "tools/src/pcr_tools/restriction_performance.py"
+      ],
+      "boundary": "Facts outside the pinned exact-enzyme snapshot, methylation/star activity and Golden Gate/Type IIS multi-fragment assembly remain unresolved/fail-closed rather than inferred."
+    },
+    {
+      "id": "FLANK-QUAL-001",
+      "area": "release",
+      "decision_role": "qualification_boundary",
+      "status": "source_static_only",
+      "claim": "R13 source qualification executes generated-contract checks, static cross-layer audits and dependency-light Python/browser/Rust source-boundary regressions; native scientific-tool and Linux qualification remains a separate gate and is not inferred from source-only success.",
+      "sources": [
+        "user-declared audit scope"
+      ],
+      "implementation": [
+        "release/FLANKING-PAIR-QUALIFICATION-STATUS.md"
+      ],
+      "boundary": "Source-only PASS is not a claim of Linux/native Primer3, BLAST+, MFEprimer, MAFFT, ViennaRNA, PrimerPooler, Docker restore or wet-lab validation."
+    }
+  ]
+}

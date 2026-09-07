@@ -1,0 +1,134 @@
+{
+  "generation_policy": "Generated from crates/pcr-core/profiles.toml by scripts/generate-runtime-artifacts.py; do not hand-edit.",
+  "modules": {
+    "arms-pcr": {
+      "checks": "The allele-specific 3′ anchor is evaluated against the declared reference and alternate alleles, nearby masked variants and the selected terminal-mismatch evidence model. Candidate arms are screened for allele geometry, local structure, self-complementarity and pair compatibility; discrimination, genotype calls and failure-mode rates still require matched positive and negative controls.",
+      "guidance": "Use this when a primer should match one allele at its 3′ end and discriminate against the other. A proposed near-terminal mismatch is a candidate-design aid, not proof of allele discrimination; paired wet-lab validation is still required.",
+      "name": "ARMS-PCR",
+      "summary": "Allele-specific primers whose 3′ end distinguishes two variant alleles."
+    },
+    "colony-pcr": {
+      "checks": "The primer pair is evaluated against the supplied insert/vector junction or colony target, expected orientation and product geometry, primer structure and the declared host, lysis and SOP context. The record preserves which construct context was tested; colony accessibility, band identity, insert orientation and Sanger or miniprep confirmation remain bench evidence.",
+      "guidance": "Use this when crude colony material and a vector/insert junction can tell you whether a construct is present and oriented correctly. Keep the shared colony preparation and named protocol with the design.",
+      "name": "Colony PCR",
+      "summary": "Short primer pairs for screening transformants directly from colonies."
+    },
+    "digital-pcr": {
+      "checks": "The primer pair and short amplicon are evaluated against the selected partitioned-counting chemistry, platform and partition format, while the declared optical or multiplex architecture remains distinct from empirical thresholds and cluster calls. Absolute concentration, partition occupancy, rain, accepted-well quality, inhibition and LoD are properties of the digital-PCR run.",
+      "guidance": "Use this when the reaction will be partitioned and positive partitions will be counted to estimate concentration. Choose the platform and optical setup explicitly; thresholding, accepted wells and uncertainty come from the run, not from a universal primer rule.",
+      "name": "Digital PCR — EvaGreen / Dye",
+      "summary": "Primer pairs for partitioned counting on a declared digital-PCR platform."
+    },
+    "gibson-assembly": {
+      "checks": "Junction primers are evaluated for fragment orientation, overlap length and junction geometry, reconstructed construct sequence, reading-frame continuity, unwanted scar sites and full-oligo structure under the selected Gibson or HiFi assembly plan. The in-silico construct is not evidence of fragment identity, assembly yield, recircularisation or clone confirmation; those require the bench workflow.",
+      "guidance": "Use this when the final construct, not an isolated amplicon, is the design unit. Select the named assembly method, review junctions, orientation and frame diagnostics, and remember that a predicted construct still needs clone-level verification.",
+      "name": "Gibson Assembly",
+      "summary": "Junction primers and typed fragments for Gibson or NEBuilder HiFi assembly."
+    },
+    "inverse-pcr": {
+      "checks": "Outward-facing primers are evaluated against the complete linear or circular template, the restriction-digest or self-ligation topology, the origin-spanning product path and oligo secondary structure. The reconstructed amplicon and end-preparation assumptions are computational outputs; digest completeness, circularisation efficiency, amplification and sequence confirmation remain experimental.",
+      "guidance": "Use this after circularisation or digestion when the unknown sequence lies outside a known anchor. Confirm the template topology and end-preparation details because the product depends on the complete construct.",
+      "name": "Inverse PCR",
+      "summary": "Outward-facing primers for amplifying sequence beside a known region."
+    },
+    "kasp": {
+      "checks": "The allele-specific primers are evaluated against the declared variant identity, plus/minus orientation, fixed reporter-tail topology, terminal-discrimination model and cross-primer interactions. The result establishes a KASP-compatible oligo proposal, but cluster separation, controls, call thresholds and genotype assignment are measured properties of the endpoint fluorescence run.",
+      "guidance": "Use this for biallelic genotyping or suitable presence/absence variants with endpoint FAM/HEX readout. The reporter tails are part of the ordered oligos, while cluster calls and thresholds remain run evidence supplied by the instrument or provider.",
+      "name": "KASP",
+      "summary": "KASP-compatible allele-specific primers with fixed reporter tails."
+    },
+    "lamp": {
+      "checks": "F3/B3, FIP/BIP and optional loop primers are evaluated as one ordered six-region geometry against the target, spacing and orientation rules, stem-primer structure limits and the selected LAMP authority. Set ranking is computational; amplification kinetics, nonspecific products, carry-over risk, signal chemistry and multiplex readout require empirical screening.",
+      "guidance": "Use this when you need isothermal amplification at one temperature. Four to six primers recognise six target regions and must be designed as one set; optional multiplex signal methods require their own named chemistry and evidence.",
+      "name": "LAMP",
+      "summary": "Primer sets for loop-mediated isothermal amplification without a thermocycler."
+    },
+    "long-range-pcr": {
+      "checks": "The primer pair is evaluated for long-amplicon placement, target topology, 3′-end compatibility, secondary structure and compatibility with the selected long-range polymerase and extension protocol. A predicted product length does not establish template integrity, processivity, extension success, full-length recovery or the absence of truncated products.",
+      "guidance": "Use this for products of roughly 5 kb or more. Select the exact polymerase and cycling protocol, then confirm template quality before ordering; length alone does not determine whether a long-range reaction will work.",
+      "name": "Long-range PCR",
+      "summary": "Primer pairs for long amplicons where polymerase, template quality and extension time matter."
+    },
+    "nested-pcr": {
+      "checks": "Round-one and round-two oligos are evaluated as separate reactions, including outer-to-inner nesting geometry, transfer or cleanup assumptions, product containment, primer structure and inner-product specificity. The computational record does not establish contamination control, transfer recovery, carry-over suppression or second-round product identity.",
+      "guidance": "Use this when one PCR does not provide enough specificity or sensitivity. Record transfer, cleanup and contamination controls for both rounds; the design does not assume an undocumented one-tube nested chemistry.",
+      "name": "Nested PCR",
+      "summary": "Outer and inner primer pairs for a documented two-round PCR."
+    },
+    "qpcr-probe": {
+      "checks": "The forward primer, reverse primer and hydrolysis probe are evaluated as one coupled assay for probe placement within the amplicon, probe- and primer-structure risk, reporter/quencher chemistry, strand orientation and optical channel configuration. Efficiency, calibration, LoD, fluorescence separation, inhibition tolerance and multiplex competition require measured qPCR evidence.",
+      "guidance": "Use this when probe signal should add a sequence-specific layer beyond the primer pair. Multiple targets can share one reaction only with compatible reporters, instrument channels and assay interactions, so the probes and primers are treated as one coupled panel.",
+      "name": "qPCR — Hydrolysis Probe",
+      "summary": "Primer pairs with a matched hydrolysis probe for real-time detection."
+    },
+    "qpcr-sybr": {
+      "checks": "The primer pair and short amplicon are evaluated under the selected intercalating-dye chemistry, thermodynamic model and specificity or background context, with the expected melt-domain behaviour kept explicit. A single melt peak does not establish sequence identity; amplification efficiency, calibration, quantification range and multiplex separation must be measured experimentally.",
+      "guidance": "Use this when a fluorescent dye will report any double-stranded product and specificity must come from the primers. Keep the amplicon short and review the melt curve; it is evidence about product behaviour, not proof of sequence identity.",
+      "name": "qPCR — Intercalating Dye",
+      "summary": "Primer pairs for dye-based real-time quantification."
+    },
+    "race": {
+      "checks": "The gene-specific primer is evaluated against the declared RNA or cDNA direction, 5′-cap or 3′-poly(A) strategy, adapter/anchor assumptions and any nested-round geometry. The record preserves the selected partner protocol and transcript sequence constraints; transcript-end identity, splice structure, template integrity and contamination control require experimental confirmation.",
+      "guidance": "Use this when an adapter is attached to the unknown 5′ or 3′ transcript end. The gene-specific primer carries the specificity of the reaction, so confirm the adapter, substrate preparation and direction before ordering.",
+      "name": "RACE",
+      "summary": "A gene-specific primer for reaching an unknown transcript end by RACE."
+    },
+    "restriction-cloning": {
+      "checks": "The annealing cores and ordered 5′ tails are evaluated separately for product placement, restriction-site orientation, protective bases, full-oligo structure, insert/vector compatibility and preservation of the intended reading frame. The software does not establish enzyme cleavage efficiency, star activity, ligation yield, transformation or clone identity.",
+      "guidance": "Use this when an insert will be amplified and cloned through restriction digest and ligation. The protective bases and restriction sites are ordered but excluded from annealing calculations; confirm that the selected sites do not occur in the insert.",
+      "name": "Restriction Cloning",
+      "summary": "Primer pairs with 5′ restriction-site tails for directional cloning."
+    },
+    "rpa": {
+      "checks": "Primer candidates are evaluated for short-product placement, sequence composition, secondary structure and compatibility with the selected named DNA or RT-RPA protocol envelope; probe or nuclease branches remain explicitly scoped. RPA yield, time-to-signal, specificity, temperature tolerance and matrix effects require an empirical screen rather than PCR-Tm extrapolation.",
+      "guidance": "Use this for recombinase polymerase amplification with a named DNA or RT-RPA protocol. RPA performance must be screened experimentally; conventional PCR Tm is not a validated RPA performance measure, and RNA use requires an explicitly selected RT protocol.",
+      "name": "RPA",
+      "summary": "Primer candidates for reviewed RPA and RT-RPA chemistries."
+    },
+    "sequencing-primer": {
+      "checks": "The sequencing primer is evaluated for placement relative to the region of interest, read direction, length, Tm, GC composition, homopolymer risk and local secondary structure against the declared template. Read-start quality, usable read length, mixed-trace behaviour, phasing and template quality are properties of the sequencing run.",
+      "guidance": "Use this when the goal is a sequencing read rather than an amplified product. Place the primer far enough from the region of interest to allow for the platform’s unreliable first bases and the requested read length.",
+      "name": "Sequencing Primer",
+      "summary": "A single primer positioned to read into a selected sequencing region."
+    },
+    "site-directed-mutagenesis": {
+      "checks": "The mutagenic oligos are evaluated against the exact substitution, insertion, deletion or library edit, template orientation, overlap or extension geometry, primer structure and selected Q5, QuikChange or multi-site topology. The reconstructed edited sequence is computationally reviewed; polymerase fidelity, parental-template carryover, unintended mutations and clone confirmation remain bench checks.",
+      "guidance": "Use this when you know the exact substitution, insertion, deletion or library you want to build. Select the matching Q5, QuikChange or multi-site topology, review the reconstructed edited sequence, and verify the final clone experimentally.",
+      "name": "Site-directed Mutagenesis",
+      "summary": "Topology-specific primer planning for declared DNA edits."
+    },
+    "species-specific-pcr": {
+      "checks": "Primer candidates are evaluated against the declared inclusivity panel, exclusion background, within-species variant context, product geometry and the selected chemistry and readout. The finite panel bounds the claim and is not a whole-database specificity proof; inclusivity, exclusivity, cross-reactivity, competition and matrix performance require validation.",
+      "guidance": "Use this when a positive band should identify one organism and remain silent on its relatives. Supply the inclusivity and exclusivity panels so specificity is checked against the organisms you actually need to distinguish.",
+      "name": "Species-specific PCR",
+      "summary": "Primer pairs that identify one organism against a declared background panel."
+    },
+    "standard-pcr": {
+      "checks": "PCRStudio searches for a forward/reverse pair flanking the selected locus, then evaluates oligonucleotide length, Tm, GC fraction, homopolymer runs, hairpin propensity, self- and hetero-dimer complementarity, amplicon size and any supplied off-target background. The record reports these in-silico constraints and the sequence context that produced them; gel mobility, product identity, yield and cycling conditions still require bench verification.",
+      "guidance": "Choose this when you have one known template and want to see one defined product on a gel or confirm its sequence. Add related background sequences when they must be excluded; choose qPCR when the result needs to be quantitative.",
+      "name": "Standard PCR",
+      "summary": "Primer pairs for one endpoint-PCR product."
+    },
+    "tetra-primer-arms": {
+      "checks": "The four-primer system is evaluated for the two allele-specific inner products, the outer control amplicon, variant placement, expected product-size separation, primer interactions and compatibility with the selected readout. In-silico separation does not guarantee gel resolution or reliable genotype discrimination; both require a representative control panel.",
+      "guidance": "Use this when both alleles and a control should be read from one tube. The three products must be separated clearly on the chosen gel or readout, which determines where the outer primers can sit.",
+      "name": "Tetra-primer ARMS",
+      "summary": "Four-primer allele assay with two allele bands and one reaction control."
+    },
+    "tiled-scheme": {
+      "checks": "The tiled scheme is evaluated for target coverage, amplicon overlap, primer structure, pool assignment, inter-pool compatibility, dropout or variant risk and the selected create, repair or replace operation. The returned scheme is a traceable computational panel plan; amplification balance, coverage depth, end-to-end uniformity and repair success come from the sequenced run.",
+      "guidance": "Use this for whole-genome or long-region coverage where several overlapping amplicons must be distributed across pools. Review coverage, variants, pool interactions and the exact upstream workflow; pooling reduces risk but does not guarantee perfect independence.",
+      "name": "Tiled Amplicon Scheme",
+      "summary": "Overlapping amplicons that cover a genome or long sequence in traceable pools."
+    },
+    "universal-primers": {
+      "checks": "The consensus is evaluated against the declared alignment, duplicate and outlier policy, ambiguity formulation, target/non-target panel and observed per-sequence coverage model. Degenerate consensus members and their coverage are bounded by the submitted alignment; population-wide inclusivity, synthesis behaviour and assay performance require a defined sampling frame and bench validation.",
+      "guidance": "Use this when one primer pair must cover a defined set of related sequences. Provide the alignment and panel authority, then review coverage, concrete degenerate members, non-target checks and the physical formulation separately.",
+      "name": "Universal Primers",
+      "summary": "Primer pairs designed from a reviewed multi-sequence panel."
+    }
+  },
+  "schema_version": "1.0.0",
+  "source": "crates/pcr-core/profiles.toml",
+  "source_sha256": "25686988fa4ed104fb4e86a3f366567618717a25836583a48f512352e1ec2d20"
+}

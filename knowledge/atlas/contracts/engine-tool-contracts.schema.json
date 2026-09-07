@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcrstudio.local/contracts/engine-tool-contracts.schema.json",
+  "title": "PCRStudio Engine Tool Bindings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generation",
+    "status",
+    "effective_date",
+    "role_semantics",
+    "engines"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "generation": {
+      "const": "1"
+    },
+    "status": {
+      "const": "canonical_contract"
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "role_semantics": {
+      "type": "string"
+    },
+    "engines": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "engine_id",
+          "tool_contract_md",
+          "bindings"
+        ],
+        "properties": {
+          "engine_id": {
+            "type": "string",
+            "enum": [
+              "consensus-pair",
+              "discriminating-pair",
+              "flanking-pair",
+              "junction-primers",
+              "loop-set",
+              "mutagenic-pair",
+              "nested",
+              "outward-pair",
+              "pair-and-probe",
+              "single-primer",
+              "tiling-scheme"
+            ]
+          },
+          "tool_contract_md": {
+            "type": "string"
+          },
+          "bindings": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "tool_id",
+                "role",
+                "purposes",
+                "artifact_identity",
+                "operations"
+              ],
+              "properties": {
+                "tool_id": {
+                  "type": "string",
+                  "enum": [
+                    "primer3_core",
+                    "primer3_py",
+                    "mfeprimer",
+                    "ncbi_blast_plus",
+                    "mafft",
+                    "primerpooler",
+                    "primalscheme3",
+                    "viennarna",
+                    "nupack4",
+                    "primer_blast",
+                    "pydna",
+                    "pcrstudio_flanking_wrapper",
+                    "pcrstudio_consensus_resolver",
+                    "pcrstudio_allele_wrapper",
+                    "pcrstudio_junction_composer",
+                    "pcrstudio_lamp_enumerator",
+                    "pcrstudio_edit_normalizer",
+                    "pcrstudio_nested_containment",
+                    "pcrstudio_topology_resolver",
+                    "pcrstudio_probe_wrapper",
+                    "pcrstudio_single_primer_wrapper",
+                    "pcrstudio_scheme_wrapper"
+                  ]
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "PRIMARY",
+                    "CONDITIONAL_PRIMARY",
+                    "VALIDATOR",
+                    "FALLBACK",
+                    "OPTIONAL",
+                    "BENCHMARK",
+                    "REFERENCE",
+                    "WATCHLIST",
+                    "REJECT"
+                  ]
+                },
+                "purposes": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "artifact_identity": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "operations": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z][a-z0-9_]*$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

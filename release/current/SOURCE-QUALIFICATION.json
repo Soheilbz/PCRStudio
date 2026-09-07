@@ -1,0 +1,160 @@
+{
+  "foundation_release": "CURRENT",
+  "gates": [
+    {
+      "name": "foundation-contract-generator-check",
+      "status": "PASS",
+      "stdout": "FOUNDATION_CONTRACTS=CHECK-PASS files=38 modules=21 engines=11 tools=12"
+    },
+    {
+      "name": "domain-vocabulary-generator-check",
+      "status": "PASS",
+      "stdout": "DOMAIN_VOCABULARY=CHECK-PASS"
+    },
+    {
+      "name": "method-fidelity-generator-check",
+      "status": "PASS",
+      "stdout": "method-fidelity artifacts: PASS"
+    },
+    {
+      "name": "multiplex-capabilities-generator-check",
+      "status": "PASS",
+      "stdout": "multiplex capability artifacts: PASS"
+    },
+    {
+      "name": "engine-authority-generator-check",
+      "status": "PASS",
+      "stdout": "ENGINE_AUTHORITY=CHECK-PASS domains=12"
+    },
+    {
+      "name": "engine-contract-generator-check",
+      "status": "PASS",
+      "stdout": "ENGINE_CONTRACTS=CHECK-PASS engines=11"
+    },
+    {
+      "name": "runtime-artifact-generator-check",
+      "status": "PASS",
+      "stdout": "RUNTIME_ARTIFACTS=CHECK-PASS knowledge/runtime/profile-bindings.generated.json, knowledge/runtime/module-rule-trace.generated.json, web/src/lib/projects/required-context.generated.json, web/src/lib/lamp-numeric-recipes.generated.json and web/src/lib/flanking-numeric-recipes.generated.json modules=21"
+    },
+    {
+      "name": "operations-policy-generator-check",
+      "status": "PASS",
+      "stdout": "OPERATIONS_POLICY=CURRENT"
+    },
+    {
+      "name": "flanking-protocol-authority-generator-check",
+      "status": "PASS",
+      "stdout": "FLANKING_PROTOCOL_AUTHORITY=CHECK-PASS groups=17"
+    },
+    {
+      "name": "lamp-protocol-authority-generator-check",
+      "status": "PASS",
+      "stdout": "LAMP_PROTOCOL_AUTHORITY=CHECK-PASS protocols=72 groups=24"
+    },
+    {
+      "name": "scientific-authority-registry-generator-check",
+      "status": "PASS",
+      "stdout": "SCIENTIFIC_AUTHORITY_REGISTRY=CHECK-PASS"
+    },
+    {
+      "name": "expert-audit-artifact-generator-check",
+      "status": "PASS",
+      "stdout": "EXPERT_ARTIFACTS=CHECK-PASS modules=21 engines=11 numeric_profile_rows=190 qualification_envelope_rows=3 source_constants=138"
+    },
+    {
+      "name": "flanking-evidence-ledger-generator-check",
+      "status": "PASS",
+      "stdout": "FLANKING_EVIDENCE_LEDGER=CHECK-PASS records=15"
+    },
+    {
+      "name": "http-contract-generator-check",
+      "status": "PASS",
+      "stdout": "HTTP_CONTRACT=CHECK-PASS endpoints=58 files=4"
+    },
+    {
+      "name": "sbom-generator-check",
+      "status": "PASS",
+      "stdout": "SBOM check PASS: 910 components"
+    },
+    {
+      "name": "current-static-consistency-generator-check",
+      "status": "PASS",
+      "stdout": "current static consistency audit check PASS"
+    },
+    {
+      "name": "canonical-static-audit",
+      "status": "PASS",
+      "stdout": "PCRStudio static source audit: 0 error(s), 0 warning(s)"
+    },
+    {
+      "name": "high-confidence-secret-scan",
+      "status": "PASS",
+      "stdout": "Secret scan: PASS (1053 text files; high-confidence credential formats only)"
+    },
+    {
+      "name": "linux-bootstrap-source-regression",
+      "status": "PASS",
+      "stdout": "Linux bootstrap/provision source regression PASS"
+    },
+    {
+      "name": "flanking-web-numeric-executable-contract",
+      "status": "PASS",
+      "stdout": "FLANKING_WEB_NUMERIC_CONTRACT=PASS"
+    },
+    {
+      "name": "lamp-web-numeric-executable-contract",
+      "status": "PASS",
+      "stdout": "LAMP_WEB_NUMERIC_CONTRACT=PASS"
+    },
+    {
+      "name": "lamp-rust-differential-source-contract",
+      "status": "PASS",
+      "stdout": "LAMP Rust differential source contract PASS: cases=5 protocols=72"
+    },
+    {
+      "name": "engine-web-differential-contract",
+      "status": "PASS",
+      "stdout": "ENGINE_WEB_CONTRACT=PASS engines=11"
+    },
+    {
+      "name": "evidence-import-executable-contract",
+      "status": "PASS",
+      "stdout": "EVIDENCE_IMPORT_CONTRACT=PASS"
+    },
+    {
+      "name": "flanking-rust-source-boundary",
+      "status": "PASS",
+      "stdout": "FLANKING_RUST_SOURCE_BOUNDARY=PASS braces=303/303 parens=1213/1213 brackets=137/137"
+    },
+    {
+      "name": "focused-source-regression-tests",
+      "status": "PASS",
+      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 1.05s"
+    }
+  ],
+  "hygiene": {
+    "cache_residue": 0,
+    "case_collisions": 0,
+    "symlinks": 0
+  },
+  "native_external_gate": {
+    "entrypoint": "scripts/run-linux-qualification.py",
+    "reason": "Linux native execution is delegated to the explicit host gate; cargo/pnpm/native scientific dependencies are not a source-only claim.",
+    "status": "NOT_ASSERTED_HERE"
+  },
+  "parse": {
+    "json": 225,
+    "python": 232,
+    "toml": 23,
+    "typescript_tsx_syntax_parse": 279
+  },
+  "release_class": "generation-1-unified-engine-linux-current",
+  "release_id": "CURRENT",
+  "schema_version": "1.2.0",
+  "scope": "environment-independent-source-qualification",
+  "status": "PASS",
+  "supply_chain": {
+    "container_images_pinned": 10,
+    "github_actions_sha_pinned": 14
+  }
+}

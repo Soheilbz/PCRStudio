@@ -1,0 +1,82 @@
+{
+  "authority_id": "inverse-current-corpus",
+  "engine": "outward-pair",
+  "cases": [
+    {
+      "expects": {
+        "branch": "restriction-self-ligation",
+        "internal_known_cut_count": 0
+      },
+      "id": "standard-two-flank",
+      "request": {
+        "enzyme": "HindIII",
+        "inverseBranch": "restriction-self-ligation"
+      }
+    },
+    {
+      "expects": {
+        "digest": "not-required",
+        "product_status": "exact"
+      },
+      "id": "supplied-circle",
+      "request": {
+        "circleLength": 4000,
+        "inverseBranch": "supplied-circular-template"
+      }
+    },
+    {
+      "expects": {
+        "status": "refused"
+      },
+      "id": "internal-cut-refusal",
+      "request": {
+        "enzyme": "cuts-known-anchor",
+        "inverseBranch": "restriction-self-ligation"
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "none-on-primary-ranking"
+      },
+      "id": "enzyme-cohort-diagnostic",
+      "request": {
+        "enzymeCohortSize": 3
+      }
+    },
+    {
+      "expects": {
+        "decision_impact": "topology-validation",
+        "topology_validation": "exact-or-fail-closed"
+      },
+      "id": "full-reference-topology",
+      "request": {
+        "enzyme": "HindIII",
+        "inverseBranch": "restriction-self-ligation",
+        "inverseReferenceCircular": false,
+        "inverseReferenceSequence": "full-reference-required"
+      }
+    },
+    {
+      "expects": {
+        "preserves_caller_order": true,
+        "synthetic_cross_enzyme_score": false
+      },
+      "id": "explicit-enzyme-cohort",
+      "request": {
+        "inverseCandidateEnzymes": [
+          "HindIII",
+          "EcoRI"
+        ],
+        "inverseReferenceSequence": "full-reference-required"
+      }
+    }
+  ],
+  "metamorphic": [
+    "circular-rotation-preserves-outward-geometry",
+    "enzyme-list-reorder-does-not-change-explicit-selected-enzyme",
+    "supplying-circle-length-only-resolves-product-size",
+    "full-reference-anchor-ambiguity-fails-closed",
+    "enzyme-cohort-reorder-preserves-per-enzyme-measurements"
+  ],
+  "schema_version": "1.0.0"
+}

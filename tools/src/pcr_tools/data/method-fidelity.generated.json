@@ -1,0 +1,721 @@
+{
+  "_projection": {
+    "canonical_sha256": "faf15cc9095e72142a981408b6132d96c40d21cd1bad264e68456c62f82d5384",
+    "canonical_source": "contracts/method-fidelity.json",
+    "generated_by": "scripts/generate-method-fidelity.py"
+  },
+  "contexts": {
+    "generic-multiplex": {
+      "active": [
+        "saddle-badness"
+      ],
+      "references": [
+        "saddle-optimizer"
+      ],
+      "validators": [
+        "primerpooler",
+        "mfeprimer",
+        "blast-plus"
+      ]
+    }
+  },
+  "grade_definitions": {
+    "F0-upstream-exact": "The pinned official/upstream executable or library is invoked directly.",
+    "F1-exact-public-port": "A fully specified exact algorithm/component is implemented without hidden heuristics; for named external methods this requires a complete public authority/differential port, while PCRStudio-owned exact algorithms must expose their objective, bounds and refusal conditions.",
+    "F2-manual-rule-faithful": "All public rules used by the named protocol/method branch are implemented, without claiming proprietary software equivalence.",
+    "F3-compatible-approximate": "Internal compatible/inspired/heuristic logic. It must not be presented as the named external method and cannot drive Scientific-Strict primary decisions unless the decision impact is explicitly non-primary.",
+    "F4-external-authority-only": "Critical internals are proprietary/incomplete or an exact external authority is required; PCRStudio must not invent them."
+  },
+  "methods": {
+    "ambiguous-specificity-surrogate": {
+      "authority_url": "https://blast.ncbi.nlm.nih.gov/",
+      "claim_boundary": "Possible-base compatible matching is conservative evidence with mismatch bounds; it may not produce a definitive clean specificity claim.",
+      "decision_impact": "unresolved-evidence-only",
+      "display_name": "Ambiguous-base specificity compatibility surrogate",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal-conservative",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "arms-pcr-generalized-policy": {
+      "authority_url": "https://pubmed.ncbi.nlm.nih.gov/40421167/",
+      "claim_boundary": "This generalized ARMS branch is not ARMSprimer3 and is not a universal polymerase mismatch law; use only outside Scientific-Strict until an exact named authority path is selected.",
+      "decision_impact": "primary-ranking",
+      "display_name": "PCRStudio generalized ARMS candidate policy",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "armsprimer3": {
+      "authority_url": "https://github.com/PCRPrimerDesign/ARMSprimer3",
+      "claim_boundary": "ARMSprimer3 is a distinct open-source upstream implementation. PCRStudio must not label its generalized internal ARMS policy ARMSprimer3; exact use requires a managed upstream adapter and qualification.",
+      "decision_impact": "primary-design",
+      "display_name": "ARMSprimer3",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-upstream-not-yet-managed",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": true
+    },
+    "blast-plus": {
+      "authority_url": "https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html",
+      "claim_boundary": "PCRStudio invokes the pinned NCBI BLAST+ executable for indexed validation rather than cloning BLAST.",
+      "decision_impact": "independent-validation",
+      "display_name": "NCBI BLAST+",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "kasp-compatible-policy": {
+      "authority_url": "https://oligos.biosearchtech.com/support/resources/starting-a-genotyping-project/assay-design-for-kasp-chemistry",
+      "claim_boundary": "This policy models open KASP chemistry/geometry only and is explicitly not LGC Kraken-equivalent.",
+      "decision_impact": "primary-ranking",
+      "display_name": "PCRStudio open KASP-compatible candidate policy",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "kraken": {
+      "authority_url": "https://oligos.biosearchtech.com/support/resources/starting-a-genotyping-project/assay-design-for-kasp-chemistry",
+      "claim_boundary": "Kraken internals are proprietary; PCRStudio does not reverse-engineer or claim equivalence.",
+      "decision_impact": "primary-design",
+      "display_name": "LGC Kraken KASP assay-design platform",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "lamp-linear-specificity-proxy": {
+      "authority_url": "https://primerexplorer.jp/e/v5_manual/02.html",
+      "claim_boundary": "A linear PCR-style screen is retained only as diagnostic evidence and never ranks/eliminates LAMP sets. LAMP-native six-region topology owns direct candidate-ranking impact.",
+      "decision_impact": "diagnostic-only",
+      "display_name": "Generic linear LAMP off-target proxy",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal-diagnostic",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "mafft": {
+      "authority_url": "https://mafft.cbrc.jp/alignment/software/",
+      "claim_boundary": "PCRStudio invokes MAFFT for managed alignment workflows; it does not label an internal alignment heuristic as MAFFT.",
+      "decision_impact": "alignment",
+      "display_name": "MAFFT",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "mfeprimer": {
+      "authority_url": "https://github.com/quwubin/MFEprimer-3.0",
+      "claim_boundary": "PCRStudio invokes the managed MFEprimer executable when that validation path is selected.",
+      "decision_impact": "independent-validation",
+      "display_name": "MFEprimer",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "mgb-tm": {
+      "authority_url": "https://www.thermofisher.com/",
+      "claim_boundary": "PCRStudio exports/imports hash-bound candidate results and does not invent an MGB Tm formula.",
+      "decision_impact": "probe-thermodynamics",
+      "display_name": "MGB-aware probe thermodynamic authority",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "nebasechanger-web": {
+      "authority_url": "https://nebasechanger.neb.com/",
+      "claim_boundary": "PCRStudio must not claim NEBaseChanger-equivalent primer design without official vendor output/authority.",
+      "decision_impact": "primary-design",
+      "display_name": "NEBaseChanger web-tool design implementation",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "olivar": {
+      "authority_url": "https://github.com/treangenlab/Olivar",
+      "claim_boundary": "The Olivar backend invokes upstream Olivar and retains its backend-specific risk evidence.",
+      "decision_impact": "primary-tiling-design",
+      "display_name": "Olivar",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "pcrstudio-multiplex-exact-search": {
+      "authority_url": "internal:contracts/multiplex-capabilities.json",
+      "claim_boundary": "PCRStudio exact lexicographic branch-and-bound over the evaluated candidate pools. It is not SADDLE and claims no optimum outside the supplied candidate pools.",
+      "decision_impact": "primary-ranking",
+      "display_name": "PCRStudio exact multiplex candidate-set search",
+      "grade": "F1-exact-public-port",
+      "implementation": "internal-exact-fully-specified",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "pcrstudio-multiplex-local-optimizer": {
+      "authority_url": "https://www.nature.com/articles/s41467-022-29500-4",
+      "claim_boundary": "PCRStudio deterministic greedy/local-swap optimiser using SADDLE Badness; it is not SADDLE simulated annealing and cannot be presented as such.",
+      "decision_impact": "primary-ranking",
+      "display_name": "PCRStudio deterministic multiplex local optimiser",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "pcrstudio-nebuilder-multisite-route": {
+      "authority_url": "https://nebasechanger.neb.com/",
+      "claim_boundary": "Deterministic construct/fragment routing informed by the NEBaseChanger multi-site workflow; Junction Primers owns actual overlap/primer design. It is not NEBaseChanger primer design.",
+      "decision_impact": "routing-only",
+      "display_name": "PCRStudio multi-site NEBuilder HiFi routing",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal-route",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "primalscheme3": {
+      "authority_url": "https://github.com/artic-network/primalscheme3",
+      "claim_boundary": "The PrimalScheme3 backend runs the upstream command; PCRStudio does not substitute its fallback while claiming PrimalScheme3.",
+      "decision_impact": "primary-tiling-design",
+      "display_name": "PrimalScheme3",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "primer3": {
+      "authority_url": "https://github.com/primer3-org/primer3",
+      "claim_boundary": "PCRStudio invokes the pinned upstream Primer3/libprimer3 implementation; it does not reimplement Primer3 ranking.",
+      "decision_impact": "primary-design",
+      "display_name": "Primer3 / libprimer3",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "primerexplorer-v5-public-rules": {
+      "authority_url": "https://primerexplorer.jp/e/v5_manual/02.html",
+      "claim_boundary": "PCRStudio implements reviewed public PrimerExplorer V5 geometry/thermodynamic rules and reference outputs; it does not claim to reproduce proprietary PrimerExplorer search/ranking internals.",
+      "decision_impact": "lamp-geometry-and-eligibility",
+      "display_name": "PrimerExplorer V5 public design-rule compatibility",
+      "grade": "F2-manual-rule-faithful",
+      "implementation": "internal-public-rules",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "primerexplorer-v5-search": {
+      "authority_url": "https://primerexplorer.jp/e/",
+      "claim_boundary": "No internal equivalence claim is allowed without an official executable/service or complete public algorithm authority.",
+      "decision_impact": "primary-ranking",
+      "display_name": "PrimerExplorer V5 proprietary search/ranking implementation",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "primerpooler": {
+      "authority_url": "https://github.com/ssb22/PrimerPooler",
+      "claim_boundary": "PCRStudio invokes PrimerPooler as an independent managed tool when configured; internal PCRStudio multiplex optimisation is separately identified.",
+      "decision_impact": "multiplex-validation-or-pooling",
+      "display_name": "PrimerPooler",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "pydna": {
+      "authority_url": "https://github.com/BjornFJohansson/pydna",
+      "claim_boundary": "PCRStudio hands supported construct/topology work to the pinned pydna library.",
+      "decision_impact": "construct-or-topology-validation",
+      "display_name": "pydna",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-library",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    },
+    "q5-manual": {
+      "authority_url": "https://www.neb.com/en-us/products/e0554-q5-site-directed-mutagenesis-kit",
+      "claim_boundary": "PCRStudio implements reviewed Q5 public primer/topology rules and explicitly refuses proprietary/unsupported branches rather than impersonating NEBaseChanger.",
+      "decision_impact": "primary-design",
+      "display_name": "NEB Q5 Site-Directed Mutagenesis public rules",
+      "grade": "F2-manual-rule-faithful",
+      "implementation": "internal-public-rules",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "qpcr-unbound-probe-heuristic": {
+      "authority_url": "https://primer3.org/",
+      "claim_boundary": "Low-level research helper only; routed qPCR Probe requires named executable chemistry and does not use this heuristic as an orderable scientific result.",
+      "decision_impact": "research-only",
+      "display_name": "Unbound low-level qPCR probe heuristic",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal-research-only",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "quikchange-lightning-manual": {
+      "authority_url": "https://www.agilent.com/cs/library/usermanuals/public/210518.pdf",
+      "claim_boundary": "PCRStudio applies published manual geometry/Tm/GC/end/structure-review rules but does not claim equivalence to Agilent QuikChange Primer Design software or its Energy Cost optimiser.",
+      "decision_impact": "primary-design",
+      "display_name": "Agilent QuikChange Lightning manual-faithful primer rules",
+      "grade": "F2-manual-rule-faithful",
+      "implementation": "internal-public-rules",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "quikchange-primer-design-web": {
+      "authority_url": "https://www.agilent.com/store/quickchange-primer-design-help.jsp",
+      "claim_boundary": "PCRStudio does not reproduce proprietary web-tool ranking/Energy Cost internals. Exact web-tool equivalence requires the vendor authority.",
+      "decision_impact": "primary-ranking",
+      "display_name": "Agilent QuikChange Primer Design Program",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "rpa-full-empirical-development": {
+      "authority_url": "https://www.globalpointofcare.abbott/us/en/lp/twistdx/support.html",
+      "claim_boundary": "PCRStudio orchestrates the source-backed empirical 8-10 forward by 8-10 reverse candidate matrix; assay selection remains evidence-driven rather than sequence-predicted.",
+      "decision_impact": "empirical-selection",
+      "display_name": "TwistAmp empirical RPA assay-development workflow",
+      "grade": "F2-manual-rule-faithful",
+      "implementation": "workflow-orchestration",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "rpa-quick-primer3-screen": {
+      "authority_url": "https://www.globalpointofcare.abbott/us/en/lp/twistdx/support.html",
+      "claim_boundary": "The in-silico shortlist is not a mechanistic RPA predictor and cannot validate an assay or replace empirical pair-matrix screening.",
+      "decision_impact": "screening-plan-only",
+      "display_name": "RPA quick Primer3 candidate screen",
+      "grade": "F3-compatible-approximate",
+      "implementation": "internal-diagnostic",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "saddle-badness": {
+      "authority_url": "https://www.nature.com/articles/s41467-022-29500-4",
+      "claim_boundary": "PCRStudio implements only the published SADDLE Badness interaction objective. This does not make the PCRStudio optimiser the SADDLE simulated-annealing optimiser.",
+      "decision_impact": "multiplex-objective",
+      "display_name": "SADDLE Badness objective (published Eq. 2 component)",
+      "grade": "F1-exact-public-port",
+      "implementation": "internal-public-component-port",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "saddle-optimizer": {
+      "authority_url": "https://www.nature.com/articles/s41467-022-29500-4",
+      "claim_boundary": "Exact SADDLE optimiser execution requires the official algorithm/code authority. PCRStudio must not guess unpublished cooling/stopping details or claim an internal replacement is SADDLE.",
+      "decision_impact": "primary-ranking",
+      "display_name": "SADDLE simulated-annealing optimiser",
+      "grade": "F4-external-authority-only",
+      "implementation": "external-authority",
+      "public_algorithm_complete": false,
+      "scientific_strict_eligible": false,
+      "upstream_code_available": false
+    },
+    "tetra-arms-ye-2001": {
+      "authority_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC55900/",
+      "claim_boundary": "The named tetra-primer branch enforces the published -2 deliberate mismatch, mismatch-strength pairing, >=26-nt inner-primer rule, opposite inner-primer geometry and three-product layout; bench optimisation remains empirical.",
+      "decision_impact": "primary-design",
+      "display_name": "Ye/Collins-Day tetra-primer ARMS-PCR 2001 public method",
+      "grade": "F2-manual-rule-faithful",
+      "implementation": "internal-public-rules",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": false
+    },
+    "viennarna": {
+      "authority_url": "https://www.tbi.univie.ac.at/RNA/",
+      "claim_boundary": "PCRStudio invokes ViennaRNA for the optional accessibility calculation and records model parameters.",
+      "decision_impact": "secondary-accessibility-evidence",
+      "display_name": "ViennaRNA",
+      "grade": "F0-upstream-exact",
+      "implementation": "upstream-tool",
+      "public_algorithm_complete": true,
+      "scientific_strict_eligible": true,
+      "upstream_code_available": true
+    }
+  },
+  "module_method_roles": {
+    "arms-pcr": {
+      "active": [
+        "primer3",
+        "arms-pcr-generalized-policy"
+      ],
+      "references": [
+        "armsprimer3"
+      ]
+    },
+    "colony-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "diagnostic": [
+        "ambiguous-specificity-surrogate"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "digital-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "gibson-assembly": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "pydna"
+      ]
+    },
+    "inverse-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "conditional": [
+        "pydna"
+      ],
+      "validators": [
+        "blast-plus"
+      ]
+    },
+    "kasp": {
+      "active": [
+        "primer3",
+        "kasp-compatible-policy"
+      ],
+      "references": [
+        "kraken"
+      ]
+    },
+    "lamp": {
+      "active": [
+        "primerexplorer-v5-public-rules"
+      ],
+      "conditional": [
+        "viennarna"
+      ],
+      "diagnostic": [
+        "lamp-linear-specificity-proxy"
+      ],
+      "references": [
+        "primerexplorer-v5-search"
+      ],
+      "validators": [
+        "blast-plus"
+      ]
+    },
+    "long-range-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "diagnostic": [
+        "ambiguous-specificity-surrogate"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "nested-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "qpcr-probe": {
+      "active": [
+        "primer3"
+      ],
+      "conditional": [
+        "mgb-tm"
+      ],
+      "references": [
+        "qpcr-unbound-probe-heuristic"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "qpcr-sybr": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "race": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "blast-plus"
+      ]
+    },
+    "restriction-cloning": {
+      "active": [
+        "primer3"
+      ]
+    },
+    "rpa": {
+      "active": [
+        "primer3"
+      ],
+      "diagnostic": [
+        "rpa-quick-primer3-screen"
+      ],
+      "required_followup": [
+        "rpa-full-empirical-development"
+      ]
+    },
+    "sequencing-primer": {
+      "active": [
+        "primer3"
+      ],
+      "validators": [
+        "blast-plus"
+      ]
+    },
+    "site-directed-mutagenesis": {
+      "active": [
+        "primer3"
+      ],
+      "conditional": [
+        "q5-manual",
+        "quikchange-lightning-manual",
+        "pcrstudio-nebuilder-multisite-route"
+      ],
+      "references": [
+        "quikchange-primer-design-web",
+        "nebasechanger-web"
+      ]
+    },
+    "species-specific-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "diagnostic": [
+        "ambiguous-specificity-surrogate"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "standard-pcr": {
+      "active": [
+        "primer3"
+      ],
+      "diagnostic": [
+        "ambiguous-specificity-surrogate"
+      ],
+      "validators": [
+        "blast-plus",
+        "mfeprimer"
+      ]
+    },
+    "tetra-primer-arms": {
+      "active": [
+        "primer3",
+        "tetra-arms-ye-2001"
+      ]
+    },
+    "tiled-scheme": {
+      "conditional": [
+        "primalscheme3",
+        "olivar"
+      ],
+      "validators": [
+        "primerpooler",
+        "mfeprimer",
+        "blast-plus"
+      ]
+    },
+    "universal-primers": {
+      "active": [
+        "primer3"
+      ]
+    }
+  },
+  "modules": {
+    "arms-pcr": [
+      "primer3",
+      "arms-pcr-generalized-policy",
+      "armsprimer3"
+    ],
+    "colony-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer",
+      "ambiguous-specificity-surrogate"
+    ],
+    "digital-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer"
+    ],
+    "gibson-assembly": [
+      "primer3",
+      "pydna"
+    ],
+    "inverse-pcr": [
+      "primer3",
+      "pydna",
+      "blast-plus"
+    ],
+    "kasp": [
+      "primer3",
+      "kasp-compatible-policy",
+      "kraken"
+    ],
+    "lamp": [
+      "primerexplorer-v5-public-rules",
+      "primerexplorer-v5-search",
+      "lamp-linear-specificity-proxy",
+      "viennarna",
+      "blast-plus"
+    ],
+    "long-range-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer",
+      "ambiguous-specificity-surrogate"
+    ],
+    "nested-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer"
+    ],
+    "qpcr-probe": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer",
+      "mgb-tm",
+      "qpcr-unbound-probe-heuristic"
+    ],
+    "qpcr-sybr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer"
+    ],
+    "race": [
+      "primer3",
+      "blast-plus"
+    ],
+    "restriction-cloning": [
+      "primer3"
+    ],
+    "rpa": [
+      "primer3",
+      "rpa-quick-primer3-screen",
+      "rpa-full-empirical-development"
+    ],
+    "sequencing-primer": [
+      "primer3",
+      "blast-plus"
+    ],
+    "site-directed-mutagenesis": [
+      "primer3",
+      "q5-manual",
+      "quikchange-lightning-manual",
+      "quikchange-primer-design-web",
+      "pcrstudio-nebuilder-multisite-route",
+      "nebasechanger-web"
+    ],
+    "species-specific-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer",
+      "ambiguous-specificity-surrogate"
+    ],
+    "standard-pcr": [
+      "primer3",
+      "blast-plus",
+      "mfeprimer",
+      "ambiguous-specificity-surrogate"
+    ],
+    "tetra-primer-arms": [
+      "primer3",
+      "tetra-arms-ye-2001"
+    ],
+    "tiled-scheme": [
+      "primalscheme3",
+      "olivar",
+      "primerpooler",
+      "mfeprimer",
+      "blast-plus"
+    ],
+    "universal-primers": [
+      "primer3"
+    ]
+  },
+  "policy": {
+    "F3_allowed_scientific_strict_decision_impacts": [
+      "diagnostic-only",
+      "screening-plan-only",
+      "routing-only",
+      "unresolved-evidence-only",
+      "secondary-accessibility-evidence",
+      "independent-validation"
+    ],
+    "named_method_equivalence_requires": [
+      "F0-upstream-exact",
+      "F1-exact-public-port"
+    ],
+    "no_hidden_algorithm_rule": "If an exact named algorithm has unpublished or proprietary decision-critical details, PCRStudio must require the official external authority or use a differently named internal method; it must never guess missing parameters.",
+    "scientific_strict_primary_decision_grades": [
+      "F0-upstream-exact",
+      "F1-exact-public-port",
+      "F2-manual-rule-faithful"
+    ]
+  },
+  "registry_id": "pcrstudio-method-fidelity-2026-09-06",
+  "reviewed_date": "2026-09-06",
+  "schema_version": "1.0.0"
+}

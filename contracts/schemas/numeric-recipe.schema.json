@@ -1,0 +1,75 @@
+{
+  "$id": "pcrstudio://schemas/numeric-recipe-v2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "appliedOverlays": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "decisionImpact": {
+      "enum": [
+        "none",
+        "ranking",
+        "eligibility"
+      ]
+    },
+    "identity": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "origins": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "ranges": {
+      "additionalProperties": {
+        "items": {
+          "type": "number"
+        },
+        "maxItems": 2,
+        "minItems": 2,
+        "type": "array"
+      },
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "2.0.0"
+    },
+    "unresolvedDependencies": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "values": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "type": "object"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "identity",
+    "values",
+    "ranges",
+    "origins",
+    "appliedOverlays",
+    "unresolvedDependencies",
+    "warnings",
+    "decisionImpact"
+  ],
+  "title": "PCRStudio generic numeric recipe",
+  "type": "object"
+}

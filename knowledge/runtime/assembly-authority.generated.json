@@ -1,0 +1,231 @@
+{
+  "authority_id": "pcrstudio-assembly-authority",
+  "catalogue_snapshot": "2026-09",
+  "groups": {
+    "capabilities": [
+      "standard-overlap",
+      "three-prime-mismatch-removal",
+      "ssdna-bridge",
+      "restriction-generated-vector"
+    ],
+    "fragment_kinds": [
+      "pcr-amplified",
+      "restriction-digest",
+      "synthetic-dsdna",
+      "ssdna-oligo",
+      "annealed-oligos",
+      "existing-linear",
+      "literal"
+    ],
+    "methods": [
+      "gibson",
+      "nebuilder",
+      "in-fusion-reference",
+      "iva-reference"
+    ],
+    "protocols": [
+      "not-selected",
+      "neb-e5510",
+      "neb-nebuilder-e2621",
+      "neb-nebuilder-e5520",
+      "neb-nebuilder-e2623"
+    ],
+    "topologies": [
+      "linear",
+      "circular"
+    ]
+  },
+  "policies": {
+    "construct_validation": "Final-construct sequence reconstruction is authoritative for frame/feature diagnostics; primer-tail geometry alone is insufficient.",
+    "method_separation": "Gibson and NEBuilder are separate capability/protocol branches. A NEBuilder-compatible design must not be relabelled as Gibson."
+  },
+  "records": {
+    "in-fusion-reference": {
+      "execution_status": "reference-only",
+      "kind": "method",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "In-Fusion reference method",
+      "sequence_decision_impact": "none",
+      "source_identity": "Existing PCRStudio reviewed In-Fusion source set",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.takarabio.com/learning-centers/cloning/in-fusion-cloning"
+    },
+    "iva-reference": {
+      "execution_status": "reference-only",
+      "kind": "method",
+      "lifecycle": {
+        "status": "reference"
+      },
+      "selection": "In-vivo assembly reference method",
+      "sequence_decision_impact": "none",
+      "source_identity": "PCRStudio Atlas IVA source set",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC41592/"
+    },
+    "neb-e5510": {
+      "branches": {
+        "2-3-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 15,
+          "insert_molar_excess": "2–3× each insert; 5× for inserts shorter than 200 bp",
+          "overlap_bp_max": 25,
+          "overlap_bp_min": 15,
+          "reaction_volume_uL": 20,
+          "total_pmol_max": 0.5,
+          "total_pmol_min": 0.02,
+          "unpurified_pcr_fraction_max": 0.2,
+          "vector_input_ng": "50–100"
+        },
+        "4-6-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 60,
+          "insert_molar_excess": "1:1 molar ratio of each insert:vector",
+          "overlap_bp_max": 80,
+          "overlap_bp_min": 20,
+          "reaction_volume_uL": 20,
+          "total_pmol_max": 1.0,
+          "total_pmol_min": 0.2,
+          "unpurified_pcr_fraction_max": 0.2,
+          "vector_input_ng": "50–100"
+        }
+      },
+      "execution_status": "executable-protocol",
+      "fragments_max": 6,
+      "fragments_min": 2,
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEB Gibson Assembly Cloning Kit E5510",
+      "sequence_decision_impact": "overlap-geometry",
+      "source_identity": "NEB Gibson Assembly Cloning Kit E5510 current product/protocol guidance",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en-us/products/e5510-gibson-assembly-cloning-kit"
+    },
+    "neb-nebuilder-e2621": {
+      "branches": {
+        "2-3-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 15,
+          "overlap_bp_max": 20,
+          "overlap_bp_min": 15,
+          "total_pmol_max": 0.2,
+          "total_pmol_min": 0.03,
+          "vector_insert_ratio": "1:2"
+        },
+        "4-6-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 60,
+          "overlap_bp_max": 30,
+          "overlap_bp_min": 20,
+          "total_pmol_max": 0.5,
+          "total_pmol_min": 0.2,
+          "vector_insert_ratio": "1:1"
+        }
+      },
+      "capabilities": [
+        "standard-overlap",
+        "three-prime-mismatch-removal",
+        "ssdna-bridge",
+        "restriction-generated-vector"
+      ],
+      "catalog_id": "E2621",
+      "execution_status": "executable-protocol",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEBuilder HiFi DNA Assembly E2621",
+      "sequence_decision_impact": "overlap-geometry",
+      "short_fragment_note": "For fragments smaller than 120 bp, NEB recommends a separate ssDNA bridge or annealed-oligonucleotide protocol.",
+      "source_identity": "NEBuilder HiFi DNA Assembly reaction protocol",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en/protocols/nebuilder-hifi-dna-assembly-reaction-protocol"
+    },
+    "neb-nebuilder-e2623": {
+      "branches": {
+        "2-3-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 15,
+          "overlap_bp_max": 20,
+          "overlap_bp_min": 15,
+          "total_pmol_max": 0.2,
+          "total_pmol_min": 0.03,
+          "vector_insert_ratio": "1:2"
+        },
+        "4-6-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 60,
+          "overlap_bp_max": 30,
+          "overlap_bp_min": 20,
+          "total_pmol_max": 0.5,
+          "total_pmol_min": 0.2,
+          "vector_insert_ratio": "1:1"
+        }
+      },
+      "capabilities": [
+        "standard-overlap",
+        "three-prime-mismatch-removal",
+        "ssdna-bridge",
+        "restriction-generated-vector"
+      ],
+      "catalog_id": "E2623",
+      "execution_status": "executable-protocol",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEBuilder HiFi DNA Assembly E2623",
+      "sequence_decision_impact": "overlap-geometry",
+      "short_fragment_note": "For fragments smaller than 120 bp, NEB recommends a separate ssDNA bridge or annealed-oligonucleotide protocol.",
+      "source_identity": "NEBuilder HiFi DNA Assembly reaction protocol",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en/protocols/nebuilder-hifi-dna-assembly-reaction-protocol"
+    },
+    "neb-nebuilder-e5520": {
+      "branches": {
+        "2-3-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 15,
+          "overlap_bp_max": 20,
+          "overlap_bp_min": 15,
+          "total_pmol_max": 0.2,
+          "total_pmol_min": 0.03,
+          "vector_insert_ratio": "1:2"
+        },
+        "4-6-fragments": {
+          "incubation_c": 50,
+          "incubation_min": 60,
+          "overlap_bp_max": 30,
+          "overlap_bp_min": 20,
+          "total_pmol_max": 0.5,
+          "total_pmol_min": 0.2,
+          "vector_insert_ratio": "1:1"
+        }
+      },
+      "capabilities": [
+        "standard-overlap",
+        "three-prime-mismatch-removal",
+        "ssdna-bridge",
+        "restriction-generated-vector"
+      ],
+      "catalog_id": "E5520",
+      "execution_status": "executable-protocol",
+      "kind": "protocol",
+      "lifecycle": {
+        "status": "current-at-review"
+      },
+      "selection": "NEBuilder HiFi DNA Assembly E5520",
+      "sequence_decision_impact": "overlap-geometry",
+      "short_fragment_note": "For fragments smaller than 120 bp, NEB recommends a separate ssDNA bridge or annealed-oligonucleotide protocol.",
+      "source_identity": "NEBuilder HiFi DNA Assembly reaction protocol",
+      "source_reviewed_date": "2026-09-04",
+      "source_url": "https://www.neb.com/en/protocols/nebuilder-hifi-dna-assembly-reaction-protocol"
+    }
+  },
+  "reviewed_date": "2026-09-04",
+  "schema_version": "1.0.0",
+  "source_policy": "Only public primary/vendor/official sources are executable authorities. Literature/tool precedents may guide diagnostics or characterization but do not become universal biological rules without a versioned protocol/evidence contract."
+}

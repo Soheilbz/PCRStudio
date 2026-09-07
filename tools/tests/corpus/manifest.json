@@ -1,0 +1,76 @@
+{
+  "records": [
+    {
+      "accession": "J01749.1",
+      "organism": "Cloning vector pBR322",
+      "description": "pBR322 cloning vector, complete sequence",
+      "what_it_tests": "The other standard plasmid, with two antibiotic markers and a different restriction map from pUC19 -- so an inverse-PCR enzyme choice cannot be tuned to one vector by accident.",
+      "length": 4361,
+      "sha256": "536042a7485bdabdf49c4d21a306213a098d77d19bdba57a1c6adc76ce2b8372"
+    },
+    {
+      "accession": "J02459.1",
+      "organism": "Escherichia phage lambda",
+      "description": "Lambda phage, complete genome",
+      "what_it_tests": "48 kb of real sequence: the template long-range PCR exists for, and large enough that a slow search shows up as slow.",
+      "length": 48502,
+      "sha256": "36432a40f602258d19ae7c8152ddbc30390b559f2859c01d7047c77b048c71b3"
+    },
+    {
+      "accession": "L09137.2",
+      "organism": "Cloning vector pUC19",
+      "description": "pUC19 cloning vector, complete sequence",
+      "what_it_tests": "Colony PCR and inverse PCR both start from a plasmid; this one carries the M13/lac priming sites and a real multiple cloning site.",
+      "length": 2686,
+      "sha256": "8a205af08518dae1b0045c7b098986dca18824ef654e75233603602ab89cad04"
+    },
+    {
+      "accession": "M19173.1",
+      "organism": "Plasmodium falciparum",
+      "description": "18S small subunit ribosomal RNA gene",
+      "what_it_tests": "The Snounou malaria nest is the most widely used nested assay there is, and its four primers are published. If our engine cannot reproduce its geometry on the sequence it was designed against, the engine is wrong and not the assay.",
+      "length": 2040,
+      "sha256": "e85c5fd99d94ee9b3c5b43b165e955a0e57be4071ae9274be32433d085ff7d0d"
+    },
+    {
+      "accession": "NC_012920.1",
+      "organism": "Homo sapiens mitochondrion",
+      "description": "Human mitochondrial genome, revised Cambridge reference sequence",
+      "what_it_tests": "The classic long-range target: laboratories amplify this whole 16.5 kb circle in one or two products, so it is where a long-range design either works or does not.",
+      "length": 16569,
+      "sha256": "f156ff3f65bbcc80c7ebb9936dceb96b1477b4f8f535c4e1dbe7baea225cbc66"
+    },
+    {
+      "accession": "NG_000007.3",
+      "organism": "Homo sapiens",
+      "description": "HBB haemoglobin subunit beta, RefSeqGene on the beta-globin locus",
+      "what_it_tests": "The region long-range PCR kits ship as their own control: the published control products are 17.5 and 21.5 kb, so a long-range design that cannot reach them is not long-range.",
+      "length": 81706,
+      "sha256": "3cd23d9a2112f3e0b076e58935d8fa8a02877740d188135087df05320a4aa3b3"
+    },
+    {
+      "accession": "NG_017013.2",
+      "organism": "Homo sapiens",
+      "description": "TP53 tumour protein p53, RefSeqGene with introns",
+      "what_it_tests": "Genomic TP53 rather than the transcript: introns, real exon boundaries and room for an outer and an inner pair, which is what a nested design needs.",
+      "length": 32772,
+      "sha256": "df9c123531fedcc39c30f4eb63c35c4ff8ad2ffb5b5c07406a385dbfc9a2b1bc"
+    },
+    {
+      "accession": "NM_000546.6",
+      "organism": "Homo sapiens",
+      "description": "TP53 tumour protein p53, transcript variant 1, mRNA",
+      "what_it_tests": "An ordinary well-behaved eukaryotic target: the baseline every other case is compared against.",
+      "length": 2512,
+      "sha256": "0c886e7e551d310e2927798a67c9ec865664222ec36ef095711ba4e2d6dc1f42"
+    },
+    {
+      "accession": "X65299.1",
+      "organism": "Saccharomyces cerevisiae",
+      "description": "CDC6 gene",
+      "what_it_tests": "A small target that is neither human nor a vector: the control that shows a change to the shared engine did not move anything it should not have.",
+      "length": 2443,
+      "sha256": "e1b715cdd1fb571b1dcbb177f99d24f4e4054a86bd9b02bb2a90df2f00351589"
+    }
+  ]
+}

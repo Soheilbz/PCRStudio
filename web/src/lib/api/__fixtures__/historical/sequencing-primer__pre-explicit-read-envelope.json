@@ -1,0 +1,139 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 1,
+      "gc_max": 60.0,
+      "gc_min": 40.0,
+      "length_max": 27,
+      "length_min": 18,
+      "length_opt": 20,
+      "max_end_gc": 3,
+      "max_poly_x": 4,
+      "tm_max": 62.0,
+      "tm_min": 52.0,
+      "tm_opt": 55.0
+    },
+    "id": "sequencing-primer",
+    "name": "Sequencing Primer",
+    "overruled": [],
+    "purposes": ["general"]
+  },
+  "considered": "considered 189, GC content failed 156, GC clamp failed 6, low tm 1, high tm 3, ok 17",
+  "constraints": {
+    "gc_clamp": 1,
+    "gc_max": 60.0,
+    "gc_min": 40.0,
+    "length_max": 27,
+    "length_min": 18,
+    "length_opt": 20,
+    "max_end_gc": 3,
+    "max_poly_x": 4,
+    "min_three_prime_distance": 5,
+    "product_max": 1000,
+    "product_min": 200,
+    "tm_max": 62.0,
+    "tm_min": 52.0,
+    "tm_opt": 55.0,
+    "tm_pair_max_difference": 3.0
+  },
+  "engine": "single-primer",
+  "order_sheet": [
+    {
+      "gc_percent": 45.0,
+      "length": 20,
+      "name": "template_1F",
+      "sequence": "TATTTCACCCTTCAGATCCG",
+      "tm": 56.1
+    },
+    {
+      "gc_percent": 42.9,
+      "length": 21,
+      "name": "template_2F",
+      "sequence": "GGAGAATATTTCACCCTTCAG",
+      "tm": 55.1
+    }
+  ],
+  "primers": [
+    {
+      "at": 1120,
+      "direction": "forward",
+      "gc_percent": 45.0,
+      "hairpin": { "dg": 0.0, "found": false, "tm": 0.0 },
+      "length": 20,
+      "note": "The target starts 61 bases from this primer's 3' end, clear of the first 40 that come back unreadable, and about 489 bases of legible trace are left after it ends.",
+      "penalty": 1.085,
+      "reaches": 61,
+      "reads": "into the target",
+      "self_dimer": { "dg": -2.69, "found": true, "tm": -17.5 },
+      "sequence": "TATTTCACCCTTCAGATCCG",
+      "spare": 489,
+      "three_prime_dg": -3.29,
+      "tm": 56.1,
+      "window": { "furthest": 550, "nearest": 40, "searched": [1114, 46], "widened": 0 }
+    },
+    {
+      "at": 1114,
+      "direction": "forward",
+      "gc_percent": 42.9,
+      "hairpin": { "dg": 0.23, "found": true, "tm": 34.4 },
+      "length": 21,
+      "note": "The target starts 66 bases from this primer's 3' end, clear of the first 40 that come back unreadable, and about 484 bases of legible trace are left after it ends.",
+      "penalty": 1.114,
+      "reaches": 66,
+      "reads": "into the target",
+      "self_dimer": { "dg": -2.32, "found": true, "tm": -14.9 },
+      "sequence": "GGAGAATATTTCACCCTTCAG",
+      "spare": 484,
+      "three_prime_dg": -2.18,
+      "tm": 55.1,
+      "window": { "furthest": 550, "nearest": 40, "searched": [1114, 46], "widened": 0 }
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 200.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 1.5,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "taq-standard",
+    "polymerase_name": "Standard Taq"
+  },
+  "read": {
+    "dead_zone": 40,
+    "direction": "forward",
+    "furthest": 550,
+    "nearest": 40,
+    "note": "The primer has to sit between 40 and 550 bases from the target: any closer and the target falls in the unreadable start of the trace, any further and the read has faded before it arrives.",
+    "read_length": 800,
+    "region": [650, 510]
+  },
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 53.4,
+    "length": 2512,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2512,
+    "soft_masked": false
+  },
+  "why_nothing": ""
+}

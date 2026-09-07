@@ -1,0 +1,64 @@
+{
+  "policy_version": "1.1.0",
+  "default_mode": "strict",
+  "development_mode_requires_explicit_opt_in": true,
+  "release_invariants": [
+    {
+      "id": "named-assay-profile-required",
+      "rule": "Every executable worker run must carry an explicit canonical assay/profile identity. Development mode may expose engineering diagnostics but may not synthesize assay identity from unprofiled defaults."
+    },
+    {
+      "id": "policy-mode-does-not-change-scientific-identity",
+      "rule": "Changing Scientific-Strict to development may alter engineering diagnostics or qualification posture, but must not change assay identity, polymerase/chemistry, required purpose, hard/bounded parameter authority, topology, or named protocol semantics."
+    },
+    {
+      "id": "no-primary-backend-substitution",
+      "rule": "A failed or unavailable PRIMARY scientific backend must not be silently replaced by a different algorithm."
+    },
+    {
+      "id": "no-hard-gate-relaxation",
+      "rule": "Candidate search may broaden only inside the same legal assay envelope; hard assay gates are never relaxed to obtain a result."
+    },
+    {
+      "id": "no-anonymous-chemistry-substitution",
+      "rule": "A different polymerase, buffer or reaction condition requires a named, sourced and versioned chemistry/profile rather than an anonymous override."
+    },
+    {
+      "id": "no-hidden-purpose-default",
+      "rule": "A multi-purpose assay must receive an explicit purpose or a versioned profile default; generic purpose is never guessed."
+    },
+    {
+      "id": "no-guessed-annealing-core",
+      "rule": "Specificity uses an explicitly declared annealing_sequence; a tailed/composite ordered oligo is never guessed to be its own annealing core."
+    },
+    {
+      "id": "production-specificity-provenance",
+      "rule": "Production/approved-reference BLAST and MFEprimer evidence requires a versioned source FASTA plus matching index-artifact fingerprints."
+    },
+    {
+      "id": "heuristic-separation",
+      "rule": "Ranking heuristics may rank candidates only after scientific gates; they cannot create or weaken assay validity."
+    },
+    {
+      "id": "capability-honesty",
+      "rule": "UI/API modifiers are advertised only when the complete assay semantics are implemented, not because a lower-level engine can approximate part of them."
+    },
+    {
+      "id": "wet-lab-boundary",
+      "rule": "Sequence design and in-silico evidence never imply wet-lab validation, LOD/LOQ, efficiency, Cq, threshold, cluster separation or diagnostic performance."
+    },
+    {
+      "id": "typed-refusal-preferred",
+      "rule": "When required scientific context or a validated implementation branch is absent, typed refusal or evidence-incomplete is preferred to inference or fallback."
+    },
+    {
+      "id": "optional-evidence-nondeterminism",
+      "rule": "A tool bound as OPTIONAL or REFERENCE may add advisory evidence only; its presence or absence must not change hard validity, deterministic candidate ranking, or the default selected candidate. If it participates in a decision, promote it to an explicit required engine role and qualification gate."
+    },
+    {
+      "id": "bench-protocol-authority",
+      "rule": "When cycling or bench chemistry is kit/platform/protocol-specific, PCRStudio must require or preserve that named authority and may not synthesize a generic bench programme from primer Tm, product length, or a surrogate polymerase preset."
+    }
+  ],
+  "fail_closed": true
+}

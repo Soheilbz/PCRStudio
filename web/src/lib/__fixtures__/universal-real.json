@@ -1,0 +1,250 @@
+{
+  "engine": "consensus-pair",
+  "alignment": {
+    "sequences": 6,
+    "columns": 900,
+    "names": ["isolate0", "isolate1", "isolate2", "isolate3", "isolate4", "isolate5"],
+    "gapped_columns": 0,
+    "conserved_columns": 685
+  },
+  "pairs": [
+    {
+      "left": {
+        "sequence": "YCTCACAGATTAAGCCATG",
+        "start": 35,
+        "end": 53,
+        "length": 19,
+        "orientation": "forward",
+        "degeneracy": 2,
+        "tm_min": 53.6,
+        "tm_max": 54.7,
+        "tm_spread": 1.1,
+        "gc_min": 42.1,
+        "gc_max": 47.4,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "right": {
+        "sequence": "ATACCCTAACWTCAAAAGCT",
+        "start": 318,
+        "end": 337,
+        "length": 20,
+        "orientation": "reverse",
+        "degeneracy": 2,
+        "tm_min": 53.3,
+        "tm_max": 53.3,
+        "tm_spread": 0.0,
+        "gc_min": 35.0,
+        "gc_max": 35.0,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "product_size": 303,
+      "covers": 6,
+      "of": 6,
+      "degeneracy": 4,
+      "cross_dimer_dg": -1.96,
+      "score": 1.15,
+      "score_components": [
+        {
+          "name": "Sequences not covered",
+          "value": 0.0,
+          "detail": "Both primers match all 6 sequences."
+        },
+        {
+          "name": "Degeneracy",
+          "value": 0.7,
+          "detail": "2-fold and 2-fold, so 4 molecules in the tube and that fraction of each."
+        },
+        {
+          "name": "Melting-temperature spread",
+          "value": 0.33,
+          "detail": "The mixture melts between 53.3 and 54.7 \u00b0C, so one annealing temperature has to suit all of it."
+        },
+        {
+          "name": "Pair mismatch",
+          "value": 0.12,
+          "detail": "Their coolest members differ by 0.3 \u00b0C."
+        }
+      ],
+      "annealing_temperature": 50.3
+    },
+    {
+      "left": {
+        "sequence": "YCTCACAGATTAAGCCAT",
+        "start": 35,
+        "end": 52,
+        "length": 18,
+        "orientation": "forward",
+        "degeneracy": 2,
+        "tm_min": 51.6,
+        "tm_max": 52.9,
+        "tm_spread": 1.3,
+        "gc_min": 38.9,
+        "gc_max": 44.4,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "right": {
+        "sequence": "TAAAKGAAACATCGGATTCT",
+        "start": 647,
+        "end": 666,
+        "length": 20,
+        "orientation": "reverse",
+        "degeneracy": 2,
+        "tm_min": 51.6,
+        "tm_max": 53.4,
+        "tm_spread": 1.8,
+        "gc_min": 30.0,
+        "gc_max": 35.0,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "product_size": 632,
+      "covers": 6,
+      "of": 6,
+      "degeneracy": 4,
+      "cross_dimer_dg": -2.45,
+      "score": 1.24,
+      "score_components": [
+        {
+          "name": "Sequences not covered",
+          "value": 0.0,
+          "detail": "Both primers match all 6 sequences."
+        },
+        {
+          "name": "Degeneracy",
+          "value": 0.7,
+          "detail": "2-fold and 2-fold, so 4 molecules in the tube and that fraction of each."
+        },
+        {
+          "name": "Melting-temperature spread",
+          "value": 0.54,
+          "detail": "The mixture melts between 51.6 and 53.4 \u00b0C, so one annealing temperature has to suit all of it."
+        },
+        {
+          "name": "Pair mismatch",
+          "value": 0.0,
+          "detail": "Their coolest members differ by 0.0 \u00b0C."
+        }
+      ],
+      "annealing_temperature": 48.6
+    },
+    {
+      "left": {
+        "sequence": "AGCTTTTGAWGTTAGGGTA",
+        "start": 318,
+        "end": 336,
+        "length": 19,
+        "orientation": "forward",
+        "degeneracy": 2,
+        "tm_min": 52.5,
+        "tm_max": 52.6,
+        "tm_spread": 0.1,
+        "gc_min": 36.8,
+        "gc_max": 36.8,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "right": {
+        "sequence": "AAAKGAAACATCGGATTCTT",
+        "start": 646,
+        "end": 665,
+        "length": 20,
+        "orientation": "reverse",
+        "degeneracy": 2,
+        "tm_min": 52.5,
+        "tm_max": 54.3,
+        "tm_spread": 1.8,
+        "gc_min": 30.0,
+        "gc_max": 35.0,
+        "covers": 6,
+        "hairpin_dg": 0.0
+      },
+      "product_size": 348,
+      "covers": 6,
+      "of": 6,
+      "degeneracy": 4,
+      "cross_dimer_dg": -1.82,
+      "score": 1.24,
+      "score_components": [
+        {
+          "name": "Sequences not covered",
+          "value": 0.0,
+          "detail": "Both primers match all 6 sequences."
+        },
+        {
+          "name": "Degeneracy",
+          "value": 0.7,
+          "detail": "2-fold and 2-fold, so 4 molecules in the tube and that fraction of each."
+        },
+        {
+          "name": "Melting-temperature spread",
+          "value": 0.54,
+          "detail": "The mixture melts between 52.5 and 54.3 \u00b0C, so one annealing temperature has to suit all of it."
+        },
+        {
+          "name": "Pair mismatch",
+          "value": 0.0,
+          "detail": "Their coolest members differ by 0.0 \u00b0C."
+        }
+      ],
+      "annealing_temperature": 49.5
+    }
+  ],
+  "windows": {
+    "considered": 5625,
+    "accepted": 476,
+    "rejections": [
+      {
+        "reason": "too degenerate",
+        "count": 439,
+        "share": 7.8,
+        "advice": "raise the degeneracy budget, or drop rare variants with the minority threshold"
+      },
+      {
+        "reason": "3' end varies",
+        "count": 2526,
+        "share": 44.9,
+        "advice": "shorten the conserved 3' end, but expect weaker priming"
+      },
+      { "reason": "GC out of range", "count": 886, "share": 15.8, "advice": "widen the GC range" },
+      {
+        "reason": "long run of one base",
+        "count": 34,
+        "share": 0.6,
+        "advice": "allow a longer homopolymer"
+      },
+      {
+        "reason": "melting temperature out of range",
+        "count": 132,
+        "share": 2.3,
+        "advice": "widen the Tm window"
+      },
+      {
+        "reason": "melting temperatures spread too far",
+        "count": 1132,
+        "share": 20.1,
+        "advice": "allow a wider spread, or lower the degeneracy so the mixture is tighter"
+      }
+    ]
+  },
+  "pair_counts": {
+    "considered": 46508,
+    "wrong_size": 13617,
+    "mismatched": 20306,
+    "shortlisted": 26202,
+    "measured": 60,
+    "kept": 3,
+    "collapsed": 57
+  },
+  "capped": { "sites": false, "site_limit": 1500, "measured_limit": 60, "note": "" },
+  "reaction": {
+    "polymerase": "taq-standard",
+    "polymerase_name": "Standard Taq",
+    "mv_conc": 50.0,
+    "dv_conc": 1.5,
+    "dntp_conc": 0.8,
+    "dna_conc": 200.0
+  }
+}

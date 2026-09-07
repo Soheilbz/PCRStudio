@@ -1,0 +1,89 @@
+{
+  "cases": [
+    {
+      "expected_thermal_stage_ids": [
+        "isothermal-amplification"
+      ],
+      "expected_unresolved": [],
+      "expected_values": {
+        "f3_b3_uM": 0.2,
+        "fip_bip_uM": 1.6,
+        "hold_temperature_c": 65.0,
+        "hold_time_min": 30.0,
+        "loop_uM": 0.4,
+        "reaction_volume_uL": 50.0
+      },
+      "id": "hyasen-hyb413-50ul",
+      "protocol": "hyasen-hyb413",
+      "python_scenario": {},
+      "web_state": {}
+    },
+    {
+      "expected_thermal_stage_ids": [
+        "isothermal-amplification"
+      ],
+      "expected_unresolved": [],
+      "expected_values": {
+        "hold_temperature_c": 65.0,
+        "hold_time_min": 30.0,
+        "lyophilized_beads_per_reaction": 2.0,
+        "primer_mix_10x_uL": 5.0,
+        "reaction_volume_uL": 50.0
+      },
+      "id": "hyasen-hyb414-lyophilized",
+      "protocol": "hyasen-hyb414",
+      "python_scenario": {},
+      "web_state": {}
+    },
+    {
+      "expected_thermal_stage_ids": [
+        "isothermal-amplification"
+      ],
+      "expected_unresolved": [],
+      "expected_values": {
+        "hold_temperature_c": 65.0,
+        "hold_time_min": 30.0,
+        "lyophilized_beads_per_reaction": 2.0,
+        "reaction_volume_uL": 50.0
+      },
+      "id": "hyasen-hyb315-dna-lyophilized",
+      "protocol": "hyasen-hyb315",
+      "python_scenario": {},
+      "web_state": {}
+    },
+    {
+      "expected_thermal_stage_ids": [
+        "isothermal-amplification"
+      ],
+      "expected_unresolved": [
+        "vazyme-rp712-exact-recipe"
+      ],
+      "expected_values": {
+        "hold_time_min": 30.0
+      },
+      "id": "vazyme-rp712-source-limited",
+      "protocol": "vazyme-rp712",
+      "python_scenario": {},
+      "web_state": {}
+    },
+    {
+      "expected_thermal_stage_ids": [
+        "carryover-preincubation",
+        "isothermal-amplification"
+      ],
+      "expected_unresolved": [],
+      "expected_values": {},
+      "id": "takara-rr385-reviewed-preincubation",
+      "protocol": "takara-rr385",
+      "python_scenario": {
+        "preincubation_strategy": "takara-ung-25c-10min"
+      },
+      "web_state": {
+        "preincubationStrategy": "takara-ung-25c-10min"
+      }
+    }
+  ],
+  "engine": "loop-set",
+  "purpose": "Shared Python/Rust/Web LAMP numeric differential corpus. Expected values and thermal stages are source-backed or deterministic projections of the canonical numeric authority; this corpus does not replace vendor evidence and bench chemistry must never alter sequence ranking.",
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,129 @@
+{
+  "authority_domains": [
+    {
+      "id": "nested",
+      "source": "contracts/chemistry/nested-protocols.json"
+    }
+  ],
+  "differential_corpora": [
+    "contracts/chemistry/nested-differential-corpus.json"
+  ],
+  "engine_id": "nested",
+  "feature_capabilities": {
+    "causal-false-product-graph": {
+      "status": "diagnostic-only"
+    },
+    "contamination-workflow-evidence": {
+      "status": "evidence-only"
+    },
+    "custom-sop-transfer": {
+      "status": "executable"
+    },
+    "diluted-transfer": {
+      "status": "executable"
+    },
+    "direct-transfer": {
+      "status": "executable"
+    },
+    "dutp-ung": {
+      "authority": "dutp-ung-strategy-only",
+      "status": "reference-only"
+    },
+    "fully-nested-two-tube": {
+      "status": "executable"
+    },
+    "generic-one-tube-nested": {
+      "authority": "one-tube-reference-only",
+      "status": "fail-closed"
+    },
+    "independent-round-chemistry": {
+      "status": "executable"
+    },
+    "independent-round-thermal-program": {
+      "status": "executable"
+    },
+    "msz-exonuclease-i": {
+      "authority": "neb-msz-exonuclease-i",
+      "status": "executable"
+    },
+    "purified-product-transfer": {
+      "status": "executable"
+    },
+    "semi-nested-forward-two-tube": {
+      "status": "executable"
+    },
+    "semi-nested-reverse-two-tube": {
+      "status": "executable"
+    },
+    "thermolabile-exonuclease-i": {
+      "authority": "neb-thermolabile-exonuclease-i",
+      "status": "executable"
+    }
+  },
+  "schema_version": "1.0.0",
+  "transport": {
+    "fields": [
+      {
+        "owner": "reaction",
+        "python": "transfer_mode",
+        "rust": "transfer_mode",
+        "web": "transferMode"
+      },
+      {
+        "owner": "reaction",
+        "python": "cleanup_protocol",
+        "rust": "cleanup_protocol",
+        "web": "cleanupProtocol"
+      },
+      {
+        "owner": "reaction",
+        "python": "transfer_volume_ul",
+        "rust": "transfer_volume_ul",
+        "web": "transferVolumeUl"
+      },
+      {
+        "owner": "reaction",
+        "python": "transfer_dilution_factor",
+        "rust": "transfer_dilution_factor",
+        "web": "transferDilutionFactor"
+      },
+      {
+        "owner": "reaction",
+        "python": "custom_transfer_sop",
+        "rust": "custom_transfer_sop",
+        "web": "customTransferSop"
+      },
+      {
+        "owner": "reaction",
+        "python": "round1_polymerase",
+        "rust": "round1_polymerase",
+        "web": "round1Polymerase"
+      },
+      {
+        "owner": "reaction",
+        "python": "round2_polymerase",
+        "rust": "round2_polymerase",
+        "web": "round2Polymerase"
+      },
+      {
+        "owner": "reaction",
+        "python": "round1_thermal_program",
+        "rust": "round1_thermal_program",
+        "web": "round1ThermalProgram"
+      },
+      {
+        "owner": "reaction",
+        "python": "round2_thermal_program",
+        "rust": "round2_thermal_program",
+        "web": "round2ThermalProgram"
+      },
+      {
+        "owner": "validation",
+        "python": "workflow_evidence",
+        "rust": "workflow_evidence",
+        "web": "workflowEvidence"
+      }
+    ],
+    "mode": "explicit-field-parity"
+  }
+}

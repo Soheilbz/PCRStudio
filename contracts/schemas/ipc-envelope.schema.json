@@ -1,0 +1,52 @@
+{
+  "$id": "pcrstudio://schemas/ipc-envelope-v2",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "command": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "engine": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "module": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "protocolVersion": {
+      "const": "2.0.0"
+    },
+    "requestId": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "requestSchema": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "resultSchema": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "requestSchema",
+    "resultSchema",
+    "requestId",
+    "command",
+    "engine",
+    "module",
+    "payload"
+  ],
+  "title": "PCRStudio worker IPC envelope",
+  "type": "object"
+}

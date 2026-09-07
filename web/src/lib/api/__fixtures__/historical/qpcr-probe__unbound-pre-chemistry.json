@@ -1,0 +1,226 @@
+{
+  "assay": {
+    "defaults": {
+      "gc_clamp": 0,
+      "gc_max": 65.0,
+      "gc_min": 30.0,
+      "length_max": 27,
+      "length_min": 18,
+      "length_opt": 20,
+      "max_end_gc": 4,
+      "max_poly_x": 4,
+      "product_max": 200,
+      "product_min": 70,
+      "tm_max": 65.0,
+      "tm_min": 59.0,
+      "tm_opt": 60.0,
+      "tm_pair_max_difference": 3.0
+    },
+    "id": "qpcr-probe",
+    "name": "qPCR â€” Hydrolysis Probe",
+    "overruled": [],
+    "purposes": ["general"]
+  },
+  "assays": [
+    {
+      "left": {
+        "gc_percent": 45.0,
+        "hairpin": { "dg": -0.66, "found": true, "tm": 44.0 },
+        "length": 20,
+        "self_dimer": { "dg": -6.52, "found": true, "tm": 12.9 },
+        "sequence": "AATGAGGCCTTGGAACTCAA",
+        "three_prime_dg": -2.27,
+        "tm": 59.9
+      },
+      "measured_in": {
+        "note": "The probe's melting temperature is computed in the same reaction as the primers'. Primer3 takes the two as separate settings, and leaving the probe at its defaults puts them nearly nine degrees apart on one oligo — which would turn a working assay into one whose probe melts below its own primers."
+      },
+      "probe": {
+        "above_primers": 6.9,
+        "after_left": 61,
+        "at": 1255,
+        "first_base": "A",
+        "gc_percent": 54.2,
+        "hairpin": { "dg": -0.54, "found": true, "tm": 42.8 },
+        "length": 24,
+        "note": "Melts 6.9 °C above the warmer primer, so it is already bound when the polymerase arrives — which is the whole mechanism: the probe is destroyed rather than extended, and only a polymerase copying through this exact stretch releases the signal. It begins with A rather than a guanine, which would quench the reporter it sits next to.",
+        "self_dimer": { "dg": -2.85, "found": true, "tm": -32.4 },
+        "sequence": "AAAAAGGGTCAGTCTACCTCCCGC",
+        "three_prime_dg": -5.31,
+        "tm": 66.9
+      },
+      "product_size": 154,
+      "right": {
+        "gc_percent": 50.0,
+        "hairpin": { "dg": 0.03, "found": true, "tm": 36.5 },
+        "length": 20,
+        "self_dimer": { "dg": -6.93, "found": true, "tm": 21.9 },
+        "sequence": "AATGTCAGTCTGAGTCAGGC",
+        "three_prime_dg": -4.06,
+        "tm": 60.0
+      }
+    },
+    {
+      "left": {
+        "gc_percent": 50.0,
+        "hairpin": { "dg": 0.0, "found": false, "tm": 0.0 },
+        "length": 20,
+        "self_dimer": { "dg": -2.92, "found": true, "tm": -6.0 },
+        "sequence": "GCCAAAGAAGAAACCACTGG",
+        "three_prime_dg": -3.22,
+        "tm": 60.0
+      },
+      "measured_in": {
+        "note": "The probe's melting temperature is computed in the same reaction as the primers'. Primer3 takes the two as separate settings, and leaving the probe at its defaults puts them nearly nine degrees apart on one oligo — which would turn a working assay into one whose probe melts below its own primers."
+      },
+      "probe": {
+        "above_primers": 7.1,
+        "after_left": 128,
+        "at": 1240,
+        "first_base": "A",
+        "gc_percent": 50.0,
+        "hairpin": { "dg": -0.08, "found": true, "tm": 38.4 },
+        "length": 24,
+        "note": "Melts 7.1 °C above the warmer primer, so it is already bound when the polymerase arrives — which is the whole mechanism: the probe is destroyed rather than extended, and only a polymerase copying through this exact stretch releases the signal. It begins with A rather than a guanine, which would quench the reporter it sits next to.",
+        "self_dimer": { "dg": -2.72, "found": true, "tm": -32.5 },
+        "sequence": "AGCCACCTGAAGTCCAAAAAGGGT",
+        "three_prime_dg": -3.53,
+        "tm": 67.1
+      },
+      "product_size": 194,
+      "right": {
+        "gc_percent": 50.0,
+        "hairpin": { "dg": 0.0, "found": false, "tm": 0.0 },
+        "length": 20,
+        "self_dimer": { "dg": -2.37, "found": true, "tm": -30.2 },
+        "sequence": "TTTTATGGCGGGAGGTAGAC",
+        "three_prime_dg": -1.84,
+        "tm": 59.8
+      }
+    }
+  ],
+  "considered": "considered 31708, GC content failed 1383, low tm 10190, high tm 4381, long poly-x seq 88, failed must_match requirements 7859, ok 7807",
+  "constraints": {
+    "primers": {
+      "gc_clamp": 0,
+      "gc_max": 65.0,
+      "gc_min": 30.0,
+      "length_max": 27,
+      "length_min": 18,
+      "length_opt": 20,
+      "max_end_gc": 4,
+      "max_poly_x": 4,
+      "min_three_prime_distance": 5,
+      "product_max": 200,
+      "product_min": 70,
+      "tm_max": 65.0,
+      "tm_min": 59.0,
+      "tm_opt": 60.0,
+      "tm_pair_max_difference": 3.0
+    },
+    "probe": {
+      "from": "derived from the primers",
+      "gc_clamp": 0,
+      "gc_max": 80.0,
+      "gc_min": 30.0,
+      "length_max": 30,
+      "length_min": 18,
+      "length_opt": 24,
+      "max_end_gc": 5,
+      "max_poly_x": 4,
+      "min_three_prime_distance": 5,
+      "note": "The probe is held 7.0 °C above the primers' window and measured in the same reaction they are. Its 5' base may not be a guanine, which quenches the reporter it sits next to.",
+      "product_max": 200,
+      "product_min": 70,
+      "tm_max": 72.0,
+      "tm_min": 66.0,
+      "tm_opt": 67.0,
+      "tm_pair_max_difference": 3.0
+    }
+  },
+  "engine": "pair-and-probe",
+  "order_sheet": [
+    {
+      "gc_percent": 45.0,
+      "length": 20,
+      "name": "template_1F",
+      "sequence": "AATGAGGCCTTGGAACTCAA",
+      "tm": 59.9
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 20,
+      "name": "template_1R",
+      "sequence": "AATGTCAGTCTGAGTCAGGC",
+      "tm": 60.0
+    },
+    {
+      "gc_percent": 54.2,
+      "length": 24,
+      "name": "template_1P",
+      "note": "Order with a 5' reporter and a 3' quencher.",
+      "sequence": "AAAAAGGGTCAGTCTACCTCCCGC",
+      "tm": 66.9
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 20,
+      "name": "template_2F",
+      "sequence": "GCCAAAGAAGAAACCACTGG",
+      "tm": 60.0
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 20,
+      "name": "template_2R",
+      "sequence": "TTTTATGGCGGGAGGTAGAC",
+      "tm": 59.8
+    },
+    {
+      "gc_percent": 50.0,
+      "length": 24,
+      "name": "template_2P",
+      "note": "Order with a 5' reporter and a 3' quencher.",
+      "sequence": "AGCCACCTGAAGTCCAAAAAGGGT",
+      "tm": 67.1
+    }
+  ],
+  "provenance": {
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "note": "Primer3 is bundled with primer3-py rather than installed separately, so its version is that package's.",
+    "platform": "Windows AMD64",
+    "primer3_py": "2.3.0",
+    "python": "3.12.13",
+    "worker": "0.1.0"
+  },
+  "reaction": {
+    "dna_conc": 250.0,
+    "dntp_conc": 0.8,
+    "dv_conc": 2.0,
+    "model": {
+      "name": "SantaLucia 1998 nearest-neighbour",
+      "primer3_salt_corrections": 1,
+      "primer3_tm_formula": 1,
+      "salt_correction": "SantaLucia 1998"
+    },
+    "mv_conc": 50.0,
+    "polymerase": "qpcr-dye",
+    "polymerase_name": "qPCR thermodynamic screening context"
+  },
+  "target": {
+    "ambiguous_at": [],
+    "ambiguous_count": 0,
+    "gc_percent": 53.4,
+    "length": 2512,
+    "name": "template",
+    "notes": [],
+    "raw_length": 2512,
+    "soft_masked": false
+  },
+  "why_nothing": ""
+}

@@ -1,0 +1,130 @@
+{
+  "cases": [
+    {
+      "expected_unresolved": [],
+      "expected_values": {
+        "master_mix_uL": 12.5,
+        "primer_each_uM": 0.2,
+        "reaction_volume_uL": 25.0
+      },
+      "id": "onetaq-standard-25ul",
+      "module": "standard-pcr",
+      "protocol": "neb-onetaq-hot-start-m0484",
+      "python_scenario": {
+        "reaction_volume_uL": 25.0
+      },
+      "web_state": {
+        "reactionVolumeUl": "25"
+      }
+    },
+    {
+      "expected_unresolved": [],
+      "expected_values": {
+        "denaturation_time_sec": 5.0,
+        "reaction_volume_uL": 20.0,
+        "yellow_sample_buffer_uL": 0.5
+      },
+      "id": "powertrack-fast-yellow-20ul",
+      "module": "qpcr-sybr",
+      "protocol": "thermo-powertrack-sybr-a46xxx",
+      "python_scenario": {
+        "additive": "yellow-sample-buffer",
+        "cycling_profile": "fast",
+        "reaction_volume_uL": 20.0
+      },
+      "web_state": {
+        "additive": "yellow-sample-buffer",
+        "cyclingProfile": "fast",
+        "reactionVolumeUl": "20"
+      }
+    },
+    {
+      "expected_unresolved": [],
+      "expected_values": {
+        "extension_seconds_per_kb": 10.0,
+        "extension_time_sec": 200.0,
+        "target_length_kb": 20.0
+      },
+      "id": "kod-long-20kb",
+      "module": "long-range-pcr",
+      "protocol": "toyobo-kod-long-kml101",
+      "python_scenario": {
+        "target_length_kb": 20.0
+      },
+      "web_state": {
+        "targetLengthKb": "20"
+      }
+    },
+    {
+      "expected_unresolved": [
+        "qiacuity-nanoplate-format"
+      ],
+      "expected_values": {},
+      "id": "qiacuity-unresolved-format",
+      "module": "digital-pcr",
+      "protocol": "qiagen-qiacuity-eg",
+      "python_scenario": {},
+      "web_state": {}
+    },
+    {
+      "expected_unresolved": [],
+      "expected_values": {
+        "bst_polymerase_U_per_uL": 0.05,
+        "hold_temperature_c": 40.0,
+        "hold_time_min": 25.0,
+        "primer_each_nM": 100.0,
+        "reverse_transcriptase_U_per_uL": 2.0
+      },
+      "id": "thermo-rpa-multiplex-rt",
+      "module": "rpa",
+      "protocol": "thermo-lyo-ready-rpa",
+      "python_scenario": {
+        "bst_units_per_uL": 0.05,
+        "from_rna": true,
+        "multiplex": true,
+        "temperature_c": 40.0,
+        "time_min": 25.0
+      },
+      "web_state": {
+        "fromRna": true,
+        "rpaBstUnitsPerUl": "0.05",
+        "rpaMultiplex": true,
+        "rpaTemperatureC": "40",
+        "rpaTimeMin": "25"
+      }
+    },
+    {
+      "expected_unresolved": [
+        "m0488-colony-lysis-time"
+      ],
+      "expected_values": {},
+      "id": "m0488-colony-unresolved-lysis",
+      "module": "colony-pcr",
+      "protocol": "neb-onetaq-hotstart-m0488-colony",
+      "python_scenario": {
+        "preparation": "direct-transfer"
+      },
+      "web_state": {
+        "preparation": "direct-transfer"
+      }
+    },
+    {
+      "expected_unresolved": [],
+      "expected_values": {
+        "rox_working_dilution_x": 20.0
+      },
+      "id": "quantinova-high-rox",
+      "module": "qpcr-sybr",
+      "protocol": "qiagen-quantinova-sybr-208052",
+      "python_scenario": {
+        "qpcr_instrument_profile": "high-rox"
+      },
+      "web_state": {
+        "qpcrInstrumentProfile": "high-rox"
+      }
+    }
+  ],
+  "engine": "flanking-pair",
+  "purpose": "Shared Python/browser Flanking numeric differential corpus. Expected values are source-backed or derived from the same canonical numeric authority; the corpus does not replace vendor evidence.",
+  "schema_version": "1.0.0"
+}
