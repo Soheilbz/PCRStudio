@@ -18,6 +18,22 @@ jobs:
   checks:
     name: Source, Rust, Python and Web checks
     runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
+        env:
+          POSTGRES_USER: pcrtest
+          POSTGRES_PASSWORD: pcrtest
+          POSTGRES_DB: pcrtest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pcrtest -d pcrtest"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PCR_TEST_DATABASE_URL: postgres://pcrtest:pcrtest@127.0.0.1:5432/pcrtest
     steps:
       - name: Check out source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
