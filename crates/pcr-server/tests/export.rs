@@ -94,7 +94,7 @@ async fn send(
 
 /// An account with one project that has been set up but never run.
 async fn account_with_a_draft(router: &Router) -> String {
-    let (_, registered) = send(
+    let (status, registered) = send(
         router,
         "POST",
         "/api/auth/register",
