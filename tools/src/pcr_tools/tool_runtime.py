@@ -25,6 +25,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from .process_boundary import (
+    ProcessOutputLimitExceeded,
+    ProcessTransportError,
+    run_bounded_text,
+)
 from .runtime_contract import (
     ENGINE_BINDINGS,
     INPUT_SCHEMA_VERSION,
@@ -34,11 +39,6 @@ from .runtime_contract import (
     ToolSpec,
 )
 from .scientific_integrity import strict as scientific_strict
-from .process_boundary import (
-    ProcessOutputLimitExceeded,
-    ProcessTransportError,
-    run_bounded_text,
-)
 
 MAX_CAPTURE_CHARS = 2_000_000
 MAX_STDOUT_BYTES = 128 * 1024 * 1024
@@ -89,7 +89,9 @@ def require_engine_toolchain(
         if engine_id == "tiling-scheme" and tool_id in {"primalscheme3", "olivar"}:
             if requested_backend in {"olivar", "compare"} and tool_id == "olivar":
                 required.add(tool_id)
-            elif requested_backend in {"primalscheme3", "compare", ""} and tool_id == "primalscheme3":
+            elif (
+                requested_backend in {"primalscheme3", "compare", ""} and tool_id == "primalscheme3"
+            ):
                 required.add(tool_id)
             continue
         required.add(tool_id)
@@ -97,7 +99,12 @@ def require_engine_toolchain(
     for tool_id in sorted(required):
         spec = TOOLS[tool_id]
         status = tool_status(tool_id)
-        if spec.execution_scope in {"local", "external-managed", "embedded-package", "optional-package"} and not status.get("available"):
+        if spec.execution_scope in {
+            "local",
+            "external-managed",
+            "embedded-package",
+            "optional-package",
+        } and not status.get("available"):
             missing.append(f"{tool_id} {spec.version}")
             continue
         if status.get("version_matches_contract") is False:
@@ -275,6 +282,7 @@ class ToolAdapter:
             "role": self.role,
         }
         import json
+
         return hashlib.sha256(
             json.dumps(parts, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
@@ -332,8 +340,6 @@ def toolchain_mode() -> str:
         return "strict"
     value = os.environ.get("PCRSTUDIO_TOOLCHAIN_MODE", "strict").strip().lower()
     return value if value in _TOOLCHAIN_MODES else "strict"
-
-
 
 
 def _scientific_environment_status() -> dict[str, Any]:
@@ -413,8 +419,7 @@ def _strict_execution_readiness() -> dict[str, Any]:
         "blast": _scientific_database_readiness("PCRSTUDIO_BLAST_DATABASE"),
     }
     environment_ready = bool(
-        environment["declared_matches_actual"]
-        and environment["approved_matches_actual"]
+        environment["declared_matches_actual"] and environment["approved_matches_actual"]
     )
     ready = toolchain_mode() != "strict" or (
         environment_ready and all(item["ready"] for item in databases.values())
@@ -429,6 +434,7 @@ def _strict_execution_readiness() -> dict[str, Any]:
         },
         "specificity_databases": databases,
     }
+
 
 def _digest(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8", "replace")).hexdigest()
@@ -477,14 +483,18 @@ def _bundle_tree_sha256(root_value: str) -> str | None:
                 resolved = path.resolve()
                 if resolved != root and root not in resolved.parents:
                     return None
-                payload = b"L\0" + rel + b"\0" + f"{mode:o}".encode() + b"\0" + target.encode("utf-8")
+                payload = (
+                    b"L\0" + rel + b"\0" + f"{mode:o}".encode() + b"\0" + target.encode("utf-8")
+                )
             elif path.is_dir():
                 payload = b"D\0" + rel + b"\0" + f"{mode:o}".encode()
             elif path.is_file():
                 content_hash = file_sha256(path)
                 if content_hash is None:
                     return None
-                payload = b"F\0" + rel + b"\0" + f"{mode:o}".encode() + b"\0" + content_hash.encode()
+                payload = (
+                    b"F\0" + rel + b"\0" + f"{mode:o}".encode() + b"\0" + content_hash.encode()
+                )
             else:
                 return None
             h.update(payload + b"\n")
@@ -529,6 +539,7 @@ def resolve(tool_id: str) -> ResolvedTool:
         if found:
             return ResolvedTool(spec, Path(found).resolve(), "PATH")
     return ResolvedTool(spec, None, "not-found")
+
 
 def native_command(
     tool_id: str, executable: str | os.PathLike[str], args: Iterable[str]
@@ -601,7 +612,9 @@ def _distribution_record_status(tool_id: str, spec: ToolSpec) -> dict[str, Any]:
         if not core_available:
             warnings.append("Bundled libprimer3 version could not be inspected.")
         if not package_available:
-            warnings.append("The primer3-py distribution that carries libprimer3 could not be fingerprinted.")
+            warnings.append(
+                "The primer3-py distribution that carries libprimer3 could not be fingerprinted."
+            )
         if core_available and _version_matches(spec.version, observed) is False:
             warnings.append(
                 f"Observed libprimer3 version {observed!r} does not match the generation-1 pin {spec.version}."
@@ -616,7 +629,9 @@ def _distribution_record_status(tool_id: str, spec: ToolSpec) -> dict[str, Any]:
             "source": "bundled-with-primer3-py",
             "carrier_distribution_version": package_version,
             "artifact_sha256": record_hash,
-            "artifact_identity": "sha256(primer3-py distribution RECORD metadata)" if record_hash else None,
+            "artifact_identity": "sha256(primer3-py distribution RECORD metadata)"
+            if record_hash
+            else None,
             "expected_artifact_sha256": None,
             "expected_artifact_sha256_malformed": False,
             "artifact_hash_matches": None,
@@ -674,6 +689,7 @@ def _distribution_record_status(tool_id: str, spec: ToolSpec) -> dict[str, Any]:
         "warnings": warnings,
     }
 
+
 def tool_status(tool_id: str) -> dict[str, Any]:
     spec = TOOLS[tool_id]
     if spec.execution_scope not in {"local", "external-managed"}:
@@ -704,9 +720,13 @@ def tool_status(tool_id: str) -> dict[str, Any]:
     if tool_id == "mafft":
         bundle_actual, bundle_expected, bundle_matches = _mafft_bundle_status()
         if toolchain_mode() == "strict" and bundle_expected is None:
-            warnings.append("Strict mode requires PCRSTUDIO_MAFFT_BUNDLE_SHA256 for the complete portable bundle.")
+            warnings.append(
+                "Strict mode requires PCRSTUDIO_MAFFT_BUNDLE_SHA256 for the complete portable bundle."
+            )
         elif bundle_matches is not True:
-            warnings.append("The MAFFT portable bundle tree does not match PCRSTUDIO_MAFFT_BUNDLE_SHA256.")
+            warnings.append(
+                "The MAFFT portable bundle tree does not match PCRSTUDIO_MAFFT_BUNDLE_SHA256."
+            )
     return {
         "tool_id": tool_id,
         "configured_version": spec.version,
@@ -749,16 +769,16 @@ def _observed_version(tool_id: str, executable: str) -> str | None:
         )
     except (OSError, subprocess.TimeoutExpired, ProcessOutputLimitExceeded, ProcessTransportError):
         return None
-    text = "\n".join(
-        part for part in (completed.stdout, completed.stderr) if part
-    ).strip()
+    text = "\n".join(part for part in (completed.stdout, completed.stderr) if part).strip()
     # Some upstream wrappers may print a code
     # page banner before the actual version.  Keep the full first 300 chars so
     # contract matching sees the authoritative version token.
     return text[:300] if text else None
 
 
-def _enforce_identity(resolved: ResolvedTool) -> tuple[str | None, bool | None, str | None, bool | None]:
+def _enforce_identity(
+    resolved: ResolvedTool,
+) -> tuple[str | None, bool | None, str | None, bool | None]:
     spec = resolved.spec
     _require_approved_scientific_environment(spec.tool_id)
     observed = _observed_version(spec.tool_id, str(resolved.path)) if resolved.path else None
@@ -900,7 +920,13 @@ def run_tool(
     ).run(args, stdin=stdin, cwd=cwd)
 
 
-_DATABASE_SCOPES = {"smoke-regression", "development", "production", "approved-reference", "unresolved"}
+_DATABASE_SCOPES = {
+    "smoke-regression",
+    "development",
+    "production",
+    "approved-reference",
+    "unresolved",
+}
 
 
 def configured_database_contract(prefix: str) -> dict[str, Any]:
@@ -913,11 +939,7 @@ def configured_database_contract(prefix: str) -> dict[str, Any]:
     when present.
     """
     raw = os.environ.get(prefix, "").strip()
-    paths = [
-        entry.strip().strip('"')
-        for entry in raw.split(os.pathsep)
-        if entry.strip()
-    ]
+    paths = [entry.strip().strip('"') for entry in raw.split(os.pathsep) if entry.strip()]
     digest = _normalise_digest(os.environ.get(f"{prefix}_SHA256", "").strip())
     scope = os.environ.get(f"{prefix}_SCOPE", "unresolved").strip().lower() or "unresolved"
     if scope not in _DATABASE_SCOPES:
@@ -930,6 +952,7 @@ def configured_database_contract(prefix: str) -> dict[str, Any]:
     if manifest and manifest.is_file():
         try:
             import json
+
             loaded = json.loads(manifest.read_text(encoding="utf-8"))
             if not isinstance(loaded, dict):
                 raise ValueError("database manifest root must be an object")
@@ -978,7 +1001,12 @@ def configured_database_contract(prefix: str) -> dict[str, Any]:
     elif manifest is not None:
         indexed_name = str(manifest_data.get("indexed_fasta") or "").strip()
         candidate = (manifest.resolve().parent / indexed_name).resolve() if indexed_name else None
-        if candidate and candidate.parent == manifest.resolve().parent and candidate.name == indexed_name and candidate.is_file():
+        if (
+            candidate
+            and candidate.parent == manifest.resolve().parent
+            and candidate.name == indexed_name
+            and candidate.is_file()
+        ):
             concrete_file = candidate
     concrete_file_hash = file_sha256(concrete_file) if concrete_file else None
     content_hash_matches = concrete_file_hash == digest if concrete_file_hash and digest else None

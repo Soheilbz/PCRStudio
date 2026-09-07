@@ -4,6 +4,7 @@ Evidence is a flat scalar observation record. It is provenance about what was
 observed after design; it is never an implicit feature vector and never mutates
 the candidate ranking that produced the saved design.
 """
+
 from __future__ import annotations
 
 from typing import Any

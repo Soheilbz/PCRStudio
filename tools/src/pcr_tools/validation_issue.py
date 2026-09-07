@@ -1,4 +1,5 @@
 """One structured validation vocabulary shared across PCRStudio layers."""
+
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
@@ -6,8 +7,16 @@ from typing import Literal, TypedDict
 
 Severity = Literal["info", "warning", "error"]
 OwnerStep = Literal[
-    "target", "design", "strategy", "constraints", "vector", "reaction",
-    "specificity", "validation", "construct", "review",
+    "target",
+    "design",
+    "strategy",
+    "constraints",
+    "vector",
+    "reaction",
+    "specificity",
+    "validation",
+    "construct",
+    "review",
 ]
 
 

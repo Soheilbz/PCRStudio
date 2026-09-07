@@ -6,6 +6,7 @@ callers from accidentally turning the worker into a generic URL fetcher and
 prevents urllib's default cross-origin redirect behaviour from escaping the
 reviewed destination.
 """
+
 from __future__ import annotations
 
 import os

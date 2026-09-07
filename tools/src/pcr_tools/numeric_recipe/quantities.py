@@ -1,4 +1,5 @@
 """Lightweight unit-bearing quantities for reaction arithmetic."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

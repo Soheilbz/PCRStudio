@@ -176,7 +176,9 @@ def test_nonstandard_inverse_branch_is_not_silently_approximated():
 
 def test_supplied_circular_template_is_executable_without_inventing_a_digest(monkeypatch):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "permissive")
-    request = strict_request(inverse_branch="supplied-circular-template", circle_length=len(known()) + 1200)
+    request = strict_request(
+        inverse_branch="supplied-circular-template", circle_length=len(known()) + 1200
+    )
     request.pop("enzyme")
     answer = run(request)
     assert answer["experiment_contract"]["branch"] == "supplied-circular-template"

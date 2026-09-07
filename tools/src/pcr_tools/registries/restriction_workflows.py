@@ -6,6 +6,7 @@ methylation sensitivity, heat inactivation, double-digest activity, star
 activity, end geometry) stay unresolved unless the exact-enzyme registry owns
 them. Bench workflow evidence never changes primer ranking.
 """
+
 from __future__ import annotations
 
 from copy import deepcopy
@@ -179,19 +180,26 @@ def _copy_record(table: dict[str, dict[str, Any]], protocol_id: str, kind: str) 
 
 
 def resolve_restriction_workflow(
-    *, digest_protocol: str | None, dephosphorylation_protocol: str | None, ligation_protocol: str | None
+    *,
+    digest_protocol: str | None,
+    dephosphorylation_protocol: str | None,
+    ligation_protocol: str | None,
 ) -> dict[str, Any]:
     if not digest_protocol:
         raise ValueError("restriction-cloning requires restriction_digest_protocol")
     if not dephosphorylation_protocol:
-        raise ValueError("restriction-cloning requires explicit restriction_dephosphorylation_protocol; use 'none' when omitted at the bench")
+        raise ValueError(
+            "restriction-cloning requires explicit restriction_dephosphorylation_protocol; use 'none' when omitted at the bench"
+        )
     if not ligation_protocol:
         raise ValueError("restriction-cloning requires restriction_ligation_protocol")
     return {
         "schema_version": SCHEMA_VERSION,
         "decision_impact": DECISION_IMPACT,
         "digest": _copy_record(DIGEST_PROTOCOLS, digest_protocol, "digest"),
-        "dephosphorylation": _copy_record(DEPHOSPHORYLATION_PROTOCOLS, dephosphorylation_protocol, "dephosphorylation"),
+        "dephosphorylation": _copy_record(
+            DEPHOSPHORYLATION_PROTOCOLS, dephosphorylation_protocol, "dephosphorylation"
+        ),
         "ligation": _copy_record(LIGATION_PROTOCOLS, ligation_protocol, "ligation"),
         "controls": {
             "required_measured_controls": [
@@ -206,6 +214,7 @@ def resolve_restriction_workflow(
 def generated_catalogue() -> dict[str, Any]:
     def table(src: dict[str, dict[str, Any]], kind: str) -> dict[str, Any]:
         return {key: _copy_record(src, key, kind) for key in sorted(src)}
+
     return {
         "schema_version": SCHEMA_VERSION,
         "decision_impact": DECISION_IMPACT,

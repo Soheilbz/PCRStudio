@@ -4,6 +4,7 @@ Calculations use user/vendor-supplied physical facts. They never infer an
 enzyme's buffer, temperature, methylation sensitivity, star activity or stock
 concentration from its recognition sequence.
 """
+
 from __future__ import annotations
 
 import math
@@ -29,7 +30,13 @@ def dna_fmol(*, mass_ng: float, length_bp: int, mean_bp_molecular_weight: float 
     return mass_ng * 1_000_000.0 / (length_bp * mw)
 
 
-def insert_mass_ng(*, vector_mass_ng: float, vector_length_bp: int, insert_length_bp: int, insert_to_vector_molar_ratio: float) -> float:
+def insert_mass_ng(
+    *,
+    vector_mass_ng: float,
+    vector_length_bp: int,
+    insert_length_bp: int,
+    insert_to_vector_molar_ratio: float,
+) -> float:
     vector_mass_ng = _positive(vector_mass_ng, "vector_mass_ng")
     if vector_length_bp <= 0 or insert_length_bp <= 0:
         raise RestrictionCalculatorError("vector_length_bp and insert_length_bp must be >0")
@@ -38,10 +45,17 @@ def insert_mass_ng(*, vector_mass_ng: float, vector_length_bp: int, insert_lengt
 
 
 def enzyme_volume_ul(*, required_units: float, stock_units_per_ul: float) -> float:
-    return _positive(required_units, "required_units") / _positive(stock_units_per_ul, "stock_units_per_ul")
+    return _positive(required_units, "required_units") / _positive(
+        stock_units_per_ul, "stock_units_per_ul"
+    )
 
 
-def final_glycerol_percent(*, enzyme_volumes_ul: list[float] | tuple[float, ...], reaction_volume_ul: float, enzyme_storage_glycerol_fraction: float = 0.5) -> float:
+def final_glycerol_percent(
+    *,
+    enzyme_volumes_ul: list[float] | tuple[float, ...],
+    reaction_volume_ul: float,
+    enzyme_storage_glycerol_fraction: float = 0.5,
+) -> float:
     reaction = _positive(reaction_volume_ul, "reaction_volume_ul")
     fraction = float(enzyme_storage_glycerol_fraction)
     if not math.isfinite(fraction) or not 0 <= fraction <= 1:
@@ -54,19 +68,28 @@ def final_glycerol_percent(*, enzyme_volumes_ul: list[float] | tuple[float, ...]
     return total * fraction / reaction * 100.0
 
 
-def plan_double_digest(*, first: dict[str, object], second: dict[str, object], minimum_common_buffer_activity_percent: float = 50.0) -> dict[str, object]:
+def plan_double_digest(
+    *,
+    first: dict[str, object],
+    second: dict[str, object],
+    minimum_common_buffer_activity_percent: float = 50.0,
+) -> dict[str, object]:
     """Plan only when exact-formulation facts are explicitly supplied.
 
     Each enzyme dict must provide ``name``, ``temperature_c`` and a ``buffers``
     mapping of buffer-id -> activity percent. Heat-inactivation information is
     optional and is never guessed.
     """
-    min_activity = _positive(minimum_common_buffer_activity_percent, "minimum_common_buffer_activity_percent")
+    min_activity = _positive(
+        minimum_common_buffer_activity_percent, "minimum_common_buffer_activity_percent"
+    )
     if min_activity > 100:
         raise RestrictionCalculatorError("minimum_common_buffer_activity_percent cannot exceed 100")
     for label, row in (("first", first), ("second", second)):
         if not str(row.get("name") or "").strip():
-            raise RestrictionCalculatorError(f"{label} enzyme requires exact name/formulation identity")
+            raise RestrictionCalculatorError(
+                f"{label} enzyme requires exact name/formulation identity"
+            )
         if not isinstance(row.get("buffers"), dict) or not row["buffers"]:
             raise RestrictionCalculatorError(f"{label} enzyme requires exact buffer/activity data")
         _positive(float(row.get("temperature_c") or 0), f"{label}.temperature_c")
@@ -81,7 +104,13 @@ def plan_double_digest(*, first: dict[str, object], second: dict[str, object], m
     if common and same_temp:
         # Prefer maximum bottleneck activity, then deterministic buffer name.
         best = sorted(common, key=lambda r: (-min(r[1], r[2]), -sum(r[1:]), r[0]))[0]
-        return {"mode": "simultaneous", "buffer": best[0], "activities_percent": [best[1], best[2]], "temperature_c": float(first["temperature_c"]), "sequence_decision_impact": "none"}
+        return {
+            "mode": "simultaneous",
+            "buffer": best[0],
+            "activities_percent": [best[1], best[2]],
+            "temperature_c": float(first["temperature_c"]),
+            "sequence_decision_impact": "none",
+        }
     return {
         "mode": "sequential-required",
         "reason": "no source-backed common buffer/temperature meeting the requested activity threshold",

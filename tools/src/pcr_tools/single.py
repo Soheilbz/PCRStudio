@@ -35,19 +35,20 @@ from .design import Constraints, clean_template
 from .intake import target_to_dict
 from .presets import thermodynamic_model
 from .provenance import provenance
-from .registries.authorities import RACE_AUTHORITY, SEQUENCING_AUTHORITY, record as authority_record
-from .scientific_integrity import enforce_constraint_overrides
-from .workflow_evidence import evidence_block
+from .registries.authorities import RACE_AUTHORITY, SEQUENCING_AUTHORITY
+from .registries.authorities import record as authority_record
 from .sanger_trace import SangerTraceError, parse_ab1_base64
+from .scientific_integrity import enforce_constraint_overrides
 from .settings import excluded_from, how_many_from, label, prepare
 from .thermo import (
     DEFAULT_CONDITIONS,
     analyse,
     pair_dimer,
     report_to_dict,
-    salt_correction_for_conditions,
     reverse_complement,
+    salt_correction_for_conditions,
 )
+from .workflow_evidence import evidence_block
 
 
 class SinglePrimerError(ValueError):
@@ -61,14 +62,23 @@ SEQUENCING_DESIGN_PROFILES = tuple(SEQUENCING_AUTHORITY["groups"]["design_profil
 SHA256_HEX_LENGTH = 64
 
 SEQUENCING_INSTRUMENTS = (
-    "unresolved", "seqstudio", "seqstudio-flex", "3500", "3500xl", "3730", "3730xl", "other"
+    "unresolved",
+    "seqstudio",
+    "seqstudio-flex",
+    "3500",
+    "3500xl",
+    "3730",
+    "3730xl",
+    "other",
 )
 
 
 def sequencing_protocol(named: str | None) -> dict[str, Any] | None:
     selected = str(named or "not-selected")
     if selected not in SEQUENCING_PROTOCOLS:
-        raise SinglePrimerError("sequencing_protocol must be one of: " + ", ".join(SEQUENCING_PROTOCOLS) + ".")
+        raise SinglePrimerError(
+            "sequencing_protocol must be one of: " + ", ".join(SEQUENCING_PROTOCOLS) + "."
+        )
     if selected == "not-selected":
         return None
     record = authority_record(SEQUENCING_AUTHORITY, selected)
@@ -80,7 +90,9 @@ def sequencing_design_profile(named: str | None) -> dict[str, Any]:
     selected = str(named or "generic-cycle-sequencing")
     if selected not in SEQUENCING_DESIGN_PROFILES:
         raise SinglePrimerError(
-            "sequencing_design_profile must be one of: " + ", ".join(SEQUENCING_DESIGN_PROFILES) + "."
+            "sequencing_design_profile must be one of: "
+            + ", ".join(SEQUENCING_DESIGN_PROFILES)
+            + "."
         )
     record = authority_record(SEQUENCING_AUTHORITY, selected)
     if record.get("execution_status") != "executable":
@@ -106,14 +118,16 @@ def universal_primer_candidates(template: str, *, direction: str) -> list[dict[s
         binding = oligo if direction == "forward" else reverse_complement(oligo)
         start = seq.find(binding)
         if start >= 0:
-            hits.append({
-                "name": name,
-                "sequence": oligo,
-                "direction": direction,
-                "template_start": start,
-                "exact_binding": True,
-                "decision_impact": "diagnostic-only",
-            })
+            hits.append(
+                {
+                    "name": name,
+                    "sequence": oligo,
+                    "direction": direction,
+                    "template_start": start,
+                    "exact_binding": True,
+                    "decision_impact": "diagnostic-only",
+                }
+            )
     return hits
 
 
@@ -137,7 +151,9 @@ def sequencing_context(request: dict[str, Any], *, assay_id: str) -> dict[str, A
     if instrument == "other" and not instrument_name:
         raise SinglePrimerError("sequencing_instrument=other requires sequencing_instrument_name")
     if instrument != "other" and instrument_name:
-        raise SinglePrimerError("sequencing_instrument_name is only valid with sequencing_instrument=other")
+        raise SinglePrimerError(
+            "sequencing_instrument_name is only valid with sequencing_instrument=other"
+        )
     facility_sop = str(request.get("sequencing_facility_sop") or "").strip()
     return {
         "instrument": instrument,
@@ -172,17 +188,17 @@ def sequencing_context(request: dict[str, Any], *, assay_id: str) -> dict[str, A
 GENERACER_25_0355_VL_ID = "generacer-kit-25-0355-vl"
 _GENERACER_RECORD = authority_record(RACE_AUTHORITY, GENERACER_25_0355_VL_ID)
 GENERACER_25_0355_VL_PARTNERS: dict[tuple[str, str], dict[str, str]] = {
-    tuple(key.split(":")): dict(value)
-    for key, value in _GENERACER_RECORD["partners"].items()
+    tuple(key.split(":")): dict(value) for key, value in _GENERACER_RECORD["partners"].items()
 }
 FIRSTCHOICE_RLM_RACE_ID = "firstchoice-rlm-race"
 SMARTER_RACE_ID = "smarter-race-current"
 _FIRSTCHOICE_RECORD = authority_record(RACE_AUTHORITY, FIRSTCHOICE_RLM_RACE_ID)
 FIRSTCHOICE_RLM_RACE_PARTNERS: dict[tuple[str, str], dict[str, str]] = {
-    tuple(key.split(":")): dict(value)
-    for key, value in _FIRSTCHOICE_RECORD["partners"].items()
+    tuple(key.split(":")): dict(value) for key, value in _FIRSTCHOICE_RECORD["partners"].items()
 }
-EXECUTABLE_NAMED_RACE_PARTNERS: dict[str, tuple[dict[str, Any], dict[tuple[str, str], dict[str, str]]]] = {
+EXECUTABLE_NAMED_RACE_PARTNERS: dict[
+    str, tuple[dict[str, Any], dict[tuple[str, str], dict[str, str]]]
+] = {
     GENERACER_25_0355_VL_ID: (_GENERACER_RECORD, GENERACER_25_0355_VL_PARTNERS),
     FIRSTCHOICE_RLM_RACE_ID: (_FIRSTCHOICE_RECORD, FIRSTCHOICE_RLM_RACE_PARTNERS),
 }
@@ -194,7 +210,13 @@ EXECUTABLE_NAMED_RACE_PARTNERS: dict[str, tuple[dict[str, Any], dict[tuple[str, 
 # after oligo-dT-adapter cDNA synthesis, not with the oligo-dT primer itself.
 # Those older workflows can still be supplied as `custom` when the *actual PCR
 # partner sequence* for the chosen round is known and is unambiguous DNA.
-RACE_ADAPTERS = ("not-selected", GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom")
+RACE_ADAPTERS = (
+    "not-selected",
+    GENERACER_25_0355_VL_ID,
+    FIRSTCHOICE_RLM_RACE_ID,
+    SMARTER_RACE_ID,
+    "custom",
+)
 RACE_CHEMISTRIES = tuple(RACE_AUTHORITY["groups"]["chemistries"])
 UNSUPPORTED_AMBIGUOUS_RACE_ADAPTERS = ("generacer", "AAP")
 RACE_DIRECTIONS = ("5prime", "3prime")
@@ -210,7 +232,9 @@ def race_chemistry(named: str | None, legacy_adapter: str | None = None) -> dict
     if selected == "not-selected":
         return None
     if selected not in RACE_CHEMISTRIES:
-        raise SinglePrimerError("race_chemistry must be one of: " + ", ".join(RACE_CHEMISTRIES) + ".")
+        raise SinglePrimerError(
+            "race_chemistry must be one of: " + ", ".join(RACE_CHEMISTRIES) + "."
+        )
     record = authority_record(RACE_AUTHORITY, selected)
     record["chemistry_id"] = selected
     status = record.get("execution_status")
@@ -256,9 +280,7 @@ def race_adapter(
             "or provide the exact current PCR partner with race_adapter=custom."
         )
     if selected not in RACE_ADAPTERS:
-        raise SinglePrimerError(
-            "race_adapter must be one of: " + ", ".join(RACE_ADAPTERS) + "."
-        )
+        raise SinglePrimerError("race_adapter must be one of: " + ", ".join(RACE_ADAPTERS) + ".")
     if selected == "not-selected":
         return None
     if selected == SMARTER_RACE_ID:
@@ -267,22 +289,31 @@ def race_adapter(
                 "SMARTer RACE requires race_partner_sequence containing the exact current kit/SOP PCR partner; PCRStudio does not infer proprietary adapter primers from obsolete documents."
             )
         sequence = clean_template(str(custom_sequence)).upper()
-        if len(sequence) > MAX_CUSTOM_RACE_PARTNER_LENGTH or any(base not in "ACGT" for base in sequence):
-            raise SinglePrimerError(f"race_partner_sequence must be 1–{MAX_CUSTOM_RACE_PARTNER_LENGTH} unambiguous DNA bases (A/C/G/T)")
-        record=authority_record(RACE_AUTHORITY, SMARTER_RACE_ID)
+        if len(sequence) > MAX_CUSTOM_RACE_PARTNER_LENGTH or any(
+            base not in "ACGT" for base in sequence
+        ):
+            raise SinglePrimerError(
+                f"race_partner_sequence must be 1–{MAX_CUSTOM_RACE_PARTNER_LENGTH} unambiguous DNA bases (A/C/G/T)"
+            )
+        record = authority_record(RACE_AUTHORITY, SMARTER_RACE_ID)
         return {
-            "id":SMARTER_RACE_ID,"name":"SMARTer current caller-supplied exact PCR partner","sequence":sequence,
-            "direction":direction,"round":round_name,"protocol_identity":record["selection"],
-            "source_identity":record["source_identity"],"source_url":record["source_url"],"source_reviewed_date":record["source_reviewed_date"],
-            "authority":"caller-supplied exact current kit/SOP partner",
+            "id": SMARTER_RACE_ID,
+            "name": "SMARTer current caller-supplied exact PCR partner",
+            "sequence": sequence,
+            "direction": direction,
+            "round": round_name,
+            "protocol_identity": record["selection"],
+            "source_identity": record["source_identity"],
+            "source_url": record["source_url"],
+            "source_reviewed_date": record["source_reviewed_date"],
+            "authority": "caller-supplied exact current kit/SOP partner",
         }
     if selected == "custom":
         if custom_sequence is None or not str(custom_sequence).strip():
             raise SinglePrimerError("race_adapter=custom requires race_partner_sequence")
         sequence = clean_template(str(custom_sequence)).upper()
-        if (
-            len(sequence) > MAX_CUSTOM_RACE_PARTNER_LENGTH
-            or any(base not in "ACGT" for base in sequence)
+        if len(sequence) > MAX_CUSTOM_RACE_PARTNER_LENGTH or any(
+            base not in "ACGT" for base in sequence
         ):
             raise SinglePrimerError(
                 f"race_partner_sequence must be 1–{MAX_CUSTOM_RACE_PARTNER_LENGTH} unambiguous DNA bases (A/C/G/T)"
@@ -313,7 +344,11 @@ def race_adapter(
         "source_url": record["source_url"],
         "source_reviewed_date": record["source_reviewed_date"],
         **({"source_revision": record["source_revision"]} if record.get("source_revision") else {}),
-        **({"source_revision_date": record["source_revision_date"]} if record.get("source_revision_date") else {}),
+        **(
+            {"source_revision_date": record["source_revision_date"]}
+            if record.get("source_revision_date")
+            else {}
+        ),
     }
 
 
@@ -769,7 +804,9 @@ def _pick(
     return found, str(answer.get(f"PRIMER_{side}_EXPLAIN", ""))
 
 
-def candidate_to_dict(candidate: Candidate, window: Window | None, **conditions: float) -> dict[str, Any]:
+def candidate_to_dict(
+    candidate: Candidate, window: Window | None, **conditions: float
+) -> dict[str, Any]:
     """One primer as plain data without inventing assay-specific placement fields."""
     measured = analyse(candidate.sequence, **conditions)
     result: dict[str, Any] = {
@@ -888,13 +925,17 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     race_round = str(request.get("race_round") or "").strip()
     selected_race_chemistry = race_chemistry(
         request.get("race_chemistry"),
-        request.get("race_adapter") if request.get("race_adapter") in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"} else None,
+        request.get("race_adapter")
+        if request.get("race_adapter")
+        in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"}
+        else None,
     )
     requested_race_adapter = request.get("race_adapter")
     if (
         selected_race_chemistry
         and requested_race_adapter not in (None, "", "not-selected")
-        and selected_race_chemistry.get("chemistry_id") in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"}
+        and selected_race_chemistry.get("chemistry_id")
+        in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"}
         and requested_race_adapter != selected_race_chemistry.get("chemistry_id")
     ):
         raise SinglePrimerError(
@@ -903,7 +944,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         )
     race_adapter_id = (
         selected_race_chemistry.get("chemistry_id")
-        if selected_race_chemistry and selected_race_chemistry.get("chemistry_id") in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"}
+        if selected_race_chemistry
+        and selected_race_chemistry.get("chemistry_id")
+        in {GENERACER_25_0355_VL_ID, FIRSTCHOICE_RLM_RACE_ID, SMARTER_RACE_ID, "custom"}
         else requested_race_adapter
     )
     selected_race_adapter = race_adapter(
@@ -931,15 +974,15 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "RACE requires an explicit `race_direction`: choose `5prime` or `3prime`."
         )
     if chosen.assay_id == "race" and selected_race_chemistry is None:
-        raise SinglePrimerError("RACE requires explicit race_chemistry; chemistry identity is not inferred from primer direction.")
+        raise SinglePrimerError(
+            "RACE requires explicit race_chemistry; chemistry identity is not inferred from primer direction."
+        )
     if chosen.assay_id == "race" and selected_race_adapter is None:
         raise SinglePrimerError(
             "The selected RACE chemistry is not executable without an exact PCR-partner sequence; use a reviewed named kit branch (GeneRacer or FirstChoice) or a complete custom SOP."
         )
     if chosen.assay_id == "race" and race_substrate not in {"total-rna", "mrna", "cdna"}:
-        raise SinglePrimerError(
-            "RACE requires `race_substrate`: total-rna, mrna or cdna."
-        )
+        raise SinglePrimerError("RACE requires `race_substrate`: total-rna, mrna or cdna.")
     if chosen.assay_id == "race" and not race_preparation:
         raise SinglePrimerError(
             "RACE requires `race_preparation` provenance (kit/SOP/RT or template-switch branch)."
@@ -948,14 +991,30 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raise SinglePrimerError("RACE requires `race_round`: primary or nested.")
     race_sop_revision = str(request.get("race_sop_revision") or "").strip()
     race_sop_sha256 = str(request.get("race_sop_sha256") or "").strip().lower()
-    if chosen.assay_id == "race" and selected_race_chemistry and selected_race_chemistry.get("chemistry_id") in {"custom", SMARTER_RACE_ID}:
+    if (
+        chosen.assay_id == "race"
+        and selected_race_chemistry
+        and selected_race_chemistry.get("chemistry_id") in {"custom", SMARTER_RACE_ID}
+    ):
         if not race_sop_revision:
-            raise SinglePrimerError("custom/SMARTer RACE requires race_sop_revision for the caller-reviewed SOP/manual authority")
-        if len(race_sop_sha256) != SHA256_HEX_LENGTH or any(ch not in "0123456789abcdef" for ch in race_sop_sha256):
-            raise SinglePrimerError("custom/SMARTer RACE requires race_sop_sha256 as a 64-character SHA-256 digest")
-    if chosen.assay_id == "race" and selected_race_chemistry and selected_race_chemistry.get("chemistry_id") == SMARTER_RACE_ID:
+            raise SinglePrimerError(
+                "custom/SMARTer RACE requires race_sop_revision for the caller-reviewed SOP/manual authority"
+            )
+        if len(race_sop_sha256) != SHA256_HEX_LENGTH or any(
+            ch not in "0123456789abcdef" for ch in race_sop_sha256
+        ):
+            raise SinglePrimerError(
+                "custom/SMARTer RACE requires race_sop_sha256 as a 64-character SHA-256 digest"
+            )
+    if (
+        chosen.assay_id == "race"
+        and selected_race_chemistry
+        and selected_race_chemistry.get("chemistry_id") == SMARTER_RACE_ID
+    ):
         if selected_race_direction == "3prime" and request.get("race_polyadenylated") is not True:
-            raise SinglePrimerError("SMARTer 3-prime RACE requires explicit racePolyadenylated=true; PCRStudio will not infer a poly(A) tail.")
+            raise SinglePrimerError(
+                "SMARTer 3-prime RACE requires explicit racePolyadenylated=true; PCRStudio will not infer a poly(A) tail."
+            )
     if selected_protocol is not None and chosen.assay_id not in ("", "sequencing-primer"):
         raise SinglePrimerError(
             "the BigDye v3.1 overlay belongs to the `sequencing-primer` assay, "
@@ -991,17 +1050,38 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     explicit_constraints = request.get("constraints") or {}
     if chosen.assay_id == "sequencing-primer" and selected_design_profile is not None:
         design_profile = dict(selected_design_profile.get("design") or {})
-        applicable = {key: value for key, value in design_profile.items() if key in Constraints.__dataclass_fields__}
-        baseline = {field: getattr(effective_limits, field) for field in Constraints.__dataclass_fields__}
+        applicable = {
+            key: value
+            for key, value in design_profile.items()
+            if key in Constraints.__dataclass_fields__
+        }
+        baseline = {
+            field: getattr(effective_limits, field) for field in Constraints.__dataclass_fields__
+        }
         baseline.update(applicable)
         if "tm_min" in applicable and "tm_max" in applicable and "tm_opt" not in applicable:
-            baseline["tm_opt"] = round((float(applicable["tm_min"]) + float(applicable["tm_max"])) / 2.0, 1)
+            baseline["tm_opt"] = round(
+                (float(applicable["tm_min"]) + float(applicable["tm_max"])) / 2.0, 1
+            )
             applicable["tm_opt"] = baseline["tm_opt"]
-        if "length_min" in applicable and "length_max" in applicable and "length_opt" not in applicable:
-            applicable["length_opt"] = max(int(applicable["length_min"]), min(int(chosen.limits.length_opt), int(applicable["length_max"])))
+        if (
+            "length_min" in applicable
+            and "length_max" in applicable
+            and "length_opt" not in applicable
+        ):
+            applicable["length_opt"] = max(
+                int(applicable["length_min"]),
+                min(int(chosen.limits.length_opt), int(applicable["length_max"])),
+            )
             baseline["length_opt"] = applicable["length_opt"]
-        enforce_constraint_overrides(explicit_constraints, baseline, context=f"sequencing profile {selected_design_profile['profile_id']}")
-        effective_limits = replace(chosen.limits, **{k:v for k,v in applicable.items() if k not in explicit_constraints})
+        enforce_constraint_overrides(
+            explicit_constraints,
+            baseline,
+            context=f"sequencing profile {selected_design_profile['profile_id']}",
+        )
+        effective_limits = replace(
+            chosen.limits, **{k: v for k, v in applicable.items() if k not in explicit_constraints}
+        )
     elif chosen.assay_id == "race" and selected_race_chemistry is not None:
         gsp = dict(selected_race_chemistry.get("gsp_profile") or {})
         applicable: dict[str, Any] = {}
@@ -1009,16 +1089,27 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             if key in gsp:
                 applicable[key] = gsp[key]
         if "length_min" in applicable and "length_max" in applicable:
-            applicable["length_opt"] = max(int(applicable["length_min"]), min(int(chosen.limits.length_opt), int(applicable["length_max"])))
+            applicable["length_opt"] = max(
+                int(applicable["length_min"]),
+                min(int(chosen.limits.length_opt), int(applicable["length_max"])),
+            )
         if "tm_min" in applicable and float(chosen.limits.tm_max) <= float(applicable["tm_min"]):
             # GeneRacer specifies a lower Tm relationship, not a universal upper bound.
             # 80 C is a PCRStudio search ceiling and is reported as such, not vendor truth.
             applicable["tm_opt"] = float(applicable["tm_min"]) + 2.0
             applicable["tm_max"] = float(applicable["tm_min"]) + 8.0
-        baseline = {field: getattr(effective_limits, field) for field in Constraints.__dataclass_fields__}
+        baseline = {
+            field: getattr(effective_limits, field) for field in Constraints.__dataclass_fields__
+        }
         baseline.update(applicable)
-        enforce_constraint_overrides(explicit_constraints, baseline, context=f"RACE chemistry {selected_race_chemistry['chemistry_id']}")
-        effective_limits = replace(chosen.limits, **{k:v for k,v in applicable.items() if k not in explicit_constraints})
+        enforce_constraint_overrides(
+            explicit_constraints,
+            baseline,
+            context=f"RACE chemistry {selected_race_chemistry['chemistry_id']}",
+        )
+        effective_limits = replace(
+            chosen.limits, **{k: v for k, v in applicable.items() if k not in explicit_constraints}
+        )
 
     reaction = chosen.reaction.as_conditions()
     if chosen.assay_id == "race":
@@ -1027,7 +1118,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "dead_zone/read_length are Sanger placement inputs and are not valid for RACE."
             )
         if bool(request.get("circular")):
-            raise SinglePrimerError("RACE requires a linear transcript/cDNA coordinate context; circular is invalid.")
+            raise SinglePrimerError(
+                "RACE requires a linear transcript/cDNA coordinate context; circular is invalid."
+            )
         found, explain = design_race(
             chosen.target.sequence,
             search_start=int(request["target_start"]),
@@ -1074,7 +1167,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     name = label(chosen.target.name)
 
     trace_review = None
-    if chosen.assay_id == "sequencing-primer" and request.get("sequencing_trace_ab1_base64") not in (None, ""):
+    if chosen.assay_id == "sequencing-primer" and request.get(
+        "sequencing_trace_ab1_base64"
+    ) not in (None, ""):
         try:
             trace_review = parse_ab1_base64(
                 request.get("sequencing_trace_ab1_base64"),
@@ -1086,34 +1181,72 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             selected_sequencing_context = {}
         else:
             selected_sequencing_context = dict(selected_sequencing_context)
-        selected_sequencing_context.update({"trace_status":"reviewed-abif","quality_status":"observed-trace-evidence","trace_filename":trace_review.get("filename")})
+        selected_sequencing_context.update(
+            {
+                "trace_status": "reviewed-abif",
+                "quality_status": "observed-trace-evidence",
+                "trace_filename": trace_review.get("filename"),
+            }
+        )
 
     walking_plan = None
     if chosen.assay_id == "sequencing-primer" and bool(request.get("sequencing_primer_walking")):
         if read_length is None:
             raise SinglePrimerError("sequencing primer walking requires an explicit read_length")
-        overlap=int(request.get("sequencing_walking_overlap") or 100)
-        usable=int(read_length)-int(dead_zone)
+        overlap = int(request.get("sequencing_walking_overlap") or 100)
+        usable = int(read_length) - int(dead_zone)
         if overlap < 0 or overlap >= usable:
-            raise SinglePrimerError("sequencingWalkingOverlap must be >=0 and smaller than usable read length")
-        step=max(1,usable-overlap)
-        target_start=int(request["target_start"]); target_end=target_start+int(request["target_length"])
-        windows=[]; at=target_start; index=1
-        while at < target_end and len(windows)<100:
-            end=min(target_end,at+usable)
-            windows.append({"walk_index":index,"target_start":at,"target_end":end,"target_length":end-at,"overlap":overlap if index>1 else 0,"status":"design-handoff"})
-            if end>=target_end: break
-            at=end-overlap; index+=1
-        walking_plan={"requested":True,"usable_read_length":usable,"overlap":overlap,"step":step,"windows":windows,"decision_impact":"route-and-coverage-plan","note":"Each walk window is an independent single-primer design/trace; observed traces determine actual usable coverage."}
+            raise SinglePrimerError(
+                "sequencingWalkingOverlap must be >=0 and smaller than usable read length"
+            )
+        step = max(1, usable - overlap)
+        target_start = int(request["target_start"])
+        target_end = target_start + int(request["target_length"])
+        windows = []
+        at = target_start
+        index = 1
+        while at < target_end and len(windows) < 100:
+            end = min(target_end, at + usable)
+            windows.append(
+                {
+                    "walk_index": index,
+                    "target_start": at,
+                    "target_end": end,
+                    "target_length": end - at,
+                    "overlap": overlap if index > 1 else 0,
+                    "status": "design-handoff",
+                }
+            )
+            if end >= target_end:
+                break
+            at = end - overlap
+            index += 1
+        walking_plan = {
+            "requested": True,
+            "usable_read_length": usable,
+            "overlap": overlap,
+            "step": step,
+            "windows": windows,
+            "decision_impact": "route-and-coverage-plan",
+            "note": "Each walk window is an independent single-primer design/trace; observed traces determine actual usable coverage.",
+        }
 
     nested_gsp_plan = None
     if chosen.assay_id == "race" and len(primers) >= 2:
-        ordered=sorted(primers,key=lambda x:int(x.get("at",0)),reverse=(selected_race_direction=="3prime"))
-        nested_gsp_plan={
-            "status":"candidate-plan","primary":ordered[0],"nested":ordered[1],"direction":selected_race_direction,
-            "partner_primary":selected_race_adapter,"partner_nested":selected_race_adapter,
-            "decision_impact":"geometry-plan",
-            "note":"Primary/nested GSP candidates are kept in transcript-end order; exact kit partner identity remains explicit and experimental product identity still requires sequencing evidence.",
+        ordered = sorted(
+            primers,
+            key=lambda x: int(x.get("at", 0)),
+            reverse=(selected_race_direction == "3prime"),
+        )
+        nested_gsp_plan = {
+            "status": "candidate-plan",
+            "primary": ordered[0],
+            "nested": ordered[1],
+            "direction": selected_race_direction,
+            "partner_primary": selected_race_adapter,
+            "partner_nested": selected_race_adapter,
+            "decision_impact": "geometry-plan",
+            "note": "Primary/nested GSP candidates are kept in transcript-end order; exact kit partner identity remains explicit and experimental product identity still requires sequencing evidence.",
         }
 
     # ── Where else this primer could sit ────────────────────────────────────
@@ -1153,7 +1286,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
 
     universal_hits = (
         universal_primer_candidates(chosen.target.sequence, direction=direction)
-        if chosen.assay_id == "sequencing-primer" and bool(request.get("sequencing_universal_primer_scan"))
+        if chosen.assay_id == "sequencing-primer"
+        and bool(request.get("sequencing_universal_primer_scan"))
         else []
     )
     workflow = evidence_block(
@@ -1202,13 +1336,15 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         # How far the scan looked, said once rather than implied per primer.
         "background": screen.summary(contigs, template_only),
         "workflow_evidence": workflow,
-        "sequencing_design_profile": selected_design_profile if chosen.assay_id == "sequencing-primer" else None,
+        "sequencing_design_profile": selected_design_profile
+        if chosen.assay_id == "sequencing-primer"
+        else None,
         "sequencing_submission": (
             {
                 "profile": selected_design_profile.get("profile_id"),
                 "requirements": selected_design_profile.get("submission"),
                 "decision_impact": "none",
-                "note": "Provider submission quantities are handoff metadata and do not alter primer ranking."
+                "note": "Provider submission quantities are handoff metadata and do not alter primer ranking.",
             }
             if chosen.assay_id == "sequencing-primer" and selected_design_profile is not None
             else None
@@ -1217,8 +1353,10 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "checked": bool(request.get("sequencing_universal_primer_scan")),
             "hits": universal_hits,
             "decision_impact": "explicit-reuse-option",
-            "note": "Only exact, uniquely mapped authority-library hits are reusable options; PCRStudio never silently replaces the ranked designed primer."
-        } if chosen.assay_id == "sequencing-primer" else None,
+            "note": "Only exact, uniquely mapped authority-library hits are reusable options; PCRStudio never silently replaces the ranked designed primer.",
+        }
+        if chosen.assay_id == "sequencing-primer"
+        else None,
         **(
             {
                 "race_placement": {
@@ -1286,10 +1424,11 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                     "opposite_direction": "reverse" if direction == "forward" else "forward",
                     "status": "separate-single-primer-design-required",
                     "decision_impact": "route-only",
-                    "note": "Bidirectional confirmation consists of two independent single-primer reactions; the opposite primer is not inferred from this ranked list."
+                    "note": "Bidirectional confirmation consists of two independent single-primer reactions; the opposite primer is not inferred from this ranked list.",
                 }
             }
-            if chosen.assay_id == "sequencing-primer" and bool(request.get("sequencing_bidirectional"))
+            if chosen.assay_id == "sequencing-primer"
+            and bool(request.get("sequencing_bidirectional"))
             else {}
         ),
         **(
@@ -1303,13 +1442,24 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             else {}
         ),
         **({"race_adapter": selected_race_adapter} if selected_race_adapter is not None else {}),
-        **({"race_chemistry": selected_race_chemistry} if selected_race_chemistry is not None else {}),
+        **(
+            {"race_chemistry": selected_race_chemistry}
+            if selected_race_chemistry is not None
+            else {}
+        ),
         **(
             {
                 "race_context": {
                     "substrate": race_substrate,
                     "preparation": race_preparation,
-                    **({"caller_sop_revision": race_sop_revision, "caller_sop_sha256": race_sop_sha256} if race_sop_revision and race_sop_sha256 else {}),
+                    **(
+                        {
+                            "caller_sop_revision": race_sop_revision,
+                            "caller_sop_sha256": race_sop_sha256,
+                        }
+                        if race_sop_revision and race_sop_sha256
+                        else {}
+                    ),
                     "round": race_round,
                     "polyadenylated": request.get("race_polyadenylated"),
                     "end_status": "candidate-transcript-end",

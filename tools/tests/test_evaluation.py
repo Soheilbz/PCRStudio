@@ -16,8 +16,6 @@ re-downloads them and reports what changed.
 
 from __future__ import annotations
 
-from itertools import pairwise
-
 import pytest
 from corpus import record
 
@@ -162,7 +160,14 @@ def test_long_range_and_standard_answer_the_same_question_differently():
 
     template = record("NG_000007.3").fasta()
     ordinary = run({"template": template, "how_many": 1, "assay": assay("standard-pcr")})
-    long_range = run({"template": template, "how_many": 1, "assay": assay("long-range-pcr"), "long_range_protocol": "thermo-long-pcr-k018x"})
+    long_range = run(
+        {
+            "template": template,
+            "how_many": 1,
+            "assay": assay("long-range-pcr"),
+            "long_range_protocol": "thermo-long-pcr-k018x",
+        }
+    )
 
     short, long = ordinary["pairs"][0], long_range["pairs"][0]
 
@@ -192,8 +197,6 @@ def test_a_long_range_product_reaches_the_sizes_its_kits_are_sold_for():
     )
     assert answer["pairs"], "no long-range pair on the beta-globin locus"
     assert max(pair["product_size"] for pair in answer["pairs"]) >= 10_000
-
-
 
 
 def test_colony_screen_records_the_actual_preparation_sop_instead_of_inventing_lysis():
@@ -285,21 +288,39 @@ def test_named_long_range_protocols_narrow_only_their_reviewed_constraint_envelo
 
     neb = long_range_protocol("neb-longamp-taq-m0323", assay_id="long-range-pcr")
     takara = long_range_protocol("takara-primestar-gxl-r050a-standard", assay_id="long-range-pcr")
-    ultrarun = long_range_protocol("qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr")
+    ultrarun = long_range_protocol(
+        "qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr"
+    )
     thermo = long_range_protocol("thermo-long-pcr-k018x", assay_id="long-range-pcr")
 
     assert neb is not None and takara is not None and ultrarun is not None and thermo is not None
-    assert neb["constraints"] == {"length_min": 20, "length_max": 36, "gc_min": 40.0, "gc_max": 60.0}
+    assert neb["constraints"] == {
+        "length_min": 20,
+        "length_max": 36,
+        "gc_min": 40.0,
+        "gc_max": 60.0,
+    }
     assert neb["magnesium_chloride_mM"] == 2.0
     assert takara["constraints"] == {"length_min": 25, "length_max": 35}
-    assert ultrarun["constraints"] == {"length_min": 20, "length_max": 30, "gc_min": 40.0, "gc_max": 60.0}
+    assert ultrarun["constraints"] == {
+        "length_min": 20,
+        "length_max": 30,
+        "gc_min": 40.0,
+        "gc_max": 60.0,
+    }
     assert ultrarun["reaction_volume_uL"]["standard"] == 20
     assert ultrarun["primer_final_concentration_uM"] == 0.5
     assert thermo["constraints"]["length_min"] == 27
     assert thermo["constraints"]["length_max"] == 36
     assert thermo["constraints"]["max_end_gc"] == 3
-    assert all(protocol["sequence_decision_impact"] == "constraint-envelope" for protocol in (neb, takara, ultrarun, thermo))
-    assert all(protocol["thermodynamic_model_impact"] == "none" for protocol in (neb, takara, ultrarun, thermo))
+    assert all(
+        protocol["sequence_decision_impact"] == "constraint-envelope"
+        for protocol in (neb, takara, ultrarun, thermo)
+    )
+    assert all(
+        protocol["thermodynamic_model_impact"] == "none"
+        for protocol in (neb, takara, ultrarun, thermo)
+    )
 
 
 def test_digital_pcr_declares_its_qpcr_like_primer_contract():
@@ -443,8 +464,6 @@ def catalogue() -> list[dict]:
     return tomllib.loads(path.read_text(encoding="utf-8"))["profile"]
 
 
-
-
 def test_no_assay_claims_to_be_stable():
     """Reserved for one that has been checked against a published result.
 
@@ -458,8 +477,6 @@ def test_no_assay_claims_to_be_stable():
 
 
 # ── What `stable` would take, measured rather than assumed ─────────────────
-
-
 
 
 def test_we_do_not_rediscover_the_published_primers_which_is_why_nothing_is_stable():

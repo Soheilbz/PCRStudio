@@ -4,6 +4,7 @@ Multiplex candidate selection is not the validation boundary.  The selected
 oligos, grouped by the tubes they will actually share, must be sent through the
 common independent validator after optimization.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -29,7 +30,9 @@ def _wire(monkeypatch: pytest.MonkeyPatch, *, mode: str, validation_status: str)
     }
     seen: dict[str, object] = {}
 
-    monkeypatch.setattr(cli, "assay_identity", lambda request, command: ("standard-pcr", "flanking-pair"))
+    monkeypatch.setattr(
+        cli, "assay_identity", lambda request, command: ("standard-pcr", "flanking-pair")
+    )
     monkeypatch.setattr(cli, "validate_required_context", lambda request, module_id: None)
     monkeypatch.setattr(cli, "require_engine_toolchain", lambda engine_id, module_id, request: None)
     monkeypatch.setattr(cli, "multiplex_run", lambda request: final_panel.copy())
@@ -59,29 +62,35 @@ def _wire(monkeypatch: pytest.MonkeyPatch, *, mode: str, validation_status: str)
     return seen
 
 
-
-
 @pytest.mark.parametrize(
     "status",
     ["verification-incomplete", "validator-error", "evidence-collected-limited"],
 )
-def test_strict_multiplex_fails_closed_when_final_panel_validation_is_incomplete(monkeypatch: pytest.MonkeyPatch, status: str):
+def test_strict_multiplex_fails_closed_when_final_panel_validation_is_incomplete(
+    monkeypatch: pytest.MonkeyPatch, status: str
+):
     _wire(monkeypatch, mode="strict", validation_status=status)
     with pytest.raises(ToolRuntimeError, match="strict final-panel validation did not complete"):
         cli.run_multiplex({"template": "ACGT" * 200})
 
 
-def test_compatible_multiplex_preserves_incomplete_evidence_without_claiming_completion(monkeypatch: pytest.MonkeyPatch):
+def test_compatible_multiplex_preserves_incomplete_evidence_without_claiming_completion(
+    monkeypatch: pytest.MonkeyPatch,
+):
     _wire(monkeypatch, mode="compatible", validation_status="evidence-collected-limited")
     result = cli.run_multiplex({"template": "ACGT" * 200})
 
     assert result["verification"]["status"] == "evidence-collected-limited"
     assert result["verification"]["computational_design_complete"] is True
     assert result["verification"]["external_evidence_complete"] is False
-    assert "selected multiplex panel is audited after set selection" in result["verification"]["note"]
+    assert (
+        "selected multiplex panel is audited after set selection" in result["verification"]["note"]
+    )
 
 
-def test_multiplex_wrapper_resolves_module_identity_from_target_assays(monkeypatch: pytest.MonkeyPatch):
+def test_multiplex_wrapper_resolves_module_identity_from_target_assays(
+    monkeypatch: pytest.MonkeyPatch,
+):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "development")
     seen: dict[str, object] = {}
     request = {
@@ -90,12 +99,30 @@ def test_multiplex_wrapper_resolves_module_identity_from_target_assays(monkeypat
             {"assay": {"id": "standard-pcr", "engine": "flanking-pair"}},
         ]
     }
-    monkeypatch.setattr(cli, "require_engine_toolchain", lambda engine_id, module_id, request: seen.update(preflight=(engine_id, module_id)))
-    monkeypatch.setattr(cli, "multiplex_run", lambda request: {"tubes": [{"tube": 1}], "order_sheet": []})
-    monkeypatch.setattr(cli, "engine_contract", lambda engine_id, module_id: {"engine": engine_id, "module": module_id})
+    monkeypatch.setattr(
+        cli,
+        "require_engine_toolchain",
+        lambda engine_id, module_id, request: seen.update(preflight=(engine_id, module_id)),
+    )
+    monkeypatch.setattr(
+        cli, "multiplex_run", lambda request: {"tubes": [{"tube": 1}], "order_sheet": []}
+    )
+    monkeypatch.setattr(
+        cli,
+        "engine_contract",
+        lambda engine_id, module_id: {"engine": engine_id, "module": module_id},
+    )
     monkeypatch.setattr(cli, "module_contract", lambda module_id: {"module": module_id})
     monkeypatch.setattr(cli, "resolved_parameters", lambda request, result: {})
-    monkeypatch.setattr(cli, "validate_result", lambda **kwargs: {"status": "not-applicable", "selected_oligos": 0, "interpretation_complete": True})
+    monkeypatch.setattr(
+        cli,
+        "validate_result",
+        lambda **kwargs: {
+            "status": "not-applicable",
+            "selected_oligos": 0,
+            "interpretation_complete": True,
+        },
+    )
     monkeypatch.setattr(cli, "toolchain_mode", lambda: "compatible")
 
     result = cli.run_multiplex(request)
@@ -115,8 +142,6 @@ def test_multiplex_wrapper_refuses_mixed_target_module_identity():
         cli._multiplex_assay_identity(request)
 
 
-
-
 def test_multiplex_wrapper_refuses_partial_target_module_identity():
     request = {
         "targets": [
@@ -128,7 +153,9 @@ def test_multiplex_wrapper_refuses_partial_target_module_identity():
         cli._multiplex_assay_identity(request)
 
 
-def test_multiplex_resolved_parameters_refuses_invalid_constraint_scope(monkeypatch: pytest.MonkeyPatch):
+def test_multiplex_resolved_parameters_refuses_invalid_constraint_scope(
+    monkeypatch: pytest.MonkeyPatch,
+):
     monkeypatch.setattr(
         cli,
         "resolved_parameters",
@@ -140,8 +167,12 @@ def test_multiplex_resolved_parameters_refuses_invalid_constraint_scope(monkeypa
         cli._multiplex_resolved_parameters(request, answer)
 
 
-def test_multiplex_resolved_parameters_refuses_missing_worker_contract(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setattr(cli, "resolved_parameters", lambda request, result: {"reaction": {}, "constraints": {}})
+def test_multiplex_resolved_parameters_refuses_missing_worker_contract(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    monkeypatch.setattr(
+        cli, "resolved_parameters", lambda request, result: {"reaction": {}, "constraints": {}}
+    )
     request = {"targets": [{"assay": {"id": "standard-pcr", "engine": "flanking-pair"}}]}
     with pytest.raises(ValueError, match="shared reaction contract"):
         cli._multiplex_resolved_parameters(
@@ -149,7 +180,9 @@ def test_multiplex_resolved_parameters_refuses_missing_worker_contract(monkeypat
         )
 
 
-def test_multiplex_resolved_parameters_preserve_per_target_policy_provenance(monkeypatch: pytest.MonkeyPatch):
+def test_multiplex_resolved_parameters_preserve_per_target_policy_provenance(
+    monkeypatch: pytest.MonkeyPatch,
+):
     monkeypatch.setattr(
         cli,
         "resolved_parameters",

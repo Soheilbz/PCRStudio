@@ -39,14 +39,20 @@ from typing import Any
 from .design import CandidatePair, Constraints, DesignResult, design
 from .explain import account_to_dict, parse, why_nothing
 from .intake import target_to_dict
+from .inverse_topology import (
+    InverseTopologyError,
+    exact_topology,
+    public_topology,
+    screen_enzyme_cohort,
+)
 from .presets import thermodynamic_model
 from .provenance import provenance
-from .registries.authorities import INVERSE_AUTHORITY, record as authority_record
-from .workflow_evidence import evidence_block
-from .inverse_topology import InverseTopologyError, exact_topology, public_topology, screen_enzyme_cohort
+from .registries.authorities import INVERSE_AUTHORITY
+from .registries.authorities import record as authority_record
 from .restriction import BY_NAME, INVERSE_FLANK, choice_to_dict, choose_enzyme, sites
 from .settings import how_many_from, label, prepare
 from .thermo import report_to_dict
+from .workflow_evidence import evidence_block
 
 #: The most pairs one inverse run will return.
 MOST_PAIRS = 50
@@ -185,13 +191,19 @@ def pair_to_dict(
     if circle_length is None:
         entry["product_size"] = None
         entry["unknown_interval"] = {
-            "status": "bounded" if unknown_min is not None or unknown_max is not None else "unresolved",
+            "status": "bounded"
+            if unknown_min is not None or unknown_max is not None
+            else "unresolved",
             "minimum": unknown_min,
             "maximum": unknown_max,
             "exact": None,
         }
         entry["product_path"] = [
-            {"kind": "forward-primer-anchor", "known_side": "right", "reads_into": "downstream-flank"},
+            {
+                "kind": "forward-primer-anchor",
+                "known_side": "right",
+                "reads_into": "downstream-flank",
+            },
             {"kind": "combined-unknown-flanks", "minimum": unknown_min, "maximum": unknown_max},
             {"kind": "restriction-fragment-ligation-junction", "status": "predicted"},
             {"kind": "reverse-primer-anchor", "known_side": "left", "reads_into": "upstream-flank"},
@@ -213,7 +225,11 @@ def pair_to_dict(
             "exact": unknown,
         }
         entry["product_path"] = [
-            {"kind": "forward-primer-anchor", "known_side": "right", "reads_into": "downstream-flank"},
+            {
+                "kind": "forward-primer-anchor",
+                "known_side": "right",
+                "reads_into": "downstream-flank",
+            },
             {"kind": "combined-unknown-flanks", "minimum": unknown, "maximum": unknown},
             {"kind": "restriction-fragment-ligation-junction", "status": "predicted"},
             {"kind": "reverse-primer-anchor", "known_side": "left", "reads_into": "upstream-flank"},
@@ -266,14 +282,20 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     if named:
         if named not in BY_NAME:
             raise InverseError(
-                f"`{named}` is not an enzyme this build knows. It knows: " + ", ".join(sorted(BY_NAME)) + "."
+                f"`{named}` is not an enzyme this build knows. It knows: "
+                + ", ".join(sorted(BY_NAME))
+                + "."
             )
         enzyme = BY_NAME[named]
         internal_sites = sites(known, enzyme)
         if internal_sites:
             raise InverseError(
                 f"{named} cuts the known anchor {len(internal_sites)} time(s)"
-                + (f" (at {', '.join(str(at) for at in internal_sites[:6])})" if internal_sites else "")
+                + (
+                    f" (at {', '.join(str(at) for at in internal_sites[:6])})"
+                    if internal_sites
+                    else ""
+                )
                 + ". Standard two-flank inverse PCR needs the complete known anchor on one restriction fragment; "
                 "the internal-cut one-sided strategy is reference-only."
             )
@@ -293,23 +315,34 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "recovers the combined path through both flanks around one intact known anchor."
         )
 
-    phosphate_states: dict[str, str] = {"left_end_phosphate": "not-applicable", "right_end_phosphate": "not-applicable"}
+    phosphate_states: dict[str, str] = {
+        "left_end_phosphate": "not-applicable",
+        "right_end_phosphate": "not-applicable",
+    }
     if request.get("circularization_provenance") in (None, ""):
         raise InverseError("circularization_provenance is required for both inverse-PCR branches")
     if branch == "restriction-self-ligation":
         for key in ("left_end_phosphate", "right_end_phosphate"):
             if request.get(key) in (None, ""):
-                raise InverseError(f"{key} is required; use `unresolved` explicitly when the phosphate state is unknown")
+                raise InverseError(
+                    f"{key} is required; use `unresolved` explicitly when the phosphate state is unknown"
+                )
             state = str(request.get(key) or "unresolved")
             if state not in {"phosphorylated", "unphosphorylated", "unresolved"}:
                 raise InverseError(f"{key} must be phosphorylated, unphosphorylated, or unresolved")
             phosphate_states[key] = state
         for key in ("linear_control_provenance", "methylation_branch"):
             if request.get(key) in (None, ""):
-                raise InverseError(f"{key} is required; use `unresolved` explicitly when evidence is unknown")
+                raise InverseError(
+                    f"{key} is required; use `unresolved` explicitly when evidence is unknown"
+                )
 
-    unknown_min = int(request["unknown_flank_min"]) if request.get("unknown_flank_min") is not None else None
-    unknown_max = int(request["unknown_flank_max"]) if request.get("unknown_flank_max") is not None else None
+    unknown_min = (
+        int(request["unknown_flank_min"]) if request.get("unknown_flank_min") is not None else None
+    )
+    unknown_max = (
+        int(request["unknown_flank_max"]) if request.get("unknown_flank_max") is not None else None
+    )
     if unknown_min is not None and unknown_min < 0:
         raise InverseError("unknown_flank_min cannot be negative")
     if unknown_max is not None and unknown_max < 0:
@@ -317,7 +350,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     if unknown_min is not None and unknown_max is not None and unknown_min > unknown_max:
         raise InverseError("unknown_flank_min cannot exceed unknown_flank_max")
 
-    supplied_circle_length = int(request["circle_length"]) if request.get("circle_length") is not None else None
+    supplied_circle_length = (
+        int(request["circle_length"]) if request.get("circle_length") is not None else None
+    )
     if topology is not None:
         exact_fragment_length = int(topology["fragment_length"])
         if supplied_circle_length is not None and supplied_circle_length != exact_fragment_length:
@@ -327,7 +362,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         supplied_circle_length = exact_fragment_length
     circle = Circle(length=supplied_circle_length)
     if branch == "supplied-circular-template" and circle.length is None:
-        raise InverseError("supplied-circular-template requires the measured/supplied circle_length")
+        raise InverseError(
+            "supplied-circular-template requires the measured/supplied circle_length"
+        )
     circle.check(len(known))
     if circle.length is not None:
         exact_unknown = circle.length - len(known)
@@ -392,22 +429,37 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     requested_cohort = request.get("inverse_candidate_enzymes")
     if requested_cohort not in (None, []):
         if not isinstance(requested_cohort, list):
-            raise InverseError("inverse_candidate_enzymes must be an array of explicit enzyme names")
+            raise InverseError(
+                "inverse_candidate_enzymes must be an array of explicit enzyme names"
+            )
         if len(requested_cohort) > MAX_ENZYME_COHORT_SIZE:
-            raise InverseError(f"inverse_candidate_enzymes may contain at most {MAX_ENZYME_COHORT_SIZE} names")
+            raise InverseError(
+                f"inverse_candidate_enzymes may contain at most {MAX_ENZYME_COHORT_SIZE} names"
+            )
         if not full_reference:
-            raise InverseError("inverse_candidate_enzymes requires inverse_reference_sequence; PCRStudio will not rank enzymes from an incomplete anchor")
+            raise InverseError(
+                "inverse_candidate_enzymes requires inverse_reference_sequence; PCRStudio will not rank enzymes from an incomplete anchor"
+            )
         enzyme_cohort = screen_enzyme_cohort(
-            full_reference, known, [str(value) for value in requested_cohort], circular=reference_circular
+            full_reference,
+            known,
+            [str(value) for value in requested_cohort],
+            circular=reference_circular,
         )
         cohort_decision_impact = "explicit-feasibility-no-cross-enzyme-score"
     else:
-        enzyme_choices = choose_enzyme(known, purpose=INVERSE_FLANK) if branch == "restriction-self-ligation" else []
+        enzyme_choices = (
+            choose_enzyme(known, purpose=INVERSE_FLANK)
+            if branch == "restriction-self-ligation"
+            else []
+        )
         enzyme_cohort = [choice_to_dict(c) for c in enzyme_choices[:cohort_size]]
         cohort_decision_impact = "diagnostic-only-anchor-metadata"
     mapping_use_case = str(request.get("mapping_use_case") or "generic-flank")
     if mapping_use_case not in {"generic-flank", "transposon-insertion", "integration-site"}:
-        raise InverseError("mapping_use_case must be generic-flank, transposon-insertion, or integration-site")
+        raise InverseError(
+            "mapping_use_case must be generic-flank, transposon-insertion, or integration-site"
+        )
     workflow = evidence_block(
         request.get("workflow_evidence"),
         note="Digest/circularization/PCR/sequencing evidence is retained for validation and never changes the saved primer ranking.",
@@ -458,8 +510,12 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "branch": branch,
             "left_end_phosphate": phosphate_states["left_end_phosphate"],
             "right_end_phosphate": phosphate_states["right_end_phosphate"],
-            "circularization_provenance": str(request.get("circularization_provenance") or "unresolved"),
-            "linear_control_provenance": str(request.get("linear_control_provenance") or "not-applicable"),
+            "circularization_provenance": str(
+                request.get("circularization_provenance") or "unresolved"
+            ),
+            "linear_control_provenance": str(
+                request.get("linear_control_provenance") or "not-applicable"
+            ),
             "methylation_branch": str(request.get("methylation_branch") or "not-applicable"),
             "mapping_use_case": mapping_use_case,
             "authority": branch_authority,
@@ -479,7 +535,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "Explicit full-reference cohorts report exact feasibility in caller order and never manufacture a universal enzyme score."
                 if requested_cohort not in (None, [])
                 else "Backup enzyme metadata remains diagnostic until a complete reference is supplied."
-            )
+            ),
         },
         "digest": {
             "branch_identity": branch,
@@ -495,9 +551,13 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "the resulting flanking-sequence junction."
             ),
         },
-        "topology_validation": public_topology(topology) if topology is not None else {
+        "topology_validation": public_topology(topology)
+        if topology is not None
+        else {
             "status": "unresolved",
-            "reason": "full reference sequence not supplied" if not full_reference else "not-applicable-to-supplied-circle",
+            "reason": "full reference sequence not supplied"
+            if not full_reference
+            else "not-applicable-to-supplied-circle",
             "decision_impact": "topology-validation",
         },
         "circle": {
@@ -505,8 +565,10 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "circle_length": circle.length,
             "unknown_interval": {
                 "status": (
-                    "exact" if circle.length is not None
-                    else "bounded" if unknown_min is not None or unknown_max is not None
+                    "exact"
+                    if circle.length is not None
+                    else "bounded"
+                    if unknown_min is not None or unknown_max is not None
                     else "unresolved"
                 ),
                 "minimum": (
@@ -528,7 +590,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "sequencingBidirectional": True,
                 "template_source": "inverse-product-or-user-confirmed-recovered-flank",
             },
-            "note": "Sequence confirmation is routed to the single-primer engine; this result carries the handoff without duplicating Sanger ranking."
+            "note": "Sequence confirmation is routed to the single-primer engine; this result carries the handoff without duplicating Sanger ranking.",
         },
         "workflow_evidence": workflow,
         "pairs": pairs,

@@ -32,27 +32,38 @@ melting seven above.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import asdict, dataclass, replace
 from itertools import groupby
 from typing import Any
-import hashlib
-import json
 
 import primer3
 
 from . import rt, screen
 from .accessibility import fold_oligos
-from .design import CandidatePair, Constraints, clean_template, pair_at, design as design_pairs
+from .design import CandidatePair, Constraints, clean_template, pair_at
+from .design import design as design_pairs
 from .intake import target_to_dict
+from .mgb_authority import MgbAuthorityError
+from .mgb_authority import apply_import as apply_mgb_import
+from .mgb_authority import candidates as mgb_candidates
+from .mgb_authority import exchange_manifest as mgb_exchange
 from .presets import thermodynamic_model
+from .probe_closure import (
+    ProbeClosureError,
+    combined_signal,
+    multiplex_interactions,
+    optical_authority,
+)
 from .provenance import provenance
-from .registries.authorities import PROBE_AUTHORITY, record as authority_record
-from .workflow_evidence import evidence_block
-from .mgb_authority import MgbAuthorityError, apply_import as apply_mgb_import, candidates as mgb_candidates, exchange_manifest as mgb_exchange
-from .probe_closure import ProbeClosureError, combined_signal, multiplex_interactions, optical_authority
-from .scientific_integrity import enforce_constraint_overrides, strict as scientific_strict
+from .registries.authorities import PROBE_AUTHORITY
+from .registries.authorities import record as authority_record
+from .scientific_integrity import enforce_constraint_overrides
+from .scientific_integrity import strict as scientific_strict
 from .settings import excluded_from, how_many_from, label, prepare
 from .thermo import DEFAULT_CONDITIONS, analyse, report_to_dict
+from .workflow_evidence import evidence_block
 
 
 class ProbeError(ValueError):
@@ -420,66 +431,166 @@ def check_enzyme(preset: Any) -> None:
 
 
 def _mgb_run(
-    request: dict[str, Any], *, chosen: Any, limits: Constraints, reaction: dict[str, float], how_many: int,
-    protocol: dict[str, Any], optical: dict[str, Any] | None,
+    request: dict[str, Any],
+    *,
+    chosen: Any,
+    limits: Constraints,
+    reaction: dict[str, float],
+    how_many: int,
+    protocol: dict[str, Any],
+    optical: dict[str, Any] | None,
 ) -> dict[str, Any]:
     """MGB candidate exchange without ever calculating ordinary-DNA probe Tm."""
     mode = str(request.get("probe_mgb_authority_mode") or "").strip()
     if mode not in {"export-candidates", "import-results"}:
-        raise ProbeError("MGB qPCR requires probeMgbAuthorityMode: export-candidates or import-results")
+        raise ProbeError(
+            "MGB qPCR requires probeMgbAuthorityMode: export-candidates or import-results"
+        )
     pair_result = design_pairs(
-        chosen.target.sequence, target_start=request.get("target_start"), target_length=request.get("target_length"),
-        excluded=excluded_from(request), constraints=limits, conditions=reaction, how_many=max(1, min(how_many, 10)),
+        chosen.target.sequence,
+        target_start=request.get("target_start"),
+        target_length=request.get("target_length"),
+        excluded=excluded_from(request),
+        constraints=limits,
+        conditions=reaction,
+        how_many=max(1, min(how_many, 10)),
         masked=chosen.target.soft_masked,
     )
     if not pair_result.pairs:
         return {
-            "engine":"pair-and-probe","assay":chosen.assay_to_dict(),"target":target_to_dict(chosen.target),
-            "protocol":protocol,"mgb_authority":{"status":"no-primer-pair"},"assays":[],"order_sheet":[],
-            "orderability":{"orderable":False,"status":"no-primer-pair"},
-            "why_nothing":"No primer pair was available from the unchanged qPCR primer envelope.",
+            "engine": "pair-and-probe",
+            "assay": chosen.assay_to_dict(),
+            "target": target_to_dict(chosen.target),
+            "protocol": protocol,
+            "mgb_authority": {"status": "no-primer-pair"},
+            "assays": [],
+            "order_sheet": [],
+            "orderability": {"orderable": False, "status": "no-primer-pair"},
+            "why_nothing": "No primer pair was available from the unchanged qPCR primer envelope.",
         }
-    pair=pair_result.pairs[0]
-    start=pair.left_at.start+pair.left_at.length
-    end=pair.right_at.start-pair.right_at.length+1
-    if end-start < MGB_PROBE_MIN_NT:
-        raise ProbeError(f"top primer pair leaves no valid internal interval for a {MGB_PROBE_MIN_NT}-{MGB_PROBE_MAX_NT} nt MGB probe")
+    pair = pair_result.pairs[0]
+    start = pair.left_at.start + pair.left_at.length
+    end = pair.right_at.start - pair.right_at.length + 1
+    if end - start < MGB_PROBE_MIN_NT:
+        raise ProbeError(
+            f"top primer pair leaves no valid internal interval for a {MGB_PROBE_MIN_NT}-{MGB_PROBE_MAX_NT} nt MGB probe"
+        )
     try:
-        cands=mgb_candidates(chosen.target.sequence,start=start,end=end,minimum=MGB_PROBE_MIN_NT,maximum=MGB_PROBE_MAX_NT)
+        cands = mgb_candidates(
+            chosen.target.sequence,
+            start=start,
+            end=end,
+            minimum=MGB_PROBE_MIN_NT,
+            maximum=MGB_PROBE_MAX_NT,
+        )
     except MgbAuthorityError as exc:
         raise ProbeError(str(exc)) from exc
-    authority_id=str(protocol.get("authority_exchange_id") or "thermofisher-primer-express-mgb")
-    exchange=mgb_exchange(cands,authority_id=authority_id)
-    base={
-        "engine":"pair-and-probe","provenance":provenance(reaction),"assay":chosen.assay_to_dict(),
-        "target":target_to_dict(chosen.target),"reaction":{"polymerase":chosen.preset.id,"polymerase_name":chosen.preset.name,**reaction,"model":thermodynamic_model(chosen.preset,chosen.reaction)},
-        "protocol":protocol,"optical_configuration":optical,"mgb_authority":{"exchange":exchange},
-        "workflow_evidence":evidence_block(request.get("workflow_evidence"),note="Observed qPCR evidence never changes the original MGB candidate ranking."),
-        "background":None,"considered":pair_result.considered,"order_sheet":[],
+    authority_id = str(protocol.get("authority_exchange_id") or "thermofisher-primer-express-mgb")
+    exchange = mgb_exchange(cands, authority_id=authority_id)
+    base = {
+        "engine": "pair-and-probe",
+        "provenance": provenance(reaction),
+        "assay": chosen.assay_to_dict(),
+        "target": target_to_dict(chosen.target),
+        "reaction": {
+            "polymerase": chosen.preset.id,
+            "polymerase_name": chosen.preset.name,
+            **reaction,
+            "model": thermodynamic_model(chosen.preset, chosen.reaction),
+        },
+        "protocol": protocol,
+        "optical_configuration": optical,
+        "mgb_authority": {"exchange": exchange},
+        "workflow_evidence": evidence_block(
+            request.get("workflow_evidence"),
+            note="Observed qPCR evidence never changes the original MGB candidate ranking.",
+        ),
+        "background": None,
+        "considered": pair_result.considered,
+        "order_sheet": [],
     }
-    if mode=="export-candidates":
-        base.update({"assays":[],"orderability":{"orderable":False,"status":"awaiting-external-mgb-authority"},"why_nothing":"MGB candidates were exported; import MGB-aware Tm values from the declared authority to rank/order them."})
+    if mode == "export-candidates":
+        base.update(
+            {
+                "assays": [],
+                "orderability": {"orderable": False, "status": "awaiting-external-mgb-authority"},
+                "why_nothing": "MGB candidates were exported; import MGB-aware Tm values from the declared authority to rank/order them.",
+            }
+        )
         return base
     try:
-        resolution=apply_mgb_import(cands,request.get("probe_mgb_authority_payload"),authority_id=authority_id)
+        resolution = apply_mgb_import(
+            cands, request.get("probe_mgb_authority_payload"), authority_id=authority_id
+        )
     except MgbAuthorityError as exc:
         raise ProbeError(str(exc)) from exc
-    selected=resolution["ranked_candidates"][0]
-    seq=selected["sequence"]
-    gc=round(100.0*(seq.count("G")+seq.count("C"))/len(seq),1)
-    assay={
-        "left":report_to_dict(pair.left),"right":report_to_dict(pair.right),
-        "probe":{"sequence":seq,"length":len(seq),"gc_percent":gc,"tm":selected["tm"],"at":selected["template_start"],"strand":selected["strand"],"tm_source":"external-mgb-authority","candidate_id":selected["candidate_id"]},
-        "product_size":pair.product_size,"mgb_authority":resolution,
+    selected = resolution["ranked_candidates"][0]
+    seq = selected["sequence"]
+    gc = round(100.0 * (seq.count("G") + seq.count("C")) / len(seq), 1)
+    assay = {
+        "left": report_to_dict(pair.left),
+        "right": report_to_dict(pair.right),
+        "probe": {
+            "sequence": seq,
+            "length": len(seq),
+            "gc_percent": gc,
+            "tm": selected["tm"],
+            "at": selected["template_start"],
+            "strand": selected["strand"],
+            "tm_source": "external-mgb-authority",
+            "candidate_id": selected["candidate_id"],
+        },
+        "product_size": pair.product_size,
+        "mgb_authority": resolution,
     }
-    name=label(chosen.target.name)
-    order=[
-        {"name":f"{name}_1F","sequence":pair.left.sequence,"annealing_sequence":pair.left.sequence,"tail_sequence":"","kind":"primer","length":pair.left.length,"gc_percent":pair.left.gc_percent,"tm":pair.left.tm},
-        {"name":f"{name}_1R","sequence":pair.right.sequence,"annealing_sequence":pair.right.sequence,"tail_sequence":"","kind":"primer","length":pair.right.length,"gc_percent":pair.right.gc_percent,"tm":pair.right.tm},
-        {"name":f"{name}_1P","sequence":seq,"annealing_sequence":seq,"tail_sequence":"","kind":"probe","length":len(seq),"gc_percent":gc,"tm":selected["tm"],"tm_source":"external-mgb-authority","modifications":{"five_prime_reporter":(optical or {}).get("reporter"),"three_prime_quencher":(optical or {}).get("quencher"),"chemistry":"mgb-nfq"}},
+    name = label(chosen.target.name)
+    order = [
+        {
+            "name": f"{name}_1F",
+            "sequence": pair.left.sequence,
+            "annealing_sequence": pair.left.sequence,
+            "tail_sequence": "",
+            "kind": "primer",
+            "length": pair.left.length,
+            "gc_percent": pair.left.gc_percent,
+            "tm": pair.left.tm,
+        },
+        {
+            "name": f"{name}_1R",
+            "sequence": pair.right.sequence,
+            "annealing_sequence": pair.right.sequence,
+            "tail_sequence": "",
+            "kind": "primer",
+            "length": pair.right.length,
+            "gc_percent": pair.right.gc_percent,
+            "tm": pair.right.tm,
+        },
+        {
+            "name": f"{name}_1P",
+            "sequence": seq,
+            "annealing_sequence": seq,
+            "tail_sequence": "",
+            "kind": "probe",
+            "length": len(seq),
+            "gc_percent": gc,
+            "tm": selected["tm"],
+            "tm_source": "external-mgb-authority",
+            "modifications": {
+                "five_prime_reporter": (optical or {}).get("reporter"),
+                "three_prime_quencher": (optical or {}).get("quencher"),
+                "chemistry": "mgb-nfq",
+            },
+        },
     ]
-    base["mgb_authority"]["resolution"]=resolution
-    base.update({"assays":[assay],"orderability":{"orderable":True,"status":"external-authority-resolved"},"order_sheet":order,"why_nothing":""})
+    base["mgb_authority"]["resolution"] = resolution
+    base.update(
+        {
+            "assays": [assay],
+            "orderability": {"orderable": True, "status": "external-authority-resolved"},
+            "order_sheet": order,
+            "why_nothing": "",
+        }
+    )
     return base
 
 
@@ -512,11 +623,16 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "The unbound-engine primer-to-probe Tm heuristic is not a release protocol."
         )
     if selected_protocol is not None and selected_protocol.get("execution_status") != "executable":
-        if not (selected_protocol.get("chemistry") == "mgb-nfq" and selected_protocol.get("execution_status") == "external-authority-required"):
+        if not (
+            selected_protocol.get("chemistry") == "mgb-nfq"
+            and selected_protocol.get("execution_status") == "external-authority-required"
+        ):
             raise ProbeError(
                 f"probe protocol `{selected_protocol['protocol_id']}` is {selected_protocol.get('execution_status')} and is not executable."
             )
-    optical = _probe_modifications(request, selected_protocol) if selected_protocol is not None else None
+    optical = (
+        _probe_modifications(request, selected_protocol) if selected_protocol is not None else None
+    )
 
     # A named protocol is a scientific identity, not a label painted over an
     # arbitrary set of user values. Strict execution may tighten its bounded
@@ -552,8 +668,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             **{
                 field: value
                 for field, value in protocol_primer_profile.items()
-                if field not in explicit_primer_constraints
-                and field in PROFILE_CONSTRAINT_FIELDS
+                if field not in explicit_primer_constraints and field in PROFILE_CONSTRAINT_FIELDS
             },
         )
         max_gc_last5 = protocol_primer_profile.get("max_gc_last5")
@@ -629,22 +744,36 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     reaction = chosen.reaction.as_conditions()
     panel_for_multiplex = request.get("probe_multiplex_panel")
     if panel_for_multiplex:
-        if not isinstance(panel_for_multiplex, list) or len(panel_for_multiplex) > QPCR_MULTIPLEX_MAX_PEERS:
-            raise ProbeError("qPCR Probe multiplex planning accepts 1–11 peer assays (12 total including the current assay); this is a software bound, not a wet-lab qualification claim")
+        if (
+            not isinstance(panel_for_multiplex, list)
+            or len(panel_for_multiplex) > QPCR_MULTIPLEX_MAX_PEERS
+        ):
+            raise ProbeError(
+                "qPCR Probe multiplex planning accepts 1–11 peer assays (12 total including the current assay); this is a software bound, not a wet-lab qualification claim"
+            )
         if scientific_strict():
-            missing=[]
-            for index,row in enumerate(panel_for_multiplex):
-                if not isinstance(row,dict):
-                    missing.append(f"peer-{index+1}:typed-row")
+            missing = []
+            for index, row in enumerate(panel_for_multiplex):
+                if not isinstance(row, dict):
+                    missing.append(f"peer-{index + 1}:typed-row")
                     continue
-                peer_label=str(row.get("target") or f"peer-{index+1}")
-                for camel,snake in (("forwardPrimer","forward_primer"),("reversePrimer","reverse_primer"),("probeSequence","probe_sequence")):
+                peer_label = str(row.get("target") or f"peer-{index + 1}")
+                for camel, snake in (
+                    ("forwardPrimer", "forward_primer"),
+                    ("reversePrimer", "reverse_primer"),
+                    ("probeSequence", "probe_sequence"),
+                ):
                     if not str(row.get(camel) or row.get(snake) or "").strip():
                         missing.append(f"{peer_label}:{camel}")
             if missing:
-                raise ProbeError("Scientific-Strict qPCR multiplex requires peer forward/reverse/probe sequences for complete cross-assay interaction evidence; missing " + ", ".join(missing[:24]))
+                raise ProbeError(
+                    "Scientific-Strict qPCR multiplex requires peer forward/reverse/probe sequences for complete cross-assay interaction evidence; missing "
+                    + ", ".join(missing[:24])
+                )
             if not request.get("probe_optical_authority_payload"):
-                raise ProbeError("Scientific-Strict qPCR multiplex requires a versioned pcrstudio.qpcr-optical-profile.v1 authority; instrument name alone is not spectral validation")
+                raise ProbeError(
+                    "Scientific-Strict qPCR multiplex requires a versioned pcrstudio.qpcr-optical-profile.v1 authority; instrument name alone is not spectral validation"
+                )
     try:
         optical_validation = optical_authority(
             request.get("probe_optical_authority_payload"),
@@ -654,13 +783,32 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     except ProbeClosureError as exc:
         raise ProbeError(str(exc)) from exc
     if selected_protocol is not None and selected_protocol.get("chemistry") == "mgb-nfq":
-        result = _mgb_run(request, chosen=chosen, limits=effective_limits, reaction=reaction, how_many=how_many, protocol=selected_protocol, optical=optical)
+        result = _mgb_run(
+            request,
+            chosen=chosen,
+            limits=effective_limits,
+            reaction=reaction,
+            how_many=how_many,
+            protocol=selected_protocol,
+            optical=optical,
+        )
         result["optical_authority"] = optical_validation
-        panel=request.get("probe_multiplex_panel")
+        panel = request.get("probe_multiplex_panel")
         if result.get("assays"):
-            one=result["assays"][0]
+            one = result["assays"][0]
             try:
-                result["multiplex_interactions"] = multiplex_interactions(panel,{"forward":one["left"]["sequence"],"reverse":one["right"]["sequence"],"probe":one["probe"]["sequence"]},mv_conc=float(reaction.get("mv_conc",50.0)),dv_conc=float(reaction.get("dv_conc",1.5)),dntp_conc=float(reaction.get("dntp_conc",0.6)),dna_conc=float(reaction.get("dna_conc",50.0)))
+                result["multiplex_interactions"] = multiplex_interactions(
+                    panel,
+                    {
+                        "forward": one["left"]["sequence"],
+                        "reverse": one["right"]["sequence"],
+                        "probe": one["probe"]["sequence"],
+                    },
+                    mv_conc=float(reaction.get("mv_conc", 50.0)),
+                    dv_conc=float(reaction.get("dv_conc", 1.5)),
+                    dntp_conc=float(reaction.get("dntp_conc", 0.6)),
+                    dna_conc=float(reaction.get("dna_conc", 50.0)),
+                )
             except ProbeClosureError as exc:
                 raise ProbeError(str(exc)) from exc
         return result
@@ -686,38 +834,48 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             if _max_consecutive_base(assay.probe.sequence, "G") <= max_consecutive_g
         ]
 
-    junctions_raw=request.get("probe_transcript_junctions") or []
-    variants_raw=request.get("probe_variant_positions") or []
-    junctions=[]
-    variants=[]
+    junctions_raw = request.get("probe_transcript_junctions") or []
+    variants_raw = request.get("probe_variant_positions") or []
+    junctions = []
+    variants = []
     try:
-        junctions=sorted({int(x) for x in junctions_raw}) if isinstance(junctions_raw,list) else []
-        variants=sorted({int(x) for x in variants_raw}) if isinstance(variants_raw,list) else []
-    except (TypeError,ValueError) as exc:
-        raise ProbeError("probe transcript junctions and variant positions must be integer arrays in 0-based template coordinates") from exc
-    mode=str(request.get("probe_transcript_mode") or "not-specified")
-    filtered=[]
+        junctions = (
+            sorted({int(x) for x in junctions_raw}) if isinstance(junctions_raw, list) else []
+        )
+        variants = sorted({int(x) for x in variants_raw}) if isinstance(variants_raw, list) else []
+    except (TypeError, ValueError) as exc:
+        raise ProbeError(
+            "probe transcript junctions and variant positions must be integer arrays in 0-based template coordinates"
+        ) from exc
+    mode = str(request.get("probe_transcript_mode") or "not-specified")
+    filtered = []
     for assay in found:
-        ps,pe=assay.probe.at,assay.probe.at+assay.probe.length
-        product_start=assay.pair.left_at.start
-        product_end=assay.pair.right_at.start+1
+        ps, pe = assay.probe.at, assay.probe.at + assay.probe.length
+        product_start = assay.pair.left_at.start
+        product_end = assay.pair.right_at.start + 1
         if any(ps <= v < pe for v in variants):
             continue
-        if mode=="exon-junction" and junctions and not any(ps < j < pe for j in junctions):
+        if mode == "exon-junction" and junctions and not any(ps < j < pe for j in junctions):
             continue
-        if mode=="exon-spanning" and junctions and not any(product_start < j < product_end for j in junctions):
+        if (
+            mode == "exon-spanning"
+            and junctions
+            and not any(product_start < j < product_end for j in junctions)
+        ):
             continue
         filtered.append(assay)
-    if mode in {"exon-junction","exon-spanning"} and not junctions:
+    if mode in {"exon-junction", "exon-spanning"} and not junctions:
         raise ProbeError(f"probeTranscriptMode={mode} requires explicit probeTranscriptJunctions")
-    found=filtered
+    found = filtered
     assays = [assay_to_dict(assay, **reaction) for assay in found]
     name = label(chosen.target.name)
 
     # Independent whole-probe fold evidence. Primer3 remains the candidate
     # authority; ViennaRNA is an OPTIONAL orthogonal structure view and never
     # silently rejects a probe on a different thermodynamic model.
-    probe_sequences = {f"probe_{index}": assay.probe.sequence for index, assay in enumerate(found, start=1)}
+    probe_sequences = {
+        f"probe_{index}": assay.probe.sequence for index, assay in enumerate(found, start=1)
+    }
     fold_temperature = (
         chosen.preset.cycling.anneal_extend_c
         or chosen.preset.cycling.isothermal_c
@@ -775,11 +933,11 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         entry["specificity_layers"] = {
             "amplicon": {
                 "source": "extending primer-pair scan",
-                "note": "Potential PCR products are evaluated independently of fluorescence."
+                "note": "Potential PCR products are evaluated independently of fluorescence.",
             },
             "probe_binding": {
                 "source": "non-extending probe binding scan",
-                "note": "Probe second sites are reported as binding evidence; the blocked probe cannot initiate a product."
+                "note": "Probe second sites are reported as binding evidence; the blocked probe cannot initiate a product.",
             },
             "combined_signal": combined_signal(entry["off_targets"], assay.probe.sequence, contigs),
         }
@@ -811,48 +969,48 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     }
 
     candidate_order_sheet = [
-            entry
-            for index, one in enumerate(assays, start=1)
-            for entry in (
-                {
-                    "name": f"{name}_{index}F",
-                    "sequence": one["left"]["sequence"],
-                    "annealing_sequence": one["left"]["sequence"],
-                    "tail_sequence": "",
-                    "kind": "primer",
-                    "length": one["left"]["length"],
-                    "gc_percent": one["left"]["gc_percent"],
-                    "tm": one["left"]["tm"],
+        entry
+        for index, one in enumerate(assays, start=1)
+        for entry in (
+            {
+                "name": f"{name}_{index}F",
+                "sequence": one["left"]["sequence"],
+                "annealing_sequence": one["left"]["sequence"],
+                "tail_sequence": "",
+                "kind": "primer",
+                "length": one["left"]["length"],
+                "gc_percent": one["left"]["gc_percent"],
+                "tm": one["left"]["tm"],
+            },
+            {
+                "name": f"{name}_{index}R",
+                "sequence": one["right"]["sequence"],
+                "annealing_sequence": one["right"]["sequence"],
+                "tail_sequence": "",
+                "kind": "primer",
+                "length": one["right"]["length"],
+                "gc_percent": one["right"]["gc_percent"],
+                "tm": one["right"]["tm"],
+            },
+            {
+                "name": f"{name}_{index}P",
+                "sequence": one["probe"]["sequence"],
+                "annealing_sequence": one["probe"]["sequence"],
+                "tail_sequence": "",
+                "kind": "probe",
+                "length": one["probe"]["length"],
+                "gc_percent": one["probe"]["gc_percent"],
+                "tm": one["probe"]["tm"],
+                "modifications": {
+                    "five_prime_reporter": (optical or {}).get("reporter"),
+                    "internal_quencher": (optical or {}).get("internal_quencher"),
+                    "three_prime_quencher": (optical or {}).get("quencher"),
+                    "chemistry": (optical or {}).get("chemistry"),
                 },
-                {
-                    "name": f"{name}_{index}R",
-                    "sequence": one["right"]["sequence"],
-                    "annealing_sequence": one["right"]["sequence"],
-                    "tail_sequence": "",
-                    "kind": "primer",
-                    "length": one["right"]["length"],
-                    "gc_percent": one["right"]["gc_percent"],
-                    "tm": one["right"]["tm"],
-                },
-                {
-                    "name": f"{name}_{index}P",
-                    "sequence": one["probe"]["sequence"],
-                    "annealing_sequence": one["probe"]["sequence"],
-                    "tail_sequence": "",
-                    "kind": "probe",
-                    "length": one["probe"]["length"],
-                    "gc_percent": one["probe"]["gc_percent"],
-                    "tm": one["probe"]["tm"],
-                    "modifications": {
-                        "five_prime_reporter": (optical or {}).get("reporter"),
-                        "internal_quencher": (optical or {}).get("internal_quencher"),
-                        "three_prime_quencher": (optical or {}).get("quencher"),
-                        "chemistry": (optical or {}).get("chemistry"),
-                    },
-                    "note": "Manufacturing/readout labels are validated against the selected probe chemistry.",
-                },
-            )
-        ]
+                "note": "Manufacturing/readout labels are validated against the selected probe chemistry.",
+            },
+        )
+    ]
 
     return {
         "engine": "pair-and-probe",
@@ -882,15 +1040,28 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         "background": screen.summary(contigs, template_only),
         "independent_probe_structure": independent_probe_structure,
         "optical_configuration": optical,
-        "transcript_mode": {"mode": request.get("probe_transcript_mode") or "not-specified", "junctions": junctions, "probe_variant_positions": variants, "coordinate_system": "0-based template"},
+        "transcript_mode": {
+            "mode": request.get("probe_transcript_mode") or "not-specified",
+            "junctions": junctions,
+            "probe_variant_positions": variants,
+            "coordinate_system": "0-based template",
+        },
         "optical_authority": optical_validation,
         "multiplex_interactions": (
             multiplex_interactions(
                 request.get("probe_multiplex_panel"),
-                {"forward": found[0].pair.left.sequence, "reverse": found[0].pair.right.sequence, "probe": found[0].probe.sequence},
-                mv_conc=float(reaction.get("mv_conc",50.0)), dv_conc=float(reaction.get("dv_conc",1.5)),
-                dntp_conc=float(reaction.get("dntp_conc",0.6)), dna_conc=float(reaction.get("dna_conc",50.0)),
-            ) if found else None
+                {
+                    "forward": found[0].pair.left.sequence,
+                    "reverse": found[0].pair.right.sequence,
+                    "probe": found[0].probe.sequence,
+                },
+                mv_conc=float(reaction.get("mv_conc", 50.0)),
+                dv_conc=float(reaction.get("dv_conc", 1.5)),
+                dntp_conc=float(reaction.get("dntp_conc", 0.6)),
+                dna_conc=float(reaction.get("dna_conc", 50.0)),
+            )
+            if found
+            else None
         ),
         "multiplex_panel": {
             "submitted": bool(request.get("probe_multiplex_panel")),
@@ -899,19 +1070,34 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "software_planning_bound": QPCR_MULTIPLEX_SOFTWARE_MAX_TARGETS,
             "wet_lab_qualified_plex": None,
             "peer_sequence_completeness": all(
-                isinstance(row, dict) and all(str(row.get(camel) or row.get(snake) or "").strip() for camel, snake in (("forwardPrimer","forward_primer"),("reversePrimer","reverse_primer"),("probeSequence","probe_sequence")))
+                isinstance(row, dict)
+                and all(
+                    str(row.get(camel) or row.get(snake) or "").strip()
+                    for camel, snake in (
+                        ("forwardPrimer", "forward_primer"),
+                        ("reversePrimer", "reverse_primer"),
+                        ("probeSequence", "probe_sequence"),
+                    )
+                )
                 for row in (request.get("probe_multiplex_panel") or [])
             ),
             "panel_sha256": hashlib.sha256(
-                json.dumps(request.get("probe_multiplex_panel"), sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+                json.dumps(
+                    request.get("probe_multiplex_panel"),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                    ensure_ascii=True,
+                ).encode("utf-8")
             ).hexdigest(),
             "chemistry_modification_identity_validation": "validated-by-typed-request-authority",
             "channel_identity_validation": "unique-explicit-identities-only",
             "instrument_spectral_compatibility": optical_validation.get("status"),
             "cross_assay_oligo_interactions": "reported-in-multiplex_interactions",
             "decision_impact": "diagnostic-only",
-            "note": "Reporter/quencher identity and explicit channel uniqueness are validated before execution. Instrument spectral compatibility is not inferred without a reviewed instrument-channel authority. Cross-assay primer/probe interaction is not claimed without the peer oligo sequences and never silently changes independent assay ranking."
-        } if request.get("probe_multiplex_panel") else None,
+            "note": "Reporter/quencher identity and explicit channel uniqueness are validated before execution. Instrument spectral compatibility is not inferred without a reviewed instrument-channel authority. Cross-assay primer/probe interaction is not claimed without the peer oligo sequences and never silently changes independent assay ranking.",
+        }
+        if request.get("probe_multiplex_panel")
+        else None,
         "workflow_evidence": workflow,
         "assays": assays,
         "considered": explain,
@@ -959,7 +1145,9 @@ def _probe_window(limits: Constraints, supplied: Constraints | None) -> dict[str
     used = supplied or Constraints(**_derived_from(limits))
     return {
         **{field: getattr(used, field) for field in Constraints.__dataclass_fields__},
-        "from": "explicit low-level probe constraints" if supplied else "unbound low-level engine heuristic",
+        "from": "explicit low-level probe constraints"
+        if supplied
+        else "unbound low-level engine heuristic",
         "note": (
             f"For unbound engine research only, the default probe search window is shifted "
             f"{UNBOUND_ENGINE_PROBE_TM_OFFSET_C} °C above the primer window and measured in the same "

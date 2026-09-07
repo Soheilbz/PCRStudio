@@ -142,16 +142,12 @@ def test_rpa_tm_is_explicitly_labeled_as_a_screening_proxy():
     assert thermodynamic_model(polymerase("taq-standard"))["role"] == "design-and-report"
 
 
-
-
 def test_thermodynamic_model_does_not_mislabel_primer3_oligo_input_as_mix_concentration():
     model = thermodynamic_model(polymerase("digital-pcr"))
 
     assert model["oligo_concentration_parameter"] == "PRIMER_DNA_CONC"
     assert model["oligo_concentration_role"] == "empirical_annealing_oligo_for_tm"
     assert "not necessarily" in model["oligo_concentration_note"]
-
-
 
 
 def test_thermodynamic_model_exposes_explicit_primer3_low_level_controls():

@@ -36,7 +36,7 @@ import pytest
 
 from pcr_tools.design import Constraints
 from pcr_tools.presets import polymerase
-from pcr_tools.probe import UNBOUND_ENGINE_PROBE_TM_OFFSET_C, FORBIDDEN_FIRST_BASE
+from pcr_tools.probe import FORBIDDEN_FIRST_BASE, UNBOUND_ENGINE_PROBE_TM_OFFSET_C
 from pcr_tools.thermo import analyse
 
 #: One reaction for all of them, so the three are comparable with each other.

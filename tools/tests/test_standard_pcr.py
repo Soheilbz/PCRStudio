@@ -112,8 +112,6 @@ def test_a_gc_clamp_longer_than_the_primer_is_refused():
     assert "more than there is" in message
 
 
-
-
 def test_asking_for_no_pairs_or_far_too_many_is_refused():
     assert "at least 1" in refusal({"how_many": 0})
     assert str(MAX_PAIRS) in refusal({"how_many": 1000})
@@ -203,8 +201,6 @@ def test_a_typed_number_beats_the_purpose_and_the_result_records_that():
         assert pair["product_size"] <= 700
 
 
-
-
 # ── Placement ─────────────────────────────────────────────────────────────
 
 
@@ -273,11 +269,10 @@ def test_a_result_says_what_produced_it():
     assert provenance["python"]
 
 
-
-
 def test_polymerase_identity_does_not_become_a_bench_protocol_by_itself():
     ordinary = run({"template": TEMPLATE, "polymerase": "taq-standard", "how_many": 1})
     assert "cycling" not in ordinary["pairs"][0]
+
 
 def test_every_oligo_in_the_order_is_checked_against_every_other():
     how_many = 4
@@ -337,10 +332,6 @@ def test_asking_for_more_pairs_than_exist_says_so_rather_than_going_quiet():
     diversify = next(stage for stage in answer["stages"] if stage["key"] == "diversify")
     assert len(answer["pairs"]) < MAX_PAIRS
     assert "fewer than" in diversify["detail"]
-
-
-
-
 
 
 def test_the_funnel_still_accounts_for_the_run():
@@ -547,10 +538,6 @@ def test_an_assay_refuses_a_purpose_it_cannot_serve_rather_than_compromising():
         )
 
 
-
-
-
-
 def test_species_specific_requires_a_product_across_every_inclusivity_record(monkeypatch):
     # Inclusivity and exclusivity are different claims. A pair that passes the
     # relative-organism screen must still be refused when it misses one of the
@@ -585,19 +572,21 @@ def test_species_specific_requires_a_product_across_every_inclusivity_record(mon
     assert answer["inclusivity"]["supplied"] is True
     assert answer["inclusivity"]["contigs"] == 2
     assert answer["inclusivity"]["pairs_rejected"] > 0
-    assert answer["inclusivity"]["sequence_topology_assumption"] == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    assert (
+        answer["inclusivity"]["sequence_topology_assumption"]
+        == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    )
     assert answer["inclusivity"]["taxonomy_resolution_status"] == "not-resolved-from-fasta-labels"
     assert answer["inclusivity"]["population_frequency_status"] == "not-computed"
     assert answer["inclusivity"]["surveillance_status"] == "external-versioned-review-required"
-    assert answer["background"]["sequence_topology_assumption"] == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    assert (
+        answer["background"]["sequence_topology_assumption"]
+        == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    )
     assert answer["background"]["taxonomy_resolution_status"] == "not-resolved-from-fasta-labels"
     assert answer["background"]["population_frequency_status"] == "not-computed"
     assert answer["background"]["surveillance_status"] == "external-versioned-review-required"
     assert "inclusivity panel" in answer["why_nothing"]
-
-
-
-
 
 
 def test_species_circular_topology_is_explicit_and_does_not_circularize_background(monkeypatch):
@@ -629,9 +618,15 @@ def test_species_circular_topology_is_explicit_and_does_not_circularize_backgrou
         }
     )
 
-    assert answer["inclusivity"]["sequence_topology_assumption"] == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    assert (
+        answer["inclusivity"]["sequence_topology_assumption"]
+        == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    )
     assert "pinned topology" in answer["inclusivity"]["topology_note"]
-    assert answer["background"]["sequence_topology_assumption"] == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    assert (
+        answer["background"]["sequence_topology_assumption"]
+        == "explicit-per-record-topology-from-pinned-metadata-manifest"
+    )
     assert "pinned per-record topology" in answer["background"]["topology_note"]
 
 
@@ -792,13 +787,23 @@ def test_restriction_cloning_keeps_the_full_ordered_oligo_interaction():
         }
     )
 
-    assert answer["cloning"]["insert_end_compatibility_scope"] == "insert-end-sequence-geometry-only"
+    assert (
+        answer["cloning"]["insert_end_compatibility_scope"] == "insert-end-sequence-geometry-only"
+    )
     assert answer["cloning"]["ligation_product_recleavage"] == "not-modeled"
     digest = answer["cloning"]["digest_validation"]
-    assert digest["methylation_sensitivity_status"] == "exact-enzyme-formulation-and-substrate-context-required"
+    assert (
+        digest["methylation_sensitivity_status"]
+        == "exact-enzyme-formulation-and-substrate-context-required"
+    )
     assert digest["star_activity_status"] == "reaction-condition-dependent-not-computed"
-    assert digest["double_digest_compatibility_status"] == "exact-formulation/current-supplier-buffer-chart-required"
-    assert digest["heat_inactivation_status"] == "exact-formulation/current-supplier-record-required"
+    assert (
+        digest["double_digest_compatibility_status"]
+        == "exact-formulation/current-supplier-buffer-chart-required"
+    )
+    assert (
+        digest["heat_inactivation_status"] == "exact-formulation/current-supplier-record-required"
+    )
     assert digest["ligation_junction_recleavage_status"] == "exact-insert-vector-junction-required"
     assert len(digest["required_records"]) >= 6
     interaction = answer["pairs"][0]["tailed"]["interaction"]
@@ -806,10 +811,6 @@ def test_restriction_cloning_keeps_the_full_ordered_oligo_interaction():
     assert interaction["worsened_by"] == pytest.approx(
         interaction["without_tails"]["dg"] - interaction["with_tails"]["dg"]
     )
-
-
-
-
 
 
 def test_restriction_cloning_rejects_removed_per_end_protective_length_fields():
@@ -838,8 +839,6 @@ def test_restriction_cloning_rejects_removed_per_end_protective_length_fields():
                 },
             }
         )
-
-
 
 
 def test_an_assay_with_no_purpose_list_serves_every_purpose():
@@ -941,9 +940,7 @@ def test_variant_coordinates_never_become_a_ranking_penalty():
 
     after = a_masked_run([back], how_many=5)
     for pair in after["pairs"]:
-        component = next(
-            c for c in pair["score_components"] if c["name"] == "Known variants"
-        )
+        component = next(c for c in pair["score_components"] if c["name"] == "Known variants")
         assert component["value"] == 0.0
         assert "No supplied variant lies" in component["detail"]
 
@@ -1096,6 +1093,7 @@ def test_every_pair_carries_a_profile_of_its_own_product():
         assert product["length"] == pair["product_size"]
         assert product["difficulty"] in {"easy", "hard", "very hard"}
 
+
 # ── Named Standard-PCR bench/provenance overlays ──────────────────────────
 
 
@@ -1142,7 +1140,9 @@ def test_q5_and_q5u_keep_uracil_and_carryover_semantics_distinct():
 
 def test_taq_family_and_high_fidelity_product_end_handoffs_remain_distinct():
     taq = pipeline.standard_pcr_protocol("neb-taq-m0273", assay_id="standard-pcr")
-    dream = pipeline.standard_pcr_protocol("thermo-dreamtaq-hot-start-ep170x", assay_id="standard-pcr")
+    dream = pipeline.standard_pcr_protocol(
+        "thermo-dreamtaq-hot-start-ep170x", assay_id="standard-pcr"
+    )
     phusion = pipeline.standard_pcr_protocol("thermo-phusion-plus", assay_id="standard-pcr")
     assert taq and dream and phusion
     assert "dA" in taq["polymerase_properties"]["product_end"]
@@ -1162,7 +1162,6 @@ def test_taq_family_and_high_fidelity_product_end_handoffs_remain_distinct():
     assert phusion["difficult_template"]["automatic_additive_selection"] is False
 
 
-
 def test_promega_gotaq_overlay_keeps_buffer_variant_and_carryover_claims_bounded():
     gotaq = pipeline.standard_pcr_protocol("promega-gotaq-m300", assay_id="standard-pcr")
     assert gotaq
@@ -1171,8 +1170,11 @@ def test_promega_gotaq_overlay_keeps_buffer_variant_and_carryover_claims_bounded
     assert gotaq["polymerase_properties"]["hot_start"] is False
     assert "dA" in gotaq["polymerase_properties"]["product_end"]
     assert gotaq["buffer_variants"]["identity_must_be_recorded"] is True
-    assert gotaq["carryover_prevention"]["dUTP_supported"] == "not-asserted-by-this-reviewed-overlay"
+    assert (
+        gotaq["carryover_prevention"]["dUTP_supported"] == "not-asserted-by-this-reviewed-overlay"
+    )
     assert gotaq["carryover_prevention"]["enabled_by_protocol_selection_alone"] is False
+
 
 def test_shared_high_gc_diagnostic_does_not_transfer_pcr_additives_into_rpa():
     from pcr_tools.amplicon import profile
@@ -1193,5 +1195,11 @@ def test_standard_pcr_hot_start_mechanisms_and_q5u_udg_pretreatment_are_vendor_b
     phusion = standard_pcr_protocol("thermo-phusion-plus", assay_id="standard-pcr")
     assert q5 and q5["polymerase_properties"]["hot_start_mechanism"] == "aptamer-based"
     assert q5u and q5u["polymerase_properties"]["hot_start_mechanism"] == "aptamer-based"
-    assert q5u["carryover_prevention"]["supplier_pretreatment"] == {"temperature_c": 25, "minutes": 10}
-    assert phusion and phusion["polymerase_properties"]["hot_start_mechanism"] == "antibody-molecule-mediated"
+    assert q5u["carryover_prevention"]["supplier_pretreatment"] == {
+        "temperature_c": 25,
+        "minutes": 10,
+    }
+    assert (
+        phusion
+        and phusion["polymerase_properties"]["hot_start_mechanism"] == "antibody-molecule-mediated"
+    )

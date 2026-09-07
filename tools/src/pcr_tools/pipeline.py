@@ -21,11 +21,13 @@ from typing import Any
 
 from . import accessibility as access
 from . import amplicon as amplicon_mod
-from . import backbone, restriction as restriction_mod, rt, screen, validation_plan
+from . import backbone, rt, screen, validation_plan
 from . import explain as explain_mod
+from . import restriction as restriction_mod
 from . import specificity as spec
 from . import tails as tails_mod
 from . import variants as variants_mod
+from .cloning_coding import resolve_cloning_coding_context
 from .design import (
     CandidatePair,
     Constraints,
@@ -34,19 +36,7 @@ from .design import (
     design_terminal_pair,
     result_to_dict,
 )
-from .intake import Target, resolve, target_to_dict
-from .presets import (
-    Cycling,
-    Polymerase,
-    Purpose,
-    Reaction,
-    polymerase,
-    purpose,
-    thermodynamic_model,
-)
-from .provenance import provenance
-from .runtime_contract import validate_required_context
-from .modified_oligos import provenance_block as modified_oligo_provenance
+from .flanking_numeric_recipes import resolve_numeric_recipe as resolve_flanking_numeric_recipe
 from .flanking_request import (
     _exon_junctions,
     _flanking_numeric_context,
@@ -57,19 +47,19 @@ from .flanking_request import (
     _validate_assay_rna,
     _workflow_evidence,
 )
-from .flanking_numeric_recipes import resolve_numeric_recipe as resolve_flanking_numeric_recipe
+from .intake import Target, resolve, target_to_dict
+from .modified_oligos import provenance_block as modified_oligo_provenance
+from .presets import (
+    Cycling,
+    Polymerase,
+    Purpose,
+    Reaction,
+    polymerase,
+    purpose,
+    thermodynamic_model,
+)
+from .provenance import provenance
 from .registries.flanking_protocols import (
-    COLONY_HOST_CLASSES,
-    COLONY_PREPARATIONS,
-    COLONY_PROTOCOLS,
-    DIGITAL_FRAGMENTATION_STATES,
-    DIGITAL_PARTITION_FORMATS,
-    DIGITAL_PLATFORM_IDS,
-    DIGITAL_PROTOCOLS,
-    LONG_RANGE_PROTOCOLS,
-    QPCR_PROTOCOLS,
-    RPA_PROTOCOLS,
-    STANDARD_PCR_PROTOCOLS,
     colony_context,
     digital_context,
     digital_protocol,
@@ -79,9 +69,10 @@ from .registries.flanking_protocols import (
     standard_pcr_protocol,
 )
 from .registries.restriction_workflows import resolve_restriction_workflow
-from .cloning_coding import resolve_cloning_coding_context
+from .rpa_multiplex import extend_order_sheet as extend_rpa_multiplex_order_sheet
+from .rpa_multiplex import resolve as resolve_rpa_multiplex
 from .rpa_screening import screening_cohort_for_current_mode as rpa_screening_cohort
-from .rpa_multiplex import extend_order_sheet as extend_rpa_multiplex_order_sheet, resolve as resolve_rpa_multiplex
+from .runtime_contract import validate_required_context
 from .scientific_integrity import (
     enforce_constraint_overrides,
     enforce_polymerase_identity,
@@ -89,7 +80,18 @@ from .scientific_integrity import (
     resolve_purpose,
 )
 from .settings import _validate_assay_contract, label
-from .species_panel import (manifest_sha256 as species_manifest_sha256, parse_accession_version_manifest, parse_record_metadata_manifest, record_metadata_sha256, validate_record_metadata, parse_accession_authority_manifest, validate_accession_authority, accession_authority_sha256, revalidation_policy as species_revalidation_policy, SpeciesPanelError)
+from .species_panel import (
+    SpeciesPanelError,
+    accession_authority_sha256,
+    parse_accession_authority_manifest,
+    parse_accession_version_manifest,
+    parse_record_metadata_manifest,
+    record_metadata_sha256,
+    validate_accession_authority,
+    validate_record_metadata,
+)
+from .species_panel import manifest_sha256 as species_manifest_sha256
+from .species_panel import revalidation_policy as species_revalidation_policy
 from .thermo import DEFAULT_CONDITIONS, pair_dimer, reverse_complement
 
 #: How firmly an unwanted site has to bind, as a fraction of how firmly the
@@ -221,9 +223,14 @@ KNOWN_REQUEST_FIELDS = frozenset(
         "digital_protocol",
         "flanking_numeric_context",
         "digital_partition_format",
-        "digital_platform_id", "digital_platform_name", "digital_instrument_model",
+        "digital_platform_id",
+        "digital_platform_name",
+        "digital_instrument_model",
         "digital_fragmentation_state",
-        "digital_multiplex_mode", "digital_multiplex_panel", "digital_run_evidence", "rpa_multiplex_panel",
+        "digital_multiplex_mode",
+        "digital_multiplex_panel",
+        "digital_run_evidence",
+        "rpa_multiplex_panel",
         "colony_host_class",
         "colony_preparation",
         "colony_protocol_id",
@@ -288,7 +295,6 @@ KNOWN_ASSAY_DEFAULT_FIELDS = frozenset(
 )
 
 
-
 KNOWN_TAIL_FIELDS = frozenset(
     {
         "tail_protocol",
@@ -300,7 +306,6 @@ KNOWN_TAIL_FIELDS = frozenset(
     }
 )
 KNOWN_VECTOR_PRIMER_FIELDS = frozenset({"name", "sequence", "reads_into", "vector", "how_many"})
-
 
 
 def _pair_has_product_on_contig(
@@ -387,16 +392,6 @@ def _pair_has_product_on_contig(
         and min_product <= product.size <= max_product
         for product in spec.products_from(sites, max_product=max_product, circular_length=fold_at)
     )
-
-
-
-
-
-
-
-
-
-
 
 
 # ── Purpose-weighted objectives ──────────────────────────────────────────────
@@ -1376,7 +1371,9 @@ def _order_sheet(
                 line["tail_sequence"] = tail["sequence"]
                 line["length"] = len(line["sequence"])
                 first_observed = tail.get("first_observed_activity_flanking_bases")
-                evidence_identity = tail.get("end_cleavage_evidence_identity") or "the recorded supplier entry"
+                evidence_identity = (
+                    tail.get("end_cleavage_evidence_identity") or "the recorded supplier entry"
+                )
                 recommendation_note = (
                     f" The close-to-end table for {evidence_identity} first reports non-zero "
                     f"activity at {first_observed} flanking base(s); that observation is not an "
@@ -1490,9 +1487,15 @@ def _cloning_tails(
         raise ValueError("`tails` must be an object")
     _reject_unknown_fields(asked, name="tails", known=KNOWN_TAIL_FIELDS)
 
-    tail_protocol = _request_optional_text(asked.get("tail_protocol"), name="tails.tail_protocol") or ""
-    forward_named = _request_optional_text(asked.get("forward_enzyme"), name="tails.forward_enzyme") or ""
-    reverse_named = _request_optional_text(asked.get("reverse_enzyme"), name="tails.reverse_enzyme") or ""
+    tail_protocol = (
+        _request_optional_text(asked.get("tail_protocol"), name="tails.tail_protocol") or ""
+    )
+    forward_named = (
+        _request_optional_text(asked.get("forward_enzyme"), name="tails.forward_enzyme") or ""
+    )
+    reverse_named = (
+        _request_optional_text(asked.get("reverse_enzyme"), name="tails.reverse_enzyme") or ""
+    )
     if (forward_named or reverse_named) and tail_protocol != "neb-general-6bp":
         raise tails_mod.TailError(
             "Scientific-Strict restriction-tail generation requires the explicit "
@@ -1519,14 +1522,20 @@ def _cloning_tails(
             "end-cleavage protocol; use a separately named branch for another requirement."
         )
 
-    forward_protective_sequence = _request_optional_text(
-        asked.get("forward_protective_sequence"),
-        name="tails.forward_protective_sequence",
-    ) or ""
-    reverse_protective_sequence = _request_optional_text(
-        asked.get("reverse_protective_sequence"),
-        name="tails.reverse_protective_sequence",
-    ) or ""
+    forward_protective_sequence = (
+        _request_optional_text(
+            asked.get("forward_protective_sequence"),
+            name="tails.forward_protective_sequence",
+        )
+        or ""
+    )
+    reverse_protective_sequence = (
+        _request_optional_text(
+            asked.get("reverse_protective_sequence"),
+            name="tails.reverse_protective_sequence",
+        )
+        or ""
+    )
 
     usable = [enzyme.name for enzyme in tails_mod.usable_enzymes(template)]
     forward = forward_named
@@ -1928,17 +1937,24 @@ def run(
     expected_preset: Polymerase = polymerase(assay_polymerase)
     preset: Polymerase = polymerase(requested_polymerase or assay_polymerase)
     allowed_polymerases = assay_defaults.get("allowedPolymerases") or []
-    if not isinstance(allowed_polymerases, list) or not all(isinstance(value, str) for value in allowed_polymerases):
+    if not isinstance(allowed_polymerases, list) or not all(
+        isinstance(value, str) for value in allowed_polymerases
+    ):
         raise ValueError("`assay.defaults.allowedPolymerases` must be a list of preset ids")
     enforce_polymerase_identity(
-        preset.id, expected_preset.id, assay_id=str(assay.get("id") or ""), allowed=allowed_polymerases
+        preset.id,
+        expected_preset.id,
+        assay_id=str(assay.get("id") or ""),
+        allowed=allowed_polymerases,
     )
     overrides = _number_map(request.get("conditions"), name="conditions")
     unknown = sorted(set(overrides) - set(DEFAULT_CONDITIONS))
     if unknown:
         raise ValueError(f"unknown reaction condition(s): {', '.join(unknown)}")
     enforce_reaction_overrides(
-        overrides, preset.reaction.as_conditions(), context=f"assay `{assay.get('id') or 'unprofiled'}`"
+        overrides,
+        preset.reaction.as_conditions(),
+        context=f"assay `{assay.get('id') or 'unprofiled'}`",
     )
     reaction = Reaction(**{**preset.reaction.as_conditions(), **overrides})
     reaction.validate()
@@ -1967,7 +1983,9 @@ def run(
     if len(named_overlays) > 1:
         raise ValueError("select only one named flanking-pair chemistry overlay")
     selected_standard_pcr_protocol = standard_pcr_protocol(
-        standard_pcr_named, assay_id=str(assay.get("id", "")), multiplex_context=bool(request.get("multiplex_context", False))
+        standard_pcr_named,
+        assay_id=str(assay.get("id", "")),
+        multiplex_context=bool(request.get("multiplex_context", False)),
     )
     selected_qpcr_protocol = qpcr_protocol(
         qpcr_named, assay_id=str(assay.get("id", "")), from_rna=from_rna
@@ -1975,14 +1993,17 @@ def run(
     selected_rpa_protocol = rpa_protocol(
         rpa_named, assay_id=str(assay.get("id", "")), from_rna=from_rna
     )
-    selected_long_range_protocol = long_range_protocol(long_range_named, assay_id=str(assay.get("id", "")))
+    selected_long_range_protocol = long_range_protocol(
+        long_range_named, assay_id=str(assay.get("id", ""))
+    )
     selected_digital_protocol = digital_protocol(
         digital_named, assay_id=str(assay.get("id", "")), from_rna=from_rna
     )
     selected_colony_context = colony_context(request, assay_id=str(assay.get("id", "")))
     selected_colony_protocol = (
         selected_colony_context.get("source_conditioned_protocol")
-        if selected_colony_context is not None and selected_colony_context.get("protocol_id") != "custom-sop"
+        if selected_colony_context is not None
+        and selected_colony_context.get("protocol_id") != "custom-sop"
         else None
     )
     selected_protocol = (
@@ -2015,7 +2036,9 @@ def run(
             overrides["high_gc_enhancer_percent"] = float(scenario.pop("gc_enhancer_percent"))
         if "rpa_multiplex" in scenario:
             scenario["multiplex"] = bool(scenario.pop("rpa_multiplex"))
-        rpa_panel_context = resolve_rpa_multiplex(request.get("rpa_multiplex_panel"), enabled=bool(scenario.get("multiplex")))
+        rpa_panel_context = resolve_rpa_multiplex(
+            request.get("rpa_multiplex_panel"), enabled=bool(scenario.get("multiplex"))
+        )
         if "rpa_temperature_c" in scenario:
             scenario["temperature_c"] = float(scenario.pop("rpa_temperature_c"))
         if "rpa_time_min" in scenario:
@@ -2186,15 +2209,17 @@ def run(
             )
         cloning_vector_target = resolve(
             raw_vector,
-            name=_request_optional_text(request.get("cloning_vector_name"), name="cloning_vector_name") or "recipient-vector",
+            name=_request_optional_text(
+                request.get("cloning_vector_name"), name="cloning_vector_name"
+            )
+            or "recipient-vector",
             lowercase_masking=False,
         )
-    elif any(request.get(key) is not None for key in (
-        "cloning_vector", "cloning_vector_name", "cloning_vector_topology"
-    )):
-        raise ValueError(
-            "cloning_vector fields belong to the restriction-cloning assay"
-        )
+    elif any(
+        request.get(key) is not None
+        for key in ("cloning_vector", "cloning_vector_name", "cloning_vector_topology")
+    ):
+        raise ValueError("cloning_vector fields belong to the restriction-cloning assay")
 
     restriction_workflow: dict[str, Any] | None = None
     restriction_workflow_fields = (
@@ -2204,16 +2229,27 @@ def run(
     )
     if restriction_exact_insert:
         restriction_workflow = resolve_restriction_workflow(
-            digest_protocol=_request_optional_text(request.get("restriction_digest_protocol"), name="restriction_digest_protocol"),
-            dephosphorylation_protocol=_request_optional_text(request.get("restriction_dephosphorylation_protocol"), name="restriction_dephosphorylation_protocol"),
-            ligation_protocol=_request_optional_text(request.get("restriction_ligation_protocol"), name="restriction_ligation_protocol"),
+            digest_protocol=_request_optional_text(
+                request.get("restriction_digest_protocol"), name="restriction_digest_protocol"
+            ),
+            dephosphorylation_protocol=_request_optional_text(
+                request.get("restriction_dephosphorylation_protocol"),
+                name="restriction_dephosphorylation_protocol",
+            ),
+            ligation_protocol=_request_optional_text(
+                request.get("restriction_ligation_protocol"), name="restriction_ligation_protocol"
+            ),
         )
     elif any(request.get(field) is not None for field in restriction_workflow_fields):
-        raise ValueError("restriction-cloning digest/dephosphorylation/ligation workflow fields belong only to restriction-cloning")
+        raise ValueError(
+            "restriction-cloning digest/dephosphorylation/ligation workflow fields belong only to restriction-cloning"
+        )
 
     restriction_donor_context: dict[str, Any] | None = None
     if restriction_exact_insert:
-        donor_region_requested = target_start is not None or target_length is not None or circular is True
+        donor_region_requested = (
+            target_start is not None or target_length is not None or circular is True
+        )
         if donor_region_requested:
             if circular is not True or target_start is None or target_length is None:
                 raise ValueError(
@@ -2221,10 +2257,17 @@ def run(
                     "otherwise submit the exact linear insert sequence."
                 )
             if isinstance(target_start, bool) or isinstance(target_length, bool):
-                raise ValueError("restriction-cloning donor target_start/target_length must be integer coordinates")
+                raise ValueError(
+                    "restriction-cloning donor target_start/target_length must be integer coordinates"
+                )
             start = int(target_start)
             length = int(target_length)
-            if start != target_start or length != target_length or not 0 <= start < target.length or not 0 < length <= target.length:
+            if (
+                start != target_start
+                or length != target_length
+                or not 0 <= start < target.length
+                or not 0 < length <= target.length
+            ):
                 raise ValueError(
                     f"restriction-cloning donor region must use 0-based start within 0..{target.length - 1} and length 1..{target.length}"
                 )
@@ -2235,7 +2278,11 @@ def run(
             else:
                 wrap = end - donor.length
                 insert_sequence = donor.sequence[start:] + donor.sequence[:wrap]
-            target = resolve(insert_sequence, name=f"{donor.name}:donor-region-{start}+{length}", lowercase_masking=False)
+            target = resolve(
+                insert_sequence,
+                name=f"{donor.name}:donor-region-{start}+{length}",
+                lowercase_masking=False,
+            )
             restriction_donor_context = {
                 "mode": "circular-donor-region-extraction",
                 "donor_name": donor.name,
@@ -2248,7 +2295,9 @@ def run(
                 "insert_sha256": hashlib.sha256(insert_sequence.encode("ascii")).hexdigest(),
             }
         elif circular is True:
-            raise ValueError("restriction-cloning exact-insert mode expects a linear submitted insert; use target_start/target_length to extract from a circular donor")
+            raise ValueError(
+                "restriction-cloning exact-insert mode expects a linear submitted insert; use target_start/target_length to extract from a circular donor"
+            )
         if any(field in supplied for field in ("product_min", "product_max")):
             raise ValueError(
                 "restriction-cloning derives product size from the exact insert or explicitly extracted donor region. "
@@ -2258,12 +2307,18 @@ def run(
 
     cloning_coding_context: dict[str, Any] | None = None
     cloning_coding_fields = (
-        "cloning_coding_intent", "cloning_cds_start", "cloning_cds_end",
-        "cloning_stop_codon_policy", "cloning_fusion_tag", "cloning_linker_aa",
+        "cloning_coding_intent",
+        "cloning_cds_start",
+        "cloning_cds_end",
+        "cloning_stop_codon_policy",
+        "cloning_fusion_tag",
+        "cloning_linker_aa",
         "cloning_vector_junction_frame",
     )
     if restriction_exact_insert:
-        cloning_coding_context = resolve_cloning_coding_context(request, insert_sequence=target.sequence)
+        cloning_coding_context = resolve_cloning_coding_context(
+            request, insert_sequence=target.sequence
+        )
     elif any(request.get(field) is not None for field in cloning_coding_fields):
         raise ValueError("cloning coding/fusion fields belong only to restriction-cloning")
 
@@ -2510,15 +2565,19 @@ def run(
         sum(base not in {"A", "C", "G", "T"} for base in contig.sequence.upper())
         for contig in contigs
     )
-    background_panel_sha256 = hashlib.sha256(
-        b"".join(
-            contig.name.encode("utf-8")
-            + b"\0"
-            + contig.sequence.upper().encode("ascii")
-            + b"\0"
-            for contig in contigs
-        )
-    ).hexdigest() if contigs and not scanning_the_template else None
+    background_panel_sha256 = (
+        hashlib.sha256(
+            b"".join(
+                contig.name.encode("utf-8")
+                + b"\0"
+                + contig.sequence.upper().encode("ascii")
+                + b"\0"
+                for contig in contigs
+            )
+        ).hexdigest()
+        if contigs and not scanning_the_template
+        else None
+    )
 
     # Species specificity has two independent claims. The exclusion
     # background asks "what must not amplify?"; the inclusivity panel asks
@@ -2587,12 +2646,26 @@ def run(
             minimum=1,
             maximum=2_147_483_647,
         )
-        species_taxonomy_snapshot = _request_optional_text(request.get("species_taxonomy_snapshot"), name="species_taxonomy_snapshot")
-        species_database_snapshot = _request_optional_text(request.get("species_database_snapshot"), name="species_database_snapshot")
-        species_panel_accession_manifest = _request_optional_text(request.get("species_panel_accession_manifest"), name="species_panel_accession_manifest")
-        species_panel_record_metadata_manifest = _request_optional_text(request.get("species_panel_record_metadata_manifest"), name="species_panel_record_metadata_manifest")
-        species_panel_accession_authority_manifest = _request_optional_text(request.get("species_panel_accession_authority_manifest"), name="species_panel_accession_authority_manifest")
-        species_panel_retrieved_date = _request_optional_text(request.get("species_panel_retrieved_date"), name="species_panel_retrieved_date")
+        species_taxonomy_snapshot = _request_optional_text(
+            request.get("species_taxonomy_snapshot"), name="species_taxonomy_snapshot"
+        )
+        species_database_snapshot = _request_optional_text(
+            request.get("species_database_snapshot"), name="species_database_snapshot"
+        )
+        species_panel_accession_manifest = _request_optional_text(
+            request.get("species_panel_accession_manifest"), name="species_panel_accession_manifest"
+        )
+        species_panel_record_metadata_manifest = _request_optional_text(
+            request.get("species_panel_record_metadata_manifest"),
+            name="species_panel_record_metadata_manifest",
+        )
+        species_panel_accession_authority_manifest = _request_optional_text(
+            request.get("species_panel_accession_authority_manifest"),
+            name="species_panel_accession_authority_manifest",
+        )
+        species_panel_retrieved_date = _request_optional_text(
+            request.get("species_panel_retrieved_date"), name="species_panel_retrieved_date"
+        )
         missing_provenance = [
             label
             for label, value in (
@@ -2603,7 +2676,10 @@ def run(
                 ("species_database_snapshot", species_database_snapshot),
                 ("species_panel_accession_manifest", species_panel_accession_manifest),
                 ("species_panel_record_metadata_manifest", species_panel_record_metadata_manifest),
-                ("species_panel_accession_authority_manifest", species_panel_accession_authority_manifest),
+                (
+                    "species_panel_accession_authority_manifest",
+                    species_panel_accession_authority_manifest,
+                ),
                 ("species_panel_retrieved_date", species_panel_retrieved_date),
             )
             if not value
@@ -2617,7 +2693,9 @@ def run(
             assert species_panel_retrieved_date is not None
             date.fromisoformat(species_panel_retrieved_date)
         except ValueError as exc:
-            raise ValueError("species_panel_retrieved_date must be a valid ISO YYYY-MM-DD calendar date") from exc
+            raise ValueError(
+                "species_panel_retrieved_date must be a valid ISO YYYY-MM-DD calendar date"
+            ) from exc
         assert species_panel_accession_manifest is not None
         versioned_accessions = parse_accession_version_manifest(species_panel_accession_manifest)
         species_panel_accession_count = len(versioned_accessions)
@@ -2625,7 +2703,9 @@ def run(
         assert species_panel_accession_authority_manifest is not None
         assert species_database_snapshot is not None and species_taxonomy_snapshot is not None
         try:
-            accession_authority_rows = parse_accession_authority_manifest(species_panel_accession_authority_manifest)
+            accession_authority_rows = parse_accession_authority_manifest(
+                species_panel_accession_authority_manifest
+            )
             species_accession_authority_summary = validate_accession_authority(
                 accession_authority_rows,
                 accessions=versioned_accessions,
@@ -2647,7 +2727,10 @@ def run(
             default_name="inclusivity",
         )
         if not inclusivity_contigs:
-            raise ValueError("Species-specific PCR requires at least one non-empty inclusivity record.")
+            raise ValueError(
+                "Species-specific PCR requires at least one non-empty inclusivity record."
+            )
+
         # Panel taxonomy is user-declared provenance, not something PCRStudio
         # can infer from FASTA labels. We can nevertheless reject a logically
         # impossible sequence contract: the same molecule cannot simultaneously
@@ -2676,7 +2759,9 @@ def run(
             )
         assert species_panel_record_metadata_manifest is not None
         try:
-            species_record_metadata = parse_record_metadata_manifest(species_panel_record_metadata_manifest)
+            species_record_metadata = parse_record_metadata_manifest(
+                species_panel_record_metadata_manifest
+            )
             species_record_metadata_summary = validate_record_metadata(
                 species_record_metadata,
                 accessions=versioned_accessions,
@@ -2686,7 +2771,9 @@ def run(
         except SpeciesPanelError as exc:
             raise ValueError(str(exc)) from exc
         species_record_metadata_sha256 = record_metadata_sha256(species_record_metadata)
-        species_topology_by_record = {row.record_id: row.topology for row in species_record_metadata}
+        species_topology_by_record = {
+            row.record_id: row.topology for row in species_record_metadata
+        }
     inclusivity_bases = sum(len(contig.sequence) for contig in inclusivity_contigs)
     inclusivity_ambiguous_bases = sum(
         1
@@ -2829,7 +2916,12 @@ def run(
                 for contig in contigs:
                     if species_topology_by_record.get(contig.name) == "circular":
                         per_contig_circular_lengths[contig.name] = len(contig.sequence)
-                        specificity_contigs.append(spec.Contig(name=contig.name, sequence=contig.sequence + contig.sequence[: screen.JOIN_WINDOW]))
+                        specificity_contigs.append(
+                            spec.Contig(
+                                name=contig.name,
+                                sequence=contig.sequence + contig.sequence[: screen.JOIN_WINDOW],
+                            )
+                        )
                     else:
                         specificity_contigs.append(contig)
             sites = spec.sites_for(
@@ -2859,7 +2951,8 @@ def run(
                 sites = [site for site in sites if screen.leftmost(site) < fold_at]
             if per_contig_circular_lengths:
                 sites = [
-                    site for site in sites
+                    site
+                    for site in sites
                     if site.contig not in per_contig_circular_lengths
                     or screen.leftmost(site) < per_contig_circular_lengths[site.contig]
                 ]
@@ -2908,7 +3001,7 @@ def run(
                         checked=True,
                         background_name=contigs[0].name if contigs else "background",
                         background_bases=background_bases,
-                            max_mismatches=max_mismatches,
+                        max_mismatches=max_mismatches,
                         sites=sites,
                         products=products,
                         terminal_mismatch_scan=terminal_mismatch_scan,
@@ -3043,10 +3136,14 @@ def run(
     cloning = _cloning_tails(request, target.sequence, ranked, reaction.as_conditions())
     if cloning is not None and restriction_exact_insert:
         cloning["insert_boundary_contract"] = {
-            "mode": "circular-donor-region-extraction" if restriction_donor_context else "exact-submitted-insert",
+            "mode": "circular-donor-region-extraction"
+            if restriction_donor_context
+            else "exact-submitted-insert",
             "product_size_bp": target.length,
             "terminal_primers_required": True,
-            "donor_plasmid_region_extraction": "implemented-and-explicit" if restriction_donor_context else "not-requested",
+            "donor_plasmid_region_extraction": "implemented-and-explicit"
+            if restriction_donor_context
+            else "not-requested",
             "donor_context": restriction_donor_context,
             "note": (
                 "Scientific-Strict pins both annealing cores to the exact insert boundaries. "
@@ -3297,7 +3394,10 @@ def run(
                 ),
             )
         )
-    if selected_rpa_protocol is not None and selected_rpa_protocol.get("protocol_id") == "thermo-lyo-ready-rpa":
+    if (
+        selected_rpa_protocol is not None
+        and selected_rpa_protocol.get("protocol_id") == "thermo-lyo-ready-rpa"
+    ):
         composition_went_in = named_protocol_amplicon_composition_considered
         composition_came_out = composition_went_in - refused_for_named_protocol_amplicon_composition
         stages.append(
@@ -3389,9 +3489,7 @@ def run(
                 rejections=(
                     [
                         {
-                            "reason": (
-                                "a supplied polymorphic coordinate lies under a primer"
-                            ),
+                            "reason": ("a supplied polymorphic coordinate lies under a primer"),
                             "count": refused_for_a_variant,
                             "share": round(
                                 100.0 * refused_for_a_variant / considered_for_variants,
@@ -3496,12 +3594,18 @@ def run(
             {
                 "one_step": True,
                 "hold": {
-                    "celsius": float(selected_qpcr_protocol["reverse_transcription"]["temperature_c"]),
-                    "seconds": int(selected_qpcr_protocol["reverse_transcription"]["incubation_minutes"] * 60),
+                    "celsius": float(
+                        selected_qpcr_protocol["reverse_transcription"]["temperature_c"]
+                    ),
+                    "seconds": int(
+                        selected_qpcr_protocol["reverse_transcription"]["incubation_minutes"] * 60
+                    ),
                 },
                 "before": "initial-denaturation-and-qpcr-cycling",
                 "note": selected_qpcr_protocol["reverse_transcription"]["note"],
-                "authority_status": selected_qpcr_protocol["reverse_transcription"]["authority_status"],
+                "authority_status": selected_qpcr_protocol["reverse_transcription"][
+                    "authority_status"
+                ],
             }
             if from_rna
             and selected_qpcr_protocol
@@ -3510,34 +3614,50 @@ def run(
                 {
                     "one_step": True,
                     "hold": {
-                        "celsius": float(selected_digital_protocol["reverse_transcription"]["temperature_c"]),
-                        "seconds": int(selected_digital_protocol["reverse_transcription"]["incubation_minutes"] * 60),
+                        "celsius": float(
+                            selected_digital_protocol["reverse_transcription"]["temperature_c"]
+                        ),
+                        "seconds": int(
+                            selected_digital_protocol["reverse_transcription"]["incubation_minutes"]
+                            * 60
+                        ),
                     },
                     "before": selected_digital_protocol["reverse_transcription"].get(
                         "before", "dpcr-cycling"
                     ),
                     "note": selected_digital_protocol["reverse_transcription"]["note"],
-                    "authority_status": selected_digital_protocol["reverse_transcription"]["authority_status"],
+                    "authority_status": selected_digital_protocol["reverse_transcription"][
+                        "authority_status"
+                    ],
                 }
                 if from_rna
                 and selected_digital_protocol
                 and selected_digital_protocol.get("reverse_transcription")
+                # The shared result schema keeps RT timing/authority compact. The
+                # named RPA protocol retains the exact enzyme/inhibitor/RNase-H
+                # recipe in its own provenance object.
                 else (
-            # The shared result schema keeps RT timing/authority compact. The
-            # named RPA protocol retains the exact enzyme/inhibitor/RNase-H
-            # recipe in its own provenance object.
-            {
-                "one_step": True,
-                "hold": {
-                    "celsius": float(selected_rpa_protocol["reverse_transcription"]["temperature_c"]),
-                    "seconds": int(selected_rpa_protocol["reverse_transcription"]["incubation_minutes"] * 60),
-                },
-                "before": "concurrent-with-rpa",
-                "note": selected_rpa_protocol["reverse_transcription"]["note"],
-                "authority_status": selected_rpa_protocol["reverse_transcription"]["authority_status"],
-            }
-            if from_rna and selected_rpa_protocol and selected_rpa_protocol.get("reverse_transcription")
-            else (rt.block(isothermal=False, polymerase=preset.name) if from_rna else None)
+                    {
+                        "one_step": True,
+                        "hold": {
+                            "celsius": float(
+                                selected_rpa_protocol["reverse_transcription"]["temperature_c"]
+                            ),
+                            "seconds": int(
+                                selected_rpa_protocol["reverse_transcription"]["incubation_minutes"]
+                                * 60
+                            ),
+                        },
+                        "before": "concurrent-with-rpa",
+                        "note": selected_rpa_protocol["reverse_transcription"]["note"],
+                        "authority_status": selected_rpa_protocol["reverse_transcription"][
+                            "authority_status"
+                        ],
+                    }
+                    if from_rna
+                    and selected_rpa_protocol
+                    and selected_rpa_protocol.get("reverse_transcription")
+                    else (rt.block(isothermal=False, polymerase=preset.name) if from_rna else None)
                 )
             )
         ),
@@ -3757,7 +3877,9 @@ def run(
             )
     else:
         if species_specific and species_topology_by_record:
-            background_topology_assumption = "explicit-per-record-topology-from-pinned-metadata-manifest"
+            background_topology_assumption = (
+                "explicit-per-record-topology-from-pinned-metadata-manifest"
+            )
             background_topology_note = (
                 "Each species-panel record uses the explicitly pinned per-record topology (linear/circular/fragment) in the record-metadata manifest. "
                 "Circular records are scanned across their own FASTA origin; fragment records remain linear and do not prove absence outside the supplied fragment."

@@ -27,7 +27,6 @@ from pcr_tools.single import (
     candidate_to_dict,
     design,
     race_adapter,
-    race_direction,
     run,
     sequencing_context,
     sequencing_protocol,
@@ -73,20 +72,6 @@ def test_race_requires_substrate_preparation_round_and_explicit_adapter():
     assert partner["sequence"]
     assert sequencing_context({}, assay_id="race") is None
     assert "candidate-transcript-end" in "candidate-transcript-end"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def template() -> str:

@@ -45,8 +45,6 @@ def test_the_same_primer_is_found_on_the_other_strand_too():
     assert reverses[0].three_prime_at == len(FILLER)
 
 
-
-
 def test_a_mismatch_behind_the_clamp_is_kept_and_counted():
     middle = PRIMER[:8] + ("T" if PRIMER[8] != "T" else "G") + PRIMER[9:]
     contigs = one_contig(FILLER + middle + FILLER)

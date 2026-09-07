@@ -29,19 +29,15 @@ from pcr_tools.loop_set import (
     GC_RICH,
     GC_RICH_AT_OR_ABOVE,
     HOLD,
-    LONGEST_RUN,
     LOOP_SPAN,
     NORMAL,
     PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
     PRIMEREXPLORER_V5_GEOMETRY,
     LoopSetError,
     adjust,
-    candidates,
     check_geometry,
     duplex_ceiling,
     interactions,
-    is_palindromic,
-    longest_run,
     oligos,
     primerexplorer_v5_end_dg,
     run,
@@ -283,7 +279,9 @@ def test_the_parameter_set_follows_the_template_rather_than_a_default():
     assert gc_percent(gc_rich) >= GC_RICH_AT_OR_ABOVE
     assert windows_for(gc_rich).id == "gc-rich"
     assert windows_for(template()).id == "normal"
-    assert windows_for("G" * 60 + "A" * 40).id == "gc-rich", "exactly 60% GC is GC-rich in the current V5 manual"
+    assert windows_for("G" * 60 + "A" * 40).id == "gc-rich", (
+        "exactly 60% GC is GC-rich in the current V5 manual"
+    )
 
 
 def test_automatic_judgment_uses_iupac_gc_interval_instead_of_counting_ambiguity_as_at():
@@ -350,12 +348,6 @@ def test_the_result_says_which_set_was_used_and_where_it_came_from():
 # ── What each candidate had to satisfy ─────────────────────────────────────
 
 
-
-
-
-
-
-
 def test_the_end_stability_threshold_is_measured_over_six_bases_not_five():
     """The length it was published against, and the two disagree.
 
@@ -381,11 +373,13 @@ def test_loop_primer_uses_the_published_v5_loop_end_stability_threshold(monkeypa
     neutral = lamp.Window(tm_min=None, tm_max=None, length_min=18, length_max=18)
     sequence = "ACGT" * 20
 
-    regular = lamp.candidates(
-        sequence, neutral, lamp.NORMAL, CONDITIONS, primes_from="end"
-    )
+    regular = lamp.candidates(sequence, neutral, lamp.NORMAL, CONDITIONS, primes_from="end")
     loop = lamp.candidates(
-        sequence, neutral, lamp.NORMAL, CONDITIONS, primes_from="end",
+        sequence,
+        neutral,
+        lamp.NORMAL,
+        CONDITIONS,
+        primes_from="end",
         end_stability_threshold=lamp.LOOP_END_STABILITY,
     )
 
@@ -418,8 +412,12 @@ def test_primerexplorer_v5_end_dg_matches_manual_figure_1_10_reference_outputs()
         "GCCTCTTGCGGGATATCGTCC": (-5.93, -6.04),
     }
     for sequence, (expected_5p, expected_3p) in reference.items():
-        assert primerexplorer_v5_end_dg(sequence[:END_BASES]) == pytest.approx(expected_5p, abs=0.005)
-        assert primerexplorer_v5_end_dg(sequence[-END_BASES:]) == pytest.approx(expected_3p, abs=0.005)
+        assert primerexplorer_v5_end_dg(sequence[:END_BASES]) == pytest.approx(
+            expected_5p, abs=0.005
+        )
+        assert primerexplorer_v5_end_dg(sequence[-END_BASES:]) == pytest.approx(
+            expected_3p, abs=0.005
+        )
 
 
 def test_primerexplorer_v5_tm_matches_the_manual_figure_1_10_reference_outputs():
@@ -436,7 +434,9 @@ def test_primerexplorer_v5_tm_matches_the_manual_figure_1_10_reference_outputs()
         "GCTAGCAGCACGCCATAG": 59.71,
         "GCCTCTTGCGGGATATCGTCC": 64.55,
     }
-    errors = [abs(primerexplorer_v5_tm(sequence) - expected) for sequence, expected in reference.items()]
+    errors = [
+        abs(primerexplorer_v5_tm(sequence) - expected) for sequence, expected in reference.items()
+    ]
     assert max(errors) < 0.1
 
 
@@ -478,8 +478,6 @@ def test_the_order_sheet_quotes_the_binding_half_for_a_composite():
             assert "not the whole oligo" in line["note"]
         else:
             assert line["tm"] == oligo["tm"]
-
-
 
 
 def test_a_named_lamp_kit_protocol_is_returned_as_one_bound_record():
@@ -558,7 +556,10 @@ def test_thermo_superscript_iv_preserves_protocol_range_and_dual_substrate_autho
     assert protocol["supports_dna"] is True
     assert protocol["supports_rna"] is True
     assert protocol["carryover_prevention"]["included"] is False
-    assert protocol["post_inactivation"] == "95 °C for 2 min in the cited real-time and endpoint workflows"
+    assert (
+        protocol["post_inactivation"]
+        == "95 °C for 2 min in the cited real-time and endpoint workflows"
+    )
     assert protocol["sequence_decision_impact"] == "none"
 
 
@@ -769,8 +770,6 @@ def test_optional_loop_primers_survive_selection_without_overriding_interaction_
     assert all(0 <= one.loops() <= 2 for one in found)
 
 
-
-
 # ── The selected LAMP oligos against each other ───────────────────────────
 
 
@@ -790,8 +789,6 @@ def test_a_deliberately_complementary_pair_is_flagged():
     serious = out["serious"][0]
     assert {serious["a"], serious["b"]} == {"F3", "B3"}
     assert serious["tm"] >= duplex_ceiling()
-
-
 
 
 def test_the_result_carries_the_dimer_screen_next_to_its_off_target_scan():
@@ -976,13 +973,16 @@ def test_generic_rt_lamp_handoff_has_no_inferred_temperature_or_duration():
     assert step["hold"] is None
     assert step["one_step"] is None
 
+
 # ── Evidence-2026 profiles and LAMP-native specificity regressions ─────────
 
 
 def test_unchecked_generic_specificity_cannot_rank_as_a_clean_zero_hit_scan():
     from pcr_tools.loop_set import _generic_off_target_rank
 
-    unresolved = _generic_off_target_rank({"checked": False, "classification": "indexed-validation-required"})
+    unresolved = _generic_off_target_rank(
+        {"checked": False, "classification": "indexed-validation-required"}
+    )
     clean = _generic_off_target_rank({"checked": True, "product_count": 0, "site_count": 0})
     assert clean < unresolved
 
@@ -996,11 +996,17 @@ def test_large_pasted_background_is_refused_not_silently_substituted(monkeypatch
     monkeypatch.setattr(
         screen,
         "contigs_for",
-        lambda request, *, template, name="": ([Contig("pasted-scope", "ACGTACGTACG")], False, None),
+        lambda request, *, template, name="": (
+            [Contig("pasted-scope", "ACGTACGTACG")],
+            False,
+            None,
+        ),
     )
 
     def direct_scan_must_not_run(*args, **kwargs):
-        raise AssertionError("oversized pasted LAMP background reached per-candidate direct scanning")
+        raise AssertionError(
+            "oversized pasted LAMP background reached per-candidate direct scanning"
+        )
 
     monkeypatch.setattr(screen, "oligos", direct_scan_must_not_run)
     with pytest.raises(loop_set.LoopSetError, match="will not silently assume"):
@@ -1019,9 +1025,7 @@ def test_lamp_generic_proxy_excuses_expected_products_only_on_template_self_scan
 
     sequence = _unique_synthetic_template()
     one = _synthetic_set_for_topology()
-    sizes, products = _lamp_generic_intended_linear_products(
-        sequence, one, template_only=True
-    )
+    sizes, products = _lamp_generic_intended_linear_products(sequence, one, template_only=True)
 
     # This synthetic topology intentionally carries no loop primers. The two
     # forward-facing core sites (F3/F2) oppose the two reverse-facing core sites
@@ -1033,9 +1037,7 @@ def test_lamp_generic_proxy_excuses_expected_products_only_on_template_self_scan
 
     # Public LAMP background is an exclusion scope: no target product/site is
     # silently excused in a panel the assay was explicitly asked to keep silent.
-    assert _lamp_generic_intended_linear_products(
-        sequence, one, template_only=False
-    ) == ([], [])
+    assert _lamp_generic_intended_linear_products(sequence, one, template_only=False) == ([], [])
 
 
 def _synthetic_set_for_topology():
@@ -1080,16 +1082,13 @@ def test_geometry_profile_is_versioned_and_does_not_silently_widen_v5():
         adjust(NORMAL, {"outer_gap": [0, 40]}, geometry_profile=PRIMEREXPLORER_V5_GEOMETRY)
 
 
-
-
-
-
 def test_round_robin_core_partner_budget_reaches_all_jobs_before_second_pass():
     from pcr_tools.loop_set import _round_robin_partner_schedule
 
     jobs = [[10, 11, 12], [20, 21, 22], [30, 31, 32]]
     scheduled = list(_round_robin_partner_schedule(jobs, 5))
     assert scheduled == [(0, 10), (1, 20), (2, 30), (0, 11), (1, 21)]
+
 
 def test_uncomputed_pairwise_structure_does_not_rank_as_best_evidence():
     from pcr_tools.loop_set import _thermodynamic_structure_rank
@@ -1210,9 +1209,9 @@ def test_six_region_background_topology_is_orientation_invariant():
 
 def test_core_pair_expansion_pool_keeps_best_and_target_wide_diversity():
     from pcr_tools.loop_set import (
+        PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
         Candidate,
         Half,
-        PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
         _core_pair_expansion_pool,
     )
 
@@ -1250,31 +1249,52 @@ def test_bounded_search_is_reverse_complement_invariant_for_both_geometry_profil
 
     def interval(candidate):
         return None if candidate is None else (candidate.start, candidate.end)
+
     def mirror(candidate):
         return None if candidate is None else (length - candidate.end, length - candidate.start)
+
     def signature(one):
         return (
-            interval(one.f3), interval(one.forward.outer), interval(one.forward.loop),
-            interval(one.forward.inner), interval(one.backward.inner), interval(one.backward.loop),
-            interval(one.backward.outer), interval(one.b3),
+            interval(one.f3),
+            interval(one.forward.outer),
+            interval(one.forward.loop),
+            interval(one.forward.inner),
+            interval(one.backward.inner),
+            interval(one.backward.loop),
+            interval(one.backward.outer),
+            interval(one.b3),
         )
+
     def rc_signature(one):
         return (
-            mirror(one.b3), mirror(one.backward.outer), mirror(one.backward.loop),
-            mirror(one.backward.inner), mirror(one.forward.inner), mirror(one.forward.loop),
-            mirror(one.forward.outer), mirror(one.f3),
+            mirror(one.b3),
+            mirror(one.backward.outer),
+            mirror(one.backward.loop),
+            mirror(one.backward.inner),
+            mirror(one.forward.inner),
+            mirror(one.forward.loop),
+            mirror(one.forward.outer),
+            mirror(one.f3),
         )
 
     for profile in (PRIMEREXPLORER_V5_GEOMETRY, PCRSTUDIO_EVIDENCE_2026_GEOMETRY):
         made, _windows, _counts, search = sets(
-            sequence, conditions=CONDITIONS, how_many=8,
-            geometry_profile=profile, include_search_meta=True,
+            sequence,
+            conditions=CONDITIONS,
+            how_many=8,
+            geometry_profile=profile,
+            include_search_meta=True,
         )
         mirrored, _windows_rc, _counts_rc, search_rc = sets(
-            reverse, conditions=CONDITIONS, how_many=8,
-            geometry_profile=profile, include_search_meta=True,
+            reverse,
+            conditions=CONDITIONS,
+            how_many=8,
+            geometry_profile=profile,
+            include_search_meta=True,
         )
-        assert not search["complete"] and not search_rc["complete"], "the regression must exercise bounded search"
+        assert not search["complete"] and not search_rc["complete"], (
+            "the regression must exercise bounded search"
+        )
         assert [signature(one) for one in made] == [rc_signature(one) for one in mirrored]
         assert search["orientation_policy"] == "lexicographically-canonical-target-orientation"
         assert search_rc["orientation_policy"] == search["orientation_policy"]
@@ -1286,31 +1306,42 @@ def test_bounded_search_mirrors_excluded_coordinates_with_reverse_complement_inp
 
     sequence = template()
     excluded = [(250, 30), (1100, 50)]
-    mirrored_excluded = [
-        (len(sequence) - (start + length), length)
-        for start, length in excluded
-    ]
+    mirrored_excluded = [(len(sequence) - (start + length), length) for start, length in excluded]
 
     forward, _w1, _c1, meta1 = sets(
-        sequence, conditions=CONDITIONS, how_many=5, excluded=excluded,
+        sequence,
+        conditions=CONDITIONS,
+        how_many=5,
+        excluded=excluded,
         include_search_meta=True,
     )
     reverse, _w2, _c2, meta2 = sets(
-        reverse_complement(sequence), conditions=CONDITIONS, how_many=5,
-        excluded=mirrored_excluded, include_search_meta=True,
+        reverse_complement(sequence),
+        conditions=CONDITIONS,
+        how_many=5,
+        excluded=mirrored_excluded,
+        include_search_meta=True,
     )
 
     def signature(one):
         return (
-            one.f3.start, one.forward.outer.start, one.forward.inner.start,
-            one.backward.inner.start, one.backward.outer.start, one.b3.start,
+            one.f3.start,
+            one.forward.outer.start,
+            one.forward.inner.start,
+            one.backward.inner.start,
+            one.backward.outer.start,
+            one.b3.start,
         )
 
     def reverse_signature(one):
         n = len(sequence)
         return (
-            n - one.b3.end, n - one.backward.outer.end, n - one.backward.inner.end,
-            n - one.forward.inner.end, n - one.forward.outer.end, n - one.f3.end,
+            n - one.b3.end,
+            n - one.backward.outer.end,
+            n - one.backward.inner.end,
+            n - one.forward.inner.end,
+            n - one.forward.outer.end,
+            n - one.f3.end,
         )
 
     assert [signature(one) for one in forward] == [reverse_signature(one) for one in reverse]
@@ -1355,7 +1386,7 @@ def test_lamp_target_inclusivity_audit_is_position_and_role_aware():
 
 
 def test_loop_alternatives_keep_no_loop_and_bounded_candidates_for_set_level_ranking():
-    from pcr_tools.loop_set import Candidate, LOOP_ALTERNATIVES_PER_HALF, _forward_halves
+    from pcr_tools.loop_set import LOOP_ALTERNATIVES_PER_HALF, Candidate, _forward_halves
 
     def c(start: int, tm: float = 63.0, length: int = 18) -> Candidate:
         return Candidate(start=start, length=length, tm=tm, gc=50.0, end_dg=-5.0)
@@ -1369,9 +1400,7 @@ def test_loop_alternatives_keep_no_loop_and_bounded_candidates_for_set_level_ran
         26: [c(26, 62.5)],
         28: [c(28, 63.5)],
     }
-    halves, capped, pruned = _forward_halves(
-        outer, inner, loop, (40, 60), 100, loop_target_tm=63.0
-    )
+    halves, capped, pruned = _forward_halves(outer, inner, loop, (40, 60), 100, loop_target_tm=63.0)
     assert capped is False
     assert len([half for half in halves if half.loop is not None]) == LOOP_ALTERNATIVES_PER_HALF
     assert any(half.loop is None for half in halves)
@@ -1388,7 +1417,10 @@ def test_outer_pair_topk_truncation_is_disclosed_as_bounded_search():
     )
     assert search["outer_pair_truncation_used"] is True
     assert search["complete"] is False
-    assert search["claim"] == "best within the evaluated bounded search set; global optimum not claimed"
+    assert (
+        search["claim"]
+        == "best within the evaluated bounded search set; global optimum not claimed"
+    )
 
 
 def test_repeated_bounded_search_is_deterministic_for_identical_input():
@@ -1397,19 +1429,27 @@ def test_repeated_bounded_search_is_deterministic_for_identical_input():
     metas = []
     for _ in range(2):
         made, _windows, _counts, search = sets(
-            sequence, conditions=CONDITIONS, how_many=8,
-            geometry_profile=PCRSTUDIO_EVIDENCE_2026_GEOMETRY, include_search_meta=True,
+            sequence,
+            conditions=CONDITIONS,
+            how_many=8,
+            geometry_profile=PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
+            include_search_meta=True,
         )
-        signatures.append([
-            (
-                one.f3.start, one.forward.outer.start,
-                None if one.forward.loop is None else one.forward.loop.start,
-                one.forward.inner.start, one.backward.inner.start,
-                None if one.backward.loop is None else one.backward.loop.start,
-                one.backward.outer.start, one.b3.start,
-            )
-            for one in made
-        ])
+        signatures.append(
+            [
+                (
+                    one.f3.start,
+                    one.forward.outer.start,
+                    None if one.forward.loop is None else one.forward.loop.start,
+                    one.forward.inner.start,
+                    one.backward.inner.start,
+                    None if one.backward.loop is None else one.backward.loop.start,
+                    one.backward.outer.start,
+                    one.b3.start,
+                )
+                for one in made
+            ]
+        )
         metas.append(search)
     assert signatures[0] == signatures[1]
     assert metas[0] == metas[1]
@@ -1419,7 +1459,10 @@ def test_evidence_geometry_does_not_replace_primerexplorer_thermodynamic_metric(
     from pcr_tools.loop_set import NEB_2025_LOOP_TM_REFERENCE, PE_THERMODYNAMIC_MODEL
 
     assert PCRSTUDIO_EVIDENCE_2026_GEOMETRY.id == "pcrstudio-evidence-2026"
-    assert PE_THERMODYNAMIC_MODEL["id"] == "primerexplorer-v5-reference-output-compatible-sl98-tm-end-dg"
+    assert (
+        PE_THERMODYNAMIC_MODEL["id"]
+        == "primerexplorer-v5-reference-output-compatible-sl98-tm-end-dg"
+    )
     assert PE_THERMODYNAMIC_MODEL["sodium_mM"] == 50.0
     assert PE_THERMODYNAMIC_MODEL["magnesium_mM"] == 4.0
     assert PE_THERMODYNAMIC_MODEL["oligo_concentration_uM"] == 0.1
@@ -1446,6 +1489,7 @@ def test_lamp_inclusivity_malformed_inputs_fail_before_alignment(raw_panel, expe
 
 def test_lamp_two_mismatch_seed_discovery_matches_bruteforce_on_random_acgt_cases():
     import random
+
     from pcr_tools import specificity as spec
 
     rng = random.Random(20260902)
@@ -1467,7 +1511,8 @@ def test_lamp_two_mismatch_seed_discovery_matches_bruteforce_on_random_acgt_case
                 for observed, wanted in zip(
                     haystack[start : start + len(expected)], expected, strict=True
                 )
-            ) <= 2
+            )
+            <= 2
         }
         assert discovered == brute
 
@@ -1476,11 +1521,16 @@ def test_low_level_sets_omitted_geometry_follows_selected_profile():
     sequence = template()
 
     implicit, _w1, _c1, meta1 = sets(
-        sequence, conditions=CONDITIONS, how_many=5,
-        geometry_profile=PCRSTUDIO_EVIDENCE_2026_GEOMETRY, include_search_meta=True,
+        sequence,
+        conditions=CONDITIONS,
+        how_many=5,
+        geometry_profile=PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
+        include_search_meta=True,
     )
     explicit, _w2, _c2, meta2 = sets(
-        sequence, conditions=CONDITIONS, how_many=5,
+        sequence,
+        conditions=CONDITIONS,
+        how_many=5,
         geometry_profile=PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
         f2_b2_span=PCRSTUDIO_EVIDENCE_2026_GEOMETRY.valid_f2_b2_span,
         loop_span=PCRSTUDIO_EVIDENCE_2026_GEOMETRY.valid_loop_span,
@@ -1491,11 +1541,14 @@ def test_low_level_sets_omitted_geometry_follows_selected_profile():
 
     def sig(one):
         return (
-            one.f3.start, one.forward.outer.start,
+            one.f3.start,
+            one.forward.outer.start,
             None if one.forward.loop is None else one.forward.loop.start,
-            one.forward.inner.start, one.backward.inner.start,
+            one.forward.inner.start,
+            one.backward.inner.start,
             None if one.backward.loop is None else one.backward.loop.start,
-            one.backward.outer.start, one.b3.start,
+            one.backward.outer.start,
+            one.b3.start,
         )
 
     assert [sig(one) for one in implicit] == [sig(one) for one in explicit]
@@ -1504,6 +1557,7 @@ def test_low_level_sets_omitted_geometry_follows_selected_profile():
 
 def test_meridian_mdx126_preserves_air_dryable_direct_blood_authority():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY
+
     p = LAMP_PROTOCOL_REGISTRY["meridian-mdx126"]
     assert set(p["formats"]) == {"liquid", "air-dryable"}
     assert p["direct_sample_matrices"] == ["blood-plasma-serum"]
@@ -1515,6 +1569,7 @@ def test_meridian_mdx126_preserves_air_dryable_direct_blood_authority():
 
 def test_takara_rr385_preserves_dna_rna_tb_green_ung_and_melt_authority():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY
+
     p = LAMP_PROTOCOL_REGISTRY["takara-rr385"]
     assert p["supports_dna"] is True and p["supports_rna"] is True
     assert p["recommended_readout_chemistries"] == ["tb-green"]
@@ -1525,42 +1580,67 @@ def test_takara_rr385_preserves_dna_rna_tb_green_ung_and_melt_authority():
 
 def test_takara_rr385_turbidity_is_a_source_backed_hard_incompatibility():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY, LoopSetError, _readout_compatibility
+
     with pytest.raises(LoopSetError, match="inorganic pyrophosphatase"):
         _readout_compatibility(LAMP_PROTOCOL_REGISTRY["takara-rr385"], "turbidity")
 
 
 def test_takara_rr385_pyrophosphate_turbidity_chemistry_is_hard_incompatible():
-    from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY, LoopSetError, _readout_chemistry_compatibility
+    from pcr_tools.loop_set import (
+        LAMP_PROTOCOL_REGISTRY,
+        LoopSetError,
+        _readout_chemistry_compatibility,
+    )
+
     with pytest.raises(LoopSetError, match="inorganic pyrophosphatase"):
-        _readout_chemistry_compatibility(LAMP_PROTOCOL_REGISTRY["takara-rr385"], "turbidity", "turbidity-pyrophosphate")
+        _readout_chemistry_compatibility(
+            LAMP_PROTOCOL_REGISTRY["takara-rr385"], "turbidity", "turbidity-pyrophosphate"
+        )
 
 
 def test_m1712_hnb_is_a_source_backed_hard_incompatibility():
-    from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY, LoopSetError, _readout_chemistry_compatibility
+    from pcr_tools.loop_set import (
+        LAMP_PROTOCOL_REGISTRY,
+        LoopSetError,
+        _readout_chemistry_compatibility,
+    )
+
     with pytest.raises(LoopSetError, match="poor HNB contrast"):
-        _readout_chemistry_compatibility(LAMP_PROTOCOL_REGISTRY["neb-m1712"], "colorimetric", "hydroxynaphthol-blue")
+        _readout_chemistry_compatibility(
+            LAMP_PROTOCOL_REGISTRY["neb-m1712"], "colorimetric", "hydroxynaphthol-blue"
+        )
 
 
 def test_direct_sample_lamp_cannot_bypass_named_matrix_authority():
     from pcr_tools.loop_set import LoopSetError, _sample_scenario_compatibility
+
     with pytest.raises(LoopSetError, match="named reviewed protocol"):
         _sample_scenario_compatibility(None, "blood-plasma-serum", "direct-addition")
 
 
 def test_direct_sample_matrix_mismatch_fails_closed():
-    from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY, LoopSetError, _sample_scenario_compatibility
+    from pcr_tools.loop_set import (
+        LAMP_PROTOCOL_REGISTRY,
+        LoopSetError,
+        _sample_scenario_compatibility,
+    )
+
     with pytest.raises(LoopSetError, match="does not carry reviewed"):
-        _sample_scenario_compatibility(LAMP_PROTOCOL_REGISTRY["meridian-mdx126"], "saliva-sputum", "direct-addition")
+        _sample_scenario_compatibility(
+            LAMP_PROTOCOL_REGISTRY["meridian-mdx126"], "saliva-sputum", "direct-addition"
+        )
 
 
 def test_explicit_formulation_must_match_reviewed_protocol_authority():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY, LoopSetError, _formulation_compatibility
+
     with pytest.raises(LoopSetError, match="does not carry reviewed"):
         _formulation_compatibility(LAMP_PROTOCOL_REGISTRY["meridian-mdx126"], "lyophilized")
 
 
 def test_source_bounded_bench_optimization_rejects_unreviewed_or_out_of_range_values():
     from pcr_tools.loop_set import LoopSetError, _bench_optimization, _lamp_protocol
+
     # MDX126 publishes an exact 8 mM baseline, not a general optimization envelope.
     mdx126 = _lamp_protocol("meridian-mdx126")
     assert mdx126 is not None
@@ -1572,13 +1652,16 @@ def test_source_bounded_bench_optimization_rejects_unreviewed_or_out_of_range_va
     # M9204 does publish a reviewed Mg optimization envelope (6–8 mM).
     m9204 = _lamp_protocol("neb-m9204")
     assert m9204 is not None
-    assert _bench_optimization({"lamp_bench_optimization": {"magnesium_mM": 7.0}}, m9204) == {"magnesium_mM": 7.0}
+    assert _bench_optimization({"lamp_bench_optimization": {"magnesium_mM": 7.0}}, m9204) == {
+        "magnesium_mM": 7.0
+    }
     with pytest.raises(LoopSetError, match="reviewed range"):
         _bench_optimization({"lamp_bench_optimization": {"magnesium_mM": 20.0}}, m9204)
 
 
 def test_readout_chemistry_broad_branch_mismatch_fails_closed():
     from pcr_tools.loop_set import LoopSetError, _readout_chemistry_compatibility
+
     with pytest.raises(LoopSetError, match="belongs to"):
         _readout_chemistry_compatibility(None, "turbidity", "tb-green")
 
@@ -1587,15 +1670,18 @@ def test_lamp_protocol_registry_substrate_partition_is_complete_and_exclusive():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY
 
     dna_only = {
-        pid for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
+        pid
+        for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
         if protocol.get("supports_dna") is True and protocol.get("supports_rna") is False
     }
     rna_only = {
-        pid for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
+        pid
+        for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
         if protocol.get("supports_dna") is False and protocol.get("supports_rna") is True
     }
     dual = {
-        pid for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
+        pid
+        for pid, protocol in LAMP_PROTOCOL_REGISTRY.items()
         if protocol.get("supports_dna") is True and protocol.get("supports_rna") is True
     }
 
@@ -1605,7 +1691,12 @@ def test_lamp_protocol_registry_substrate_partition_is_complete_and_exclusive():
     assert len(dual) == 33
     assert dna_only | rna_only | dual == set(LAMP_PROTOCOL_REGISTRY)
     assert not (dna_only & rna_only or dna_only & dual or rna_only & dual)
-    assert {"optigene-iso004", "optigene-dr004", "optigene-iso004-lyo", "meridian-mdx118"} <= dna_only
+    assert {
+        "optigene-iso004",
+        "optigene-dr004",
+        "optigene-iso004-lyo",
+        "meridian-mdx118",
+    } <= dna_only
     assert all(protocol.get("formats") for protocol in LAMP_PROTOCOL_REGISTRY.values())
     assert LAMP_PROTOCOL_REGISTRY["neb-e1700"]["formats"] == ["liquid"]
     assert LAMP_PROTOCOL_REGISTRY["neb-l4401"]["formats"] == ["lyophilized"]
@@ -1633,11 +1724,15 @@ def test_primerexplorer_v5_automatic_judgment_exact_gc_boundaries_are_inclusive(
 
 def test_fixed_primer_and_mutation_anchor_filters_are_exact_and_nonmutating():
     import pcr_tools.loop_set as lamp
-    c = lambda start, length=18: lamp.Candidate(start=start, length=length, tm=60.0, gc=50.0, end_dg=-5.0)
+
+    def c(start, length=18):
+        return lamp.Candidate(start=start, length=length, tm=60.0, gc=50.0, end_dg=-5.0)
+
     one = lamp.Set(
         forward=lamp.Half(outer=c(25), inner=c(70, 20), loop=c(48), span=45),
         backward=lamp.Half(outer=c(150), inner=c(105, 20), loop=c(130), span=43),
-        f3=c(2), b3=c(176),
+        f3=c(2),
+        b3=c(176),
     )
     sequence = ("ACGT" * 60)[:240]
     ordered = {oligo.name: oligo.sequence for oligo in lamp.oligos(sequence, one)}
@@ -1650,8 +1745,11 @@ def test_fixed_primer_and_mutation_anchor_filters_are_exact_and_nonmutating():
 
 def test_lamp_catalogue_partition_tracks_canonical_72_protocol_authority():
     from pcr_tools.loop_set import LAMP_PROTOCOL_REGISTRY
+
     assert len(LAMP_PROTOCOL_REGISTRY) == 72
-    assert {"vazyme-rp712", "hyasen-hyb413", "hyasen-hyb414", "hyasen-hyb315"} <= set(LAMP_PROTOCOL_REGISTRY)
+    assert {"vazyme-rp712", "hyasen-hyb413", "hyasen-hyb414", "hyasen-hyb315"} <= set(
+        LAMP_PROTOCOL_REGISTRY
+    )
 
 
 def test_lamp_shared_numeric_differential_corpus_matches_python_authority():
@@ -1663,7 +1761,9 @@ def test_lamp_shared_numeric_differential_corpus_matches_python_authority():
     from pcr_tools.registries.lamp import LAMP_PROTOCOL_REGISTRY
 
     root = Path(__file__).resolve().parents[2]
-    corpus = json.loads((root / "contracts/chemistry/lamp-differential-corpus.json").read_text(encoding="utf-8"))
+    corpus = json.loads(
+        (root / "contracts/chemistry/lamp-differential-corpus.json").read_text(encoding="utf-8")
+    )
     for case in corpus["cases"]:
         protocol = case["protocol"]
         resolved = resolve_numeric_recipe(
@@ -1675,7 +1775,9 @@ def test_lamp_shared_numeric_differential_corpus_matches_python_authority():
             assert resolved["values"][key] == pytest.approx(expected), f"{case['id']}:{key}"
         unresolved = {row["id"] for row in resolved["unresolved_numeric_dependencies"]}
         assert set(case.get("expected_unresolved") or []).issubset(unresolved), case["id"]
-        assert [row["id"] for row in resolved["thermal_stages"]] == case.get("expected_thermal_stage_ids", [])
+        assert [row["id"] for row in resolved["thermal_stages"]] == case.get(
+            "expected_thermal_stage_ids", []
+        )
         assert resolved["thermal_stage_model"] == "ordered-source-backed-only"
         assert resolved["sequence_decision_impact"] == "none"
 
@@ -1705,8 +1807,12 @@ def test_lamp_screening_thinning_is_deterministic_and_does_not_mutate_primary_or
 
     def s(offset: int) -> lamp.Set:
         return lamp.Set(
-            forward=lamp.Half(outer=c(offset + 25), inner=c(offset + 70, 20), loop=c(offset + 48), span=45),
-            backward=lamp.Half(outer=c(offset + 150), inner=c(offset + 105, 20), loop=c(offset + 130), span=43),
+            forward=lamp.Half(
+                outer=c(offset + 25), inner=c(offset + 70, 20), loop=c(offset + 48), span=45
+            ),
+            backward=lamp.Half(
+                outer=c(offset + 150), inner=c(offset + 105, 20), loop=c(offset + 130), span=43
+            ),
             f3=c(offset + 2),
             b3=c(offset + 176),
         )

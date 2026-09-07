@@ -25,8 +25,13 @@ def test_generic_multiplex_separates_saddle_component_local_optimizer_and_refere
         enforce_scientific_strict(active, context="standard-pcr:multiplex")
 
 
-@pytest.mark.parametrize("module_id,blocked", [("arms-pcr", "arms-pcr-generalized-policy"), ("kasp", "kasp-compatible-policy")])
-def test_generalized_named_method_lookalikes_are_not_scientific_strict_primary(monkeypatch, module_id, blocked):
+@pytest.mark.parametrize(
+    "module_id,blocked",
+    [("arms-pcr", "arms-pcr-generalized-policy"), ("kasp", "kasp-compatible-policy")],
+)
+def test_generalized_named_method_lookalikes_are_not_scientific_strict_primary(
+    monkeypatch, module_id, blocked
+):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "strict")
     active = active_for_run(module_id, "design", {}, {})
     assert blocked in _ids(active)

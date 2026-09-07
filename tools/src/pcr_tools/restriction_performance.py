@@ -5,6 +5,7 @@ snapshot against the packaged geometry registry JSON without importing the Prime
 dependent restriction-design engine. That keeps source qualification and registry
 parity checks executable in environments without primer3-py.
 """
+
 from __future__ import annotations
 
 import json
@@ -37,10 +38,14 @@ def _load() -> dict[str, Any]:
     if not isinstance(geometry_rows, list):
         raise RestrictionPerformanceError("restriction geometry registry is malformed")
     geometry_names = {
-        row.get("name") for row in geometry_rows if isinstance(row, dict) and isinstance(row.get("name"), str)
+        row.get("name")
+        for row in geometry_rows
+        if isinstance(row, dict) and isinstance(row.get("name"), str)
     }
     if len(geometry_names) != len(geometry_rows):
-        raise RestrictionPerformanceError("restriction geometry registry has missing/duplicate names")
+        raise RestrictionPerformanceError(
+            "restriction geometry registry has missing/duplicate names"
+        )
     performance_names = set(doc["enzymes"])
     unknown = sorted(performance_names - geometry_names)
     missing = sorted(geometry_names - performance_names)
@@ -49,16 +54,28 @@ def _load() -> dict[str, Any]:
             f"restriction performance/geometry registries drifted: unknown={unknown}, missing={missing}"
         )
     for name, row in doc["enzymes"].items():
-        if not isinstance(row, dict) or not row.get("evidence_identity") or not isinstance(row.get("activity_percent"), dict):
-            raise RestrictionPerformanceError(f"{name} is missing exact performance evidence identity/activity data")
+        if (
+            not isinstance(row, dict)
+            or not row.get("evidence_identity")
+            or not isinstance(row.get("activity_percent"), dict)
+        ):
+            raise RestrictionPerformanceError(
+                f"{name} is missing exact performance evidence identity/activity data"
+            )
         temp = row.get("incubation_temperature_c")
         if not isinstance(temp, (int, float)) or isinstance(temp, bool) or temp <= 0:
             raise RestrictionPerformanceError(f"{name} has invalid incubation temperature")
         for buffer_id, activity in row["activity_percent"].items():
-            if not isinstance(buffer_id, str) or not isinstance(activity, (int, float)) or isinstance(activity, bool):
+            if (
+                not isinstance(buffer_id, str)
+                or not isinstance(activity, (int, float))
+                or isinstance(activity, bool)
+            ):
                 raise RestrictionPerformanceError(f"{name} has invalid buffer/activity data")
             if activity < 0 or activity > 100:
-                raise RestrictionPerformanceError(f"{name} has out-of-range activity for {buffer_id}")
+                raise RestrictionPerformanceError(
+                    f"{name} has out-of-range activity for {buffer_id}"
+                )
     return doc
 
 

@@ -15,7 +15,6 @@ from pcr_tools.universal import (
     Limits,
     _cross_dimer_dg,
     _hairpin_dg,
-    _tm_bounds,
     design,
     limits_from_request,
     read_alignment,
@@ -84,8 +83,6 @@ def test_invalid_numeric_limits_are_refused_before_search(field, value, message)
 def test_degeneracy_above_exact_thermodynamic_limit_is_refused():
     with pytest.raises(ValueError, match=f"{MAX_EXACT_VARIANTS}-member exact"):
         Limits(max_degeneracy=MAX_EXACT_VARIANTS + 1).validate()
-
-
 
 
 def test_large_mixtures_use_the_worst_concrete_member_for_structure_checks():
@@ -211,7 +208,10 @@ def test_tm_spread_reference_is_diagnostic_not_a_candidate_validity_gate():
     loose = design(records, limits=Limits(tm_spread_max=100.0), reaction=REACTION)
 
     assert tight["windows"]["accepted"] == loose["windows"]["accepted"]
-    assert tight["windows"]["above_tm_spread_reference"] >= loose["windows"]["above_tm_spread_reference"]
+    assert (
+        tight["windows"]["above_tm_spread_reference"]
+        >= loose["windows"]["above_tm_spread_reference"]
+    )
     assert tight["windows"]["tm_spread_reference_c"] == 0.0
 
 
@@ -319,14 +319,37 @@ def test_universal_release_wrapper_preserves_canonical_profile_authority(monkeyp
         },
     }
 
-    monkeypatch.setattr(cli, "design_universal", lambda *args, **kwargs: {
-        "engine": "consensus-pair",
-        "alignment": {"sequences": 2, "columns": 44, "names": ["a", "b"], "gapped_columns": 0, "conserved_columns": 44},
-        "pairs": [],
-        "windows": {"considered": 0, "accepted": 0, "above_tm_spread_reference": 0, "tm_spread_reference_c": 5.0, "rejections": []},
-        "pair_counts": {},
-        "capped": {"sites": False, "pairs": False, "site_limit": 0, "measured_limit": 0, "search_complete": True, "note": "test"},
-    })
+    monkeypatch.setattr(
+        cli,
+        "design_universal",
+        lambda *args, **kwargs: {
+            "engine": "consensus-pair",
+            "alignment": {
+                "sequences": 2,
+                "columns": 44,
+                "names": ["a", "b"],
+                "gapped_columns": 0,
+                "conserved_columns": 44,
+            },
+            "pairs": [],
+            "windows": {
+                "considered": 0,
+                "accepted": 0,
+                "above_tm_spread_reference": 0,
+                "tm_spread_reference_c": 5.0,
+                "rejections": [],
+            },
+            "pair_counts": {},
+            "capped": {
+                "sites": False,
+                "pairs": False,
+                "site_limit": 0,
+                "measured_limit": 0,
+                "search_complete": True,
+                "note": "test",
+            },
+        },
+    )
     monkeypatch.setattr(cli, "provenance", lambda *_args, **_kwargs: {})
 
     result = cli.run_universal(request)

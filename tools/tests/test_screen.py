@@ -164,8 +164,6 @@ def test_shared_screen_records_an_explicit_assay_temperature():
     assert result["method"]["binding_score"]["temperature_c"] == 60.0
 
 
-
-
 @pytest.mark.parametrize("worker", sorted(WORKERS))
 def test_the_scan_runs_and_says_how_far_it_looked(worker: str):
     answer = _run(worker, dict(WORKERS[worker]))

@@ -21,7 +21,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from .registries.authorities import DISCRIMINATING_AUTHORITY, record as authority_record
+from .registries.authorities import DISCRIMINATING_AUTHORITY
+from .registries.authorities import record as authority_record
 
 #: The two standard KASP tail sequences, in the order alleles are given.
 #:
@@ -30,8 +31,7 @@ from .registries.authorities import DISCRIMINATING_AUTHORITY, record as authorit
 #: and not a search. The first allele listed takes the first tail.
 _KASP_CHEMISTRY = dict(DISCRIMINATING_AUTHORITY["kasp_chemistry"])
 TAILS: tuple[tuple[str, str], ...] = tuple(
-    (str(item["dye"]), str(item["sequence"]))
-    for item in _KASP_CHEMISTRY["reporter_tails"]
+    (str(item["dye"]), str(item["sequence"])) for item in _KASP_CHEMISTRY["reporter_tails"]
 )
 
 #: A named wet-lab overlay.  These are not geometry defaults: they are the
@@ -82,8 +82,11 @@ def protocol(
                 "rox": readout["rox"],
             },
             "additional_cycle_block": {
-                "denature_c": cycle["denaturation_c"], "denature_seconds": cycle["denaturation_s"],
-                "anneal_extend_c": cycle["anneal_extend_c"], "anneal_extend_seconds": cycle["anneal_extend_s"], "cycles": cycle["cycles"],
+                "denature_c": cycle["denaturation_c"],
+                "denature_seconds": cycle["denaturation_s"],
+                "anneal_extend_c": cycle["anneal_extend_c"],
+                "anneal_extend_seconds": cycle["anneal_extend_s"],
+                "cycles": cycle["cycles"],
             },
             "numeric_resolution": "source-limited",
             "unresolved": [

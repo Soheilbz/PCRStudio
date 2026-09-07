@@ -4,6 +4,7 @@ The browser and Rust boundary reject unknown/ill-typed public fields first, but
 direct worker and multiplex callers also enter Python.  These helpers keep that
 secondary fail-closed boundary small and independently testable.
 """
+
 from __future__ import annotations
 
 import math
@@ -11,6 +12,7 @@ from typing import Any
 
 from pcr_tools.registries.flanking_protocols import DIGITAL_CONSUMABLE_IDS, QPCR_INSTRUMENT_PROFILES
 from pcr_tools.workflow_evidence import WorkflowEvidenceError, validate_evidence_fields
+
 
 def _validate_assay_rna(
     assay: dict[str, Any], *, target_has_rna: bool, requested_from_rna: bool
@@ -145,17 +147,35 @@ def _number_map(value: Any, *, name: str) -> dict[str, float | int]:
     return checked
 
 
+FLANKING_NUMERIC_CONTEXT_FIELDS = frozenset(
+    {
+        "reaction_volume_ul",
+        "primer_each_um",
+        "primer_each_nm",
+        "gc_enhancer_percent",
+        "additive",
+        "cycling_profile",
+        "template_fraction_percent",
+        "target_length_kb",
+        "partition_format_detail",
+        "preparation",
+        "initial_denaturation_time_min",
+        "rpa_temperature_c",
+        "rpa_time_min",
+        "rpa_bst_units_per_ul",
+        "rpa_multiplex",
+        "template_input_ng",
+        "template_input_ul",
+        "template_class",
+        "hmw_template_verified",
+        "qpcr_instrument_profile",
+        "digital_consumable_id",
+        "effective_partition_volume_nl",
+        "fragmentation_enzyme",
+        "colony_sample_input_ul",
+    }
+)
 
-FLANKING_NUMERIC_CONTEXT_FIELDS = frozenset({
-    "reaction_volume_ul", "primer_each_um", "primer_each_nm",
-    "gc_enhancer_percent", "additive", "cycling_profile",
-    "template_fraction_percent", "target_length_kb",
-    "partition_format_detail", "preparation", "initial_denaturation_time_min",
-    "rpa_temperature_c", "rpa_time_min", "rpa_bst_units_per_ul", "rpa_multiplex",
-    "template_input_ng", "template_input_ul", "template_class", "hmw_template_verified",
-    "qpcr_instrument_profile", "digital_consumable_id", "effective_partition_volume_nl",
-    "fragmentation_enzyme", "colony_sample_input_ul",
-})
 
 def _flanking_numeric_context(value: Any, *, assay_id: str) -> dict[str, Any] | None:
     """Validate the source-conditioned Flanking bench context.
@@ -168,21 +188,48 @@ def _flanking_numeric_context(value: Any, *, assay_id: str) -> dict[str, Any] | 
         return None
     if not isinstance(value, dict):
         raise ValueError("`flanking_numeric_context` must be an object")
-    _reject_unknown_fields(value, name="flanking_numeric_context", known=FLANKING_NUMERIC_CONTEXT_FIELDS)
+    _reject_unknown_fields(
+        value, name="flanking_numeric_context", known=FLANKING_NUMERIC_CONTEXT_FIELDS
+    )
     checked: dict[str, Any] = {}
     numeric_fields = {
-        "reaction_volume_ul", "primer_each_um", "primer_each_nm",
-        "gc_enhancer_percent", "template_fraction_percent", "target_length_kb",
-        "initial_denaturation_time_min", "rpa_temperature_c", "rpa_time_min",
-        "rpa_bst_units_per_ul", "template_input_ng", "template_input_ul",
-        "effective_partition_volume_nl", "colony_sample_input_ul",
+        "reaction_volume_ul",
+        "primer_each_um",
+        "primer_each_nm",
+        "gc_enhancer_percent",
+        "template_fraction_percent",
+        "target_length_kb",
+        "initial_denaturation_time_min",
+        "rpa_temperature_c",
+        "rpa_time_min",
+        "rpa_bst_units_per_ul",
+        "template_input_ng",
+        "template_input_ul",
+        "effective_partition_volume_nl",
+        "colony_sample_input_ul",
     }
     for key, entry in value.items():
         if key in numeric_fields:
-            if isinstance(entry, bool) or not isinstance(entry, (int, float)) or not math.isfinite(float(entry)) or float(entry) <= 0:
-                raise ValueError(f"`flanking_numeric_context.{key}` must be finite and greater than zero")
+            if (
+                isinstance(entry, bool)
+                or not isinstance(entry, (int, float))
+                or not math.isfinite(float(entry))
+                or float(entry) <= 0
+            ):
+                raise ValueError(
+                    f"`flanking_numeric_context.{key}` must be finite and greater than zero"
+                )
             checked[key] = float(entry)
-        elif key in {"additive", "cycling_profile", "partition_format_detail", "preparation", "template_class", "qpcr_instrument_profile", "digital_consumable_id", "fragmentation_enzyme"}:
+        elif key in {
+            "additive",
+            "cycling_profile",
+            "partition_format_detail",
+            "preparation",
+            "template_class",
+            "qpcr_instrument_profile",
+            "digital_consumable_id",
+            "fragmentation_enzyme",
+        }:
             if not isinstance(entry, str):
                 raise ValueError(f"`flanking_numeric_context.{key}` must be text")
             checked[key] = entry
@@ -198,13 +245,40 @@ def _flanking_numeric_context(value: Any, *, assay_id: str) -> dict[str, Any] | 
         raise ValueError("unsupported flanking numeric cycling profile")
     if checked.get("partition_format_detail") not in (None, "not-specified", "8.5k", "26k"):
         raise ValueError("unsupported digital partition format detail")
-    if checked.get("preparation") not in (None, "protocol-default", "direct-colony", "direct-transfer", "liquid-culture", "water-lysate", "buffer-lysate", "host-specific-lysis", "other"):
+    if checked.get("preparation") not in (
+        None,
+        "protocol-default",
+        "direct-colony",
+        "direct-transfer",
+        "liquid-culture",
+        "water-lysate",
+        "buffer-lysate",
+        "host-specific-lysis",
+        "other",
+    ):
         raise ValueError("unsupported flanking preparation")
-    if checked.get("template_class") not in (None, "genomic", "hmw-genomic", "plasmid", "lambda", "lower-complexity", "cDNA", "RNA", "crude", "other"):
+    if checked.get("template_class") not in (
+        None,
+        "genomic",
+        "hmw-genomic",
+        "plasmid",
+        "lambda",
+        "lower-complexity",
+        "cDNA",
+        "RNA",
+        "crude",
+        "other",
+    ):
         raise ValueError("unsupported flanking template_class")
-    if checked.get("qpcr_instrument_profile") is not None and checked.get("qpcr_instrument_profile") not in QPCR_INSTRUMENT_PROFILES:
+    if (
+        checked.get("qpcr_instrument_profile") is not None
+        and checked.get("qpcr_instrument_profile") not in QPCR_INSTRUMENT_PROFILES
+    ):
         raise ValueError("unsupported qPCR instrument/reference-dye profile")
-    if checked.get("digital_consumable_id") is not None and checked.get("digital_consumable_id") not in DIGITAL_CONSUMABLE_IDS:
+    if (
+        checked.get("digital_consumable_id") is not None
+        and checked.get("digital_consumable_id") not in DIGITAL_CONSUMABLE_IDS
+    ):
         raise ValueError("unsupported digital consumable id")
     if "gc_enhancer_percent" in checked and assay_id != "standard-pcr":
         raise ValueError("GC enhancer context is only valid for standard-pcr")
@@ -224,15 +298,38 @@ def _flanking_numeric_context(value: Any, *, assay_id: str) -> dict[str, Any] | 
         raise ValueError("template_fraction_percent is only valid for qpcr-sybr")
     if "qpcr_instrument_profile" in checked and assay_id != "qpcr-sybr":
         raise ValueError("qpcr_instrument_profile is only valid for qpcr-sybr")
-    if any(key in checked for key in {"digital_consumable_id", "effective_partition_volume_nl", "fragmentation_enzyme"}) and assay_id != "digital-pcr":
-        raise ValueError("digital consumable/partition/fragmentation numeric context is only valid for digital-pcr")
+    if (
+        any(
+            key in checked
+            for key in {
+                "digital_consumable_id",
+                "effective_partition_volume_nl",
+                "fragmentation_enzyme",
+            }
+        )
+        and assay_id != "digital-pcr"
+    ):
+        raise ValueError(
+            "digital consumable/partition/fragmentation numeric context is only valid for digital-pcr"
+        )
     if "colony_sample_input_ul" in checked and assay_id != "colony-pcr":
         raise ValueError("colony_sample_input_ul is only valid for colony-pcr")
     if "hmw_template_verified" in checked and assay_id != "long-range-pcr":
         raise ValueError("hmw_template_verified is only valid for long-range-pcr")
     if "cycling_profile" in checked and assay_id != "qpcr-sybr":
         raise ValueError("cycling_profile is only valid for qpcr-sybr")
-    if any(key in checked for key in {"rpa_temperature_c", "rpa_time_min", "rpa_bst_units_per_ul", "rpa_multiplex"}) and assay_id != "rpa":
+    if (
+        any(
+            key in checked
+            for key in {
+                "rpa_temperature_c",
+                "rpa_time_min",
+                "rpa_bst_units_per_ul",
+                "rpa_multiplex",
+            }
+        )
+        and assay_id != "rpa"
+    ):
         raise ValueError("RPA numeric context is only valid for rpa")
     if "primer_each_nm" in checked and assay_id not in {"qpcr-sybr", "rpa", "digital-pcr"}:
         raise ValueError("primer_each_nm is not valid for this flanking assay")

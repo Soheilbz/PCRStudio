@@ -1,8 +1,9 @@
 """Assay-neutral baseline → overlay → bounded override resolver."""
+
 from __future__ import annotations
 
-from copy import deepcopy
 from collections.abc import Callable, Iterable, Mapping
+from copy import deepcopy
 from typing import Any
 
 from .model import NumericResolution

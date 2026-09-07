@@ -377,9 +377,7 @@ def design(
     measured: list[InsertPrimer] = []
     for entry in found:
         report = analyse(entry["sequence"], **reaction)
-        dimer_temperature = (
-            float(temperature_c) if temperature_c is not None else PRIMER3_TEMP_C
-        )
+        dimer_temperature = float(temperature_c) if temperature_c is not None else PRIMER3_TEMP_C
         dimer_temperature_role = (
             "explicit-assay-temperature"
             if temperature_c is not None

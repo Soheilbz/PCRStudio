@@ -4,6 +4,7 @@ These tests mock external execution.  They verify PCRStudio's command/coordinate
 contract without requiring PrimalScheme, MAFFT, or any scientific executable on
 the test host.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -38,7 +39,9 @@ def test_primer_bed_parser_accepts_lf_and_crlf_under_zero_based_half_open_contra
         ("ref\tstart\t30\tname\t1\t+\tACGT", "non-integer"),
     ],
 )
-def test_primer_bed_parser_fails_closed_on_ambiguous_or_lossy_import(tmp_path: Path, line: str, message: str):
+def test_primer_bed_parser_fails_closed_on_ambiguous_or_lossy_import(
+    tmp_path: Path, line: str, message: str
+):
     path = tmp_path / "bad.bed"
     path.write_text(line + "\n", encoding="utf-8")
     with pytest.raises(adapter.PrimalSchemeImportError, match=message):
@@ -169,15 +172,3 @@ def test_scheme_replace_uses_the_pinned_upstream_operation(monkeypatch):
 def test_scheme_lifecycle_preserves_output_as_a_generated_artifact(monkeypatch):
     _result, captured = _lifecycle(monkeypatch, "scheme-create", overlap=20, pools=4)
     assert "--output" in captured["args"]
-
-
-
-
-
-
-
-
-
-
-
-

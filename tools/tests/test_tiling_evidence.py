@@ -1,12 +1,19 @@
 from __future__ import annotations
 
-from pcr_tools.tiling_evidence import parse_depth_tsv, repair_handoff, scheme_diff, version_transition
+from pcr_tools.tiling_evidence import (
+    parse_depth_tsv,
+    repair_handoff,
+    scheme_diff,
+    version_transition,
+)
 
 
 def test_depth_import_flags_dropouts_without_claiming_cause():
     evidence = parse_depth_tsv("amplicon\tdepth\nA1\t120\nA2\t4\n", dropout_threshold=20)
     assert evidence["summary"]["dropout_count"] == 1
-    handoff = repair_handoff(evidence, operation="scheme-create", existing_bed="chr\t0\t100\tA2_LEFT\n")
+    handoff = repair_handoff(
+        evidence, operation="scheme-create", existing_bed="chr\t0\t100\tA2_LEFT\n"
+    )
     assert handoff["recommended_operation"] == "repair-mode"
     assert handoff["causal_claim"] == "none"
 

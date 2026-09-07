@@ -158,8 +158,6 @@ MALARIA_WINDOW = {
 MALARIA_OUTER = ("TTAAAATTGTTGCAGTTAAAACG", "CCTGTTGTTGCCTTAAACTTC")
 
 
-
-
 def test_our_pair_is_better_than_the_published_one_at_matching_temperatures():
     """Where a search beats hand design, and by how much.
 

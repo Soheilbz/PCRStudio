@@ -8,6 +8,8 @@ import pytest
 from pcr_tools.flanking_numeric_recipes import resolve_numeric_recipe
 from pcr_tools.junction import protocol as assembly_protocol
 from pcr_tools.lamp_numeric_recipes import LAMP_NUMERIC_BASELINES
+from pcr_tools.mutagenesis_workflows import EditSpec, quikchange_single
+from pcr_tools.mutagenic import Q5_SEARCH_PRIMER_LENGTH_MAX
 from pcr_tools.nested import NESTED_AUTHORITY
 from pcr_tools.registries.authorities import (
     ASSEMBLY_AUTHORITY,
@@ -22,8 +24,6 @@ from pcr_tools.registries.flanking_protocols import (
     RPA_PROTOCOLS,
     STANDARD_PCR_PROTOCOLS,
 )
-from pcr_tools.mutagenesis_workflows import EditSpec, quikchange_single
-from pcr_tools.mutagenic import Q5_SEARCH_PRIMER_LENGTH_MAX
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -48,7 +48,9 @@ def test_flanking_protocol_families_are_disjoint_and_numeric_requests_fail_cross
 
 
 def test_lamp_canonical_record_owns_m1712_hold_and_supplement_does_not_override_it() -> None:
-    authority = json.loads((ROOT / "contracts/chemistry/lamp-protocols.json").read_text(encoding="utf-8"))
+    authority = json.loads(
+        (ROOT / "contracts/chemistry/lamp-protocols.json").read_text(encoding="utf-8")
+    )
     record = authority["protocols"]["neb-m1712"]
     assert record["hold_temperature_c"] == 65
     assert record["hold_time_min"] == 20
@@ -114,8 +116,13 @@ def test_nested_cleanup_values_remain_protocol_specific() -> None:
 
 
 def test_consensus_alignment_roles_and_population_claim_boundary_are_canonical() -> None:
-    authority = json.loads((ROOT / "contracts/chemistry/consensus-profiles.json").read_text(encoding="utf-8"))
+    authority = json.loads(
+        (ROOT / "contracts/chemistry/consensus-profiles.json").read_text(encoding="utf-8")
+    )
     assert authority["records"]["mafft-7.526"]["tool_role"] == "PRIMARY"
     assert authority["records"]["muscle-5.3-audit"]["execution_status"] == "diagnostic-only"
-    assert authority["records"]["muscle-5.3-audit"]["sequence_decision_impact"] == "none-on-primary-ranking"
+    assert (
+        authority["records"]["muscle-5.3-audit"]["sequence_decision_impact"]
+        == "none-on-primary-ranking"
+    )
     assert "Population-wide universality" in authority["policies"]["population_claim"]

@@ -5,10 +5,11 @@ Coordinates are zero-based boundaries/indices in the submitted reference sequenc
 all outputs carry the reference provenance supplied by the caller.  Non-SNV
 variants are never coerced to a single base without recording the reduction.
 """
+
 from __future__ import annotations
 
-from dataclasses import dataclass
 from collections.abc import Sequence
+from dataclasses import dataclass
 from typing import Any
 
 from .design import clean_template
@@ -153,7 +154,9 @@ def normalize_variant(request: dict[str, Any], template: str) -> NormalizedVaria
             raise VariantError(
                 f"reference template reads {observed!r} at the declared locus, not REF {ref!r}"
             )
-    coordinate_system = str(raw.get("coordinate_system") or raw.get("coordinateSystem") or "0-based-reference")
+    coordinate_system = str(
+        raw.get("coordinate_system") or raw.get("coordinateSystem") or "0-based-reference"
+    )
     if coordinate_system not in {"0-based-reference", "0-based-half-open"}:
         raise VariantError("only explicit zero-based reference coordinate systems are executable")
     strand = str(raw.get("strand") or "plus")
@@ -164,7 +167,10 @@ def normalize_variant(request: dict[str, Any], template: str) -> NormalizedVaria
         at=at,
         ref=ref,
         alt=alt,
-        reference_accession=(str(raw.get("reference_accession") or raw.get("referenceAccession") or "").strip() or None),
+        reference_accession=(
+            str(raw.get("reference_accession") or raw.get("referenceAccession") or "").strip()
+            or None
+        ),
         assembly=(str(raw.get("assembly") or "").strip() or None),
         coordinate_system=coordinate_system,
         strand=strand,
@@ -200,7 +206,9 @@ def differing_anchor(variant: NormalizedVariant) -> dict[str, Any] | None:
     }
 
 
-def parse_vcf_mask(text: str | None, *, reference_accession: str | None = None) -> list[dict[str, Any]]:
+def parse_vcf_mask(
+    text: str | None, *, reference_accession: str | None = None
+) -> list[dict[str, Any]]:
     """Parse a small caller-supplied VCF into zero-based nearby-variant masks.
 
     This is intentionally an offline parser. It does not infer population
@@ -221,7 +229,16 @@ def parse_vcf_mask(text: str | None, *, reference_accession: str | None = None) 
             pos0 = int(pos) - 1
         except ValueError as exc:
             raise VariantError(f"nearby VCF line {line_no} POS is not an integer") from exc
-        out.append({"chrom": chrom, "at": pos0, "id": vid if vid != "." else None, "ref": ref, "alt": alt.split(","), "reference_accession": reference_accession})
+        out.append(
+            {
+                "chrom": chrom,
+                "at": pos0,
+                "id": vid if vid != "." else None,
+                "ref": ref,
+                "alt": alt.split(","),
+                "reference_accession": reference_accession,
+            }
+        )
     return out
 
 

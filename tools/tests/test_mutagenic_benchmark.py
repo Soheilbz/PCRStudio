@@ -9,6 +9,7 @@ be copied into PCRStudio's Q5 branch.
 Source retained for the historical control only: Thermo Scientific Phusion
 Site-Directed Mutagenesis Kit manual MAN0013377.
 """
+
 from __future__ import annotations
 
 import pytest
@@ -78,8 +79,6 @@ def test_external_edit_interpretation_is_sequence_checked():
     assert sites(parental, BY_NAME["SphI"]) == [EDIT_AT]
     assert sites(mutant, BY_NAME["SphI"]) == []
     assert sites(parental, BY_NAME["HindIII"]) == sites(mutant, BY_NAME["HindIII"])
-
-
 
 
 def test_thermodynamic_values_are_reported_as_screening_not_protocol(ours):

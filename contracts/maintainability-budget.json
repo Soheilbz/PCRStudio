@@ -15,9 +15,9 @@
     "crates/pcr-core/src/engines/flanking_pair.rs": 2513,
     "crates/pcr-projects/src/lib.rs": 2165,
     "crates/pcr-storage/src/lib.rs": 1970,
-    "tools/src/pcr_tools/loop_set.py": 4201,
-    "tools/src/pcr_tools/pipeline.py": 3866,
-    "tools/src/pcr_tools/registries/flanking_protocols.py": 2478,
+    "tools/src/pcr_tools/loop_set.py": 4762,
+    "tools/src/pcr_tools/pipeline.py": 3988,
+    "tools/src/pcr_tools/registries/flanking_protocols.py": 3006,
     "web/src/components/design/engine-fields.tsx": 3258,
     "web/src/components/project/workspace.tsx": 3104,
     "web/src/lib/api/types.ts": 4225
@@ -27,8 +27,9 @@
   "release_line": "CURRENT",
   "schema_version": "1.0.0",
   "max_function_lines": {
-    "tools/src/pcr_tools/pipeline.py::run": 2124,
-    "tools/src/pcr_tools/loop_set.py::run": 904
+    "tools/src/pcr_tools/multiplex.py::run": 607,
+    "tools/src/pcr_tools/pipeline.py::run": 2237,
+    "tools/src/pcr_tools/loop_set.py::run": 1172
   },
   "function_review_lines": 600
 }

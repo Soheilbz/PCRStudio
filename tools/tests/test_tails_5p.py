@@ -62,17 +62,11 @@ class TestTiling:
         return run({**self.BASE, **extra})
 
 
-
-
-
-
 class TestDegenerate:
     def _run(self, **extra) -> dict:
         from pcr_tools.__main__ import run_universal
 
         return run_universal({"template": _family(), "how_many": 2, **extra})
-
-
 
 
 @pytest.mark.parametrize("bad", ["ACGTN", "ACGU", "ACGT" * 30, "hello"])

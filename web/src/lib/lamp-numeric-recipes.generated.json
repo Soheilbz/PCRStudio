@@ -974,7 +974,7 @@
   },
   "schema_version": "1.2.0",
   "source": "tools/src/pcr_tools/lamp_numeric_recipes.py",
-  "source_sha256": "afa4f50b5a94e4a373daecaf1c791e95515e142a62e48fbd754425357249e1b0",
+  "source_sha256": "5e2765f1349faee51ed02e2fd9a270546c3285cd53a1996802ba1cd1d3ff2eb9",
   "unresolved_numeric_dependencies": {
     "optigene-iso004": [
       {

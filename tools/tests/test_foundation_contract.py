@@ -4,6 +4,7 @@ These tests deliberately do not import Primer3. They protect the architecture
 contract even on a release-builder that lacks the native scientific toolchain;
 the full thermodynamic suite remains a separate native qualification gate.
 """
+
 from __future__ import annotations
 
 import json
@@ -12,7 +13,14 @@ from pathlib import Path
 
 import pytest
 
-from pcr_tools.contract_loader import ENGINES, FOUNDATION, MODULES, MODULE_TO_ENGINE, TOOLS, TOOL_PAYLOAD
+from pcr_tools.contract_loader import (
+    ENGINES,
+    FOUNDATION,
+    MODULE_TO_ENGINE,
+    MODULES,
+    TOOL_PAYLOAD,
+    TOOLS,
+)
 from pcr_tools.coordinates import Boundary, CircularPosition, HalfOpenInterval
 from pcr_tools.ipc import IpcError, parse_request, success
 from pcr_tools.numeric_recipe import Quantity, dilution_volume, resolve
@@ -74,7 +82,7 @@ def test_half_open_coordinate_length_and_circular_normalization_properties() -> 
         assert interval.length == length
 
         reference = rng.randrange(1, 50_000)
-        raw = rng.randrange(-10**8, 10**8)
+        raw = rng.randrange(-(10**8), 10**8)
         position = CircularPosition(raw, reference)
         assert 0 <= position.value < reference
         assert position.value == raw % reference
@@ -86,7 +94,9 @@ def test_numeric_dilution_and_bounded_override_properties() -> None:
         reaction = rng.uniform(1.0, 100.0)
         final_x = rng.uniform(0.001, 2.0)
         stock_x = rng.uniform(final_x, 500.0)
-        got = dilution_volume(Quantity(reaction, "uL"), Quantity(final_x, "x"), Quantity(stock_x, "x"))
+        got = dilution_volume(
+            Quantity(reaction, "uL"), Quantity(final_x, "x"), Quantity(stock_x, "x")
+        )
         assert got.unit == "uL"
         assert got.value == pytest.approx(reaction * final_x / stock_x)
         assert 0 <= got.value <= reaction
@@ -188,7 +198,9 @@ def test_numeric_resolution_is_invariant_to_irrelevant_overlay_order() -> None:
     )
     assert first.values == second.values
     assert first.origins == second.origins
-    assert {row["id"] for row in first.applied_overlays} == {row["id"] for row in second.applied_overlays}
+    assert {row["id"] for row in first.applied_overlays} == {
+        row["id"] for row in second.applied_overlays
+    }
 
 
 def test_tightening_numeric_range_never_makes_an_out_of_range_override_valid() -> None:
@@ -235,11 +247,19 @@ def test_tool_adapter_capabilities_are_registry_backed() -> None:
 
 
 def test_egress_policy_is_https_only_and_cannot_expand_at_runtime(monkeypatch):
-    from pcr_tools.egress import EgressPolicyError, allowed_hosts, validate_https_url, validate_redirect
+    from pcr_tools.egress import (
+        EgressPolicyError,
+        allowed_hosts,
+        validate_https_url,
+        validate_redirect,
+    )
 
     monkeypatch.delenv("PCRSTUDIO_EGRESS_ALLOWLIST", raising=False)
     assert allowed_hosts() == frozenset({"eutils.ncbi.nlm.nih.gov"})
-    assert validate_https_url("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi") == "eutils.ncbi.nlm.nih.gov"
+    assert (
+        validate_https_url("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi")
+        == "eutils.ncbi.nlm.nih.gov"
+    )
     for url in (
         "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
         "https://example.org/",
@@ -251,10 +271,13 @@ def test_egress_policy_is_https_only_and_cannot_expand_at_runtime(monkeypatch):
 
     # Redirects remain on the exact source host even if a future release grows
     # the compiled allowlist. The current release has one reviewed host.
-    assert validate_redirect(
-        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
-        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?retmode=text",
-    ) == "eutils.ncbi.nlm.nih.gov"
+    assert (
+        validate_redirect(
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi",
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?retmode=text",
+        )
+        == "eutils.ncbi.nlm.nih.gov"
+    )
 
     monkeypatch.setenv("PCRSTUDIO_EGRESS_ALLOWLIST", "example.org")
     with pytest.raises(EgressPolicyError):
@@ -271,7 +294,9 @@ def test_autosave_conflict_merge_does_not_duplicate_large_draft_over_server_acti
     """
     root = Path(__file__).resolve().parents[2]
     actions = (root / "web/src/lib/projects/actions.ts").read_text(encoding="utf-8")
-    autosave = (root / "web/src/components/project/use-draft-autosave.ts").read_text(encoding="utf-8")
+    autosave = (root / "web/src/components/project/use-draft-autosave.ts").read_text(
+        encoding="utf-8"
+    )
 
     assert "baseSettings: Record<string, unknown>" not in actions
     assert "remoteUpdatedAt?: string" in actions

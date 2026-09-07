@@ -262,8 +262,9 @@ def audit_engine_maturity() -> None:
     if "search_length_is_vendor_limit\": False" not in mut_source:
         error("engine maturity: Q5 implementation search length is not explicitly separated from vendor limits")
     workflows = (ROOT / "tools/src/pcr_tools/mutagenesis_workflows.py").read_text(encoding="utf-8")
-    for marker in ("_QC_SINGLE = authority_record", "_QC_MULTI = authority_record", 'terms=authority["tm_formula_parameters"]'):
-        if marker not in workflows:
+    workflows_compact = re.sub(r"\s+", "", workflows)
+    for marker in ("_QC_SINGLE=authority_record", "_QC_MULTI=authority_record", 'terms=authority["tm_formula_parameters"]'):
+        if marker not in workflows_compact:
             error(f"engine maturity: QuikChange vendor formula/geometry regained a parallel truth ({marker})")
     if "81.5 + 0.41" in workflows:
         error("engine maturity: QuikChange Tm formula coefficients were re-hardcoded outside authority")

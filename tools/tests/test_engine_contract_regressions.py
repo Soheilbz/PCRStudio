@@ -3,12 +3,13 @@
 These tests intentionally avoid importing the scientific engines. Native Primer3,
 ViennaRNA, Rust and browser execution are separate Linux qualification gates.
 """
+
 from __future__ import annotations
 
 import importlib.util
 import json
-from pathlib import Path
 import re
+from pathlib import Path
 
 import pytest
 
@@ -92,7 +93,9 @@ def test_workflow_evidence_is_flat_bounded_and_never_changes_design_ranking():
 
 def test_source_vocabularies_match_corrected_canonical_ids_without_importing_engines():
     junction = (ROOT / "tools/src/pcr_tools/junction.py").read_text(encoding="utf-8")
-    rust_junction = (ROOT / "crates/pcr-core/src/engines/junction_primers.rs").read_text(encoding="utf-8")
+    rust_junction = (ROOT / "crates/pcr-core/src/engines/junction_primers.rs").read_text(
+        encoding="utf-8"
+    )
     assembly = load("contracts/chemistry/assembly-protocols.json")
     protocols = set(assembly["groups"]["protocols"])
     for protocol in protocols - {"not-selected"}:
@@ -112,13 +115,33 @@ def test_source_vocabularies_match_corrected_canonical_ids_without_importing_eng
 def test_modules_toml_owns_engine_fields_instead_of_leaving_ui_only_state():
     modules = (ROOT / "contracts/modules.toml").read_text(encoding="utf-8")
     required_tokens = [
-        "consensusPolicy", "panelMetadata", "formulationMode", "alternativeAlignment",
-        "variantType", "nearbyVariantsVcf", "kaspProtocol", "kaspEndpointDataReference",
-        "assemblyMethod", "assemblySequenceVerification",
-        "mutagenesisTopology", "editInputMode", "editsJson", "aaCdsStart", "aaResidue",
-        "aaTo", "codonPolicy", "codonUsage", "libraryMode", "libraryAt", "libraryCodon",
-        "transferMode", "cleanupProtocol", "round1ThermalProgram", "round2ThermalProgram",
-        "nestedRound1Ntc", "nestedRound2Ntc",
+        "consensusPolicy",
+        "panelMetadata",
+        "formulationMode",
+        "alternativeAlignment",
+        "variantType",
+        "nearbyVariantsVcf",
+        "kaspProtocol",
+        "kaspEndpointDataReference",
+        "assemblyMethod",
+        "assemblySequenceVerification",
+        "mutagenesisTopology",
+        "editInputMode",
+        "editsJson",
+        "aaCdsStart",
+        "aaResidue",
+        "aaTo",
+        "codonPolicy",
+        "codonUsage",
+        "libraryMode",
+        "libraryAt",
+        "libraryCodon",
+        "transferMode",
+        "cleanupProtocol",
+        "round1ThermalProgram",
+        "round2ThermalProgram",
+        "nestedRound1Ntc",
+        "nestedRound2Ntc",
     ]
     missing = [token for token in required_tokens if token not in modules]
     assert not missing, f"current engine field ownership missing: {missing}"
@@ -129,15 +152,18 @@ def test_no_legacy_plus_minus_refusal_survives_in_current_expert_source():
     kasp_row = next(line for line in source.splitlines() if line.lstrip().startswith('"kasp":'))
     assert "strong-endpoint-plus-minus" in kasp_row
     assert "distinct junction-aware plus/minus branch" in kasp_row
-    assert not re.search(r"plus/minus[^.\n]{0,180}(typed refus|typed-refus|refus)", kasp_row, flags=re.I), (
-        "expert audit generator still describes implemented KASP plus/minus as refused"
-    )
+    assert not re.search(
+        r"plus/minus[^.\n]{0,180}(typed refus|typed-refus|refus)", kasp_row, flags=re.I
+    ), "expert audit generator still describes implemented KASP plus/minus as refused"
+
 
 def test_discriminating_mismatch_identity_and_kasp_mode_boundaries_are_canonical():
     authority = load("contracts/chemistry/discriminating-protocols.json")
     model_id = authority["mismatch_model"]["model_id"]
     assert model_id == "pcrstudio-gen1-taq-terminal-mismatch-evidence-2026"
-    rust = (ROOT / "crates/pcr-core/src/engines/discriminating_authority.generated.rs").read_text(encoding="utf-8")
+    rust = (ROOT / "crates/pcr-core/src/engines/discriminating_authority.generated.rs").read_text(
+        encoding="utf-8"
+    )
     web = (ROOT / "web/src/lib/engine-authorities.generated.ts").read_text(encoding="utf-8")
     assert f'DISCRIMINATING_MISMATCH_MODEL_ID: &str = "{model_id}"' in rust
     assert f'DISCRIMINATING_MISMATCH_MODEL_ID = "{model_id}"' in web
@@ -146,7 +172,10 @@ def test_discriminating_mismatch_identity_and_kasp_mode_boundaries_are_canonical
     caps = matrix["engines"]["discriminating-pair"]["feature_capabilities"]
     assert set(caps["kasp-biallelic-genotype"]["scope"]) == {"snv", "mnv"}
     assert set(caps["kasp-plus-minus"]["scope"]) == {
-        "insertion", "deletion", "complex-replacement", "presence-absence"
+        "insertion",
+        "deletion",
+        "complex-replacement",
+        "presence-absence",
     }
 
     corpus = load("contracts/chemistry/discriminating-differential-corpus.json")
@@ -154,6 +183,10 @@ def test_discriminating_mismatch_identity_and_kasp_mode_boundaries_are_canonical
     assert cases["kasp-biallelic-indel-refusal"]["expected"]["status"] == "refused"
     pa = cases["kasp-plus-minus-presence-absence"]
     assert pa["request"]["kasp_assay_mode"] == "plus-minus-presence-absence"
-    assert pa["request"]["variant"] == {"type": "presence-absence", "at": 10, "ref": "ACGT", "alt": ""}
+    assert pa["request"]["variant"] == {
+        "type": "presence-absence",
+        "at": 10,
+        "ref": "ACGT",
+        "alt": "",
+    }
     assert pa["expected"]["variant_shape"] == "reference-present/alternate-absent"
-

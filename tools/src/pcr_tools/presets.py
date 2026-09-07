@@ -331,9 +331,15 @@ POLYMERASES: tuple[Polymerase, ...] = (
         cycling=Cycling(
             # Required by the generic calculation-context dataclass only. RACE bench cycling is
             # deliberately owned by the named RACE kit/SOP and is never emitted from this preset.
-            denature_c=95.0, denature_seconds=30, initial_denature_seconds=180,
-            anneal_seconds=30, extend_c=72.0, extend_seconds_per_kb=60,
-            min_extend_seconds=60, final_extend_seconds=300, cycles=32,
+            denature_c=95.0,
+            denature_seconds=30,
+            initial_denature_seconds=180,
+            anneal_seconds=30,
+            extend_c=72.0,
+            extend_seconds_per_kb=60,
+            min_extend_seconds=60,
+            final_extend_seconds=300,
+            cycles=32,
         ),
     ),
     Polymerase(
@@ -347,9 +353,15 @@ POLYMERASES: tuple[Polymerase, ...] = (
         reaction=Reaction(mv_conc=50.0, dv_conc=1.5, dntp_conc=0.8, dna_conc=200.0),
         cycling=Cycling(
             # Calculation placeholder only; never a Sanger bench programme.
-            denature_c=95.0, denature_seconds=30, initial_denature_seconds=180,
-            anneal_seconds=30, extend_c=72.0, extend_seconds_per_kb=60,
-            min_extend_seconds=30, final_extend_seconds=300, cycles=32,
+            denature_c=95.0,
+            denature_seconds=30,
+            initial_denature_seconds=180,
+            anneal_seconds=30,
+            extend_c=72.0,
+            extend_seconds_per_kb=60,
+            min_extend_seconds=30,
+            final_extend_seconds=300,
+            cycles=32,
         ),
     ),
     Polymerase(
@@ -599,9 +611,15 @@ POLYMERASES: tuple[Polymerase, ...] = (
         cycling=Cycling(
             # Placeholder required by the shared calculation-context dataclass only.
             # Mutagenic results never emit this as a bench programme.
-            denature_c=98.0, denature_seconds=10, initial_denature_seconds=30,
-            anneal_seconds=20, extend_c=72.0, extend_seconds_per_kb=30,
-            min_extend_seconds=15, final_extend_seconds=120, cycles=25,
+            denature_c=98.0,
+            denature_seconds=10,
+            initial_denature_seconds=30,
+            anneal_seconds=20,
+            extend_c=72.0,
+            extend_seconds_per_kb=30,
+            min_extend_seconds=15,
+            final_extend_seconds=120,
+            cycles=25,
         ),
         proofreading=True,
     ),

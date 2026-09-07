@@ -38,7 +38,11 @@ def test_bounded_process_fails_on_first_byte_beyond_limit() -> None:
 def test_bounded_process_avoids_stdin_stdout_pipe_deadlock() -> None:
     payload = "x" * (2 * 1024 * 1024)
     result = run_bounded_text(
-        [sys.executable, "-c", "import sys; sys.stdout.write('y' * 200000); sys.stdout.flush(); data=sys.stdin.read(); print(len(data))"],
+        [
+            sys.executable,
+            "-c",
+            "import sys; sys.stdout.write('y' * 200000); sys.stdout.flush(); data=sys.stdin.read(); print(len(data))",
+        ],
         input_text=payload,
         timeout=10,
         stdout_limit=1024 * 1024,
@@ -97,7 +101,9 @@ def test_write_all_handles_short_progress_until_payload_is_complete() -> None:
     assert writer.flushed is True
 
 
-@pytest.mark.skipif(sys.platform != "linux", reason="production process-group contract is Linux-specific")
+@pytest.mark.skipif(
+    sys.platform != "linux", reason="production process-group contract is Linux-specific"
+)
 def test_bounded_process_reaps_grandchild_after_wrapper_exits() -> None:
     import os
     import time

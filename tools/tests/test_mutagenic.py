@@ -12,7 +12,6 @@ import pytest
 from corpus import record
 
 from pcr_tools.mutagenic import (
-    Q5_MAX_SMALL_INSERTION,
     Q5_MIN_3PRIME_COMPLEMENT,
     Edit,
     MutagenesisError,
@@ -98,7 +97,7 @@ def test_large_q5_insertion_uses_reviewed_split_tail_topology():
 
 def test_q5_insertion_above_reviewed_100_nt_boundary_is_refused():
     edit = Edit(kind="insert", at=1200, to="A" * 101)
-    with pytest.raises(MutagenesisError, match="100 nt|100-nt|assembly"):
+    with pytest.raises(MutagenesisError, match=r"100 nt|100-nt|assembly"):
         made(edit)
 
 
@@ -109,8 +108,6 @@ def test_ordered_and_annealing_molecules_are_reported_separately():
     assert entry["forward"]["tail_sequence"] == "GGG"
     assert entry["forward"]["annealing_sequence"] == pair.forward_annealing
     assert entry["melting"]["authority"].startswith("Primer3 thermodynamic screening")
-
-
 
 
 def test_quikchange_protocol_cannot_be_cross_wired_into_q5_topology(monkeypatch):

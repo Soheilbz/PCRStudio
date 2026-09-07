@@ -12,11 +12,10 @@ import tomllib
 from pathlib import Path
 
 import pytest
-from corpus import record
 
 from pcr_tools import validation_plan
 from pcr_tools.pipeline import long_range_protocol, qpcr_protocol
-from pcr_tools.presets import PURPOSES, polymerase
+from pcr_tools.presets import PURPOSES
 from pcr_tools.thermo import analyse
 from pcr_tools.validation_plan import for_assay
 
@@ -60,6 +59,7 @@ RPA_REFERENCE_PRIMERS = (
     "CCTAGTTTGCGCGCTATATTTTGTTTTCTATCG",
 )
 
+
 def _strict_runtime_context(profile_id: str) -> dict[str, object]:
     """Minimum explicit scientific context required by strict module contracts."""
     if profile_id == "long-range-pcr":
@@ -97,6 +97,7 @@ def _strict_runtime_context(profile_id: str) -> dict[str, object]:
     if profile_id == "rpa":
         return {"rpa_protocol": "twistamp-basic"}
     return {}
+
 
 SYBR_REFERENCE_PRIMERS = (
     "ACCCACTCCTCCACCTTTGAC",
@@ -164,8 +165,6 @@ def test_canonical_documents_keep_distinct_ownership_boundaries() -> None:
     assert "18–25 nt" not in tools
     assert "5000–20000 bp" not in engine
     assert "5000–20000 bp" not in tools
-
-
 
 
 def test_module_purpose_modes_match_the_runtime_profile_registry() -> None:
@@ -447,12 +446,8 @@ def test_gc_clamp_is_documented_as_profile_specific_not_universal() -> None:
 
 
 def test_end_stability_scale_is_not_misattributed_to_base_primer3() -> None:
-    design = (ROOT / "tools" / "src" / "pcr_tools" / "design.py").read_text(
-        encoding="utf-8"
-    )
-    pipeline = (ROOT / "tools" / "src" / "pcr_tools" / "pipeline.py").read_text(
-        encoding="utf-8"
-    )
+    design = (ROOT / "tools" / "src" / "pcr_tools" / "design.py").read_text(encoding="utf-8")
+    pipeline = (ROOT / "tools" / "src" / "pcr_tools" / "pipeline.py").read_text(encoding="utf-8")
 
     # Keep the distinction in executable comments; resolved tool values are
     # intentionally not duplicated in the tool vocabulary document.
@@ -465,8 +460,6 @@ def test_published_rpa_primer_examples_fit_the_documented_search_envelope() -> N
         report = analyse(sequence)
         assert 30 <= len(sequence) <= 35
         assert 30.0 <= report.gc_percent <= 70.0
-
-
 
 
 def test_published_sybr_primer_examples_fit_the_documented_qpcr_envelope() -> None:
@@ -488,28 +481,29 @@ def _assay(profile_id: str) -> dict:
     }
 
 
-
-
-
-
 def test_current_flanking_protocol_registry_keeps_vendor_boundaries_explicit() -> None:
     """Protocol records are code to be exercised by the Linux suite later.
 
     This source regression prevents a future refactor from silently collapsing
     current/historical long-PCR, RPA, qPCR or dPCR branches back into one recipe.
     """
-    from pcr_tools.pipeline import digital_protocol, long_range_protocol, qpcr_protocol, rpa_protocol
+    from pcr_tools.pipeline import (
+        digital_protocol,
+        long_range_protocol,
+        qpcr_protocol,
+        rpa_protocol,
+    )
 
     itaq = qpcr_protocol("bio-rad-itaq-sybr", assay_id="qpcr-sybr")
     luna = qpcr_protocol("neb-luna-universal-m3003", assay_id="qpcr-sybr")
-    luna_rt = qpcr_protocol(
-        "neb-luna-one-step-rt-qpcr-e3005", assay_id="qpcr-sybr", from_rna=True
-    )
+    luna_rt = qpcr_protocol("neb-luna-one-step-rt-qpcr-e3005", assay_id="qpcr-sybr", from_rna=True)
     powerup = qpcr_protocol("thermo-powerup-sybr-a2574x", assay_id="qpcr-sybr")
     liquid = rpa_protocol("twistamp-liquid-basic", assay_id="rpa")
     longamp = long_range_protocol("neb-longamp-taq-m0323", assay_id="long-range-pcr")
     takara = long_range_protocol("takara-primestar-gxl-r050a-standard", assay_id="long-range-pcr")
-    ultrarun = long_range_protocol("qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr")
+    ultrarun = long_range_protocol(
+        "qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr"
+    )
     qia = digital_protocol("qiagen-qiacuity-eg", assay_id="digital-pcr")
     qia_one_step = digital_protocol(
         "qiagen-qiacuity-onestep-advanced-eg", assay_id="digital-pcr", from_rna=True
@@ -518,10 +512,16 @@ def test_current_flanking_protocol_registry_keeps_vendor_boundaries_explicit() -
     qx200 = digital_protocol("bio-rad-qx200-evagreen", assay_id="digital-pcr")
 
     assert itaq and itaq["reaction_volume_uL"] == {"supported_10": 10, "supported_20": 20}
-    assert itaq["primer_final_concentration_nM"] == {"optimization_min": 300, "optimization_max": 500}
+    assert itaq["primer_final_concentration_nM"] == {
+        "optimization_min": 300,
+        "optimization_max": 500,
+    }
     assert luna and luna["protocol_id"] == "neb-luna-universal-m3003"
     assert luna["amplicon_bp_preferred"] == {"min": 70, "max": 200}
-    assert luna["carryover_prevention"]["optional_udg_pretreatment"] == {"temperature_c": 25, "minutes": 10}
+    assert luna["carryover_prevention"]["optional_udg_pretreatment"] == {
+        "temperature_c": 25,
+        "minutes": 10,
+    }
     assert luna["carryover_prevention"]["enabled_by_protocol_selection_alone"] is False
     assert luna_rt and luna_rt["protocol_id"] == "neb-luna-one-step-rt-qpcr-e3005"
     assert luna_rt["primer_final_concentration_nM"]["starting"] == 400
@@ -534,12 +534,18 @@ def test_current_flanking_protocol_registry_keeps_vendor_boundaries_explicit() -
     assert ultrarun["primer_final_concentration_uM"] == 0.5
     assert ultrarun["cycling_model"]["standard_two_step"]["anneal_extend"]["seconds_per_kb"] == 30
     assert ultrarun["optional_q_solution"]["automatic_activation"] is False
-    assert luna_rt["carryover_prevention"]["optional_udg_pretreatment"] == {"temperature_c": 25, "minutes": 2}
+    assert luna_rt["carryover_prevention"]["optional_udg_pretreatment"] == {
+        "temperature_c": 25,
+        "minutes": 2,
+    }
     assert luna_rt["genomic_dna_control"]["no_rt_control_recommended"] is True
     assert luna_rt["transcript_design"]["hard_requirement_for_every_transcript"] is False
     assert powerup and powerup["protocol_id"] == "thermo-powerup-sybr-a2574x"
     assert powerup["reaction_volume_uL"] == {"supported_10": 10, "supported_20": 20}
-    assert powerup["primer_final_concentration_nM"] == {"optimization_min": 300, "optimization_max": 800}
+    assert powerup["primer_final_concentration_nM"] == {
+        "optimization_min": 300,
+        "optimization_max": 800,
+    }
     assert liquid and liquid["protocol_id"] == "twistamp-liquid-basic"
     assert liquid["oligo_contract"] == "plain-acgt-two-primer"
     assert liquid["modified_probe_support"] is False
@@ -560,8 +566,10 @@ def test_current_flanking_protocol_registry_keeps_vendor_boundaries_explicit() -
     assert qx700["primer_concentration_status"].startswith("supplier-variable")
     assert qx200 and qx200["carryover_prevention"]["UNG_compatible"] is True
     assert qx200["carryover_prevention"]["enabled_by_protocol_selection_alone"] is False
-    assert qx200["fragmentation_guidance"]["in_reaction_starting_units"] == "approximately 2-5 U per 20 uL reaction when direct digestion is used"
-
+    assert (
+        qx200["fragmentation_guidance"]["in_reaction_starting_units"]
+        == "approximately 2-5 U per 20 uL reaction when direct digestion is used"
+    )
 
 
 def test_dpcr_run_handoff_keeps_partition_volume_and_software_authority_explicit() -> None:
@@ -593,11 +601,13 @@ def test_dpcr_run_handoff_keeps_partition_volume_and_software_authority_explicit
         assay_id="digital-pcr",
     )
     assert qx is not None
-    assert qx["volume_precision_factor_status"] == "platform-specific-volume-correction-not-inferred"
+    assert (
+        qx["volume_precision_factor_status"] == "platform-specific-volume-correction-not-inferred"
+    )
     assert "volume source" in " ".join(qx["required_run_evidence"])
 
+
 def test_luna_e3005_is_not_silently_used_as_a_dna_only_qpcr_overlay() -> None:
-    import pytest
     from pcr_tools.pipeline import qpcr_protocol
 
     with pytest.raises(ValueError, match="from_rna=true"):
@@ -634,7 +644,9 @@ def test_thermo_lyo_ready_rpa_keeps_supplier_constraints_and_named_rt_recipe() -
     assert dna["oligo_contract"] == "plain-acgt-two-primer"
     assert dna["modified_probe_support"] is False
     assert dna["readout_contract"] == "endpoint-product-detection-modality-not-inferred"
-    assert dna["contamination_control"]["environment_and_carryover_false_positive_recognized"] is True
+    assert (
+        dna["contamination_control"]["environment_and_carryover_false_positive_recognized"] is True
+    )
     assert dna["contamination_control"]["separate_endpoint_workspace_when_opening_tubes"] is True
     assert "reverse_transcription" not in dna
     rt = rna["reverse_transcription"]
@@ -646,7 +658,6 @@ def test_thermo_lyo_ready_rpa_keeps_supplier_constraints_and_named_rt_recipe() -
 
 
 def test_twistamp_basic_rna_does_not_inherit_the_thermo_rt_recipe() -> None:
-    import pytest
     from pcr_tools.pipeline import rpa_protocol
 
     with pytest.raises(ValueError, match="thermo-lyo-ready-rpa"):
@@ -672,9 +683,14 @@ def test_long_range_vendor_cycling_models_keep_published_long_extensions():
 
     takara = long_range_protocol("takara-primestar-gxl-r050a-standard", assay_id="long-range-pcr")
     assert takara is not None
-    assert takara["cycling_model"]["10_to_30kb"]["anneal_extend"] == {"temperature_c": 68, "minutes": 10}
+    assert takara["cycling_model"]["10_to_30kb"]["anneal_extend"] == {
+        "temperature_c": 68,
+        "minutes": 10,
+    }
 
-    ultrarun = long_range_protocol("qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr")
+    ultrarun = long_range_protocol(
+        "qiagen-ultrarun-longrange-206442-206444", assay_id="long-range-pcr"
+    )
     assert ultrarun is not None
     assert ultrarun["cycling_model"]["standard_two_step"]["anneal_extend"]["temperature_c"] == 65
     assert ultrarun["cycling_model"]["alternative_three_step"]["extension"] == {
@@ -693,7 +709,10 @@ def test_itaq_current_reaction_and_primer_starting_points_are_preserved():
         "optimization_max": 500,
     }
     assert protocol["amplicon_bp_preferred"] == {"min": 70, "max": 150}
-    assert protocol["cycling_model"]["polymerase_activation_and_dna_denaturation"]["temperature_c"] == 95
+    assert (
+        protocol["cycling_model"]["polymerase_activation_and_dna_denaturation"]["temperature_c"]
+        == 95
+    )
 
 
 def test_rna_validation_contract_promotes_rt_evidence_to_required():
@@ -745,9 +764,21 @@ def test_species_per_record_circular_specificity_detects_origin_crossing_product
     from pcr_tools.specificity import Site, products_from
 
     def site(*, role: str, three_prime_at: int, orientation: str, contig: str = "circ") -> Site:
-        return Site(primer="A" * 20, role=role, contig=contig, three_prime_at=three_prime_at, orientation=orientation, mismatches=0, dg=-10.0, tm=60.0)
+        return Site(
+            primer="A" * 20,
+            role=role,
+            contig=contig,
+            three_prime_at=three_prime_at,
+            orientation=orientation,
+            mismatches=0,
+            dg=-10.0,
+            tm=60.0,
+        )
 
-    sites = [site(role="left", three_prime_at=95, orientation="forward"), site(role="right", three_prime_at=8, orientation="reverse")]
+    sites = [
+        site(role="left", three_prime_at=95, orientation="forward"),
+        site(role="right", three_prime_at=8, orientation="reverse"),
+    ]
     assert products_from(sites, max_product=100) == []
     circular = products_from(sites, max_product=100, circular_lengths={"circ": 100})
     assert len(circular) == 1

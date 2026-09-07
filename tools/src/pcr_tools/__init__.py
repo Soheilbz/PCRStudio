@@ -6,6 +6,7 @@ contracts without importing GPL Primer3 thermodynamics as a side effect. The
 first access to a scientific design/thermodynamic symbol still imports the same
 implementation as before.
 """
+
 from __future__ import annotations
 
 from importlib import import_module

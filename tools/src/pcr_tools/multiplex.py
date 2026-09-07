@@ -41,18 +41,19 @@ entirely above its own threshold. The spread is reported and not enforced.
 
 from __future__ import annotations
 
+import math
 import random
 from dataclasses import dataclass, field
 from typing import Any
 
-from .pipeline import run as run_single
 from . import screen
-from .presets import Reaction
 from . import specificity as spec
+from .fingerprints import canonical_sha256
+from .pipeline import run as run_single
+from .presets import Reaction
 from .runtime_contract import validate_required_context
 from .scientific_integrity import require_named_assay, strict
 from .thermo import reverse_complement
-from .fingerprints import canonical_sha256
 
 #: Complementary subsequence envelope used in SADDLE's published Badness
 #: implementation. The article uses at least 4 nt and caps subsequence length
@@ -95,16 +96,18 @@ MAX_EXACT_STATES = 750_000
 # tube composition or search effort. Shared assay/chemistry context is injected
 # into each target by the Rust HTTP boundary and therefore is intentionally not
 # an outer worker field.
-KNOWN_REQUEST_FIELDS = frozenset({
-    "readout",
-    "readout_profile",
-    "targets",
-    "candidates_per_target",
-    "per_tube",
-    "rounds",
-    "seed",
-    "optimizer_mode",
-})
+KNOWN_REQUEST_FIELDS = frozenset(
+    {
+        "readout",
+        "readout_profile",
+        "targets",
+        "candidates_per_target",
+        "per_tube",
+        "rounds",
+        "seed",
+        "optimizer_mode",
+    }
+)
 
 # Multiplex targets intentionally expose only fields whose semantics survive
 # set-level selection and reporting. In particular, restriction tails, vector
@@ -113,33 +116,35 @@ KNOWN_REQUEST_FIELDS = frozenset({
 # silently accepting those fields would misrepresent the molecules actually
 # screened for interactions. Rust injects the canonical assay and shared tube
 # context before the worker is called.
-KNOWN_TARGET_FIELDS = frozenset({
-    "name",
-    "template",
-    "background",
-    "inclusivity",
-    "inclusivity_panel_provenance",
-    "background_panel_provenance",
-    "species_panel_selection_rationale",
-    "species_target_taxid",
-    "species_taxonomy_snapshot",
-    "species_database_snapshot",
-    "species_panel_accession_manifest",
-    "species_panel_retrieved_date",
-    "constraints",
-    "assay",
-    "from_rna",
-    "standard_pcr_protocol",
-    "multiplex_context",
-    "colony_host_class",
-    "colony_preparation",
-    "colony_protocol_id",
-    "colony_protocol_name",
-    "colony_protocol_provenance",
-    "tube",
-    "primer_concentration_nm",
-    "empirical_evidence_ref",
-})
+KNOWN_TARGET_FIELDS = frozenset(
+    {
+        "name",
+        "template",
+        "background",
+        "inclusivity",
+        "inclusivity_panel_provenance",
+        "background_panel_provenance",
+        "species_panel_selection_rationale",
+        "species_target_taxid",
+        "species_taxonomy_snapshot",
+        "species_database_snapshot",
+        "species_panel_accession_manifest",
+        "species_panel_retrieved_date",
+        "constraints",
+        "assay",
+        "from_rna",
+        "standard_pcr_protocol",
+        "multiplex_context",
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id",
+        "colony_protocol_name",
+        "colony_protocol_provenance",
+        "tube",
+        "primer_concentration_nm",
+        "empirical_evidence_ref",
+    }
+)
 
 # QIAxcel supplier-table size domains used only when the corresponding named
 # cartridge profile is explicitly selected. These are readout-model boundaries,
@@ -258,9 +263,7 @@ AGAROSE_SEPARATION: tuple[tuple[int, int, str], ...] = (
     (2000, 201, "1.3% agarose"),
 )
 
-AGAROSE_PROFILES = (
-    "qiagen-multiplex-agarose-guideline",
-)
+AGAROSE_PROFILES = ("qiagen-multiplex-agarose-guideline",)
 
 #: Named QIAxcel readout references. A generic "capillary" instrument has no
 #: universal base-pair resolution, so Scientific-Strict requires one of these
@@ -341,7 +344,10 @@ def separation_needed(
         if largest <= ceiling:
             return gap, f"QIAGEN agarose guideline using {gel}"
     ceiling, gap, gel = AGAROSE_SEPARATION[-1]
-    return gap, f"QIAGEN agarose guideline using {gel}; >{ceiling} bp is outside this simple spacing table"
+    return (
+        gap,
+        f"QIAGEN agarose guideline using {gel}; >{ceiling} bp is outside this simple spacing table",
+    )
 
 
 @dataclass(frozen=True)
@@ -365,7 +371,9 @@ def unresolvable(
     if not products:
         return [], 0, ""
 
-    needed, how = separation_needed(max(products.values()), readout, readout_profile=readout_profile)
+    needed, how = separation_needed(
+        max(products.values()), readout, readout_profile=readout_profile
+    )
     names = sorted(products)
     clashes = [
         Collision(
@@ -466,9 +474,7 @@ def choose(
     def objective(picks: dict[str, Candidate]) -> tuple[int, int, float]:
         """Readout risk first, then interaction Badness, with no mixed-unit weight."""
         products = {target: pick.product_size for target, pick in picks.items()}
-        clashes, needed, _ = unresolvable(
-            products, readout, readout_profile=readout_profile
-        )
+        clashes, needed, _ = unresolvable(products, readout, readout_profile=readout_profile)
         shortfall = sum(max(0, needed - clash.apart) for clash in clashes)
         oligos = [oligo for pick in picks.values() for oligo in pick.oligos()]
         return len(clashes), shortfall, set_badness(oligos)
@@ -536,7 +542,9 @@ def choose_exact(
     max_states = _integer(max_states, name="max_exact_states", minimum=1, maximum=MAX_EXACT_STATES)
     for target, choices in candidates.items():
         if not choices:
-            raise MultiplexError(f"`{target}` has no candidate pairs, so exact multiplex selection cannot proceed.")
+            raise MultiplexError(
+                f"`{target}` has no candidate pairs, so exact multiplex selection cannot proceed."
+            )
     order = sorted(candidates, key=lambda target: (len(candidates[target]), target))
 
     def objective(picks: dict[str, Candidate]) -> tuple[int, int, float]:
@@ -667,9 +675,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(request, dict):
         raise MultiplexError("a multiplex request must be a JSON object")
     unknown = sorted(
-        repr(key)
-        for key in request
-        if not isinstance(key, str) or key not in KNOWN_REQUEST_FIELDS
+        repr(key) for key in request if not isinstance(key, str) or key not in KNOWN_REQUEST_FIELDS
     )
     if unknown:
         raise MultiplexError("unknown multiplex request field(s): " + ", ".join(unknown))
@@ -834,9 +840,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(entry, dict):
             raise MultiplexError(f"target {index} must be an object with a template.")
         unknown_target = sorted(
-            repr(key)
-            for key in entry
-            if not isinstance(key, str) or key not in KNOWN_TARGET_FIELDS
+            repr(key) for key in entry if not isinstance(key, str) or key not in KNOWN_TARGET_FIELDS
         )
         if unknown_target:
             raise MultiplexError(
@@ -865,8 +869,15 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         target_inputs[name] = dict(entry)
         primer_concentration_nm = entry.get("primer_concentration_nm")
         if primer_concentration_nm is not None:
-            if isinstance(primer_concentration_nm, bool) or not isinstance(primer_concentration_nm, (int, float)) or not math.isfinite(float(primer_concentration_nm)) or float(primer_concentration_nm) <= 0:
-                raise MultiplexError(f"target {index} primer_concentration_nm must be a positive finite planned/measured concentration")
+            if (
+                isinstance(primer_concentration_nm, bool)
+                or not isinstance(primer_concentration_nm, (int, float))
+                or not math.isfinite(float(primer_concentration_nm))
+                or float(primer_concentration_nm) <= 0
+            ):
+                raise MultiplexError(
+                    f"target {index} primer_concentration_nm must be a positive finite planned/measured concentration"
+                )
             target_inputs[name]["primer_concentration_nm"] = float(primer_concentration_nm)
         empirical_evidence_ref = str(entry.get("empirical_evidence_ref") or "").strip()
         if empirical_evidence_ref:
@@ -944,8 +955,12 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                     "Split one-step, two-step, unresolved or differently timed RT chemistries into separate requests."
                 )
         reaction_contract = one.get("reaction") if isinstance(one.get("reaction"), dict) else {}
-        constraint_contract = one.get("constraints") if isinstance(one.get("constraints"), dict) else {}
-        provenance_contract = one.get("provenance") if isinstance(one.get("provenance"), dict) else {}
+        constraint_contract = (
+            one.get("constraints") if isinstance(one.get("constraints"), dict) else {}
+        )
+        provenance_contract = (
+            one.get("provenance") if isinstance(one.get("provenance"), dict) else {}
+        )
         assay_id = str(resolved_assay.get("id") or "")
         if assay_id == "colony-pcr":
             colony = one.get("colony_context")
@@ -962,7 +977,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         if assay_id == "species-specific-pcr":
             inclusivity_evidence = one.get("inclusivity")
             background_evidence = one.get("background")
-            if not isinstance(inclusivity_evidence, dict) or not isinstance(background_evidence, dict):
+            if not isinstance(inclusivity_evidence, dict) or not isinstance(
+                background_evidence, dict
+            ):
                 raise MultiplexError(
                     f"target {index} lost species-specific inclusivity/exclusion evidence during design; the panel claim cannot be aggregated without both."
                 )
@@ -970,7 +987,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 ("inclusivity", inclusivity_evidence),
                 ("exclusivity", background_evidence),
             ):
-                if not evidence.get("panel_provenance") or not evidence.get("panel_selection_rationale"):
+                if not evidence.get("panel_provenance") or not evidence.get(
+                    "panel_selection_rationale"
+                ):
                     raise MultiplexError(
                         f"target {index} lost species-specific {label} panel provenance/selection rationale during design; the multiplex result refuses an untraceable biological-panel claim."
                     )
@@ -999,8 +1018,14 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "why_nothing": one.get("why_nothing", ""),
             "target": one.get("target", {}),
             "constraints": dict(constraint_contract),
-            **({"primer_concentration_nm": float(primer_concentration_nm)} if primer_concentration_nm is not None else {}),
-            **({"empirical_evidence_ref": empirical_evidence_ref} if empirical_evidence_ref else {}),
+            **(
+                {"primer_concentration_nm": float(primer_concentration_nm)}
+                if primer_concentration_nm is not None
+                else {}
+            ),
+            **(
+                {"empirical_evidence_ref": empirical_evidence_ref} if empirical_evidence_ref else {}
+            ),
         }
         if isinstance(one.get("background"), dict):
             target_summary["background"] = one["background"]
@@ -1040,7 +1065,15 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             if optimizer_mode == "exact":
                 tubes.append(choose_exact(group, readout=readout, readout_profile=readout_profile))
             else:
-                tubes.append(choose(group, readout=readout, readout_profile=readout_profile, rounds=rounds, seed=seed))
+                tubes.append(
+                    choose(
+                        group,
+                        readout=readout,
+                        readout_profile=readout_profile,
+                        rounds=rounds,
+                        seed=seed,
+                    )
+                )
     else:
         if strict() and per_tube < len(designs):
             raise MultiplexError(
@@ -1052,16 +1085,30 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             tubes = [
                 choose_exact(designs, readout=readout, readout_profile=readout_profile)
                 if optimizer_mode == "exact"
-                else choose(designs, readout=readout, readout_profile=readout_profile, rounds=rounds, seed=seed)
+                else choose(
+                    designs,
+                    readout=readout,
+                    readout_profile=readout_profile,
+                    rounds=rounds,
+                    seed=seed,
+                )
             ]
         else:
             tubes = split_into_tubes(
-                designs, per_tube=per_tube, readout=readout, readout_profile=readout_profile, rounds=rounds, seed=seed
+                designs,
+                per_tube=per_tube,
+                readout=readout,
+                readout_profile=readout_profile,
+                rounds=rounds,
+                seed=seed,
             )
             tube_labels = [f"tube-{index + 1}" for index in range(len(tubes))]
 
     tube_results = [
-        {**_tube_to_dict(tube, index + 1, readout, readout_profile=readout_profile), "tube_id": tube_labels[index]}
+        {
+            **_tube_to_dict(tube, index + 1, readout, readout_profile=readout_profile),
+            "tube_id": tube_labels[index],
+        }
         for index, tube in enumerate(tubes)
     ]
     panel_cross_product_specificity = _cross_product_specificity(
@@ -1081,19 +1128,44 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                         "kind": "primer",
                         "length": len(sequence),
                         "gc_percent": round(
-                            100.0 * sum(base in {"G", "C"} for base in sequence.upper()) / max(len(sequence), 1),
+                            100.0
+                            * sum(base in {"G", "C"} for base in sequence.upper())
+                            / max(len(sequence), 1),
                             1,
                         ),
                         "tube": f"tube-{tube_number}",
                         "pool": tube_number - 1,
-                        **({"planned_primer_concentration_nm": target_inputs[pair["target"]]["primer_concentration_nm"]} if target_inputs[pair["target"]].get("primer_concentration_nm") is not None else {}),
-                        **({"empirical_evidence_ref": target_inputs[pair["target"]]["empirical_evidence_ref"]} if target_inputs[pair["target"]].get("empirical_evidence_ref") else {}),
+                        **(
+                            {
+                                "planned_primer_concentration_nm": target_inputs[pair["target"]][
+                                    "primer_concentration_nm"
+                                ]
+                            }
+                            if target_inputs[pair["target"]].get("primer_concentration_nm")
+                            is not None
+                            else {}
+                        ),
+                        **(
+                            {
+                                "empirical_evidence_ref": target_inputs[pair["target"]][
+                                    "empirical_evidence_ref"
+                                ]
+                            }
+                            if target_inputs[pair["target"]].get("empirical_evidence_ref")
+                            else {}
+                        ),
                         "note": "Selected for this final multiplex tube; concentration metadata is empirical/planned formulation evidence and never alters sequence ranking. External interaction validation is evaluated tube-by-tube.",
                     }
                 )
 
     panel_identity_payload = [
-        {"tube_id": tube["tube_id"], "pairs": [{"target": pair["target"], "left": pair["left"], "right": pair["right"]} for pair in tube["pairs"]]}
+        {
+            "tube_id": tube["tube_id"],
+            "pairs": [
+                {"target": pair["target"], "left": pair["left"], "right": pair["right"]}
+                for pair in tube["pairs"]
+            ],
+        }
         for tube in tube_results
     ]
     formulation_payload = [
@@ -1165,7 +1237,11 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "strategy": (
                     "explicit-target-tube-identities"
                     if explicit_assignment
-                    else ("single-tube" if len(tube_results) == 1 else "deterministic-fewest-candidates-first-chunking")
+                    else (
+                        "single-tube"
+                        if len(tube_results) == 1
+                        else "deterministic-fewest-candidates-first-chunking"
+                    )
                 ),
                 "global_partition_optimized": False,
                 "explicit": explicit_assignment,
@@ -1216,7 +1292,9 @@ def _cross_product_specificity(
             dna_conc=float(reaction["dna_conc"]),
         )
     except (KeyError, TypeError, ValueError) as exc:
-        raise MultiplexError("multiplex cross-product specificity lost the shared thermodynamic reaction context") from exc
+        raise MultiplexError(
+            "multiplex cross-product specificity lost the shared thermodynamic reaction context"
+        ) from exc
 
     results: list[dict[str, Any]] = []
     for tube in tube_results:
@@ -1227,7 +1305,9 @@ def _cross_product_specificity(
         shared_background = bool(backgrounds) and all(backgrounds) and len(set(backgrounds)) == 1
         if shared_background:
             contigs = screen.contigs_from_text(
-                backgrounds[0], label="shared multiplex background", default_name="shared multiplex background"
+                backgrounds[0],
+                label="shared multiplex background",
+                default_name="shared multiplex background",
             )
             scope = "shared-declared-background"
         else:
@@ -1236,9 +1316,13 @@ def _cross_product_specificity(
                 template = str(entry.get("template") or "").strip()
                 if not template:
                     continue
-                parsed = screen.contigs_from_text(template, label=f"multiplex target {name}", default_name=name)
+                parsed = screen.contigs_from_text(
+                    template, label=f"multiplex target {name}", default_name=name
+                )
                 for idx, contig in enumerate(parsed, start=1):
-                    contigs.append(spec.Contig(name=f"{name}:{idx}:{contig.name}", sequence=contig.sequence))
+                    contigs.append(
+                        spec.Contig(name=f"{name}:{idx}:{contig.name}", sequence=contig.sequence)
+                    )
             scope = "union-of-target-templates"
         named: dict[str, str] = {}
         intended_sizes: list[int] = []
@@ -1249,23 +1333,32 @@ def _cross_product_specificity(
             intended_sizes.append(int(pair.get("product_size") or 0))
         longest = max(intended_sizes, default=0)
         audit = screen.oligos(
-            named, contigs, reaction=rxn, max_mismatches=3,
-            max_product=screen.product_ceiling(longest), intended_sizes=intended_sizes, max_products=50,
+            named,
+            contigs,
+            reaction=rxn,
+            max_mismatches=3,
+            max_product=screen.product_ceiling(longest),
+            intended_sizes=intended_sizes,
+            max_products=50,
         )
         products = list(audit.get("products") or []) if isinstance(audit, dict) else []
-        results.append({
-            "tube": tube.get("tube"),
-            "tube_id": tube.get("tube_id"),
-            "scope": scope,
-            "checked": bool(audit.get("checked")) if isinstance(audit, dict) else False,
-            "unintended_product_count": int(audit.get("product_count") or len(products)) if isinstance(audit, dict) else 0,
-            "audit": audit,
-            "decision_impact": "validation-evidence",
-            "note": (
-                "All selected extending primers were scanned together, so F_i x R_j cross-products are visible. "
-                "This is not a replacement for each target's broader inclusivity/exclusivity database evidence."
-            ),
-        })
+        results.append(
+            {
+                "tube": tube.get("tube"),
+                "tube_id": tube.get("tube_id"),
+                "scope": scope,
+                "checked": bool(audit.get("checked")) if isinstance(audit, dict) else False,
+                "unintended_product_count": int(audit.get("product_count") or len(products))
+                if isinstance(audit, dict)
+                else 0,
+                "audit": audit,
+                "decision_impact": "validation-evidence",
+                "note": (
+                    "All selected extending primers were scanned together, so F_i x R_j cross-products are visible. "
+                    "This is not a replacement for each target's broader inclusivity/exclusivity database evidence."
+                ),
+            }
+        )
     return results
 
 
@@ -1278,9 +1371,7 @@ def _tube_to_dict(
 ) -> dict[str, Any]:
     """One tube, its interactions and reference readout-spacing risks."""
     products = {pick.target: pick.product_size for pick in tube.chosen}
-    clashes, needed, how = unresolvable(
-        products, readout, readout_profile=readout_profile
-    )
+    clashes, needed, how = unresolvable(products, readout, readout_profile=readout_profile)
 
     oligos = [(f"{pick.target}_F", pick.left) for pick in tube.chosen] + [
         (f"{pick.target}_R", pick.right) for pick in tube.chosen

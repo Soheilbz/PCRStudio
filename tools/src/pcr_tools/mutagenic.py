@@ -25,14 +25,16 @@ from typing import Any
 
 import primer3
 
+from . import mutagenesis_workflows as workflows
 from .design import clean_template
 from .intake import target_to_dict
 from .presets import thermodynamic_model
 from .provenance import provenance
+from .registries.authorities import MUTAGENESIS_AUTHORITY
+from .registries.authorities import record as authority_record
 from .settings import how_many_from, label, prepare
 from .thermo import DEFAULT_CONDITIONS, analyse, pair_dimer, report_to_dict, reverse_complement
 from .workflow_evidence import evidence_block
-from .registries.authorities import MUTAGENESIS_AUTHORITY, record as authority_record
 
 
 class MutagenesisError(ValueError):
@@ -75,8 +77,18 @@ GAP_WORTH_MENTIONING = 3.0
 #: Named recovery/routing protocols are topology-specific. Q5, QuikChange Lightning
 #: single-site, Lightning Multi and NEBuilder multi-site are never treated as
 #: interchangeable presets; each branch validates its own protocol identity.
-POST_AMPLIFICATION_PROTOCOLS = ("neb-q5-e0554", "agilent-quikchange-lightning-210518", "agilent-quikchange-lightning-multi-210513-210516", "neb-nebuilder-multisite")
-MUTAGENESIS_TOPOLOGIES = ("q5-back-to-back", "quikchange-complementary", "quikchange-lightning-multi", "nebuilder-multisite")
+POST_AMPLIFICATION_PROTOCOLS = (
+    "neb-q5-e0554",
+    "agilent-quikchange-lightning-210518",
+    "agilent-quikchange-lightning-multi-210513-210516",
+    "neb-nebuilder-multisite",
+)
+MUTAGENESIS_TOPOLOGIES = (
+    "q5-back-to-back",
+    "quikchange-complementary",
+    "quikchange-lightning-multi",
+    "nebuilder-multisite",
+)
 
 
 @dataclass(frozen=True)
@@ -237,7 +249,9 @@ def design(
                 start = edit.at - left_match
                 if start < 0 or after + right_match > len(sequence):
                     continue
-                forward = sequence[start:edit.at] + edit.to + sequence[after : after + right_match]
+                forward = (
+                    sequence[start : edit.at] + edit.to + sequence[after : after + right_match]
+                )
                 template_window = sequence[start : after + right_match]
                 measured = analyse(forward, **reaction)
                 on_template = round(
@@ -316,14 +330,18 @@ def design(
             left_insert = edit.to[:split]
             right_insert = edit.to[split:]
             if max(len(left_insert), len(right_insert)) > Q5_SPLIT_INSERTION_PER_PRIMER_MAX:
-                raise MutagenesisError("Q5 split insertion would exceed the reviewed 50-nt 5' tail per primer boundary.")
+                raise MutagenesisError(
+                    "Q5 split insertion would exceed the reviewed 50-nt 5' tail per primer boundary."
+                )
         for core_length in _q5_lengths():
             if core_length < Q5_MIN_3PRIME_COMPLEMENT or edit.at + core_length > len(sequence):
                 continue
             forward_core = sequence[edit.at : edit.at + core_length]
             forward_tail = right_insert
             forward = forward_tail + forward_core
-            forward_product = analyse(forward_core, **reaction) if forward_tail else analyse(forward, **reaction)
+            forward_product = (
+                analyse(forward_core, **reaction) if forward_tail else analyse(forward, **reaction)
+            )
             forward_template = analyse(forward_core, **reaction)
             for reverse_length in _q5_lengths():
                 if edit.at - reverse_length < 0:
@@ -420,9 +438,10 @@ def pair_to_dict(pair: MutagenicPair, edit: Edit, **conditions: float) -> dict[s
         "order_guidance": {
             "forward_ordered_length_nt": len(pair.forward),
             "reverse_ordered_length_nt": len(pair.reverse),
-            "purification_recommended": max(len(pair.forward), len(pair.reverse)) > Q5_PURIFICATION_RECOMMENDED_OVER,
+            "purification_recommended": max(len(pair.forward), len(pair.reverse))
+            > Q5_PURIFICATION_RECOMMENDED_OVER,
             "authority": "NEB Q5 current primer-design guidance: purification recommended for primers >60 nt",
-            "note": "Purification is an ordering recommendation, not a thermodynamic validity gate."
+            "note": "Purification is an ordering recommendation, not a thermodynamic validity gate.",
         },
         "centrality_error_nt": pair.centrality_error if edit.kind == "substitute" else None,
         "cross_dimer_dg": pair.cross_dimer_dg,
@@ -430,19 +449,22 @@ def pair_to_dict(pair: MutagenicPair, edit: Edit, **conditions: float) -> dict[s
     }
 
 
-
 #: The most pairs one request may ask for.
 MOST_PAIRS = 10
 
 
-def _workflow_result(request: dict[str, Any], chosen: Any, *, topology: str, protocol_id: str) -> dict[str, Any] | None:
+def _workflow_result(
+    request: dict[str, Any], chosen: Any, *, topology: str, protocol_id: str
+) -> dict[str, Any] | None:
     """Run non-Q5 topologies without pretending they share Q5 geometry."""
     if topology == "q5-back-to-back":
         return None
     seq = clean_template(chosen.target.sequence)
     reaction = chosen.reaction.as_conditions()
     codon_policy = str(request.get("codon_policy") or "minimum-nucleotide-changes")
-    edits = workflows.normalize_edits(request, len(seq)) if not request.get("amino_acid_edit") else []
+    edits = (
+        workflows.normalize_edits(request, len(seq)) if not request.get("amino_acid_edit") else []
+    )
     amino_evidence = None
     if request.get("amino_acid_edit") is not None:
         raw = request.get("amino_acid_edit")
@@ -452,17 +474,23 @@ def _workflow_result(request: dict[str, Any], chosen: Any, *, topology: str, pro
             seq,
             raw,
             codon_policy=codon_policy,
-            codon_usage=request.get("codon_usage") if isinstance(request.get("codon_usage"), dict) else None,
+            codon_usage=request.get("codon_usage")
+            if isinstance(request.get("codon_usage"), dict)
+            else None,
         )
         edits = [edit]
     changed = workflows.apply_edits(seq, edits)
     base = {
         "engine": "mutagenic-pair",
-        "mutagenesis_topology": "q5-back-to-back",
         "provenance": provenance(reaction),
         "assay": chosen.assay_to_dict(),
         "target": target_to_dict(chosen.target),
-        "reaction": {"polymerase": chosen.preset.id, "polymerase_name": chosen.preset.name, **reaction, "model": thermodynamic_model(chosen.preset, chosen.reaction)},
+        "reaction": {
+            "polymerase": chosen.preset.id,
+            "polymerase_name": chosen.preset.name,
+            **reaction,
+            "model": thermodynamic_model(chosen.preset, chosen.reaction),
+        },
         "mutagenesis_topology": topology,
         "post_amplification_protocol": protocol_id,
         "edits": [e.as_dict() for e in edits],
@@ -472,56 +500,128 @@ def _workflow_result(request: dict[str, Any], chosen: Any, *, topology: str, pro
         "workflow_evidence": evidence_block(request.get("workflow_evidence")),
         "validation_contract": {
             "sequence_confirmation_required": True,
-            "parental_template_removal_must_be_recorded_when_protocol_depends_on_it": topology.startswith("quikchange"),
+            "parental_template_removal_must_be_recorded_when_protocol_depends_on_it": topology.startswith(
+                "quikchange"
+            ),
             "claim_boundary": "A predicted edited construct is not a verified clone. Record transformation, clone identity and sequence confirmation as empirical evidence.",
         },
     }
     name = label(chosen.target.name)
     if topology == "quikchange-complementary":
         if protocol_id != "agilent-quikchange-lightning-210518":
-            raise MutagenesisError("quikchange-complementary requires post_amplification_protocol=agilent-quikchange-lightning-210518")
+            raise MutagenesisError(
+                "quikchange-complementary requires post_amplification_protocol=agilent-quikchange-lightning-210518"
+            )
         if len(edits) != 1:
-            raise MutagenesisError("QuikChange Lightning single-site topology requires exactly one edit; use Lightning Multi or NEBuilder multi-site for multiple edits.")
+            raise MutagenesisError(
+                "QuikChange Lightning single-site topology requires exactly one edit; use Lightning Multi or NEBuilder multi-site for multiple edits."
+            )
         planned = workflows.quikchange_single(seq, edits[0])
         pairs = planned.get("pairs", [])
-        base.update({
-            "design": planned,
-            "protocol": {
-                "selection": "Agilent QuikChange Lightning Site-Directed Mutagenesis",
-                "source_identity": "Agilent QuikChange Lightning Instruction Manual 210518",
-                "source_url": "https://www.agilent.com/cs/library/usermanuals/public/210518.pdf",
-                "topology": "complementary mutagenic primers / linear amplification / DpnI",
-                "numeric_authority": "Use the current kit manual for bench recipe and cycling; PCRStudio exposes only reviewed primer-geometry rules here.",
-            },
-            "orderability": {"orderable": bool(pairs), "status": "orderable-manual-faithful-quikchange" if pairs else "not-orderable", "note": "Orderable only when the public QuikChange Lightning manual rules implemented by PCRStudio are satisfied; GC/end and structure review are reported. This is not Agilent Primer Design Program/Energy Cost equivalence."},
-            "order_sheet": [entry for i,pair in enumerate(pairs,1) for entry in (
-                {"name":f"{name}_{i}F","sequence":pair["forward"],"kind":"primer","length":len(pair["forward"]),"tm_formula_c":pair["tm_formula_c"],"gc_percent":pair["gc_percent"],"note":"Mutagenic complementary primer; Agilent-specific Tm formula."},
-                {"name":f"{name}_{i}R","sequence":pair["reverse"],"kind":"primer","length":len(pair["reverse"]),"tm_formula_c":pair["tm_formula_c"],"gc_percent":pair["gc_percent"],"note":"Exact reverse complement of the mutagenic forward primer."},
-            )],
-        })
+        base.update(
+            {
+                "design": planned,
+                "protocol": {
+                    "selection": "Agilent QuikChange Lightning Site-Directed Mutagenesis",
+                    "source_identity": "Agilent QuikChange Lightning Instruction Manual 210518",
+                    "source_url": "https://www.agilent.com/cs/library/usermanuals/public/210518.pdf",
+                    "topology": "complementary mutagenic primers / linear amplification / DpnI",
+                    "numeric_authority": "Use the current kit manual for bench recipe and cycling; PCRStudio exposes only reviewed primer-geometry rules here.",
+                },
+                "orderability": {
+                    "orderable": bool(pairs),
+                    "status": "orderable-manual-faithful-quikchange" if pairs else "not-orderable",
+                    "note": "Orderable only when the public QuikChange Lightning manual rules implemented by PCRStudio are satisfied; GC/end and structure review are reported. This is not Agilent Primer Design Program/Energy Cost equivalence.",
+                },
+                "order_sheet": [
+                    entry
+                    for i, pair in enumerate(pairs, 1)
+                    for entry in (
+                        {
+                            "name": f"{name}_{i}F",
+                            "sequence": pair["forward"],
+                            "kind": "primer",
+                            "length": len(pair["forward"]),
+                            "tm_formula_c": pair["tm_formula_c"],
+                            "gc_percent": pair["gc_percent"],
+                            "note": "Mutagenic complementary primer; Agilent-specific Tm formula.",
+                        },
+                        {
+                            "name": f"{name}_{i}R",
+                            "sequence": pair["reverse"],
+                            "kind": "primer",
+                            "length": len(pair["reverse"]),
+                            "tm_formula_c": pair["tm_formula_c"],
+                            "gc_percent": pair["gc_percent"],
+                            "note": "Exact reverse complement of the mutagenic forward primer.",
+                        },
+                    )
+                ],
+            }
+        )
         return base
     if topology == "quikchange-lightning-multi":
         if protocol_id != "agilent-quikchange-lightning-multi-210513-210516":
-            raise MutagenesisError("quikchange-lightning-multi requires the named Agilent Lightning Multi protocol")
+            raise MutagenesisError(
+                "quikchange-lightning-multi requires the named Agilent Lightning Multi protocol"
+            )
         planned = workflows.quikchange_multi(seq, edits)
         primers = planned.get("primers", [])
-        base.update({
-            "design": planned,
-            "protocol": {"selection":"Agilent QuikChange Lightning Multi", "source_identity":"Agilent manual 210514", "source_url":"https://www.agilent.com/Library/usermanuals/Public/210514.pdf", "topology":"one same-orientation non-overlapping primer per mutation site"},
-            "orderability": {"orderable": bool(planned.get("orderable")), "status":"orderable-manual-faithful-lightning-multi" if planned.get("orderable") else "not-orderable", "note": "Orderable only when the public Lightning Multi geometry, formula-Tm and dimer rules implemented by PCRStudio are satisfied; this is not Agilent web-tool equivalence."},
-            "order_sheet": [{"name":f"{name}_M{i}","sequence":p["sequence"],"kind":"primer","length":p["length"],"tm_formula_c":p["tm_formula_c"],"gc_percent":p["gc_percent"],"note":"Same-template-strand Lightning Multi mutagenic primer."} for i,p in enumerate(primers,1)],
-        })
+        base.update(
+            {
+                "design": planned,
+                "protocol": {
+                    "selection": "Agilent QuikChange Lightning Multi",
+                    "source_identity": "Agilent manual 210514",
+                    "source_url": "https://www.agilent.com/Library/usermanuals/Public/210514.pdf",
+                    "topology": "one same-orientation non-overlapping primer per mutation site",
+                },
+                "orderability": {
+                    "orderable": bool(planned.get("orderable")),
+                    "status": "orderable-manual-faithful-lightning-multi"
+                    if planned.get("orderable")
+                    else "not-orderable",
+                    "note": "Orderable only when the public Lightning Multi geometry, formula-Tm and dimer rules implemented by PCRStudio are satisfied; this is not Agilent web-tool equivalence.",
+                },
+                "order_sheet": [
+                    {
+                        "name": f"{name}_M{i}",
+                        "sequence": p["sequence"],
+                        "kind": "primer",
+                        "length": p["length"],
+                        "tm_formula_c": p["tm_formula_c"],
+                        "gc_percent": p["gc_percent"],
+                        "note": "Same-template-strand Lightning Multi mutagenic primer.",
+                    }
+                    for i, p in enumerate(primers, 1)
+                ],
+            }
+        )
         return base
     if topology == "nebuilder-multisite":
         if protocol_id != "neb-nebuilder-multisite":
-            raise MutagenesisError("nebuilder-multisite requires post_amplification_protocol=neb-nebuilder-multisite")
+            raise MutagenesisError(
+                "nebuilder-multisite requires post_amplification_protocol=neb-nebuilder-multisite"
+            )
         planned = workflows.nebuilder_multisite_route(seq, edits)
-        base.update({
-            "design": planned,
-            "protocol": {"selection":"PCRStudio multi-site NEBuilder HiFi routing informed by NEBaseChanger workflow", "source_identity":"NEBaseChanger v2.8.4 workflow reference", "source_url":"https://nebasechanger.neb.com/", "execution_status":"route-to-junction-engine", "vendor_tool_equivalent":False},
-            "orderability": {"orderable": False, "status":"route-to-junction-primers", "note":"This engine reconstructs the exact edited construct and routing graph; Junction Primers owns overlap/primer ordering."},
-            "order_sheet": [],
-        })
+        base.update(
+            {
+                "design": planned,
+                "protocol": {
+                    "selection": "PCRStudio multi-site NEBuilder HiFi routing informed by NEBaseChanger workflow",
+                    "source_identity": "NEBaseChanger v2.8.4 workflow reference",
+                    "source_url": "https://nebasechanger.neb.com/",
+                    "execution_status": "route-to-junction-engine",
+                    "vendor_tool_equivalent": False,
+                },
+                "orderability": {
+                    "orderable": False,
+                    "status": "route-to-junction-primers",
+                    "note": "This engine reconstructs the exact edited construct and routing graph; Junction Primers owns overlap/primer ordering.",
+                },
+                "order_sheet": [],
+            }
+        )
         return base
     raise MutagenesisError("unknown mutagenesis_topology: " + topology)
 
@@ -542,7 +642,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
 
     topology = str(request.get("mutagenesis_topology") or "q5-back-to-back").strip()
     if topology not in MUTAGENESIS_TOPOLOGIES:
-        raise MutagenesisError("mutagenesis_topology must be one of: " + ", ".join(MUTAGENESIS_TOPOLOGIES))
+        raise MutagenesisError(
+            "mutagenesis_topology must be one of: " + ", ".join(MUTAGENESIS_TOPOLOGIES)
+        )
     post_amplification_protocol = str(request.get("post_amplification_protocol") or "").strip()
 
     # Library requests are explicit design-space declarations. They are never
@@ -552,16 +654,30 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raw = request.get("library_edit")
         if not isinstance(raw, dict):
             raise MutagenesisError("library_mode requires library_edit={at,codon}")
-        lib = workflows.library_edit(clean_template(chosen.target.sequence), at=int(raw.get("at")), codon=str(raw.get("codon") or request.get("library_mode")))
+        lib = workflows.library_edit(
+            clean_template(chosen.target.sequence),
+            at=int(raw.get("at")),
+            codon=str(raw.get("codon") or request.get("library_mode")),
+        )
         return {
-            "engine":"mutagenic-pair", "provenance":provenance(chosen.reaction.as_conditions()), "assay":chosen.assay_to_dict(),
-            "target":target_to_dict(chosen.target), "mutagenesis_topology":"library-degenerate", "library_design":lib,
-            "orderability":{"orderable":False,"status":"requires-topology-specific-library-primer-design","note":"PCRStudio records the IUPAC library construct and theoretical sequence space but does not claim equal synthesis abundance or emit a primer until a reviewed library topology is selected."},
+            "engine": "mutagenic-pair",
+            "provenance": provenance(chosen.reaction.as_conditions()),
+            "assay": chosen.assay_to_dict(),
+            "target": target_to_dict(chosen.target),
+            "mutagenesis_topology": "library-degenerate",
+            "library_design": lib,
+            "orderability": {
+                "orderable": False,
+                "status": "requires-topology-specific-library-primer-design",
+                "note": "PCRStudio records the IUPAC library construct and theoretical sequence space but does not claim equal synthesis abundance or emit a primer until a reviewed library topology is selected.",
+            },
             "workflow_evidence": evidence_block(request.get("workflow_evidence")),
-            "order_sheet":[],
+            "order_sheet": [],
         }
 
-    alternate = _workflow_result(request, chosen, topology=topology, protocol_id=post_amplification_protocol)
+    alternate = _workflow_result(
+        request, chosen, topology=topology, protocol_id=post_amplification_protocol
+    )
     if alternate is not None:
         return alternate
 
@@ -570,13 +686,23 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     if isinstance(request.get("edits"), list):
         normalized = workflows.normalize_edits(request, len(clean_template(chosen.target.sequence)))
         if len(normalized) != 1:
-            raise MutagenesisError("q5-back-to-back accepts exactly one edit per PCRStudio design; use quikchange-lightning-multi or nebuilder-multisite for multiple edits.")
+            raise MutagenesisError(
+                "q5-back-to-back accepts exactly one edit per PCRStudio design; use quikchange-lightning-multi or nebuilder-multisite for multiple edits."
+            )
         supplied = normalized[0].as_dict()
     elif request.get("amino_acid_edit") is not None:
-        raw_aa=request.get("amino_acid_edit")
-        if not isinstance(raw_aa,dict): raise MutagenesisError("amino_acid_edit must be an object")
-        aa_edit,_aa_evidence=workflows.amino_acid_edit(clean_template(chosen.target.sequence),raw_aa,codon_policy=str(request.get("codon_policy") or "minimum-nucleotide-changes"),codon_usage=request.get("codon_usage") if isinstance(request.get("codon_usage"),dict) else None)
-        supplied=aa_edit.as_dict()
+        raw_aa = request.get("amino_acid_edit")
+        if not isinstance(raw_aa, dict):
+            raise MutagenesisError("amino_acid_edit must be an object")
+        aa_edit, _aa_evidence = workflows.amino_acid_edit(
+            clean_template(chosen.target.sequence),
+            raw_aa,
+            codon_policy=str(request.get("codon_policy") or "minimum-nucleotide-changes"),
+            codon_usage=request.get("codon_usage")
+            if isinstance(request.get("codon_usage"), dict)
+            else None,
+        )
+        supplied = aa_edit.as_dict()
     else:
         supplied = request.get("edit")
     if not isinstance(supplied, dict):
@@ -593,11 +719,17 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     if not kind:
         raise MutagenesisError("The edit needs an explicit `kind`; no edit type is inferred.")
     if "at" not in supplied or supplied.get("at") is None:
-        raise MutagenesisError("The edit needs an explicit zero-based `at`; omission is not base 0.")
+        raise MutagenesisError(
+            "The edit needs an explicit zero-based `at`; omission is not base 0."
+        )
     if kind in {"substitute", "insert"} and not str(supplied.get("to") or "").strip():
         raise MutagenesisError(f"A {kind} edit needs an explicit non-empty `to` sequence.")
-    if kind in {"substitute", "delete"} and ("replacing" not in supplied or supplied.get("replacing") is None):
-        raise MutagenesisError(f"A {kind} edit needs an explicit `replacing` count; omission is not zero.")
+    if kind in {"substitute", "delete"} and (
+        "replacing" not in supplied or supplied.get("replacing") is None
+    ):
+        raise MutagenesisError(
+            f"A {kind} edit needs an explicit `replacing` count; omission is not zero."
+        )
 
     edit = Edit(
         kind=kind,
@@ -678,9 +810,16 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "purification_recommended_over_ordered_primer_nt": Q5_PURIFICATION_RECOMMENDED_OVER,
             "large_insertion_status": "executable-reviewed-split-tail-topology",
         },
-        "construct": workflows.sequence_diff(clean_template(chosen.target.sequence), changed, [workflows.EditSpec(edit.kind, edit.at, edit.to, edit.replacing)]),
+        "construct": workflows.sequence_diff(
+            clean_template(chosen.target.sequence),
+            changed,
+            [workflows.EditSpec(edit.kind, edit.at, edit.to, edit.replacing)],
+        ),
         "template_methylation_status": str(request.get("template_methylation_status") or "unknown"),
-        "validation_contract": {"sequence_confirmation_required": True, "claim_boundary": "Predicted construct sequence; clone-level sequence confirmation is required."},
+        "validation_contract": {
+            "sequence_confirmation_required": True,
+            "claim_boundary": "Predicted construct sequence; clone-level sequence confirmation is required.",
+        },
         "edit": {
             "kind": edit.kind,
             "at": edit.at,
@@ -712,11 +851,24 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                         "cycles": 25,
                         "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                         "denaturation": {"temperature_c": 98, "seconds": 10},
-                        "annealing": {"temperature_c": {"min": 50, "max": 72}, "seconds": {"min": 10, "max": 30}, "authority": "NEBaseChanger/Q5-specific; not inferred from PCRStudio screening Tm"},
-                        "extension": {"temperature_c": 72, "seconds_per_kb": {"min": 20, "max": 30}},
+                        "annealing": {
+                            "temperature_c": {"min": 50, "max": 72},
+                            "seconds": {"min": 10, "max": 30},
+                            "authority": "NEBaseChanger/Q5-specific; not inferred from PCRStudio screening Tm",
+                        },
+                        "extension": {
+                            "temperature_c": 72,
+                            "seconds_per_kb": {"min": 20, "max": 30},
+                        },
                         "final_extension": {"temperature_c": 72, "seconds": 120},
                     },
-                    "kld": {"pcr_product_uL": 1, "buffer_2x_uL": 5, "enzyme_mix_10x_uL": 1, "water_uL": 3, "room_temperature_minutes": 5},
+                    "kld": {
+                        "pcr_product_uL": 1,
+                        "buffer_2x_uL": 5,
+                        "enzyme_mix_10x_uL": 1,
+                        "water_uL": 3,
+                        "room_temperature_minutes": 5,
+                    },
                     "note": (
                         "Named Q5/E0554 branch only. Confirm the current kit revision and use "
                         "NEBaseChanger or a gradient for annealing temperature. Classical QuikChange "

@@ -173,8 +173,6 @@ def test_an_enzyme_that_cuts_several_times_is_marked_unusable_with_the_count():
     assert "times" in ranked["Sau3AI"].why
 
 
-
-
 def test_every_shipped_enzyme_has_a_site_that_parses():
     for enzyme in ENZYMES:
         enzyme.pattern()

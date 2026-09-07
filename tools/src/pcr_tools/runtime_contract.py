@@ -4,6 +4,7 @@ Architectural authority is generated from ``contracts/*.toml``. This module
 contains only executable helpers and stable scientific boundary semantics; it
 does not restate module, engine or tool registries by hand.
 """
+
 from __future__ import annotations
 
 from typing import Any, Final
@@ -18,6 +19,8 @@ from .contract_loader import (
     TOOLS,
     ToolSpec,
 )
+
+__all__ = ["TOOLS", "ToolSpec"]
 
 CONTRACT_VERSION: Final = str(FOUNDATION["module_contract_version"])
 PARAMETER_MAP_VERSION: Final = "generation1-current"
@@ -53,6 +56,7 @@ PIPELINE_STAGES: Final[tuple[str, ...]] = (
     "verification-envelope",
     "result-schema-and-ui",
 )
+
 
 def assay_identity(request: dict[str, Any], command: str) -> tuple[str, str]:
     """Resolve module/engine identity and refuse contradictory payloads."""
@@ -154,7 +158,9 @@ def validate_required_context(request: dict[str, Any], module_id: str) -> None:
 
     for rule in contract.get("wire_conditional_required_context", ()):
         when = rule.get("when", {})
-        active = all(_context_value(request, path) == (True, expected) for path, expected in when.items())
+        active = all(
+            _context_value(request, path) == (True, expected) for path, expected in when.items()
+        )
         if not active:
             continue
         for path in rule.get("required_context", ()):
@@ -254,16 +260,32 @@ def resolved_parameters(request: dict[str, Any], result: dict[str, Any]) -> dict
     """
     result_assay = result.get("assay") if isinstance(result.get("assay"), dict) else {}
     native = result_assay.get("parameter_resolution") if isinstance(result_assay, dict) else None
-    if isinstance(native, dict) and isinstance(native.get("reaction"), dict) and isinstance(native.get("constraints"), dict):
+    if (
+        isinstance(native, dict)
+        and isinstance(native.get("reaction"), dict)
+        and isinstance(native.get("constraints"), dict)
+    ):
         return native
 
     assay = request.get("assay") if isinstance(request.get("assay"), dict) else {}
     defaults = assay.get("defaults") if isinstance(assay.get("defaults"), dict) else {}
-    assay_constraints = defaults.get("constraints") if isinstance(defaults.get("constraints"), dict) else {}
-    constraint_policy = defaults.get("constraintPolicy") if isinstance(defaults.get("constraintPolicy"), dict) else {}
-    condition_policy = defaults.get("conditionPolicy") if isinstance(defaults.get("conditionPolicy"), dict) else {}
-    user_conditions = request.get("conditions") if isinstance(request.get("conditions"), dict) else {}
-    user_constraints = request.get("constraints") if isinstance(request.get("constraints"), dict) else {}
+    assay_constraints = (
+        defaults.get("constraints") if isinstance(defaults.get("constraints"), dict) else {}
+    )
+    constraint_policy = (
+        defaults.get("constraintPolicy")
+        if isinstance(defaults.get("constraintPolicy"), dict)
+        else {}
+    )
+    condition_policy = (
+        defaults.get("conditionPolicy") if isinstance(defaults.get("conditionPolicy"), dict) else {}
+    )
+    user_conditions = (
+        request.get("conditions") if isinstance(request.get("conditions"), dict) else {}
+    )
+    user_constraints = (
+        request.get("constraints") if isinstance(request.get("constraints"), dict) else {}
+    )
 
     def policy_label(raw: Any) -> str:
         value = str(raw or "recommended").strip().lower()
@@ -275,11 +297,16 @@ def resolved_parameters(request: dict[str, Any], result: dict[str, Any]) -> dict
 
     reaction: dict[str, Any] = {}
     for name, value in (result.get("reaction") or {}).items():
-        if not isinstance(value, (int, float, str, bool)) or name in {"polymerase", "polymerase_name"}:
+        if not isinstance(value, (int, float, str, bool)) or name in {
+            "polymerase",
+            "polymerase_name",
+        }:
             continue
         reaction[name] = {
             "value": value,
-            "source": "policy-checked-user-override" if name in user_conditions else "resolved-chemistry-profile",
+            "source": "policy-checked-user-override"
+            if name in user_conditions
+            else "resolved-chemistry-profile",
             "override_policy": policy_label(condition_policy.get(name)),
         }
 
@@ -305,4 +332,7 @@ def resolved_parameters(request: dict[str, Any], result: dict[str, Any]) -> dict
             }
         return answer
 
-    return {"reaction": reaction, "constraints": explain_constraints(result.get("constraints") or {}, user_constraints)}
+    return {
+        "reaction": reaction,
+        "constraints": explain_constraints(result.get("constraints") or {}, user_constraints),
+    }

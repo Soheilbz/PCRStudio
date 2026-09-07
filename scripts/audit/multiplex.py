@@ -6,6 +6,7 @@ inherit one generic set of scientific claims.
 """
 from __future__ import annotations
 import json
+import re
 from .common import ROOT, error, sha256
 
 EXPECTED_GENERIC={"standard-pcr","colony-pcr","species-specific-pcr"}
@@ -140,6 +141,7 @@ def audit_multiplex_closure()->None:
 
     probe_rust=_text('crates/pcr-core/src/engines/pair_and_probe.rs')
     probe_py=_text('tools/src/pcr_tools/probe_closure.py')+_text('tools/src/pcr_tools/probe.py')
+    probe_py_compact=re.sub(r"\s+", "", probe_py)
     probe_web=_text('web/src/components/design/probe-multiplex-editor.tsx')+_text('web/src/lib/projects/engine-request-extensions.ts')
     for marker in ('forward_primer','reverse_primer','probe_sequence'):
         if marker not in probe_rust:
@@ -148,7 +150,7 @@ def audit_multiplex_closure()->None:
         if marker not in probe_web:
             error(f'multiplex: qPCR Probe Web panel drops peer oligo field {marker}')
     for marker in ('pcrstudio.qpcr-optical-profile.v1','threshold":"none-universal','diagnostic-only'):
-        if marker not in probe_py:
+        if marker not in probe_py_compact:
             error(f'multiplex: qPCR Probe authority/interaction boundary missing: {marker}')
     probe_fields=_text('web/src/components/design/probe-fields.tsx')
     if 'qpcr_optical_profiles' not in probe_fields or 'Built-in profiles reproduce reviewed manufacturer channel/reporter maps' not in probe_fields:

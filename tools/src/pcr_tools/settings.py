@@ -225,11 +225,15 @@ def prepare(
     if not isinstance(assay_defaults, dict):
         raise ValueError("`assay.defaults` must be an object")
     assay_name = assay.get("name") or assay.get("id") or "this assay"
-    constraint_policy = _profile_policy(assay_defaults.get("constraintPolicy"), label="constraintPolicy")
+    constraint_policy = _profile_policy(
+        assay_defaults.get("constraintPolicy"), label="constraintPolicy"
+    )
     constraint_envelope = assay_defaults.get("constraintEnvelope") or {}
     if not isinstance(constraint_envelope, dict):
         raise ValueError("`assay.defaults.constraintEnvelope` must be an object")
-    condition_policy = _profile_policy(assay_defaults.get("conditionPolicy"), label="conditionPolicy")
+    condition_policy = _profile_policy(
+        assay_defaults.get("conditionPolicy"), label="conditionPolicy"
+    )
     chemistry_family = str(assay_defaults.get("chemistryFamily") or "")
     if str(assay.get("id") or "") == "kasp" and chemistry_family != "kasp-endpoint-fret":
         raise ValueError(
@@ -255,7 +259,9 @@ def prepare(
     if unknown:
         raise ValueError(f"unknown reaction condition(s): {', '.join(unknown)}")
     preset_conditions = preset.reaction.as_conditions()
-    enforce_reaction_overrides(overrides, preset_conditions, context=f"assay `{assay.get('id') or assay_name}`")
+    enforce_reaction_overrides(
+        overrides, preset_conditions, context=f"assay `{assay.get('id') or assay_name}`"
+    )
     reaction = Reaction(**{**preset_conditions, **overrides})
     reaction.validate()
 
@@ -264,7 +270,10 @@ def prepare(
     # a three-kilobase cloning product is not a preference to be balanced.
     allowed = list(assay_defaults.get("purposes") or [])
     wanted = resolve_purpose(
-        request.get("purpose"), assay_defaults.get("defaultPurpose"), allowed, assay_name=str(assay_name)
+        request.get("purpose"),
+        assay_defaults.get("defaultPurpose"),
+        allowed,
+        assay_name=str(assay_name),
     )
     if wanted and allowed and wanted not in allowed:
         raise ValueError(
@@ -358,7 +367,11 @@ def prepare(
                 if name in constraint_envelope
                 else {}
             ),
-            **({"change_class": override_classifications[name]} if name in override_classifications else {}),
+            **(
+                {"change_class": override_classifications[name]}
+                if name in override_classifications
+                else {}
+            ),
         }
 
     # A template of nothing but ambiguity codes is not a template. Caught here

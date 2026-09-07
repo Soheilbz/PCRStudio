@@ -39,31 +39,43 @@ PE_GAS_CONSTANT = 1.987
 # conditions. This is therefore labelled *reference-output compatible*: it is
 # not a claim about proprietary PrimerExplorer implementation internals.
 _PE_SL98_DH_DS = {
-    "AA": (-7.9, -22.2), "TT": (-7.9, -22.2),
+    "AA": (-7.9, -22.2),
+    "TT": (-7.9, -22.2),
     "AT": (-7.2, -20.4),
     "TA": (-7.2, -21.3),
-    "CA": (-8.5, -22.7), "TG": (-8.5, -22.7),
-    "GT": (-8.4, -22.4), "AC": (-8.4, -22.4),
-    "CT": (-7.8, -21.0), "AG": (-7.8, -21.0),
-    "GA": (-8.2, -22.2), "TC": (-8.2, -22.2),
+    "CA": (-8.5, -22.7),
+    "TG": (-8.5, -22.7),
+    "GT": (-8.4, -22.4),
+    "AC": (-8.4, -22.4),
+    "CT": (-7.8, -21.0),
+    "AG": (-7.8, -21.0),
+    "GA": (-8.2, -22.2),
+    "TC": (-8.2, -22.2),
     "CG": (-10.6, -27.2),
     "GC": (-9.8, -24.4),
-    "GG": (-8.0, -19.9), "CC": (-8.0, -19.9),
+    "GG": (-8.0, -19.9),
+    "CC": (-8.0, -19.9),
 }
 
 # SantaLucia 1998 unified ΔG°37 parameters used by PrimerExplorer for its
 # six-base primer-end stability calculation.
 _PE_SL98_DG37 = {
-    "AA": -1.00, "TT": -1.00,
+    "AA": -1.00,
+    "TT": -1.00,
     "AT": -0.88,
     "TA": -0.58,
-    "CA": -1.45, "TG": -1.45,
-    "GT": -1.44, "AC": -1.44,
-    "CT": -1.28, "AG": -1.28,
-    "GA": -1.30, "TC": -1.30,
+    "CA": -1.45,
+    "TG": -1.45,
+    "GT": -1.44,
+    "AC": -1.44,
+    "CT": -1.28,
+    "AG": -1.28,
+    "GA": -1.30,
+    "TC": -1.30,
     "CG": -2.17,
     "GC": -2.24,
-    "GG": -1.84, "CC": -1.84,
+    "GG": -1.84,
+    "CC": -1.84,
 }
 
 
@@ -225,8 +237,7 @@ PCRSTUDIO_EVIDENCE_2026_GEOMETRY = GeometryProfile(
 )
 
 GEOMETRY_PROFILES = {
-    one.id: one
-    for one in (PRIMEREXPLORER_V5_GEOMETRY, PCRSTUDIO_EVIDENCE_2026_GEOMETRY)
+    one.id: one for one in (PRIMEREXPLORER_V5_GEOMETRY, PCRSTUDIO_EVIDENCE_2026_GEOMETRY)
 }
 DEFAULT_GEOMETRY_PROFILE_ID = PRIMEREXPLORER_V5_GEOMETRY.id
 
@@ -237,9 +248,7 @@ def geometry_profile_for(named: str | None) -> GeometryProfile:
         return GEOMETRY_PROFILES[profile_id]
     except KeyError as error:
         raise LoopSetError(
-            "lamp_geometry_profile must be one of: "
-            + ", ".join(sorted(GEOMETRY_PROFILES))
-            + "."
+            "lamp_geometry_profile must be one of: " + ", ".join(sorted(GEOMETRY_PROFILES)) + "."
         ) from error
 
 
@@ -407,11 +416,11 @@ def _span(asked: Any, base: tuple[int, int], name: str) -> tuple[int, int]:
 
 
 def adjust(
-    base: Windows, asked: dict[str, Any] | None, *,
+    base: Windows,
+    asked: dict[str, Any] | None,
+    *,
     geometry_profile: GeometryProfile = PRIMEREXPLORER_V5_GEOMETRY,
-) -> tuple[
-    Windows, tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int], list[str]
-]:
+) -> tuple[Windows, tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int], list[str]]:
     """Apply explicit overrides to a source-backed LAMP parameter set.
 
     Generation-1 allows tightening reviewed bounds in every policy mode. Legacy `amplicon` is
@@ -441,8 +450,11 @@ def adjust(
     strange = sorted(set(asked) - known)
     if strange:
         raise LoopSetError(
-            "This does not take " + ", ".join(strange) + ". It takes: "
-            + ", ".join(sorted(known)) + "."
+            "This does not take "
+            + ", ".join(strange)
+            + ". It takes: "
+            + ", ".join(sorted(known))
+            + "."
         )
 
     overruled: list[str] = []
@@ -460,9 +472,9 @@ def adjust(
         raise LoopSetError("GC bounds must be percentages between 0 and 100.")
     if gc_min is not None and gc_max is not None and gc_min > gc_max:
         raise LoopSetError(f"The GC range runs from {gc_min} to {gc_max}%, which is backwards.")
-    widened_gc = (
-        base.gc_min is not None and gc_min is not None and gc_min < base.gc_min
-    ) or (base.gc_max is not None and gc_max is not None and gc_max > base.gc_max)
+    widened_gc = (base.gc_min is not None and gc_min is not None and gc_min < base.gc_min) or (
+        base.gc_max is not None and gc_max is not None and gc_max > base.gc_max
+    )
     if widened_gc:
         raise LoopSetError(
             "The reviewed LAMP primer-GC envelope cannot be widened under the same "
@@ -473,25 +485,20 @@ def adjust(
         overruled.append("GC range")
 
     used = Windows(
-        id=base.id, name=base.name,
+        id=base.id,
+        name=base.name,
         outer=_adjusted(base.outer, asked.get("outer"), "outer"),
         inner=_adjusted(base.inner, asked.get("inner"), "inner"),
         loop=_adjusted(base.loop, asked.get("loop"), "loop"),
-        gc_min=gc_min, gc_max=gc_max, why=base.why,
+        gc_min=gc_min,
+        gc_max=gc_max,
+        why=base.why,
     )
 
-    f2_b2_span = _span(
-        asked.get("f2_b2_span"), geometry_profile.valid_f2_b2_span, "f2_b2_span"
-    )
-    loop_span = _span(
-        asked.get("loop_span"), geometry_profile.valid_loop_span, "loop_span"
-    )
-    outer_gap = _span(
-        asked.get("outer_gap"), geometry_profile.valid_outer_gap, "outer_gap"
-    )
-    middle_gap = _span(
-        asked.get("middle_gap"), geometry_profile.valid_middle_gap, "middle_gap"
-    )
+    f2_b2_span = _span(asked.get("f2_b2_span"), geometry_profile.valid_f2_b2_span, "f2_b2_span")
+    loop_span = _span(asked.get("loop_span"), geometry_profile.valid_loop_span, "loop_span")
+    outer_gap = _span(asked.get("outer_gap"), geometry_profile.valid_outer_gap, "outer_gap")
+    middle_gap = _span(asked.get("middle_gap"), geometry_profile.valid_middle_gap, "middle_gap")
     for name, given, base_span in (
         ("F2-B2 span", f2_b2_span, geometry_profile.valid_f2_b2_span),
         ("loop span", loop_span, geometry_profile.valid_loop_span),
@@ -582,5 +589,3 @@ def check_geometry(
     # site may still be a valid four-primer LAMP core, so loop-primer fit must not
     # become a hard assay-validity gate. The enumerator simply returns `None` for
     # that half's loop primer.
-
-

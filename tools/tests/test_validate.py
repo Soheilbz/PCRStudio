@@ -147,8 +147,6 @@ def test_primers_facing_away_from_each_other_are_named_as_such():
 # ── Measuring without judging ──────────────────────────────────────────────
 
 
-
-
 def test_the_universal_pair_is_outside_the_default_window_and_is_not_condemned():
     """The case that shows what this is for.
 
@@ -195,8 +193,6 @@ def test_a_window_the_pair_does_fit_is_reported_as_fitting():
 
 
 # ── The rest of what a designed pair gets ──────────────────────────────────
-
-
 
 
 def test_a_background_is_scanned_when_one_is_given_and_said_so_when_not():

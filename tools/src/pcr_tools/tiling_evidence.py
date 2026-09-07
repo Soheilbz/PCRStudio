@@ -1,8 +1,7 @@
 """Post-design tiling evidence and scheme-lifecycle helpers."""
+
 from __future__ import annotations
 
-import csv
-import io
 import re
 from statistics import mean
 from typing import Any
@@ -20,14 +19,18 @@ def parse_depth_tsv(raw: str, *, dropout_threshold: float) -> dict[str, Any]:
         raise TilingEvidenceError("tilingDepthTsv is empty")
     if not 0 <= float(dropout_threshold) <= 1_000_000_000:
         raise TilingEvidenceError("tilingDropoutThreshold must be a non-negative finite depth")
-    lines = [line for line in raw.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+    lines = [
+        line for line in raw.splitlines() if line.strip() and not line.lstrip().startswith("#")
+    ]
     if len(lines) > 20_000:
         raise TilingEvidenceError("tilingDepthTsv is limited to 20,000 non-comment rows")
     rows: list[dict[str, Any]] = []
     for index, line in enumerate(lines, start=1):
         parts = line.replace(",", "\t").split()
         if len(parts) < 2:
-            raise TilingEvidenceError(f"tilingDepthTsv row {index} needs amplicon/name and numeric depth")
+            raise TilingEvidenceError(
+                f"tilingDepthTsv row {index} needs amplicon/name and numeric depth"
+            )
         name, depth_raw = parts[0], parts[-1]
         if index == 1 and depth_raw.lower() in {"depth", "mean_depth", "coverage"}:
             continue
@@ -107,7 +110,9 @@ def version_transition(version: str | None, diff: dict[str, Any] | None) -> dict
     }
 
 
-def repair_handoff(depth: dict[str, Any] | None, *, operation: str, existing_bed: str | None) -> dict[str, Any] | None:
+def repair_handoff(
+    depth: dict[str, Any] | None, *, operation: str, existing_bed: str | None
+) -> dict[str, Any] | None:
     if not depth or not depth.get("dropouts"):
         return None
     return {

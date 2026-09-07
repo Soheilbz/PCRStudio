@@ -167,7 +167,9 @@ class Limits:
                 f"asked for, {self.length_min} to {self.length_max}"
             )
         if self.length_max > MAX_DEGENERATE_PRIMER_LENGTH:
-            raise ValueError(f"a degenerate primer cannot exceed {MAX_DEGENERATE_PRIMER_LENGTH} bases in this search")
+            raise ValueError(
+                f"a degenerate primer cannot exceed {MAX_DEGENERATE_PRIMER_LENGTH} bases in this search"
+            )
         if self.length_min > self.length_max:
             raise ValueError(
                 f"the shortest primer ({self.length_min}) is longer than the "
@@ -366,9 +368,17 @@ def read_alignment(
         AlignmentError: for fewer than two sequences, unequal lengths, or more
             than this is willing to search.
     """
-    allowed_policies = {"strict-all-members", "coverage-threshold", "majority", "weighted", "stratified"}
+    allowed_policies = {
+        "strict-all-members",
+        "coverage-threshold",
+        "majority",
+        "weighted",
+        "stratified",
+    }
     if policy not in allowed_policies:
-        raise AlignmentError("consensus policy must be one of: " + ", ".join(sorted(allowed_policies)))
+        raise AlignmentError(
+            "consensus policy must be one of: " + ", ".join(sorted(allowed_policies))
+        )
     supplied_weights = weights or {}
     supplied_strata = strata or {}
 
@@ -392,8 +402,12 @@ def read_alignment(
     if any((not math.isfinite(weight)) or weight <= 0 for weight in row_weights):
         raise AlignmentError("all supplied panel weights must be finite positive numbers")
     row_strata = [str(supplied_strata.get(name, "unstratified")) for name in names]
-    if policy == "stratified" and (not supplied_strata or any(name not in supplied_strata for name in names)):
-        raise AlignmentError("stratified consensus policy requires a declared stratum for every alignment record")
+    if policy == "stratified" and (
+        not supplied_strata or any(name not in supplied_strata for name in names)
+    ):
+        raise AlignmentError(
+            "stratified consensus policy requires a declared stratum for every alignment record"
+        )
 
     if len(rows) < 2:
         raise AlignmentError(
@@ -454,7 +468,8 @@ def read_alignment(
                 wanted = threshold * strata_total.get(stratum, 0.0)
                 running = 0.0
                 for base, count in sorted(counts.items(), key=lambda item: (-item[1], item[0])):
-                    kept.add(base); running += count
+                    kept.add(base)
+                    running += count
                     if running >= wanted:
                         break
             return frozenset(kept or global_counts)
@@ -462,11 +477,27 @@ def read_alignment(
             wanted = threshold * sum(row_weights)
         else:
             # coverage-threshold is deliberately record-count based.
-            global_counts = {base: float(sum(1 for row in rows if base in (row[index] if row[index] in "ACGT" else EXPANSION.get(row[index], "ACGT")))) for base in global_counts}
+            global_counts = {
+                base: float(
+                    sum(
+                        1
+                        for row in rows
+                        if base
+                        in (
+                            row[index]
+                            if row[index] in "ACGT"
+                            else EXPANSION.get(row[index], "ACGT")
+                        )
+                    )
+                )
+                for base in global_counts
+            }
             wanted = threshold * depth
-        kept: set[str] = set(); running = 0.0
+        kept: set[str] = set()
+        running = 0.0
         for base, count in sorted(global_counts.items(), key=lambda item: (-item[1], item[0])):
-            kept.add(base); running += count
+            kept.add(base)
+            running += count
             if running >= wanted:
                 break
         return frozenset(kept or global_counts)
@@ -474,7 +505,15 @@ def read_alignment(
     for index in range(len(rows[0])):
         columns.append(chosen_bases(index))
 
-    return Alignment(names=names, rows=rows, columns=columns, gapped=gapped, weights=row_weights, strata=row_strata, policy=policy)
+    return Alignment(
+        names=names,
+        rows=rows,
+        columns=columns,
+        gapped=gapped,
+        weights=row_weights,
+        strata=row_strata,
+        policy=policy,
+    )
 
 
 @lru_cache(maxsize=4096)
@@ -804,13 +843,15 @@ def design(
     rules = limits or Limits()
     rules.validate()
 
-    alignment = read_alignment(records, min_coverage=rules.min_coverage, policy=consensus_policy, weights=weights, strata=strata)
-    forward, forward_reasons = find_sites(
-        alignment, rules, reaction, orientation="forward"
+    alignment = read_alignment(
+        records,
+        min_coverage=rules.min_coverage,
+        policy=consensus_policy,
+        weights=weights,
+        strata=strata,
     )
-    reverse, reverse_reasons = find_sites(
-        alignment, rules, reaction, orientation="reverse"
-    )
+    forward, forward_reasons = find_sites(alignment, rules, reaction, orientation="forward")
+    reverse, reverse_reasons = find_sites(alignment, rules, reaction, orientation="reverse")
     reasons = _combine_reasons(forward_reasons, reverse_reasons)
 
     # Universal-primer ranking is exact within the declared computational
@@ -837,8 +878,8 @@ def design(
         right_end = right.start + right.length
         right_binding = reverse_complement(right.sequence)
         matched = [
-            matches(left.sequence, row[left.start:left_end])
-            and matches(right_binding, row[right.start:right_end])
+            matches(left.sequence, row[left.start : left_end])
+            and matches(right_binding, row[right.start : right_end])
             for row in alignment.rows
         ]
         count = sum(matched)
@@ -848,7 +889,9 @@ def design(
             return count, got / total if total else 0.0, "weighted-panel-fraction"
         if alignment.policy == "stratified":
             by: dict[str, list[tuple[bool, float]]] = {}
-            for ok, weight, stratum in zip(matched, alignment.weights, alignment.strata, strict=True):
+            for ok, weight, stratum in zip(
+                matched, alignment.weights, alignment.strata, strict=True
+            ):
                 by.setdefault(stratum, []).append((ok, weight))
             fractions: list[float] = []
             for values in by.values():
@@ -889,10 +932,17 @@ def design(
             # selection, so no candidate is eliminated by an unvalidated proxy.
             exact_candidates.append(
                 Pair(
-                    left=left, right=right, product_min=product, product_max=product,
-                    covers=covers, degeneracy=left.degeneracy * right.degeneracy,
-                    cross_dimer_dg=0.0, penalty=penalty, coverage_score=coverage_score,
-                    coverage_basis=coverage_basis, components=parts,
+                    left=left,
+                    right=right,
+                    product_min=product,
+                    product_max=product,
+                    covers=covers,
+                    degeneracy=left.degeneracy * right.degeneracy,
+                    cross_dimer_dg=0.0,
+                    penalty=penalty,
+                    coverage_score=coverage_score,
+                    coverage_basis=coverage_basis,
+                    components=parts,
                 )
             )
 
@@ -900,7 +950,10 @@ def design(
     selected_unmeasured: list[Pair] = []
     collapsed = 0
     for candidate in exact_candidates:
-        if any(_too_similar(candidate, other, rules.min_three_prime_distance) for other in selected_unmeasured):
+        if any(
+            _too_similar(candidate, other, rules.min_three_prime_distance)
+            for other in selected_unmeasured
+        ):
             collapsed += 1
             continue
         selected_unmeasured.append(candidate)
@@ -909,11 +962,17 @@ def design(
 
     kept = [
         Pair(
-            left=pair.left, right=pair.right, product_min=pair.product_min, product_max=pair.product_max,
-            covers=pair.covers, degeneracy=pair.degeneracy,
+            left=pair.left,
+            right=pair.right,
+            product_min=pair.product_min,
+            product_max=pair.product_max,
+            covers=pair.covers,
+            degeneracy=pair.degeneracy,
             cross_dimer_dg=_cross_dimer_dg(pair.left.sequence, pair.right.sequence, reaction),
-            penalty=pair.penalty, coverage_score=pair.coverage_score,
-            coverage_basis=pair.coverage_basis, components=pair.components,
+            penalty=pair.penalty,
+            coverage_score=pair.coverage_score,
+            coverage_basis=pair.coverage_basis,
+            components=pair.components,
         )
         for pair in selected_unmeasured
     ]

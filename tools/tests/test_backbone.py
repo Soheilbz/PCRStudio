@@ -136,8 +136,6 @@ def test_the_primer_reads_back_towards_the_vector(insert: str, reaction: dict[st
     assert into_end["primers"][0]["orientation"] == "forward"
 
 
-
-
 def test_backbone_can_use_a_shared_assay_hold_for_cross_dimer_screening(
     insert: str, reaction: dict[str, float]
 ) -> None:
@@ -183,8 +181,6 @@ def test_no_product_length_is_invented(insert: str, reaction: dict[str, float]) 
     assert "paste the vector" in found["product"]["note"].lower()
     # What it *can* say is the part it controls.
     assert found["primers"][0]["from_the_junction"] > 0
-
-
 
 
 def test_a_window_nothing_fits_says_what_to_do(reaction: dict[str, float]) -> None:

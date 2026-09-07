@@ -80,7 +80,7 @@ def test_recommended_default_can_tune_inside_an_outer_qualification_envelope() -
 
 
 def test_outer_qualification_envelope_refuses_named_branch_extrapolation() -> None:
-    with pytest.raises(ValueError, match="outside the versioned.*qualification envelope"):
+    with pytest.raises(ValueError, match=r"outside the versioned.*qualification envelope"):
         prepare(
             {
                 "template": "A" * 800,

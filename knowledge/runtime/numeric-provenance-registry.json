@@ -1556,7 +1556,7 @@
   "source_constants": [
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 108,
+      "line": 110,
       "name": "OFF_TARGET_SERIOUS",
       "value": 0.75,
       "category": "ranking-tuning",
@@ -1564,7 +1564,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 109,
+      "line": 111,
       "name": "OFF_TARGET_WATCH",
       "value": 0.55,
       "category": "ranking-tuning",
@@ -1572,7 +1572,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 115,
+      "line": 117,
       "name": "PENALTY_CAP",
       "value": 5.0,
       "category": "ranking-tuning",
@@ -1580,7 +1580,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 121,
+      "line": 123,
       "name": "ACCESSIBILITY_WEIGHT",
       "value": 0.2,
       "category": "ranking-tuning",
@@ -1588,7 +1588,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 122,
+      "line": 124,
       "name": "ACCESSIBILITY_CAP",
       "value": 2.0,
       "category": "ranking-tuning",
@@ -1596,7 +1596,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 124,
+      "line": 126,
       "name": "ACCESSIBILITY_DETAIL_LOG_ORDERS",
       "value": 0.5,
       "category": "diagnostic-report-threshold",
@@ -1604,7 +1604,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 136,
+      "line": 138,
       "name": "CROSS_PAIR_DIMER_WATCH",
       "value": -6.0,
       "category": "implementation-numeric-constant",
@@ -1612,7 +1612,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 144,
+      "line": 146,
       "name": "CROSS_DIMER_WEIGHT",
       "value": 0.15,
       "category": "ranking-tuning",
@@ -1620,7 +1620,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 145,
+      "line": 147,
       "name": "CROSS_DIMER_CAP",
       "value": 0.75,
       "category": "ranking-tuning",
@@ -1628,7 +1628,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 156,
+      "line": 158,
       "name": "SHORTLIST_FACTOR",
       "value": 3,
       "category": "computational-search-cap",
@@ -1636,7 +1636,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 164,
+      "line": 166,
       "name": "JUNCTION_SHORTLIST_FACTOR",
       "value": 4,
       "category": "computational-search-cap",
@@ -1644,7 +1644,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 171,
+      "line": 173,
       "name": "MAX_PAIRS",
       "value": 50,
       "category": "computational-search-cap",
@@ -1652,7 +1652,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 177,
+      "line": 179,
       "name": "MAX_TEMPLATE_BASES",
       "value": 1000000,
       "category": "computational-search-cap",
@@ -1660,7 +1660,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 433,
+      "line": 428,
       "name": "PURPOSE_WEIGHTS",
       "value": {
         "sanger": {
@@ -1679,7 +1679,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 467,
+      "line": 462,
       "name": "THREE_PRIME_TRIPLET_FREQUENCIES",
       "value": {
         "AAA": 1.45,
@@ -1752,7 +1752,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 538,
+      "line": 533,
       "name": "THREE_PRIME_TRIPLET_CAP",
       "value": 0.5,
       "category": "ranking-tuning",
@@ -1760,7 +1760,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 575,
+      "line": 570,
       "name": "ISOTHERMAL_PRIMER3_WEIGHTS",
       "value": {
         "PRIMER_WT_TM_LT": 0.0,
@@ -1772,7 +1772,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 826,
+      "line": 821,
       "name": "UNIFORMITY_WINDOW",
       "value": 50,
       "category": "diagnostic-report-threshold",
@@ -1780,7 +1780,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 834,
+      "line": 829,
       "name": "UNIFORMITY_LOW_GC",
       "value": 15.0,
       "category": "diagnostic-report-threshold",
@@ -1788,7 +1788,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 835,
+      "line": 830,
       "name": "UNIFORMITY_HIGH_GC",
       "value": 85.0,
       "category": "diagnostic-report-threshold",
@@ -1796,7 +1796,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 921,
+      "line": 916,
       "name": "QUALITY_WEIGHTS",
       "value": {
         "specificity": 3.0,
@@ -1809,7 +1809,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 933,
+      "line": 928,
       "name": "END_STABILITY_SCALE",
       "value": 9.0,
       "category": "ranking-tuning",
@@ -1817,7 +1817,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 20,
+      "line": 21,
       "name": "DIGITAL_MULTIPLEX_SOFTWARE_MAX_TARGETS",
       "value": 12,
       "category": "assay-envelope-or-source-boundary",
@@ -1825,7 +1825,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 59,
+      "line": 86,
       "name": "COLONY_PROTOCOL_RECORDS",
       "value": {
         "neb-onetaq-m0482-colony": {
@@ -1991,7 +1991,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 143,
+      "line": 184,
       "name": "STANDARD_PCR_ADDITIONAL_PROTOCOL_RECORDS",
       "value": {
         "qiagen-alltaq-master-mix-203144": {
@@ -2151,7 +2151,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 205,
+      "line": 279,
       "name": "QPCR_ADDITIONAL_PROTOCOL_RECORDS",
       "value": {
         "vazyme-q713-suprealq-ultra-hunter-sybr": {
@@ -2317,7 +2317,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 266,
+      "line": 389,
       "name": "RPA_ADDITIONAL_PROTOCOL_RECORDS",
       "value": {
         "gbiosciences-rpa-786-2155": {
@@ -2371,7 +2371,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 60,
+      "line": 61,
       "name": "MIN_COMPLEMENTARY",
       "value": 4,
       "category": "readout-or-algorithm-model",
@@ -2379,7 +2379,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 61,
+      "line": 62,
       "name": "MAX_COMPLEMENTARY",
       "value": 8,
       "category": "computational-search-cap",
@@ -2387,7 +2387,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 66,
+      "line": 67,
       "name": "CANDIDATES_PER_TARGET",
       "value": 100,
       "category": "computational-search-cap",
@@ -2395,7 +2395,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 71,
+      "line": 72,
       "name": "MAX_TARGETS",
       "value": 32,
       "category": "computational-search-cap",
@@ -2403,7 +2403,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 72,
+      "line": 73,
       "name": "MAX_TOTAL_INPUT_CHARS",
       "value": 2000000,
       "category": "computational-search-cap",
@@ -2411,7 +2411,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 73,
+      "line": 74,
       "name": "MAX_TOTAL_CANDIDATES",
       "value": 3200,
       "category": "computational-search-cap",
@@ -2419,7 +2419,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 80,
+      "line": 81,
       "name": "MAX_CANDIDATES",
       "value": 200,
       "category": "computational-search-cap",
@@ -2427,7 +2427,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 84,
+      "line": 85,
       "name": "MAX_SEARCH_ROUNDS",
       "value": 10000,
       "category": "computational-search-cap",
@@ -2435,7 +2435,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 85,
+      "line": 86,
       "name": "MAX_TOTAL_SEARCH_ROUNDS",
       "value": 100000,
       "category": "computational-search-cap",
@@ -2443,7 +2443,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 90,
+      "line": 91,
       "name": "MAX_EXACT_STATES",
       "value": 750000,
       "category": "computational-search-cap",
@@ -2451,7 +2451,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 147,
+      "line": 152,
       "name": "QIAXCEL_REFERENCE_MAX_BP",
       "value": 5000,
       "category": "readout-or-algorithm-model",
@@ -2459,7 +2459,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 148,
+      "line": 153,
       "name": "QIAXCEL_SMALL_BAND_MAX_BP",
       "value": 500,
       "category": "readout-or-algorithm-model",
@@ -2467,7 +2467,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 149,
+      "line": 154,
       "name": "QIAXCEL_MID_BAND_MAX_BP",
       "value": 1000,
       "category": "readout-or-algorithm-model",
@@ -2475,7 +2475,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 249,
+      "line": 254,
       "name": "AGAROSE_SEPARATION",
       "value": [
         [
@@ -2509,7 +2509,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 275,
+      "line": 278,
       "name": "CROWDED",
       "value": 10,
       "category": "diagnostic-report-threshold",
@@ -2517,7 +2517,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 405,
+      "line": 409,
       "name": "TETRA_INNER_MIN_NT",
       "value": 26,
       "category": "implementation-numeric-constant",
@@ -2525,7 +2525,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 406,
+      "line": 410,
       "name": "TETRA_INNER_OPT_NT",
       "value": 28,
       "category": "implementation-numeric-constant",
@@ -2533,7 +2533,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 407,
+      "line": 411,
       "name": "TETRA_SECOND_MISMATCH_AT",
       "value": -2,
       "category": "implementation-numeric-constant",
@@ -2541,7 +2541,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 456,
+      "line": 468,
       "name": "GEOMETRIES",
       "value": {
         "arms-two-tube": {
@@ -2568,7 +2568,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 503,
+      "line": 515,
       "name": "KASP_CONSTRAINT_DEFAULTS",
       "value": {
         "tm_min": 55.0,
@@ -2588,7 +2588,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 817,
+      "line": 833,
       "name": "MOST_PARTNERS",
       "value": 8,
       "category": "computational-search-cap",
@@ -2596,7 +2596,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 74,
+      "line": 85,
       "name": "UNBOUND_ENGINE_PROBE_TM_OFFSET_C",
       "value": 7.0,
       "category": "assay-envelope-or-source-boundary",
@@ -2604,7 +2604,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 75,
+      "line": 86,
       "name": "MGB_PROBE_MIN_NT",
       "value": 13,
       "category": "implementation-numeric-constant",
@@ -2612,7 +2612,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 76,
+      "line": 87,
       "name": "MGB_PROBE_MAX_NT",
       "value": 25,
       "category": "implementation-numeric-constant",
@@ -2620,7 +2620,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 77,
+      "line": 88,
       "name": "QPCR_MULTIPLEX_SOFTWARE_MAX_TARGETS",
       "value": 12,
       "category": "assay-envelope-or-source-boundary",
@@ -2628,7 +2628,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 394,
+      "line": 405,
       "name": "MOST_ASSAYS",
       "value": 10,
       "category": "computational-search-cap",
@@ -2636,7 +2636,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 94,
+      "line": 193,
       "name": "THREE_PRIME_SCAN_BASES",
       "value": 12,
       "category": "implementation-numeric-constant",
@@ -2644,7 +2644,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 95,
+      "line": 194,
       "name": "THREE_PRIME_REVIEW_BASES",
       "value": 4,
       "category": "implementation-numeric-constant",
@@ -2652,7 +2652,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 629,
+      "line": 698,
       "name": "LOOP_ALTERNATIVES_PER_HALF",
       "value": 3,
       "category": "implementation-numeric-constant",
@@ -2660,7 +2660,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 760,
+      "line": 831,
       "name": "MOST_HALVES",
       "value": 4000,
       "category": "computational-search-cap",
@@ -2668,7 +2668,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 766,
+      "line": 837,
       "name": "RISK_RANK_POOL_LIMIT",
       "value": 2048,
       "category": "computational-search-cap",
@@ -2676,7 +2676,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 767,
+      "line": 838,
       "name": "MOST_CORE_PAIR_EVALUATIONS",
       "value": 100000,
       "category": "computational-search-cap",
@@ -2684,7 +2684,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 768,
+      "line": 839,
       "name": "MAX_BACKWARD_PARTNERS_PER_FORWARD",
       "value": 128,
       "category": "computational-search-cap",
@@ -2692,7 +2692,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 769,
+      "line": 840,
       "name": "OUTER_CANDIDATES_PER_SIDE",
       "value": 8,
       "category": "computational-search-cap",
@@ -2700,7 +2700,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 770,
+      "line": 841,
       "name": "OUTER_PAIRS_PER_CORE",
       "value": 4,
       "category": "computational-search-cap",
@@ -2708,7 +2708,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 771,
+      "line": 842,
       "name": "CORE_PAIR_OUTER_EXPANSION_LIMIT",
       "value": 4096,
       "category": "computational-search-cap",
@@ -2716,7 +2716,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1343,
+      "line": 1436,
       "name": "SETS_APART",
       "value": 8,
       "category": "implementation-numeric-constant",
@@ -2724,7 +2724,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1631,
+      "line": 1724,
       "name": "INCLUSIVITY_WORST_RECORDS",
       "value": 12,
       "category": "implementation-numeric-constant",
@@ -2732,7 +2732,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1988,
+      "line": 2139,
       "name": "HOLD",
       "value": 65.0,
       "category": "assay-envelope-or-source-boundary",
@@ -2740,7 +2740,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1995,
+      "line": 2146,
       "name": "DUPLEX_BELOW_HOLD",
       "value": 10.0,
       "category": "assay-envelope-or-source-boundary",
@@ -2748,7 +2748,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2379,
+      "line": 2515,
       "name": "LAMP_TOPOLOGY_MAX_MISMATCHES",
       "value": 2,
       "category": "implementation-numeric-constant",
@@ -2756,7 +2756,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2380,
+      "line": 2516,
       "name": "LAMP_TOPOLOGY_DIRECT_MAX_BASES",
       "value": 5000000,
       "category": "computational-search-cap",
@@ -2764,7 +2764,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2393,
+      "line": 2529,
       "name": "LAMP_TOPOLOGY_SITE_LIMIT_PER_ROLE",
       "value": 5000,
       "category": "computational-search-cap",
@@ -2772,7 +2772,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2394,
+      "line": 2530,
       "name": "LAMP_TOPOLOGY_COMBINATION_LIMIT",
       "value": 100000,
       "category": "computational-search-cap",
@@ -2780,7 +2780,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2395,
+      "line": 2531,
       "name": "LAMP_TOPOLOGY_REPORT_LIMIT",
       "value": 20,
       "category": "computational-search-cap",
@@ -2788,7 +2788,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4144,
+      "line": 4705,
       "name": "MAX_WORKFLOW_EVIDENCE_FIELDS",
       "value": 64,
       "category": "computational-search-cap",
@@ -2796,7 +2796,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4145,
+      "line": 4706,
       "name": "MAX_WORKFLOW_EVIDENCE_KEY_CHARS",
       "value": 80,
       "category": "computational-search-cap",
@@ -2804,7 +2804,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4146,
+      "line": 4707,
       "name": "MAX_WORKFLOW_EVIDENCE_TEXT_CHARS",
       "value": 8000,
       "category": "computational-search-cap",
@@ -2812,7 +2812,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4148,
+      "line": 4709,
       "name": "MOST_SETS",
       "value": 10,
       "category": "computational-search-cap",
@@ -2925,7 +2925,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 56,
+      "line": 62,
       "name": "_PE_SL98_DG37",
       "value": {
         "AA": -1.0,
@@ -2950,7 +2950,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 150,
+      "line": 162,
       "name": "EVIDENCE_2026_OUTER_GAP",
       "value": [
         0,
@@ -2961,7 +2961,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 151,
+      "line": 163,
       "name": "EVIDENCE_2026_F2_B2_PREFERRED",
       "value": [
         120,
@@ -2972,7 +2972,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 152,
+      "line": 164,
       "name": "EVIDENCE_2026_OUTER_GAP_PREFERRED",
       "value": [
         40,
@@ -2983,7 +2983,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 159,
+      "line": 171,
       "name": "NEB_2025_LOOP_TM_REFERENCE",
       "value": [
         64.0,
@@ -2994,7 +2994,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 279,
+      "line": 288,
       "name": "WINDOW_BOUNDS",
       "value": {
         "tm_min": [
@@ -3019,7 +3019,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 290,
+      "line": 299,
       "name": "GEOMETRY_BOUNDS",
       "value": {
         "f2_b2_span": [
@@ -3044,7 +3044,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 515,
+      "line": 522,
       "name": "END_STABILITY",
       "value": -4.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3052,7 +3052,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 519,
+      "line": 526,
       "name": "LOOP_END_STABILITY",
       "value": -2.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3060,7 +3060,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 520,
+      "line": 527,
       "name": "END_BASES",
       "value": 6,
       "category": "assay-envelope-or-source-boundary",
@@ -3068,7 +3068,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 525,
+      "line": 532,
       "name": "LONGEST_RUN",
       "value": 4,
       "category": "assay-envelope-or-source-boundary",
@@ -3076,7 +3076,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_profiles.py",
-      "line": 96,
+      "line": 97,
       "name": "AT_RICH_AT_OR_BELOW",
       "value": 45.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3084,7 +3084,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_profiles.py",
-      "line": 97,
+      "line": 98,
       "name": "GC_RICH_AT_OR_ABOVE",
       "value": 60.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3092,7 +3092,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_profiles.py",
-      "line": 101,
+      "line": 102,
       "name": "LOOP_GC_MIN",
       "value": 40.0,
       "category": "implementation-numeric-constant",
@@ -3100,7 +3100,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_profiles.py",
-      "line": 102,
+      "line": 103,
       "name": "LOOP_GC_MAX",
       "value": 65.0,
       "category": "implementation-numeric-constant",
@@ -3108,7 +3108,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 61,
+      "line": 62,
       "name": "SHA256_HEX_LENGTH",
       "value": 64,
       "category": "implementation-numeric-constant",
@@ -3116,7 +3116,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 205,
+      "line": 227,
       "name": "MAX_CUSTOM_RACE_PARTNER_LENGTH",
       "value": 200,
       "category": "computational-search-cap",
@@ -3124,7 +3124,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 327,
+      "line": 362,
       "name": "ADAPTER_DIMER_WATCH",
       "value": -6.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3132,7 +3132,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 366,
+      "line": 401,
       "name": "DEAD_ZONE",
       "value": 40,
       "category": "assay-envelope-or-source-boundary",
@@ -3140,7 +3140,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 373,
+      "line": 408,
       "name": "READ_LENGTH",
       "value": 800,
       "category": "assay-envelope-or-source-boundary",
@@ -3148,7 +3148,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 384,
+      "line": 419,
       "name": "ACCURACY",
       "value": 20,
       "category": "assay-envelope-or-source-boundary",
@@ -3156,7 +3156,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 391,
+      "line": 426,
       "name": "MOST_WIDENINGS",
       "value": 5,
       "category": "computational-search-cap",
@@ -3164,7 +3164,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 864,
+      "line": 901,
       "name": "MOST_PRIMERS",
       "value": 10,
       "category": "computational-search-cap",
@@ -3204,7 +3204,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 58,
+      "line": 59,
       "name": "NEBUILDER_STANDARD_QUANTITY_MAX_FRAGMENTS",
       "value": 6,
       "category": "assay-envelope-or-source-boundary",
@@ -3212,7 +3212,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 62,
+      "line": 63,
       "name": "ASSEMBLY_CROSS_TALK_TM",
       "value": 45.0,
       "category": "assay-envelope-or-source-boundary",
@@ -3220,7 +3220,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 354,
+      "line": 402,
       "name": "LONGEST_RUN_AT_AN_END",
       "value": 4,
       "category": "assay-envelope-or-source-boundary",
@@ -3228,7 +3228,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 702,
+      "line": 748,
       "name": "MOST_FOLDED",
       "value": 600,
       "category": "computational-search-cap",
@@ -3236,7 +3236,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1046,
+      "line": 1092,
       "name": "MOST_BACKTRACKS",
       "value": 200,
       "category": "computational-search-cap",
@@ -3244,7 +3244,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 52,
+      "line": 58,
       "name": "MOST_PAIRS",
       "value": 50,
       "category": "computational-search-cap",
@@ -3252,7 +3252,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 57,
+      "line": 63,
       "name": "DEFAULT_ENZYME_COHORT_SIZE",
       "value": 8,
       "category": "implementation-numeric-constant",
@@ -3260,7 +3260,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 58,
+      "line": 64,
       "name": "MIN_ENZYME_COHORT_SIZE",
       "value": 1,
       "category": "implementation-numeric-constant",
@@ -3268,7 +3268,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 59,
+      "line": 65,
       "name": "MAX_ENZYME_COHORT_SIZE",
       "value": 12,
       "category": "computational-search-cap",
@@ -3276,7 +3276,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 68,
+      "line": 70,
       "name": "Q5_SEARCH_PRIMER_LENGTH_MIN",
       "value": 15,
       "category": "implementation-numeric-constant",
@@ -3284,7 +3284,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 69,
+      "line": 71,
       "name": "Q5_SEARCH_PRIMER_LENGTH_MAX",
       "value": 60,
       "category": "implementation-numeric-constant",
@@ -3292,7 +3292,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 73,
+      "line": 75,
       "name": "GAP_WORTH_MENTIONING",
       "value": 3.0,
       "category": "diagnostic-report-threshold",
@@ -3300,7 +3300,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 435,
+      "line": 453,
       "name": "MOST_PAIRS",
       "value": 10,
       "category": "computational-search-cap",
@@ -3308,7 +3308,7 @@
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
-      "line": 66,
+      "line": 65,
       "name": "MOST_NESTS",
       "value": 20,
       "category": "computational-search-cap",
@@ -3316,7 +3316,7 @@
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
-      "line": 73,
+      "line": 72,
       "name": "INNER_CANDIDATES",
       "value": 4,
       "category": "computational-search-cap",
@@ -3324,7 +3324,7 @@
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
-      "line": 78,
+      "line": 77,
       "name": "INNER_SCREEN_MISMATCHES",
       "value": 3,
       "category": "assay-envelope-or-source-boundary",
@@ -3446,7 +3446,7 @@
   "decision_numeric_literals": [
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 647,
+      "line": 642,
       "function": "_score_off_targets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3455,7 +3455,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 769,
+      "line": 764,
       "function": "_score_accessibility",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3464,7 +3464,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1248,
+      "line": 1243,
       "function": "_accessibility_profile",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3473,7 +3473,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1967,
+      "line": 1983,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3482,7 +3482,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 2720,
+      "line": 2807,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3491,7 +3491,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 692,
+      "line": 687,
       "function": "_template_window",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3500,7 +3500,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 692,
+      "line": 687,
       "function": "_template_window",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3509,7 +3509,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1591,
+      "line": 1600,
       "function": "_cloning_tails",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3518,7 +3518,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1591,
+      "line": 1600,
       "function": "_cloning_tails",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3527,7 +3527,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 986,
+      "line": 981,
       "function": "_quality_score",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3536,7 +3536,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 2716,
+      "line": 2803,
       "function": "run",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -3545,7 +3545,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 3067,
+      "line": 3164,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3554,7 +3554,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 3067,
+      "line": 3164,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3563,7 +3563,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 858,
+      "line": 853,
       "function": "_uniformity",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3572,7 +3572,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 860,
+      "line": 855,
       "function": "_uniformity",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3581,7 +3581,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 377,
+      "line": 382,
       "function": "_pair_has_product_on_contig",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3590,7 +3590,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 383,
+      "line": 388,
       "function": "_pair_has_product_on_contig",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3599,7 +3599,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 2227,
+      "line": 2268,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3608,7 +3608,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 2227,
+      "line": 2269,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3617,7 +3617,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 2478,
+      "line": 2533,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3626,7 +3626,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 3093,
+      "line": 3190,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3635,7 +3635,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 3093,
+      "line": 3190,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3644,7 +3644,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1317,
+      "line": 1312,
       "function": "_interactions",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3653,7 +3653,7 @@
     },
     {
       "file": "tools/src/pcr_tools/pipeline.py",
-      "line": 1317,
+      "line": 1312,
       "function": "_interactions",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3662,7 +3662,7 @@
     },
     {
       "file": "tools/src/pcr_tools/flanking_request.py",
-      "line": 182,
+      "line": 217,
       "function": "_flanking_numeric_context",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3671,7 +3671,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 2092,
+      "line": 2596,
       "function": "digital_context",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3680,7 +3680,7 @@
     },
     {
       "file": "tools/src/pcr_tools/registries/flanking_protocols.py",
-      "line": 2085,
+      "line": 2589,
       "function": "digital_context",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3689,7 +3689,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 717,
+      "line": 723,
       "function": "run",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3698,7 +3698,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 497,
+      "line": 503,
       "function": "choose",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3707,7 +3707,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 1227,
+      "line": 1305,
       "function": "_cross_product_specificity",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3716,7 +3716,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 868,
+      "line": 876,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3725,7 +3725,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 482,
+      "line": 488,
       "function": "choose",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3734,7 +3734,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 1168,
+      "line": 1242,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3743,7 +3743,7 @@
     },
     {
       "file": "tools/src/pcr_tools/multiplex.py",
-      "line": 1178,
+      "line": 1254,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3752,7 +3752,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 1527,
+      "line": 1665,
       "function": "_why_nothing",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3761,7 +3761,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 678,
+      "line": 690,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3770,7 +3770,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 744,
+      "line": 759,
       "function": "design",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3779,7 +3779,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 773,
+      "line": 791,
       "function": "design",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3788,7 +3788,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 773,
+      "line": 791,
       "function": "design",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3797,7 +3797,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 1032,
+      "line": 1046,
       "function": "_partners",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3806,7 +3806,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 1314,
+      "line": 1435,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3815,7 +3815,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 329,
+      "line": 333,
       "function": "allele_primers",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3824,7 +3824,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 596,
+      "line": 608,
       "function": "why_none",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3833,7 +3833,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 1327,
+      "line": 1448,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3842,7 +3842,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 596,
+      "line": 608,
       "function": "why_none",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3851,7 +3851,7 @@
     },
     {
       "file": "tools/src/pcr_tools/discriminate.py",
-      "line": 910,
+      "line": 926,
       "function": "_partner_candidates",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3860,7 +3860,7 @@
     },
     {
       "file": "tools/src/pcr_tools/probe.py",
-      "line": 318,
+      "line": 329,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3869,7 +3869,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 451,
+      "line": 506,
       "function": "_spatial_sample",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3878,7 +3878,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2885,
+      "line": 3038,
       "function": "_unique_lamp_site",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3887,7 +3887,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2888,
+      "line": 3041,
       "function": "_unique_lamp_site",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3896,7 +3896,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3175,
+      "line": 3422,
       "function": "_optional_nonnegative_numeric",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3905,7 +3905,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 416,
+      "line": 471,
       "function": "_spatial_order",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3914,7 +3914,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 416,
+      "line": 471,
       "function": "_spatial_order",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3923,7 +3923,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 447,
+      "line": 502,
       "function": "_spatial_sample",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3932,7 +3932,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 784,
+      "line": 853,
       "function": "_round_robin_partner_schedule",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3941,7 +3941,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1715,
+      "line": 1851,
       "function": "_aligned_region_events",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3950,7 +3950,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1846,
+      "line": 1982,
       "function": "_target_inclusivity_audit",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3959,7 +3959,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2877,
+      "line": 3030,
       "function": "_existing_lamp_integer",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3968,7 +3968,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3159,
+      "line": 3396,
       "function": "_mutation_request",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3977,7 +3977,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3159,
+      "line": 3396,
       "function": "_mutation_request",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -3986,7 +3986,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 494,
+      "line": 546,
       "function": "three_prime_interaction_risk",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -3995,7 +3995,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 564,
+      "line": 624,
       "function": "_set_terminal_gc_rank",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4004,7 +4004,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1777,
+      "line": 1913,
       "function": "_aligned_region_events",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4013,7 +4013,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1777,
+      "line": 1913,
       "function": "_aligned_region_events",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4022,7 +4022,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3087,
+      "line": 3299,
       "function": "_rt_lamp_accessibility",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4031,7 +4031,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3087,
+      "line": 3300,
       "function": "_rt_lamp_accessibility",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4040,7 +4040,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3156,
+      "line": 3388,
       "function": "_mutation_request",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4049,7 +4049,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 565,
+      "line": 628,
       "function": "_set_terminal_gc_rank",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4058,7 +4058,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1209,
+      "line": 1294,
       "function": "sets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4067,7 +4067,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1210,
+      "line": 1295,
       "function": "sets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4076,7 +4076,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1436,
+      "line": 1529,
       "function": "_outers_before",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4085,7 +4085,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1436,
+      "line": 1529,
       "function": "_outers_before",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4094,7 +4094,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1448,
+      "line": 1541,
       "function": "_outers_after",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4103,7 +4103,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1448,
+      "line": 1541,
       "function": "_outers_after",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4112,7 +4112,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1759,
+      "line": 1897,
       "function": "_aligned_region_events",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4121,7 +4121,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1765,
+      "line": 1901,
       "function": "_aligned_region_events",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4130,7 +4130,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2247,
+      "line": 2384,
       "function": "set_to_dict",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4139,7 +4139,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2249,
+      "line": 2386,
       "function": "set_to_dict",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4148,7 +4148,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3043,
+      "line": 3250,
       "function": "_existing_lamp_set",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4157,7 +4157,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 3043,
+      "line": 3250,
       "function": "_existing_lamp_set",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4166,7 +4166,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 173,
+      "line": 226,
       "function": "longest_run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4175,7 +4175,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1276,
+      "line": 1361,
       "function": "sets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4184,7 +4184,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1277,
+      "line": 1362,
       "function": "sets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4193,7 +4193,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1734,
+      "line": 1872,
       "function": "_aligned_region_events",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4202,7 +4202,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1736,
+      "line": 1874,
       "function": "_aligned_region_events",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4211,7 +4211,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1761,
+      "line": 1897,
       "function": "_aligned_region_events",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4220,7 +4220,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1765,
+      "line": 1901,
       "function": "_aligned_region_events",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4229,7 +4229,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1115,
+      "line": 1206,
       "function": "sets",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4238,7 +4238,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 1117,
+      "line": 1206,
       "function": "sets",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4247,7 +4247,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2490,
+      "line": 2626,
       "function": "_lamp_sequence_sites",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4256,7 +4256,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4007,
+      "line": 4560,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4265,7 +4265,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 4007,
+      "line": 4560,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4274,7 +4274,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2661,
+      "line": 2804,
       "function": "_lamp_background_topology_audit",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4283,7 +4283,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2661,
+      "line": 2804,
       "function": "_lamp_background_topology_audit",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4292,7 +4292,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2680,
+      "line": 2827,
       "function": "_lamp_background_topology_audit",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4301,7 +4301,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2681,
+      "line": 2828,
       "function": "_lamp_background_topology_audit",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4310,7 +4310,7 @@
     },
     {
       "file": "tools/src/pcr_tools/loop_set.py",
-      "line": 2682,
+      "line": 2829,
       "function": "_lamp_background_topology_audit",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4319,7 +4319,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 85,
+      "line": 97,
       "function": "primerexplorer_v5_tm",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4328,7 +4328,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 572,
+      "line": 579,
       "function": "check_geometry",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4337,7 +4337,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 123,
+      "line": 135,
       "function": "primerexplorer_v5_end_dg",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4346,7 +4346,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 400,
+      "line": 409,
       "function": "_span",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4355,7 +4355,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 400,
+      "line": 409,
       "function": "_span",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4364,7 +4364,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 457,
+      "line": 469,
       "function": "adjust",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4373,7 +4373,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 457,
+      "line": 469,
       "function": "adjust",
       "value": 100,
       "category": "percentage-domain-boundary",
@@ -4382,7 +4382,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 459,
+      "line": 471,
       "function": "adjust",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4391,7 +4391,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 459,
+      "line": 471,
       "function": "adjust",
       "value": 100,
       "category": "percentage-domain-boundary",
@@ -4400,7 +4400,7 @@
     },
     {
       "file": "tools/src/pcr_tools/lamp_geometry.py",
-      "line": 124,
+      "line": 136,
       "function": "primerexplorer_v5_end_dg",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4409,7 +4409,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 438,
+      "line": 473,
       "function": "window_for",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4418,7 +4418,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 440,
+      "line": 475,
       "function": "window_for",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4427,7 +4427,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 108,
+      "line": 120,
       "function": "universal_primer_candidates",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4436,7 +4436,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 442,
+      "line": 477,
       "function": "window_for",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4445,7 +4445,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 837,
+      "line": 874,
       "function": "design_race",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4454,7 +4454,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 837,
+      "line": 874,
       "function": "design_race",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4463,7 +4463,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 1110,
+      "line": 1235,
       "function": "run",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4472,7 +4472,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 1097,
+      "line": 1198,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4481,7 +4481,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 1102,
+      "line": 1208,
       "function": "run",
       "value": 100,
       "category": "percentage-domain-boundary",
@@ -4490,7 +4490,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 1104,
+      "line": 1216,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4499,7 +4499,7 @@
     },
     {
       "file": "tools/src/pcr_tools/single.py",
-      "line": 670,
+      "line": 705,
       "function": "_thin",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4544,7 +4544,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 285,
+      "line": 322,
       "function": "protocol",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4553,7 +4553,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 289,
+      "line": 332,
       "function": "protocol",
       "value": 6,
       "category": "named-protocol-structure",
@@ -4562,7 +4562,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 287,
+      "line": 326,
       "function": "protocol",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4571,7 +4571,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 491,
+      "line": 540,
       "function": "around",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4580,7 +4580,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 776,
+      "line": 822,
       "function": "check",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4589,7 +4589,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 825,
+      "line": 871,
       "function": "junctions",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4598,7 +4598,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 889,
+      "line": 935,
       "function": "clashes",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4607,7 +4607,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1371,
+      "line": 1417,
       "function": "run",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4616,7 +4616,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1436,
+      "line": 1509,
       "function": "run",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4625,7 +4625,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 263,
+      "line": 291,
       "function": "protocol",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4634,7 +4634,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 263,
+      "line": 291,
       "function": "protocol",
       "value": 6,
       "category": "named-protocol-structure",
@@ -4643,7 +4643,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 266,
+      "line": 296,
       "function": "protocol",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4652,7 +4652,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 287,
+      "line": 328,
       "function": "protocol",
       "value": 6,
       "category": "named-protocol-structure",
@@ -4661,7 +4661,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 360,
+      "line": 408,
       "function": "ends_badly",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4670,7 +4670,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 115,
+      "line": 126,
       "function": "check",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4679,7 +4679,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 360,
+      "line": 408,
       "function": "ends_badly",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4688,7 +4688,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 758,
+      "line": 804,
       "function": "occurrences",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4697,7 +4697,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1022,
+      "line": 1064,
       "function": "choose",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4706,7 +4706,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 788,
+      "line": 834,
       "function": "check",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4715,7 +4715,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1470,
+      "line": 1543,
       "function": "run",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4724,7 +4724,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1476,
+      "line": 1549,
       "function": "run",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4733,7 +4733,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1651,
+      "line": 1756,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4742,7 +4742,7 @@
     },
     {
       "file": "tools/src/pcr_tools/junction.py",
-      "line": 1651,
+      "line": 1756,
       "function": "run",
       "value": 3,
       "category": "structural-cardinality-or-index-boundary",
@@ -4751,7 +4751,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 120,
+      "line": 126,
       "function": "design_outward",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4760,7 +4760,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 313,
+      "line": 346,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4769,7 +4769,7 @@
     },
     {
       "file": "tools/src/pcr_tools/inverse.py",
-      "line": 315,
+      "line": 348,
       "function": "run",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4778,7 +4778,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 483,
+      "line": 515,
       "function": "_workflow_result",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4787,7 +4787,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 572,
+      "line": 688,
       "function": "run",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4796,7 +4796,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 109,
+      "line": 121,
       "function": "check",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4805,7 +4805,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 139,
+      "line": 151,
       "function": "check",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4814,7 +4814,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 238,
+      "line": 250,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4823,7 +4823,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 252,
+      "line": 266,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4832,7 +4832,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 283,
+      "line": 297,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4841,7 +4841,7 @@
     },
     {
       "file": "tools/src/pcr_tools/mutagenic.py",
-      "line": 329,
+      "line": 347,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4850,26 +4850,26 @@
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
-      "line": 127,
+      "line": 126,
       "function": "check",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
       "source_segment": "0",
-      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
-    },
-    {
-      "file": "tools/src/pcr_tools/nested.py",
-      "line": 579,
-      "function": "_transfer_contract",
-      "value": 1,
-      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
-      "source_segment": "1",
       "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
       "line": 584,
       "function": "_transfer_contract",
+      "value": 1,
+      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
+      "source_segment": "1",
+      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
+    },
+    {
+      "file": "tools/src/pcr_tools/nested.py",
+      "line": 590,
+      "function": "_transfer_contract",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
       "source_segment": "0",
@@ -4877,7 +4877,7 @@
     },
     {
       "file": "tools/src/pcr_tools/nested.py",
-      "line": 614,
+      "line": 666,
       "function": "_nested_false_product_graph",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4886,7 +4886,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 398,
+      "line": 412,
       "function": "read_alignment",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -4895,7 +4895,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 409,
+      "line": 423,
       "function": "read_alignment",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4913,20 +4913,11 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 196,
+      "line": 198,
       "function": "validate",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
       "source_segment": "1",
-      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
-    },
-    {
-      "file": "tools/src/pcr_tools/universal.py",
-      "line": 203,
-      "function": "validate",
-      "value": 0,
-      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
-      "source_segment": "0",
       "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
     },
     {
@@ -4940,7 +4931,34 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 209,
+      "line": 207,
+      "function": "validate",
+      "value": 0,
+      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
+      "source_segment": "0",
+      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
+    },
+    {
+      "file": "tools/src/pcr_tools/universal.py",
+      "line": 211,
+      "function": "validate",
+      "value": 0,
+      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
+      "source_segment": "0",
+      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
+    },
+    {
+      "file": "tools/src/pcr_tools/universal.py",
+      "line": 220,
+      "function": "validate",
+      "value": 1,
+      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
+      "source_segment": "1",
+      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
+    },
+    {
+      "file": "tools/src/pcr_tools/universal.py",
+      "line": 218,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4958,16 +4976,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 216,
-      "function": "validate",
-      "value": 0,
-      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
-      "source_segment": "0",
-      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
-    },
-    {
-      "file": "tools/src/pcr_tools/universal.py",
-      "line": 216,
+      "line": 222,
       "function": "validate",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4976,16 +4985,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 220,
-      "function": "validate",
-      "value": 1,
-      "category": "mathematical-domain-cardinality-or-explicit-sentinel",
-      "source_segment": "1",
-      "decision_role": "hard decisions must remain mathematical/structural or explicitly assay/protocol-scoped; ranking tuning is separately named and may not enter hard refusal"
-    },
-    {
-      "file": "tools/src/pcr_tools/universal.py",
-      "line": 207,
+      "line": 209,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -4994,7 +4994,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 207,
+      "line": 209,
       "function": "validate",
       "value": 100,
       "category": "percentage-domain-boundary",
@@ -5003,7 +5003,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 392,
+      "line": 402,
       "function": "read_alignment",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5012,7 +5012,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 643,
+      "line": 682,
       "function": "find_sites",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5021,7 +5021,7 @@
     },
     {
       "file": "tools/src/pcr_tools/universal.py",
-      "line": 928,
+      "line": 987,
       "function": "design",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5039,7 +5039,7 @@
     },
     {
       "file": "tools/src/pcr_tools/specificity.py",
-      "line": 533,
+      "line": 531,
       "function": "_candidate_window_starts",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5048,7 +5048,7 @@
     },
     {
       "file": "tools/src/pcr_tools/specificity.py",
-      "line": 664,
+      "line": 663,
       "function": "sites_for",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5057,7 +5057,7 @@
     },
     {
       "file": "tools/src/pcr_tools/specificity.py",
-      "line": 698,
+      "line": 703,
       "function": "sites_for",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5066,7 +5066,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 681,
+      "line": 680,
       "function": "design_terminal_pair",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5075,7 +5075,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 168,
+      "line": 167,
       "function": "validate",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5084,7 +5084,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 198,
+      "line": 197,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5093,7 +5093,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 228,
+      "line": 227,
       "function": "validate",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5102,7 +5102,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 213,
+      "line": 212,
       "function": "validate",
       "value": 2,
       "category": "structural-cardinality-or-index-boundary",
@@ -5111,7 +5111,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 234,
+      "line": 233,
       "function": "validate",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5120,7 +5120,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 240,
+      "line": 239,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5129,7 +5129,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 245,
+      "line": 244,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5138,7 +5138,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 252,
+      "line": 251,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5147,7 +5147,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 517,
+      "line": 516,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5156,7 +5156,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 526,
+      "line": 525,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5165,7 +5165,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 526,
+      "line": 525,
       "function": "design",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5174,7 +5174,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 547,
+      "line": 546,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5183,7 +5183,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 556,
+      "line": 555,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5192,7 +5192,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 205,
+      "line": 204,
       "function": "validate",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5201,7 +5201,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 205,
+      "line": 204,
       "function": "validate",
       "value": 100,
       "category": "percentage-domain-boundary",
@@ -5210,7 +5210,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 562,
+      "line": 561,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5219,7 +5219,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 562,
+      "line": 561,
       "function": "design",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5228,7 +5228,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 581,
+      "line": 580,
       "function": "design",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5237,7 +5237,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 750,
+      "line": 749,
       "function": "design_terminal_pair",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5246,7 +5246,7 @@
     },
     {
       "file": "tools/src/pcr_tools/design.py",
-      "line": 751,
+      "line": 750,
       "function": "design_terminal_pair",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5264,7 +5264,7 @@
     },
     {
       "file": "tools/src/pcr_tools/tails.py",
-      "line": 171,
+      "line": 168,
       "function": "usable_enzymes",
       "value": 0,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5273,7 +5273,7 @@
     },
     {
       "file": "tools/src/pcr_tools/tails.py",
-      "line": 199,
+      "line": 195,
       "function": "build_tail",
       "value": 1,
       "category": "mathematical-domain-cardinality-or-explicit-sentinel",
@@ -5318,37 +5318,37 @@
     "knowledge/runtime/module-contracts.json": "a78e27fdb5f5375a566dbaada6891dfde7c47444296ddc526a10c140c4d7fe0a",
     "knowledge/atlas/contracts/engine-tool-contracts.json": "36888de95a033d26736c321d321801665adbe4f17df4b7b81c261f89ef579bd3",
     "knowledge/atlas/contracts/toolchain-manifest.json": "ef8b011e651d0190d59bb45ea198c3164ee53048cfaeeae1fb1509600bb8ad3f",
-    "tools/src/pcr_tools/runtime_contract.py": "f04f23c7ed94ab3df098aec7c398179c4a0cc4f3f6074f0903b1f85441a04f64",
-    "tools/src/pcr_tools/validation_plan.py": "469f07948d0bb2636a28896c5b3dd72f82b4a7f48f2fbe92a2655c8cb4d16ffd",
+    "tools/src/pcr_tools/runtime_contract.py": "4275de0e53efc56b9a212e8f443d3cb7e397d4aab2dc990b0ee042488fa6fa30",
+    "tools/src/pcr_tools/validation_plan.py": "759f9757cd79b188a548b2daaf5ac7c54e8164a27d0cb0e2ed17b0104cefb432",
     "knowledge/runtime/scientific-integrity-policy.json": "8a80a5e3c10cd30c2b1f17224368a5bbea250b1fd4d6ad4853cd86a1f6bdaba8",
-    "tools/src/pcr_tools/pipeline.py": "4803fb6bec12da40ca2f63dd7cafa83987e06943512b310a21e4296d06225307",
-    "tools/src/pcr_tools/flanking_request.py": "41fd27700044fa4943954a8f3daff506bad369858fd0e82d3fdb9d50f8b77916",
-    "tools/src/pcr_tools/loop_set.py": "54f9d743b5291f50b3332736ba1386efd8aa64c1f205ff1201e3c006b7e60643",
-    "tools/src/pcr_tools/lamp_geometry.py": "97c47ee98fbdc8655bce5f3b3ce61f1b2c9ebe2ee1b62a6c014b1238eaf68860",
-    "tools/src/pcr_tools/lamp_profiles.py": "b449277d2ac64d7d707ddde8c236c4dcdb32ac115b85eccc12e38ed9559cd5d5",
-    "tools/src/pcr_tools/registries/lamp.py": "7cec3c3f429f000fad07036587d0ac0d4ff1370b3984fbc275cb64a391c1c54e",
-    "tools/src/pcr_tools/registries/flanking_protocols.py": "1a23f09bd918edb9a06c43c88a0d98a4af7f254e1f2655deec29c491d1785903",
-    "tools/src/pcr_tools/lamp_numeric_recipes.py": "afa4f50b5a94e4a373daecaf1c791e95515e142a62e48fbd754425357249e1b0",
-    "tools/src/pcr_tools/accessibility.py": "5aff2995aa42e3ab8f1bf959ce1dfeec4c8a85505ea921a647af60f44d4e9a85",
-    "tools/src/pcr_tools/restriction.py": "8f54df2eb6591bbc923317f411f27548f1532067f02ff603107493d2774a5f1b",
-    "tools/src/pcr_tools/pydna_bridge.py": "a0342162d9b41b671181cb834f5a71ef22af84ad00e7899ba95e48da4cebb5d6",
+    "tools/src/pcr_tools/pipeline.py": "804062c2f0ebd93bd2a1d39d15b239aa9cd2bb5aedaabfa6539a758b2d1a688b",
+    "tools/src/pcr_tools/flanking_request.py": "c52575f68c6f39d617499daafa4556176ad67229e9fda5dc652b5234f6aad221",
+    "tools/src/pcr_tools/loop_set.py": "c237ef7bc454b5c84c19ceab3e5e63a539f68f5ef71205b9dc3ad45018b4cc4f",
+    "tools/src/pcr_tools/lamp_geometry.py": "caec31eb50fc694805627815e3ffb7f7f3894411663c277adad89b0afe8c9b28",
+    "tools/src/pcr_tools/lamp_profiles.py": "efaaac8c685ea2980317df2e5f3f74677293a128d0e35b83e4f9436ed1280ffd",
+    "tools/src/pcr_tools/registries/lamp.py": "c1f20afaab9114ede5d41efa38804517a56d08ad9d5c16b4f69b0a14ffb785f6",
+    "tools/src/pcr_tools/registries/flanking_protocols.py": "9f8772ebd2e8994240ad89643101c83b889fdadde17e83716faa48eeab336203",
+    "tools/src/pcr_tools/lamp_numeric_recipes.py": "5e2765f1349faee51ed02e2fd9a270546c3285cd53a1996802ba1cd1d3ff2eb9",
+    "tools/src/pcr_tools/accessibility.py": "2f83e07732192c9cb5631c56ce428462da553c57a0d6fe3b2e80bc30cf9153a9",
+    "tools/src/pcr_tools/restriction.py": "5c4a029fc3a8ab274f7447621076e114a462e2e3b644cbd0be9303793beca711",
+    "tools/src/pcr_tools/pydna_bridge.py": "dde765988c6f69167bdb9252a2067d1f7b77c974b44bc5dee70e0c67c1ef7d92",
     "tools/src/pcr_tools/data/restriction_enzyme_registry.json": "919796a6b1e42fbd313bda86b64a9b96d3dec5a198f9fb60239c536085a8b141",
-    "tools/src/pcr_tools/multiplex.py": "56cab6ab889a57577a52c827180192e4c33ebdc274e84783a878bdfae624819a",
-    "tools/src/pcr_tools/discriminate.py": "f2eb82609052d332db9663ee09c5824b2db2dea7c1f80e0bab42c5bb04c246b7",
-    "tools/src/pcr_tools/variants.py": "58c8d1295d575a244ef589e92534d47d38f963fa3804b12139cf7022783ffc63",
-    "tools/src/pcr_tools/kasp_plus_minus.py": "980a8f90fae31ab3c063278452c8bb82acb8bdbae45e8868775debfd0a3e579a",
-    "tools/src/pcr_tools/workflow_evidence.py": "94b7eb068f1c7883cca2d32e914cbbaf3d544ce39c3b5a4eae64b52aa70eb8e7",
-    "tools/src/pcr_tools/probe.py": "69ebcfb207a3cf311d302b33a1e200be9d9267849acaa4c5cd43c7e819808056",
-    "tools/src/pcr_tools/single.py": "84f936e0c889cd83d172b3d74bdfe892b6e7e7e3e66b27803f3eb60ffac30b69",
-    "tools/src/pcr_tools/tiling.py": "dbbd8d569192a0778fd6088546c94e1adf4dd57f34d9a3aca8649fd94d9dce83",
-    "tools/src/pcr_tools/junction.py": "6566551852c582a39e7410a1412e077017fdb96ee479794850f988d890e54026",
-    "tools/src/pcr_tools/inverse.py": "0df3139aba92f46e70858d758e9b71e056000b9c479ea1bfee6a6e83375a79a4",
-    "tools/src/pcr_tools/mutagenic.py": "6c6a82493ac9a2cb2fc4659f405408755576967bc9dc7bebc8d2f88658beda91",
-    "tools/src/pcr_tools/nested.py": "aebba66b446e6fea7ced445ff11e990e926847fe96c92d82589fa516428ce915",
-    "tools/src/pcr_tools/universal.py": "326c9979238108c7d128ed75a086ae7e7ef124198b818d68c17c2ac1759c4839",
-    "tools/src/pcr_tools/universal_panel.py": "6bebfff12bd5744567ab9311b9db5216ad0e583d46dc6f9c460713471eba38df",
-    "tools/src/pcr_tools/specificity.py": "2c95f288170940257292694f0d3f518d703892c7e12410d70e6cd06d1c0b2bb0",
-    "tools/src/pcr_tools/design.py": "84c29e200373aa77d98a359b241ba2dce2af976331f6c5b4e9528e35acdf857c",
+    "tools/src/pcr_tools/multiplex.py": "f72880c42512354448c17e1ea06e133d126dbe0cd53524d6a19aab7a24205f49",
+    "tools/src/pcr_tools/discriminate.py": "66e613de158fe15cc183c36582b54c6a7dc86d2de25fcfe9dbdca386978bbfdc",
+    "tools/src/pcr_tools/variants.py": "7664558cb0a054bb19c75a01bfcaeb43d39f5b60666e0ca68023a697defad162",
+    "tools/src/pcr_tools/kasp_plus_minus.py": "5d42b6e6a6fa0a98f983b11a3d61460e83f8df40de8c8e1d5f10c1947984f906",
+    "tools/src/pcr_tools/workflow_evidence.py": "e60b20f82a3dd051cfb0ce63cfb38764d6e945651a102eec1ee9d864ed5be97c",
+    "tools/src/pcr_tools/probe.py": "403696e9b58554238a81874c599e94d63ef7ee750a745710ea2e3db884f5e8f3",
+    "tools/src/pcr_tools/single.py": "a94e4bb39e0826ef58600ee89d75f04e05cc5373d5a85425eaac6f95e5067912",
+    "tools/src/pcr_tools/tiling.py": "c705dad37ae028a886b9b8941e3363af77d941abca88a25864f5b0b4668c46b7",
+    "tools/src/pcr_tools/junction.py": "a290865c9d05fe2dee39a49834d0dcd003390076730b10d38130aff4537b3596",
+    "tools/src/pcr_tools/inverse.py": "1c5efb8445707b9e1f97e220ec563c7b9dc7ab8a282adc200dda8c0fb2882115",
+    "tools/src/pcr_tools/mutagenic.py": "37d54ad341f648e7e838d12cb600c9b05e4b5bcb78853e39847d5dc762312021",
+    "tools/src/pcr_tools/nested.py": "8a929add747139f123d259783aee0a845e3a275e682f52d6739aa97bbb183660",
+    "tools/src/pcr_tools/universal.py": "2f86fb45e617f75b58d38b3e766257dd04b188ec2334112a36f15111c10a9177",
+    "tools/src/pcr_tools/universal_panel.py": "09352f1d13413b8008eea0b8e4378775f061a23c6f4a6c9f8dd435f48f4ca5d0",
+    "tools/src/pcr_tools/specificity.py": "2e0def5e771d5c7a73d43f398c4c3ae942b258d36d1664df924d82a806878fac",
+    "tools/src/pcr_tools/design.py": "7eea738210e7aa0a35f607182a9d2ec1b4a18d58ac427243665f467f58da9867",
     "web/src/components/design/page-plan.ts": "1df333dd0be34156524ff4880e476504a84e77d1c4224aca27d7032083bde42f",
     "web/src/components/design/result-overview.tsx": "f9382510dbcfb2559ccac1a66c484523259bcccc00b7df00bf11c8c6238ec498",
     "web/src/components/design/toolchain-status.tsx": "a275e999a26ec3473bfd71acaa85a217955ce2ab0315de1adeb58f8201312f89",
@@ -5363,8 +5363,8 @@
     "web/src/lib/projects/fork-settings.ts": "80e1e2b7a51c0c9ac59fdea277cfef639fff38fbcdf81b430db7f60038f6f847",
     "web/src/lib/kasp-endpoint.ts": "c76f7664ff0da67010393949280466ec13eedb2a1b2ffc9ab4ca077702cf2874",
     "web/src/lib/contracts/design-requests.ts": "1f7bfbfce1723fa090f6ce78d534df139105e6a928a262260c258954797aedf8",
-    "tools/tests/test_engine_contract_regressions.py": "ec46489e989dcd9e3129424fecf4ad597309b395b983d2e8b78d47377cbe1119",
-    "tools/tests/test_engine_authority_contract.py": "5b7b6ae04f0d7170f6f7f2f1e7a8a131ce38d8c7b4688a294234726eb7787db1",
+    "tools/tests/test_engine_contract_regressions.py": "ae940f97aebb3d70ea74a673c99412854223154b90f2852a7435c5e101b83e05",
+    "tools/tests/test_engine_authority_contract.py": "99398fa4789831903d77bcc00ca70e98c31dd32140f460d3a466478bc0c6878f",
     "crates/pcr-core/tests/engine_differential_contract.rs": "00b82165793b32a04483afa24aae6ced00ccf176c33b04d5a06bb30edfa421c8",
     "scripts/check-engine-web-contract.js": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34",
     "scripts/generate-engine-authorities.py": "0ceda2b688ef481c052104f9b585fad4794c59a45bc7d10418bd23cad6f780aa",
@@ -5385,7 +5385,7 @@
     "contracts/scientific-authorities.json": "fb3b3015ac0564f091fba3b71a34c003cb04a6c4f4a2c3d9d1bf2ed8699f5123",
     "knowledge/sources/flanking-source-snapshots.json": "0395507fb90cd7aa80f02a3b3f5932edae0362c222b3fcd5c4c1402c997686af",
     "knowledge/runtime/scientific-authority-registry.generated.json": "e77aec32374dd9ae442449f4a3f0a3d371c1606208aa582ea305a9d3ac6f4489",
-    "tools/src/pcr_tools/scientific_authority.py": "d9ca74eaf4bb1fb2bd215f7412e575301b9eb8719aad6c1f513b05466ffd039d",
+    "tools/src/pcr_tools/scientific_authority.py": "e4bb66e24f7495b3a01cd7af46196bd1390e6880eef29b1889842a2609c4205a",
     "scripts/generate-scientific-authority-registry.py": "71477eb3e49a3ede063960795a0e8a629119236ca83466d0a4380838802654f1",
     "scripts/generate-flanking-source-snapshots.py": "c811fa9eec2fce82bee18637ee74f99ae2e9d16efa7bb475bbc89d9901ca8de0",
     "contracts/capability-truth.json": "eb2a1335b3f0c24cc4de64700c151ad7f4539c943eb15b335cf82f066a3cccb1"

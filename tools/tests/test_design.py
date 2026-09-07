@@ -16,7 +16,7 @@ from typing import Any
 import pytest
 
 from pcr_tools.design import Constraints, design
-from pcr_tools.thermo import DEFAULT_CONDITIONS, SequenceError, pair_dimer
+from pcr_tools.thermo import DEFAULT_CONDITIONS, SequenceError
 
 
 def a_template(length: int = 900, seed: int = 7) -> str:
@@ -368,7 +368,6 @@ class TestRankingWeights:
         assert captured["PRIMER_PICK_RIGHT_PRIMER"] == 1
         assert captured["PRIMER_PICK_ANYWAY"] == 0
         assert captured["PRIMER_THERMODYNAMIC_TEMPLATE_ALIGNMENT"] == 0
-
 
     def test_a_negative_weight_is_refused_before_it_reaches_primer3(self):
         # Measured: Primer3's core dies on an assertion (`sum >= 0.0`) for a

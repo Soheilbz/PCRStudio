@@ -4,6 +4,7 @@ It intentionally imports only pydna + stdlib so the main worker environment
 never has to carry pydna's optional dependency graph. Input/output are one JSON
 object and no user sequence is written outside the process.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -17,7 +18,9 @@ def _record_identity() -> dict[str, str | None]:
     record = dist.read_text("RECORD") or ""
     return {
         "pydna_version": str(dist.version),
-        "pydna_record_sha256": hashlib.sha256(record.encode("utf-8", "replace")).hexdigest() if record else None,
+        "pydna_record_sha256": hashlib.sha256(record.encode("utf-8", "replace")).hexdigest()
+        if record
+        else None,
     }
 
 
@@ -37,7 +40,9 @@ def _restriction_ligation(request: dict) -> dict:
     forward_enzyme_name = str(request.get("forward_enzyme") or "")
     reverse_enzyme_name = str(request.get("reverse_enzyme") or "")
     if not all((forward, reverse, insert, vector, forward_enzyme_name, reverse_enzyme_name)):
-        raise ValueError("forward, reverse, template, vector and both restriction enzymes are required")
+        raise ValueError(
+            "forward, reverse, template, vector and both restriction enzymes are required"
+        )
     try:
         forward_enzyme = getattr(Restriction, forward_enzyme_name)
         reverse_enzyme = getattr(Restriction, reverse_enzyme_name)
@@ -64,7 +69,10 @@ def _restriction_ligation(request: dict) -> dict:
     errors: list[str] = []
     for vector_index, vector_frag in enumerate(vector_frags):
         for insert_index, insert_frag in enumerate(relevant_insert_frags):
-            orientations = [("forward", insert_frag), ("reverse-complement", insert_frag.reverse_complement())]
+            orientations = [
+                ("forward", insert_frag),
+                ("reverse-complement", insert_frag.reverse_complement()),
+            ]
             for orientation, oriented_insert in orientations:
                 for order, pieces in (
                     ("vector+insert", (vector_frag, oriented_insert)),
@@ -75,23 +83,30 @@ def _restriction_ligation(request: dict) -> dict:
                         circular = linear.looped()
                     except Exception as error:
                         if len(errors) < 12:
-                            errors.append(f"{vector_index}:{insert_index}:{orientation}:{order}:{type(error).__name__}")
+                            errors.append(
+                                f"{vector_index}:{insert_index}:{orientation}:{order}:{type(error).__name__}"
+                            )
                         continue
                     sequence = str(circular.seq).upper()
                     digest = _sha(sequence)
-                    products.setdefault(digest, {
-                        "length": len(circular),
-                        "sequence_sha256": digest,
-                        "insert_orientation": (
-                            "forward" if insert_upper in sequence else
-                            "reverse-complement" if rc_insert in sequence else
-                            "unresolved"
-                        ),
-                        "vector_fragment_index": vector_index,
-                        "vector_fragment_length": len(vector_frag),
-                        "insert_fragment_index": insert_index,
-                        "insert_fragment_length": len(insert_frag),
-                    })
+                    products.setdefault(
+                        digest,
+                        {
+                            "length": len(circular),
+                            "sequence_sha256": digest,
+                            "insert_orientation": (
+                                "forward"
+                                if insert_upper in sequence
+                                else "reverse-complement"
+                                if rc_insert in sequence
+                                else "unresolved"
+                            ),
+                            "vector_fragment_index": vector_index,
+                            "vector_fragment_length": len(vector_frag),
+                            "insert_fragment_index": insert_index,
+                            "insert_fragment_length": len(insert_frag),
+                        },
+                    )
 
     return {
         "operation": "restriction-ligation-construct",
@@ -105,8 +120,8 @@ def _restriction_ligation(request: dict) -> dict:
         "attempt_errors": errors,
         "interpretation": (
             "A unique in-silico circular construct was recovered from compatible pydna restriction/ligation ends."
-            if len(products) == 1 else
-            "Multiple or zero circular constructs remain possible in-silico; PCRStudio does not select one by fragment-size heuristic."
+            if len(products) == 1
+            else "Multiple or zero circular constructs remain possible in-silico; PCRStudio does not select one by fragment-size heuristic."
         ),
         **_record_identity(),
     }

@@ -1,15 +1,39 @@
 from __future__ import annotations
 
 import math
+
 import pytest
 
+from pcr_tools.cloning_coding import resolve_cloning_coding_context
 from pcr_tools.dpcr_quantification import DpcrQuantificationError, quantify_dpcr
-from pcr_tools.restriction_calculators import dna_fmol, enzyme_volume_ul, final_glycerol_percent, insert_mass_ng, plan_double_digest
-from pcr_tools.species_panel import SpeciesPanelError, manifest_sha256, parse_accession_version_manifest, surveillance_diff
+from pcr_tools.restriction_calculators import (
+    dna_fmol,
+    enzyme_volume_ul,
+    final_glycerol_percent,
+    insert_mass_ng,
+    plan_double_digest,
+)
+from pcr_tools.restriction_performance import PERFORMANCE_BY_NAME, plan_neb_double_digest
+from pcr_tools.rpa_screening import screening_cohort
+from pcr_tools.species_panel import (
+    SpeciesPanelError,
+    manifest_sha256,
+    parse_accession_version_manifest,
+    parse_record_metadata_manifest,
+    record_metadata_sha256,
+    surveillance_diff,
+    validate_record_metadata,
+)
 
 
 def test_dpcr_poisson_and_ci_are_finite_for_unsaturated_run():
-    result = quantify_dpcr(accepted_partitions=20_000, positive_partitions=2_000, partition_volume_nl=0.85, dilution_factor=2, analysed_volume_ul=8.5)
+    result = quantify_dpcr(
+        accepted_partitions=20_000,
+        positive_partitions=2_000,
+        partition_volume_nl=0.85,
+        dilution_factor=2,
+        analysed_volume_ul=8.5,
+    )
     assert result.positive_fraction == pytest.approx(0.1)
     assert result.lambda_copies_per_partition == pytest.approx(-math.log(0.9))
     assert result.copies_per_ul > 0
@@ -27,18 +51,35 @@ def test_dpcr_refuses_saturation_and_unknown_partition_volume():
 
 def test_restriction_molar_and_volume_calculators():
     assert dna_fmol(mass_ng=50, length_bp=2500) == pytest.approx(30.30303, rel=1e-5)
-    assert insert_mass_ng(vector_mass_ng=50, vector_length_bp=5000, insert_length_bp=1000, insert_to_vector_molar_ratio=3) == pytest.approx(30)
+    assert insert_mass_ng(
+        vector_mass_ng=50,
+        vector_length_bp=5000,
+        insert_length_bp=1000,
+        insert_to_vector_molar_ratio=3,
+    ) == pytest.approx(30)
     assert enzyme_volume_ul(required_units=10, stock_units_per_ul=20) == pytest.approx(0.5)
-    assert final_glycerol_percent(enzyme_volumes_ul=[1, 1], reaction_volume_ul=50) == pytest.approx(2.0)
+    assert final_glycerol_percent(enzyme_volumes_ul=[1, 1], reaction_volume_ul=50) == pytest.approx(
+        2.0
+    )
 
 
 def test_double_digest_is_source_fact_driven_and_fail_closed():
-    a = {"name":"A", "temperature_c":37, "buffers":{"rCutSmart":100,"r3.1":50}, "heat_inactivation":"65C/20m"}
-    b = {"name":"B", "temperature_c":37, "buffers":{"rCutSmart":100,"r3.1":10}, "heat_inactivation":None}
+    a = {
+        "name": "A",
+        "temperature_c": 37,
+        "buffers": {"rCutSmart": 100, "r3.1": 50},
+        "heat_inactivation": "65C/20m",
+    }
+    b = {
+        "name": "B",
+        "temperature_c": 37,
+        "buffers": {"rCutSmart": 100, "r3.1": 10},
+        "heat_inactivation": None,
+    }
     plan = plan_double_digest(first=a, second=b)
     assert plan["mode"] == "simultaneous" and plan["buffer"] == "rCutSmart"
     with pytest.raises(ValueError, match="buffer/activity"):
-        plan_double_digest(first={"name":"A", "temperature_c":37}, second=b)
+        plan_double_digest(first={"name": "A", "temperature_c": 37}, second=b)
 
 
 def test_species_manifest_requires_accession_versions_and_diff_is_version_aware():
@@ -51,13 +92,16 @@ def test_species_manifest_requires_accession_versions_and_diff_is_version_aware(
     assert "NZ_CP000002.1" in diff.added
     assert "NZ_CP000001.1" in diff.removed
 
-from pcr_tools.restriction_performance import PERFORMANCE_BY_NAME, plan_neb_double_digest
-
 
 def test_current_restriction_performance_snapshot_covers_curated_geometry_registry():
     import json
     from importlib.resources import files
-    geometry = json.loads(files("pcr_tools").joinpath("data/restriction_enzyme_registry.json").read_text(encoding="utf-8"))
+
+    geometry = json.loads(
+        files("pcr_tools")
+        .joinpath("data/restriction_enzyme_registry.json")
+        .read_text(encoding="utf-8")
+    )
     assert set(PERFORMANCE_BY_NAME) == {row["name"] for row in geometry["enzymes"]}
     plan = plan_neb_double_digest("XhoI", "NdeI")
     assert plan["mode"] == "simultaneous"
@@ -65,14 +109,6 @@ def test_current_restriction_performance_snapshot_covers_curated_geometry_regist
     # ApaI and BglII do not share a >=50% buffer in the pinned supplier snapshot.
     sequential = plan_neb_double_digest("ApaI", "BglII")
     assert sequential["mode"] == "sequential-required"
-
-from pcr_tools.species_panel import (
-    parse_record_metadata_manifest,
-    record_metadata_sha256,
-    validate_record_metadata,
-)
-from pcr_tools.rpa_screening import screening_cohort
-from pcr_tools.cloning_coding import resolve_cloning_coding_context
 
 
 def test_species_snapshot_hashes_are_order_comment_and_whitespace_invariant():
@@ -103,7 +139,13 @@ def test_species_snapshot_hashes_are_order_comment_and_whitespace_invariant():
 
 def test_rpa_screening_cohort_is_deterministic_and_never_reorders_primary_ranking():
     ranked = [
-        {"candidate": i, "score": 100.0 - i, "left_at": {"start": i * 5}, "right_at": {"start": 200 + i * 7}, "amplicon": "A" * 150}
+        {
+            "candidate": i,
+            "score": 100.0 - i,
+            "left_at": {"start": i * 5},
+            "right_at": {"start": 200 + i * 7},
+            "amplicon": "A" * 150,
+        }
         for i in range(8)
     ]
     first = screening_cohort(ranked, maximum=4, min_coordinate_distance=20)
@@ -117,48 +159,92 @@ def test_rpa_screening_cohort_is_deterministic_and_never_reorders_primary_rankin
 def test_cloning_coding_context_validates_exact_insert_frame_without_changing_sequence_decision():
     insert = "ATG" + "GCC" * 9 + "TAA"
     preserved = resolve_cloning_coding_context(
-        {"cloning_coding_intent": "preserve-orf", "cloning_cds_start": 0, "cloning_cds_end": len(insert), "cloning_stop_codon_policy": "preserve"},
+        {
+            "cloning_coding_intent": "preserve-orf",
+            "cloning_cds_start": 0,
+            "cloning_cds_end": len(insert),
+            "cloning_stop_codon_policy": "preserve",
+        },
         insert_sequence=insert,
     )
     assert preserved["terminal_stop_present"] is True
     assert preserved["sequence_decision_impact"] == "none"
     with pytest.raises(ValueError, match="does not include the terminal stop"):
         resolve_cloning_coding_context(
-            {"cloning_coding_intent": "preserve-orf", "cloning_cds_start": 0, "cloning_cds_end": len(insert), "cloning_stop_codon_policy": "remove"},
+            {
+                "cloning_coding_intent": "preserve-orf",
+                "cloning_cds_start": 0,
+                "cloning_cds_end": len(insert),
+                "cloning_stop_codon_policy": "remove",
+            },
             insert_sequence=insert,
         )
     in_frame = resolve_cloning_coding_context(
-        {"cloning_coding_intent": "in-frame-fusion", "cloning_cds_start": 0, "cloning_cds_end": len(insert) - 3, "cloning_stop_codon_policy": "remove", "cloning_vector_junction_frame": 0},
+        {
+            "cloning_coding_intent": "in-frame-fusion",
+            "cloning_cds_start": 0,
+            "cloning_cds_end": len(insert) - 3,
+            "cloning_stop_codon_policy": "remove",
+            "cloning_vector_junction_frame": 0,
+        },
         insert_sequence=insert,
     )
     assert in_frame["phase_status"].startswith("declared-phase-compatible")
     with pytest.raises(ValueError, match="out of frame"):
         resolve_cloning_coding_context(
-            {"cloning_coding_intent": "in-frame-fusion", "cloning_cds_start": 0, "cloning_cds_end": len(insert) - 3, "cloning_stop_codon_policy": "remove", "cloning_vector_junction_frame": 1},
+            {
+                "cloning_coding_intent": "in-frame-fusion",
+                "cloning_cds_start": 0,
+                "cloning_cds_end": len(insert) - 3,
+                "cloning_stop_codon_policy": "remove",
+                "cloning_vector_junction_frame": 1,
+            },
             insert_sequence=insert,
         )
 
 
 def test_dpcr_and_restriction_calculators_obey_basic_metamorphic_properties():
     concentrations = [
-        quantify_dpcr(accepted_partitions=20_000, positive_partitions=p, partition_volume_nl=0.85).copies_per_ul
+        quantify_dpcr(
+            accepted_partitions=20_000, positive_partitions=p, partition_volume_nl=0.85
+        ).copies_per_ul
         for p in (100, 500, 1_000, 5_000)
     ]
     assert concentrations == sorted(concentrations)
-    base = insert_mass_ng(vector_mass_ng=25, vector_length_bp=5000, insert_length_bp=1000, insert_to_vector_molar_ratio=3)
-    assert insert_mass_ng(vector_mass_ng=50, vector_length_bp=5000, insert_length_bp=1000, insert_to_vector_molar_ratio=3) == pytest.approx(base * 2)
-    assert insert_mass_ng(vector_mass_ng=25, vector_length_bp=5000, insert_length_bp=1000, insert_to_vector_molar_ratio=6) == pytest.approx(base * 2)
+    base = insert_mass_ng(
+        vector_mass_ng=25,
+        vector_length_bp=5000,
+        insert_length_bp=1000,
+        insert_to_vector_molar_ratio=3,
+    )
+    assert insert_mass_ng(
+        vector_mass_ng=50,
+        vector_length_bp=5000,
+        insert_length_bp=1000,
+        insert_to_vector_molar_ratio=3,
+    ) == pytest.approx(base * 2)
+    assert insert_mass_ng(
+        vector_mass_ng=25,
+        vector_length_bp=5000,
+        insert_length_bp=1000,
+        insert_to_vector_molar_ratio=6,
+    ) == pytest.approx(base * 2)
 
 
 def test_shared_python_browser_numeric_differential_corpus_matches_python_authority():
     import json
     from pathlib import Path
+
     from pcr_tools.flanking_numeric_recipes import resolve_numeric_recipe
 
     root = Path(__file__).resolve().parents[2]
-    corpus = json.loads((root / "contracts/chemistry/flanking-differential-corpus.json").read_text(encoding="utf-8"))
+    corpus = json.loads(
+        (root / "contracts/chemistry/flanking-differential-corpus.json").read_text(encoding="utf-8")
+    )
     for case in corpus["cases"]:
-        result = resolve_numeric_recipe(case["protocol"], case["module"], scenario=case.get("python_scenario") or {})
+        result = resolve_numeric_recipe(
+            case["protocol"], case["module"], scenario=case.get("python_scenario") or {}
+        )
         for key, expected in case.get("expected_values", {}).items():
             assert result["values"].get(key) == pytest.approx(expected), f"{case['id']}:{key}"
         unresolved = {row["id"] for row in result["unresolved_numeric_dependencies"]}
@@ -210,11 +296,17 @@ def test_digital_consumable_platform_matrix_is_fail_closed_and_m0689_colony_is_e
     assert qx600_result and qx600_result["platform_name"] == "Bio-Rad QX600"
     qx600_evagreen = dict(qx600)
     qx600_evagreen["digital_protocol"] = "bio-rad-qx200-evagreen"
-    assert digital_context(qx600_evagreen, assay_id="digital-pcr")["protocol_id"] == "bio-rad-qx200-evagreen"
+    assert (
+        digital_context(qx600_evagreen, assay_id="digital-pcr")["protocol_id"]
+        == "bio-rad-qx200-evagreen"
+    )
 
     qx_one_evagreen = dict(qx600_evagreen)
     qx_one_evagreen["digital_platform_id"] = "bio-rad-qx-one"
-    assert digital_context(qx_one_evagreen, assay_id="digital-pcr")["platform_name"] == "Bio-Rad QX ONE"
+    assert (
+        digital_context(qx_one_evagreen, assay_id="digital-pcr")["platform_name"]
+        == "Bio-Rad QX ONE"
+    )
 
     qx_continuum = dict(qx600)
     qx_continuum["digital_platform_id"] = "bio-rad-qx-continuum"
@@ -248,26 +340,54 @@ def test_digital_consumable_platform_matrix_is_fail_closed_and_m0689_colony_is_e
 
 
 def test_species_accession_authority_fails_closed_on_suppressed_replaced_and_snapshot_drift():
-    from pcr_tools.species_panel import parse_accession_authority_manifest, validate_accession_authority
+    from pcr_tools.species_panel import (
+        parse_accession_authority_manifest,
+        validate_accession_authority,
+    )
 
     current = parse_accession_authority_manifest(
         "NC_000001.1\t562\tcurrent\t\tRefSeq-232\tTaxonomy-2026-09\n"
         "NC_000002.2\t562\tcurrent\t\tRefSeq-232\tTaxonomy-2026-09\n"
     )
     summary = validate_accession_authority(
-        current, accessions=("NC_000001.1","NC_000002.2"), target_taxid=562,
-        sequence_database_snapshot="RefSeq-232", taxonomy_snapshot="Taxonomy-2026-09",
+        current,
+        accessions=("NC_000001.1", "NC_000002.2"),
+        target_taxid=562,
+        sequence_database_snapshot="RefSeq-232",
+        taxonomy_snapshot="Taxonomy-2026-09",
     )
     assert summary["status_counts"]["current"] == 2
     assert summary["all_records_match_target_taxid"] is True
 
-    suppressed = parse_accession_authority_manifest("NC_000001.1\t562\tsuppressed\t\tRefSeq-232\tTaxonomy-2026-09\n")
+    suppressed = parse_accession_authority_manifest(
+        "NC_000001.1\t562\tsuppressed\t\tRefSeq-232\tTaxonomy-2026-09\n"
+    )
     with pytest.raises(SpeciesPanelError, match="suppressed"):
-        validate_accession_authority(suppressed, accessions=("NC_000001.1",), target_taxid=562, sequence_database_snapshot="RefSeq-232", taxonomy_snapshot="Taxonomy-2026-09")
+        validate_accession_authority(
+            suppressed,
+            accessions=("NC_000001.1",),
+            target_taxid=562,
+            sequence_database_snapshot="RefSeq-232",
+            taxonomy_snapshot="Taxonomy-2026-09",
+        )
 
-    replaced = parse_accession_authority_manifest("NC_000001.1\t562\treplaced\tNC_000001.2\tRefSeq-232\tTaxonomy-2026-09\n")
-    with pytest.raises(SpeciesPanelError, match="NC_000001.1->NC_000001.2"):
-        validate_accession_authority(replaced, accessions=("NC_000001.1",), target_taxid=562, sequence_database_snapshot="RefSeq-232", taxonomy_snapshot="Taxonomy-2026-09")
+    replaced = parse_accession_authority_manifest(
+        "NC_000001.1\t562\treplaced\tNC_000001.2\tRefSeq-232\tTaxonomy-2026-09\n"
+    )
+    with pytest.raises(SpeciesPanelError, match=r"NC_000001.1->NC_000001.2"):
+        validate_accession_authority(
+            replaced,
+            accessions=("NC_000001.1",),
+            target_taxid=562,
+            sequence_database_snapshot="RefSeq-232",
+            taxonomy_snapshot="Taxonomy-2026-09",
+        )
 
     with pytest.raises(SpeciesPanelError, match="sequence-database snapshot"):
-        validate_accession_authority(current, accessions=("NC_000001.1","NC_000002.2"), target_taxid=562, sequence_database_snapshot="RefSeq-233", taxonomy_snapshot="Taxonomy-2026-09")
+        validate_accession_authority(
+            current,
+            accessions=("NC_000001.1", "NC_000002.2"),
+            target_taxid=562,
+            sequence_database_snapshot="RefSeq-233",
+            taxonomy_snapshot="Taxonomy-2026-09",
+        )

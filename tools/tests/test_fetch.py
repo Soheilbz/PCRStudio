@@ -15,9 +15,9 @@ from pcr_tools.fetch import (
     MAX_RESPONSE_BYTES,
     FetchError,
     Record,
+    _request_url,
     check_accessions,
     fetch,
-    _request_url,
     parse_fasta,
 )
 
@@ -51,8 +51,6 @@ class _FakeOpener:
 
 def _install_fetch_response(monkeypatch, response):
     monkeypatch.setattr("pcr_tools.fetch.opener", lambda: _FakeOpener(response))
-
-
 
 
 def test_ncbi_api_key_is_explicit_request_data_not_ambient_environment(monkeypatch):
@@ -171,18 +169,24 @@ def test_alignment_refuses_unverified_mafft_version_in_every_policy(monkeypatch)
     monkeypatch.setenv("PCRSTUDIO_TOOLCHAIN_MODE", "compatible")
     monkeypatch.setattr(
         "pcr_tools.align.available",
-        lambda: {"available": True, "aligners": [{"id": "mafft", "name": "MAFFT", "path": "mafft"}]},
+        lambda: {
+            "available": True,
+            "aligners": [{"id": "mafft", "name": "MAFFT", "path": "mafft"}],
+        },
     )
     monkeypatch.setattr(
         "pcr_tools.align.tool_status",
         lambda _tool: {"version_matches_contract": False, "observed_version": "7.525"},
     )
-    with pytest.raises(AlignError, match="requires the pinned 7.526 version"):
+    with pytest.raises(AlignError, match=r"requires the pinned 7.526 version"):
         align(">target\nACGT\n>other\nACGT\n")
 
 
 def test_alignment_refuses_an_aligner_that_drops_a_record(monkeypatch):
-    monkeypatch.setattr("pcr_tools.align.tool_status", lambda _tool: {"version_matches_contract": True, "observed_version": "v7.526"})
+    monkeypatch.setattr(
+        "pcr_tools.align.tool_status",
+        lambda _tool: {"version_matches_contract": True, "observed_version": "v7.526"},
+    )
     monkeypatch.setattr(
         "pcr_tools.align.available",
         lambda: {
@@ -200,7 +204,10 @@ def test_alignment_refuses_an_aligner_that_drops_a_record(monkeypatch):
 
 
 def test_alignment_refuses_an_aligner_that_changes_bases(monkeypatch):
-    monkeypatch.setattr("pcr_tools.align.tool_status", lambda _tool: {"version_matches_contract": True, "observed_version": "v7.526"})
+    monkeypatch.setattr(
+        "pcr_tools.align.tool_status",
+        lambda _tool: {"version_matches_contract": True, "observed_version": "v7.526"},
+    )
     monkeypatch.setattr(
         "pcr_tools.align.available",
         lambda: {

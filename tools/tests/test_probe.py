@@ -21,8 +21,8 @@ from corpus import record
 from pcr_tools.design import Constraints
 from pcr_tools.presets import polymerase
 from pcr_tools.probe import (
-    UNBOUND_ENGINE_PROBE_TM_OFFSET_C,
     FORBIDDEN_FIRST_BASE,
+    UNBOUND_ENGINE_PROBE_TM_OFFSET_C,
     ProbeError,
     assay_to_dict,
     design,
@@ -225,7 +225,9 @@ def _qpcr_probe_request(**extra):
 
 
 @pytest.mark.parametrize("policy", ["strict", "development"])
-def test_qpcr_probe_without_named_executable_chemistry_is_refused_in_every_policy(monkeypatch, policy):
+def test_qpcr_probe_without_named_executable_chemistry_is_refused_in_every_policy(
+    monkeypatch, policy
+):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", policy)
     with pytest.raises(ProbeError, match="explicit named executable probe chemistry"):
         run(_qpcr_probe_request())

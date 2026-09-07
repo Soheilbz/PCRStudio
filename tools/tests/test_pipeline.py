@@ -86,10 +86,6 @@ def test_an_assay_default_purpose_is_used_when_the_request_has_none():
     assert answer["purpose"]["id"] == "screen"
 
 
-
-
-
-
 def test_restriction_cloning_refuses_bare_primer_branch():
     try:
         run(
@@ -111,7 +107,9 @@ def test_restriction_cloning_refuses_bare_primer_branch():
     except ValueError as error:
         assert "tails.tail_protocol" in str(error)
     else:
-        raise AssertionError("restriction-cloning must not return supplier-orderable bare PCR primers")
+        raise AssertionError(
+            "restriction-cloning must not return supplier-orderable bare PCR primers"
+        )
 
 
 def test_the_order_sheet_follows_the_ranking_not_primer3s_order():
@@ -127,10 +125,6 @@ def test_every_score_is_the_sum_of_its_stated_parts():
     for pair in answer["pairs"]:
         total = sum(part["value"] for part in pair["score_components"])
         assert round(total, 3) == pair["score"]
-
-
-
-
 
 
 def test_result_keeps_the_executable_assay_contract_for_reproduction():
@@ -165,12 +159,6 @@ def test_result_keeps_the_executable_assay_contract_for_reproduction():
     assert answer["assay"]["enzyme"] == ["thermostable"]
 
 
-
-
-
-
-
-
 def test_validation_contract_is_structured_for_qpcr_and_digital_pcr():
     qanswer = run({"template": TEMPLATE, "assay": {"id": "qpcr-sybr"}, "how_many": 1})
     qitems = {item["key"] for item in qanswer["validation"]["items"]}
@@ -178,7 +166,9 @@ def test_validation_contract_is_structured_for_qpcr_and_digital_pcr():
     assert qanswer["validation"]["status"] == "in-silico-only"
     assert "efficiency" in " ".join(qanswer["validation"]["not_computed"])
 
-    danswer = run({"template": TEMPLATE, **DIGITAL_CONTEXT, "assay": {"id": "digital-pcr"}, "how_many": 1})
+    danswer = run(
+        {"template": TEMPLATE, **DIGITAL_CONTEXT, "assay": {"id": "digital-pcr"}, "how_many": 1}
+    )
     ditems = {item["key"] for item in danswer["validation"]["items"]}
     assert {"partition_counts", "partition_volume", "threshold_and_rain_policy"} <= ditems
     assert danswer["reaction"]["model"]["oligo_concentration_parameter"] == "PRIMER_DNA_CONC"
@@ -191,8 +181,6 @@ def test_validation_contract_is_structured_for_qpcr_and_digital_pcr():
         for item in danswer["validation"]["items"]
         if item["kind"] == "measurement"
     )
-
-
 
 
 def test_bio_rad_itaq_explicit_product_override_wins_and_is_audited():
@@ -210,8 +198,6 @@ def test_bio_rad_itaq_explicit_product_override_wins_and_is_audited():
     assert answer["constraints"]["product_max"] == 120
     assert {"product_min", "product_max"} <= set(answer["purpose"]["overridden"])
     assert all(90 <= pair["product_size"] <= 120 for pair in answer["pairs"])
-
-
 
 
 def test_flanking_pair_does_not_accept_two_named_chemistry_overlays():
@@ -271,12 +257,8 @@ def test_named_flanking_protocol_records_keep_vendor_authority_without_reranking
         ),
         long_range_protocol("neb-q5-xt-m2499", assay_id="long-range-pcr"),
         long_range_protocol("promega-gotaq-long-m4021", assay_id="long-range-pcr"),
-        long_range_protocol(
-            "thermo-platinum-superfi-ii-longrange", assay_id="long-range-pcr"
-        ),
-        digital_protocol(
-            "bio-rad-qx700-evagreen-supermix", assay_id="digital-pcr"
-        ),
+        long_range_protocol("thermo-platinum-superfi-ii-longrange", assay_id="long-range-pcr"),
+        digital_protocol("bio-rad-qx700-evagreen-supermix", assay_id="digital-pcr"),
     ]
     assert all(record and record["sequence_decision_impact"] == "none" for record in records)
 
@@ -299,21 +281,15 @@ def test_digital_pcr_requires_platform_partition_and_fragmentation_context():
 
 def test_qx200_overlay_refuses_non_droplet_partition():
     with pytest.raises(ValueError, match="droplet"):
-        run({
-            "template": TEMPLATE,
-            **{**DIGITAL_CONTEXT, "digital_partition_format": "chip"},
-            "assay": {"id": "digital-pcr"},
-            "digital_protocol": "bio-rad-qx200-evagreen",
-            "how_many": 1,
-        })
-
-
-
-
-
-
-
-
+        run(
+            {
+                "template": TEMPLATE,
+                **{**DIGITAL_CONTEXT, "digital_partition_format": "chip"},
+                "assay": {"id": "digital-pcr"},
+                "digital_protocol": "bio-rad-qx200-evagreen",
+                "how_many": 1,
+            }
+        )
 
 
 def test_an_invalid_assay_cycling_programme_is_refused_before_the_search():
@@ -381,8 +357,6 @@ def test_unknown_nested_configuration_is_refused_before_search(field, value, mes
         run({"template": TEMPLATE, field: value})
 
 
-
-
 def test_internal_shortlist_limits_are_validated_before_searching():
     with pytest.raises(ValueError, match=r"most.*integer"):
         run({"template": TEMPLATE}, most=3.5)
@@ -390,8 +364,6 @@ def test_internal_shortlist_limits_are_validated_before_searching():
         run({"template": TEMPLATE}, pool=0)
     with pytest.raises(ValueError, match=r"pool.*how_many"):
         run({"template": TEMPLATE, "how_many": 2}, pool=1)
-
-
 
 
 def test_a_template_shorter_than_the_product_says_which_two_numbers_disagree():
@@ -492,12 +464,6 @@ def test_rna_cannot_be_explicitly_run_as_plain_dna():
         run({"template": TEMPLATE.replace("T", "U"), "from_rna": False})
 
 
-
-
-
-
-
-
 def test_unknown_assay_requirements_are_refused_instead_of_ignored():
     with pytest.raises(ValueError, match="unknown assay requirement"):
         run(
@@ -552,8 +518,6 @@ def test_accessibility_either_ran_or_said_why_it_did_not():
     answer = run({"template": TEMPLATE, "how_many": 2})
     profile = answer["accessibility"]
     assert profile["checked"] or profile["note"], "a silent skip reads as nothing to report"
-
-
 
 
 def test_stage_audit_follows_execution_order_for_variant_and_specificity_filters():
@@ -648,8 +612,6 @@ def test_rpa_neutralises_primer3_tm_ranking_without_removing_tm_guards(monkeypat
         }
     )
     assert seen and seen[-1] == ISOTHERMAL_PRIMER3_WEIGHTS
-
-
 
 
 def test_the_weights_a_run_used_travel_with_the_result():
@@ -787,8 +749,6 @@ def test_rpa_quality_does_not_treat_the_pcr_tm_midpoint_as_quality():
 
     assert quality["parts"]["tm_centeredness"] is None
     assert 0 <= quality["score"] <= 100
-
-
 
 
 def test_unchecked_specificity_is_not_reported_as_a_perfect_quality_component(
@@ -946,10 +906,6 @@ def test_a_clean_scan_and_a_narrow_one_do_not_read_alike():
     )
     assert wide["background"]["note"] == ""
     assert wide["background"]["bases"] > len(TEMPLATE)
-
-
-
-
 
 
 def test_circular_template_specificity_reports_real_background_bases_not_join_scaffold():

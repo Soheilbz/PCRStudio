@@ -59,24 +59,34 @@ _IUPAC_BASES: dict[str, frozenset[str]] = {
     "N": frozenset("ACGT"),
 }
 _IUPAC_COMPLEMENT = {
-    "A": "T", "C": "G", "G": "C", "T": "A", "U": "A",
-    "R": "Y", "Y": "R", "S": "S", "W": "W", "K": "M", "M": "K",
-    "B": "V", "D": "H", "H": "D", "V": "B", "N": "N", "-": "-",
+    "A": "T",
+    "C": "G",
+    "G": "C",
+    "T": "A",
+    "U": "A",
+    "R": "Y",
+    "Y": "R",
+    "S": "S",
+    "W": "W",
+    "K": "M",
+    "M": "K",
+    "B": "V",
+    "D": "H",
+    "H": "D",
+    "V": "B",
+    "N": "N",
+    "-": "-",
 }
 
 
-def _oriented_alignment_segment(
-    aligned_sequence: str, columns: list[int], strand: str
-) -> str:
+def _oriented_alignment_segment(aligned_sequence: str, columns: list[int], strand: str) -> str:
     segment = "".join(aligned_sequence[column].upper() for column in columns)
     if strand == "+":
         return segment
     return "".join(_IUPAC_COMPLEMENT.get(base, "N") for base in reversed(segment))
 
 
-def _alignment_variant_risk(
-    *, msa_payload: str, primers: list[dict[str, Any]]
-) -> dict[str, Any]:
+def _alignment_variant_risk(*, msa_payload: str, primers: list[dict[str, Any]]) -> dict[str, Any]:
     """Measure observed primer-site conservation in the exact MSA used for tiling.
 
     This is deliberately *not* an amplification-success model.  It reports whether
@@ -353,7 +363,9 @@ def _parse_region_bed(raw: str, *, reference_length: int) -> list[tuple[int, int
     return merged
 
 
-def _gaps_within(intervals: list[tuple[int, int]], covered: set[int], *, why: str) -> list[dict[str, Any]]:
+def _gaps_within(
+    intervals: list[tuple[int, int]], covered: set[int], *, why: str
+) -> list[dict[str, Any]]:
     gaps: list[dict[str, Any]] = []
     for region_start, region_end in intervals:
         at = region_start
@@ -404,7 +416,9 @@ def _find_config(workspace: Path) -> Path | None:
     if len(preferred) > 1:
         # Prefer a config below the generated output directory, but never use
         # filesystem ordering as a hidden scientific choice.
-        generated = [path for path in preferred if "scheme" in {part.lower() for part in path.parts}]
+        generated = [
+            path for path in preferred if "scheme" in {part.lower() for part in path.parts}
+        ]
         if len(generated) == 1:
             return generated[0]
         return None
@@ -461,9 +475,7 @@ def _prepare_input(request: dict[str, Any]) -> tuple[Any, str, str, dict[str, An
     records = _fasta_records(str(request.get("template") or ""))
     alignment_mode = str(request.get("tilingAlignmentMode") or "auto")
     if alignment_mode not in {"auto", "prealigned"}:
-        raise PrimalSchemeImportError(
-            "tilingAlignmentMode must be `auto` or `prealigned`"
-        )
+        raise PrimalSchemeImportError("tilingAlignmentMode must be `auto` or `prealigned`")
 
     alignment_meta: dict[str, Any]
     if len(records) > 1:
@@ -599,29 +611,75 @@ def _inspect_interactions(
 
 
 def _collect_visualisations(
-    *, bed: Path, msa: Path, reference_sequence: str, reference_id: str, module_id: str, workspace: Path
+    *,
+    bed: Path,
+    msa: Path,
+    reference_sequence: str,
+    reference_id: str,
+    module_id: str,
+    workspace: Path,
 ) -> dict[str, Any]:
     """Collect current PrimalScheme3 native visualisations as diagnostic artifacts."""
     ref = _write_text(workspace / "reference.fasta", f">{reference_id}\n{reference_sequence}\n")
     specs = [
-        ("visualise_bedfile", ["visualise-bedfile", str(bed), str(ref), "--ref-id", reference_id, "--output", str(workspace / "bedfile.html")], workspace / "bedfile.html", "bed-layout-html"),
-        ("visualise_primer_mismatches", ["visualise-primer-mismatches", str(msa), str(bed), "--output", str(workspace / "primer-mismatches.html"), "--no-include-seqs", "--no-offline-plots"], workspace / "primer-mismatches.html", "primer-mismatch-html"),
+        (
+            "visualise_bedfile",
+            [
+                "visualise-bedfile",
+                str(bed),
+                str(ref),
+                "--ref-id",
+                reference_id,
+                "--output",
+                str(workspace / "bedfile.html"),
+            ],
+            workspace / "bedfile.html",
+            "bed-layout-html",
+        ),
+        (
+            "visualise_primer_mismatches",
+            [
+                "visualise-primer-mismatches",
+                str(msa),
+                str(bed),
+                "--output",
+                str(workspace / "primer-mismatches.html"),
+                "--no-include-seqs",
+                "--no-offline-plots",
+            ],
+            workspace / "primer-mismatches.html",
+            "primer-mismatch-html",
+        ),
     ]
-    artifacts=[]; runs=[]; warnings=[]
-    for operation_id,args,out,kind in specs:
+    artifacts = []
+    runs = []
+    warnings = []
+    for operation_id, args, out, kind in specs:
         try:
             _completed, run = run_tool(
-                "primalscheme3", args, role="OPTIONAL", operation_id=operation_id, engine_id="tiling-scheme", module_id=module_id, cwd=workspace, timeout_seconds=180,
+                "primalscheme3",
+                args,
+                role="OPTIONAL",
+                operation_id=operation_id,
+                engine_id="tiling-scheme",
+                module_id=module_id,
+                cwd=workspace,
+                timeout_seconds=180,
             )
             runs.append(run)
-            if out.exists(): artifacts.append(_artifact(out,kind=kind))
-            else: warnings.append(f"{operation_id} completed without the expected artifact")
+            if out.exists():
+                artifacts.append(_artifact(out, kind=kind))
+            else:
+                warnings.append(f"{operation_id} completed without the expected artifact")
         except ToolRuntimeError as exc:
             warnings.append(str(exc))
     return {
-        "status":"evidence-collected" if artifacts else "unavailable",
-        "artifacts":artifacts,"tool_runs":runs,"warnings":warnings,"decision_impact":"diagnostic-only",
-        "note":"Native visualisations expose scheme layout and primer mismatch evidence; they never alter candidate ranking or orderability.",
+        "status": "evidence-collected" if artifacts else "unavailable",
+        "artifacts": artifacts,
+        "tool_runs": runs,
+        "warnings": warnings,
+        "decision_impact": "diagnostic-only",
+        "note": "Native visualisations expose scheme layout and primer mismatch evidence; they never alter candidate ranking or orderability.",
     }
 
 
@@ -727,7 +785,9 @@ def _normalise_result(
             covered.update(range(max(0, int(tile["start"])), reference_length))
             covered.update(range(0, min(reference_length, int(tile["end"]))))
         else:
-            covered.update(range(max(0, int(tile["start"])), min(reference_length, int(tile["end"]))))
+            covered.update(
+                range(max(0, int(tile["start"])), min(reference_length, int(tile["end"])))
+            )
 
     requested_regions: list[tuple[int, int]] = []
     if operation == "panel-create" and request.get("regionBed"):
@@ -823,7 +883,9 @@ def _normalise_result(
             **reaction,
             "model": thermodynamic_model(chosen.preset, chosen.reaction),
         },
-        "constraints": {field: getattr(limits, field) for field in Constraints.__dataclass_fields__},
+        "constraints": {
+            field: getattr(limits, field) for field in Constraints.__dataclass_fields__
+        },
         "reference_id": chosen.target.name or "unnamed-reference",
         "coordinate_system": "0-based, half-open; circular origin-spanning tiles use start>end with crosses_the_join=true",
         "scheme_format": "pcrstudio-tiling-v2",
@@ -834,7 +896,10 @@ def _normalise_result(
             "tool_runs": tool_runs,
             "interaction_evidence": interaction_evidence,
             "input_artifacts": {
-                key: {"sha256": _sha256_text(str(request[key])), "characters": len(str(request[key]))}
+                key: {
+                    "sha256": _sha256_text(str(request[key])),
+                    "characters": len(str(request[key])),
+                }
                 for key in ("existingBed", "schemeConfig", "regionBed")
                 if request.get(key)
             },
@@ -926,12 +991,21 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raise PrimalSchemeImportError(
             "tiled-scheme requires explicit `tilingAlignmentMode`: auto or prealigned; alignment authority is scientific input."
         )
-    if operation != "panel-create" and (request.get("regionBed") is not None or request.get("panelMode") is not None):
+    if operation != "panel-create" and (
+        request.get("regionBed") is not None or request.get("panelMode") is not None
+    ):
         raise PrimalSchemeImportError("regionBed/panelMode are only valid for panel-create.")
     if operation == "panel-create" and request.get("panelMode") in (None, ""):
-        raise PrimalSchemeImportError("panel-create requires explicit `panelMode`: region-only, entropy or equal.")
-    if operation not in {"repair-mode", "scheme-replace"} and request.get("schemeConfig") is not None:
-        raise PrimalSchemeImportError("schemeConfig is only valid for repair-mode or scheme-replace.")
+        raise PrimalSchemeImportError(
+            "panel-create requires explicit `panelMode`: region-only, entropy or equal."
+        )
+    if (
+        operation not in {"repair-mode", "scheme-replace"}
+        and request.get("schemeConfig") is not None
+    ):
+        raise PrimalSchemeImportError(
+            "schemeConfig is only valid for repair-mode or scheme-replace."
+        )
     if operation == "scheme-create" and request.get("existingBed") is not None:
         raise PrimalSchemeImportError(
             "existingBed is not a scheme-create input in PCRStudio Gen-1; hidden stale state is refused rather than changing the operation."
@@ -1138,15 +1212,24 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             bed = _find_bed(workspace, exclude=existing_bed if operation == "repair-mode" else None)
 
         result = _normalise_result(
-            request=request, chosen=chosen, msa_payload=msa_payload, reference_sequence=reference_sequence,
-            alignment_meta=alignment_meta, bed=bed, workspace=workspace, operation=operation, tool_runs=tool_runs,
+            request=request,
+            chosen=chosen,
+            msa_payload=msa_payload,
+            reference_sequence=reference_sequence,
+            alignment_meta=alignment_meta,
+            bed=bed,
+            workspace=workspace,
+            operation=operation,
+            tool_runs=tool_runs,
         )
         if isinstance(result.get("lifecycle"), dict):
             visual = _collect_visualisations(
                 bed=bed,
                 msa=source,
                 reference_sequence=reference_sequence,
-                reference_id=str(getattr(getattr(chosen, "target", None), "name", None) or "reference"),
+                reference_id=str(
+                    getattr(getattr(chosen, "target", None), "name", None) or "reference"
+                ),
                 module_id=module_id,
                 workspace=workspace,
             )

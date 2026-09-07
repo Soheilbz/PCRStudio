@@ -47,8 +47,53 @@ from dataclasses import dataclass, replace
 from typing import Any
 
 from . import accessibility as access
-from .lamp_multiplex import resolve as resolve_lamp_multiplex
 from . import rt
+from .lamp_errors import LoopSetError
+
+# These imports are part of the historical public surface of ``loop_set``;
+# callers and downstream tests import the reviewed profiles and geometry
+# constants from this module even though their definitions live elsewhere.
+from .lamp_geometry import (
+    AMPLICON,
+    DEFAULT_GEOMETRY_PROFILE_ID,
+    DEFAULT_INNER_LINKER_ID,
+    END_BASES,
+    END_STABILITY,
+    EVIDENCE_2026_F2_B2_PREFERRED,
+    EVIDENCE_2026_OUTER_GAP,
+    EVIDENCE_2026_OUTER_GAP_PREFERRED,
+    F2_B2_SPAN,
+    GEOMETRY_BOUNDS,
+    GEOMETRY_PROFILES,
+    INNER_LINKERS,
+    LONGEST_RUN,
+    LOOP_END_STABILITY,
+    LOOP_SPAN,
+    MIDDLE_GAP,
+    NEB_2025_LOOP_TM_REFERENCE,
+    OUTER_GAP,
+    PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
+    PE_EFFECTIVE_NA_M,
+    PE_GAS_CONSTANT,
+    PE_MG_M,
+    PE_NA_M,
+    PE_OLIGO_CONC_M,
+    PE_THERMODYNAMIC_MODEL,
+    PRIMEREXPLORER_V5_GEOMETRY,
+    WINDOW_BOUNDS,
+    WINDOW_INTEGER_FIELDS,
+    GeometryProfile,
+    Region,
+    adjust,
+    check_geometry,
+    geometry_profile_for,
+    inner_linker_for,
+    primerexplorer_v5_end_dg,
+    primerexplorer_v5_tm,
+    smallest_amplicon,
+    smallest_f2_b2_span,
+)
+from .lamp_multiplex import resolve as resolve_lamp_multiplex
 from .lamp_numeric_recipes import (
     LAMP_ACCELERATION_ADDITIVES,
     LAMP_CARRYOVER_STRATEGIES,
@@ -61,9 +106,6 @@ from .lamp_numeric_recipes import (
     LAMP_SPECIFICITY_ADDITIVES,
     resolve_numeric_recipe,
 )
-from .specificity import BackgroundTooLarge
-from .modified_oligos import provenance_block as modified_oligo_provenance
-from .lamp_errors import LoopSetError
 from .lamp_profiles import (
     AT_RICH,
     AT_RICH_AT_OR_BELOW,
@@ -80,7 +122,26 @@ from .lamp_profiles import (
     target_gc_interval,
     windows_for,
 )
-from .workflow_evidence import WorkflowEvidenceError, validate_evidence_fields
+from .modified_oligos import provenance_block as modified_oligo_provenance
+from .registries.lamp import (
+    _READOUT_CHEMISTRY_BRANCH,
+    LAMP_CONFIRMATION_MODES,
+    LAMP_DESIGN_INTENTS,
+    LAMP_DESIGN_STAGES,
+    LAMP_DETECTION_TOPOLOGIES,
+    LAMP_FIXED_PRIMER_ROLES,
+    LAMP_FORMULATIONS,
+    LAMP_LOOP_POLICIES,
+    LAMP_MUTATION_ANCHORS,
+    LAMP_PROTOCOL_REGISTRY,
+    LAMP_PROTOCOLS,
+    LAMP_READOUT_CHEMISTRIES,
+    LAMP_READOUTS,
+    LAMP_SAMPLE_MATRICES,
+    LAMP_SAMPLE_PREPARATIONS,
+    LAMP_SCREENING_COHORT,
+)
+from .specificity import BackgroundTooLarge
 from .thermo import (
     DEFAULT_CONDITIONS,
     analyse,
@@ -88,6 +149,44 @@ from .thermo import (
     pair_dimer,
     reverse_complement,
 )
+from .workflow_evidence import WorkflowEvidenceError, validate_evidence_fields
+
+__all__ = [
+    "AMPLICON",
+    "AT_RICH",
+    "AT_RICH_AT_OR_BELOW",
+    "BY_ID",
+    "DEFAULT_GEOMETRY_PROFILE_ID",
+    "DEFAULT_INNER_LINKER_ID",
+    "EVIDENCE_2026_F2_B2_PREFERRED",
+    "EVIDENCE_2026_OUTER_GAP",
+    "EVIDENCE_2026_OUTER_GAP_PREFERRED",
+    "F2_B2_SPAN",
+    "GC_RICH",
+    "GC_RICH_AT_OR_ABOVE",
+    "GEOMETRY_BOUNDS",
+    "GEOMETRY_PROFILES",
+    "INNER_LINKERS",
+    "LONGEST_RUN",
+    "LOOP_PRIMER_WINDOW",
+    "LOOP_SPAN",
+    "MIDDLE_GAP",
+    "NEB_2025_LOOP_TM_REFERENCE",
+    "NORMAL",
+    "OUTER_GAP",
+    "PCRSTUDIO_EVIDENCE_2026_GEOMETRY",
+    "PE_EFFECTIVE_NA_M",
+    "PE_GAS_CONSTANT",
+    "PE_MG_M",
+    "PE_NA_M",
+    "PE_OLIGO_CONC_M",
+    "SETS",
+    "WINDOW_BOUNDS",
+    "WINDOW_INTEGER_FIELDS",
+    "Region",
+    "smallest_amplicon",
+    "smallest_f2_b2_span",
+]
 
 # Bounded diagnostic scan: this is intentionally reported as a ceiling rather
 # than presented as exhaustive thermodynamic evidence.
@@ -99,52 +198,6 @@ CORE_OLIGO_NAMES = {"F3", "FIP", "BIP", "B3"}
 class LoopSetBackgroundTooLarge(BackgroundTooLarge, LoopSetError):
     """A LAMP background that needs indexed validation instead of a direct scan."""
 
-
-# Profile/window objects are imported from ``lamp_profiles`` and intentionally
-# re-exported from this module for backwards-compatible public imports.
-# Candidate enumeration, thermodynamic evaluation and ranking remain below.
-
-
-from .lamp_geometry import (
-    AMPLICON,
-    DEFAULT_GEOMETRY_PROFILE_ID,
-    DEFAULT_INNER_LINKER_ID,
-    END_BASES,
-    END_STABILITY,
-    EVIDENCE_2026_F2_B2_PREFERRED,
-    EVIDENCE_2026_OUTER_GAP,
-    EVIDENCE_2026_OUTER_GAP_PREFERRED,
-    F2_B2_SPAN,
-    GEOMETRY_BOUNDS,
-    GEOMETRY_PROFILES,
-    GeometryProfile,
-    INNER_LINKERS,
-    LONGEST_RUN,
-    LOOP_END_STABILITY,
-    LOOP_SPAN,
-    MIDDLE_GAP,
-    NEB_2025_LOOP_TM_REFERENCE,
-    OUTER_GAP,
-    PCRSTUDIO_EVIDENCE_2026_GEOMETRY,
-    PE_EFFECTIVE_NA_M,
-    PE_GAS_CONSTANT,
-    PE_MG_M,
-    PE_NA_M,
-    PE_OLIGO_CONC_M,
-    PE_THERMODYNAMIC_MODEL,
-    PRIMEREXPLORER_V5_GEOMETRY,
-    Region,
-    WINDOW_BOUNDS,
-    WINDOW_INTEGER_FIELDS,
-    adjust,
-    check_geometry,
-    geometry_profile_for,
-    inner_linker_for,
-    primerexplorer_v5_end_dg,
-    primerexplorer_v5_tm,
-    smallest_amplicon,
-    smallest_f2_b2_span,
-)
 
 # ── Enumerating what could serve each role ─────────────────────────────────
 
@@ -327,8 +380,10 @@ class Set:
     def spread(self) -> float:
         """Diagnostic whole-set Tm range; not a ranking/validity target."""
         temperatures = [
-            self.forward.outer.tm, self.forward.inner.tm,
-            self.backward.outer.tm, self.backward.inner.tm,
+            self.forward.outer.tm,
+            self.forward.inner.tm,
+            self.backward.outer.tm,
+            self.backward.inner.tm,
         ]
         for half in (self.forward, self.backward):
             if half.loop:
@@ -342,18 +397,18 @@ class Set:
         and matched corresponding F/B regions. Exact role-window centres are
         used only where the published preset supplies both edges.
         """
-        correspondence = (
-            abs(self.forward.outer.tm - self.backward.outer.tm)
-            + abs(self.forward.inner.tm - self.backward.inner.tm)
+        correspondence = abs(self.forward.outer.tm - self.backward.outer.tm) + abs(
+            self.forward.inner.tm - self.backward.inner.tm
         )
-        offset_error = (
-            abs((self.forward.inner.tm - self.forward.outer.tm) - 5.0)
-            + abs((self.backward.inner.tm - self.backward.outer.tm) - 5.0)
+        offset_error = abs((self.forward.inner.tm - self.forward.outer.tm) - 5.0) + abs(
+            (self.backward.inner.tm - self.backward.outer.tm) - 5.0
         )
         centre_error = 0.0
         for candidate, window in (
-            (self.forward.outer, windows.outer), (self.backward.outer, windows.outer),
-            (self.forward.inner, windows.inner), (self.backward.inner, windows.inner),
+            (self.forward.outer, windows.outer),
+            (self.backward.outer, windows.outer),
+            (self.forward.inner, windows.inner),
+            (self.backward.inner, windows.inner),
         ):
             if window.tm_min is not None and window.tm_max is not None:
                 centre_error += abs(candidate.tm - ((window.tm_min + window.tm_max) / 2))
@@ -452,10 +507,7 @@ def _spatial_sample(values: list[Any], count: int) -> list[Any]:
         return [values[(len(values) - 1) // 2]]
     last = len(values) - 1
     denominator = count - 1
-    indices = [
-        (index * last + denominator // 2) // denominator
-        for index in range(count)
-    ]
+    indices = [(index * last + denominator // 2) // denominator for index in range(count)]
     return [values[index] for index in indices]
 
 
@@ -499,11 +551,19 @@ def three_prime_interaction_risk(oligos_by_name: dict[str, str]) -> dict[str, An
                     "partner": partner_name,
                     "bases": bases,
                     "review": bases >= THREE_PRIME_REVIEW_BASES,
-                    "core_core": primer_name in CORE_OLIGO_NAMES and partner_name in CORE_OLIGO_NAMES,
+                    "core_core": primer_name in CORE_OLIGO_NAMES
+                    and partner_name in CORE_OLIGO_NAMES,
                 }
             )
 
-    events.sort(key=lambda event: (-event["bases"], not event["core_core"], event["primer_3p"], event["partner"]))
+    events.sort(
+        key=lambda event: (
+            -event["bases"],
+            not event["core_core"],
+            event["primer_3p"],
+            event["partner"],
+        )
+    )
     core = [event for event in events if event["core_core"]]
     return {
         "classification": "risk-ranking-not-pass-fail",
@@ -525,9 +585,9 @@ def three_prime_interaction_risk(oligos_by_name: dict[str, str]) -> dict[str, An
 def _set_sequence_risk_rank(
     template: str, one: Set, *, inner_linker: str = ""
 ) -> tuple[int, int, int, int]:
-    risk = three_prime_interaction_risk({
-        oligo.name: oligo.sequence for oligo in oligos(template, one, inner_linker=inner_linker)
-    })
+    risk = three_prime_interaction_risk(
+        {oligo.name: oligo.sequence for oligo in oligos(template, one, inner_linker=inner_linker)}
+    )
     return (
         int(risk["core_core_max_bases"]),
         int(risk["core_core_review_events"]),
@@ -562,11 +622,17 @@ def _set_terminal_gc_rank(
     made = oligos(template, one, inner_linker=inner_linker)
     runs = [_three_prime_gc_run(oligo.sequence) for oligo in made]
     no_clamp = sum(_three_prime_gc_count(oligo.sequence) == 0 for oligo in made)
-    return (no_clamp, max((max(0, run - 3) for run in runs), default=0), sum(run > 3 for run in runs))
+    return (
+        no_clamp,
+        max((max(0, run - 3) for run in runs), default=0),
+        sum(run > 3 for run in runs),
+    )
 
 
 def _cheap_set_rank(
-    windows: Windows, one: Set, *,
+    windows: Windows,
+    one: Set,
+    *,
     geometry_profile: GeometryProfile = PRIMEREXPLORER_V5_GEOMETRY,
 ) -> tuple[Any, ...]:
     """Fast source-shaped rank used before sequence-interaction expansion."""
@@ -580,7 +646,10 @@ def _cheap_set_rank(
 
 
 def _set_rank(
-    template: str, windows: Windows, one: Set, *,
+    template: str,
+    windows: Windows,
+    one: Set,
+    *,
     geometry_profile: GeometryProfile = PRIMEREXPLORER_V5_GEOMETRY,
     inner_linker: str = "",
 ) -> tuple[Any, ...]:
@@ -652,7 +721,8 @@ def _forward_halves(
     loop: dict[int, list[Candidate]],
     loop_span: tuple[int, int],
     most: int,
-    *, loop_target_tm: float = 63.0,
+    *,
+    loop_target_tm: float = 63.0,
 ) -> tuple[list[Half], bool, int]:
     """F2, F1 and the LF between them, for every workable placement.
 
@@ -704,7 +774,8 @@ def _backward_halves(
     loop: dict[int, list[Candidate]],
     loop_span: tuple[int, int],
     most: int,
-    *, loop_target_tm: float = 63.0,
+    *,
+    loop_target_tm: float = 63.0,
 ) -> tuple[list[Half], bool, int]:
     """B1c, B2c and the LB between them.
 
@@ -771,9 +842,7 @@ OUTER_PAIRS_PER_CORE = 4
 CORE_PAIR_OUTER_EXPANSION_LIMIT = 4096
 
 
-def _round_robin_partner_schedule(
-    partner_lists: list[list[int]], limit: int
-):
+def _round_robin_partner_schedule(partner_lists: list[list[int]], limit: int):
     """Yield ``(job_index, partner_index)`` fairly across bounded jobs.
 
     Every non-empty job receives its first partner before any job receives its
@@ -828,9 +897,8 @@ def _core_pair_rank(
                 loop_penalty += half.loop.tm - high
 
     correspondence = abs(front.outer.tm - behind.outer.tm) + abs(front.inner.tm - behind.inner.tm)
-    offset_error = (
-        abs((front.inner.tm - front.outer.tm) - 5.0)
-        + abs((behind.inner.tm - behind.outer.tm) - 5.0)
+    offset_error = abs((front.inner.tm - front.outer.tm) - 5.0) + abs(
+        (behind.inner.tm - behind.outer.tm) - 5.0
     )
     return (
         round(span_penalty, 3),
@@ -946,7 +1014,10 @@ def sets(
     fixed_primers: dict[str, str] | None = None,
     mutation_anchor: dict[str, Any] | None = None,
     include_search_meta: bool = False,
-) -> tuple[list[Set], Windows, dict[str, int]] | tuple[list[Set], Windows, dict[str, int], dict[str, object]]:
+) -> (
+    tuple[list[Set], Windows, dict[str, int]]
+    | tuple[list[Set], Windows, dict[str, int], dict[str, object]]
+):
     """Whole sets, best first, with the parameter set they were found under.
 
     Returns three values for direct low-level callers: the sets, the windows
@@ -1003,12 +1074,24 @@ def sets(
         sequence, chosen.inner, chosen, reaction, primes_from="start", excluded=search_excluded
     )
     loop_forward = candidates(
-        sequence, chosen.loop, chosen, reaction, primes_from="start", excluded=search_excluded,
-        gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX), end_stability_threshold=LOOP_END_STABILITY,
+        sequence,
+        chosen.loop,
+        chosen,
+        reaction,
+        primes_from="start",
+        excluded=search_excluded,
+        gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX),
+        end_stability_threshold=LOOP_END_STABILITY,
     )
     loop_backward = candidates(
-        sequence, chosen.loop, chosen, reaction, primes_from="end", excluded=search_excluded,
-        gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX), end_stability_threshold=LOOP_END_STABILITY,
+        sequence,
+        chosen.loop,
+        chosen,
+        reaction,
+        primes_from="end",
+        excluded=search_excluded,
+        gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX),
+        end_stability_threshold=LOOP_END_STABILITY,
     )
 
     loop_target_tm = (
@@ -1021,11 +1104,19 @@ def sets(
         )
     )
     forward, forward_halves_capped, forward_loop_alternatives_pruned = _forward_halves(
-        outer_forward, inner_forward, loop_forward, loop_span, MOST_HALVES,
+        outer_forward,
+        inner_forward,
+        loop_forward,
+        loop_span,
+        MOST_HALVES,
         loop_target_tm=loop_target_tm,
     )
     backward, backward_halves_capped, backward_loop_alternatives_pruned = _backward_halves(
-        outer_backward, inner_backward, loop_backward, loop_span, MOST_HALVES,
+        outer_backward,
+        inner_backward,
+        loop_backward,
+        loop_span,
+        MOST_HALVES,
         loop_target_tm=loop_target_tm,
     )
 
@@ -1112,9 +1203,7 @@ def sets(
         partner_indices = [
             index
             for index in range(left, right)
-            if f2_b2_span[0]
-            <= backward[index].outer.end - front.outer.start
-            <= f2_b2_span[1]
+            if f2_b2_span[0] <= backward[index].outer.end - front.outer.start <= f2_b2_span[1]
             and b3_cache.setdefault(
                 backward[index].outer.end,
                 _outers_after(outer_backward, backward[index].outer.end, outer_gap),
@@ -1125,9 +1214,7 @@ def sets(
         partner_count_before_local_sampling += len(partner_indices)
         if len(partner_indices) > MAX_BACKWARD_PARTNERS_PER_FORWARD:
             backward_partner_sampling_used = True
-            partner_indices = _spatial_sample(
-                partner_indices, MAX_BACKWARD_PARTNERS_PER_FORWARD
-            )
+            partner_indices = _spatial_sample(partner_indices, MAX_BACKWARD_PARTNERS_PER_FORWARD)
         partner_count_after_local_sampling += len(partner_indices)
         partner_jobs.append((front, partner_indices))
 
@@ -1156,23 +1243,19 @@ def sets(
         f3_short = outer_subset(
             f3_candidates,
             front.outer.tm,
-            gap_of=lambda candidate: front.outer.start - candidate.end,
+            gap_of=lambda candidate, outer_start=front.outer.start: outer_start - candidate.end,
         )
         b3_short = outer_subset(
             b3_candidates,
             behind.outer.tm,
-            gap_of=lambda candidate: candidate.start - behind.outer.end,
+            gap_of=lambda candidate, outer_end=behind.outer.end: candidate.start - outer_end,
         )
 
         combinations = [
-            Set(forward=front, backward=behind, f3=f3, b3=b3)
-            for f3 in f3_short
-            for b3 in b3_short
+            Set(forward=front, backward=behind, f3=f3, b3=b3) for f3 in f3_short for b3 in b3_short
         ]
         combinations.sort(
-            key=lambda one: _cheap_set_rank(
-                chosen, one, geometry_profile=geometry_profile
-            )
+            key=lambda one: _cheap_set_rank(chosen, one, geometry_profile=geometry_profile)
         )
         if len(combinations) > OUTER_PAIRS_PER_CORE:
             outer_pair_truncation_used = True
@@ -1198,9 +1281,11 @@ def sets(
     risk_pool, risk_ranking_capped = _risk_rank_pool(
         found, max(RISK_RANK_POOL_LIMIT, how_many * 64)
     )
-    risk_pool.sort(key=lambda one: _set_rank(
-        sequence, chosen, one, geometry_profile=geometry_profile, inner_linker=inner_linker
-    ))
+    risk_pool.sort(
+        key=lambda one: _set_rank(
+            sequence, chosen, one, geometry_profile=geometry_profile, inner_linker=inner_linker
+        )
+    )
     found = risk_pool
     search = {
         "complete": not (
@@ -1294,17 +1379,25 @@ def sets(
         candidate_pool = [_mirror_set(one, len(input_sequence)) for one in candidate_pool]
         counted = _swap_forward_backward_counts(counted)
         search["forward_halves_capped"], search["backward_halves_capped"] = (
-            search["backward_halves_capped"], search["forward_halves_capped"]
+            search["backward_halves_capped"],
+            search["forward_halves_capped"],
         )
         search["forward_loop_alternatives_pruned"], search["backward_loop_alternatives_pruned"] = (
-            search["backward_loop_alternatives_pruned"], search["forward_loop_alternatives_pruned"]
+            search["backward_loop_alternatives_pruned"],
+            search["forward_loop_alternatives_pruned"],
         )
     before_constraints = len(candidate_pool)
     if fixed_primers:
-        candidate_pool = [one for one in candidate_pool if _matches_fixed_primers(input_sequence, one, fixed_primers, inner_linker=inner_linker)]
+        candidate_pool = [
+            one
+            for one in candidate_pool
+            if _matches_fixed_primers(input_sequence, one, fixed_primers, inner_linker=inner_linker)
+        ]
     after_fixed = len(candidate_pool)
     if mutation_anchor:
-        candidate_pool = [one for one in candidate_pool if _matches_mutation_anchor(one, mutation_anchor)]
+        candidate_pool = [
+            one for one in candidate_pool if _matches_mutation_anchor(one, mutation_anchor)
+        ]
     after_mutation = len(candidate_pool)
     search["design_constraints"] = {
         "candidate_pool_before": before_constraints,
@@ -1344,10 +1437,7 @@ SETS_APART = 8
 
 
 def _candidate_near(first: Candidate, second: Candidate) -> bool:
-    return (
-        abs(first.start - second.start) < SETS_APART
-        and abs(first.end - second.end) < SETS_APART
-    )
+    return abs(first.start - second.start) < SETS_APART and abs(first.end - second.end) < SETS_APART
 
 
 def _same_design_neighbourhood(one: Set, other: Set) -> bool:
@@ -1393,7 +1483,10 @@ def _matches_fixed_primers(
     Fixed primers constrain candidate membership only. They never rewrite the
     supplied sequence or relax PrimerExplorer geometry/thermodynamic criteria.
     """
-    ordered = {oligo.name: oligo.sequence.upper() for oligo in oligos(template, one, inner_linker=inner_linker)}
+    ordered = {
+        oligo.name: oligo.sequence.upper()
+        for oligo in oligos(template, one, inner_linker=inner_linker)
+    }
     return all(ordered.get(role) == sequence.upper() for role, sequence in fixed_primers.items())
 
 
@@ -1655,24 +1748,67 @@ def _inclusion_regions(one: Set) -> list[InclusionRegion]:
     """
     regions = [
         InclusionRegion("F3", one.f3.start, one.f3.end, "outer", "right", "F3 3' extension edge"),
-        InclusionRegion("F2", one.forward.outer.start, one.forward.outer.end, "inner", "right", "FIP F2 3' annealing edge"),
-        InclusionRegion("F1/F1c", one.forward.inner.start, one.forward.inner.end, "inner", "right", "FIP 5' F1c terminal maps to the F1 right edge"),
-        InclusionRegion("B1c", one.backward.inner.start, one.backward.inner.end, "inner", "left", "BIP 5' B1c terminal maps to the B1c left edge"),
-        InclusionRegion("B2c/B2", one.backward.outer.start, one.backward.outer.end, "inner", "left", "BIP B2 3' annealing edge maps to the B2c left edge"),
-        InclusionRegion("B3c/B3", one.b3.start, one.b3.end, "outer", "left", "B3 3' extension edge maps to the B3c left edge"),
+        InclusionRegion(
+            "F2",
+            one.forward.outer.start,
+            one.forward.outer.end,
+            "inner",
+            "right",
+            "FIP F2 3' annealing edge",
+        ),
+        InclusionRegion(
+            "F1/F1c",
+            one.forward.inner.start,
+            one.forward.inner.end,
+            "inner",
+            "right",
+            "FIP 5' F1c terminal maps to the F1 right edge",
+        ),
+        InclusionRegion(
+            "B1c",
+            one.backward.inner.start,
+            one.backward.inner.end,
+            "inner",
+            "left",
+            "BIP 5' B1c terminal maps to the B1c left edge",
+        ),
+        InclusionRegion(
+            "B2c/B2",
+            one.backward.outer.start,
+            one.backward.outer.end,
+            "inner",
+            "left",
+            "BIP B2 3' annealing edge maps to the B2c left edge",
+        ),
+        InclusionRegion(
+            "B3c/B3",
+            one.b3.start,
+            one.b3.end,
+            "outer",
+            "left",
+            "B3 3' extension edge maps to the B3c left edge",
+        ),
     ]
     if one.forward.loop:
         regions.append(
             InclusionRegion(
-                "LF", one.forward.loop.start, one.forward.loop.end,
-                "loop", "left", "LF 3' edge maps to the left edge of its plus-strand interval",
+                "LF",
+                one.forward.loop.start,
+                one.forward.loop.end,
+                "loop",
+                "left",
+                "LF 3' edge maps to the left edge of its plus-strand interval",
             )
         )
     if one.backward.loop:
         regions.append(
             InclusionRegion(
-                "LB", one.backward.loop.start, one.backward.loop.end,
-                "loop", "right", "LB 3' edge maps to the right edge of its plus-strand interval",
+                "LB",
+                one.backward.loop.start,
+                one.backward.loop.end,
+                "loop",
+                "right",
+                "LB 3' edge maps to the right edge of its plus-strand interval",
             )
         )
     return regions
@@ -1713,7 +1849,9 @@ def _aligned_region_events(
 ) -> dict[str, Any]:
     """Substitution/indel and terminal evidence for one region in one MSA row."""
     if region.start < 0 or region.end > len(columns) or region.start >= region.end:
-        raise LoopSetError(f"Invalid inclusivity interval {region.name}: {region.start}:{region.end}.")
+        raise LoopSetError(
+            f"Invalid inclusivity interval {region.name}: {region.start}:{region.end}."
+        )
 
     first_col = columns[region.start]
     last_col = columns[region.end - 1]
@@ -1756,9 +1894,7 @@ def _aligned_region_events(
         if event:
             event_positions.append(relative)
             near_terminal = (
-                relative < 3
-                if region.critical_side == "left"
-                else relative >= length - 3
+                relative < 3 if region.critical_side == "left" else relative >= length - 3
             )
             if near_terminal:
                 terminal_3_events += 1
@@ -1847,29 +1983,35 @@ def _target_inclusivity_audit(template: str, one: Set, aligned: Any) -> dict[str
             inner_terminal_clean_records += 1
         if selected_exact:
             all_selected_regions_exact_records += 1
-        record_summaries.append({
-            "id": record.id,
-            "core_exact": core_exact,
-            "all_selected_regions_exact": selected_exact,
-            "inner_terminal_3_events": group_terminal["inner"],
-            "inner_events": group_events["inner"],
-            "loop_terminal_3_events": group_terminal["loop"],
-            "loop_events": group_events["loop"],
-            "outer_terminal_3_events": group_terminal["outer"],
-            "outer_events": group_events["outer"],
-            "regions_with_events": {
-                name: evidence for name, evidence in per_region.items()
-                if evidence["total_events"] or evidence["ambiguous_bases"]
-            },
-        })
+        record_summaries.append(
+            {
+                "id": record.id,
+                "core_exact": core_exact,
+                "all_selected_regions_exact": selected_exact,
+                "inner_terminal_3_events": group_terminal["inner"],
+                "inner_events": group_events["inner"],
+                "loop_terminal_3_events": group_terminal["loop"],
+                "loop_events": group_events["loop"],
+                "outer_terminal_3_events": group_terminal["outer"],
+                "outer_events": group_events["outer"],
+                "regions_with_events": {
+                    name: evidence
+                    for name, evidence in per_region.items()
+                    if evidence["total_events"] or evidence["ambiguous_bases"]
+                },
+            }
+        )
 
     # Worst rows are retained for inspection without multiplying a 500-row MSA
     # by every candidate set in the JSON result. Aggregate counts still use the
     # entire panel.
     record_summaries.sort(
         key=lambda item: (
-            item["inner_terminal_3_events"], item["inner_events"],
-            item["loop_terminal_3_events"], item["loop_events"], item["outer_events"],
+            item["inner_terminal_3_events"],
+            item["inner_events"],
+            item["loop_terminal_3_events"],
+            item["loop_events"],
+            item["outer_events"],
         ),
         reverse=True,
     )
@@ -1880,7 +2022,9 @@ def _target_inclusivity_audit(template: str, one: Set, aligned: Any) -> dict[str
         "exact_core_records": exact_core_records,
         "exact_core_fraction": (exact_core_records / checked if checked else None),
         "inner_terminal_clean_records": inner_terminal_clean_records,
-        "inner_terminal_clean_fraction": (inner_terminal_clean_records / checked if checked else None),
+        "inner_terminal_clean_fraction": (
+            inner_terminal_clean_records / checked if checked else None
+        ),
         "all_selected_regions_exact_records": all_selected_regions_exact_records,
         "all_selected_regions_exact_fraction": (
             all_selected_regions_exact_records / checked if checked else None
@@ -1891,9 +2035,12 @@ def _target_inclusivity_audit(template: str, one: Set, aligned: Any) -> dict[str
         "record_reporting_capped": len(record_summaries) > INCLUSIVITY_WORST_RECORDS,
         "classification": "position-aware-msa-inclusivity-soft-ranking",
         "rank_fields": [
-            "inner_terminal_3_events", "inner_events",
-            "loop_terminal_3_events", "loop_events",
-            "outer_terminal_3_events", "outer_events",
+            "inner_terminal_3_events",
+            "inner_events",
+            "loop_terminal_3_events",
+            "loop_events",
+            "outer_terminal_3_events",
+            "outer_events",
         ],
         "claim": (
             "All intended-target rows in the supplied homologous panel were compared at the "
@@ -1929,7 +2076,9 @@ def _prepare_target_inclusivity(template: str, raw_panel: Any) -> tuple[Any | No
             "note": "No intended-target diversity panel was supplied; representative-template design is not population inclusivity evidence.",
         }
     if not isinstance(raw_panel, str):
-        raise LoopSetError("inclusivity must be FASTA text containing homologous intended-target sequences.")
+        raise LoopSetError(
+            "inclusivity must be FASTA text containing homologous intended-target sequences."
+        )
 
     from .align import AlignError, align
     from .fetch import GAP_CHARACTERS, parse_fasta
@@ -1938,7 +2087,9 @@ def _prepare_target_inclusivity(template: str, raw_panel: Any) -> tuple[Any | No
     if not records:
         raise LoopSetError("inclusivity was supplied but contains no non-empty FASTA sequence.")
     if any(record.id == INCLUSIVITY_REFERENCE_ID for record in records):
-        raise LoopSetError(f"inclusivity record id {INCLUSIVITY_REFERENCE_ID!r} is reserved by PCRStudio.")
+        raise LoopSetError(
+            f"inclusivity record id {INCLUSIVITY_REFERENCE_ID!r} is reserved by PCRStudio."
+        )
     for record in records:
         gaps = sorted(set(record.sequence) & set(GAP_CHARACTERS))
         if gaps:
@@ -1999,31 +2150,13 @@ def duplex_ceiling() -> float:
     """Return the diagnostic cross-dimer reference temperature."""
     return round(HOLD - DUPLEX_BELOW_HOLD, 1)
 
+
 # A LAMP temperature and six-primer geometry do not identify a commercial
 # formulation. Keep named protocol overlays explicit so concentrations,
 # carry-over chemistry, readout constraints and incubation are never mixed
 # across Bst-family products/vendors.  These records are bench provenance and
 # ordered-oligo diagnostic context; selecting one does not change the genomic
 # LAMP candidate search/ranking contract.
-from .registries.lamp import (
-    LAMP_PROTOCOL_REGISTRY,
-    LAMP_PROTOCOLS,
-    LAMP_READOUTS,
-    LAMP_READOUT_CHEMISTRIES,
-    LAMP_SAMPLE_MATRICES,
-    LAMP_SAMPLE_PREPARATIONS,
-    LAMP_FORMULATIONS,
-    LAMP_CONFIRMATION_MODES,
-    LAMP_DETECTION_TOPOLOGIES,
-    LAMP_DESIGN_INTENTS,
-    LAMP_LOOP_POLICIES,
-    LAMP_DESIGN_STAGES,
-    LAMP_MUTATION_ANCHORS,
-    LAMP_FIXED_PRIMER_ROLES,
-    LAMP_SCREENING_COHORT,
-    _READOUT_CHEMISTRY_BRANCH,
-)
-
 def _lamp_protocol(protocol_id: str) -> dict[str, Any] | None:
     """Return a defensive copy of one reviewed protocol overlay."""
     if protocol_id == "not-selected":
@@ -2194,6 +2327,7 @@ def interactions(
         ),
     }
 
+
 def set_to_dict(
     template: str,
     one: Set,
@@ -2227,15 +2361,18 @@ def set_to_dict(
             "preferred_loop_tm_penalty": one.evidence_rank(geometry_profile)[2],
             "preferred_f2_b2_span": (
                 list(geometry_profile.preferred_f2_b2_span)
-                if geometry_profile.preferred_f2_b2_span is not None else None
+                if geometry_profile.preferred_f2_b2_span is not None
+                else None
             ),
             "preferred_outer_gap": (
                 list(geometry_profile.preferred_outer_gap)
-                if geometry_profile.preferred_outer_gap is not None else None
+                if geometry_profile.preferred_outer_gap is not None
+                else None
             ),
             "preferred_loop_tm": (
                 list(geometry_profile.preferred_loop_tm)
-                if geometry_profile.preferred_loop_tm is not None else None
+                if geometry_profile.preferred_loop_tm is not None
+                else None
             ),
             "geometry_profile": geometry_profile.id,
             "classification": "soft-ranking-only",
@@ -2366,7 +2503,6 @@ def _measured(
     return entry
 
 
-
 # ── LAMP-native finite-background topology review ──────────────────────────
 #
 # Generic PCR-style specificity asks whether individual oligos have extra sites
@@ -2494,9 +2630,12 @@ def _lamp_sequence_sites(
                 # The biologically critical oligo terminus maps to opposite ends
                 # of the plus-strand window when the hit itself is reversed.
                 critical_index = (
-                    -1 if (query.critical_end == "3" and actual_orientation == "forward")
-                    else 0 if query.critical_end == "3"
-                    else 0 if actual_orientation == "forward"
+                    -1
+                    if (query.critical_end == "3" and actual_orientation == "forward")
+                    else 0
+                    if query.critical_end == "3"
+                    else 0
+                    if actual_orientation == "forward"
                     else -1
                 )
                 terminal_exact = (
@@ -2615,9 +2754,7 @@ def _lamp_background_topology_audit(
             for role, values in by_role.items():
                 expected = query_by_role[role].expected_orientation
                 required = (
-                    expected
-                    if locus_orientation == "forward"
-                    else _opposite_orientation(expected)
+                    expected if locus_orientation == "forward" else _opposite_orientation(expected)
                 )
                 selected = [
                     _canonical_lamp_site(
@@ -2643,30 +2780,40 @@ def _lamp_background_topology_audit(
 
             for f2 in role_sites["F2"]:
                 f1_candidates = _range_by(
-                    role_sites["F1c"], starts["F1c"],
-                    f2.start + loop_span[0], f2.start + loop_span[1],
+                    role_sites["F1c"],
+                    starts["F1c"],
+                    f2.start + loop_span[0],
+                    f2.start + loop_span[1],
                 )
                 for f1c in f1_candidates:
                     b1_candidates = _range_by(
-                        role_sites["B1c"], starts["B1c"],
-                        f1c.end + middle_gap[0], f1c.end + middle_gap[1],
+                        role_sites["B1c"],
+                        starts["B1c"],
+                        f1c.end + middle_gap[0],
+                        f1c.end + middle_gap[1],
                     )
                     for b1c in b1_candidates:
                         b2_candidates = _range_by(
-                            b2_by_end, b2_ends,
-                            b1c.end + loop_span[0], b1c.end + loop_span[1],
+                            b2_by_end,
+                            b2_ends,
+                            b1c.end + loop_span[0],
+                            b1c.end + loop_span[1],
                         )
                         for b2 in b2_candidates:
                             span = b2.end - f2.start
                             if not f2_b2_span[0] <= span <= f2_b2_span[1]:
                                 continue
                             f3_candidates = _range_by(
-                                f3_by_end, f3_ends,
-                                f2.start - outer_gap[1], f2.start - outer_gap[0],
+                                f3_by_end,
+                                f3_ends,
+                                f2.start - outer_gap[1],
+                                f2.start - outer_gap[0],
                             )
                             b3_candidates = _range_by(
-                                role_sites["B3"], starts["B3"],
-                                b2.end + outer_gap[0], b2.end + outer_gap[1],
+                                role_sites["B3"],
+                                starts["B3"],
+                                b2.end + outer_gap[0],
+                                b2.end + outer_gap[1],
                             )
                             for f3 in f3_candidates:
                                 for b3 in b3_candidates:
@@ -2698,29 +2845,35 @@ def _lamp_background_topology_audit(
                                             )
                                             for site in six
                                         ]
-                                        loci.append({
-                                            "contig": contig_name,
-                                            "locus_orientation": locus_orientation,
-                                            "start": min(pair[0] for pair in physical),
-                                            "end": max(pair[1] for pair in physical),
-                                            "exact": exact,
-                                            "critical_terminals_exact": terminal_intact,
-                                            "total_mismatch_lower_bound": sum(site.mismatches for site in six),
-                                            "total_mismatch_upper_bound": sum(site.mismatch_upper_bound for site in six),
-                                            "regions": [
-                                                {
-                                                    "role": site.role,
-                                                    "start": physical[index][0],
-                                                    "end": physical[index][1],
-                                                    "orientation": site.orientation,
-                                                    "mismatches": site.mismatches,
-                                                    "mismatch_upper_bound": site.mismatch_upper_bound,
-                                                    "ambiguous_bases": site.ambiguous_bases,
-                                                    "critical_terminal_exact": site.critical_terminal_exact,
-                                                }
-                                                for index, site in enumerate(six)
-                                            ],
-                                        })
+                                        loci.append(
+                                            {
+                                                "contig": contig_name,
+                                                "locus_orientation": locus_orientation,
+                                                "start": min(pair[0] for pair in physical),
+                                                "end": max(pair[1] for pair in physical),
+                                                "exact": exact,
+                                                "critical_terminals_exact": terminal_intact,
+                                                "total_mismatch_lower_bound": sum(
+                                                    site.mismatches for site in six
+                                                ),
+                                                "total_mismatch_upper_bound": sum(
+                                                    site.mismatch_upper_bound for site in six
+                                                ),
+                                                "regions": [
+                                                    {
+                                                        "role": site.role,
+                                                        "start": physical[index][0],
+                                                        "end": physical[index][1],
+                                                        "orientation": site.orientation,
+                                                        "mismatches": site.mismatches,
+                                                        "mismatch_upper_bound": site.mismatch_upper_bound,
+                                                        "ambiguous_bases": site.ambiguous_bases,
+                                                        "critical_terminal_exact": site.critical_terminal_exact,
+                                                    }
+                                                    for index, site in enumerate(six)
+                                                ],
+                                            }
+                                        )
                                 if not combination_complete:
                                     break
                             if not combination_complete:
@@ -2963,9 +3116,16 @@ def _existing_lamp_set(
     b1c_length = _existing_lamp_integer(raw.get("bip_b1c_length"), name="bip_b1c_length")
     linker = inner_linker.upper()
     if f1c_length + len(linker) >= len(fip) or b1c_length + len(linker) >= len(bip):
-        raise LoopSetError("F1c/B1c split length plus linker must leave a non-empty F2/B2 annealing segment")
-    if linker and (fip[f1c_length : f1c_length + len(linker)] != linker or bip[b1c_length : b1c_length + len(linker)] != linker):
-        raise LoopSetError("Existing FIP/BIP sequences do not contain the selected inner-primer linker at the declared split")
+        raise LoopSetError(
+            "F1c/B1c split length plus linker must leave a non-empty F2/B2 annealing segment"
+        )
+    if linker and (
+        fip[f1c_length : f1c_length + len(linker)] != linker
+        or bip[b1c_length : b1c_length + len(linker)] != linker
+    ):
+        raise LoopSetError(
+            "Existing FIP/BIP sequences do not contain the selected inner-primer linker at the declared split"
+        )
 
     f1c = fip[:f1c_length]
     f2_seq = fip[f1c_length + len(linker) :]
@@ -2974,17 +3134,43 @@ def _existing_lamp_set(
     role_specs = [
         ("F3", f3_seq, windows.outer, "end", (windows.gc_min, windows.gc_max), END_STABILITY),
         ("F2", f2_seq, windows.outer, "end", (windows.gc_min, windows.gc_max), END_STABILITY),
-        ("F1/F1c", reverse_complement(f1c), windows.inner, "end", (windows.gc_min, windows.gc_max), END_STABILITY),
+        (
+            "F1/F1c",
+            reverse_complement(f1c),
+            windows.inner,
+            "end",
+            (windows.gc_min, windows.gc_max),
+            END_STABILITY,
+        ),
         ("B1c", b1c_seq, windows.inner, "start", (windows.gc_min, windows.gc_max), END_STABILITY),
-        ("B2c/B2", reverse_complement(b2_oligo), windows.outer, "start", (windows.gc_min, windows.gc_max), END_STABILITY),
-        ("B3c/B3", reverse_complement(b3_oligo), windows.outer, "start", (windows.gc_min, windows.gc_max), END_STABILITY),
+        (
+            "B2c/B2",
+            reverse_complement(b2_oligo),
+            windows.outer,
+            "start",
+            (windows.gc_min, windows.gc_max),
+            END_STABILITY,
+        ),
+        (
+            "B3c/B3",
+            reverse_complement(b3_oligo),
+            windows.outer,
+            "start",
+            (windows.gc_min, windows.gc_max),
+            END_STABILITY,
+        ),
     ]
     built: dict[str, Candidate] = {}
     evidence: list[dict[str, Any]] = []
     for role, plus, window, primes_from, gc_bounds, threshold in role_specs:
         candidate, audit = _existing_candidate(
-            template, plus, role=role, window=window, primes_from=primes_from,
-            gc_bounds=gc_bounds, end_threshold=threshold,
+            template,
+            plus,
+            role=role,
+            window=window,
+            primes_from=primes_from,
+            gc_bounds=gc_bounds,
+            end_threshold=threshold,
         )
         built[role] = candidate
         evidence.append(audit)
@@ -2992,15 +3178,25 @@ def _existing_lamp_set(
     lf = None
     if lf_oligo:
         lf, audit = _existing_candidate(
-            template, reverse_complement(lf_oligo), role="LF", window=windows.loop,
-            primes_from="start", gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX), end_threshold=LOOP_END_STABILITY,
+            template,
+            reverse_complement(lf_oligo),
+            role="LF",
+            window=windows.loop,
+            primes_from="start",
+            gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX),
+            end_threshold=LOOP_END_STABILITY,
         )
         evidence.append(audit)
     lb = None
     if lb_oligo:
         lb, audit = _existing_candidate(
-            template, lb_oligo, role="LB", window=windows.loop,
-            primes_from="end", gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX), end_threshold=LOOP_END_STABILITY,
+            template,
+            lb_oligo,
+            role="LB",
+            window=windows.loop,
+            primes_from="end",
+            gc_bounds=(LOOP_GC_MIN, LOOP_GC_MAX),
+            end_threshold=LOOP_END_STABILITY,
         )
         evidence.append(audit)
 
@@ -3010,7 +3206,18 @@ def _existing_lamp_set(
     b1 = built["B1c"]
     b2 = built["B2c/B2"]
     b3 = built["B3c/B3"]
-    if not (f3.end <= f2.start < f2.end <= f1.start < f1.end <= b1.start < b1.end <= b2.start < b2.end <= b3.start):
+    if not (
+        f3.end
+        <= f2.start
+        < f2.end
+        <= f1.start
+        < f1.end
+        <= b1.start
+        < b1.end
+        <= b2.start
+        < b2.end
+        <= b3.start
+    ):
         raise LoopSetError(
             "Existing F3/F2/F1/B1c/B2c/B3c roles do not form the required non-overlapping LAMP order on the submitted target."
         )
@@ -3048,7 +3255,8 @@ def _existing_lamp_set(
         "role_audits": evidence,
         "geometry": actual,
         "geometry_issues": geometry_issues,
-        "within_selected_design_envelope": not geometry_issues and all(item["within_selected_design_envelope"] for item in evidence),
+        "within_selected_design_envelope": not geometry_issues
+        and all(item["within_selected_design_envelope"] for item in evidence),
         "decision_impact": "no-redesign-existing-set-evidence-only",
     }
 
@@ -3084,21 +3292,33 @@ def _rt_lamp_accessibility(
         name = raw.get("name")
         at = raw.get("at")
         length = raw.get("length")
-        if isinstance(name, str) and isinstance(at, int) and isinstance(length, int) and at >= 0 and length > 0:
+        if (
+            isinstance(name, str)
+            and isinstance(at, int)
+            and isinstance(length, int)
+            and at >= 0
+            and length > 0
+        ):
             windows[name] = (at, length)
     hold = protocol.get("hold_temperature_c") if isinstance(protocol, dict) else None
-    temperature = float(hold) if isinstance(hold, (int, float)) and not isinstance(hold, bool) else float(fallback_temperature_c)
+    temperature = (
+        float(hold)
+        if isinstance(hold, (int, float)) and not isinstance(hold, bool)
+        else float(fallback_temperature_c)
+    )
     folded = access.profile(template, windows, celsius=temperature, molecule="RNA")
     report = access.accessibility_to_dict(folded)
-    report.update({
-        "molecule": "RNA",
-        "parameter_authority": "ViennaRNA Turner 2004 RNA",
-        "decision_impact": "none",
-        "note": (
-            report.get("note")
-            or "Optional RT-LAMP RNA-structure diagnostic on the selected role regions; it did not participate in set generation, hard validity or ranking."
-        ),
-    })
+    report.update(
+        {
+            "molecule": "RNA",
+            "parameter_authority": "ViennaRNA Turner 2004 RNA",
+            "decision_impact": "none",
+            "note": (
+                report.get("note")
+                or "Optional RT-LAMP RNA-structure diagnostic on the selected role regions; it did not participate in set generation, hard validity or ranking."
+            ),
+        }
+    )
     return report
 
 
@@ -3108,7 +3328,6 @@ def _workflow_evidence(value: Any) -> dict[str, str | int | float | bool | None]
         return validate_evidence_fields(value)
     except WorkflowEvidenceError as exc:
         raise LoopSetError(str(exc)) from exc
-
 
 
 def _enum_value(request: dict[str, Any], key: str, allowed: tuple[str, ...], default: str) -> str:
@@ -3122,10 +3341,14 @@ def _fixed_primer_request(request: dict[str, Any], intent: str) -> dict[str, str
     raw = request.get("lamp_fixed_primers")
     if raw is None:
         if intent == "fixed-primer-anchor":
-            raise LoopSetError("fixed-primer-anchor requires lamp_fixed_primers with at least one exact F3/B3/FIP/BIP/LF/LB sequence.")
+            raise LoopSetError(
+                "fixed-primer-anchor requires lamp_fixed_primers with at least one exact F3/B3/FIP/BIP/LF/LB sequence."
+            )
         return None
     if intent != "fixed-primer-anchor":
-        raise LoopSetError("lamp_fixed_primers is accepted only with lamp_design_intent=fixed-primer-anchor.")
+        raise LoopSetError(
+            "lamp_fixed_primers is accepted only with lamp_design_intent=fixed-primer-anchor."
+        )
     if not isinstance(raw, dict) or not raw:
         raise LoopSetError("lamp_fixed_primers must be a non-empty object.")
     unknown = sorted(set(raw) - set(LAMP_FIXED_PRIMER_ROLES))
@@ -3135,7 +3358,9 @@ def _fixed_primer_request(request: dict[str, Any], intent: str) -> dict[str, str
     for role, sequence in raw.items():
         text = str(sequence or "").strip().upper()
         if not text or any(base not in "ACGT" for base in text):
-            raise LoopSetError(f"lamp_fixed_primers.{role} must be a non-empty unambiguous DNA sequence.")
+            raise LoopSetError(
+                f"lamp_fixed_primers.{role} must be a non-empty unambiguous DNA sequence."
+            )
         answer[role] = text
     return answer
 
@@ -3144,25 +3369,47 @@ def _mutation_request(request: dict[str, Any], intent: str, template: str) -> di
     raw = request.get("lamp_variant")
     if raw is None:
         if intent == "mutation-anchored-specific":
-            raise LoopSetError("mutation-anchored-specific requires lamp_variant with position/ref/alt/anchor.")
+            raise LoopSetError(
+                "mutation-anchored-specific requires lamp_variant with position/ref/alt/anchor."
+            )
         return None
     if intent != "mutation-anchored-specific":
-        raise LoopSetError("lamp_variant is accepted only with lamp_design_intent=mutation-anchored-specific.")
+        raise LoopSetError(
+            "lamp_variant is accepted only with lamp_design_intent=mutation-anchored-specific."
+        )
     if not isinstance(raw, dict):
         raise LoopSetError("lamp_variant must be an object.")
     if set(raw) - {"position", "ref", "alt", "anchor"}:
         raise LoopSetError("lamp_variant accepts only position, ref, alt and anchor.")
     position = raw.get("position")
-    if not isinstance(position, int) or isinstance(position, bool) or not 0 <= position < len(template):
-        raise LoopSetError("lamp_variant.position must be a 0-based position inside the submitted target.")
-    ref = str(raw.get("ref") or "").upper(); alt = str(raw.get("alt") or "").upper(); anchor = str(raw.get("anchor") or "")
+    if (
+        not isinstance(position, int)
+        or isinstance(position, bool)
+        or not 0 <= position < len(template)
+    ):
+        raise LoopSetError(
+            "lamp_variant.position must be a 0-based position inside the submitted target."
+        )
+    ref = str(raw.get("ref") or "").upper()
+    alt = str(raw.get("alt") or "").upper()
+    anchor = str(raw.get("anchor") or "")
     if len(ref) != 1 or len(alt) != 1 or ref not in "ACGT" or alt not in "ACGT" or ref == alt:
         raise LoopSetError("lamp_variant.ref and alt must be different single A/C/G/T bases.")
     if anchor not in LAMP_MUTATION_ANCHORS:
-        raise LoopSetError("lamp_variant.anchor must be one of: " + ", ".join(LAMP_MUTATION_ANCHORS))
+        raise LoopSetError(
+            "lamp_variant.anchor must be one of: " + ", ".join(LAMP_MUTATION_ANCHORS)
+        )
     if template[position].upper() != alt:
-        raise LoopSetError("mutation-specific design expects the submitted template to carry lamp_variant.alt at lamp_variant.position.")
-    return {"position": position, "ref": ref, "alt": alt, "anchor": anchor, "empirical_validation_required": True}
+        raise LoopSetError(
+            "mutation-specific design expects the submitted template to carry lamp_variant.alt at lamp_variant.position."
+        )
+    return {
+        "position": position,
+        "ref": ref,
+        "alt": alt,
+        "anchor": anchor,
+        "empirical_validation_required": True,
+    }
 
 
 def _optional_nonnegative_numeric(request: dict[str, Any], key: str) -> float | None:
@@ -3177,63 +3424,108 @@ def _optional_nonnegative_numeric(request: dict[str, Any], key: str) -> float | 
     return number
 
 
-def _readout_chemistry_compatibility(protocol: dict[str, Any] | None, readout: str, chemistry: str) -> dict[str, Any]:
+def _readout_chemistry_compatibility(
+    protocol: dict[str, Any] | None, readout: str, chemistry: str
+) -> dict[str, Any]:
     branch = _READOUT_CHEMISTRY_BRANCH[chemistry]
     if chemistry != "not-specified" and readout != "not-specified" and branch != readout:
-        raise LoopSetError(f"LAMP readout chemistry `{chemistry}` belongs to `{branch}`, not `{readout}`.")
+        raise LoopSetError(
+            f"LAMP readout chemistry `{chemistry}` belongs to `{branch}`, not `{readout}`."
+        )
     if protocol is not None:
         forbidden = dict(protocol.get("forbidden_readout_chemistries") or {})
         if chemistry in forbidden:
-            raise LoopSetError(f"The selected LAMP readout chemistry `{chemistry}` conflicts with the reviewed named protocol: {forbidden[chemistry]}")
+            raise LoopSetError(
+                f"The selected LAMP readout chemistry `{chemistry}` conflicts with the reviewed named protocol: {forbidden[chemistry]}"
+            )
     return {"selected": chemistry, "branch": branch, "decision_impact": "none"}
 
 
-def _sample_scenario_compatibility(protocol: dict[str, Any] | None, matrix: str, preparation: str) -> dict[str, Any]:
+def _sample_scenario_compatibility(
+    protocol: dict[str, Any] | None, matrix: str, preparation: str
+) -> dict[str, Any]:
     direct = preparation in {"direct-addition", "koh-lyse-and-lamp"}
     if direct:
         if protocol is None:
-            raise LoopSetError("Direct-sample LAMP requires a named reviewed protocol; generic Bst chemistry is not a direct-matrix authority.")
+            raise LoopSetError(
+                "Direct-sample LAMP requires a named reviewed protocol; generic Bst chemistry is not a direct-matrix authority."
+            )
         if matrix in {"not-specified", "crude-unspecified"}:
             raise LoopSetError("Direct-sample LAMP requires an explicit reviewed specimen matrix.")
         allowed = list(protocol.get("direct_sample_matrices") or [])
         if matrix not in allowed:
-            raise LoopSetError(f"The selected protocol does not carry reviewed direct-sample authority for `{matrix}`.")
+            raise LoopSetError(
+                f"The selected protocol does not carry reviewed direct-sample authority for `{matrix}`."
+            )
         if preparation == "koh-lyse-and-lamp" and matrix != "koh-lysate":
             raise LoopSetError("KOH Lyse & LAMP requires lamp_sample_matrix=`koh-lysate`.")
-    return {"matrix": matrix, "preparation": preparation, "direct": direct, "decision_impact": "none"}
+    return {
+        "matrix": matrix,
+        "preparation": preparation,
+        "direct": direct,
+        "decision_impact": "none",
+    }
 
 
 def _formulation_compatibility(protocol: dict[str, Any] | None, formulation: str) -> dict[str, Any]:
     if formulation != "not-specified" and protocol is None:
-        raise LoopSetError("An explicit LAMP formulation requires a named reviewed protocol authority.")
-    if formulation != "not-specified" and protocol is not None and formulation not in list(protocol.get("formats") or []):
-        raise LoopSetError(f"The selected protocol does not carry reviewed `{formulation}` formulation authority.")
+        raise LoopSetError(
+            "An explicit LAMP formulation requires a named reviewed protocol authority."
+        )
+    if (
+        formulation != "not-specified"
+        and protocol is not None
+        and formulation not in list(protocol.get("formats") or [])
+    ):
+        raise LoopSetError(
+            f"The selected protocol does not carry reviewed `{formulation}` formulation authority."
+        )
     return {"selection": formulation, "decision_impact": "none"}
 
 
-def _confirmation_compatibility(protocol: dict[str, Any] | None, confirmation: str) -> dict[str, Any]:
+def _confirmation_compatibility(
+    protocol: dict[str, Any] | None, confirmation: str
+) -> dict[str, Any]:
     reviewed = list((protocol or {}).get("recommended_confirmation_modes") or [])
-    return {"selection": confirmation, "reviewed_for_protocol": confirmation in reviewed if confirmation != "not-specified" else None,
-            "note": "Confirmation evidence is assay provenance; a melt/anneal curve does not establish sequence identity.", "decision_impact": "none"}
+    return {
+        "selection": confirmation,
+        "reviewed_for_protocol": confirmation in reviewed
+        if confirmation != "not-specified"
+        else None,
+        "note": "Confirmation evidence is assay provenance; a melt/anneal curve does not establish sequence identity.",
+        "decision_impact": "none",
+    }
 
 
-def _bench_optimization(request: dict[str, Any], protocol: dict[str, Any] | None) -> dict[str, float] | None:
+def _bench_optimization(
+    request: dict[str, Any], protocol: dict[str, Any] | None
+) -> dict[str, float] | None:
     raw = request.get("lamp_bench_optimization")
-    if raw in (None, {}): return None
+    if raw in (None, {}):
+        return None
     if protocol is None:
         raise LoopSetError("LAMP bench optimization requires a named reviewed protocol authority.")
-    if not isinstance(raw, dict): raise LoopSetError("lamp_bench_optimization must be an object.")
+    if not isinstance(raw, dict):
+        raise LoopSetError("lamp_bench_optimization must be an object.")
     protocol_id = str(protocol.get("_protocol_id") or "")
     scope = dict(LAMP_NUMERIC_OPTIMIZATION_ENVELOPES.get(protocol_id) or {})
     checked: dict[str, float] = {}
     for key, value in raw.items():
-        if key not in scope: raise LoopSetError(f"The selected protocol does not publish a reviewed optimization envelope for `{key}`.")
-        if not isinstance(value, (int, float)) or isinstance(value, bool): raise LoopSetError(f"lamp_bench_optimization.{key} must be numeric.")
+        if key not in scope:
+            raise LoopSetError(
+                f"The selected protocol does not publish a reviewed optimization envelope for `{key}`."
+            )
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            raise LoopSetError(f"lamp_bench_optimization.{key} must be numeric.")
         lo, hi = scope[key]
-        number=float(value)
-        if not lo <= number <= hi: raise LoopSetError(f"lamp_bench_optimization.{key} must be within the reviewed range {lo}–{hi}.")
-        checked[key]=number
+        number = float(value)
+        if not lo <= number <= hi:
+            raise LoopSetError(
+                f"lamp_bench_optimization.{key} must be within the reviewed range {lo}–{hi}."
+            )
+        checked[key] = number
     return checked
+
 
 def run(request: dict[str, Any]) -> dict[str, Any]:
     """One loop-mediated design, end to end, in the shape the interface reads.
@@ -3290,100 +3582,237 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         # Protocol/readout contradictions are chemistry-contract errors, not candidate-search failures.
         _readout_compatibility(protocol, lamp_readout)
 
-    lamp_readout_chemistry = _enum_value(request, "lamp_readout_chemistry", LAMP_READOUT_CHEMISTRIES, "not-specified")
-    lamp_sample_matrix = _enum_value(request, "lamp_sample_matrix", LAMP_SAMPLE_MATRICES, "not-specified")
-    lamp_sample_preparation = _enum_value(request, "lamp_sample_preparation", LAMP_SAMPLE_PREPARATIONS, "not-specified")
+    lamp_readout_chemistry = _enum_value(
+        request, "lamp_readout_chemistry", LAMP_READOUT_CHEMISTRIES, "not-specified"
+    )
+    lamp_sample_matrix = _enum_value(
+        request, "lamp_sample_matrix", LAMP_SAMPLE_MATRICES, "not-specified"
+    )
+    lamp_sample_preparation = _enum_value(
+        request, "lamp_sample_preparation", LAMP_SAMPLE_PREPARATIONS, "not-specified"
+    )
     lamp_formulation = _enum_value(request, "lamp_formulation", LAMP_FORMULATIONS, "not-specified")
-    lamp_confirmation_mode = _enum_value(request, "lamp_confirmation_mode", LAMP_CONFIRMATION_MODES, "not-specified")
-    lamp_detection_topology = _enum_value(request, "lamp_detection_topology", LAMP_DETECTION_TOPOLOGIES, "nonspecific-dsdna")
+    lamp_confirmation_mode = _enum_value(
+        request, "lamp_confirmation_mode", LAMP_CONFIRMATION_MODES, "not-specified"
+    )
+    lamp_detection_topology = _enum_value(
+        request, "lamp_detection_topology", LAMP_DETECTION_TOPOLOGIES, "nonspecific-dsdna"
+    )
     lamp_design_intent = _enum_value(request, "lamp_design_intent", LAMP_DESIGN_INTENTS, "standard")
     lamp_design_stage = _enum_value(request, "lamp_design_stage", LAMP_DESIGN_STAGES, "integrated")
     lamp_loop_policy = _enum_value(request, "lamp_loop_policy", LAMP_LOOP_POLICIES, "prefer-six")
-    lamp_carryover_strategy = _enum_value(request, "lamp_carryover_strategy", LAMP_CARRYOVER_STRATEGIES, "protocol-default")
-    lamp_reconstitution_x = _enum_value(request, "lamp_reconstitution_x", LAMP_RECONSTITUTION_OPTIONS, "protocol-default")
-    lamp_specificity_additive = _enum_value(request, "lamp_specificity_additive", LAMP_SPECIFICITY_ADDITIVES, "none")
-    lamp_acceleration_additive = _enum_value(request, "lamp_acceleration_additive", LAMP_ACCELERATION_ADDITIVES, "none")
-    lamp_primer_kinetics_profile = _enum_value(request, "lamp_primer_kinetics_profile", LAMP_PRIMER_KINETICS_PROFILES, "protocol-default")
-    lamp_preincubation_strategy = _enum_value(request, "lamp_preincubation_strategy", LAMP_PREINCUBATION_STRATEGIES, "protocol-default")
-    lamp_sample_buffer_type = _enum_value(request, "lamp_sample_buffer_type", LAMP_SAMPLE_BUFFER_TYPES, "none")
-    lamp_instrument_profile = _enum_value(request, "lamp_instrument_profile", LAMP_INSTRUMENT_PROFILES, "not-specified")
+    lamp_carryover_strategy = _enum_value(
+        request, "lamp_carryover_strategy", LAMP_CARRYOVER_STRATEGIES, "protocol-default"
+    )
+    lamp_reconstitution_x = _enum_value(
+        request, "lamp_reconstitution_x", LAMP_RECONSTITUTION_OPTIONS, "protocol-default"
+    )
+    lamp_specificity_additive = _enum_value(
+        request, "lamp_specificity_additive", LAMP_SPECIFICITY_ADDITIVES, "none"
+    )
+    lamp_acceleration_additive = _enum_value(
+        request, "lamp_acceleration_additive", LAMP_ACCELERATION_ADDITIVES, "none"
+    )
+    lamp_primer_kinetics_profile = _enum_value(
+        request, "lamp_primer_kinetics_profile", LAMP_PRIMER_KINETICS_PROFILES, "protocol-default"
+    )
+    lamp_preincubation_strategy = _enum_value(
+        request, "lamp_preincubation_strategy", LAMP_PREINCUBATION_STRATEGIES, "protocol-default"
+    )
+    lamp_sample_buffer_type = _enum_value(
+        request, "lamp_sample_buffer_type", LAMP_SAMPLE_BUFFER_TYPES, "none"
+    )
+    lamp_instrument_profile = _enum_value(
+        request, "lamp_instrument_profile", LAMP_INSTRUMENT_PROFILES, "not-specified"
+    )
     lamp_sample_input_percent = _optional_nonnegative_numeric(request, "lamp_sample_input_percent")
     lamp_sample_buffer_ph = _optional_nonnegative_numeric(request, "lamp_sample_buffer_ph")
-    lamp_sample_buffer_percent = _optional_nonnegative_numeric(request, "lamp_sample_buffer_percent")
-    lamp_transport_medium_percent = _optional_nonnegative_numeric(request, "lamp_transport_medium_percent")
+    lamp_sample_buffer_percent = _optional_nonnegative_numeric(
+        request, "lamp_sample_buffer_percent"
+    )
+    lamp_transport_medium_percent = _optional_nonnegative_numeric(
+        request, "lamp_transport_medium_percent"
+    )
     lamp_bile_salt_mg_ml = _optional_nonnegative_numeric(request, "lamp_bile_salt_mg_ml")
     lamp_cary_blair_percent = _optional_nonnegative_numeric(request, "lamp_cary_blair_percent")
-    lamp_upstream_guanidine_mM = _optional_nonnegative_numeric(request, "lamp_upstream_guanidine_mM")
+    lamp_upstream_guanidine_mM = _optional_nonnegative_numeric(
+        request, "lamp_upstream_guanidine_mM"
+    )
 
     try:
-        lamp_multiplex_plan = resolve_lamp_multiplex(request.get("lamp_multiplex_plan"), topology=lamp_detection_topology)
+        lamp_multiplex_plan = resolve_lamp_multiplex(
+            request.get("lamp_multiplex_plan"), topology=lamp_detection_topology
+        )
     except ValueError as exc:
         raise LoopSetError(str(exc)) from exc
     if lamp_detection_topology not in {"nonspecific-dsdna", "multiplex-modified-primer-probe"}:
-        raise LoopSetError("Gen-1 LAMP executes standard design plus evidence-bound multiplex modified-primer/probe planning; other modified-probe/lateral-flow topologies remain fail closed.")
-    if lamp_design_intent == "panel-conservation-aware" and not str(request.get("inclusivity") or "").strip():
-        raise LoopSetError("panel-conservation-aware LAMP design requires an explicit inclusivity panel.")
-    if lamp_carryover_strategy != "protocol-default" and lamp_protocol not in {"neb-m9204", "neb-m9205"}:
-        raise LoopSetError("The reviewed numeric dUTP/UDG carry-over overlay is limited to the NEB M9204/M9205 standalone Bst-XT protocols.")
+        raise LoopSetError(
+            "Gen-1 LAMP executes standard design plus evidence-bound multiplex modified-primer/probe planning; other modified-probe/lateral-flow topologies remain fail closed."
+        )
+    if (
+        lamp_design_intent == "panel-conservation-aware"
+        and not str(request.get("inclusivity") or "").strip()
+    ):
+        raise LoopSetError(
+            "panel-conservation-aware LAMP design requires an explicit inclusivity panel."
+        )
+    if lamp_carryover_strategy != "protocol-default" and lamp_protocol not in {
+        "neb-m9204",
+        "neb-m9205",
+    }:
+        raise LoopSetError(
+            "The reviewed numeric dUTP/UDG carry-over overlay is limited to the NEB M9204/M9205 standalone Bst-XT protocols."
+        )
     if lamp_reconstitution_x != "protocol-default" and lamp_protocol != "neb-l4401":
-        raise LoopSetError("Explicit 2X/4X reconstitution authority is currently source-backed only for NEB L4401.")
+        raise LoopSetError(
+            "Explicit 2X/4X reconstitution authority is currently source-backed only for NEB L4401."
+        )
     if lamp_specificity_additive != "none" and lamp_protocol != "neb-e1700":
-        raise LoopSetError("The reviewed Tte UvrD starting example is scoped to NEB E1700; it is not a universal LAMP additive amount.")
-    if lamp_acceleration_additive != "none" and (lamp_protocol not in {"neb-m1800", "neb-m1804"} or lamp_readout != "colorimetric"):
-        raise LoopSetError("The reviewed 40 mM Guanidine HCl acceleration branch is limited to NEB M1800/M1804 colorimetric LAMP.")
-    if lamp_primer_kinetics_profile != "protocol-default" and lamp_protocol not in {"optigene-iso001", "optigene-iso001-rt", "optigene-iso004", "optigene-iso004-rt"}:
-        raise LoopSetError("The selected numeric primer-kinetics profile is source-backed only for the reviewed OptiGene ISO-001/ISO-004 liquid master-mix branches.")
+        raise LoopSetError(
+            "The reviewed Tte UvrD starting example is scoped to NEB E1700; it is not a universal LAMP additive amount."
+        )
+    if lamp_acceleration_additive != "none" and (
+        lamp_protocol not in {"neb-m1800", "neb-m1804"} or lamp_readout != "colorimetric"
+    ):
+        raise LoopSetError(
+            "The reviewed 40 mM Guanidine HCl acceleration branch is limited to NEB M1800/M1804 colorimetric LAMP."
+        )
+    if lamp_primer_kinetics_profile != "protocol-default" and lamp_protocol not in {
+        "optigene-iso001",
+        "optigene-iso001-rt",
+        "optigene-iso004",
+        "optigene-iso004-rt",
+    }:
+        raise LoopSetError(
+            "The selected numeric primer-kinetics profile is source-backed only for the reviewed OptiGene ISO-001/ISO-004 liquid master-mix branches."
+        )
     if lamp_preincubation_strategy != "protocol-default" and lamp_protocol != "takara-rr385":
-        raise LoopSetError("The reviewed carry-over pre-incubation branch is currently specific to Takara RR385.")
-    if lamp_readout_chemistry == "eiken-fd-lmp221" and lamp_protocol not in {"eiken-lmp204", "eiken-lmp207", "eiken-lmp244"}:
-        raise LoopSetError("Eiken LMP221 fluorescent detection reagent is source-backed only with the reviewed Eiken DNA/RNA kit branches; LMP247 already contains its own calcein system.")
-    if lamp_readout_chemistry == "eiken-fd-lmp221" and lamp_sample_buffer_type in {"te", "chelating-other"}:
-        raise LoopSetError("Eiken LMP221 explicitly warns against TE/other chelating sample buffers because Mn chelation can release calcein and create false-positive fluorescence.")
-    if any(v is not None for v in (lamp_sample_buffer_ph, lamp_sample_buffer_percent, lamp_upstream_guanidine_mM)) and (lamp_protocol not in {"neb-m1800", "neb-m1804"} or lamp_readout != "colorimetric"):
-        raise LoopSetError("Sample-buffer pH/fraction and upstream guanidine numeric authority is currently source-backed only for NEB M1800/M1804 pH-colorimetric LAMP.")
+        raise LoopSetError(
+            "The reviewed carry-over pre-incubation branch is currently specific to Takara RR385."
+        )
+    if lamp_readout_chemistry == "eiken-fd-lmp221" and lamp_protocol not in {
+        "eiken-lmp204",
+        "eiken-lmp207",
+        "eiken-lmp244",
+    }:
+        raise LoopSetError(
+            "Eiken LMP221 fluorescent detection reagent is source-backed only with the reviewed Eiken DNA/RNA kit branches; LMP247 already contains its own calcein system."
+        )
+    if lamp_readout_chemistry == "eiken-fd-lmp221" and lamp_sample_buffer_type in {
+        "te",
+        "chelating-other",
+    }:
+        raise LoopSetError(
+            "Eiken LMP221 explicitly warns against TE/other chelating sample buffers because Mn chelation can release calcein and create false-positive fluorescence."
+        )
+    if any(
+        v is not None
+        for v in (lamp_sample_buffer_ph, lamp_sample_buffer_percent, lamp_upstream_guanidine_mM)
+    ) and (lamp_protocol not in {"neb-m1800", "neb-m1804"} or lamp_readout != "colorimetric"):
+        raise LoopSetError(
+            "Sample-buffer pH/fraction and upstream guanidine numeric authority is currently source-backed only for NEB M1800/M1804 pH-colorimetric LAMP."
+        )
     if lamp_instrument_profile.startswith("vazyme-") and lamp_protocol != "vazyme-rp711":
-        raise LoopSetError("Vazyme instrument-conditioned dye profiles require the exact RP711 protocol authority.")
+        raise LoopSetError(
+            "Vazyme instrument-conditioned dye profiles require the exact RP711 protocol authority."
+        )
     if lamp_instrument_profile == "agdia-amplifire" and lamp_protocol != "agdia-lmx54700":
-        raise LoopSetError("The AmpliFire numeric run profile is source-backed here only for Agdia LMX 54700.")
+        raise LoopSetError(
+            "The AmpliFire numeric run profile is source-backed here only for Agdia LMX 54700."
+        )
 
-    scenario_sample = _sample_scenario_compatibility(protocol, lamp_sample_matrix, lamp_sample_preparation)
+    scenario_sample = _sample_scenario_compatibility(
+        protocol, lamp_sample_matrix, lamp_sample_preparation
+    )
     scenario_formulation = _formulation_compatibility(protocol, lamp_formulation)
-    scenario_readout_chemistry = _readout_chemistry_compatibility(protocol, lamp_readout, lamp_readout_chemistry)
+    scenario_readout_chemistry = _readout_chemistry_compatibility(
+        protocol, lamp_readout, lamp_readout_chemistry
+    )
     scenario_confirmation = _confirmation_compatibility(protocol, lamp_confirmation_mode)
     scenario_optimization = _bench_optimization(request, protocol)
     numeric_scenario = {
-        "readout": lamp_readout, "chemistry": lamp_readout_chemistry, "from_rna": wants_rna,
-        "matrix": lamp_sample_matrix, "preparation": lamp_sample_preparation, "formulation": lamp_formulation,
-        "carryover_strategy": lamp_carryover_strategy, "reconstitution_x": lamp_reconstitution_x,
-        "specificity_additive": lamp_specificity_additive, "acceleration_additive": lamp_acceleration_additive,
-        "primer_kinetics_profile": lamp_primer_kinetics_profile, "preincubation_strategy": lamp_preincubation_strategy,
-        "sample_input_percent": lamp_sample_input_percent, "sample_buffer_type": lamp_sample_buffer_type,
-        "instrument_profile": lamp_instrument_profile, "sample_buffer_ph": lamp_sample_buffer_ph,
-        "sample_buffer_percent": lamp_sample_buffer_percent, "transport_medium_percent": lamp_transport_medium_percent,
-        "bile_salt_mg_ml": lamp_bile_salt_mg_ml, "cary_blair_percent": lamp_cary_blair_percent,
+        "readout": lamp_readout,
+        "chemistry": lamp_readout_chemistry,
+        "from_rna": wants_rna,
+        "matrix": lamp_sample_matrix,
+        "preparation": lamp_sample_preparation,
+        "formulation": lamp_formulation,
+        "carryover_strategy": lamp_carryover_strategy,
+        "reconstitution_x": lamp_reconstitution_x,
+        "specificity_additive": lamp_specificity_additive,
+        "acceleration_additive": lamp_acceleration_additive,
+        "primer_kinetics_profile": lamp_primer_kinetics_profile,
+        "preincubation_strategy": lamp_preincubation_strategy,
+        "sample_input_percent": lamp_sample_input_percent,
+        "sample_buffer_type": lamp_sample_buffer_type,
+        "instrument_profile": lamp_instrument_profile,
+        "sample_buffer_ph": lamp_sample_buffer_ph,
+        "sample_buffer_percent": lamp_sample_buffer_percent,
+        "transport_medium_percent": lamp_transport_medium_percent,
+        "bile_salt_mg_ml": lamp_bile_salt_mg_ml,
+        "cary_blair_percent": lamp_cary_blair_percent,
         "upstream_guanidine_mM": lamp_upstream_guanidine_mM,
     }
     try:
-        resolved_numeric_recipe = resolve_numeric_recipe(lamp_protocol, protocol, numeric_scenario, scenario_optimization)
+        resolved_numeric_recipe = resolve_numeric_recipe(
+            lamp_protocol, protocol, numeric_scenario, scenario_optimization
+        )
     except ValueError as exc:
         raise LoopSetError(str(exc)) from exc
     lamp_scenario = {
         "sample": {**scenario_sample, "input_percent": lamp_sample_input_percent},
-        "formulation": scenario_formulation, "readout_chemistry": scenario_readout_chemistry,
+        "formulation": scenario_formulation,
+        "readout_chemistry": scenario_readout_chemistry,
         "confirmation": scenario_confirmation,
-        "detection_topology": {"selection": lamp_detection_topology, "decision_impact": "none", "multiplex_plan": lamp_multiplex_plan},
-        "design_intent": {"selection": lamp_design_intent, "decision_impact": "candidate-ranking" if lamp_design_intent == "panel-conservation-aware" else ("candidate-filter" if lamp_design_intent in {"fixed-primer-anchor", "mutation-anchored-specific"} else "standard")},
-        "design_stage": {"selection": lamp_design_stage, "decision_impact": "candidate-architecture"},
+        "detection_topology": {
+            "selection": lamp_detection_topology,
+            "decision_impact": "none",
+            "multiplex_plan": lamp_multiplex_plan,
+        },
+        "design_intent": {
+            "selection": lamp_design_intent,
+            "decision_impact": "candidate-ranking"
+            if lamp_design_intent == "panel-conservation-aware"
+            else (
+                "candidate-filter"
+                if lamp_design_intent in {"fixed-primer-anchor", "mutation-anchored-specific"}
+                else "standard"
+            ),
+        },
+        "design_stage": {
+            "selection": lamp_design_stage,
+            "decision_impact": "candidate-architecture",
+        },
         "loop_policy": {"selection": lamp_loop_policy, "decision_impact": "candidate-architecture"},
         "carryover_strategy": {"selection": lamp_carryover_strategy, "decision_impact": "none"},
         "reconstitution": {"selection": lamp_reconstitution_x, "decision_impact": "none"},
         "specificity_additive": {"selection": lamp_specificity_additive, "decision_impact": "none"},
-        "acceleration_additive": {"selection": lamp_acceleration_additive, "decision_impact": "none"},
-        "primer_kinetics_profile": {"selection": lamp_primer_kinetics_profile, "decision_impact": "none"},
-        "preincubation_strategy": {"selection": lamp_preincubation_strategy, "decision_impact": "none"},
-        "sample_buffer": {"type": lamp_sample_buffer_type, "ph": lamp_sample_buffer_ph, "percent_final": lamp_sample_buffer_percent, "decision_impact": "none"},
+        "acceleration_additive": {
+            "selection": lamp_acceleration_additive,
+            "decision_impact": "none",
+        },
+        "primer_kinetics_profile": {
+            "selection": lamp_primer_kinetics_profile,
+            "decision_impact": "none",
+        },
+        "preincubation_strategy": {
+            "selection": lamp_preincubation_strategy,
+            "decision_impact": "none",
+        },
+        "sample_buffer": {
+            "type": lamp_sample_buffer_type,
+            "ph": lamp_sample_buffer_ph,
+            "percent_final": lamp_sample_buffer_percent,
+            "decision_impact": "none",
+        },
         "instrument_profile": {"selection": lamp_instrument_profile, "decision_impact": "none"},
-        "matrix_modifiers": {"transport_medium_percent": lamp_transport_medium_percent, "bile_salt_mg_ml": lamp_bile_salt_mg_ml, "cary_blair_percent": lamp_cary_blair_percent, "upstream_guanidine_mM": lamp_upstream_guanidine_mM, "decision_impact": "none"},
+        "matrix_modifiers": {
+            "transport_medium_percent": lamp_transport_medium_percent,
+            "bile_salt_mg_ml": lamp_bile_salt_mg_ml,
+            "cary_blair_percent": lamp_cary_blair_percent,
+            "upstream_guanidine_mM": lamp_upstream_guanidine_mM,
+            "decision_impact": "none",
+        },
         "bench_optimization": {"values": scenario_optimization or {}, "decision_impact": "none"},
         "resolved_numeric_recipe": resolved_numeric_recipe,
     }
@@ -3397,7 +3826,11 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         lamp_loop_policy = "core-four-only"
     elif lamp_design_stage == "add-loops":
         required_core = {"F3", "B3", "FIP", "BIP"}
-        if lamp_design_intent != "fixed-primer-anchor" or fixed_primers is None or not required_core.issubset(fixed_primers):
+        if (
+            lamp_design_intent != "fixed-primer-anchor"
+            or fixed_primers is None
+            or not required_core.issubset(fixed_primers)
+        ):
             raise LoopSetError(
                 "lamp_design_stage=add-loops requires lamp_design_intent=fixed-primer-anchor and exact F3/B3/FIP/BIP sequences from the selected core set."
             )
@@ -3475,36 +3908,60 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raise LoopSetError("mode must be design or validate-existing")
     if mode == "validate-existing":
         one, existing_audit = _existing_lamp_set(
-            template, request.get("existing_set"), windows=windows, inner_linker=inner_linker,
-            f2_b2_span=f2_b2_span, loop_span=loop_span, outer_gap=outer_gap, middle_gap=middle_gap,
+            template,
+            request.get("existing_set"),
+            windows=windows,
+            inner_linker=inner_linker,
+            f2_b2_span=f2_b2_span,
+            loop_span=loop_span,
+            outer_gap=outer_gap,
+            middle_gap=middle_gap,
         )
         entry = set_to_dict(
-            template, one, windows, role_concentrations_uM=role_concentrations_uM,
-            geometry_profile=geometry_profile, inner_linker=inner_linker, **reaction,
+            template,
+            one,
+            windows,
+            role_concentrations_uM=role_concentrations_uM,
+            geometry_profile=geometry_profile,
+            inner_linker=inner_linker,
+            **reaction,
         )
         if target_alignment is not None:
             entry["target_inclusivity"] = _target_inclusivity_audit(template, one, target_alignment)
         named: dict[str, str] = {}
         whole: dict[str, str] = {}
         for oligo in oligos(template, one, inner_linker=inner_linker):
-            named[oligo.name] = oligo.sequence[oligo.tail_length :] if oligo.composite else oligo.sequence
+            named[oligo.name] = (
+                oligo.sequence[oligo.tail_length :] if oligo.composite else oligo.sequence
+            )
             whole[oligo.name] = oligo.sequence
         if generic_direct_background_enabled:
             intended_sizes, intended_products = _lamp_generic_intended_linear_products(
                 template, one, template_only=template_only
             )
             entry["off_targets"] = screen.oligos(
-                named, contigs, reaction=chosen.reaction, fold_at=fold_at,
+                named,
+                contigs,
+                reaction=chosen.reaction,
+                fold_at=fold_at,
                 max_product=screen.product_ceiling(one.size),
-                intended_sizes=intended_sizes, intended_products=intended_products,
-                temperature_c=(chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c),
+                intended_sizes=intended_sizes,
+                intended_products=intended_products,
+                temperature_c=(
+                    chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c
+                ),
             )
         else:
             entry["off_targets"] = _indexed_specificity_required(background_bases)
         if not template_only and background_bases <= LAMP_TOPOLOGY_DIRECT_MAX_BASES:
             entry["lamp_background_topology"] = _lamp_background_topology_audit(
-                template, one, contigs, f2_b2_span=f2_b2_span, loop_span=loop_span,
-                outer_gap=outer_gap, middle_gap=middle_gap,
+                template,
+                one,
+                contigs,
+                f2_b2_span=f2_b2_span,
+                loop_span=loop_span,
+                outer_gap=outer_gap,
+                middle_gap=middle_gap,
             )
         elif not template_only:
             entry["lamp_background_topology"] = {
@@ -3530,9 +3987,18 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "name": used.name,
             "thermodynamic_model": PE_THERMODYNAMIC_MODEL,
             "chosen_from": "existing-set validation against explicit/automatic selected parameter envelope",
-            "outer": {"tm": [used.outer.tm_min, used.outer.tm_max], "length": [used.outer.length_min, used.outer.length_max]},
-            "inner": {"tm": [used.inner.tm_min, used.inner.tm_max], "length": [used.inner.length_min, used.inner.length_max]},
-            "loop": {"tm": [used.loop.tm_min, used.loop.tm_max], "length": [used.loop.length_min, used.loop.length_max]},
+            "outer": {
+                "tm": [used.outer.tm_min, used.outer.tm_max],
+                "length": [used.outer.length_min, used.outer.length_max],
+            },
+            "inner": {
+                "tm": [used.inner.tm_min, used.inner.tm_max],
+                "length": [used.inner.length_min, used.inner.length_max],
+            },
+            "loop": {
+                "tm": [used.loop.tm_min, used.loop.tm_max],
+                "length": [used.loop.length_min, used.loop.length_max],
+            },
             "gc": [used.gc_min, used.gc_max],
             "regular_primer_gc": [used.gc_min, used.gc_max],
             "loop_primer_gc": [LOOP_GC_MIN, LOOP_GC_MAX],
@@ -3545,26 +4011,43 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "classification": "validation-reference-envelope-not-redesign-gate",
             },
             "geometry_profile": {
-                "id": geometry_profile.id, "name": geometry_profile.name,
-                "source": geometry_profile.source, "claim": geometry_profile.claim,
+                "id": geometry_profile.id,
+                "name": geometry_profile.name,
+                "source": geometry_profile.source,
+                "claim": geometry_profile.claim,
                 "valid_f2_b2_span": list(geometry_profile.valid_f2_b2_span),
                 "valid_loop_span": list(geometry_profile.valid_loop_span),
                 "valid_outer_gap": list(geometry_profile.valid_outer_gap),
                 "valid_middle_gap": list(geometry_profile.valid_middle_gap),
-                "preferred_f2_b2_span": list(geometry_profile.preferred_f2_b2_span) if geometry_profile.preferred_f2_b2_span is not None else None,
-                "preferred_outer_gap": list(geometry_profile.preferred_outer_gap) if geometry_profile.preferred_outer_gap is not None else None,
-                "preferred_loop_tm": list(geometry_profile.preferred_loop_tm) if geometry_profile.preferred_loop_tm is not None else None,
+                "preferred_f2_b2_span": list(geometry_profile.preferred_f2_b2_span)
+                if geometry_profile.preferred_f2_b2_span is not None
+                else None,
+                "preferred_outer_gap": list(geometry_profile.preferred_outer_gap)
+                if geometry_profile.preferred_outer_gap is not None
+                else None,
+                "preferred_loop_tm": list(geometry_profile.preferred_loop_tm)
+                if geometry_profile.preferred_loop_tm is not None
+                else None,
             },
             "inner_linker": {
-                "id": inner_linker_id, "sequence": inner_linker or None,
+                "id": inner_linker_id,
+                "sequence": inner_linker or None,
                 "classification": "explicit-existing-set-split-context",
                 "claim": "The selected linker is used only to parse and validate the submitted FIP/BIP architecture.",
             },
-            "preferred_f2_b2_span": list(geometry_profile.preferred_f2_b2_span) if geometry_profile.preferred_f2_b2_span is not None else None,
-            "preferred_outer_gap": list(geometry_profile.preferred_outer_gap) if geometry_profile.preferred_outer_gap is not None else None,
-            "preferred_loop_tm": list(geometry_profile.preferred_loop_tm) if geometry_profile.preferred_loop_tm is not None else None,
-            "f2_b2_span": list(f2_b2_span), "loop_span": list(loop_span),
-            "outer_gap": list(outer_gap), "middle_gap": list(middle_gap),
+            "preferred_f2_b2_span": list(geometry_profile.preferred_f2_b2_span)
+            if geometry_profile.preferred_f2_b2_span is not None
+            else None,
+            "preferred_outer_gap": list(geometry_profile.preferred_outer_gap)
+            if geometry_profile.preferred_outer_gap is not None
+            else None,
+            "preferred_loop_tm": list(geometry_profile.preferred_loop_tm)
+            if geometry_profile.preferred_loop_tm is not None
+            else None,
+            "f2_b2_span": list(f2_b2_span),
+            "loop_span": list(loop_span),
+            "outer_gap": list(outer_gap),
+            "middle_gap": list(middle_gap),
             "overruled": overruled,
             "why": "Existing set evaluated against this reviewed design envelope; failing an envelope is reported, not silently redesigned.",
         }
@@ -3573,7 +4056,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             entry,
             wants_rna=wants_rna,
             protocol=protocol,
-            fallback_temperature_c=(chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c),
+            fallback_temperature_c=(
+                chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c
+            ),
         )
         if rna_accessibility is not None:
             entry["rna_target_accessibility"] = rna_accessibility
@@ -3581,12 +4066,25 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         answer: dict[str, Any] = {
             "engine": "loop-set",
             "lamp_scenario": lamp_scenario,
-            **({"workflow_evidence": {"recorded": True, "decision_impact": "none", "observed": workflow_evidence,
-                "note": "Experimental validation evidence is stored for reproducibility and never changes LAMP set evaluation."}} if workflow_evidence is not None else {}),
+            **(
+                {
+                    "workflow_evidence": {
+                        "recorded": True,
+                        "decision_impact": "none",
+                        "observed": workflow_evidence,
+                        "note": "Experimental validation evidence is stored for reproducibility and never changes LAMP set evaluation.",
+                    }
+                }
+                if workflow_evidence is not None
+                else {}
+            ),
             "mode": "validate-existing",
             "existing_set_validation": existing_audit,
-            "readout": {"selection": lamp_readout, "sequence_decision_impact": "none",
-                "note": "Readout is chemistry/provenance evidence and does not alter existing-set sequence evaluation."},
+            "readout": {
+                "selection": lamp_readout,
+                "sequence_decision_impact": "none",
+                "note": "Readout is chemistry/provenance evidence and does not alter existing-set sequence evaluation.",
+            },
             "reverse_transcription": (
                 _rt_lamp_block_for_protocol(lamp_protocol, protocol)
                 if rt.wanted(request) and protocol is not None
@@ -3596,15 +4094,32 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "assay": chosen.assay_to_dict(),
             "target": target_to_dict(chosen.target),
             "reaction": {
-                "polymerase": chosen.preset.id, "polymerase_name": chosen.preset.name,
-                **reaction, "model": thermodynamic_model(chosen.preset, chosen.reaction),
+                "polymerase": chosen.preset.id,
+                "polymerase_name": chosen.preset.name,
+                **reaction,
+                "model": thermodynamic_model(chosen.preset, chosen.reaction),
                 "diagnostic_structure_temperature_c": HOLD,
                 "context_role": "existing-LAMP-set thermodynamic/interaction validation context",
                 "context_note": "No candidate generation occurred; thermodynamic calculations describe the submitted oligos under the declared screening context.",
             },
-            **({"protocol": {**{key: value for key, value in protocol.items() if key not in {"role_concentrations_uM", "rt_authority_status", "_protocol_id"}},
-                "readout_compatibility": _readout_compatibility(protocol, lamp_readout),
-                "readout_chemistry_compatibility": _readout_chemistry_compatibility(protocol, lamp_readout, lamp_readout_chemistry)}} if protocol is not None else {}),
+            **(
+                {
+                    "protocol": {
+                        **{
+                            key: value
+                            for key, value in protocol.items()
+                            if key
+                            not in {"role_concentrations_uM", "rt_authority_status", "_protocol_id"}
+                        },
+                        "readout_compatibility": _readout_compatibility(protocol, lamp_readout),
+                        "readout_chemistry_compatibility": _readout_chemistry_compatibility(
+                            protocol, lamp_readout, lamp_readout_chemistry
+                        ),
+                    }
+                }
+                if protocol is not None
+                else {}
+            ),
             "parameter_set": parameter_block,
             "target_inclusivity": target_panel_meta,
             "background": background_summary,
@@ -3613,13 +4128,21 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "why_nothing": "",
             "order_sheet": [
                 {
-                    "name": f"{name}_1_{oligo['name']}", "sequence": oligo["sequence"],
-                    "annealing_sequence": oligo["anneals"]["sequence"] if oligo["composite"] else oligo["sequence"],
-                    "tail_sequence": oligo["sequence"][:-len(oligo["anneals"]["sequence"])] if oligo["composite"] else "",
-                    "lamp_role": oligo["name"], "lamp_set_index": 1,
+                    "name": f"{name}_1_{oligo['name']}",
+                    "sequence": oligo["sequence"],
+                    "annealing_sequence": oligo["anneals"]["sequence"]
+                    if oligo["composite"]
+                    else oligo["sequence"],
+                    "tail_sequence": oligo["sequence"][: -len(oligo["anneals"]["sequence"])]
+                    if oligo["composite"]
+                    else "",
+                    "lamp_role": oligo["name"],
+                    "lamp_set_index": 1,
                     "lamp_target_tail_sequence": oligo.get("target_tail_sequence") or "",
                     "lamp_linker_sequence": oligo.get("linker_sequence") or "",
-                    "kind": "primer", "length": oligo["length"], "gc_percent": oligo["gc_percent"],
+                    "kind": "primer",
+                    "length": oligo["length"],
+                    "gc_percent": oligo["gc_percent"],
                     "tm": oligo["anneals"]["tm"] if oligo["composite"] else oligo["tm"],
                     "note": "Existing user-supplied oligo; no redesign occurred.",
                 }
@@ -3662,22 +4185,31 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     # strips optional LF/LB from otherwise valid cores; require-six refuses
     # cores missing either loop. This is candidate architecture, not bench chemistry.
     if lamp_loop_policy == "require-six":
-        found = [one for one in found if one.forward.loop is not None and one.backward.loop is not None]
+        found = [
+            one for one in found if one.forward.loop is not None and one.backward.loop is not None
+        ]
     elif lamp_loop_policy == "core-four-only":
         found = [
-            replace(one, forward=replace(one.forward, loop=None), backward=replace(one.backward, loop=None))
+            replace(
+                one,
+                forward=replace(one.forward, loop=None),
+                backward=replace(one.backward, loop=None),
+            )
             for one in found
         ]
     search_meta["lamp_loop_policy"] = lamp_loop_policy
     search_meta["lamp_design_stage"] = lamp_design_stage
     search_meta["mutation_specificity_note"] = (
         "Variant placement is a positional candidate constraint only; no universal LAMP allele-discrimination threshold or secondary mismatch is inferred. Paired WT/MUT empirical validation is required."
-        if mutation_anchor else None
+        if mutation_anchor
+        else None
     )
 
     described = [
         set_to_dict(
-            template, one, used,
+            template,
+            one,
+            used,
             role_concentrations_uM=role_concentrations_uM,
             geometry_profile=geometry_profile,
             inner_linker=inner_linker,
@@ -3713,9 +4245,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             # whatever it finds in the tube.
             whole[oligo.name] = oligo.sequence
         if target_alignment is not None:
-            entry["target_inclusivity"] = _target_inclusivity_audit(
-                template, one, target_alignment
-            )
+            entry["target_inclusivity"] = _target_inclusivity_audit(template, one, target_alignment)
         if generic_direct_background_enabled:
             intended_sizes, intended_products = _lamp_generic_intended_linear_products(
                 template, one, template_only=template_only
@@ -3734,7 +4264,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 max_product=screen.product_ceiling(one.size),
                 intended_sizes=intended_sizes,
                 intended_products=intended_products,
-                temperature_c=(chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c),
+                temperature_c=(
+                    chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c
+                ),
             )
         else:
             entry["off_targets"] = _indexed_specificity_required(background_bases)
@@ -3756,7 +4288,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         entry = pair[1]
         inclusivity = (
             _inclusivity_rank(entry.get("target_inclusivity"))
-            if target_alignment is not None and lamp_design_intent == "panel-conservation-aware" else ()
+            if target_alignment is not None and lamp_design_intent == "panel-conservation-aware"
+            else ()
         )
         return (*inclusivity, *_thermodynamic_structure_rank(entry))
 
@@ -3809,11 +4342,11 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         entry = pair[1]
         inclusivity = (
             _inclusivity_rank(entry.get("target_inclusivity"))
-            if target_alignment is not None and lamp_design_intent == "panel-conservation-aware" else ()
+            if target_alignment is not None and lamp_design_intent == "panel-conservation-aware"
+            else ()
         )
         topology = (
-            _lamp_topology_rank(entry.get("lamp_background_topology"))
-            if not template_only else ()
+            _lamp_topology_rank(entry.get("lamp_background_topology")) if not template_only else ()
         )
         return (*inclusivity, *topology, *_thermodynamic_structure_rank(entry))
 
@@ -3822,7 +4355,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     found = [pair[0] for pair in paired]
     described = [pair[1] for pair in paired]
     if wants_rna:
-        fallback_temperature_c = (chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c)
+        fallback_temperature_c = (
+            chosen.preset.cycling.isothermal_c or chosen.preset.cycling.extend_c
+        )
         for entry in described:
             entry["rna_target_accessibility"] = _rt_lamp_accessibility(
                 template,
@@ -3841,7 +4376,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         "topology_pool_evaluated": topology_pool_evaluated,
         "topology_pool_strategy": (
             "all-stage1-candidates-exactly-reviewed"
-            if topology_enabled else "not-run-use-indexed-validator-at-this-scope"
+            if topology_enabled
+            else "not-run-use-indexed-validator-at-this-scope"
         ),
         "final_count": len(described),
         "background_aware": (
@@ -3852,18 +4388,30 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         ),
         "generic_direct_background_limit_bases": LAMP_GENERIC_DIRECT_MAX_BASES,
         "target_inclusivity_provided": target_alignment is not None,
-        "target_inclusivity_aware": target_alignment is not None and lamp_design_intent == "panel-conservation-aware",
+        "target_inclusivity_aware": target_alignment is not None
+        and lamp_design_intent == "panel-conservation-aware",
         "rank_fields": (
-            ([
-                "inner_terminal_3_events", "inner_events",
-                "loop_terminal_3_events", "loop_events",
-                "outer_terminal_3_events", "outer_events",
-            ] if target_alignment is not None and lamp_design_intent == "panel-conservation-aware" else [])
-            + ([
-                "lamp_six_region_risk_class",
-                "lamp_exact_compatible_locus_count_lower_bound",
-                "lamp_terminal_intact_compatible_locus_count_lower_bound",
-            ] if not template_only else [])
+            (
+                [
+                    "inner_terminal_3_events",
+                    "inner_events",
+                    "loop_terminal_3_events",
+                    "loop_events",
+                    "outer_terminal_3_events",
+                    "outer_events",
+                ]
+                if target_alignment is not None and lamp_design_intent == "panel-conservation-aware"
+                else []
+            )
+            + (
+                [
+                    "lamp_six_region_risk_class",
+                    "lamp_exact_compatible_locus_count_lower_bound",
+                    "lamp_terminal_intact_compatible_locus_count_lower_bound",
+                ]
+                if not template_only
+                else []
+            )
             + [
                 "pairwise_structure_evidence_incomplete",
                 "max_pair_interaction_tm",
@@ -3882,7 +4430,7 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         ),
     }
     # Keep the older key for consumers that already display it.
-    background_rank_enabled = (not template_only and topology_enabled)
+    background_rank_enabled = not template_only and topology_enabled
     search_meta["background_aware_selection"] = {
         "enabled": background_rank_enabled,
         "candidate_pool_requested": candidate_pool_size,
@@ -3897,7 +4445,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             if background_rank_enabled
             else (
                 "indexed-validation-required-before-background-aware-selection"
-                if not template_only else "not-applicable"
+                if not template_only
+                else "not-applicable"
             )
         ),
         "claim": (
@@ -3905,7 +4454,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "the generic linear site/product proxy is diagnostic-only. Larger backgrounds are intentionally not rescanned set-by-set: "
             "candidate selection is not genome-wide-specificity-ranked at that scope, and the indexed external "
             "validator must provide the specificity evidence without a fabricated clean result."
-            if not template_only else "no supplied exclusion background"
+            if not template_only
+            else "no supplied exclusion background"
         ),
     }
 
@@ -3984,10 +4534,13 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                     **{
                         key: value
                         for key, value in protocol.items()
-                        if key not in {"role_concentrations_uM", "rt_authority_status", "_protocol_id"}
+                        if key
+                        not in {"role_concentrations_uM", "rt_authority_status", "_protocol_id"}
                     },
                     "readout_compatibility": _readout_compatibility(protocol, lamp_readout),
-                    "readout_chemistry_compatibility": _readout_chemistry_compatibility(protocol, lamp_readout, lamp_readout_chemistry),
+                    "readout_chemistry_compatibility": _readout_chemistry_compatibility(
+                        protocol, lamp_readout, lamp_readout_chemistry
+                    ),
                 }
             }
             if protocol is not None
@@ -4046,15 +4599,18 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "valid_middle_gap": list(geometry_profile.valid_middle_gap),
                 "preferred_f2_b2_span": (
                     list(geometry_profile.preferred_f2_b2_span)
-                    if geometry_profile.preferred_f2_b2_span is not None else None
+                    if geometry_profile.preferred_f2_b2_span is not None
+                    else None
                 ),
                 "preferred_outer_gap": (
                     list(geometry_profile.preferred_outer_gap)
-                    if geometry_profile.preferred_outer_gap is not None else None
+                    if geometry_profile.preferred_outer_gap is not None
+                    else None
                 ),
                 "preferred_loop_tm": (
                     list(geometry_profile.preferred_loop_tm)
-                    if geometry_profile.preferred_loop_tm is not None else None
+                    if geometry_profile.preferred_loop_tm is not None
+                    else None
                 ),
             },
             "inner_linker": {
@@ -4064,20 +4620,24 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "claim": (
                     "The TTTT option is literature-backed as a tested LAMP inner-primer junction variant, "
                     "not a universal performance guarantee."
-                    if inner_linker else "No synthetic FIP/BIP junction linker requested."
+                    if inner_linker
+                    else "No synthetic FIP/BIP junction linker requested."
                 ),
             },
             "preferred_f2_b2_span": (
                 list(geometry_profile.preferred_f2_b2_span)
-                if geometry_profile.preferred_f2_b2_span is not None else None
+                if geometry_profile.preferred_f2_b2_span is not None
+                else None
             ),
             "preferred_outer_gap": (
                 list(geometry_profile.preferred_outer_gap)
-                if geometry_profile.preferred_outer_gap is not None else None
+                if geometry_profile.preferred_outer_gap is not None
+                else None
             ),
             "preferred_loop_tm": (
                 list(geometry_profile.preferred_loop_tm)
-                if geometry_profile.preferred_loop_tm is not None else None
+                if geometry_profile.preferred_loop_tm is not None
+                else None
             ),
             "f2_b2_span": list(f2_b2_span),
             "loop_span": list(loop_span),
@@ -4118,7 +4678,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 ),
                 "tail_sequence": (
                     oligo["sequence"][: -len(oligo["anneals"]["sequence"])]
-                    if oligo["composite"] else ""
+                    if oligo["composite"]
+                    else ""
                 ),
                 "lamp_role": oligo["name"],
                 "lamp_set_index": index,

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import pytest
 
-from pcr_tools.inverse_topology import InverseTopologyError, exact_topology, public_topology, screen_enzyme_cohort
+from pcr_tools.inverse_topology import (
+    InverseTopologyError,
+    exact_topology,
+    public_topology,
+    screen_enzyme_cohort,
+)
 
 
 def test_full_reference_topology_is_exact_and_does_not_expose_circle_sequence():

@@ -25,14 +25,22 @@ from .discriminate import DiscriminationError
 from .discriminate import run as discriminate_run
 from .external_validation import validate_result
 from .fetch import FetchError, fetch, parse_fasta, records_to_dict
+from .fingerprints import toolchain_fingerprint
 from .intake import IntakeError
-from .ipc import IpcError, RequestEnvelope, failure as ipc_failure, parse_request, success as ipc_success
 from .inverse import InverseError
 from .inverse import run as inverse_run
+from .ipc import IpcError, RequestEnvelope, parse_request
+from .ipc import failure as ipc_failure
+from .ipc import success as ipc_success
 from .junction import JunctionError
 from .junction import run as junction_run
 from .loop_set import LoopSetError
 from .loop_set import run as loop_set_run
+from .method_fidelity import active_for_run as method_fidelity_for_run
+from .method_fidelity import context_references as method_fidelity_context_references
+from .method_fidelity import enforce_scientific_strict as enforce_method_fidelity
+from .method_fidelity import references_for_module as method_fidelity_references_for_module
+from .method_fidelity import registry_identity as method_fidelity_registry_identity
 from .multiplex import MultiplexError
 from .multiplex import run as multiplex_run
 from .mutagenic import MutagenesisError
@@ -40,9 +48,6 @@ from .mutagenic import run as mutagenic_run
 from .nested import NestedError
 from .nested import run as nested_run
 from .orchestrator import orchestrate
-from .fingerprints import toolchain_fingerprint
-from .method_fidelity import active_for_run as method_fidelity_for_run, context_references as method_fidelity_context_references, enforce_scientific_strict as enforce_method_fidelity, references_for_module as method_fidelity_references_for_module, registry_identity as method_fidelity_registry_identity
-from .scientific_authority import for_module as scientific_authorities_for_module
 from .pipeline import MAX_PAIRS
 from .pipeline import run as run_pipeline
 from .presets import Cycling, fields_for, polymerases_to_dict, purposes_to_dict
@@ -66,6 +71,7 @@ from .runtime_contract import (
     resolved_parameters,
     validate_required_context,
 )
+from .scientific_authority import for_module as scientific_authorities_for_module
 from .scientific_integrity import (
     enforce_polymerase_identity,
     enforce_reaction_overrides,
@@ -98,15 +104,14 @@ from .universal_panel import (
     CONSENSUS_POLICIES,
     FORMULATION_MODES,
     alternative_alignment_evidence,
+    amplicon_informativeness,
     coverage_evidence,
     formulation_for_pair,
     panel_qc,
     parse_panel_metadata,
     scan_nontarget_pair,
     split_pool_alternative,
-    amplicon_informativeness,
 )
-from .workflow_evidence import evidence_block
 from .validate import ValidationError
 from .validate import run as validate_run
 from .vectors import (
@@ -116,6 +121,11 @@ from .vectors import (
     partner_window,
     placement_to_dict,
 )
+from .workflow_evidence import evidence_block
+
+# Keep the runtime-context validator available from the CLI module for
+# integrations that patch or inspect the command dispatch boundary.
+__all__ = ["validate_required_context"]
 
 COMMANDS = (
     "thermo",
@@ -378,10 +388,14 @@ def run_universal(request: dict[str, Any]) -> dict[str, Any]:
     # names/rows/panel metadata/policy were resolved before design above and
     # are reused here for evidence so the report exactly matches the design
     # semantics.
-    design_weights = {name: float(panel_metadata.get(name, {}).get("weight", 1.0)) for name in names}
+    design_weights = {
+        name: float(panel_metadata.get(name, {}).get("weight", 1.0)) for name in names
+    }
     design_strata = {name: str(panel_metadata.get(name, {}).get("stratum") or "") for name in names}
     if consensus_policy == "stratified" and any(not value for value in design_strata.values()):
-        raise ValueError("stratified consensus_policy requires panel_metadata.stratum for every FASTA record")
+        raise ValueError(
+            "stratified consensus_policy requires panel_metadata.stratum for every FASTA record"
+        )
 
     resolved_limits = limits_from_request(request)
     answer = design_universal(
@@ -543,7 +557,7 @@ def run_universal(request: dict[str, Any]) -> dict[str, Any]:
         {
             "name": f"universal_{index}{role}",
             "sequence": oligo["sequence"],
-            "annealing_sequence": oligo["sequence"][len(tail):] if tail else oligo["sequence"],
+            "annealing_sequence": oligo["sequence"][len(tail) :] if tail else oligo["sequence"],
             "tail_sequence": tail,
             "kind": "primer",
             "length": len(oligo["sequence"]),
@@ -551,7 +565,8 @@ def run_universal(request: dict[str, Any]) -> dict[str, Any]:
             "tm": oligo.get("tm_min", oligo.get("tm", 0.0)),
             "note": (
                 "The ordered molecule carries a 5-prime sequencing tail; specificity is evaluated on the annealing core."
-                if tail else ""
+                if tail
+                else ""
             ),
         }
         for index, pair in enumerate(answer.get("pairs") or [], start=1)
@@ -644,7 +659,9 @@ def run_enzymes(request: dict[str, Any]) -> dict[str, Any]:
     background = request.get("background")
     purpose = request.get("purpose")
     if not isinstance(purpose, str) or not purpose.strip():
-        raise RestrictionError("`purpose` is required; enzyme ranking never infers the scientific question")
+        raise RestrictionError(
+            "`purpose` is required; enzyme ranking never infers the scientific question"
+        )
     return {
         "purpose": purpose,
         "enzymes": [
@@ -673,7 +690,9 @@ def _multiplex_assay_identity(request: dict[str, Any]) -> tuple[str, str]:
     if isinstance(targets, list) and targets:
         for index, target in enumerate(targets, start=1):
             if not isinstance(target, dict):
-                raise ValueError(f"multiplex target {index} must be an object with a canonical assay identity")
+                raise ValueError(
+                    f"multiplex target {index} must be an object with a canonical assay identity"
+                )
             assay = target.get("assay")
             if not isinstance(assay, dict):
                 raise ValueError(
@@ -682,7 +701,9 @@ def _multiplex_assay_identity(request: dict[str, Any]) -> tuple[str, str]:
                 )
             module_id, engine_id = assay_identity(target, "run")
             if not module_id:
-                raise ValueError(f"multiplex target {index} has an unresolved assay/module identity")
+                raise ValueError(
+                    f"multiplex target {index} has an unresolved assay/module identity"
+                )
             identities.append((module_id, engine_id or "flanking-pair"))
     if not identities:
         module_id, engine_id = assay_identity(request, "run")
@@ -752,7 +773,9 @@ def _multiplex_resolved_parameters(
             },
         )
         reaction = resolved.get("reaction") if isinstance(resolved.get("reaction"), dict) else {}
-        constraints = resolved.get("constraints") if isinstance(resolved.get("constraints"), dict) else {}
+        constraints = (
+            resolved.get("constraints") if isinstance(resolved.get("constraints"), dict) else {}
+        )
         if shared_reaction is None:
             shared_reaction = dict(reaction)
         elif reaction != shared_reaction:
@@ -772,7 +795,9 @@ def _multiplex_resolved_parameters(
 
     return {
         "reaction": shared_reaction or {},
-        "constraints": shared_constraints if scope == "shared" and shared_constraints is not None else {},
+        "constraints": shared_constraints
+        if scope == "shared" and shared_constraints is not None
+        else {},
         "constraint_scope": scope,
         "per_target_constraints": per_target,
     }
@@ -785,7 +810,9 @@ def run_multiplex(request: dict[str, Any]) -> dict[str, Any]:
     answer = multiplex_run(request)
     answer["runtime_contract"] = engine_contract(engine_id, module_id)
     answer["module_contract"] = module_contract(module_id) if module_id else {}
-    answer["runtime_contract"]["resolved_parameters"] = _multiplex_resolved_parameters(request, answer)
+    answer["runtime_contract"]["resolved_parameters"] = _multiplex_resolved_parameters(
+        request, answer
+    )
     answer["toolchain_validation"] = validate_result(
         command="multiplex",
         request=request,
@@ -799,7 +826,8 @@ def run_multiplex(request: dict[str, Any]) -> dict[str, Any]:
     if (
         toolchain_mode() == "strict"
         and computational_complete
-        and validation["status"] in {"verification-incomplete", "validator-error", "evidence-collected-limited"}
+        and validation["status"]
+        in {"verification-incomplete", "validator-error", "evidence-collected-limited"}
     ):
         raise ToolRuntimeError(
             "multiplex design refused: strict final-panel validation did not complete; repair the configured tools/databases and retry"
@@ -822,12 +850,15 @@ def run_multiplex(request: dict[str, Any]) -> dict[str, Any]:
     enforce_method_fidelity(active_methods, context=f"{module_id}:multiplex")
     provenance_block["scientific_authorities"] = scientific_authorities_for_module(module_id)
     provenance_block["method_fidelity"] = active_methods
-    provenance_block["method_fidelity_references"] = method_fidelity_references_for_module(module_id) + method_fidelity_context_references("generic-multiplex")
-    provenance_block["method_fidelity_scope"] = "active-run-methods-plus-separate-reference-authorities"
+    provenance_block["method_fidelity_references"] = method_fidelity_references_for_module(
+        module_id
+    ) + method_fidelity_context_references("generic-multiplex")
+    provenance_block["method_fidelity_scope"] = (
+        "active-run-methods-plus-separate-reference-authorities"
+    )
     provenance_block["method_fidelity_registry"] = method_fidelity_registry_identity()
     provenance_block["toolchain_fingerprint"] = toolchain_fingerprint(answer)
     return answer
-
 
 
 def run_toolchain(_request: dict[str, Any]) -> dict[str, Any]:
@@ -843,6 +874,7 @@ def run_toolchain(_request: dict[str, Any]) -> dict[str, Any]:
         "engine_count": len(ENGINE_BINDINGS),
         "toolchain": toolchain_snapshot(),
     }
+
 
 def run_nested(request: dict[str, Any]) -> dict[str, Any]:
     """Two rounds, the second reading inside the first."""

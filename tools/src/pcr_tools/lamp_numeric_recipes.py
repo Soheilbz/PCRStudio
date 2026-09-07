@@ -6,6 +6,7 @@ bench scenario, which numerical reaction values are publicly supported?
 Missing public amounts remain unresolved. No value in this module is allowed
 to change primer sequence ranking (`sequence_decision_impact = none`).
 """
+
 from __future__ import annotations
 
 from copy import deepcopy
@@ -14,16 +15,29 @@ from typing import Any
 from .numeric_recipe import Quantity, dilution_volume
 from .numeric_recipe.resolver import resolve as resolve_generic_numeric_recipe
 from .registries.lamp import (
-    LAMP_INSTRUMENT_PROFILES,
-    LAMP_CARRYOVER_STRATEGIES,
-    LAMP_RECONSTITUTION_OPTIONS,
-    LAMP_SPECIFICITY_ADDITIVES,
     LAMP_ACCELERATION_ADDITIVES,
-    LAMP_PRIMER_KINETICS_PROFILES,
+    LAMP_CARRYOVER_STRATEGIES,
+    LAMP_INSTRUMENT_PROFILES,
     LAMP_PREINCUBATION_STRATEGIES,
-    LAMP_SAMPLE_BUFFER_TYPES,
+    LAMP_PRIMER_KINETICS_PROFILES,
     LAMP_PROTOCOL_REGISTRY,
+    LAMP_RECONSTITUTION_OPTIONS,
+    LAMP_SAMPLE_BUFFER_TYPES,
+    LAMP_SPECIFICITY_ADDITIVES,
 )
+
+__all__ = [
+    "LAMP_ACCELERATION_ADDITIVES",
+    "LAMP_CARRYOVER_STRATEGIES",
+    "LAMP_INSTRUMENT_PROFILES",
+    "LAMP_NUMERIC_OPTIMIZATION_ENVELOPES",
+    "LAMP_PREINCUBATION_STRATEGIES",
+    "LAMP_PRIMER_KINETICS_PROFILES",
+    "LAMP_RECONSTITUTION_OPTIONS",
+    "LAMP_SAMPLE_BUFFER_TYPES",
+    "LAMP_SPECIFICITY_ADDITIVES",
+    "resolve_numeric_recipe",
+]
 
 LAMP_NUMERIC_SCHEMA_VERSION = "1.2.0"
 
@@ -70,114 +84,273 @@ LAMP_NUMERIC_OPTIMIZATION_ENVELOPES: dict[str, dict[str, list[float]]] = {
 # registry. They are especially useful for products whose public handling guide
 # exposes exact reagent arithmetic not represented by the generic registry
 # shape.
-LAMP_NUMERIC_BASELINES: dict[str, dict[str, Any]] = {'agdia-lmx54700': {'f3_b3_uM': 0.2, 'fip_bip_uM': 1.6, 'loop_uM': 0.4, 'master_mix_uL': 12.5, 'primer_mix_uL': 2.5},
- 'jena-pcr387': {'hold_temperature_max_c': 65.0,
-                 'hold_temperature_min_c': 60.0,
-                 'hold_time_min': 30.0,
-                 'master_mix_x_final': 1.0},
- 'jena-pcr393': {'hold_temperature_max_c': 65.0,
-                 'hold_temperature_min_c': 60.0,
-                 'hold_time_min': 30.0,
-                 'master_mix_x_final': 1.0},
- 'jena-pcr395': {'hold_temperature_max_c': 65.0,
-                 'hold_temperature_min_c': 60.0,
-                 'hold_time_min': 30.0,
-                 'master_mix_x_final': 1.0},
- 'jena-pcr398': {'hold_temperature_max_c': 65.0,
-                 'hold_temperature_min_c': 60.0,
-                 'hold_time_min': 30.0,
-                 'master_mix_x_final': 1.0},
- 'jena-pcr540': {'buffer_x_final': 1.0,
-                 'enzyme_mix_x_final': 1.0,
-                 'fluorescent_dye_x': 1.0,
-                 'hold_temperature_max_c': 65.0,
-                 'hold_temperature_min_c': 60.0,
-                 'hold_time_min': 30.0},
- 'jena-pcr541': {'hold_temperature_max_c': 65.0, 'hold_temperature_min_c': 60.0, 'master_mix_x_final': 1.0},
- 'meridian-mdx135': {'f3_b3_uM': 0.2,
-                     'fip_bip_uM': 1.6,
-                     'hold_temperature_c': 65.0,
-                     'hold_time_min': 60.0,
-                     'loop_uM': 0.8,
-                     'magnesium_mM': 4.0,
-                     'master_mix_x_final': 1.0,
-                     'reaction_volume_uL': 20.0},
- 'nippon-dr0401': {'reaction_volume_uL': 25.0},
- 'nippon-dr0701': {'reaction_volume_uL': 25.0},
- 'nippon-heatact-fluorescence': {'reaction_volume_uL': 25.0},
- 'nippon-heatact-turbidity': {'reaction_volume_uL': 25.0},
- 'nippon-heatact-turbidity-visible': {'reaction_volume_uL': 25.0},
- 'nzy-md0696': {'hold_temperature_max_c': 70.0, 'hold_temperature_min_c': 65.0},
- 'nzy-md0697': {'hold_temperature_max_c': 70.0, 'hold_temperature_min_c': 65.0},
- 'thermo-a5180x': {'hold_time_min': 30.0},
- 'vazyme-rp711': {'f3_b3_uM': 0.2, 'fip_bip_uM': 1.6, 'fluorescent_dye_uL_per_25uL': 0.5, 'loop_uM': 0.8}}
+LAMP_NUMERIC_BASELINES: dict[str, dict[str, Any]] = {
+    "agdia-lmx54700": {
+        "f3_b3_uM": 0.2,
+        "fip_bip_uM": 1.6,
+        "loop_uM": 0.4,
+        "master_mix_uL": 12.5,
+        "primer_mix_uL": 2.5,
+    },
+    "jena-pcr387": {
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "hold_time_min": 30.0,
+        "master_mix_x_final": 1.0,
+    },
+    "jena-pcr393": {
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "hold_time_min": 30.0,
+        "master_mix_x_final": 1.0,
+    },
+    "jena-pcr395": {
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "hold_time_min": 30.0,
+        "master_mix_x_final": 1.0,
+    },
+    "jena-pcr398": {
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "hold_time_min": 30.0,
+        "master_mix_x_final": 1.0,
+    },
+    "jena-pcr540": {
+        "buffer_x_final": 1.0,
+        "enzyme_mix_x_final": 1.0,
+        "fluorescent_dye_x": 1.0,
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "hold_time_min": 30.0,
+    },
+    "jena-pcr541": {
+        "hold_temperature_max_c": 65.0,
+        "hold_temperature_min_c": 60.0,
+        "master_mix_x_final": 1.0,
+    },
+    "meridian-mdx135": {
+        "f3_b3_uM": 0.2,
+        "fip_bip_uM": 1.6,
+        "hold_temperature_c": 65.0,
+        "hold_time_min": 60.0,
+        "loop_uM": 0.8,
+        "magnesium_mM": 4.0,
+        "master_mix_x_final": 1.0,
+        "reaction_volume_uL": 20.0,
+    },
+    "nippon-dr0401": {"reaction_volume_uL": 25.0},
+    "nippon-dr0701": {"reaction_volume_uL": 25.0},
+    "nippon-heatact-fluorescence": {"reaction_volume_uL": 25.0},
+    "nippon-heatact-turbidity": {"reaction_volume_uL": 25.0},
+    "nippon-heatact-turbidity-visible": {"reaction_volume_uL": 25.0},
+    "nzy-md0696": {"hold_temperature_max_c": 70.0, "hold_temperature_min_c": 65.0},
+    "nzy-md0697": {"hold_temperature_max_c": 70.0, "hold_temperature_min_c": 65.0},
+    "thermo-a5180x": {"hold_time_min": 30.0},
+    "vazyme-rp711": {
+        "f3_b3_uM": 0.2,
+        "fip_bip_uM": 1.6,
+        "fluorescent_dye_uL_per_25uL": 0.5,
+        "loop_uM": 0.8,
+    },
+}
 
 # Conditional rules are exact-product / exact-scenario overlays. `unset`
 # removes a baseline that becomes non-authoritative under the selected branch.
 LAMP_NUMERIC_CONDITIONAL_RULES: dict[str, list[dict[str, Any]]] = {
     "neb-e1700": [
-        {"id": "neb-e1700-tte-uvrd", "when": {"specificity_additive": "tte-uvrd-reviewed"}, "set": {"tte_uvrd_ng_per_25uL": 10.0}, "authority": "NEB E1700 Tte UvrD FAQ starting example"},
+        {
+            "id": "neb-e1700-tte-uvrd",
+            "when": {"specificity_additive": "tte-uvrd-reviewed"},
+            "set": {"tte_uvrd_ng_per_25uL": 10.0},
+            "authority": "NEB E1700 Tte UvrD FAQ starting example",
+        },
     ],
     "neb-m1712": [
-        {"id": "m1712-calcein", "when": {"chemistry": "calcein"}, "set": {"calcein_uM": 25.0, "mncl2_mM": 0.5}, "authority": "NEB M1712 readout guidance"},
-        {"id": "m1712-ebt", "when": {"chemistry": "eriochrome-black-t"}, "set": {"eriochrome_black_t_uM": 60.0}, "authority": "NEB M1712 readout guidance"},
+        {
+            "id": "m1712-calcein",
+            "when": {"chemistry": "calcein"},
+            "set": {"calcein_uM": 25.0, "mncl2_mM": 0.5},
+            "authority": "NEB M1712 readout guidance",
+        },
+        {
+            "id": "m1712-ebt",
+            "when": {"chemistry": "eriochrome-black-t"},
+            "set": {"eriochrome_black_t_uM": 60.0},
+            "authority": "NEB M1712 readout guidance",
+        },
     ],
     "thermo-a5180x": [
-        {"id": "thermo-a5180x-syto9", "when": {"chemistry": "syto9"}, "set": {"syto9_uM": 5.0}, "authority": "Thermo SuperScript IV RT-LAMP Quick Reference"},
-        {"id": "thermo-a5180x-calcein", "when": {"chemistry": "calcein"}, "set": {"calcein_uM": 80.0, "mncl2_mM": 0.25}, "authority": "Thermo SuperScript IV RT-LAMP calcein guidance"},
+        {
+            "id": "thermo-a5180x-syto9",
+            "when": {"chemistry": "syto9"},
+            "set": {"syto9_uM": 5.0},
+            "authority": "Thermo SuperScript IV RT-LAMP Quick Reference",
+        },
+        {
+            "id": "thermo-a5180x-calcein",
+            "when": {"chemistry": "calcein"},
+            "set": {"calcein_uM": 80.0, "mncl2_mM": 0.25},
+            "authority": "Thermo SuperScript IV RT-LAMP calcein guidance",
+        },
     ],
     "neb-m9204": [
-        {"id": "m9204-rna-rt", "when": {"from_rna": True}, "set": {"rt_units": 7.5}, "authority": "NEB M9204 RT-LAMP protocol"},
-        {"id": "m9204-dutp-udg", "when": {"carryover_strategy": "reviewed-dutp-udg"}, "set": {"dutp_mM": 0.7, "thermolabile_udg_u_per_ml": 20.0}, "authority": "NEB M9204 optional carry-over branch"},
+        {
+            "id": "m9204-rna-rt",
+            "when": {"from_rna": True},
+            "set": {"rt_units": 7.5},
+            "authority": "NEB M9204 RT-LAMP protocol",
+        },
+        {
+            "id": "m9204-dutp-udg",
+            "when": {"carryover_strategy": "reviewed-dutp-udg"},
+            "set": {"dutp_mM": 0.7, "thermolabile_udg_u_per_ml": 20.0},
+            "authority": "NEB M9204 optional carry-over branch",
+        },
     ],
     "neb-m9205": [
-        {"id": "m9205-rna-rt", "when": {"from_rna": True}, "set": {"rt_units": 7.5}, "authority": "NEB M9205 RT-LAMP protocol"},
-        {"id": "m9205-dutp-udg", "when": {"carryover_strategy": "reviewed-dutp-udg"}, "set": {"dutp_mM": 0.7, "thermolabile_udg_u_per_ml": 20.0}, "authority": "NEB M9205 optional carry-over branch"},
+        {
+            "id": "m9205-rna-rt",
+            "when": {"from_rna": True},
+            "set": {"rt_units": 7.5},
+            "authority": "NEB M9205 RT-LAMP protocol",
+        },
+        {
+            "id": "m9205-dutp-udg",
+            "when": {"carryover_strategy": "reviewed-dutp-udg"},
+            "set": {"dutp_mM": 0.7, "thermolabile_udg_u_per_ml": 20.0},
+            "authority": "NEB M9205 optional carry-over branch",
+        },
     ],
     "optigene-iso004-lnl": [
-        {"id": "optigene-iso004-lnl-koh", "when": {"preparation": "koh-lyse-and-lamp"}, "set": {"koh_mM": 60.0}, "authority": "OptiGene Lyse & LAMP guidance"},
+        {
+            "id": "optigene-iso004-lnl-koh",
+            "when": {"preparation": "koh-lyse-and-lamp"},
+            "set": {"koh_mM": 60.0},
+            "authority": "OptiGene Lyse & LAMP guidance",
+        },
     ],
     "optigene-iso001-lnl": [
-        {"id": "optigene-iso001-lnl-koh", "when": {"preparation": "koh-lyse-and-lamp"}, "set": {"koh_mM": 60.0}, "authority": "OptiGene Lyse & LAMP guidance"},
+        {
+            "id": "optigene-iso001-lnl-koh",
+            "when": {"preparation": "koh-lyse-and-lamp"},
+            "set": {"koh_mM": 60.0},
+            "authority": "OptiGene Lyse & LAMP guidance",
+        },
     ],
     "optigene-dr001-lnl": [
-        {"id": "optigene-dr001-lnl-koh", "when": {"preparation": "koh-lyse-and-lamp"}, "set": {"koh_mM": 60.0}, "authority": "OptiGene Lyse & LAMP guidance"},
+        {
+            "id": "optigene-dr001-lnl-koh",
+            "when": {"preparation": "koh-lyse-and-lamp"},
+            "set": {"koh_mM": 60.0},
+            "authority": "OptiGene Lyse & LAMP guidance",
+        },
     ],
     "takara-rr385": [
-        {"id": "takara-rr385-preincubation", "when": {"preincubation_strategy": "takara-ung-25c-10min"}, "set": {"preincubation_temperature_c": 25.0, "preincubation_time_min": 10.0}, "authority": "Takara RR385 manual"},
+        {
+            "id": "takara-rr385-preincubation",
+            "when": {"preincubation_strategy": "takara-ung-25c-10min"},
+            "set": {"preincubation_temperature_c": 25.0, "preincubation_time_min": 10.0},
+            "authority": "Takara RR385 manual",
+        },
     ],
     "eiken-lmp204": [
-        {"id": "eiken-lmp221-reagent", "when": {"chemistry": "eiken-fd-lmp221"}, "set": {"eiken_lmp221_uL_per_reaction": 1.0}, "authority": "Eiken LMP221 insert"},
+        {
+            "id": "eiken-lmp221-reagent",
+            "when": {"chemistry": "eiken-fd-lmp221"},
+            "set": {"eiken_lmp221_uL_per_reaction": 1.0},
+            "authority": "Eiken LMP221 insert",
+        },
     ],
     "eiken-lmp207": [
-        {"id": "eiken-lmp221-reagent", "when": {"chemistry": "eiken-fd-lmp221"}, "set": {"eiken_lmp221_uL_per_reaction": 1.0}, "authority": "Eiken LMP221 insert"},
+        {
+            "id": "eiken-lmp221-reagent",
+            "when": {"chemistry": "eiken-fd-lmp221"},
+            "set": {"eiken_lmp221_uL_per_reaction": 1.0},
+            "authority": "Eiken LMP221 insert",
+        },
     ],
     "eiken-lmp244": [
-        {"id": "eiken-lmp221-reagent", "when": {"chemistry": "eiken-fd-lmp221"}, "set": {"eiken_lmp221_uL_per_reaction": 1.0}, "authority": "Eiken LMP221 insert"},
+        {
+            "id": "eiken-lmp221-reagent",
+            "when": {"chemistry": "eiken-fd-lmp221"},
+            "set": {"eiken_lmp221_uL_per_reaction": 1.0},
+            "authority": "Eiken LMP221 insert",
+        },
     ],
     "neb-m1800": [
-        {"id": "neb-m1800-guanidine", "when": {"acceleration_additive": "guanidine-hcl-40mm"}, "set": {"guanidine_added_mM": 40.0}, "authority": "NEB colorimetric LAMP guanidine guidance"},
+        {
+            "id": "neb-m1800-guanidine",
+            "when": {"acceleration_additive": "guanidine-hcl-40mm"},
+            "set": {"guanidine_added_mM": 40.0},
+            "authority": "NEB colorimetric LAMP guanidine guidance",
+        },
     ],
     "neb-m1804": [
-        {"id": "neb-m1804-guanidine", "when": {"acceleration_additive": "guanidine-hcl-40mm"}, "set": {"guanidine_added_mM": 40.0}, "authority": "NEB colorimetric LAMP guanidine guidance"},
+        {
+            "id": "neb-m1804-guanidine",
+            "when": {"acceleration_additive": "guanidine-hcl-40mm"},
+            "set": {"guanidine_added_mM": 40.0},
+            "authority": "NEB colorimetric LAMP guanidine guidance",
+        },
     ],
     "yeasen-16730": [
-        {"id": "yeasen-16730-lyophilization-stabilizer", "when": {"formulation": "lyophilized"}, "set": {"lyophilization_stabilizer_uL_per_25uL": 6.0}, "authority": "Yeasen 16730 manual reviewed lyo setup"},
+        {
+            "id": "yeasen-16730-lyophilization-stabilizer",
+            "when": {"formulation": "lyophilized"},
+            "set": {"lyophilization_stabilizer_uL_per_25uL": 6.0},
+            "authority": "Yeasen 16730 manual reviewed lyo setup",
+        },
     ],
     "vazyme-rp711": [
-        {"id": "vazyme-rp711-slan96p-dye", "when": {"instrument_profile": "vazyme-slan96p"}, "set": {"fluorescent_dye_x": 0.1, "fluorescent_dye_uL_per_25uL": 0.05}, "authority": "Vazyme RP711 V25.1/current product guidance"},
+        {
+            "id": "vazyme-rp711-slan96p-dye",
+            "when": {"instrument_profile": "vazyme-slan96p"},
+            "set": {"fluorescent_dye_x": 0.1, "fluorescent_dye_uL_per_25uL": 0.05},
+            "authority": "Vazyme RP711 V25.1/current product guidance",
+        },
         *[
-            {"id": f"vazyme-rp711-{profile}-dye", "when": {"instrument_profile": profile}, "set": {"fluorescent_dye_x": 1.0, "fluorescent_dye_uL_per_25uL": 0.5}, "authority": "Vazyme RP711 instrument-specific dye guidance"}
+            {
+                "id": f"vazyme-rp711-{profile}-dye",
+                "when": {"instrument_profile": profile},
+                "set": {"fluorescent_dye_x": 1.0, "fluorescent_dye_uL_per_25uL": 0.5},
+                "authority": "Vazyme RP711 instrument-specific dye guidance",
+            }
             for profile in (
-                "vazyme-quantstudio3", "vazyme-quantstudio5", "vazyme-steponeplus",
-                "vazyme-lightcycler96", "vazyme-cfx96-touch", "vazyme-quantgene9600", "vazyme-gentier96r",
+                "vazyme-quantstudio3",
+                "vazyme-quantstudio5",
+                "vazyme-steponeplus",
+                "vazyme-lightcycler96",
+                "vazyme-cfx96-touch",
+                "vazyme-quantgene9600",
+                "vazyme-gentier96r",
             )
         ],
-        {"id": "vazyme-rp711-other-qpcr-dye-range", "when": {"instrument_profile": "other-qpcr"}, "unset": ["fluorescent_dye_x", "fluorescent_dye_uL_per_25uL"], "ranges": {"fluorescent_dye_x": [0.1, 1.0], "fluorescent_dye_uL_per_25uL": [0.05, 0.5]}, "authority": "Vazyme RP711 other-instrument dye guidance"},
+        {
+            "id": "vazyme-rp711-other-qpcr-dye-range",
+            "when": {"instrument_profile": "other-qpcr"},
+            "unset": ["fluorescent_dye_x", "fluorescent_dye_uL_per_25uL"],
+            "ranges": {"fluorescent_dye_x": [0.1, 1.0], "fluorescent_dye_uL_per_25uL": [0.05, 0.5]},
+            "authority": "Vazyme RP711 other-instrument dye guidance",
+        },
     ],
     "agdia-lmx54700": [
-        {"id": "agdia-lmx54700-rna-external-rt", "when": {"from_rna": True}, "set": {"external_rt_units": 50.0, "external_rt_stock_u_per_uL": 200.0, "external_rt_uL": 0.25}, "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06"},
-        {"id": "agdia-lmx54700-amplifire-run", "when": {"instrument_profile": "agdia-amplifire"}, "set": {"hold_temperature_c": 65.0, "hold_time_min": 20.0}, "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06"},
+        {
+            "id": "agdia-lmx54700-rna-external-rt",
+            "when": {"from_rna": True},
+            "set": {
+                "external_rt_units": 50.0,
+                "external_rt_stock_u_per_uL": 200.0,
+                "external_rt_uL": 0.25,
+            },
+            "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+        },
+        {
+            "id": "agdia-lmx54700-amplifire-run",
+            "when": {"instrument_profile": "agdia-amplifire"},
+            "set": {"hold_temperature_c": 65.0, "hold_time_min": 20.0},
+            "authority": "Agdia LMX 54700 User Guide m472 Rev. 2025-01-06",
+        },
     ],
 }
 
@@ -204,19 +377,43 @@ LAMP_SAMPLE_INPUT_LIMITS: dict[str, dict[str, float]] = {
 
 LAMP_NUMERIC_UNRESOLVED_DEPENDENCIES: dict[str, list[dict[str, str]]] = {
     "vazyme-rp712": [
-        {"id": "vazyme-rp712-exact-recipe", "when": "always", "note": "The reviewed public product authority supports product/readout/carry-over identity and a 30-minute claim, but this release does not snapshot an exact transferable reagent-volume recipe; numeric bench recipe therefore remains unresolved/fail-closed."}
+        {
+            "id": "vazyme-rp712-exact-recipe",
+            "when": "always",
+            "note": "The reviewed public product authority supports product/readout/carry-over identity and a 30-minute claim, but this release does not snapshot an exact transferable reagent-volume recipe; numeric bench recipe therefore remains unresolved/fail-closed.",
+        }
     ],
     "optigene-iso004": [
-        {"id": "optigene-turbidity-extra-mg-dntp", "when": "turbidity-or-gel", "note": "Vendor guidance indicates extra MgSO4/dNTP optimization for some non-fluorescent workflows but does not publish one transferable universal amount."}
+        {
+            "id": "optigene-turbidity-extra-mg-dntp",
+            "when": "turbidity-or-gel",
+            "note": "Vendor guidance indicates extra MgSO4/dNTP optimization for some non-fluorescent workflows but does not publish one transferable universal amount.",
+        }
     ],
 }
 
 LAMP_NUMERIC_DEPENDENCY_AXES = [
-    "protocol", "substrate", "readout", "exact-readout-chemistry", "instrument",
-    "formulation", "reconstitution", "carry-over", "sample-matrix",
-    "sample-preparation", "sample-input-fraction", "sample-buffer", "sample-pH",
-    "transport-medium", "bile-salt", "Cary-Blair", "guanidine", "specificity-additive",
-    "primer-kinetics-profile", "pre-incubation", "bench-optimization",
+    "protocol",
+    "substrate",
+    "readout",
+    "exact-readout-chemistry",
+    "instrument",
+    "formulation",
+    "reconstitution",
+    "carry-over",
+    "sample-matrix",
+    "sample-preparation",
+    "sample-input-fraction",
+    "sample-buffer",
+    "sample-pH",
+    "transport-medium",
+    "bile-salt",
+    "Cary-Blair",
+    "guanidine",
+    "specificity-additive",
+    "primer-kinetics-profile",
+    "pre-incubation",
+    "bench-optimization",
 ]
 
 
@@ -244,11 +441,19 @@ def _flatten_protocol_baseline(protocol: dict[str, Any] | None) -> dict[str, flo
             value = role.get(src)
             if isinstance(value, (int, float)) and not isinstance(value, bool):
                 out[dst] = float(value)
-        for left, right, dst in (("FIP", "BIP", "fip_bip_uM"), ("F3", "B3", "f3_b3_uM"), ("LF", "LB", "loop_uM")):
+        for left, right, dst in (
+            ("FIP", "BIP", "fip_bip_uM"),
+            ("F3", "B3", "f3_b3_uM"),
+            ("LF", "LB", "loop_uM"),
+        ):
             a, b = role.get(left), role.get(right)
-            if all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (a, b)):
+            if all(
+                isinstance(value, (int, float)) and not isinstance(value, bool) for value in (a, b)
+            ):
                 if float(a) != float(b):
-                    raise ValueError(f"{left}/{right} concentrations differ and cannot be collapsed into {dst}")
+                    raise ValueError(
+                        f"{left}/{right} concentrations differ and cannot be collapsed into {dst}"
+                    )
                 out[dst] = float(a)
     chemistry = protocol.get("chemistry") or {}
     if isinstance(chemistry, dict):
@@ -303,8 +508,12 @@ def resolve_numeric_recipe(
 
     # Product-scoped direct specimen limits.
     matrix = str(scenario.get("matrix") or "")
-    if scenario.get("sample_input_percent") is not None and not (protocol_id in LAMP_SAMPLE_INPUT_LIMITS and matrix in LAMP_SAMPLE_INPUT_LIMITS[protocol_id]):
-        raise ValueError("sample_input_percent has no reviewed exact-product numeric authority for the selected protocol/matrix.")
+    if scenario.get("sample_input_percent") is not None and not (
+        protocol_id in LAMP_SAMPLE_INPUT_LIMITS and matrix in LAMP_SAMPLE_INPUT_LIMITS[protocol_id]
+    ):
+        raise ValueError(
+            "sample_input_percent has no reviewed exact-product numeric authority for the selected protocol/matrix."
+        )
     if protocol_id in LAMP_SAMPLE_INPUT_LIMITS and matrix in LAMP_SAMPLE_INPUT_LIMITS[protocol_id]:
         limit = float(LAMP_SAMPLE_INPUT_LIMITS[protocol_id][matrix])
         ranges["sample_input_percent"] = [0.0, limit]
@@ -312,7 +521,9 @@ def resolve_numeric_recipe(
         if actual is not None:
             actual_f = float(actual)
             if actual_f < 0 or actual_f > limit:
-                raise ValueError(f"sample_input_percent must be within the reviewed exact-product range 0–{limit}% for {protocol_id}/{matrix}.")
+                raise ValueError(
+                    f"sample_input_percent must be within the reviewed exact-product range 0–{limit}% for {protocol_id}/{matrix}."
+                )
             values["sample_input_percent"] = actual_f
             origins["sample_input_percent"] = "user-within-source-bound"
 
@@ -326,22 +537,35 @@ def resolve_numeric_recipe(
             ph_f = float(ph)
             values["sample_buffer_ph"] = ph_f
             origins["sample_buffer_ph"] = "user-reviewed-context"
-            if not NEB_PH_COLORIMETRIC_REVIEWED_SAMPLE_PH[0] <= ph_f <= NEB_PH_COLORIMETRIC_REVIEWED_SAMPLE_PH[1] and (percent is not None and float(percent) > NEB_PH_COLORIMETRIC_CONSERVATIVE_BUFFER_PERCENT_MAX):
-                raise ValueError("For NEB pH-colorimetric LAMP, sample buffers outside pH 7–8.5 are not accepted above 10% final reaction fraction.")
+            if not NEB_PH_COLORIMETRIC_REVIEWED_SAMPLE_PH[
+                0
+            ] <= ph_f <= NEB_PH_COLORIMETRIC_REVIEWED_SAMPLE_PH[1] and (
+                percent is not None
+                and float(percent) > NEB_PH_COLORIMETRIC_CONSERVATIVE_BUFFER_PERCENT_MAX
+            ):
+                raise ValueError(
+                    "For NEB pH-colorimetric LAMP, sample buffers outside pH 7–8.5 are not accepted above 10% final reaction fraction."
+                )
         if percent is not None:
             pct = float(percent)
             if pct < 0:
                 raise ValueError("sample_buffer_percent cannot be negative.")
             if buffer_type == "te" and pct >= NEB_PH_COLORIMETRIC_TE_CAUTION_PERCENT_MAX:
-                raise ValueError("TE at 20% final or above is outside the reviewed NEB pH-colorimetric boundary.")
+                raise ValueError(
+                    "TE at 20% final or above is outside the reviewed NEB pH-colorimetric boundary."
+                )
             values["sample_buffer_percent"] = pct
             origins["sample_buffer_percent"] = "user-reviewed-context"
             if buffer_type == "te" and pct > NEB_PH_COLORIMETRIC_CONSERVATIVE_BUFFER_PERCENT_MAX:
-                warnings.append("TE between 10% and 20% final lies in a source-disagreement/caution region; validate the exact assay empirically.")
+                warnings.append(
+                    "TE between 10% and 20% final lies in a source-disagreement/caution region; validate the exact assay empirically."
+                )
         upstream = float(scenario.get("upstream_guanidine_mM") or 0.0)
         added = float(values.get("guanidine_added_mM") or 0.0)
         if upstream + added >= NEB_PH_COLORIMETRIC_GUANIDINE_TOTAL_MM_MAX:
-            raise ValueError("Total guanidine must remain below 60 mM in the reviewed NEB pH-colorimetric branch.")
+            raise ValueError(
+                "Total guanidine must remain below 60 mM in the reviewed NEB pH-colorimetric branch."
+            )
         if upstream:
             values["upstream_guanidine_mM"] = upstream
             values["total_guanidine_mM"] = upstream + added
@@ -349,32 +573,52 @@ def resolve_numeric_recipe(
             origins["total_guanidine_mM"] = "derived-stoichiometry"
 
     # Eiken LMP221 + chelating buffers is a source-backed incompatibility.
-    if scenario.get("chemistry") == "eiken-fd-lmp221" and scenario.get("sample_buffer_type") in {"te", "chelating-other"}:
-        raise ValueError("Eiken LMP221 is incompatible with TE/other chelating sample-buffer context because Mn chelation can release calcein and create false-positive fluorescence.")
+    if scenario.get("chemistry") == "eiken-fd-lmp221" and scenario.get("sample_buffer_type") in {
+        "te",
+        "chelating-other",
+    }:
+        raise ValueError(
+            "Eiken LMP221 is incompatible with TE/other chelating sample-buffer context because Mn chelation can release calcein and create false-positive fluorescence."
+        )
 
     # Other matrix modifiers: preserve exact numeric evidence when the product
     # authority provides a maximum, but do not fabricate missing values.
     if scenario.get("transport_medium_percent") is not None:
         if protocol_id not in {"meridian-mdx134", "meridian-mdx135"}:
-            raise ValueError("transport_medium_percent has reviewed numeric authority only for Meridian MDX134/MDX135 in this catalogue.")
+            raise ValueError(
+                "transport_medium_percent has reviewed numeric authority only for Meridian MDX134/MDX135 in this catalogue."
+            )
         pct = float(scenario["transport_medium_percent"])
         if not 0 <= pct <= 50.0:
-            raise ValueError("transport_medium_percent must remain within the reviewed 0–50% final range for the selected Meridian saliva/sputum branch.")
-        values["transport_medium_percent"] = pct; origins["transport_medium_percent"] = "user-reviewed-context"
+            raise ValueError(
+                "transport_medium_percent must remain within the reviewed 0–50% final range for the selected Meridian saliva/sputum branch."
+            )
+        values["transport_medium_percent"] = pct
+        origins["transport_medium_percent"] = "user-reviewed-context"
     if scenario.get("bile_salt_mg_ml") is not None:
         if protocol_id != "meridian-mdx144":
-            raise ValueError("bile_salt_mg_ml has reviewed numeric authority only for Meridian MDX144 in this catalogue.")
+            raise ValueError(
+                "bile_salt_mg_ml has reviewed numeric authority only for Meridian MDX144 in this catalogue."
+            )
         value = float(scenario["bile_salt_mg_ml"])
         if not 0 <= value <= 2.0:
-            raise ValueError("bile_salt_mg_ml must remain within the reviewed 0–2 mg/mL range for Meridian MDX144.")
-        values["bile_salt_mg_ml"] = value; origins["bile_salt_mg_ml"] = "user-reviewed-context"
+            raise ValueError(
+                "bile_salt_mg_ml must remain within the reviewed 0–2 mg/mL range for Meridian MDX144."
+            )
+        values["bile_salt_mg_ml"] = value
+        origins["bile_salt_mg_ml"] = "user-reviewed-context"
     if scenario.get("cary_blair_percent") is not None:
         if protocol_id != "meridian-mdx144":
-            raise ValueError("cary_blair_percent has reviewed numeric authority only for Meridian MDX144 in this catalogue.")
+            raise ValueError(
+                "cary_blair_percent has reviewed numeric authority only for Meridian MDX144 in this catalogue."
+            )
         value = float(scenario["cary_blair_percent"])
         if not 0 <= value <= 40.0:
-            raise ValueError("cary_blair_percent must remain within the reviewed 0–40% range for Meridian MDX144.")
-        values["cary_blair_percent"] = value; origins["cary_blair_percent"] = "user-reviewed-context"
+            raise ValueError(
+                "cary_blair_percent must remain within the reviewed 0–40% range for Meridian MDX144."
+            )
+        values["cary_blair_percent"] = value
+        origins["cary_blair_percent"] = "user-reviewed-context"
 
     # Derived dye volume arithmetic prevents a final-X / stock-X / volume
     # contradiction after instrument overlays or explicit bounded overrides.
@@ -389,25 +633,38 @@ def resolve_numeric_recipe(
     unresolved: list[dict[str, str]] = []
     if protocol_id in LAMP_NUMERIC_UNRESOLVED_DEPENDENCIES:
         for item in LAMP_NUMERIC_UNRESOLVED_DEPENDENCIES[protocol_id]:
-            if item.get("when") == "turbidity-or-gel" and scenario.get("readout") not in {"turbidity", "other-validated"}:
+            if item.get("when") == "turbidity-or-gel" and scenario.get("readout") not in {
+                "turbidity",
+                "other-validated",
+            }:
                 continue
             unresolved.append(dict(item))
 
     thermal_stages: list[dict[str, Any]] = []
     if scenario.get("preincubation_strategy") == "takara-ung-25c-10min":
-        thermal_stages.append({
-            "id": "carryover-preincubation", "temperature_c": 25.0, "time_min": 10.0,
-            "authority": "Takara RR385 reviewed pre-incubation branch", "required_by_selection": True,
-        })
+        thermal_stages.append(
+            {
+                "id": "carryover-preincubation",
+                "temperature_c": 25.0,
+                "time_min": 10.0,
+                "authority": "Takara RR385 reviewed pre-incubation branch",
+                "required_by_selection": True,
+            }
+        )
     hold_temperature = values.get("hold_temperature_c")
     hold_time = values.get("hold_time_min")
     if hold_temperature is not None or hold_time is not None:
-        thermal_stages.append({
-            "id": "isothermal-amplification",
-            "temperature_c": hold_temperature, "time_min": hold_time,
-            "authority": origins.get("hold_temperature_c") or origins.get("hold_time_min") or "product-baseline",
-            "required_by_selection": True,
-        })
+        thermal_stages.append(
+            {
+                "id": "isothermal-amplification",
+                "temperature_c": hold_temperature,
+                "time_min": hold_time,
+                "authority": origins.get("hold_temperature_c")
+                or origins.get("hold_time_min")
+                or "product-baseline",
+                "required_by_selection": True,
+            }
+        )
     # Confirmation/inactivation is not synthesized from free text. A later
     # stage is present only when an exact numeric authority has been promoted.
 

@@ -15,7 +15,9 @@ from pcr_tools import rt
 
 @pytest.mark.parametrize("policy", ["strict", "development"])
 @pytest.mark.parametrize("isothermal", [False, True])
-def test_generic_rt_handoff_is_unresolved_in_every_policy(monkeypatch, policy: str, isothermal: bool):
+def test_generic_rt_handoff_is_unresolved_in_every_policy(
+    monkeypatch, policy: str, isothermal: bool
+):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", policy)
     step = rt.block(isothermal=isothermal, polymerase="Standard Taq")
 

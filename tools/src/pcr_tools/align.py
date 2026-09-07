@@ -63,7 +63,7 @@ def _binary() -> str | None:
 def available() -> dict[str, Any]:
     """Whether the pinned Generation-1 automatic aligner is installed."""
     mafft = _binary()
-    options = ([{"id": "mafft", "name": "MAFFT", "path": mafft}] if mafft else [])
+    options = [{"id": "mafft", "name": "MAFFT", "path": mafft}] if mafft else []
     return {
         "available": bool(options),
         "aligners": options,
@@ -73,6 +73,7 @@ def available() -> dict[str, Any]:
             else "MAFFT 7.526 is unavailable. Configure the canonical MAFFT toolchain artifact; PCRStudio does not auto-substitute another aligner."
         ),
     }
+
 
 def _with_mafft(
     path: str,
@@ -239,6 +240,7 @@ def _version(chosen: dict[str, str]) -> str:
     status = tool_status("mafft")
     observed = str(status.get("observed_version") or "").strip()
     return observed or "MAFFT 7.526"
+
 
 def aligned_to_dict(result: Aligned) -> dict[str, Any]:
     """The alignment as plain data, with the FASTA a person can paste anywhere."""

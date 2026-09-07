@@ -1,4 +1,5 @@
 """Typed 0-based half-open coordinates used at scientific boundaries."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -10,6 +11,7 @@ Strand = Literal["+", "-"]
 @dataclass(frozen=True, slots=True, order=True)
 class BaseIndex:
     """Zero-based base index."""
+
     value: int
 
     def __post_init__(self) -> None:
@@ -20,6 +22,7 @@ class BaseIndex:
 @dataclass(frozen=True, slots=True, order=True)
 class Boundary:
     """Boundary between bases in a half-open coordinate system."""
+
     value: int
 
     def __post_init__(self) -> None:
@@ -30,6 +33,7 @@ class Boundary:
 @dataclass(frozen=True, slots=True)
 class HalfOpenInterval:
     """[start,end) interval; start <= end by construction."""
+
     start: Boundary
     end: Boundary
 
@@ -45,6 +49,7 @@ class HalfOpenInterval:
 @dataclass(frozen=True, slots=True)
 class CircularPosition:
     """Normalized zero-based position on a circular reference."""
+
     value: int
     reference_length: int
 

@@ -4,6 +4,7 @@ Only the small tag set required for review is decoded.  The parser is deliberate
 bounded and evidence-only: chromatogram quality can validate a completed run but
 never changes the primer ranking that produced it.
 """
+
 from __future__ import annotations
 
 import base64
@@ -105,7 +106,7 @@ def _u16(data: bytes, directory: dict, tag: str, number: int, *, limit: int) -> 
 def _longest_q20(qualities: list[int]) -> dict[str, int] | None:
     best_start = best_end = run_start = 0
     in_run = False
-    for index, q in enumerate(qualities + [0]):
+    for index, q in enumerate([*qualities, 0]):
         if index < len(qualities) and q >= 20:
             if not in_run:
                 run_start = index
@@ -124,7 +125,11 @@ def parse_ab1_base64(payload: str, *, filename: str | None = None) -> dict[str, 
     directory = _directory(data)
     bases = _text(data, directory, "PBAS", 2) or _text(data, directory, "PBAS", 1) or ""
     bases = bases.strip().upper()[:MAX_BASES]
-    positions = _u16(data, directory, "PLOC", 2, limit=MAX_BASES) or _u16(data, directory, "PLOC", 1, limit=MAX_BASES) or []
+    positions = (
+        _u16(data, directory, "PLOC", 2, limit=MAX_BASES)
+        or _u16(data, directory, "PLOC", 1, limit=MAX_BASES)
+        or []
+    )
     qualities = _u8(data, directory, "PCON", 2) or _u8(data, directory, "PCON", 1) or []
     order = (_text(data, directory, "FWO_", 1) or "GATC").strip().upper()
     if len(order) != 4 or set(order) != set("ACGT"):
@@ -134,7 +139,11 @@ def parse_ab1_base64(payload: str, *, filename: str | None = None) -> dict[str, 
         values = _u16(data, directory, "DATA", number, limit=MAX_POINTS)
         if values is not None:
             traces[channel] = values
-    n = min(len(bases), len(positions) if positions else len(bases), len(qualities) if qualities else len(bases))
+    n = min(
+        len(bases),
+        len(positions) if positions else len(bases),
+        len(qualities) if qualities else len(bases),
+    )
     bases = bases[:n]
     positions = positions[:n] if positions else []
     qualities = qualities[:n] if qualities else []
@@ -151,13 +160,15 @@ def parse_ab1_base64(payload: str, *, filename: str | None = None) -> dict[str, 
             secondary_base, secondary = ranked[1]
             ratio = (secondary / primary) if primary > 0 else 0.0
             if ratio >= MIXED_PEAK_SECONDARY_RATIO:
-                mixed.append({
-                    "base_index": index,
-                    "basecall": base,
-                    "primary_channel": primary_base,
-                    "secondary_channel": secondary_base,
-                    "secondary_ratio": round(ratio, 4),
-                })
+                mixed.append(
+                    {
+                        "base_index": index,
+                        "basecall": base,
+                        "primary_channel": primary_base,
+                        "secondary_channel": secondary_base,
+                        "secondary_ratio": round(ratio, 4),
+                    }
+                )
     q20 = _longest_q20(qualities) if qualities else None
     mean_q = (sum(qualities) / len(qualities)) if qualities else None
     return {

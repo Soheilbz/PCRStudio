@@ -165,11 +165,7 @@ def usable_enzymes(insert: str, *, catalogue: tuple[Enzyme, ...] | None = None) 
     evidence. Supplier-specific cloning suitability remains a separate
     protocol/catalogue question.
     """
-    return [
-        enzyme
-        for enzyme in (catalogue or ENZYMES)
-        if occurrences(insert, enzyme) == 0
-    ]
+    return [enzyme for enzyme in (catalogue or ENZYMES) if occurrences(insert, enzyme) == 0]
 
 
 def build_tail(
@@ -288,7 +284,10 @@ def end_compatibility(left: Enzyme, right: Enzyme) -> bool | None:
     """
     left_end = end_geometry(left)
     right_end = end_geometry(right)
-    if left_end["status"] != "derived-palindromic-site" or right_end["status"] != "derived-palindromic-site":
+    if (
+        left_end["status"] != "derived-palindromic-site"
+        or right_end["status"] != "derived-palindromic-site"
+    ):
         return None
     if left_end["ambiguous"] or right_end["ambiguous"]:
         return None

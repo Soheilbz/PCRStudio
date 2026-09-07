@@ -101,9 +101,7 @@ class Enzyme:
             self.first_observed_activity_flanking_bases is not None
             and self.first_observed_activity_flanking_bases < 0
         ):
-            raise RestrictionError(
-                f"{self.name} has a negative flanking-base activity annotation"
-            )
+            raise RestrictionError(f"{self.name} has a negative flanking-base activity annotation")
         if (
             self.first_observed_activity_flanking_bases is not None
             and not self.end_cleavage_evidence_identity
@@ -129,7 +127,11 @@ RESTRICTION_REGISTRY_RESOURCE = "data/restriction_enzyme_registry.json"
 
 
 def _load_enzyme_registry() -> tuple[dict[str, object], tuple[Enzyme, ...]]:
-    raw = files("pcr_tools").joinpath(*RESTRICTION_REGISTRY_RESOURCE.split("/")).read_text(encoding="utf-8")
+    raw = (
+        files("pcr_tools")
+        .joinpath(*RESTRICTION_REGISTRY_RESOURCE.split("/"))
+        .read_text(encoding="utf-8")
+    )
     document = json.loads(raw)
     if not isinstance(document, dict) or document.get("schema_version") != "1.0.0":
         raise RestrictionError("restriction-enzyme registry is missing schema_version 1.0.0")
@@ -147,7 +149,9 @@ def _load_enzyme_registry() -> tuple[dict[str, object], tuple[Enzyme, ...]]:
         flanking = row.get("first_observed_activity_flanking_bases")
         evidence = row.get("end_cleavage_evidence_identity")
         if not name or name in names:
-            raise RestrictionError(f"restriction-enzyme registry has an empty or duplicate name at row {index}")
+            raise RestrictionError(
+                f"restriction-enzyme registry has an empty or duplicate name at row {index}"
+            )
         if isinstance(cut, bool) or not isinstance(cut, int):
             raise RestrictionError(f"{name} has a non-integer cuts_after value in the registry")
         if flanking is not None and (isinstance(flanking, bool) or not isinstance(flanking, int)):
@@ -157,7 +161,9 @@ def _load_enzyme_registry() -> tuple[dict[str, object], tuple[Enzyme, ...]]:
             site=site,
             cuts_after=cut,
             first_observed_activity_flanking_bases=flanking,
-            end_cleavage_evidence_identity=(str(evidence).strip() if evidence is not None else None),
+            end_cleavage_evidence_identity=(
+                str(evidence).strip() if evidence is not None else None
+            ),
         )
         enzyme.pattern()  # validate site/cut/evidence invariants at import time
         names.add(name)
@@ -370,7 +376,10 @@ def choose_enzyme(
                     "inverse PCR requires the complete known anchor to remain intact on one fragment",
                 )
         elif len(inside) == 1:
-            usable, why = True, "cuts the supplied sequence once, as this explicitly selected purpose requires"
+            usable, why = (
+                True,
+                "cuts the supplied sequence once, as this explicitly selected purpose requires",
+            )
         elif not inside:
             usable, why = False, "does not cut the supplied sequence"
         else:

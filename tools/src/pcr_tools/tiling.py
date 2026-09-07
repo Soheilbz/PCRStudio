@@ -545,15 +545,13 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         },
         **laid_out,
         "why_nothing": (
-
-                "Internal development walker only: canonical PrimalScheme3 execution is required before release or ordering."
-                if coverage_complete
-                else (
-                    "The walk could not place a single amplicon. Every start it tried failed the constraints."
-                    if not scheme.tiles
-                    else f"The internal scheme leaves {len(laid_out.get('gaps') or [])} uncovered interval(s); partial coverage is diagnostic and not releasable for ordering."
-                )
-
+            "Internal development walker only: canonical PrimalScheme3 execution is required before release or ordering."
+            if coverage_complete
+            else (
+                "The walk could not place a single amplicon. Every start it tried failed the constraints."
+                if not scheme.tiles
+                else f"The internal scheme leaves {len(laid_out.get('gaps') or [])} uncovered interval(s); partial coverage is diagnostic and not releasable for ordering."
+            )
         ),
         "orderability": orderability,
         "order_sheet": (

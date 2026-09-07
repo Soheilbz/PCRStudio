@@ -5,12 +5,13 @@ It is intentionally independent from candidate enumeration and thermodynamic
 execution so exact Automatic-Judgment boundaries can be tested without
 Primer3 or other native tools.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .lamp_errors import LoopSetError
 from .degenerate import EXPANSION
+from .lamp_errors import LoopSetError
 
 
 @dataclass(frozen=True)
@@ -113,9 +114,7 @@ def target_gc_interval(template: str) -> tuple[float, float]:
     for base in sequence:
         choices = EXPANSION.get(base)
         if choices is None:
-            raise LoopSetError(
-                f"Automatic Judgment cannot interpret `{base}` as a DNA/IUPAC base."
-            )
+            raise LoopSetError(f"Automatic Judgment cannot interpret `{base}` as a DNA/IUPAC base.")
         minimum_gc += int(all(choice in "GC" for choice in choices))
         maximum_gc += int(any(choice in "GC" for choice in choices))
     length = len(sequence)

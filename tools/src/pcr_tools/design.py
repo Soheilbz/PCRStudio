@@ -141,7 +141,6 @@ class Constraints:
     #: callers that never heard of this do not change behaviour.
     max_end_stability: float | None = None
 
-
     def validate(self) -> None:
         """Reject combinations Primer3 would refuse, with a reason.
 

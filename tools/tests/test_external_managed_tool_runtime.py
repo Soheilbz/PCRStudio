@@ -37,11 +37,19 @@ def test_tiling_strict_preflight_requires_only_selected_primary(monkeypatch) -> 
         }
 
     monkeypatch.setattr(tool_runtime, "tool_status", status)
-    monkeypatch.setattr(tool_runtime, "configured_database_contract", lambda _prefix: {
-        "paths": ["db"], "sha256": "0" * 64, "scope": "production",
-        "manifest": "manifest", "manifest_contract_consistent": True,
-        "content_hash_matches": True, "index_artifacts_match": True,
-    })
+    monkeypatch.setattr(
+        tool_runtime,
+        "configured_database_contract",
+        lambda _prefix: {
+            "paths": ["db"],
+            "sha256": "0" * 64,
+            "scope": "production",
+            "manifest": "manifest",
+            "manifest_contract_consistent": True,
+            "content_hash_matches": True,
+            "index_artifacts_match": True,
+        },
+    )
     tool_runtime.require_engine_toolchain(
         "tiling-scheme", "tiled-scheme", {"tilingBackend": "olivar"}
     )

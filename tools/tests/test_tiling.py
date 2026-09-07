@@ -108,10 +108,6 @@ def test_what_the_oligos_in_each_tube_do_to_each_other_is_measured():
 # ── Layouts that could not be attempted ────────────────────────────────────
 
 
-
-
-
-
 def test_zero_slide_is_preserved_as_an_explicit_no_sliding_choice():
     laid = lay_out(mitochondrion(), constraints=LIMITS, conditions=CONDITIONS, slide=0)
 

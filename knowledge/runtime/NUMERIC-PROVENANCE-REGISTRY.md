@@ -10,21 +10,21 @@ The registry separates hard/assay-envelope values from ranking tuning, diagnosti
 
 | Source | Constant | Category | Decision role |
 |---|---|---|---|
-| `tools/src/pcr_tools/pipeline.py:108` | `OFF_TARGET_SERIOUS` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:109` | `OFF_TARGET_WATCH` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:115` | `PENALTY_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:121` | `ACCESSIBILITY_WEIGHT` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:122` | `ACCESSIBILITY_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:144` | `CROSS_DIMER_WEIGHT` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:145` | `CROSS_DIMER_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:433` | `PURPOSE_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:467` | `THREE_PRIME_TRIPLET_FREQUENCIES` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:538` | `THREE_PRIME_TRIPLET_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:575` | `ISOTHERMAL_PRIMER3_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:921` | `QUALITY_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/pipeline.py:933` | `END_STABILITY_SCALE` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/lamp_geometry.py:151` | `EVIDENCE_2026_F2_B2_PREFERRED` | ranking-tuning | may rank/report only; not a hard validity gate |
-| `tools/src/pcr_tools/lamp_geometry.py:152` | `EVIDENCE_2026_OUTER_GAP_PREFERRED` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:110` | `OFF_TARGET_SERIOUS` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:111` | `OFF_TARGET_WATCH` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:117` | `PENALTY_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:123` | `ACCESSIBILITY_WEIGHT` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:124` | `ACCESSIBILITY_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:146` | `CROSS_DIMER_WEIGHT` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:147` | `CROSS_DIMER_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:428` | `PURPOSE_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:462` | `THREE_PRIME_TRIPLET_FREQUENCIES` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:533` | `THREE_PRIME_TRIPLET_CAP` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:570` | `ISOTHERMAL_PRIMER3_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:916` | `QUALITY_WEIGHTS` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/pipeline.py:928` | `END_STABILITY_SCALE` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/lamp_geometry.py:163` | `EVIDENCE_2026_F2_B2_PREFERRED` | ranking-tuning | may rank/report only; not a hard validity gate |
+| `tools/src/pcr_tools/lamp_geometry.py:164` | `EVIDENCE_2026_OUTER_GAP_PREFERRED` | ranking-tuning | may rank/report only; not a hard validity gate |
 
 ## Inline decision-literal inventory
 

@@ -19,7 +19,6 @@ from pcr_tools.thermo import (
     melting_temperature,
     pair_dimer,
     reverse_complement,
-    salt_correction_for_conditions,
 )
 
 #: The M13 forward sequencing primer. In every catalogue, and a fair check that
@@ -62,10 +61,6 @@ class TestComposition:
         assert gc_percent("GGCC") == 100.0
         assert gc_percent("ATAT") == 0.0
         assert gc_percent("ATGC") == 50.0
-
-
-
-
 
 
 def test_low_level_primer3_controls_are_explicit_not_library_defaults(monkeypatch):
@@ -204,7 +199,6 @@ def test_it_ranks_primers_the_same_way_primer3_does():
     uses it. If our number disagreed about which primer has the stickier end,
     we would be printing a contradiction of the thing that picked the primer.
     """
-    import primer3
     from corpus import record
 
     designed = primer3.bindings.design_primers(

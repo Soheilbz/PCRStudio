@@ -14,9 +14,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .inverse_topology import InverseTopologyError, exact_topology
 from .runtime_contract import ENGINE_BINDINGS
 from .tool_runtime import run_tool, tool_status
-from .inverse_topology import InverseTopologyError, exact_topology
 
 
 def _clean(value: Any) -> str:
@@ -28,7 +28,9 @@ def _pydna_operation(engine_id: str) -> str:
         if str(binding.get("tool_id")) == "pydna":
             operations = tuple(str(value) for value in binding.get("operations", ()))
             if len(operations) != 1:
-                raise ValueError(f"{engine_id}/pydna must declare exactly one operation; got {operations}")
+                raise ValueError(
+                    f"{engine_id}/pydna must declare exactly one operation; got {operations}"
+                )
             return operations[0]
     raise ValueError(f"{engine_id} does not declare a pydna binding")
 
@@ -43,13 +45,15 @@ def _pcr_product(
     module_id: str,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     bridge = Path(__file__).with_name("pydna_bridge.py")
-    payload = json.dumps({
-        "operation": "pcr-product",
-        "forward": forward,
-        "reverse": reverse,
-        "template": template,
-        "circular": circular,
-    })
+    payload = json.dumps(
+        {
+            "operation": "pcr-product",
+            "forward": forward,
+            "reverse": reverse,
+            "template": template,
+            "circular": circular,
+        }
+    )
     completed, run = run_tool(
         "pydna",
         [str(bridge)],
@@ -78,29 +82,38 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
         "status": "not-applicable",
         "purpose": (
             "independent restriction-digest/ligation construct simulation"
-            if restriction_cloning else
-            "independent PCR-product simulation"
+            if restriction_cloning
+            else "independent PCR-product simulation"
         ),
         "decision_impact": "advisory-independent-simulation",
         "interpretation_contract": (
             "pydna-independent-restriction-construct-simulation-v1"
-            if restriction_cloning else
-            "pydna-independent-pcr-product-simulation-v2"
+            if restriction_cloning
+            else "pydna-independent-pcr-product-simulation-v2"
         ),
         "evidence": {},
         "tool_run": None,
         "warnings": [],
     }
-    if engine_id not in {"junction-primers", "outward-pair", "mutagenic-pair"} and not restriction_cloning:
-        base["evidence"] = {"reason": "engine/module does not bind executable pydna validation in the generation-1 Atlas"}
+    if (
+        engine_id not in {"junction-primers", "outward-pair", "mutagenic-pair"}
+        and not restriction_cloning
+    ):
+        base["evidence"] = {
+            "reason": "engine/module does not bind executable pydna validation in the generation-1 Atlas"
+        }
         return base
     if not status.get("available"):
         base["evidence"] = {"reason": "optional pydna distribution is unavailable"}
-        base["warnings"].append("Optional pydna 5.5.16 simulation did not run; primary PCRStudio design remains available.")
+        base["warnings"].append(
+            "Optional pydna 5.5.16 simulation did not run; primary PCRStudio design remains available."
+        )
         return base
     if status.get("version_matches_contract") is False:
         base["status"] = "error"
-        base["warnings"].append("Installed pydna version does not match the generation-1 5.5.16 contract.")
+        base["warnings"].append(
+            "Installed pydna version does not match the generation-1 5.5.16 contract."
+        )
         return base
 
     simulations: list[dict[str, Any]] = []
@@ -131,19 +144,26 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                 forward = _clean((tailed.get("left") or {}).get("sequence"))
                 reverse = _clean((tailed.get("right") or {}).get("sequence"))
                 bridge = Path(__file__).with_name("pydna_bridge.py")
-                payload = json.dumps({
-                    "operation": "restriction-ligation-construct",
-                    "forward": forward,
-                    "reverse": reverse,
-                    "template": insert,
-                    "vector": vector,
-                    "forward_enzyme": tails.get("forward_enzyme"),
-                    "reverse_enzyme": tails.get("reverse_enzyme"),
-                })
+                payload = json.dumps(
+                    {
+                        "operation": "restriction-ligation-construct",
+                        "forward": forward,
+                        "reverse": reverse,
+                        "template": insert,
+                        "vector": vector,
+                        "forward_enzyme": tails.get("forward_enzyme"),
+                        "reverse_enzyme": tails.get("reverse_enzyme"),
+                    }
+                )
                 completed, run = run_tool(
-                    "pydna", [str(bridge)], role="OPTIONAL",
+                    "pydna",
+                    [str(bridge)],
+                    role="OPTIONAL",
                     operation_id=_pydna_operation(engine_id),
-                    engine_id=engine_id, module_id=module_id, stdin=payload, timeout_seconds=60,
+                    engine_id=engine_id,
+                    module_id=module_id,
+                    stdin=payload,
+                    timeout_seconds=60,
                 )
                 parsed = json.loads(completed.stdout)
                 if not isinstance(parsed, dict):
@@ -156,32 +176,42 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                         "Sequence-level vector geometry suggested a directional branch, but independent pydna simulation did not recover one unique circular construct; review digest/ligation evidence."
                     )
             else:
-                base["evidence"] = {"reason": "restriction-cloning pydna simulation requires a selected tailed pair plus exact insert/vector sequences"}
+                base["evidence"] = {
+                    "reason": "restriction-cloning pydna simulation requires a selected tailed pair plus exact insert/vector sequences"
+                }
                 return base
         elif engine_id == "mutagenic-pair":
             pairs = result.get("pairs") or []
             template = _clean(request.get("template"))
             if pairs and template:
                 pair = pairs[0]
-                simulations.append({
-                    "candidate_rank": 1,
-                    **simulate(
-                        _clean((pair.get("forward") or {}).get("sequence")),
-                        _clean((pair.get("reverse") or {}).get("sequence")),
-                        template,
-                        circular=False,
-                    ),
-                })
+                simulations.append(
+                    {
+                        "candidate_rank": 1,
+                        **simulate(
+                            _clean((pair.get("forward") or {}).get("sequence")),
+                            _clean((pair.get("reverse") or {}).get("sequence")),
+                            template,
+                            circular=False,
+                        ),
+                    }
+                )
         elif engine_id == "outward-pair":
             branch = str((result.get("experiment_contract") or {}).get("branch") or "")
             template = _clean(request.get("template"))
             pairs = result.get("pairs") or []
             circular_template = ""
-            if branch == "restriction-self-ligation" and pairs and request.get("inverse_reference_sequence") and request.get("enzyme"):
+            if (
+                branch == "restriction-self-ligation"
+                and pairs
+                and request.get("inverse_reference_sequence")
+                and request.get("enzyme")
+            ):
                 try:
                     resolved = exact_topology(
                         str(request.get("inverse_reference_sequence")),
-                        template, str(request.get("enzyme")),
+                        template,
+                        str(request.get("enzyme")),
                         circular=bool(request.get("inverse_reference_circular", False)),
                     )
                     circular_template = _clean(resolved.get("_circle_sequence"))
@@ -193,14 +223,17 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                 circular_template = template
             if pairs and circular_template:
                 pair = pairs[0]
-                simulations.append({
-                    "candidate_rank": 1,
-                    **simulate(
-                        _clean((pair.get("left") or {}).get("sequence")),
-                        _clean((pair.get("right") or {}).get("sequence")),
-                        circular_template, circular=True,
-                    ),
-                })
+                simulations.append(
+                    {
+                        "candidate_rank": 1,
+                        **simulate(
+                            _clean((pair.get("left") or {}).get("sequence")),
+                            _clean((pair.get("right") or {}).get("sequence")),
+                            circular_template,
+                            circular=True,
+                        ),
+                    }
+                )
             else:
                 base["evidence"] = {
                     "reason": "complete circular template sequence is not known; pydna will not invent the unknown flank",
@@ -215,21 +248,26 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                 if isinstance(oligo, dict) and oligo.get("tube"):
                     by_fragment.setdefault(str(oligo["tube"]), []).append(oligo)
             for segment in segments:
-                if not isinstance(segment, dict) or str(segment.get("kind") or "amplified") != "amplified":
+                if (
+                    not isinstance(segment, dict)
+                    or str(segment.get("kind") or "amplified") != "amplified"
+                ):
                     continue
                 name = str(segment.get("name") or "")
                 primers = by_fragment.get(name, [])
                 template = _clean(segment.get("template") or segment.get("sequence"))
                 if len(primers) == 2 and template:
-                    simulations.append({
-                        "fragment": name,
-                        **simulate(
-                            _clean(primers[0].get("sequence")),
-                            _clean(primers[1].get("sequence")),
-                            template,
-                            circular=False,
-                        ),
-                    })
+                    simulations.append(
+                        {
+                            "fragment": name,
+                            **simulate(
+                                _clean(primers[0].get("sequence")),
+                                _clean(primers[1].get("sequence")),
+                                template,
+                                circular=False,
+                            ),
+                        }
+                    )
 
         if simulations:
             base["status"] = "evidence-collected"
@@ -240,8 +278,8 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                 "sequence_disclosure": "product sequences represented by SHA-256 only in common provenance",
                 "interpretation": (
                     "independent pydna restriction-digest/ligation construct simulation; it remains advisory and does not model methylation, star activity, supplier buffer compatibility or wet-lab yield"
-                    if restriction_cloning else
-                    "independent PCR-product simulation in the isolated scientific-tools environment; it does not simulate complete construct topology or wet-lab validation"
+                    if restriction_cloning
+                    else "independent PCR-product simulation in the isolated scientific-tools environment; it does not simulate complete construct topology or wet-lab validation"
                 ),
                 "package_identity": {
                     "version": simulations[0].get("pydna_version"),
@@ -249,8 +287,12 @@ def validate(request: dict[str, Any], result: dict[str, Any], engine_id: str) ->
                 },
             }
         else:
-            base["evidence"] = {"reason": "no independently simulatable selected product was present"}
+            base["evidence"] = {
+                "reason": "no independently simulatable selected product was present"
+            }
     except Exception as error:
         base["status"] = "error"
-        base["warnings"].append(f"pydna independent simulation failed without changing the primary design: {error}")
+        base["warnings"].append(
+            f"pydna independent simulation failed without changing the primary design: {error}"
+        )
     return base

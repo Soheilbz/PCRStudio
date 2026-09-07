@@ -30,11 +30,17 @@ def test_runtime_module_contract_uses_cross_layer_canonical_fields() -> None:
     assert contract["engine"] == "pair-and-probe"
     assert contract["command"] == "probe"
     assert contract["required_context"] == [
-        "probe_protocol", "probe_chemistry", "probe_reporter", "probe_quencher"
+        "probe_protocol",
+        "probe_chemistry",
+        "probe_reporter",
+        "probe_quencher",
     ]
     assert contract["wire_required_context"] == contract["required_context"]
     assert contract["wire_required_any_of"] == []
-    assert contract["fallback"] == "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model"
+    assert (
+        contract["fallback"]
+        == "never_mix_probe_chemistries_or_apply_mgb_vendor_tm_window_to_unmodified_dna_tm_model"
+    )
 
 
 def test_required_context_is_presence_based_not_string_typed() -> None:
@@ -73,8 +79,6 @@ def test_required_context_refuses_missing_or_empty_values() -> None:
             raise AssertionError("missing/blank required context must fail closed")
 
 
-
-
 def test_conditional_required_context_is_branch_aware() -> None:
     base = {
         "digital_partition_format": "chip",
@@ -94,7 +98,11 @@ def test_conditional_required_context_is_branch_aware() -> None:
         raise AssertionError("conditional platform identity must fail closed")
 
     validate_required_context(
-        {**base, "digital_platform_id": "other-validated", "digital_platform_name": "qualified platform"},
+        {
+            **base,
+            "digital_platform_id": "other-validated",
+            "digital_platform_name": "qualified platform",
+        },
         "digital-pcr",
     )
 
@@ -131,7 +139,7 @@ def test_required_context_can_address_nested_runtime_objects() -> None:
             "reverse_enzyme": "BamHI",
             "forward_protective_sequence": "GACTTA",
             "reverse_protective_sequence": "CAGTTA",
-        }
+        },
     }
     validate_required_context(complete, "restriction-cloning")
 

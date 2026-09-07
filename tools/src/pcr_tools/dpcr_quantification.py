@@ -5,10 +5,11 @@ primer candidate generation/ranking. Partition volume and dilution are explicit
 inputs because platform names alone do not establish the effective analysed
 volume of a particular run.
 """
+
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 
 
 class DpcrQuantificationError(ValueError):
@@ -34,7 +35,9 @@ class DpcrQuantification:
         return asdict(self)
 
 
-def _wilson_interval(successes: int, total: int, z: float = 1.959963984540054) -> tuple[float, float]:
+def _wilson_interval(
+    successes: int, total: int, z: float = 1.959963984540054
+) -> tuple[float, float]:
     p = successes / total
     z2 = z * z
     den = 1.0 + z2 / total
@@ -54,14 +57,20 @@ def quantify_dpcr(
     if isinstance(accepted_partitions, bool) or accepted_partitions <= 0:
         raise DpcrQuantificationError("accepted_partitions must be a positive integer")
     if isinstance(positive_partitions, bool) or not 0 <= positive_partitions <= accepted_partitions:
-        raise DpcrQuantificationError("positive_partitions must be between 0 and accepted_partitions")
+        raise DpcrQuantificationError(
+            "positive_partitions must be between 0 and accepted_partitions"
+        )
     if positive_partitions == accepted_partitions:
-        raise DpcrQuantificationError("all accepted partitions are positive; the run is saturated and finite Poisson concentration is unresolved")
+        raise DpcrQuantificationError(
+            "all accepted partitions are positive; the run is saturated and finite Poisson concentration is unresolved"
+        )
     if not math.isfinite(partition_volume_nl) or partition_volume_nl <= 0:
         raise DpcrQuantificationError("partition_volume_nl must be explicit, finite and >0")
     if not math.isfinite(dilution_factor) or dilution_factor <= 0:
         raise DpcrQuantificationError("dilution_factor must be finite and >0")
-    if analysed_volume_ul is not None and (not math.isfinite(analysed_volume_ul) or analysed_volume_ul <= 0):
+    if analysed_volume_ul is not None and (
+        not math.isfinite(analysed_volume_ul) or analysed_volume_ul <= 0
+    ):
         raise DpcrQuantificationError("analysed_volume_ul must be >0 when supplied")
 
     p = positive_partitions / accepted_partitions

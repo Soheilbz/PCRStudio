@@ -1,6 +1,7 @@
 """Named-method fidelity and approximation-boundary audit."""
 from __future__ import annotations
 import json
+import re
 from .common import ROOT, error
 
 GRADES={
@@ -91,10 +92,11 @@ def audit_method_fidelity()->None:
         if marker not in rpa: error(f'method-fidelity: RPA empirical-development marker missing: {marker}')
 
     mut=_text('tools/src/pcr_tools/mutagenic.py')+_text('tools/src/pcr_tools/mutagenesis_workflows.py')
+    mut_compact=re.sub(r"\s+", "", mut)
     for forbidden in ('orderable-reviewed-quikchange','orderable-reviewed-lightning-multi','NEBaseChanger multi-site -> NEBuilder HiFi route'):
         if forbidden in mut: error(f'method-fidelity: stale overstated mutagenesis claim remains: {forbidden}')
     for required in ('orderable-manual-faithful-quikchange','vendor_web_tool_equivalent":False','PCRStudio multi-site NEBuilder HiFi routing informed by NEBaseChanger workflow'):
-        if required not in mut: error(f'method-fidelity: mutagenesis fidelity marker missing: {required}')
+        if required.replace(" ", "") not in mut_compact: error(f'method-fidelity: mutagenesis fidelity marker missing: {required}')
 
     kasp=_text('tools/src/pcr_tools/discriminate.py')+_text('tools/src/pcr_tools/kasp_plus_minus.py')
     if 'vendor_kraken_equivalent":False' not in kasp and 'vendor_kraken_equivalent": False' not in kasp:

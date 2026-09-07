@@ -1,4 +1,5 @@
 """Specificity-database provenance must identify source and generated indexes."""
+
 from __future__ import annotations
 
 import hashlib
@@ -51,7 +52,9 @@ def _configured(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, *, corrupt_inde
     return configured_database_contract(prefix)
 
 
-def test_database_contract_verifies_every_declared_index_artifact(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_database_contract_verifies_every_declared_index_artifact(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     contract = _configured(tmp_path, monkeypatch)
     assert contract["manifest_contract_consistent"] is True
     assert contract["content_hash_matches"] is True
@@ -60,7 +63,9 @@ def test_database_contract_verifies_every_declared_index_artifact(tmp_path: Path
     assert contract["index_artifacts"][0]["status"] == "verified"
 
 
-def test_database_contract_detects_stale_or_corrupted_index_even_when_fasta_is_unchanged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_database_contract_detects_stale_or_corrupted_index_even_when_fasta_is_unchanged(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     contract = _configured(tmp_path, monkeypatch, corrupt_index=True)
     assert contract["manifest_contract_consistent"] is True
     assert contract["content_hash_matches"] is True
@@ -68,7 +73,9 @@ def test_database_contract_detects_stale_or_corrupted_index_even_when_fasta_is_u
     assert contract["index_artifacts"][0]["status"] == "missing-or-mismatched"
 
 
-def test_index_manifest_cannot_escape_its_database_directory(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_index_manifest_cannot_escape_its_database_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     fasta = tmp_path / "ref.fasta"
     fasta.write_text(">ref\nACGT\n", encoding="utf-8")
     outside = tmp_path.parent / "outside.idx"
@@ -100,7 +107,9 @@ def test_index_manifest_cannot_escape_its_database_directory(tmp_path: Path, mon
     assert contract["index_artifacts_match"] is False
 
 
-def test_blast_prefix_recomputes_reviewed_fasta_from_manifest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_blast_prefix_recomputes_reviewed_fasta_from_manifest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     fasta = tmp_path / "ref.fasta"
     fasta.write_text(">ref\nACGTACGT\n", encoding="utf-8")
     index = tmp_path / "ref.nsq"

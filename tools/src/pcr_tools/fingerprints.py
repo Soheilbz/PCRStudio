@@ -1,4 +1,5 @@
 """Canonical hashes for reproducibility and safe duplicate detection."""
+
 from __future__ import annotations
 
 import hashlib
@@ -33,11 +34,22 @@ def _path_free_tool_validation(value: Any) -> Any:
 def toolchain_fingerprint(result: dict[str, Any]) -> str:
     """Fingerprint only computational authority, never sequence/user payload."""
     provenance = result.get("provenance") if isinstance(result.get("provenance"), dict) else {}
-    runtime = result.get("runtime_contract") if isinstance(result.get("runtime_contract"), dict) else {}
-    validation = result.get("toolchain_validation") if isinstance(result.get("toolchain_validation"), dict) else {}
-    integrity = result.get("scientific_integrity") if isinstance(result.get("scientific_integrity"), dict) else {}
+    runtime = (
+        result.get("runtime_contract") if isinstance(result.get("runtime_contract"), dict) else {}
+    )
+    validation = (
+        result.get("toolchain_validation")
+        if isinstance(result.get("toolchain_validation"), dict)
+        else {}
+    )
+    integrity = (
+        result.get("scientific_integrity")
+        if isinstance(result.get("scientific_integrity"), dict)
+        else {}
+    )
     authority = {
-        "runtime_contract_version": provenance.get("runtime_contract_version") or runtime.get("version"),
+        "runtime_contract_version": provenance.get("runtime_contract_version")
+        or runtime.get("version"),
         "parameter_map_version": provenance.get("parameter_map_version"),
         "input_schema_version": provenance.get("input_schema_version"),
         "output_schema_version": provenance.get("output_schema_version"),

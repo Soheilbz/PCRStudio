@@ -4,6 +4,7 @@ The scientific request remains an engine-owned dictionary.  The process
 boundary itself is no longer an unversioned JSON blob: protocol/schema/module
 identity is validated before the handler or any external scientific tool runs.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -110,9 +111,7 @@ def parse_request(raw: Any, argv_command: str) -> RequestEnvelope:
     if not isinstance(engine, str) or not engine:
         raise IpcError("worker engine must be a non-empty string")
     if expected_engine and engine != expected_engine:
-        raise IpcError(
-            f"worker engine mismatch: expected {expected_engine!r}, got {engine!r}"
-        )
+        raise IpcError(f"worker engine mismatch: expected {expected_engine!r}, got {engine!r}")
     return RequestEnvelope(
         protocol_version=IPC_PROTOCOL_VERSION,
         request_schema=REQUEST_SCHEMA_VERSION,

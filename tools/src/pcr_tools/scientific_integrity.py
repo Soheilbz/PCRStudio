@@ -5,6 +5,7 @@ request easier by silently changing the assay, chemistry, evidence scope or
 validated parameter envelope.  Development mode exists only for explicit
 engineering work and is never the default.
 """
+
 from __future__ import annotations
 
 import math
@@ -144,8 +145,16 @@ def enforce_constraint_overrides(
                     f"constraintEnvelope.{name} for {context} has unknown key(s): "
                     + ", ".join(unknown_envelope_keys)
                 )
-            minimum = _finite_number(raw_envelope.get("min")) if raw_envelope.get("min") is not None else None
-            maximum = _finite_number(raw_envelope.get("max")) if raw_envelope.get("max") is not None else None
+            minimum = (
+                _finite_number(raw_envelope.get("min"))
+                if raw_envelope.get("min") is not None
+                else None
+            )
+            maximum = (
+                _finite_number(raw_envelope.get("max"))
+                if raw_envelope.get("max") is not None
+                else None
+            )
             if minimum is None and maximum is None:
                 raise ValueError(
                     f"constraintEnvelope.{name} for {context} must declare at least one finite min/max"
@@ -274,7 +283,6 @@ def resolve_purpose(
     return str(wanted) if wanted else None
 
 
-
 PROFILE_AUTHORITY_SOURCE = "pcr-core:profiles.toml"
 PROFILE_AUTHORITY_TRANSPORT = "server-injected-canonical-profile"
 
@@ -299,8 +307,9 @@ def require_named_assay(
     if not module_id:
         label = f" for worker command `{command}`" if command else ""
         raise ValueError(
-            "Executable worker runtime requires an explicit named `assay.id`" + label +
-            ". Unprofiled low-level helpers may be used in isolated research tests, but a worker run must not synthesize scientific identity from defaults."
+            "Executable worker runtime requires an explicit named `assay.id`"
+            + label
+            + ". Unprofiled low-level helpers may be used in isolated research tests, but a worker run must not synthesize scientific identity from defaults."
         )
     if require_profile_authority:
         authority = assay.get("profileAuthority") if isinstance(assay, dict) else None
@@ -318,6 +327,7 @@ def require_named_assay(
                 + "; an assay id by itself does not prove that chemistry/defaults came from the reviewed profile registry."
             )
     return module_id
+
 
 def provenance_block() -> dict[str, Any]:
     return {

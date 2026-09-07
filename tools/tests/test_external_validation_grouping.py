@@ -1,4 +1,5 @@
 """Independent interaction evidence must respect physical reaction groups."""
+
 from __future__ import annotations
 
 from types import SimpleNamespace
@@ -20,7 +21,9 @@ def _oligo(name: str, sequence: str, *, tube: int | None = None, pool: int | Non
     }
 
 
-def test_primerpooler_runs_once_per_actual_tube_and_never_crosses_tubes(monkeypatch: pytest.MonkeyPatch):
+def test_primerpooler_runs_once_per_actual_tube_and_never_crosses_tubes(
+    monkeypatch: pytest.MonkeyPatch,
+):
     oligos = [
         _oligo("a-F", "ACGTACGTACGTACGTACGT", tube=0),
         _oligo("a-R", "TGCATGCATGCATGCATGCA", tube=0),
@@ -69,12 +72,16 @@ def test_primerpooler_runs_once_per_actual_tube_and_never_crosses_tubes(monkeypa
     contents = [str(call["fasta"]) for call in physical_calls]
     assert any(">a-F" in text and ">c-F" in text and ">b-F" not in text for text in contents)
     assert any(">b-F" in text and ">d-F" in text and ">a-F" not in text for text in contents)
-    assert all(str(call["args"][0]).startswith("--dg=333.15,2.0,50.0,0.8") for call in physical_calls)
+    assert all(
+        str(call["args"][0]).startswith("--dg=333.15,2.0,50.0,0.8") for call in physical_calls
+    )
     assert all("--counts" in call["args"] for call in physical_calls)
     assert "--pools=?,1," in str(calls[2]["args"])
 
 
-def test_explicit_tube_takes_precedence_over_pool_for_physical_grouping(monkeypatch: pytest.MonkeyPatch):
+def test_explicit_tube_takes_precedence_over_pool_for_physical_grouping(
+    monkeypatch: pytest.MonkeyPatch,
+):
     oligos = [
         _oligo("a", "ACGTACGTACGTACGTACGT", tube=0, pool=4),
         _oligo("b", "TGCATGCATGCATGCATGCA", tube=0, pool=5),
@@ -214,7 +221,9 @@ def test_loop_set_runtime_contract_declares_conditional_mafft_and_mfe_structure_
     }
 
 
-def test_loop_set_mfeprimer_ordered_oligo_qc_executes_dimer_and_hairpin(monkeypatch: pytest.MonkeyPatch, tmp_path):
+def test_loop_set_mfeprimer_ordered_oligo_qc_executes_dimer_and_hairpin(
+    monkeypatch: pytest.MonkeyPatch, tmp_path
+):
     calls: list[str] = []
 
     def fake_run_tool(tool_id, args, **kwargs):
@@ -357,11 +366,13 @@ def test_blast_lamp_topology_indexes_out_geometrically_impossible_decoys():
         _lamp_hit("B3", 175, 193, "reverse", "reverse"),
     ]
     for offset in range(1000, 2000, 10):
-        hits.extend([
-            _lamp_hit("F1c", offset, offset + 20, "reverse", "reverse"),
-            _lamp_hit("B1c", offset + 300, offset + 320, "forward", "forward"),
-            _lamp_hit("B2", offset + 600, offset + 618, "reverse", "reverse"),
-        ])
+        hits.extend(
+            [
+                _lamp_hit("F1c", offset, offset + 20, "reverse", "reverse"),
+                _lamp_hit("B1c", offset + 300, offset + 320, "forward", "forward"),
+                _lamp_hit("B2", offset + 600, offset + 618, "reverse", "reverse"),
+            ]
+        )
     out = validation._blast_lamp_topology(
         hits,
         {

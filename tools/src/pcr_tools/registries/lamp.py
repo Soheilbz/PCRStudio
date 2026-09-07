@@ -5,14 +5,17 @@ The scientific catalogue and all closed vocabularies are authored once in
 ``scripts/generate-lamp-protocol-authority.py``.  This module is deliberately
 thin so Python cannot silently diverge from Rust/Web/UI vocabulary.
 """
+
 from __future__ import annotations
 
-from copy import deepcopy
 import json
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
-_AUTHORITY_PATH = Path(__file__).resolve().parents[1] / "data" / "lamp-protocol-authority.generated.json"
+_AUTHORITY_PATH = (
+    Path(__file__).resolve().parents[1] / "data" / "lamp-protocol-authority.generated.json"
+)
 _AUTHORITY: dict[str, Any] = json.loads(_AUTHORITY_PATH.read_text(encoding="utf-8"))
 _GROUPS: dict[str, list[str]] = _AUTHORITY["groups"]
 
@@ -44,7 +47,9 @@ LAMP_SAMPLE_BUFFER_TYPES = tuple(_GROUPS["sample_buffer_types"])
 LAMP_MUTATION_ANCHORS = tuple(_GROUPS["mutation_anchors"])
 LAMP_FIXED_PRIMER_ROLES = tuple(_GROUPS["fixed_primer_roles"])
 
-_READOUT_CHEMISTRY_BRANCH: dict[str, str] = dict(_AUTHORITY["compatibility"]["readout_chemistry_branch"])
+_READOUT_CHEMISTRY_BRANCH: dict[str, str] = dict(
+    _AUTHORITY["compatibility"]["readout_chemistry_branch"]
+)
 LAMP_AUTOMATIC_JUDGMENT: dict[str, Any] = deepcopy(_AUTHORITY["automatic_judgment"])
 LAMP_SCREENING_COHORT: dict[str, Any] = deepcopy(_AUTHORITY["screening_cohort"])
 LAMP_CATALOGUE_SNAPSHOT: dict[str, Any] = deepcopy(_AUTHORITY["catalogue_snapshot"])

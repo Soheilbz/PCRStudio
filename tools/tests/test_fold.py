@@ -33,7 +33,7 @@ from pcr_accessibility.__main__ import (
 from pcr_accessibility.__main__ import folds as worker_folds
 from pcr_accessibility.__main__ import profile as worker_profile
 from pcr_tools.accessibility import fold_oligos
-from pcr_tools.junction import MOST_FOLDED, run
+from pcr_tools.junction import run
 
 CORPUS = pathlib.Path(__file__).parent / "corpus"
 

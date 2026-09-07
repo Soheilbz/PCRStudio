@@ -14,8 +14,6 @@ looks entirely reasonable and an assembly that does not close.
 
 from __future__ import annotations
 
-import pathlib
-
 import pytest
 from corpus import record
 
@@ -27,15 +25,10 @@ from pcr_tools.junction import (
     Plan,
     Segment,
     around,
-    choose,
     clashes,
     ends_badly,
     method,
     occurrences,
-    primers_for,
-    run,
-    tails_for,
-    tubes,
     wallace,
     windows_for,
 )
@@ -203,15 +196,7 @@ def test_two_fixed_fragments_cannot_be_joined_and_the_refusal_says_why():
     assert "has to be amplified" in why
 
 
-
-
 # ── The tails go on the right primers, the right way round ─────────────────
-
-
-
-
-
-
 
 
 # ── The set, which is why this is one search ───────────────────────────────
@@ -259,8 +244,6 @@ def test_a_circular_construct_is_searched_across_its_own_join():
     assert len(occurrences(construct, wrapped, circular=True)) == 1
 
 
-
-
 def test_a_circular_plan_has_one_more_junction_than_a_linear_one():
     """The last fragment meets the first, and that join is real."""
     circular = two_fragments()
@@ -269,12 +252,6 @@ def test_a_circular_plan_has_one_more_junction_than_a_linear_one():
 
 
 # ── The three scales, never added together ─────────────────────────────────
-
-
-
-
-
-
 
 
 # ── Plans that could not be assemblies ─────────────────────────────────────
@@ -303,8 +280,6 @@ def test_two_fragments_sharing_a_name_are_refused():
                 Segment("same", "amplified", tp53()[200:900]),
             ]
         ).check()
-
-
 
 
 def test_a_kind_this_does_not_assemble_lists_the_ones_it_does():
@@ -360,26 +335,6 @@ def test_the_tag_is_folded_into_the_join_between_its_neighbours():
     )
     assert joined.interposed == HIS_TAG
     assert joined.interposed_names == ["his-tag"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def test_an_overlap_too_long_to_fold_says_so_rather_than_reading_as_clean():

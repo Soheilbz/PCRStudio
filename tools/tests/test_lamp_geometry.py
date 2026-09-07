@@ -58,7 +58,6 @@ class TestLeavingItAlone:
 
 
 class TestAdjusting:
-
     def test_the_geometry_can_be_changed_and_is_obeyed(self):
         """Not merely accepted: the sets that come back have to fit inside it."""
         answer = _design(f2_b2_span=[140, 170])
@@ -67,8 +66,6 @@ class TestAdjusting:
         assert answer["sets"], "no design to check the geometry against"
         for entry in answer["sets"]:
             assert 140 <= entry["f2_b2_span"] <= 170
-
-
 
 
 class TestRefusing:

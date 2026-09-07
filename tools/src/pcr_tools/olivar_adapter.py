@@ -9,9 +9,9 @@ The adapter normalises Olivar's BED export into PCRStudio's canonical
 0-based, half-open coordinate contract. Olivar's internal coordinates are
 1-based closed; only the BED export is consumed for ordered primer geometry.
 """
+
 from __future__ import annotations
 
-import json
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -66,7 +66,12 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raise OlivarImportError(
             "Olivar circular-target BED normalisation is not yet qualified; circular tiling remains fail-closed."
         )
-    if request.get("existingBed") or request.get("schemeConfig") or request.get("regionBed") or request.get("primerName"):
+    if (
+        request.get("existingBed")
+        or request.get("schemeConfig")
+        or request.get("regionBed")
+        or request.get("primerName")
+    ):
         raise OlivarImportError(
             "Olivar scheme-create does not accept PrimalScheme lifecycle BED/config/region replacement inputs."
         )

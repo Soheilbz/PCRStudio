@@ -18,15 +18,10 @@ import random
 import pytest
 
 import pcr_tools.multiplex as multiplex_module
-from corpus import record
-
 from pcr_tools.multiplex import (
     CROWDED,
     MAX_SEARCH_ROUNDS,
     MAX_TARGETS,
-    MAX_TOTAL_CANDIDATES,
-    MAX_TOTAL_INPUT_CHARS,
-    MAX_TOTAL_SEARCH_ROUNDS,
     Candidate,
     MultiplexError,
     badness,
@@ -35,7 +30,6 @@ from pcr_tools.multiplex import (
     separation_needed,
     set_badness,
     split_into_tubes,
-    unresolvable,
 )
 from pcr_tools.thermo import reverse_complement
 
@@ -53,8 +47,6 @@ def test_two_random_oligos_barely_register():
         for _ in range(40)
     ]
     assert max(scores) < 100
-
-
 
 
 def test_the_same_duplex_costs_far_more_at_the_three_prime_ends():
@@ -154,8 +146,6 @@ def test_zero_targets_per_tube_is_refused_before_the_split_can_loop():
         split_into_tubes(candidates, per_tube=0)
 
 
-
-
 def test_negative_rounds_and_overlarge_rounds_are_refused():
     with pytest.raises(MultiplexError, match=r"rounds.*at least 0"):
         choose({}, rounds=-1)
@@ -168,23 +158,7 @@ def test_non_integer_controls_are_refused_instead_of_truncated():
         split_into_tubes({}, per_tube=1.5)
 
 
-
-
-
-
-
-
-
-
 # ── What the reader can tell apart ─────────────────────────────────────────
-
-
-
-
-
-
-
-
 
 
 def test_a_readout_nobody_named_is_refused_rather_than_guessed():
@@ -213,17 +187,9 @@ def test_a_panel_too_big_for_one_tube_is_split_rather_than_refused():
 # ── End to end, on a real sequence ─────────────────────────────────────────
 
 
-
-
-
-
 def test_a_multiplex_without_a_readout_is_refused():
     with pytest.raises(MultiplexError, match="readout"):
         run({"targets": [{"template": "ACGT" * 100}, {"template": "ACGT" * 100}]})
-
-
-
-
 
 
 def test_non_text_readout_is_refused_as_invalid_input():
@@ -233,32 +199,40 @@ def test_non_text_readout_is_refused_as_invalid_input():
 
 def test_ngs_refuses_an_unused_size_reference_profile():
     with pytest.raises(MultiplexError, match=r"omit it for NGS"):
-        run({
-            "readout": "ngs",
-            "readout_profile": "qiagen-qiaxcel-high-resolution",
-            "targets": [{"template": "A" * 200}, {"template": "C" * 200}],
-        })
+        run(
+            {
+                "readout": "ngs",
+                "readout_profile": "qiagen-qiaxcel-high-resolution",
+                "targets": [{"template": "A" * 200}, {"template": "C" * 200}],
+            }
+        )
 
 
 def test_per_tube_cannot_exceed_the_public_target_ceiling():
     with pytest.raises(MultiplexError, match=r"per_tube.*at most"):
-        run({
-            "readout": "ngs",
-            "per_tube": MAX_TARGETS + 1,
-            "targets": [{"template": "A" * 200}, {"template": "C" * 200}],
-        })
+        run(
+            {
+                "readout": "ngs",
+                "per_tube": MAX_TARGETS + 1,
+                "targets": [{"template": "A" * 200}, {"template": "C" * 200}],
+            }
+        )
 
 
 def test_multiplex_refuses_targets_with_different_named_protocols(monkeypatch):
     """One physical tube cannot silently mix two vendor chemistry overlays."""
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "qpcr-sybr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "qpcr-sybr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
 
     def fake_run_single(entry, **kwargs):
         protocol_id = (
-            "neb-luna-universal-m3003"
-            if entry.get("name") == "a"
-            else "thermo-powerup-sybr-a2574x"
+            "neb-luna-universal-m3003" if entry.get("name") == "a" else "thermo-powerup-sybr-a2574x"
         )
         return {
             "assay": {
@@ -266,15 +240,29 @@ def test_multiplex_refuses_targets_with_different_named_protocols(monkeypatch):
                 "name": "qPCR SYBR",
                 "engine": "flanking-pair",
                 "status": "experimental",
-                "profile_authority": {"profileId": "qpcr-sybr", "source": "test", "transport": "test"},
-                "defaults": {}, "purposes": ["general"], "modifiers": ["multiplex"], "requires": [], "enzyme": [],
+                "profile_authority": {
+                    "profileId": "qpcr-sybr",
+                    "source": "test",
+                    "transport": "test",
+                },
+                "defaults": {},
+                "purposes": ["general"],
+                "modifiers": ["multiplex"],
+                "requires": [],
+                "enzyme": [],
             },
             "reaction": {"polymerase": "qpcr-dye"},
             "constraints": {},
             "provenance": {},
             "protocol": {"kind": "qpcr-sybr", "protocol_id": protocol_id, "selection": protocol_id},
             "reverse_transcription": None,
-            "pairs": [{"left": {"sequence": "A" * 20}, "right": {"sequence": "T" * 20}, "product_size": 100}],
+            "pairs": [
+                {
+                    "left": {"sequence": "A" * 20},
+                    "right": {"sequence": "T" * 20},
+                    "product_size": 100,
+                }
+            ],
             "target": {"name": entry.get("name", "")},
         }
 
@@ -292,26 +280,61 @@ def test_multiplex_refuses_targets_with_different_named_protocols(monkeypatch):
 
 def test_multiplex_refuses_targets_with_different_rt_authority(monkeypatch):
     """RNA targets in one tube must share RT placement/authority as well as PCR chemistry."""
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "qpcr-sybr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "qpcr-sybr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
 
     def fake_run_single(entry, **kwargs):
         rt = common if entry.get("name") == "a" else other
         return {
             "assay": {
-                "id": "qpcr-sybr", "name": "qPCR SYBR", "engine": "flanking-pair", "status": "experimental",
-                "profile_authority": {"profileId": "qpcr-sybr", "source": "test", "transport": "test"},
-                "defaults": {}, "purposes": ["general"], "modifiers": ["multiplex"], "requires": [], "enzyme": [],
+                "id": "qpcr-sybr",
+                "name": "qPCR SYBR",
+                "engine": "flanking-pair",
+                "status": "experimental",
+                "profile_authority": {
+                    "profileId": "qpcr-sybr",
+                    "source": "test",
+                    "transport": "test",
+                },
+                "defaults": {},
+                "purposes": ["general"],
+                "modifiers": ["multiplex"],
+                "requires": [],
+                "enzyme": [],
             },
-            "reaction": {"polymerase": "qpcr-dye"}, "constraints": {}, "provenance": {},
-            "protocol": {"kind": "qpcr-sybr", "protocol_id": "neb-luna-one-step-rt-qpcr-e3005", "selection": "Luna One-Step"},
+            "reaction": {"polymerase": "qpcr-dye"},
+            "constraints": {},
+            "provenance": {},
+            "protocol": {
+                "kind": "qpcr-sybr",
+                "protocol_id": "neb-luna-one-step-rt-qpcr-e3005",
+                "selection": "Luna One-Step",
+            },
             "reverse_transcription": rt,
-            "pairs": [{"left": {"sequence": "A" * 20}, "right": {"sequence": "T" * 20}, "product_size": 100}],
+            "pairs": [
+                {
+                    "left": {"sequence": "A" * 20},
+                    "right": {"sequence": "T" * 20},
+                    "product_size": 100,
+                }
+            ],
             "target": {"name": entry.get("name", "")},
         }
 
     monkeypatch.setattr(multiplex_module, "run_single", fake_run_single)
-    common = {"one_step": True, "hold": {"celsius": 55, "seconds": 600}, "before": "initial-denaturation-and-qpcr-cycling", "authority_status": "named", "note": "x"}
+    common = {
+        "one_step": True,
+        "hold": {"celsius": 55, "seconds": 600},
+        "before": "initial-denaturation-and-qpcr-cycling",
+        "authority_status": "named",
+        "note": "x",
+    }
     other = {**common, "hold": {"celsius": 60, "seconds": 600}}
     request = {
         "readout": "ngs",
@@ -326,41 +349,72 @@ def test_multiplex_refuses_targets_with_different_rt_authority(monkeypatch):
 
 def test_multiplex_refuses_a_profile_that_does_not_declare_the_modifier(monkeypatch):
     """Direct worker callers cannot bypass the canonical profile capability gate."""
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "qpcr-sybr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "qpcr-sybr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
     monkeypatch.setattr(
         multiplex_module,
         "run_single",
         lambda entry, **kwargs: {
             "assay": {
-                "id": "qpcr-sybr", "name": "qPCR SYBR", "engine": "flanking-pair", "status": "experimental",
-                "profile_authority": {"profileId": "qpcr-sybr", "source": "test", "transport": "test"},
-                "defaults": {}, "purposes": ["general"], "modifiers": ["reverse-transcription", "variant-masking"], "requires": [], "enzyme": [],
+                "id": "qpcr-sybr",
+                "name": "qPCR SYBR",
+                "engine": "flanking-pair",
+                "status": "experimental",
+                "profile_authority": {
+                    "profileId": "qpcr-sybr",
+                    "source": "test",
+                    "transport": "test",
+                },
+                "defaults": {},
+                "purposes": ["general"],
+                "modifiers": ["reverse-transcription", "variant-masking"],
+                "requires": [],
+                "enzyme": [],
             },
-            "reaction": {"polymerase": "qpcr-dye"}, "constraints": {}, "provenance": {}, "pairs": [],
+            "reaction": {"polymerase": "qpcr-dye"},
+            "constraints": {},
+            "provenance": {},
+            "pairs": [],
         },
     )
     with pytest.raises(MultiplexError, match="does not declare the canonical `multiplex` modifier"):
-        multiplex_module.run({"readout": "ngs", "targets": [{"template": "A" * 200}, {"template": "C" * 200}]})
+        multiplex_module.run(
+            {"readout": "ngs", "targets": [{"template": "A" * 200}, {"template": "C" * 200}]}
+        )
 
 
 def test_multiplex_refuses_unknown_outer_request_fields_before_search():
     with pytest.raises(MultiplexError, match="unknown multiplex request field"):
-        run({
-            "readout": "ngs",
-            "targets": [{"template": "ACGT" * 100}, {"template": "TGCA" * 100}],
-            "perTubes": 2,
-        })
+        run(
+            {
+                "readout": "ngs",
+                "targets": [{"template": "ACGT" * 100}, {"template": "TGCA" * 100}],
+                "perTubes": 2,
+            }
+        )
+
 
 def test_multiplex_refuses_target_fields_the_set_optimizer_cannot_represent():
     with pytest.raises(MultiplexError, match=r"unsupported multiplex field.*tails"):
-        run({
-            "readout": "ngs",
-            "targets": [
-                {"name": "a", "template": "A" * 200, "tails": {"left": "AAAAAA", "right": "CCCCCC"}},
-                {"name": "b", "template": "C" * 200},
-            ],
-        })
+        run(
+            {
+                "readout": "ngs",
+                "targets": [
+                    {
+                        "name": "a",
+                        "template": "A" * 200,
+                        "tails": {"left": "AAAAAA", "right": "CCCCCC"},
+                    },
+                    {"name": "b", "template": "C" * 200},
+                ],
+            }
+        )
 
 
 def _fake_multiplex_single(entry, **kwargs):
@@ -371,7 +425,11 @@ def _fake_multiplex_single(entry, **kwargs):
             "name": "Standard PCR",
             "engine": "flanking-pair",
             "status": "stable",
-            "profile_authority": {"profileId": "standard-pcr", "source": "test", "transport": "test"},
+            "profile_authority": {
+                "profileId": "standard-pcr",
+                "source": "test",
+                "transport": "test",
+            },
             "defaults": {},
             "purposes": ["general"],
             "modifiers": ["multiplex"],
@@ -401,17 +459,33 @@ def _fake_multiplex_single(entry, **kwargs):
 
 
 def test_multiplex_preserves_target_specific_constraint_provenance(monkeypatch):
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "standard-pcr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "standard-pcr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
     monkeypatch.setattr(multiplex_module, "run_single", _fake_multiplex_single)
 
-    result = multiplex_module.run({
-        "readout": "ngs",
-        "targets": [
-            {"name": "a", "template": "A" * 200, "constraints": {"product_min": 80, "product_max": 120}},
-            {"name": "b", "template": "C" * 200, "constraints": {"product_min": 150, "product_max": 220}},
-        ],
-    })
+    result = multiplex_module.run(
+        {
+            "readout": "ngs",
+            "targets": [
+                {
+                    "name": "a",
+                    "template": "A" * 200,
+                    "constraints": {"product_min": 80, "product_max": 120},
+                },
+                {
+                    "name": "b",
+                    "template": "C" * 200,
+                    "constraints": {"product_min": 150, "product_max": 220},
+                },
+            ],
+        }
+    )
 
     assert result["constraint_scope"] == "per-target"
     assert "constraints" not in result
@@ -420,37 +494,52 @@ def test_multiplex_preserves_target_specific_constraint_provenance(monkeypatch):
 
 
 def test_multiplex_reports_a_shared_constraint_block_only_when_identical(monkeypatch):
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "standard-pcr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "standard-pcr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
     monkeypatch.setattr(multiplex_module, "run_single", _fake_multiplex_single)
     shared = {"product_min": 100, "product_max": 180}
 
-    result = multiplex_module.run({
-        "readout": "ngs",
-        "targets": [
-            {"name": "a", "template": "A" * 200, "constraints": shared},
-            {"name": "b", "template": "C" * 200, "constraints": shared},
-        ],
-    })
+    result = multiplex_module.run(
+        {
+            "readout": "ngs",
+            "targets": [
+                {"name": "a", "template": "A" * 200, "constraints": shared},
+                {"name": "b", "template": "C" * 200, "constraints": shared},
+            ],
+        }
+    )
 
     assert result["constraint_scope"] == "shared"
     assert result["constraints"] == shared
     assert all(target["constraints"] == shared for target in result["targets"])
 
 
-
 def test_multiplex_order_sheet_preserves_tube_without_inventing_tm(monkeypatch):
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "standard-pcr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "standard-pcr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
     monkeypatch.setattr(multiplex_module, "run_single", _fake_multiplex_single)
 
-    result = multiplex_module.run({
-        "readout": "ngs",
-        "targets": [
-            {"name": "a", "template": "A" * 200},
-            {"name": "b", "template": "C" * 200},
-        ],
-    })
+    result = multiplex_module.run(
+        {
+            "readout": "ngs",
+            "targets": [
+                {"name": "a", "template": "A" * 200},
+                {"name": "b", "template": "C" * 200},
+            ],
+        }
+    )
 
     line = result["order_sheet"][0]
     assert line["tube"] == "tube-1"
@@ -460,8 +549,14 @@ def test_multiplex_order_sheet_preserves_tube_without_inventing_tm(monkeypatch):
 
 
 def test_multiplex_refuses_mixed_computational_provenance(monkeypatch):
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "standard-pcr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "standard-pcr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
 
     def fake(entry, **kwargs):
         result = _fake_multiplex_single(entry, **kwargs)
@@ -470,29 +565,39 @@ def test_multiplex_refuses_mixed_computational_provenance(monkeypatch):
 
     monkeypatch.setattr(multiplex_module, "run_single", fake)
     with pytest.raises(MultiplexError, match="same computational provenance"):
-        multiplex_module.run({
+        multiplex_module.run(
+            {
+                "readout": "ngs",
+                "targets": [
+                    {"name": "a", "template": "A" * 200},
+                    {"name": "b", "template": "C" * 200},
+                ],
+            }
+        )
+
+
+def test_multiplex_reports_tube_partition_as_bounded_heuristic(monkeypatch):
+    monkeypatch.setattr(
+        multiplex_module,
+        "require_named_assay",
+        lambda entry, command, require_profile_authority=True: "standard-pcr",
+    )
+    monkeypatch.setattr(
+        multiplex_module, "validate_required_context", lambda entry, module_id: None
+    )
+    monkeypatch.setattr(multiplex_module, "run_single", _fake_multiplex_single)
+
+    monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "development")
+    result = multiplex_module.run(
+        {
             "readout": "ngs",
+            "per_tube": 1,
             "targets": [
                 {"name": "a", "template": "A" * 200},
                 {"name": "b", "template": "C" * 200},
             ],
-        })
-
-
-def test_multiplex_reports_tube_partition_as_bounded_heuristic(monkeypatch):
-    monkeypatch.setattr(multiplex_module, "require_named_assay", lambda entry, command, require_profile_authority=True: "standard-pcr")
-    monkeypatch.setattr(multiplex_module, "validate_required_context", lambda entry, module_id: None)
-    monkeypatch.setattr(multiplex_module, "run_single", _fake_multiplex_single)
-
-    monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "development")
-    result = multiplex_module.run({
-        "readout": "ngs",
-        "per_tube": 1,
-        "targets": [
-            {"name": "a", "template": "A" * 200},
-            {"name": "b", "template": "C" * 200},
-        ],
-    })
+        }
+    )
     assignment = result["selection_method"]["tube_assignment"]
     assert assignment["strategy"] == "deterministic-fewest-candidates-first-chunking"
     assert assignment["global_partition_optimized"] is False

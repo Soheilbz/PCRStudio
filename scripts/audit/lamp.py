@@ -210,7 +210,9 @@ def audit_lamp_protocol_contract() -> None:
         error("lamp: shared modified-oligo manufacturing schema is incomplete across contract/Python/Rust")
     if "multiplex-modified-primer-probe" not in algorithm or "lamp_multiplex_plan" not in algorithm or "lamp_multiplex_plan" not in rust:
         error("lamp: specialized multiplex modified-primer/probe planning boundary is missing")
-    if "automatic_modified_oligo_design':False" not in (ROOT / "tools/src/pcr_tools/lamp_multiplex.py").read_text(encoding="utf-8").replace(" ", ""):
+    lamp_multiplex_text = (ROOT / "tools/src/pcr_tools/lamp_multiplex.py").read_text(encoding="utf-8")
+    lamp_multiplex_compact = lamp_multiplex_text.replace(" ", "").replace('"', "'")
+    if "automatic_modified_oligo_design':False" not in lamp_multiplex_compact:
         error("lamp: multiplex planning must not manufacture modified LAMP oligos")
     if "other modified-probe/lateral-flow" not in algorithm or "other modified-probe/lateral-flow" not in rust:
         error("lamp: non-multiplex modified-probe/lateral-flow execution must remain fail-closed")
@@ -285,4 +287,3 @@ def audit_lamp_evidence_ledger() -> None:
                 error(f"{evidence_id}: regression test reference is stale: {test_name}")
         if not item.get("decision_role") or not item.get("claim_boundary"):
             error(f"{evidence_id}: decision role/claim boundary is incomplete")
-

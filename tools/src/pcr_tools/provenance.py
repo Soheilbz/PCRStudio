@@ -98,7 +98,9 @@ def provenance(conditions: Mapping[str, float] | None = None) -> dict[str, Any]:
         "primer3_artifact": {
             "primer3_py_record_sha256": primer3_package_status.get("artifact_sha256"),
             "libprimer3_carrier_record_sha256": primer3_core_status.get("artifact_sha256"),
-            "libprimer3_version_matches_contract": primer3_core_status.get("version_matches_contract"),
+            "libprimer3_version_matches_contract": primer3_core_status.get(
+                "version_matches_contract"
+            ),
             "artifact_identity": primer3_core_status.get("artifact_identity"),
         },
         "tool_versions": versions,

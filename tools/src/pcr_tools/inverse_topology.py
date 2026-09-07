@@ -6,6 +6,7 @@ anchor placement, flanking restriction cuts, exact circularized fragment, and
 source-coordinate segments without inventing an enzyme ranking or wet-lab
 suitability claim.
 """
+
 from __future__ import annotations
 
 from hashlib import sha256
@@ -90,14 +91,20 @@ def _fragment_for_anchor(
             fragment_len = len(reference)
         offset = _distance_clockwise(left, anchor_start, len(reference))
         if offset + anchor_length > fragment_len:
-            raise InverseTopologyError("selected cut pair does not contain the complete known anchor")
+            raise InverseTopologyError(
+                "selected cut pair does not contain the complete known anchor"
+            )
         if left < right:
             fragment = reference[left:right]
             segments = [{"source_start": left, "source_end": right, "length": right - left}]
         else:
             fragment = reference[left:] + reference[:right]
             segments = [
-                {"source_start": left, "source_end": len(reference), "length": len(reference) - left},
+                {
+                    "source_start": left,
+                    "source_end": len(reference),
+                    "length": len(reference) - left,
+                },
                 {"source_start": 0, "source_end": right, "length": right},
             ]
     else:
@@ -109,7 +116,9 @@ def _fragment_for_anchor(
             )
         left, right = max(left_candidates), min(right_candidates)
         if right <= left:
-            raise InverseTopologyError("linear reference produced a non-positive restriction fragment")
+            raise InverseTopologyError(
+                "linear reference produced a non-positive restriction fragment"
+            )
         fragment = reference[left:right]
         fragment_len = len(fragment)
         offset = anchor_start - left
@@ -118,7 +127,9 @@ def _fragment_for_anchor(
     upstream = offset
     downstream = fragment_len - (offset + anchor_length)
     if upstream < 0 or downstream < 0:
-        raise InverseTopologyError("full-reference restriction fragment does not contain the complete anchor")
+        raise InverseTopologyError(
+            "full-reference restriction fragment does not contain the complete anchor"
+        )
     return {
         "enzyme": enzyme.name,
         "cut_count": len(cuts),
@@ -144,7 +155,9 @@ def _fragment_for_anchor(
     }
 
 
-def exact_topology(reference: str, anchor: str, enzyme_name: str, *, circular: bool = False) -> dict[str, Any]:
+def exact_topology(
+    reference: str, anchor: str, enzyme_name: str, *, circular: bool = False
+) -> dict[str, Any]:
     if enzyme_name not in BY_NAME:
         raise InverseTopologyError(f"unknown restriction enzyme `{enzyme_name}`")
     normalized, anchor_start, submitted_orientation = _normalise_reference(reference, anchor)
@@ -155,16 +168,18 @@ def exact_topology(reference: str, anchor: str, enzyme_name: str, *, circular: b
         enzyme=BY_NAME[enzyme_name],
         circular=circular,
     )
-    fragment.update({
-        "status": "exact",
-        "reference_length": len(normalized),
-        "reference_circular": bool(circular),
-        "anchor_start": anchor_start,
-        "anchor_end": anchor_start + len(clean_template(anchor)),
-        "submitted_anchor_orientation": submitted_orientation,
-        "coordinate_system": "0-based half-open on normalized known-anchor orientation",
-        "decision_impact": "topology-validation",
-    })
+    fragment.update(
+        {
+            "status": "exact",
+            "reference_length": len(normalized),
+            "reference_circular": bool(circular),
+            "anchor_start": anchor_start,
+            "anchor_end": anchor_start + len(clean_template(anchor)),
+            "submitted_anchor_orientation": submitted_orientation,
+            "coordinate_system": "0-based half-open on normalized known-anchor orientation",
+            "decision_impact": "topology-validation",
+        }
+    )
     return fragment
 
 
@@ -173,7 +188,9 @@ def public_topology(topology: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in topology.items() if key != "_circle_sequence"}
 
 
-def screen_enzyme_cohort(reference: str, anchor: str, names: list[str], *, circular: bool = False) -> list[dict[str, Any]]:
+def screen_enzyme_cohort(
+    reference: str, anchor: str, names: list[str], *, circular: bool = False
+) -> list[dict[str, Any]]:
     """Measure an explicit enzyme cohort while preserving caller order.
 
     No cross-enzyme biological score is manufactured: buffer compatibility,
@@ -192,15 +209,17 @@ def screen_enzyme_cohort(reference: str, anchor: str, names: list[str], *, circu
             continue
         try:
             topology = exact_topology(reference, anchor, name, circular=circular)
-            out.append({
-                "enzyme": name,
-                "designable": True,
-                "fragment_length": topology["fragment_length"],
-                "upstream_flank_length": topology["upstream_flank_length"],
-                "downstream_flank_length": topology["downstream_flank_length"],
-                "origin_spanning": topology["origin_spanning"],
-                "reason": None,
-            })
+            out.append(
+                {
+                    "enzyme": name,
+                    "designable": True,
+                    "fragment_length": topology["fragment_length"],
+                    "upstream_flank_length": topology["upstream_flank_length"],
+                    "downstream_flank_length": topology["downstream_flank_length"],
+                    "origin_spanning": topology["origin_spanning"],
+                    "reason": None,
+                }
+            )
         except InverseTopologyError as exc:
             out.append({"enzyme": name, "designable": False, "reason": str(exc)})
     return out

@@ -54,7 +54,9 @@ def _project_temp_root() -> Path | None:
     except OSError:
         return None
     for directory in (current, *current.parents):
-        if (directory / "Cargo.toml").is_file() and (directory / "tools" / "pyproject.toml").is_file():
+        if (directory / "Cargo.toml").is_file() and (
+            directory / "tools" / "pyproject.toml"
+        ).is_file():
             root = directory / ".local" / "tmp"
             root.mkdir(parents=True, exist_ok=True)
             return root
@@ -159,9 +161,7 @@ def selected_oligos(result: dict[str, Any]) -> list[dict[str, Any]]:
                         entry.get("lamp_target_tail_sequence")
                     )
                     or "",
-                    "lamp_linker_sequence": _clean_sequence(
-                        entry.get("lamp_linker_sequence")
-                    )
+                    "lamp_linker_sequence": _clean_sequence(entry.get("lamp_linker_sequence"))
                     or "",
                 }
             )
@@ -175,6 +175,7 @@ def _sequence_for(oligo: dict[str, Any], molecule: str) -> str:
     if molecule == "annealing":
         return str(oligo["annealing_sequence"])
     raise ValueError(f"unknown oligo molecule selector: {molecule}")
+
 
 def _safe_id(name: str, index: int) -> str:
     token = re.sub(r"[^A-Za-z0-9_.-]+", "_", name).strip("_.-")
@@ -209,6 +210,7 @@ def _write_fasta(
             handle.write(f">{identifier}\n{_sequence_for(oligo, molecule)}\n")
     return identifiers
 
+
 def _reaction(result: dict[str, Any]) -> dict[str, float]:
     raw = result.get("reaction") or {}
     if not isinstance(raw, dict):
@@ -220,8 +222,6 @@ def _reaction(result: dict[str, Any]) -> dict[str, float]:
         except (TypeError, ValueError):
             answer[key] = 0.0
     return answer
-
-
 
 
 def _declared_operations(engine_id: str, tool_id: str) -> tuple[str, ...]:
@@ -247,7 +247,10 @@ def _one_declared_operation(
         )
     return operations[0]
 
-def _public_database_contract(database: dict[str, Any], *, database_hash: str | None) -> dict[str, Any]:
+
+def _public_database_contract(
+    database: dict[str, Any], *, database_hash: str | None
+) -> dict[str, Any]:
     """Path-free database provenance safe to persist in a design result.
 
     Full filesystem paths and raw manifests are deployment diagnostics. The raw
@@ -340,10 +343,14 @@ def _mfeprimer_oligo_qc(
         groups = [("all-oligos", None, oligos)]
 
     common = [
-        "--mono", str(reaction["mv_conc"]),
-        "--diva", str(reaction["dv_conc"]),
-        "--dntp", str(reaction["dntp_conc"]),
-        "--oligo", str(reaction["dna_conc"]),
+        "--mono",
+        str(reaction["mv_conc"]),
+        "--diva",
+        str(reaction["dv_conc"]),
+        "--dntp",
+        str(reaction["dntp_conc"]),
+        "--oligo",
+        str(reaction["dna_conc"]),
         "-j",
     ]
     records: list[dict[str, Any]] = []
@@ -371,9 +378,7 @@ def _mfeprimer_oligo_qc(
                     timeout_seconds=180,
                 )
             except ToolRuntimeError as error:
-                warnings.append(
-                    f"MFEprimer {operation} check failed for {group_name}: {error}"
-                )
+                warnings.append(f"MFEprimer {operation} check failed for {group_name}: {error}")
                 continue
             record: dict[str, Any] = {
                 "operation": operation,
@@ -382,15 +387,14 @@ def _mfeprimer_oligo_qc(
                 "query_count": len(identifiers),
                 "tool_run": run,
                 "stdout_excerpt": [
-                    line.strip()
-                    for line in completed.stdout.splitlines()
-                    if line.strip()
+                    line.strip() for line in completed.stdout.splitlines() if line.strip()
                 ][-12:],
             }
             if lamp_set_index is not None:
                 record["lamp_set_index"] = lamp_set_index
             records.append(record)
     return records, warnings
+
 
 def _mfeprimer(
     oligos: list[dict[str, Any]],
@@ -430,13 +434,19 @@ def _mfeprimer(
             f"MFEprimer database scope is {database['scope']!r}; evidence is suitable for smoke/development checks, not a production specificity claim."
         )
     if database.get("manifest_error"):
-        evidence["warnings"].append(f"MFEprimer database manifest could not be parsed: {database['manifest_error']}")
+        evidence["warnings"].append(
+            f"MFEprimer database manifest could not be parsed: {database['manifest_error']}"
+        )
     if database.get("manifest") and not database.get("manifest_contract_consistent"):
-        evidence["warnings"].append("MFEprimer database manifest scope/hash does not match the configured database contract.")
+        evidence["warnings"].append(
+            "MFEprimer database manifest scope/hash does not match the configured database contract."
+        )
         if _mode() == "strict":
             return evidence
     if database.get("content_hash_matches") is False:
-        evidence["warnings"].append("MFEprimer configured FASTA content does not match its declared SHA-256.")
+        evidence["warnings"].append(
+            "MFEprimer configured FASTA content does not match its declared SHA-256."
+        )
         if _mode() == "strict":
             return evidence
     if database.get("index_artifacts_match") is not True:
@@ -460,7 +470,9 @@ def _mfeprimer(
     }
 
     reaction = _reaction(result)
-    with tempfile.TemporaryDirectory(prefix="pcrstudio-mfe-", dir=str(_project_temp_root()) if _project_temp_root() else None) as workspace_name:
+    with tempfile.TemporaryDirectory(
+        prefix="pcrstudio-mfe-", dir=str(_project_temp_root()) if _project_temp_root() else None
+    ) as workspace_name:
         workspace = Path(workspace_name)
         fasta = workspace / "oligos.fa"
         prefix = workspace / "mfeprimer-result"
@@ -481,7 +493,11 @@ def _mfeprimer(
 
         constraints = result.get("constraints") or {}
         if isinstance(constraints, dict):
-            flat = constraints.get("primers") if isinstance(constraints.get("primers"), dict) else constraints
+            flat = (
+                constraints.get("primers")
+                if isinstance(constraints.get("primers"), dict)
+                else constraints
+            )
             if isinstance(flat, dict):
                 if isinstance(flat.get("product_min"), (int, float)):
                     args.extend(["--minSize", str(int(flat["product_min"]))])
@@ -560,7 +576,12 @@ def _mfeprimer(
                 except OSError:
                     continue
             evidence["evidence"].update(
-                {"format": "tsv", "tsv_files": [p.name for p in tsv_files], "rows": rows, "columns": columns}
+                {
+                    "format": "tsv",
+                    "tsv_files": [p.name for p in tsv_files],
+                    "rows": rows,
+                    "columns": columns,
+                }
             )
 
         structure_runs, structure_warnings = _mfeprimer_oligo_qc(
@@ -577,7 +598,6 @@ def _mfeprimer(
         "MFEprimer evidence is independent validation. A database hit is not automatically an off-target unless the intended target/background identity makes that interpretation unambiguous."
     )
     return evidence
-
 
 
 def _lamp_blast_region_queries(oligos: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -618,30 +638,34 @@ def _lamp_blast_region_queries(oligos: list[dict[str, Any]]) -> list[dict[str, A
         # off-target evidence. Their hits deliberately do not enter the
         # six-region assembler below.
         if "LF" in by_role:
-            records.append(("LF", by_role["LF"]["annealing_sequence"], "reverse", "3", "lamp-loop-region"))
+            records.append(
+                ("LF", by_role["LF"]["annealing_sequence"], "reverse", "3", "lamp-loop-region")
+            )
         if "LB" in by_role:
-            records.append(("LB", by_role["LB"]["annealing_sequence"], "forward", "3", "lamp-loop-region"))
+            records.append(
+                ("LB", by_role["LB"]["annealing_sequence"], "forward", "3", "lamp-loop-region")
+            )
         for role, sequence, expected_orientation, critical_end, kind in records:
             clean = _clean_sequence(sequence)
             if not clean:
                 continue
-            queries.append({
-                "name": f"lamp_set_{set_index}_{role}",
-                "kind": kind,
-                "ordered_sequence": clean,
-                "annealing_sequence": clean,
-                "tail_sequence": "",
-                "lamp_set_index": set_index,
-                "lamp_region_role": role,
-                "expected_orientation": expected_orientation,
-                "critical_end": critical_end,
-            })
+            queries.append(
+                {
+                    "name": f"lamp_set_{set_index}_{role}",
+                    "kind": kind,
+                    "ordered_sequence": clean,
+                    "annealing_sequence": clean,
+                    "tail_sequence": "",
+                    "lamp_set_index": set_index,
+                    "lamp_region_role": role,
+                    "expected_orientation": expected_orientation,
+                    "critical_end": critical_end,
+                }
+            )
     return queries
 
 
-def _write_blast_queries(
-    path: Path, queries: list[dict[str, Any]]
-) -> dict[str, dict[str, Any]]:
+def _write_blast_queries(path: Path, queries: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     metadata: dict[str, dict[str, Any]] = {}
     with path.open("w", encoding="utf-8", newline="\n") as handle:
         for index, query in enumerate(queries, start=1):
@@ -657,7 +681,10 @@ def _write_blast_queries(
 
 
 def _blast_lamp_topology(
-    hits: list[dict[str, Any]], result: dict[str, Any], *, hit_collection_potentially_capped: bool = False
+    hits: list[dict[str, Any]],
+    result: dict[str, Any],
+    *,
+    hit_collection_potentially_capped: bool = False,
 ) -> dict[str, Any]:
     """Assemble BLAST region hits into LAMP-compatible six-region loci.
 
@@ -695,14 +722,16 @@ def _blast_lamp_topology(
         if low > high or not values:
             return []
         keys = [int(hit["canonical_start"]) for hit in values]
-        return values[bisect_left(keys, low):bisect_right(keys, high)]
+        return values[bisect_left(keys, low) : bisect_right(keys, high)]
 
     def by_end(values: list[dict[str, Any]], low: int, high: int) -> list[dict[str, Any]]:
         if low > high or not values:
             return []
-        ordered = sorted(values, key=lambda hit: (int(hit["canonical_end"]), int(hit["canonical_start"])))
+        ordered = sorted(
+            values, key=lambda hit: (int(hit["canonical_end"]), int(hit["canonical_start"]))
+        )
         keys = [int(hit["canonical_end"]) for hit in ordered]
-        return ordered[bisect_left(keys, low):bisect_right(keys, high)]
+        return ordered[bisect_left(keys, low) : bisect_right(keys, high)]
 
     f2_b2 = span("f2_b2_span", (120, 180))
     loop_span = span("loop_span", (40, 60))
@@ -758,9 +787,7 @@ def _blast_lamp_topology(
         # coordinate envelope before another role is crossed into the candidate.
         for f2 in roles["F2"]:
             f2_start = int(f2["canonical_start"])
-            f1_candidates = by_start(
-                roles["F1c"], f2_start + loop_span[0], f2_start + loop_span[1]
-            )
+            f1_candidates = by_start(roles["F1c"], f2_start + loop_span[0], f2_start + loop_span[1])
             for f1c in f1_candidates:
                 f1_end = int(f1c["canonical_end"])
                 b1_candidates = by_start(
@@ -793,27 +820,33 @@ def _blast_lamp_topology(
                                 exact_count += int(exact)
                                 terminal_intact_count += int(terminal)
                                 if len(loci) < 20:
-                                    loci.append({
-                                        "set_index": set_index,
-                                        "subject": subject,
-                                        "locus_orientation": locus_orientation,
-                                        "start": min(int(h["start"]) for h in six),
-                                        "end": max(int(h["end"]) for h in six),
-                                        "exact": exact,
-                                        "critical_terminals_exact": terminal,
-                                        "total_mismatches": sum(int(h["mismatches"]) for h in six),
-                                        "regions": [
-                                            {
-                                                "role": h["lamp_region_role"],
-                                                "start": int(h["start"]),
-                                                "end": int(h["end"]),
-                                                "orientation": h["orientation"],
-                                                "mismatches": int(h["mismatches"]),
-                                                "critical_terminal_exact": bool(h["critical_terminal_exact"]),
-                                            }
-                                            for h in six
-                                        ],
-                                    })
+                                    loci.append(
+                                        {
+                                            "set_index": set_index,
+                                            "subject": subject,
+                                            "locus_orientation": locus_orientation,
+                                            "start": min(int(h["start"]) for h in six),
+                                            "end": max(int(h["end"]) for h in six),
+                                            "exact": exact,
+                                            "critical_terminals_exact": terminal,
+                                            "total_mismatches": sum(
+                                                int(h["mismatches"]) for h in six
+                                            ),
+                                            "regions": [
+                                                {
+                                                    "role": h["lamp_region_role"],
+                                                    "start": int(h["start"]),
+                                                    "end": int(h["end"]),
+                                                    "orientation": h["orientation"],
+                                                    "mismatches": int(h["mismatches"]),
+                                                    "critical_terminal_exact": bool(
+                                                        h["critical_terminal_exact"]
+                                                    ),
+                                                }
+                                                for h in six
+                                            ],
+                                        }
+                                    )
                             if capped:
                                 break
                         if capped:
@@ -828,7 +861,9 @@ def _blast_lamp_topology(
             break
 
     complete_within_collected_hits = not capped
-    interpretation_complete = complete_within_collected_hits and not hit_collection_potentially_capped
+    interpretation_complete = (
+        complete_within_collected_hits and not hit_collection_potentially_capped
+    )
     return {
         "checked": True,
         "search_exhaustiveness": "indexed-BLAST-heuristic-not-mismatch-complete",
@@ -852,6 +887,7 @@ def _blast_lamp_topology(
         ),
     }
 
+
 def _blast(
     oligos: list[dict[str, Any]],
     *,
@@ -874,7 +910,9 @@ def _blast(
     raw_db = database["paths"][0] if database["paths"] else ""
     db_hash = database["sha256"]
     if not raw_db:
-        evidence["warnings"].append("No BLAST database is configured; expanded specificity was not run.")
+        evidence["warnings"].append(
+            "No BLAST database is configured; expanded specificity was not run."
+        )
         return evidence
     if not db_hash:
         evidence["warnings"].append(
@@ -887,13 +925,19 @@ def _blast(
             f"BLAST database scope is {database['scope']!r}; evidence is suitable for smoke/development checks, not a production specificity claim."
         )
     if database.get("manifest_error"):
-        evidence["warnings"].append(f"BLAST database manifest could not be parsed: {database['manifest_error']}")
+        evidence["warnings"].append(
+            f"BLAST database manifest could not be parsed: {database['manifest_error']}"
+        )
     if database.get("manifest") and not database.get("manifest_contract_consistent"):
-        evidence["warnings"].append("BLAST database manifest scope/hash does not match the configured database contract.")
+        evidence["warnings"].append(
+            "BLAST database manifest scope/hash does not match the configured database contract."
+        )
         if _mode() == "strict":
             return evidence
     if database.get("content_hash_matches") is False:
-        evidence["warnings"].append("BLAST source FASTA content does not match its declared SHA-256.")
+        evidence["warnings"].append(
+            "BLAST source FASTA content does not match its declared SHA-256."
+        )
         if _mode() == "strict":
             return evidence
     if database.get("index_artifacts_match") is not True:
@@ -903,7 +947,9 @@ def _blast(
         if _mode() == "strict":
             return evidence
 
-    execution = request.get("executionContext") if isinstance(request.get("executionContext"), dict) else {}
+    execution = (
+        request.get("executionContext") if isinstance(request.get("executionContext"), dict) else {}
+    )
     try:
         resource_units = max(1, min(int(execution.get("resourceUnits", 1)), 32))
     except (TypeError, ValueError):
@@ -917,12 +963,12 @@ def _blast(
     # BLAST threads by deployment policy, never more than the server reserved.
     threads = max(1, min(requested_threads, resource_units, 32))
 
-    with tempfile.TemporaryDirectory(prefix="pcrstudio-blast-", dir=str(_project_temp_root()) if _project_temp_root() else None) as workspace_name:
+    with tempfile.TemporaryDirectory(
+        prefix="pcrstudio-blast-", dir=str(_project_temp_root()) if _project_temp_root() else None
+    ) as workspace_name:
         workspace = Path(workspace_name)
         fasta = workspace / "oligos.fa"
-        blast_queries = (
-            _lamp_blast_region_queries(oligos) if engine_id == "loop-set" else oligos
-        )
+        blast_queries = _lamp_blast_region_queries(oligos) if engine_id == "loop-set" else oligos
         query_metadata = _write_blast_queries(fasta, blast_queries)
         identifiers = {identifier: str(meta["name"]) for identifier, meta in query_metadata.items()}
         outfmt = "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen qseq sseq"
@@ -960,7 +1006,9 @@ def _blast(
             evidence["warnings"].append(str(error))
             return evidence
 
-        per_query: dict[str, dict[str, int]] = defaultdict(lambda: {"hits": 0, "full_length_hits": 0})
+        per_query: dict[str, dict[str, int]] = defaultdict(
+            lambda: {"hits": 0, "full_length_hits": 0}
+        )
         lamp_hits: list[dict[str, Any]] = []
         malformed = 0
         for line in completed.stdout.splitlines():
@@ -998,22 +1046,24 @@ def _blast(
                     and sseq[terminal_index] in "ACGT"
                     and qseq[terminal_index] == sseq[terminal_index]
                 )
-                lamp_hits.append({
-                    "query_id": query,
-                    "lamp_set_index": int(meta["lamp_set_index"]),
-                    "lamp_region_role": str(meta["lamp_region_role"]),
-                    "subject": fields[1],
-                    "start": min(sstart, send) - 1,
-                    "end": max(sstart, send),
-                    "orientation": "forward" if sstart <= send else "reverse",
-                    "expected_orientation": str(meta["expected_orientation"]),
-                    "mismatches": mismatches,
-                    "full_length": full_length,
-                    "critical_terminal_exact": critical_terminal_exact,
-                    "pident": float(fields[2]),
-                    "evalue": float(fields[10]),
-                    "bitscore": float(fields[11]),
-                })
+                lamp_hits.append(
+                    {
+                        "query_id": query,
+                        "lamp_set_index": int(meta["lamp_set_index"]),
+                        "lamp_region_role": str(meta["lamp_region_role"]),
+                        "subject": fields[1],
+                        "start": min(sstart, send) - 1,
+                        "end": max(sstart, send),
+                        "orientation": "forward" if sstart <= send else "reverse",
+                        "expected_orientation": str(meta["expected_orientation"]),
+                        "mismatches": mismatches,
+                        "full_length": full_length,
+                        "critical_terminal_exact": critical_terminal_exact,
+                        "pident": float(fields[2]),
+                        "evalue": float(fields[10]),
+                        "bitscore": float(fields[11]),
+                    }
+                )
 
         blast_target_cap = 5000
         hit_collection_potentially_capped = any(
@@ -1041,7 +1091,8 @@ def _blast(
                 "critical_terminal_policy": "F3/F2/B2/B3/LF/LB 3-prime; F1c/B1c 5-prime",
             }
             evidence["evidence"]["lamp_six_region_topology"] = _blast_lamp_topology(
-                lamp_hits, result,
+                lamp_hits,
+                result,
                 hit_collection_potentially_capped=hit_collection_potentially_capped,
             )
         evidence["warnings"].append(
@@ -1080,7 +1131,9 @@ def _primerpooler(
 
     reaction = _reaction(result)
     grouped: dict[str, list[dict[str, Any]]] = {}
-    explicit_grouping = any(oligo.get("tube") is not None or oligo.get("pool") is not None for oligo in oligos)
+    explicit_grouping = any(
+        oligo.get("tube") is not None or oligo.get("pool") is not None for oligo in oligos
+    )
     for oligo in oligos:
         if oligo.get("tube") is not None:
             key = f"tube:{oligo['tube']}"
@@ -1092,7 +1145,9 @@ def _primerpooler(
 
     group_results: list[dict[str, Any]] = []
     tool_runs: list[dict[str, Any]] = []
-    with tempfile.TemporaryDirectory(prefix="pcrstudio-pooler-", dir=str(_project_temp_root()) if _project_temp_root() else None) as workspace_name:
+    with tempfile.TemporaryDirectory(
+        prefix="pcrstudio-pooler-", dir=str(_project_temp_root()) if _project_temp_root() else None
+    ) as workspace_name:
         workspace = Path(workspace_name)
         reaction_block = result.get("reaction") or {}
         raw_temperature = reaction_block.get("anneal_extend_c")
@@ -1187,17 +1242,29 @@ def _primerpooler(
         name = str(row.get("name") or "")
         if name.endswith(("F", "R")) and len(name) > 1:
             proposal_pair_bases.setdefault(name[:-1], set()).add(name[-1])
-    proposal_pair_count = sum(1 for roles in proposal_pair_bases.values() if {"F", "R"}.issubset(roles))
+    proposal_pair_count = sum(
+        1 for roles in proposal_pair_bases.values() if {"F", "R"}.issubset(roles)
+    )
     if engine_id in {"flanking-pair", "tiling-scheme"} and proposal_pair_count >= 2:
         proposal_input = workspace / "primerpooler-proposal.fa"
-        identifiers = _write_fasta(proposal_input, proposal_members, molecule="ordered", kinds={"primer"})
+        identifiers = _write_fasta(
+            proposal_input, proposal_members, molecule="ordered", kinds={"primer"}
+        )
         prefix = workspace / "primerpooler-proposed-pool-"
         proposal_args: list[str] = ["--seedless"]
         if interaction_option:
             proposal_args.append(interaction_option)
-        selection = result.get("selection_method") if isinstance(result.get("selection_method"), dict) else {}
+        selection = (
+            result.get("selection_method")
+            if isinstance(result.get("selection_method"), dict)
+            else {}
+        )
         requested_max = selection.get("per_tube") if selection.get("tube_split_explicit") else None
-        if isinstance(requested_max, int) and requested_max > 0 and requested_max < proposal_pair_count:
+        if (
+            isinstance(requested_max, int)
+            and requested_max > 0
+            and requested_max < proposal_pair_count
+        ):
             proposal_args.append(f"--max-count={requested_max}")
         proposal_args.extend([f"--pools=?,1,{prefix}", str(proposal_input)])
         try:
@@ -1213,7 +1280,9 @@ def _primerpooler(
             )
             tool_runs.append(proposal_run)
             pools: list[dict[str, Any]] = []
-            for pool_index, pool_file in enumerate(sorted(workspace.glob(prefix.name + "*")), start=1):
+            for pool_index, pool_file in enumerate(
+                sorted(workspace.glob(prefix.name + "*")), start=1
+            ):
                 if not pool_file.is_file():
                     continue
                 try:
@@ -1226,7 +1295,9 @@ def _primerpooler(
                         identifier = line[1:].strip().split()[0]
                         names.append(identifiers.get(identifier, identifier))
                 if names:
-                    pools.append({"pool": pool_index, "oligos": names, "source_file": pool_file.name})
+                    pools.append(
+                        {"pool": pool_index, "oligos": names, "source_file": pool_file.name}
+                    )
             pool_proposal = {
                 "status": "proposal-collected" if pools else "proposal-output-unparsed",
                 "source_tool": "PrimerPooler 1.89 upstream pooling/minimisation",
@@ -1237,7 +1308,9 @@ def _primerpooler(
                 "pools": pools,
                 "accepted_into_design": False,
                 "decision_impact": "evidence-only-until-explicitly-accepted",
-                "stdout_tail": [line.strip() for line in completed.stdout.splitlines() if line.strip()][-25:],
+                "stdout_tail": [
+                    line.strip() for line in completed.stdout.splitlines() if line.strip()
+                ][-25:],
                 "note": (
                     "This is PrimerPooler's own upstream pool proposal for the selected primer pairs. "
                     "PCRStudio does not silently replace the panel's explicit physical tube/pool identities; "
@@ -1259,9 +1332,11 @@ def _primerpooler(
             }
 
     if evidence["status"] != "error":
-        evidence["status"] = "evidence-collected" if any(
-            group.get("status") == "evidence-collected" for group in group_results
-        ) else "not-applicable"
+        evidence["status"] = (
+            "evidence-collected"
+            if any(group.get("status") == "evidence-collected" for group in group_results)
+            else "not-applicable"
+        )
     evidence["tool_run"] = tool_runs[0] if len(tool_runs) == 1 else None
     evidence["tool_runs"] = tool_runs
     evidence["evidence"] = {
@@ -1312,8 +1387,6 @@ def _requested_validators(engine_id: str) -> set[str]:
     }
 
 
-
-
 def _required_validators(engine_id: str) -> set[str]:
     """Return independent validators that are release-gating for this engine.
 
@@ -1326,6 +1399,7 @@ def _required_validators(engine_id: str) -> set[str]:
         if str(binding.get("tool_id")) in _EXTERNAL_VALIDATION_ADAPTERS
         and binding.get("role") == "VALIDATOR"
     }
+
 
 def validate_result(
     *, command: str, request: dict[str, Any], result: dict[str, Any], engine_id: str, module_id: str
@@ -1365,7 +1439,9 @@ def validate_result(
                 "tail_position": "5-prime-only",
             },
             "checks": [],
-            "warnings": ["No supplier-ready oligo sequences were present in the result to validate."],
+            "warnings": [
+                "No supplier-ready oligo sequences were present in the result to validate."
+            ],
         }
 
     # These tools are independent validators and each owns its own temporary
@@ -1375,31 +1451,43 @@ def validate_result(
     # deterministic regardless of which process finishes first.
     jobs: list[tuple[str, Any]] = []
     if "mfeprimer" in wanted:
-        jobs.append((
-            "mfeprimer",
-            lambda: _mfeprimer(oligos, engine_id=engine_id, module_id=module_id, result=result),
-        ))
+        jobs.append(
+            (
+                "mfeprimer",
+                lambda: _mfeprimer(oligos, engine_id=engine_id, module_id=module_id, result=result),
+            )
+        )
     if "ncbi_blast_plus" in wanted:
-        jobs.append((
-            "ncbi_blast_plus",
-            lambda: _blast(
-                oligos, engine_id=engine_id, module_id=module_id, result=result, request=request
-            ),
-        ))
+        jobs.append(
+            (
+                "ncbi_blast_plus",
+                lambda: _blast(
+                    oligos, engine_id=engine_id, module_id=module_id, result=result, request=request
+                ),
+            )
+        )
     if "primerpooler" in wanted and (engine_id in {"nested", "tiling-scheme"} or len(oligos) >= 4):
-        jobs.append((
-            "primerpooler",
-            lambda: _primerpooler(oligos, engine_id=engine_id, module_id=module_id, result=result),
-        ))
+        jobs.append(
+            (
+                "primerpooler",
+                lambda: _primerpooler(
+                    oligos, engine_id=engine_id, module_id=module_id, result=result
+                ),
+            )
+        )
 
     if "pydna" in wanted:
-        jobs.append((
-            "pydna",
-            lambda: validate_with_pydna(request, result, engine_id),
-        ))
+        jobs.append(
+            (
+                "pydna",
+                lambda: validate_with_pydna(request, result, engine_id),
+            )
+        )
 
     if jobs:
-        with ThreadPoolExecutor(max_workers=len(jobs), thread_name_prefix="pcrstudio-validator") as executor:
+        with ThreadPoolExecutor(
+            max_workers=len(jobs), thread_name_prefix="pcrstudio-validator"
+        ) as executor:
             future_to_id = {executor.submit(call): tool_id for tool_id, call in jobs}
             for future in as_completed(future_to_id):
                 tool_id = future_to_id[future]
@@ -1417,11 +1505,13 @@ def validate_result(
 
     collected = sum(1 for check in checks if check.get("status") == "evidence-collected")
     errors = [
-        check for check in checks
+        check
+        for check in checks
         if check.get("status") == "error" and check.get("tool_id") in required
     ]
     unchecked = [
-        check for check in checks
+        check
+        for check in checks
         if check.get("status") == "unchecked" and check.get("tool_id") in required
     ]
     limited_database_evidence = any(
@@ -1436,7 +1526,8 @@ def validate_result(
         for check in checks
     )
     uninterpreted_required = [
-        check for check in checks
+        check
+        for check in checks
         if check.get("tool_id") in required
         and check.get("status") == "evidence-collected"
         and check.get("interpretation_complete") is not True
@@ -1465,7 +1556,11 @@ def validate_result(
     else:
         status = "not-applicable"
 
-    if mode == "strict" and status in {"verification-incomplete", "validator-error", "evidence-collected-limited"}:
+    if mode == "strict" and status in {
+        "verification-incomplete",
+        "validator-error",
+        "evidence-collected-limited",
+    }:
         warnings.insert(
             0,
             "Strict validation policy is active: this result must not be presented as externally verified until the missing validator/database requirement is resolved.",
@@ -1489,8 +1584,7 @@ def validate_result(
         "checks": checks,
         "warnings": warnings,
         "interpretation_complete": (
-            status in {"evidence-collected", "not-applicable"}
-            and not uninterpreted_required
+            status in {"evidence-collected", "not-applicable"} and not uninterpreted_required
         ),
         "uninterpreted_required_tools": [
             str(check.get("tool_id")) for check in uninterpreted_required

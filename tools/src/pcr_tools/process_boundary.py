@@ -6,6 +6,7 @@ and helper workers are treated as untrusted process boundaries here: stdout and
 stderr are drained concurrently, hard byte limits are enforced while the child
 is running, and timeouts terminate the whole process group on POSIX.
 """
+
 from __future__ import annotations
 
 import os
@@ -181,11 +182,15 @@ def run_bounded_text(
         if writer is not None:
             writer.join(timeout=1)
             if writer.is_alive():
-                record_transport_error("stdin", "writer thread did not stop after child termination")
+                record_transport_error(
+                    "stdin", "writer thread did not stop after child termination"
+                )
         for name, thread in zip(("stdout", "stderr"), readers, strict=True):
             thread.join(timeout=1)
             if thread.is_alive():
-                record_transport_error(name, "reader thread did not reach EOF after child termination")
+                record_transport_error(
+                    name, "reader thread did not reach EOF after child termination"
+                )
 
     if timed_out:
         raise subprocess.TimeoutExpired(argv, timeout)

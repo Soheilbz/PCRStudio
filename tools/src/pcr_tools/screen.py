@@ -47,7 +47,6 @@ def product_ceiling(longest_intended: int) -> int:
 JOIN_WINDOW = 60
 
 
-
 def contigs_from_text(
     value: str,
     *,
@@ -355,7 +354,8 @@ def oligos(
     return {
         "checked": True,
         "thermodynamic_temperature_role": (
-            "model-reference-not-bench-annealing" if temperature_c is None
+            "model-reference-not-bench-annealing"
+            if temperature_c is None
             else "caller-declared-hold"
         ),
         **spec.specificity_to_dict(

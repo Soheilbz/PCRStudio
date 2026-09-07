@@ -209,5 +209,5 @@
   },
   "schema_version": "1.0.0",
   "source": "tools/src/pcr_tools/registries/restriction_workflows.py",
-  "source_sha256": "45b006f9e0817c1cc1c39791592bab8dc647137d79405f9861cb9e9f14e657c0"
+  "source_sha256": "1457038f8ae27086790a27e1d98637a17e12e15ea5f3bf52b832db0f1cad15f6"
 }

@@ -18,7 +18,9 @@ def test_development_cannot_change_named_assay_chemistry(monkeypatch):
     with pytest.raises(ValueError, match="scientifically bound to chemistry"):
         enforce_polymerase_identity("q5", "taq-standard", assay_id="standard-pcr")
     with pytest.raises(ValueError, match="anonymous reaction-condition"):
-        enforce_reaction_overrides({"mv_conc": 60.0}, {"mv_conc": 50.0}, context="assay `standard-pcr`")
+        enforce_reaction_overrides(
+            {"mv_conc": 60.0}, {"mv_conc": 50.0}, context="assay `standard-pcr`"
+        )
 
 
 def test_development_cannot_escape_profile_constraint_authority(monkeypatch):
@@ -41,7 +43,7 @@ def test_development_cannot_escape_profile_constraint_authority(monkeypatch):
 
 def test_development_cannot_invent_assay_or_purpose(monkeypatch):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "development")
-    with pytest.raises(ValueError, match="explicit named `assay.id`"):
+    with pytest.raises(ValueError, match=r"explicit named `assay.id`"):
         require_named_assay({}, command="run")
     with pytest.raises(ValueError, match="multiple supported purposes"):
         resolve_purpose(None, None, ["general", "cloning"], assay_name="Example")

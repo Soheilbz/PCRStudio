@@ -5,12 +5,15 @@ pool, but cannot select/validate the final RPA assay.  This module therefore
 keeps quick pair ranking diagnostic and separately exposes the manufacturer
 8-10 forward by 8-10 reverse matrix that must be screened experimentally.
 """
+
 from __future__ import annotations
 
 from typing import Any
 
 
-def _oligo_pool(ranked: list[dict[str, Any]], side: str, *, maximum: int = 10) -> list[dict[str, Any]]:
+def _oligo_pool(
+    ranked: list[dict[str, Any]], side: str, *, maximum: int = 10
+) -> list[dict[str, Any]]:
     selected: list[dict[str, Any]] = []
     seen: set[str] = set()
     for rank, entry in enumerate(ranked, start=1):
@@ -21,12 +24,14 @@ def _oligo_pool(ranked: list[dict[str, Any]], side: str, *, maximum: int = 10) -
         if not sequence or sequence in seen:
             continue
         location = entry.get(f"{side}_at") if isinstance(entry.get(f"{side}_at"), dict) else {}
-        selected.append({
-            "sequence": sequence,
-            "source_pair_rank": rank,
-            "start": int(location.get("start") or 0),
-            "length": len(sequence),
-        })
+        selected.append(
+            {
+                "sequence": sequence,
+                "source_pair_rank": rank,
+                "start": int(location.get("start") or 0),
+                "length": len(sequence),
+            }
+        )
         seen.add(sequence)
         if len(selected) >= maximum:
             break
@@ -57,15 +62,23 @@ def screening_cohort(
             continue
         left, right = coords(entry)
         if selected and not all(
-            abs(left - int(row["left_start"])) + abs(right - int(row["right_start"])) >= min_coordinate_distance
+            abs(left - int(row["left_start"])) + abs(right - int(row["right_start"]))
+            >= min_coordinate_distance
             for row in selected
         ):
             continue
-        selected.append({
-            "candidate": candidate, "primary_rank": rank, "score": float(entry.get("score", 0.0)),
-            "left_start": left, "right_start": right,
-            "amplicon_length": len(str(entry.get("amplicon", ""))) if entry.get("amplicon") else None,
-        })
+        selected.append(
+            {
+                "candidate": candidate,
+                "primary_rank": rank,
+                "score": float(entry.get("score", 0.0)),
+                "left_start": left,
+                "right_start": right,
+                "amplicon_length": len(str(entry.get("amplicon", "")))
+                if entry.get("amplicon")
+                else None,
+            }
+        )
         seen_candidates.add(candidate)
         if len(selected) >= maximum:
             break
@@ -76,11 +89,18 @@ def screening_cohort(
             if candidate in seen_candidates:
                 continue
             left, right = coords(entry)
-            selected.append({
-                "candidate": candidate, "primary_rank": rank, "score": float(entry.get("score", 0.0)),
-                "left_start": left, "right_start": right,
-                "amplicon_length": len(str(entry.get("amplicon", ""))) if entry.get("amplicon") else None,
-            })
+            selected.append(
+                {
+                    "candidate": candidate,
+                    "primary_rank": rank,
+                    "score": float(entry.get("score", 0.0)),
+                    "left_start": left,
+                    "right_start": right,
+                    "amplicon_length": len(str(entry.get("amplicon", "")))
+                    if entry.get("amplicon")
+                    else None,
+                }
+            )
             seen_candidates.add(candidate)
             if len(selected) >= maximum:
                 break
@@ -112,14 +132,19 @@ def screening_cohort(
             "matrix_ready": matrix_ready,
             "selection_basis": "empirical amplification speed/sensitivity screening",
             "sequence_prediction_equivalence": False,
-            "status": "external-empirical-evidence-required" if matrix_ready else "candidate-pool-insufficient-for-source-backed-8x8-minimum",
+            "status": "external-empirical-evidence-required"
+            if matrix_ready
+            else "candidate-pool-insufficient-for-source-backed-8x8-minimum",
             "note": "The manufacturer states that no automated primer-design software can reliably predict optimal RPA performance. PCRStudio prepares up to 10 unique candidates per orientation, but final assay selection requires experimental screening of the complete declared forward-by-reverse matrix.",
         },
         "claim_boundary": "PCRStudio/Primer3 supplies candidate oligos only. It does not identify a validated or optimal RPA primer pair from sequence scores and does not replace the source-backed empirical 8-10 by 8-10 screening matrix.",
     }
 
-def screening_cohort_for_current_mode(ranked: list[dict[str, Any]], *, maximum: int = 10) -> dict[str, Any]:
+
+def screening_cohort_for_current_mode(
+    ranked: list[dict[str, Any]], *, maximum: int = 10
+) -> dict[str, Any]:
     """Build the RPA screen and enforce the empirical-matrix floor only in Scientific-Strict runs."""
     from .scientific_integrity import strict
-    return screening_cohort(ranked, maximum=maximum, require_matrix_ready=strict())
 
+    return screening_cohort(ranked, maximum=maximum, require_matrix_ready=strict())

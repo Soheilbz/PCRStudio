@@ -45,8 +45,8 @@ from typing import Any
 
 from . import kasp
 from .design import Constraints, clean_template
+from .registries.authorities import DISCRIMINATING_AUTHORITY
 from .thermo import DEFAULT_CONDITIONS, analyse, reverse_complement
-from .registries.authorities import DISCRIMINATING_AUTHORITY, record as authority_record
 from .variants import VariantError, differing_anchor, normalize_variant, parse_vcf_mask
 from .workflow_evidence import evidence_block
 
@@ -68,8 +68,10 @@ COMPLEMENT = {"A": "T", "T": "A", "G": "C", "C": "G"}
 _MISMATCH_AUTHORITY = dict(DISCRIMINATING_AUTHORITY["mismatch_model"])
 _MISMATCH_CLASSES = dict(_MISMATCH_AUTHORITY["classes"])
 
+
 def _pairs(tokens: list[str]) -> frozenset[tuple[str, str]]:
     return frozenset(tuple(token.split("/", 1)) for token in tokens)
+
 
 BLOCKING = _pairs(list(_MISMATCH_CLASSES["blocks"]))
 
@@ -207,7 +209,9 @@ def assignments(alleles: tuple[str, str], same_strand: bool) -> list[Assignment]
 #: Counted back from the 3' end, so -1 is the discriminating base itself and is
 #: never available. Third from the end is the usual choice; fourth is the
 #: alternative when the third cannot be substituted without leaving the window.
-SECOND_MISMATCH_AT = tuple(int(value) for value in _MISMATCH_AUTHORITY["secondary_mismatch_positions_from_3prime"])
+SECOND_MISMATCH_AT = tuple(
+    int(value) for value in _MISMATCH_AUTHORITY["secondary_mismatch_positions_from_3prime"]
+)
 
 #: What the second mismatch is for, said once.
 #:
@@ -406,6 +410,7 @@ TETRA_INNER_MIN_NT = 26
 TETRA_INNER_OPT_NT = 28
 TETRA_SECOND_MISMATCH_AT = -2
 
+
 def _classic_tetra_mismatch_strength(primer_base: str, template_base: str) -> str:
     a, b = primer_base.upper(), template_base.upper()
     if a == b:
@@ -416,6 +421,7 @@ def _classic_tetra_mismatch_strength(primer_base: str, template_base: str) -> st
     if pair in {frozenset(("C", "A")), frozenset(("G", "T"))}:
         return "weak"
     raise DiscriminationError(f"Unsupported tetra-ARMS mismatch pair {a}/{b}")
+
 
 def with_tetra_second_mismatch(
     primer: AlleleSpecific, limits: Constraints, conditions: dict[str, float]
@@ -437,9 +443,15 @@ def with_tetra_second_mismatch(
         if not limits.tm_min <= measured.tm <= limits.tm_max:
             continue
         return AlleleSpecific(
-            allele=primer.allele, strand=primer.strand, sequence=modified,
-            at=primer.at, length=primer.length, tm=measured.tm,
-            gc_percent=measured.gc_percent, terminus=primer.terminus, second=candidate,
+            allele=primer.allele,
+            strand=primer.strand,
+            sequence=modified,
+            at=primer.at,
+            length=primer.length,
+            tm=measured.tm,
+            gc_percent=measured.gc_percent,
+            terminus=primer.terminus,
+            second=candidate,
         )
     return None
 
@@ -697,7 +709,10 @@ def design(
         inner_limits = replace(
             limits,
             length_min=max(limits.length_min, TETRA_INNER_MIN_NT),
-            length_opt=max(max(limits.length_min, TETRA_INNER_MIN_NT), min(TETRA_INNER_OPT_NT, limits.length_max)),
+            length_opt=max(
+                max(limits.length_min, TETRA_INNER_MIN_NT),
+                min(TETRA_INNER_OPT_NT, limits.length_max),
+            ),
         )
     else:
         inner_limits = limits
@@ -748,9 +763,13 @@ def design(
             )
             for allele, primer in specific.items()
         }
-        shared = set.intersection(
-            *(set(item["sequence"] for item in pools[allele]) for allele in (one, other))
-        ) if all(pools.get(allele) for allele in (one, other)) else set()
+        shared = (
+            set.intersection(
+                *(set(item["sequence"] for item in pools[allele]) for allele in (one, other))
+            )
+            if all(pools.get(allele) for allele in (one, other))
+            else set()
+        )
         if shared:
             # Preserve Primer3 preference across both allele-pinned searches.
             def shared_rank(seq: str) -> int:
@@ -758,11 +777,10 @@ def design(
                     next(i for i, item in enumerate(pools[allele]) if item["sequence"] == seq)
                     for allele in (one, other)
                 )
+
             picked = min(shared, key=shared_rank)
             for allele in (one, other):
-                common[allele] = next(
-                    item for item in pools[allele] if item["sequence"] == picked
-                )
+                common[allele] = next(item for item in pools[allele] if item["sequence"] == picked)
     else:
         for allele, primer in specific.items():
             product = _partner_for(sequence, at, primer, limits, reaction, design_pair, excluded)
@@ -776,9 +794,7 @@ def design(
         if plus_allele is not None and minus_allele is not None:
             outer_reverse = common[plus_allele]
             outer_forward = common[minus_allele]
-            control_size = (
-                outer_reverse["at"] + outer_reverse["length"] - outer_forward["at"]
-            )
+            control_size = outer_reverse["at"] + outer_reverse["length"] - outer_forward["at"]
             allele_sizes = {allele: int(common[allele]["product_size"]) for allele in (one, other)}
             sizes = [allele_sizes[one], allele_sizes[other], control_size]
             minimum_gap = min(abs(a - b) for i, a in enumerate(sizes) for b in sizes[i + 1 :])
@@ -935,9 +951,7 @@ def _partner_for(
     design_pair: Any,
     excluded: list[tuple[int, int]] | None = None,
 ) -> dict[str, Any] | None:
-    candidates = _partner_candidates(
-        sequence, at, primer, limits, reaction, design_pair, excluded
-    )
+    candidates = _partner_candidates(sequence, at, primer, limits, reaction, design_pair, excluded)
     return candidates[0] if candidates else None
 
 
@@ -1139,7 +1153,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     anchor = differing_anchor(normalized_variant)
     if normalized_variant.kind in {"snv", "mnv"}:
         if anchor is None:
-            raise DiscriminationError("The declared equal-length REF/ALT has no differing base to anchor.")
+            raise DiscriminationError(
+                "The declared equal-length REF/ALT has no differing base to anchor."
+            )
         supplied = list(anchor["alleles"])
         design_at = int(anchor["at"])
     else:
@@ -1190,12 +1206,23 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 "KASP requires explicit `kasp_assay_mode`: biallelic-genotype or plus-minus-presence-absence."
             )
         if kasp_assay_mode == "plus-minus-presence-absence" and normalized_variant.kind not in {
-            "insertion", "deletion", "complex-replacement", "presence-absence"
+            "insertion",
+            "deletion",
+            "complex-replacement",
+            "presence-absence",
         }:
             raise DiscriminationError(
                 "KASP plus/minus requires an insertion, deletion, complex replacement or explicit presence/absence variant; use biallelic-genotype for SNV/MNV."
             )
-    elif any(request.get(k) is not None for k in ("kasp_assay_mode", "kasp_plate_format", "kasp_instrument_model", "kasp_rox_policy")):
+    elif any(
+        request.get(k) is not None
+        for k in (
+            "kasp_assay_mode",
+            "kasp_plate_format",
+            "kasp_instrument_model",
+            "kasp_rox_policy",
+        )
+    ):
         raise DiscriminationError("KASP-specific fields require KASP geometry.")
     if kasp_protocol is not None and kasp_protocol not in kasp.PROTOCOLS:
         raise DiscriminationError(
@@ -1214,7 +1241,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         if request.get("kasp_plate_format") not in {"96", "384"}:
             raise DiscriminationError("LGC KASP requires `kasp_plate_format` 96 or 384.")
         if not str(request.get("kasp_instrument_model") or "").strip():
-            raise DiscriminationError("LGC KASP requires `kasp_instrument_model`; use `unresolved` when unknown.")
+            raise DiscriminationError(
+                "LGC KASP requires `kasp_instrument_model`; use `unresolved` when unknown."
+            )
         if request.get("kasp_rox_policy") not in {"none", "low", "standard", "high", "unresolved"}:
             raise DiscriminationError("LGC KASP requires an explicit `kasp_rox_policy`.")
 
@@ -1238,58 +1267,149 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         )
 
     if geometry == "kasp" and kasp_assay_mode == "plus-minus-presence-absence":
-        from .kasp_plus_minus import design_plus_minus
         from . import screen
-        plusminus = design_plus_minus(chosen.target.sequence, normalized_variant, chosen.limits, reaction)
+        from .kasp_plus_minus import design_plus_minus
+
+        plusminus = design_plus_minus(
+            chosen.target.sequence, normalized_variant, chosen.limits, reaction
+        )
         named = {primer["name"]: primer["sequence"] for primer in plusminus.get("primers", [])}
         for index, partner in enumerate(plusminus.get("partners", []), start=1):
             named[f"partner {index}"] = partner["sequence"]
         contigs, template_only, fold_at = screen.contigs_for(
             request, template=chosen.target.sequence, name=chosen.target.name
         )
-        off_targets = screen.oligos(
-            named, contigs, reaction=chosen.reaction, fold_at=fold_at,
-            max_product=screen.product_ceiling(chosen.limits.product_max), intended_sizes=[]
-        ) if named else []
+        off_targets = (
+            screen.oligos(
+                named,
+                contigs,
+                reaction=chosen.reaction,
+                fold_at=fold_at,
+                max_product=screen.product_ceiling(chosen.limits.product_max),
+                intended_sizes=[],
+            )
+            if named
+            else []
+        )
         from .intake import target_to_dict
         from .presets import thermodynamic_model
         from .provenance import provenance
         from .settings import label
+
         selected_protocol = kasp.protocol(
-            kasp_protocol, plate_format=request.get("kasp_plate_format"),
-            instrument_model=request.get("kasp_instrument_model"), rox_policy=request.get("kasp_rox_policy")
+            kasp_protocol,
+            plate_format=request.get("kasp_plate_format"),
+            instrument_model=request.get("kasp_instrument_model"),
+            rox_policy=request.get("kasp_rox_policy"),
         )
         assay_orderable = bool(plusminus.get("orderable"))
         name = label(chosen.target.name)
-        order_sheet=[]
+        order_sheet = []
         if assay_orderable:
             for primer in plusminus["primers"]:
-                order_sheet.append({"name":f"{name}_{primer['allele']}","sequence":primer["ordered_sequence"],"annealing_sequence":primer["sequence"],"tail_sequence":primer["cassette"]["tail"],"kind":"primer","length":len(primer["ordered_sequence"]),"gc_percent":primer["gc_percent"],"tm":primer["tm"],"note":primer["note"]})
+                order_sheet.append(
+                    {
+                        "name": f"{name}_{primer['allele']}",
+                        "sequence": primer["ordered_sequence"],
+                        "annealing_sequence": primer["sequence"],
+                        "tail_sequence": primer["cassette"]["tail"],
+                        "kind": "primer",
+                        "length": len(primer["ordered_sequence"]),
+                        "gc_percent": primer["gc_percent"],
+                        "tm": primer["tm"],
+                        "note": primer["note"],
+                    }
+                )
             for partner in plusminus["partners"]:
-                order_sheet.append({"name":f"{name}_common","sequence":partner["sequence"],"annealing_sequence":partner["sequence"],"tail_sequence":"","kind":"primer","length":partner["length"],"gc_percent":partner["gc_percent"],"tm":partner["tm"],"note":partner["note"]})
+                order_sheet.append(
+                    {
+                        "name": f"{name}_common",
+                        "sequence": partner["sequence"],
+                        "annealing_sequence": partner["sequence"],
+                        "tail_sequence": "",
+                        "kind": "primer",
+                        "length": partner["length"],
+                        "gc_percent": partner["gc_percent"],
+                        "tm": partner["tm"],
+                        "note": partner["note"],
+                    }
+                )
         return {
-            "engine":"discriminating-pair", "provenance":provenance(reaction), "assay":chosen.assay_to_dict(),
-            "target":target_to_dict(chosen.target), "reaction":{"polymerase":chosen.preset.id,"polymerase_name":chosen.preset.name,**reaction,"model":thermodynamic_model(chosen.preset,chosen.reaction)},
-            "constraints":{field_:getattr(chosen.limits,field_) for field_ in Constraints.__dataclass_fields__},
-            "geometry":{"id":"kasp","name":"KASP plus/minus presence–absence","tubes":1,"note":"Two tailed allele-junction primers compete with one shared common primer."},
-            "variant":{**normalized_variant.as_dict(),"anchor":None,"normalization":"exact-ref-alt-reconstructed-alleles"},
-            "variant_masking":{"nearby_variants":nearby_variant_records,"source":"caller-supplied-vcf-only","population_frequency_inferred":False},
-            "mismatch_evidence_model": mismatch_evidence_model,
-            "kasp":{"assay_mode":kasp_assay_mode,"chemistry_family":chosen.assay_chemistry_family,"singleplex":True,"call_status":"predicted","call_model":plusminus.get("call_model"),"junction_model":plusminus.get("junction_model"),"design_authority":{"method":"PCRStudio open junction-aware KASP-compatible candidate policy","vendor_kraken_equivalent":False,"validation_required":True,"note":"This branch is not LGC Kraken-equivalent; endpoint cluster validation and controls remain required."}},
-            "protocol":selected_protocol, "primers":plusminus.get("primers",[]), "partners":plusminus.get("partners",[]),
-            "discrimination":{}, "refused":{}, "band_geometry":None, "background":screen.summary(contigs,template_only),
-            "off_targets":off_targets, "why_nothing":str(plusminus.get("why") or ""),
-            "orderability":{"orderable":assay_orderable,"status":"orderable" if assay_orderable else "not-orderable-incomplete-design","note":"Junction topology is complete." if assay_orderable else str(plusminus.get("why") or "Incomplete plus/minus design.")},
-            "workflow_evidence": evidence_block(request.get("workflow_evidence")),
-            "validation_contract":{
-                "endpoint_channels":{"x":"FAM","y":"HEX"},
-                "required_controls":["at least two NTC wells per assay per plate","positive/presence control","negative/absence control"],
-                "recommended_cluster_samples":22,
-                "call_states":plusminus.get("call_model",{}).get("states",[]),
-                "primary_ranking_mutated_by_evidence":False,
-                "source_records":["kasp-cluster-plot-guide","kasp-faq-controls"],
+            "engine": "discriminating-pair",
+            "provenance": provenance(reaction),
+            "assay": chosen.assay_to_dict(),
+            "target": target_to_dict(chosen.target),
+            "reaction": {
+                "polymerase": chosen.preset.id,
+                "polymerase_name": chosen.preset.name,
+                **reaction,
+                "model": thermodynamic_model(chosen.preset, chosen.reaction),
             },
-            "order_sheet":order_sheet,
+            "constraints": {
+                field_: getattr(chosen.limits, field_)
+                for field_ in Constraints.__dataclass_fields__
+            },
+            "geometry": {
+                "id": "kasp",
+                "name": "KASP plus/minus presence–absence",
+                "tubes": 1,
+                "note": "Two tailed allele-junction primers compete with one shared common primer.",
+            },
+            "variant": {
+                **normalized_variant.as_dict(),
+                "anchor": None,
+                "normalization": "exact-ref-alt-reconstructed-alleles",
+            },
+            "variant_masking": {
+                "nearby_variants": nearby_variant_records,
+                "source": "caller-supplied-vcf-only",
+                "population_frequency_inferred": False,
+            },
+            "mismatch_evidence_model": mismatch_evidence_model,
+            "kasp": {
+                "assay_mode": kasp_assay_mode,
+                "chemistry_family": chosen.assay_chemistry_family,
+                "singleplex": True,
+                "call_status": "predicted",
+                "call_model": plusminus.get("call_model"),
+                "junction_model": plusminus.get("junction_model"),
+                "design_authority": {
+                    "method": "PCRStudio open junction-aware KASP-compatible candidate policy",
+                    "vendor_kraken_equivalent": False,
+                    "validation_required": True,
+                    "note": "This branch is not LGC Kraken-equivalent; endpoint cluster validation and controls remain required.",
+                },
+            },
+            "protocol": selected_protocol,
+            "primers": plusminus.get("primers", []),
+            "partners": plusminus.get("partners", []),
+            "discrimination": {},
+            "refused": {},
+            "band_geometry": None,
+            "background": screen.summary(contigs, template_only),
+            "off_targets": off_targets,
+            "why_nothing": str(plusminus.get("why") or ""),
+            "orderability": {
+                "orderable": assay_orderable,
+                "status": "orderable" if assay_orderable else "not-orderable-incomplete-design",
+                "note": "Junction topology is complete."
+                if assay_orderable
+                else str(plusminus.get("why") or "Incomplete plus/minus design."),
+            },
+            "workflow_evidence": evidence_block(request.get("workflow_evidence")),
+            "validation_contract": {
+                "endpoint_channels": {"x": "FAM", "y": "HEX"},
+                "required_controls": [
+                    "at least two NTC wells per assay per plate",
+                    "positive/presence control",
+                    "negative/absence control",
+                ],
+                "recommended_cluster_samples": 22,
+                "call_states": plusminus.get("call_model", {}).get("states", []),
+                "primary_ranking_mutated_by_evidence": False,
+                "source_records": ["kasp-cluster-plot-guide", "kasp-faq-controls"],
+            },
+            "order_sheet": order_sheet,
         }
 
     extra_excluded = list(excluded_from(request))
@@ -1297,7 +1417,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         for coordinate in anchor.get("other_differences", []):
             extra_excluded.append((int(coordinate), 1))
     for item in nearby_variant_records:
-        coordinate=int(item["at"]); ref_len=max(1,len(str(item.get("ref") or "")))
+        coordinate = int(item["at"])
+        ref_len = max(1, len(str(item.get("ref") or "")))
         if coordinate != design_at:
             extra_excluded.append((coordinate, ref_len))
 
@@ -1325,7 +1446,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         if tetra_min_separation is not None:
             required_gap = int(tetra_min_separation)
             if required_gap < 1:
-                raise DiscriminationError("tetra_min_band_separation_bp must be a positive integer.")
+                raise DiscriminationError(
+                    "tetra_min_band_separation_bp must be a positive integer."
+                )
             observed_gap = int(assay.band_geometry["minimum_pairwise_separation_bp"])
             if observed_gap < required_gap:
                 raise DiscriminationError(
@@ -1397,14 +1520,18 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         "variant_normalized": {**normalized_variant.as_dict(), "anchor": anchor},
         "variant_masking": {
             "nearby_variants": nearby_variant_records,
-            "other_variant_differences_masked_from_partner_search": (anchor or {}).get("other_differences", []),
+            "other_variant_differences_masked_from_partner_search": (anchor or {}).get(
+                "other_differences", []
+            ),
             "source": "caller-supplied-vcf-only",
             "population_frequency_inferred": False,
         },
         "mismatch_evidence_model": mismatch_evidence_model,
         "polymerase_discrimination_scope": {
-            "class": "taq-no-proofreading" if not getattr(chosen.preset, "proofreading", False) else "proofreading-prohibited",
-            "claim_boundary": "Mismatch classes are evidence-scoped candidate ranking, not a polymerase-independent guarantee."
+            "class": "taq-no-proofreading"
+            if not getattr(chosen.preset, "proofreading", False)
+            else "proofreading-prohibited",
+            "claim_boundary": "Mismatch classes are evidence-scoped candidate ranking, not a polymerase-independent guarantee.",
         },
         "kasp": (
             {
@@ -1442,53 +1569,55 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         "why_nothing": why_nothing,
         "orderability": orderability,
         "workflow_evidence": evidence_block(request.get("workflow_evidence")),
-        "order_sheet": ([] if not assay_orderable else [
-            {
-                "name": f"{name}_{allele}",
-                # The whole molecule, tail included. An order sheet that
-                # dropped it would be the one thing in this result somebody
-                # copies straight into a supplier's form.
-                "sequence": (
-                    kasp.attach(primer.sequence, index)
-                    if assay.geometry == "kasp"
-                    else primer.sequence
-                ),
-                "annealing_sequence": primer.sequence,
-                "tail_sequence": (
-                    kasp.attach("", index) if assay.geometry == "kasp" else ""
-                ),
-                "kind": "primer",
-                "length": (
-                    len(kasp.attach(primer.sequence, index))
-                    if assay.geometry == "kasp"
-                    else primer.length
-                ),
-                "gc_percent": primer.gc_percent,
-                "tm": primer.tm,
-                "note": (
-                    f"Allele-specific for {allele}, and it carries a deliberate "
-                    f"mismatch {abs(primer.second.at)} bases from its 3' end — order it "
-                    "exactly as written. It disagrees with the template on purpose."
-                    if primer.second
-                    else f"Allele-specific for {allele}."
-                ),
-            }
-            for index, (allele, primer) in enumerate(assay.specific.items())
-        ]
-        + [
-            {
-                "name": f"{name}_common_{'_'.join(partner['for_alleles'])}",
-                "sequence": partner["sequence"],
-                "annealing_sequence": partner["sequence"],
-                "tail_sequence": "",
-                "kind": "primer",
-                "length": partner["length"],
-                "gc_percent": partner["gc_percent"],
-                "tm": partner["tm"],
-                "note": partner["note"],
-            }
-            for partner in described["partners"]
-        ]),
+        "order_sheet": (
+            []
+            if not assay_orderable
+            else [
+                {
+                    "name": f"{name}_{allele}",
+                    # The whole molecule, tail included. An order sheet that
+                    # dropped it would be the one thing in this result somebody
+                    # copies straight into a supplier's form.
+                    "sequence": (
+                        kasp.attach(primer.sequence, index)
+                        if assay.geometry == "kasp"
+                        else primer.sequence
+                    ),
+                    "annealing_sequence": primer.sequence,
+                    "tail_sequence": (kasp.attach("", index) if assay.geometry == "kasp" else ""),
+                    "kind": "primer",
+                    "length": (
+                        len(kasp.attach(primer.sequence, index))
+                        if assay.geometry == "kasp"
+                        else primer.length
+                    ),
+                    "gc_percent": primer.gc_percent,
+                    "tm": primer.tm,
+                    "note": (
+                        f"Allele-specific for {allele}, and it carries a deliberate "
+                        f"mismatch {abs(primer.second.at)} bases from its 3' end — order it "
+                        "exactly as written. It disagrees with the template on purpose."
+                        if primer.second
+                        else f"Allele-specific for {allele}."
+                    ),
+                }
+                for index, (allele, primer) in enumerate(assay.specific.items())
+            ]
+            + [
+                {
+                    "name": f"{name}_common_{'_'.join(partner['for_alleles'])}",
+                    "sequence": partner["sequence"],
+                    "annealing_sequence": partner["sequence"],
+                    "tail_sequence": "",
+                    "kind": "primer",
+                    "length": partner["length"],
+                    "gc_percent": partner["gc_percent"],
+                    "tm": partner["tm"],
+                    "note": partner["note"],
+                }
+                for partner in described["partners"]
+            ]
+        ),
     }
     answer["variant"] = {
         **normalized_variant.as_dict(),
@@ -1498,7 +1627,16 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     }
     answer["validation_contract"] = {
         "empirical_discrimination_required": True,
-        "controls": (["NTC", "positive allele A", "positive allele B", "heterozygous control when biologically applicable"] if geometry == "arms-two-tube" else ["NTC", "known genotype controls"]),
+        "controls": (
+            [
+                "NTC",
+                "positive allele A",
+                "positive allele B",
+                "heterozygous control when biologically applicable",
+            ]
+            if geometry == "arms-two-tube"
+            else ["NTC", "known genotype controls"]
+        ),
         "primary_ranking_mutated_by_evidence": False,
     }
     if geometry == "tetra" and assay.band_geometry is not None:

@@ -247,7 +247,9 @@ def profile(
         )
     except ProcessOutputLimitExceeded as error:
         return Accessibility(
-            checked=False, model="", openings={},
+            checked=False,
+            model="",
+            openings={},
             note=f"The folding step exceeded its {error.stream} output limit.",
         )
     except subprocess.TimeoutExpired:
@@ -414,7 +416,9 @@ def fold_oligos(oligos: dict[str, str], celsius: float) -> Folds:
         )
     except ProcessOutputLimitExceeded as error:
         return Folds(
-            checked=False, model="", folds={},
+            checked=False,
+            model="",
+            folds={},
             note=f"The folding step exceeded its {error.stream} output limit.",
         )
     except subprocess.TimeoutExpired:

@@ -198,7 +198,8 @@ def audit_scientific_integrity() -> None:
         'apply_mgb_import(cands,request.get("probe_mgb_authority_payload"),authority_id=authority_id)',
         '"tm_source":"external-mgb-authority"',
     )
-    if any(marker not in probe_text for marker in mgb_gate_markers):
+    probe_compact = re.sub(r"\s+", "", probe_text)
+    if any(marker.replace(" ", "") not in probe_compact for marker in mgb_gate_markers):
         error("TaqMan MGB can again bypass the declared external-authority candidate exchange")
     if '"status": "orderable" if orderable else "research-only-unbound-probe-engine"' not in probe_text:
         error("unbound pair-and-probe research can again lose its explicit non-orderable status")

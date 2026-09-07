@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from pcr_tools.registries.restriction_workflows import generated_catalogue, resolve_restriction_workflow
+from pcr_tools.registries.restriction_workflows import (
+    generated_catalogue,
+    resolve_restriction_workflow,
+)
 
 
 def test_neb_standard_digest_stays_family_scoped() -> None:

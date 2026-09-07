@@ -100,8 +100,6 @@ def _configure_model(RNA: Any, celsius: float, molecule: str) -> str:
     return model
 
 
-
-
 def _configure_dna_model(RNA: Any, celsius: float) -> str:
     """Backward-compatible DNA-only helper used by the retained fold contract tests."""
     return _configure_model(RNA, celsius, "DNA")
@@ -140,9 +138,7 @@ def _sequence(value: Any, *, name: str, molecule: str) -> str:
     if invalid:
         ordered = sorted(allowed)
         alphabet = (
-            ordered[0]
-            if len(ordered) == 1
-            else ", ".join(ordered[:-1]) + " and " + ordered[-1]
+            ordered[0] if len(ordered) == 1 else ", ".join(ordered[:-1]) + " and " + ordered[-1]
         )
         raise ValueError(
             f"the {name} contains {', '.join(invalid)}, but this {molecule} folding "
@@ -330,7 +326,9 @@ def main() -> int:
     if not isinstance(template, str):
         return _fail("invalidRequest", "`template` must be a sequence")
     try:
-        answer = profile(template, raw_windows, celsius, molecule=str(request.get("molecule") or "DNA"))
+        answer = profile(
+            template, raw_windows, celsius, molecule=str(request.get("molecule") or "DNA")
+        )
     except ImportError:
         return _fail("toolMissing", "ViennaRNA is not installed in this environment")
     except ValueError as error:

@@ -522,9 +522,7 @@ def _seed_partitions(primer: str, max_mismatches: int) -> list[tuple[int, str]]:
     return out
 
 
-def _candidate_window_starts(
-    haystack: str, expected: str, max_mismatches: int
-) -> list[int]:
+def _candidate_window_starts(haystack: str, expected: str, max_mismatches: int) -> list[int]:
     """Candidate starts complete for the declared whole-primer mismatch budget."""
     starts: set[int] = set()
     for offset, seed in _seed_partitions(expected, max_mismatches):
@@ -533,6 +531,7 @@ def _candidate_window_starts(
             if 0 <= window_start and window_start + len(expected) <= len(haystack):
                 starts.add(window_start)
     return sorted(starts)
+
 
 def _conservative_thermo_window(window: str, primer: str) -> tuple[str, int]:
     """Make an ambiguity window measurable without treating it as certain.
@@ -680,9 +679,15 @@ def sites_for(
                 continue
             found.append(
                 Site(
-                    primer=primer, role=role, contig=contig.name,
-                    three_prime_at=start + length - 1, orientation="forward",
-                    mismatches=count, dg=dg, tm=tm, ambiguous_bases=ambiguous,
+                    primer=primer,
+                    role=role,
+                    contig=contig.name,
+                    three_prime_at=start + length - 1,
+                    orientation="forward",
+                    mismatches=count,
+                    dg=dg,
+                    tm=tm,
+                    ambiguous_bases=ambiguous,
                     mismatch_upper_bound=mismatch_upper_bound,
                     mismatch_positions_from_three_prime=mismatch_positions,
                     ambiguous_positions_from_three_prime=ambiguous_positions,
@@ -704,16 +709,20 @@ def sites_for(
                 three_prime_at_start=True,
             )
             thermo_window, ambiguous = _conservative_thermo_window(window, rc_primer)
-            dg, tm = _score(
-                primer, thermo_window, reaction, temperature_c=temperature_c
-            )
+            dg, tm = _score(primer, thermo_window, reaction, temperature_c=temperature_c)
             if min_dg is not None and dg > min_dg:
                 continue
             found.append(
                 Site(
-                    primer=primer, role=role, contig=contig.name,
-                    three_prime_at=window_start, orientation="reverse",
-                    mismatches=count, dg=dg, tm=tm, ambiguous_bases=ambiguous,
+                    primer=primer,
+                    role=role,
+                    contig=contig.name,
+                    three_prime_at=window_start,
+                    orientation="reverse",
+                    mismatches=count,
+                    dg=dg,
+                    tm=tm,
+                    ambiguous_bases=ambiguous,
                     mismatch_upper_bound=mismatch_upper_bound,
                     mismatch_positions_from_three_prime=mismatch_positions,
                     ambiguous_positions_from_three_prime=ambiguous_positions,
@@ -754,7 +763,10 @@ def _append_product_stream(
 
 
 def products_from(
-    sites: list[Site], *, max_product: int, circular_length: int | None = None,
+    sites: list[Site],
+    *,
+    max_product: int,
+    circular_length: int | None = None,
     circular_lengths: dict[str, int] | None = None,
 ) -> list[OffTarget]:
     """Every pair of sites that face each other closely enough to amplify.
@@ -771,7 +783,9 @@ def products_from(
         circular_length = _validate_integer(circular_length, name="circular_length", minimum=1)
     checked_circular_lengths: dict[str, int] = {}
     for contig_name, length in (circular_lengths or {}).items():
-        checked_circular_lengths[str(contig_name)] = _validate_integer(length, name=f"circular_lengths[{contig_name}]", minimum=1)
+        checked_circular_lengths[str(contig_name)] = _validate_integer(
+            length, name=f"circular_lengths[{contig_name}]", minimum=1
+        )
     if circular_length is not None and checked_circular_lengths:
         raise ValueError("choose scalar circular_length or per-contig circular_lengths, not both")
 
@@ -945,8 +959,7 @@ def _site_to_dict(site: Site) -> dict[str, Any]:
                 "template_base": template_base,
                 "background_plus_base": background_plus_base,
             }
-            for position, primer_base, template_base, background_plus_base
-            in site.mismatch_base_pairs_from_three_prime
+            for position, primer_base, template_base, background_plus_base in site.mismatch_base_pairs_from_three_prime
         ],
         "nearest_three_prime_mismatch": (
             min(site.mismatch_positions_from_three_prime)

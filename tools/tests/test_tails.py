@@ -184,7 +184,9 @@ def test_the_finished_oligo_is_measured_in_full(tp53: str) -> None:
     # The tail is real DNA: it can fold back on the primer. Those numbers have
     # to come from the molecule that is in the tube, not from the primer it
     # was built on.
-    tailed = attach("CAGACCTATGGAAACTACTT", build_tail("EcoRI", tp53, protective_sequence=PROTECTIVE))
+    tailed = attach(
+        "CAGACCTATGGAAACTACTT", build_tail("EcoRI", tp53, protective_sequence=PROTECTIVE)
+    )
 
     assert tailed.whole.hairpin is not None
     assert tailed.whole.self_dimer is not None
@@ -199,7 +201,9 @@ def test_interaction_is_reported_before_and_after(tp53: str) -> None:
     always sticky is a different problem from one the tails broke.
     """
     left = attach("CAGACCTATGGAAACTACTT", build_tail("EcoRI", tp53, protective_sequence=PROTECTIVE))
-    right = attach("GGAGTCTTCCAGTGGTAATC", build_tail("BamHI", tp53, protective_sequence=PROTECTIVE))
+    right = attach(
+        "GGAGTCTTCCAGTGGTAATC", build_tail("BamHI", tp53, protective_sequence=PROTECTIVE)
+    )
 
     interaction = tails_interact(left, right)
 
@@ -221,6 +225,21 @@ def test_a_tail_describes_itself_for_the_wire(tp53: str) -> None:
 
 
 def test_tail_exposes_supplier_minimum_when_catalogue_has_verified_one(tp53: str) -> None:
-    assert describe(build_tail("HindIII", tp53, protective_sequence=PROTECTIVE))["first_observed_activity_flanking_bases"] == 2
-    assert describe(build_tail("KpnI", tp53, protective_sequence=PROTECTIVE))["end_cleavage_evidence_identity"] == "NEB KpnI-HF"
-    assert describe(build_tail("SpeI", tp53, protective_sequence=PROTECTIVE))["end_cleavage_evidence_identity"] == "NEB SpeI-HF"
+    assert (
+        describe(build_tail("HindIII", tp53, protective_sequence=PROTECTIVE))[
+            "first_observed_activity_flanking_bases"
+        ]
+        == 2
+    )
+    assert (
+        describe(build_tail("KpnI", tp53, protective_sequence=PROTECTIVE))[
+            "end_cleavage_evidence_identity"
+        ]
+        == "NEB KpnI-HF"
+    )
+    assert (
+        describe(build_tail("SpeI", tp53, protective_sequence=PROTECTIVE))[
+            "end_cleavage_evidence_identity"
+        ]
+        == "NEB SpeI-HF"
+    )

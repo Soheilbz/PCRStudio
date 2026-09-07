@@ -128,7 +128,6 @@ class TestAPair:
         )
         assert not any(pair["crosses_the_join"] for pair in answer["pairs"])
 
-
     def test_circular_target_coordinates_cannot_start_in_search_scaffolding(self):
         """The repeated head is internal Primer3 scaffolding, not user coordinates."""
         from pcr_tools.pipeline import run

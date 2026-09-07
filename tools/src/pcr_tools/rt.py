@@ -37,7 +37,9 @@ def block(*, isothermal: bool = False, polymerase: str | None = None) -> dict[st
             ),
         }
 
-    whose = f"{polymerase} does not set them" if polymerase else "the PCR polymerase does not set them"
+    whose = (
+        f"{polymerase} does not set them" if polymerase else "the PCR polymerase does not set them"
+    )
     return {
         "one_step": None,
         "hold": None,

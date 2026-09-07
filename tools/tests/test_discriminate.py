@@ -28,7 +28,6 @@ from pcr_tools.discriminate import (
     DiscriminationError,
     allele_primers,
     apply_second,
-    assay_to_dict,
     assignments,
     carrying,
     design,
@@ -233,10 +232,6 @@ def test_a_second_mismatch_changes_exactly_one_base():
 # ── Two bugs a pinned 3' end causes, both found by measurement ─────────────
 
 
-
-
-
-
 # ── What it refuses ────────────────────────────────────────────────────────
 
 
@@ -276,10 +271,6 @@ def test_a_geometry_this_does_not_do_lists_the_ones_it_does():
         )
 
 
-
-
-
-
 def test_a_request_without_a_variant_position_is_refused_rather_than_defaulted():
     with pytest.raises(DiscriminationError, match="nothing sensible to default"):
         run({"template": template(), "alleles": ["C", "G"], "assay": {"id": "a", "name": "A"}})
@@ -298,16 +289,6 @@ def test_a_request_with_one_allele_is_refused():
 
 
 # ── What it says ───────────────────────────────────────────────────────────
-
-
-
-
-
-
-
-
-
-
 
 
 def test_unknown_kasp_protocol_is_refused():
@@ -342,8 +323,6 @@ def test_lgc_protocol_cannot_be_attached_to_a_gel_geometry():
         )
 
 
-
-
 def test_every_geometry_declares_whether_its_primers_share_a_strand():
     """Because that single fact decides what the assay can promise."""
     for name, layout in GEOMETRIES.items():
@@ -363,7 +342,7 @@ def test_the_synthetic_template_differs_from_the_real_one_at_one_base():
 @pytest.mark.parametrize("policy", ["strict", "development"])
 def test_kasp_geometry_never_synthesizes_assay_identity(monkeypatch, policy):
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", policy)
-    with pytest.raises(DiscriminationError, match="canonical `assay.id=kasp` profile"):
+    with pytest.raises(DiscriminationError, match=r"canonical `assay.id=kasp` profile"):
         run(
             {
                 "template": template(),

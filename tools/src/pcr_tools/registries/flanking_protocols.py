@@ -5,12 +5,13 @@ were split from :mod:`pcr_tools.pipeline` in Generation 1 foundation so named pr
 branches can evolve without turning the scientific orchestrator into a registry
 monolith.  Public names are re-exported by ``pipeline`` for legacy compatibility.
 """
+
 from __future__ import annotations
 
 import hashlib
 import json
 import math
-
+from importlib.resources import files
 from typing import Any
 
 # Multiplex bounds are source-backed planning boundaries, never wet-lab
@@ -18,21 +19,38 @@ from typing import Any
 # from contracts/multiplex-capabilities.json so Python does not maintain an
 # independent platform-capability table.
 DIGITAL_MULTIPLEX_SOFTWARE_MAX_TARGETS = 12
-from importlib.resources import files
 
 _MULTIPLEX_CAPABILITIES = json.loads(
-    files("pcr_tools").joinpath("data/multiplex-capabilities.generated.json").read_text(encoding="utf-8")
+    files("pcr_tools")
+    .joinpath("data/multiplex-capabilities.generated.json")
+    .read_text(encoding="utf-8")
 )
-DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES = dict(_MULTIPLEX_CAPABILITIES.get("platform_authorities") or {})
-QIACUITY_HIGH_MULTIPLEX_MODELS = frozenset({"qiacuity-one-5plex", "qiacuity-four", "qiacuity-eight"})
-QIACUITY_CHANNEL_TARGET_MAX = int(DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-5plex"]["detection_channels"])
-QIACUITY_ONE_2PLEX_CHANNEL_MAX = int(DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-2plex"]["detection_channels"])
-QIACUITY_ONE_2PLEX_MULTIPLEX_MAX = int(DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-2plex"]["multiplex_target_bound"])
-QX600_CHANNEL_TARGET_MAX = int(DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["bio-rad-qx600"]["detection_channels"])
-QX600_MULTIPLEX_MAX = int(DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["bio-rad-qx600"]["multiplex_target_bound"])
+DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES = dict(
+    _MULTIPLEX_CAPABILITIES.get("platform_authorities") or {}
+)
+QIACUITY_HIGH_MULTIPLEX_MODELS = frozenset(
+    {"qiacuity-one-5plex", "qiacuity-four", "qiacuity-eight"}
+)
+QIACUITY_CHANNEL_TARGET_MAX = int(
+    DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-5plex"]["detection_channels"]
+)
+QIACUITY_ONE_2PLEX_CHANNEL_MAX = int(
+    DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-2plex"]["detection_channels"]
+)
+QIACUITY_ONE_2PLEX_MULTIPLEX_MAX = int(
+    DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["qiacuity-one-2plex"]["multiplex_target_bound"]
+)
+QX600_CHANNEL_TARGET_MAX = int(
+    DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["bio-rad-qx600"]["detection_channels"]
+)
+QX600_MULTIPLEX_MAX = int(
+    DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES["bio-rad-qx600"]["multiplex_target_bound"]
+)
 
 _PROTOCOL_AUTHORITY = json.loads(
-    files("pcr_tools").joinpath("data/flanking-protocol-authority.generated.json").read_text(encoding="utf-8")
+    files("pcr_tools")
+    .joinpath("data/flanking-protocol-authority.generated.json")
+    .read_text(encoding="utf-8")
 )
 _GROUPS = _PROTOCOL_AUTHORITY["groups"]
 STANDARD_PCR_PROTOCOLS = tuple(_GROUPS["standard_pcr"])
@@ -46,11 +64,20 @@ DIGITAL_PLATFORM_IDS = set(_GROUPS["digital_platform_ids"])
 DIGITAL_FRAGMENTATION_STATES = set(_GROUPS["digital_fragmentation_states"])
 QPCR_INSTRUMENT_PROFILES = set(_GROUPS["qpcr_instrument_profiles"])
 DIGITAL_CONSUMABLE_IDS = set(_GROUPS["digital_consumable_ids"])
-DIGITAL_CONSUMABLE_PLATFORMS = {key: frozenset(value) for key, value in _PROTOCOL_AUTHORITY["compatibility"]["digital_consumable_platforms"].items()}
-DIGITAL_PROTOCOL_PLATFORMS = {key: frozenset(value) for key, value in _PROTOCOL_AUTHORITY["compatibility"]["digital_protocol_platforms"].items()}
+DIGITAL_CONSUMABLE_PLATFORMS = {
+    key: frozenset(value)
+    for key, value in _PROTOCOL_AUTHORITY["compatibility"]["digital_consumable_platforms"].items()
+}
+DIGITAL_PROTOCOL_PLATFORMS = {
+    key: frozenset(value)
+    for key, value in _PROTOCOL_AUTHORITY["compatibility"]["digital_protocol_platforms"].items()
+}
 DIGITAL_PLATFORM_ROUTES = dict(_PROTOCOL_AUTHORITY["routing"]["digital_platforms"])
 DIGITAL_PLATFORM_LABELS = dict(_PROTOCOL_AUTHORITY["labels"]["digital_platforms"])
-DIGITAL_PLATFORM_NAME_ALIASES = {key: frozenset(value) for key, value in _PROTOCOL_AUTHORITY["aliases"]["digital_platform_names"].items()}
+DIGITAL_PLATFORM_NAME_ALIASES = {
+    key: frozenset(value)
+    for key, value in _PROTOCOL_AUTHORITY["aliases"]["digital_platform_names"].items()
+}
 PROTOCOL_PROVENANCE = {key: dict(value) for key, value in _PROTOCOL_AUTHORITY["provenance"].items()}
 COLONY_PROTOCOLS = tuple(_GROUPS["colony_protocols"])
 COLONY_HOST_CLASSES = set(_GROUPS["colony_host_classes"])
@@ -104,7 +131,11 @@ COLONY_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
         "host_classes": ["bacterial"],
         "preparations": ["direct-transfer", "liquid-culture"],
         "reaction_volume_uL": 50,
-        "primer_final_concentration_uM": {"starting": 0.4, "reviewed_range_min": 0.2, "reviewed_range_max": 0.6},
+        "primer_final_concentration_uM": {
+            "starting": 0.4,
+            "reviewed_range_min": 0.2,
+            "reviewed_range_max": 0.6,
+        },
         "initial_denaturation": {"temperature_c": 95, "minutes": 10},
         "liquid_culture_input_uL": 5,
         "cycles": 40,
@@ -128,10 +159,20 @@ COLONY_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
         "cycling_model": {
             "denaturation": {"temperature_c": 95, "seconds": 15},
             "annealing": {"temperature_c_min": 55, "temperature_c_max": 64, "seconds": 15},
-            "extension": {"temperature_c": 72, "seconds_min": 30, "seconds_max": 60, "amplicon_bp_context_min": 500, "amplicon_bp_context_max": 1000},
+            "extension": {
+                "temperature_c": 72,
+                "seconds_min": 30,
+                "seconds_max": 60,
+                "amplicon_bp_context_min": 500,
+                "amplicon_bp_context_max": 1000,
+            },
             "final_extension": {"temperature_c": 72, "minutes": 5},
         },
-        "screening_followup": ["agarose gel", "Exo-CIP cleanup", "replica-plate/miniprep/Sanger confirmation"],
+        "screening_followup": [
+            "agarose gel",
+            "Exo-CIP cleanup",
+            "replica-plate/miniprep/Sanger confirmation",
+        ],
         "sequence_decision_impact": "none",
     },
 }
@@ -150,10 +191,17 @@ STANDARD_PCR_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
         "reaction_volume_uL": {"standard": 20, "384_well": 10},
         "master_mix": {"stock_x": 4, "final_x": 1},
         "primer_final_concentration_uM": {"starting": 0.25},
-        "template_input": {"total_DNA_pg_min": 0.1, "total_DNA_ug_max": 1.0, "undiluted_cDNA_max_fraction": 0.10},
+        "template_input": {
+            "total_DNA_pg_min": 0.1,
+            "total_DNA_ug_max": 1.0,
+            "undiluted_cDNA_max_fraction": 0.10,
+        },
         "manufacturer_reach_kb_max": 9,
         "polymerase_properties": {"hot_start": True, "proofreading": False},
-        "difficult_template": {"GC_rich_support": True, "Q_Solution": "kit-specific optional branch; never auto-selected"},
+        "difficult_template": {
+            "GC_rich_support": True,
+            "Q_Solution": "kit-specific optional branch; never auto-selected",
+        },
         "sequence_decision_impact": "none",
         "note": "AllTaq is a 4X hot-start master mix. PCRStudio records the published 20/10-uL formats and 0.25-uM primer starting point without reconstructing proprietary buffer composition.",
     },
@@ -180,8 +228,17 @@ STANDARD_PCR_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
         "lifecycle": {"status": "current"},
         "reaction_volume_uL": 50,
         "master_mix": {"volume_uL": 25, "final_x": 1},
-        "primer_final_concentration_uM": {"starting": 0.3, "long_target_ge_10kb": 0.15, "low_yield_trial": 0.5},
-        "template_input": {"genomic_DNA_ng_max": 200, "plasmid_DNA_ng_max": 50, "cDNA_RNA_equivalent_ng_max": 750, "crude_sample_uL_max": 5},
+        "primer_final_concentration_uM": {
+            "starting": 0.3,
+            "long_target_ge_10kb": 0.15,
+            "low_yield_trial": 0.5,
+        },
+        "template_input": {
+            "genomic_DNA_ng_max": 200,
+            "plasmid_DNA_ng_max": 50,
+            "cDNA_RNA_equivalent_ng_max": 750,
+            "crude_sample_uL_max": 5,
+        },
         "manufacturer_reach_kb_approx": 40,
         "polymerase_properties": {"hot_start": True, "proofreading": True, "product_end": "blunt"},
         "sequence_decision_impact": "none",
@@ -193,10 +250,27 @@ STANDARD_PCR_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
         "source_url": "https://www.neb.com/en-us/products/m0284-multiplex-pcr-5x-master-mix",
         "lifecycle": {"status": "current"},
         "reaction_volume_uL": {"supported_25": 25, "supported_50": 50},
-        "master_mix": {"stock_x": 5, "final_x": 1, "reviewed_optimization_x_min": 0.8, "reviewed_optimization_x_max": 1.5},
-        "primer_final_concentration_uM": {"starting": 0.15, "reviewed_range_min": 0.05, "reviewed_range_max": 0.4},
+        "master_mix": {
+            "stock_x": 5,
+            "final_x": 1,
+            "reviewed_optimization_x_min": 0.8,
+            "reviewed_optimization_x_max": 1.5,
+        },
+        "primer_final_concentration_uM": {
+            "starting": 0.15,
+            "reviewed_range_min": 0.05,
+            "reviewed_range_max": 0.4,
+        },
         "template_input_ng_max": 1000,
-        "cycling_model": {"activation": {"temperature_c": 95, "minutes": 1}, "cycles_min": 30, "cycles_max": 40, "denaturation": {"temperature_c": 95, "seconds": 20}, "annealing": {"temperature_c_min": 55, "temperature_c_max": 68, "seconds": 60}, "extension": {"temperature_c": 68, "minutes_per_kb_min": 1, "minutes_per_kb_max": 2}, "final_extension": {"temperature_c": 68, "minutes": 5}},
+        "cycling_model": {
+            "activation": {"temperature_c": 95, "minutes": 1},
+            "cycles_min": 30,
+            "cycles_max": 40,
+            "denaturation": {"temperature_c": 95, "seconds": 20},
+            "annealing": {"temperature_c_min": 55, "temperature_c_max": 68, "seconds": 60},
+            "extension": {"temperature_c": 68, "minutes_per_kb_min": 1, "minutes_per_kb_max": 2},
+            "final_extension": {"temperature_c": 68, "minutes": 5},
+        },
         "multiplex_only_chemistry": True,
         "sequence_decision_impact": "none",
     },
@@ -204,84 +278,143 @@ STANDARD_PCR_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
 
 QPCR_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
     "vazyme-q713-suprealq-ultra-hunter-sybr": {
-        "kind": "qpcr-sybr", "selection": "Vazyme SupRealQ Ultra Hunter SYBR qPCR Master Mix (U+) · Q713",
-        "source_publication": "Vazyme Global Q713 current product page / Flyer Q713 V25.1", "source_revision": "current product page reviewed 2026-09-05; Flyer Q713 V25.1 listed",
+        "kind": "qpcr-sybr",
+        "selection": "Vazyme SupRealQ Ultra Hunter SYBR qPCR Master Mix (U+) · Q713",
+        "source_publication": "Vazyme Global Q713 current product page / Flyer Q713 V25.1",
+        "source_revision": "current product page reviewed 2026-09-05; Flyer Q713 V25.1 listed",
         "source_url": "https://www.vazymeglobal.com/product-center/dye-based-qpcr/suprealq-ultra-hunter-sybr-qpcr-master-mix-u",
         "lifecycle": {"status": "current-source-limited"},
         "reaction_volume_uL": {"catalogue_reference": 20},
         "readout": "SYBR Green I fluorescence",
         "carryover_prevention": {"dUTP": True, "heat_labile_UDG": True},
-        "passive_reference_dye": {"included": True, "vendor_claim": "broad-instrument compatibility without user ROX concentration adjustment"},
+        "passive_reference_dye": {
+            "included": True,
+            "vendor_claim": "broad-instrument compatibility without user ROX concentration adjustment",
+        },
         "unresolved_numeric_dependencies": [
             "Exact product-specific primer starting concentration and master-mix stock/final stoichiometry require a transferable current IFU before PCRStudio will resolve them."
         ],
         "sequence_decision_impact": "none",
     },
     "qiagen-quantinova-sybr-208052": {
-        "kind": "qpcr-sybr", "selection": "QIAGEN QuantiNova SYBR Green PCR Kit (208052 family)",
-        "source_publication": "QuantiNova SYBR Green PCR Handbook", "source_revision": "current handbook reviewed 2026-09-04",
+        "kind": "qpcr-sybr",
+        "selection": "QIAGEN QuantiNova SYBR Green PCR Kit (208052 family)",
+        "source_publication": "QuantiNova SYBR Green PCR Handbook",
+        "source_revision": "current handbook reviewed 2026-09-04",
         "source_url": "https://www.qiagen.com/en-US/resources/download/KitHandbook/quantinova-sybr-green-pcr-handbook",
-        "lifecycle": {"status": "current"}, "reaction_volume_uL": {"standard": 20, "384_well": 10},
-        "master_mix": {"stock_x": 2, "final_x": 1}, "primer_final_concentration_nM": {"starting": 700},
+        "lifecycle": {"status": "current"},
+        "reaction_volume_uL": {"standard": 20, "384_well": 10},
+        "master_mix": {"stock_x": 2, "final_x": 1},
+        "primer_final_concentration_nM": {"starting": 700},
         "template_input_ng_max": 100,
-        "rox": {"high_rox_working_dilution_x": 20, "low_rox_working_dilution_x": 200, "no_rox_supported": True},
-        "yellow_template_dilution_buffer": {"optional": True}, "sequence_decision_impact": "none",
+        "rox": {
+            "high_rox_working_dilution_x": 20,
+            "low_rox_working_dilution_x": 200,
+            "no_rox_supported": True,
+        },
+        "yellow_template_dilution_buffer": {"optional": True},
+        "sequence_decision_impact": "none",
     },
     "bio-rad-ssoadvanced-sybr-172527x": {
-        "kind": "qpcr-sybr", "selection": "Bio-Rad SsoAdvanced Universal SYBR Green Supermix (172527x)",
-        "source_publication": "Bio-Rad SsoAdvanced Universal SYBR Green Supermix instruction manual", "source_revision": "current reviewed 2026-09-04",
+        "kind": "qpcr-sybr",
+        "selection": "Bio-Rad SsoAdvanced Universal SYBR Green Supermix (172527x)",
+        "source_publication": "Bio-Rad SsoAdvanced Universal SYBR Green Supermix instruction manual",
+        "source_revision": "current reviewed 2026-09-04",
         "source_url": "https://www.bio-rad.com/webroot/web/pdf/lsr/literature/10000076346.pdf",
-        "lifecycle": {"status": "current"}, "reaction_volume_uL": {"supported_10": 10, "supported_20": 20},
-        "master_mix": {"stock_x": 2, "final_x": 1}, "primer_final_concentration_nM": {"reviewed_min": 250, "reviewed_max": 500, "starting": 400},
-        "template_input": {"cDNA_ng_max": 100, "cDNA_fg_min": 100, "gDNA_ng_max": 50, "gDNA_pg_min": 5},
-        "universal_reference_dye": True, "sequence_decision_impact": "none",
+        "lifecycle": {"status": "current"},
+        "reaction_volume_uL": {"supported_10": 10, "supported_20": 20},
+        "master_mix": {"stock_x": 2, "final_x": 1},
+        "primer_final_concentration_nM": {
+            "reviewed_min": 250,
+            "reviewed_max": 500,
+            "starting": 400,
+        },
+        "template_input": {
+            "cDNA_ng_max": 100,
+            "cDNA_fg_min": 100,
+            "gDNA_ng_max": 50,
+            "gDNA_pg_min": 5,
+        },
+        "universal_reference_dye": True,
+        "sequence_decision_impact": "none",
     },
     "solis-hot-firepol-evagreen-rox": {
-        "kind": "qpcr-sybr", "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus (ROX), 5X",
-        "source_publication": "DS-08-24 HOT FIREPol EvaGreen qPCR Mix Plus (ROX)", "source_revision": "revised 2022-04-12 / reviewed 2026-09-04",
+        "kind": "qpcr-sybr",
+        "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus (ROX), 5X",
+        "source_publication": "DS-08-24 HOT FIREPol EvaGreen qPCR Mix Plus (ROX)",
+        "source_revision": "revised 2022-04-12 / reviewed 2026-09-04",
         "source_url": "https://solisbiodyne.com/pics/9799_DS-08-24_v3_HOT_FIREPol_EvaGreen_qPCR_Mix_Plus_ROX_revised_12.04.2022.pdf",
-        "lifecycle": {"status": "current"}, "reaction_volume_uL": 20, "master_mix": {"stock_x": 5, "final_x": 1},
+        "lifecycle": {"status": "current"},
+        "reaction_volume_uL": 20,
+        "master_mix": {"stock_x": 5, "final_x": 1},
         "primer_final_concentration_nM": {"reviewed_min": 80, "reviewed_max": 250, "starting": 250},
-        "template_input": {"cDNA_pg_per_uL_min": 0.1, "cDNA_ng_per_uL_max": 10, "gDNA_pg_per_uL_min": 10, "gDNA_ng_per_uL_max": 4},
-        "instrument_profile": "rox", "sequence_decision_impact": "none",
+        "template_input": {
+            "cDNA_pg_per_uL_min": 0.1,
+            "cDNA_ng_per_uL_max": 10,
+            "gDNA_pg_per_uL_min": 10,
+            "gDNA_ng_per_uL_max": 4,
+        },
+        "instrument_profile": "rox",
+        "sequence_decision_impact": "none",
     },
     "solis-hot-firepol-evagreen-norox": {
-        "kind": "qpcr-sybr", "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus (no ROX), 5X",
-        "source_publication": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus product catalogue", "source_revision": "current reviewed 2026-09-04",
+        "kind": "qpcr-sybr",
+        "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus (no ROX), 5X",
+        "source_publication": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus product catalogue",
+        "source_revision": "current reviewed 2026-09-04",
         "source_url": "https://solisbiodyne.com/EN/product/name=HOT-FIREPol-EvaGreen-qPCR-Mix-Plus&catno=08-25-0000S",
-        "lifecycle": {"status": "current"}, "reaction_volume_uL": 20, "master_mix": {"stock_x": 5, "final_x": 1},
+        "lifecycle": {"status": "current"},
+        "reaction_volume_uL": 20,
+        "master_mix": {"stock_x": 5, "final_x": 1},
         "primer_final_concentration_nM": {"reviewed_min": 80, "reviewed_max": 250, "starting": 250},
-        "instrument_profile": "no-rox", "sequence_decision_impact": "none",
+        "instrument_profile": "no-rox",
+        "sequence_decision_impact": "none",
     },
     "solis-hot-firepol-evagreen-capillary": {
-        "kind": "qpcr-sybr", "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus Capillary, 5X",
-        "source_publication": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus product catalogue", "source_revision": "current reviewed 2026-09-04",
+        "kind": "qpcr-sybr",
+        "selection": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus Capillary, 5X",
+        "source_publication": "Solis BioDyne HOT FIREPol EvaGreen qPCR Mix Plus product catalogue",
+        "source_revision": "current reviewed 2026-09-04",
         "source_url": "https://solisbiodyne.com/pics/6570_SBDproductcatalogue.pdf",
-        "lifecycle": {"status": "current"}, "master_mix": {"stock_x": 5, "final_x": 1},
-        "instrument_profile": "capillary", "sequence_decision_impact": "none",
-        "unresolved_numeric_dependencies": ["Confirm exact current capillary-format reaction volume and primer concentration from the product-specific IFU before bench execution."],
+        "lifecycle": {"status": "current"},
+        "master_mix": {"stock_x": 5, "final_x": 1},
+        "instrument_profile": "capillary",
+        "sequence_decision_impact": "none",
+        "unresolved_numeric_dependencies": [
+            "Confirm exact current capillary-format reaction volume and primer concentration from the product-specific IFU before bench execution."
+        ],
     },
 }
 
 RPA_ADDITIONAL_PROTOCOL_RECORDS: dict[str, dict[str, Any]] = {
     "gbiosciences-rpa-786-2155": {
-        "kind": "rpa", "protocol_id": "gbiosciences-rpa-786-2155",
+        "kind": "rpa",
+        "protocol_id": "gbiosciences-rpa-786-2155",
         "selection": "G-Biosciences Recombinase Polymerase Amplification (RPA) Kit 786-2155",
-        "source_publication": "G-Biosciences RPA Kit protocol", "source_revision": "current reviewed 2026-09-04",
+        "source_publication": "G-Biosciences RPA Kit protocol",
+        "source_revision": "current reviewed 2026-09-04",
         "source_url": "https://www.gbiosciences.com/Recombinase-Polymerase-Amplification-RPA-Kit",
-        "lifecycle": {"status": "current"}, "reaction_volume_uL": 20,
-        "primer_stock_uM": 10, "primer_volume_uL_each": 1, "primer_final_concentration_nM": 500,
+        "lifecycle": {"status": "current"},
+        "reaction_volume_uL": 20,
+        "primer_stock_uM": 10,
+        "primer_volume_uL_each": 1,
+        "primer_final_concentration_nM": 500,
         "enzyme_mix": {"stock_x": 5, "volume_uL": 4, "final_x": 1},
         "reaction_buffer": {"stock_x": 2, "volume_uL": 10, "final_x": 1},
         "magnesium_acetate": {"stock_mM": 280, "volume_uL": 1, "final_mM": 14},
-        "template_input_ng": {"min": 1, "max": 50}, "temperature_c": {"min": 37, "max": 40},
-        "incubation_minutes": {"min": 20, "max": 60}, "sequence_decision_impact": "none",
-        "oligo_contract": "plain-acgt-two-primer", "modified_probe_support": False,
+        "template_input_ng": {"min": 1, "max": 50},
+        "temperature_c": {"min": 37, "max": 40},
+        "incubation_minutes": {"min": 20, "max": 60},
+        "sequence_decision_impact": "none",
+        "oligo_contract": "plain-acgt-two-primer",
+        "modified_probe_support": False,
     },
 }
 
 
-def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context: bool = False) -> dict[str, Any] | None:
+def standard_pcr_protocol(
+    named: str | None, *, assay_id: str, multiplex_context: bool = False
+) -> dict[str, Any] | None:
     """Return a reviewed Standard-PCR bench/provenance overlay.
 
     Standard PCR intentionally keeps one stable Primer3 thermodynamic screening
@@ -293,9 +426,7 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
     selected = str(named or "not-selected")
     if selected not in STANDARD_PCR_PROTOCOLS:
         raise ValueError(
-            "standard_pcr_protocol must be one of: "
-            + ", ".join(STANDARD_PCR_PROTOCOLS)
-            + "."
+            "standard_pcr_protocol must be one of: " + ", ".join(STANDARD_PCR_PROTOCOLS) + "."
         )
     if selected == "not-selected":
         return None
@@ -335,13 +466,23 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "source_publication": "NEB M0273 PCR protocol / optimization guidance",
             "source_revision": "current reviewed web protocol",
             "reaction_volume_uL": {"supported_25": 25, "supported_50": 50},
-            "primer_final_concentration_uM": {"starting": 0.2, "reviewed_range_min": 0.05, "reviewed_range_max": 1.0},
+            "primer_final_concentration_uM": {
+                "starting": 0.2,
+                "reviewed_range_min": 0.05,
+                "reviewed_range_max": 1.0,
+            },
             "magnesium_final_mM": 1.5,
             "dntp_each_mM": 0.2,
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 95, "seconds": 30},
                 "denaturation": {"temperature_c": 95, "seconds_min": 15, "seconds_max": 30},
-                "annealing": {"temperature_c_min": 45, "temperature_c_max": 68, "seconds_min": 15, "seconds_max": 60, "authority": "primer/template dependent"},
+                "annealing": {
+                    "temperature_c_min": 45,
+                    "temperature_c_max": 68,
+                    "seconds_min": 15,
+                    "seconds_max": 60,
+                    "authority": "primer/template dependent",
+                },
                 "extension": {"temperature_c": 68, "seconds_per_kb": 60},
                 "final_extension": {"temperature_c": 68, "seconds": 300},
                 "cycles": {
@@ -384,14 +525,28 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "source_publication": "NEB M0493 protocol",
             "source_revision": "current reviewed web protocol",
             "reaction_volume_uL": {"supported_25": 25, "supported_50": 50},
-            "primer_final_concentration_uM": {"starting": 0.5, "long_complex_target_min": 0.2, "long_complex_target_max": 0.3},
+            "primer_final_concentration_uM": {
+                "starting": 0.5,
+                "long_complex_target_min": 0.2,
+                "long_complex_target_max": 0.3,
+            },
             "magnesium_final_mM": 2.0,
             "dntp_each_mM": 0.2,
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                 "denaturation": {"temperature_c": 98, "seconds_min": 5, "seconds_max": 10},
-                "annealing": {"temperature_c_min": 50, "temperature_c_max": 72, "seconds_min": 10, "seconds_max": 30, "authority": "NEB Tm Calculator / gradient"},
-                "extension": {"temperature_c": 72, "seconds_per_kb_min": 20, "seconds_per_kb_max": 30},
+                "annealing": {
+                    "temperature_c_min": 50,
+                    "temperature_c_max": 72,
+                    "seconds_min": 10,
+                    "seconds_max": 30,
+                    "authority": "NEB Tm Calculator / gradient",
+                },
+                "extension": {
+                    "temperature_c": 72,
+                    "seconds_per_kb_min": 20,
+                    "seconds_per_kb_max": 30,
+                },
                 "final_extension": {"temperature_c": 72, "seconds": 120},
                 "cycles": {"min": 25, "max": 35},
             },
@@ -433,8 +588,17 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                 "denaturation": {"temperature_c": 98, "seconds_min": 5, "seconds_max": 10},
-                "annealing": {"temperature_c_min": 55, "temperature_c_max": 72, "seconds": 20, "authority": "NEB Tm Calculator"},
-                "extension": {"temperature_c": 72, "seconds_per_kb_min": 20, "seconds_per_kb_max": 30},
+                "annealing": {
+                    "temperature_c_min": 55,
+                    "temperature_c_max": 72,
+                    "seconds": 20,
+                    "authority": "NEB Tm Calculator",
+                },
+                "extension": {
+                    "temperature_c": 72,
+                    "seconds_per_kb_min": 20,
+                    "seconds_per_kb_max": 30,
+                },
                 "final_extension": {"temperature_c": 72, "seconds": 300},
                 "cycles": {"starting": 30, "typical_max": 35},
             },
@@ -481,7 +645,13 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 95, "seconds": 120},
                 "denaturation": {"temperature_c": 95, "seconds_min": 30, "seconds_max": 60},
-                "annealing": {"temperature_c_min": 42, "temperature_c_max": 65, "seconds_min": 30, "seconds_max": 60, "authority": "primer/template dependent"},
+                "annealing": {
+                    "temperature_c_min": 42,
+                    "temperature_c_max": 65,
+                    "seconds_min": 30,
+                    "seconds_max": 60,
+                    "authority": "primer/template dependent",
+                },
                 "extension": {"temperature_c": 72, "seconds_per_kb_min": 60},
                 "final_extension": {"temperature_c": 72, "seconds": 300},
                 "cycles": {"min": 25, "max": 35},
@@ -559,13 +729,28 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
         "neb-onetaq-hot-start-quickload-m0488",
         "neb-onetaq-hot-start-quickload-gc-m0489",
     }:
-        gc_buffer = selected in {"neb-onetaq-hot-start-gc-m0485", "neb-onetaq-hot-start-quickload-gc-m0489"}
+        gc_buffer = selected in {
+            "neb-onetaq-hot-start-gc-m0485",
+            "neb-onetaq-hot-start-quickload-gc-m0489",
+        }
         quick_load = "quickload" in selected
         catalogue = {
-            "neb-onetaq-hot-start-m0484": ("M0484", "OneTaq Hot Start 2X Master Mix with Standard Buffer"),
-            "neb-onetaq-hot-start-gc-m0485": ("M0485", "OneTaq Hot Start 2X Master Mix with GC Buffer"),
-            "neb-onetaq-hot-start-quickload-m0488": ("M0488", "OneTaq Hot Start Quick-Load 2X Master Mix with Standard Buffer"),
-            "neb-onetaq-hot-start-quickload-gc-m0489": ("M0489", "OneTaq Hot Start Quick-Load 2X Master Mix with GC Buffer"),
+            "neb-onetaq-hot-start-m0484": (
+                "M0484",
+                "OneTaq Hot Start 2X Master Mix with Standard Buffer",
+            ),
+            "neb-onetaq-hot-start-gc-m0485": (
+                "M0485",
+                "OneTaq Hot Start 2X Master Mix with GC Buffer",
+            ),
+            "neb-onetaq-hot-start-quickload-m0488": (
+                "M0488",
+                "OneTaq Hot Start Quick-Load 2X Master Mix with Standard Buffer",
+            ),
+            "neb-onetaq-hot-start-quickload-gc-m0489": (
+                "M0489",
+                "OneTaq Hot Start Quick-Load 2X Master Mix with GC Buffer",
+            ),
         }
         cat, label = catalogue[selected]
         return {
@@ -576,16 +761,31 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "lifecycle": {"status": "current", "package_identity_is_not_chemistry_identity": True},
             "reaction_volume_uL": {"supported_25": 25, "supported_50": 50},
             "master_mix": {"stock_x": 2, "final_x": 1},
-            "primer_final_concentration_uM": {"starting": 0.2, "reviewed_range_min": 0.05, "reviewed_range_max": 1.0},
+            "primer_final_concentration_uM": {
+                "starting": 0.2,
+                "reviewed_range_min": 0.05,
+                "reviewed_range_max": 1.0,
+            },
             "magnesium_final_mM": 2.0 if gc_buffer else 1.8,
             "dntp_each_mM": 0.2,
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 94, "seconds": 30},
                 "denaturation": {"temperature_c": 94, "seconds_min": 15, "seconds_max": 30},
-                "annealing": {"temperature_c_min": 45, "temperature_c_max": 68, "seconds_min": 15, "seconds_max": 60, "authority": "primer/template dependent"},
+                "annealing": {
+                    "temperature_c_min": 45,
+                    "temperature_c_max": 68,
+                    "seconds_min": 15,
+                    "seconds_max": 60,
+                    "authority": "primer/template dependent",
+                },
                 "extension": {"temperature_c": 68, "seconds_per_kb": 60},
                 "final_extension": {"temperature_c": 68, "seconds": 300},
-                "cycles": {"routine": 30, "general_min": 25, "general_max": 35, "low_copy_may_require_up_to": 45},
+                "cycles": {
+                    "routine": 30,
+                    "general_min": 25,
+                    "general_max": 35,
+                    "low_copy_may_require_up_to": 45,
+                },
             },
             "polymerase_properties": {
                 "polymerase_blend": "Taq + Deep Vent",
@@ -626,7 +826,12 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 95, "minutes_min": 1, "minutes_max": 2},
                 "denaturation": {"temperature_c": 95, "seconds": 15},
-                "annealing": {"temperature_c_min": 55, "temperature_c_max": 65, "seconds": 15, "authority": "primer dependent"},
+                "annealing": {
+                    "temperature_c_min": 55,
+                    "temperature_c_max": 65,
+                    "seconds": 15,
+                    "authority": "primer dependent",
+                },
                 "extension": {"temperature_c": 72, "seconds_per_kb": 20},
                 "cycles": {"max": 40},
                 "colony_initial_denaturation": {"temperature_c": 95, "minutes": 10},
@@ -641,7 +846,11 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
                 "extra_magnesium_or_enhancer_recommended": False,
                 "note": "The supplier recommends using the optimized mix without automatically adding extra Mg/enhancers; assay-specific troubleshooting remains a bench decision.",
             },
-            "polymerase_properties": {"proofreading": False, "hot_start": True, "product_end": "Taq-family-3-prime-dA-overhang-expected"},
+            "polymerase_properties": {
+                "proofreading": False,
+                "hot_start": True,
+                "product_end": "Taq-family-3-prime-dA-overhang-expected",
+            },
             "note": "This branch also carries an exact colony-PCR preparation overlay when the colony module explicitly selects it; direct-sample facts never alter primer sequence ranking.",
         }
 
@@ -653,13 +862,20 @@ def standard_pcr_protocol(named: str | None, *, assay_id: str, multiplex_context
             "source_revision": "current reviewed user guide",
             "source_reviewed_date": "2026-09-03",
             "reaction_volume_uL": {"supported_20": 20, "supported_50": 50},
-            "primer_final_concentration_uM": {"starting": 0.5, "over_5kb_genomic_or_multiplex": 0.2},
+            "primer_final_concentration_uM": {
+                "starting": 0.5,
+                "over_5kb_genomic_or_multiplex": 0.2,
+            },
             "magnesium_final_mM": 1.75,
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                 "denaturation": {"temperature_c": 98, "seconds_min": 5, "seconds_max": 10},
                 "three_step_annealing": {"temperature_c": 60, "seconds": 10},
-                "extension": {"temperature_c": 72, "seconds_per_kb_min": 15, "seconds_per_kb_max": 30},
+                "extension": {
+                    "temperature_c": 72,
+                    "seconds_per_kb_min": 15,
+                    "seconds_per_kb_max": 30,
+                },
                 "final_extension": {"temperature_c": 72, "minutes": 5},
                 "cycles": {"min": 25, "max": 35},
                 "two_step_for_primers_over_nt": 30,
@@ -761,8 +977,15 @@ def qpcr_protocol(
 
     if selected in QPCR_ADDITIONAL_PROTOCOL_RECORDS:
         if from_rna:
-            raise ValueError(f"{selected} is represented as a DNA/cDNA dye-qPCR chemistry, not a one-step RT-qPCR branch")
-        return {"protocol_id": selected, "constraints": {}, "thermodynamic_model_impact": "none", **dict(QPCR_ADDITIONAL_PROTOCOL_RECORDS[selected])}
+            raise ValueError(
+                f"{selected} is represented as a DNA/cDNA dye-qPCR chemistry, not a one-step RT-qPCR branch"
+            )
+        return {
+            "protocol_id": selected,
+            "constraints": {},
+            "thermodynamic_model_impact": "none",
+            **dict(QPCR_ADDITIONAL_PROTOCOL_RECORDS[selected]),
+        }
 
     if selected == "bio-rad-itaq-sybr":
         return {
@@ -787,7 +1010,11 @@ def qpcr_protocol(
                     "genomic_DNA_minutes": {"min": 2, "max": 5},
                 },
                 "denaturation_and_anneal_extend": "instrument-mode dependent; use the Bio-Rad table for the exact real-time platform",
-                "melt_curve": {"temperature_c_min": 65, "temperature_c_max": 95, "instrument_default_permitted": True},
+                "melt_curve": {
+                    "temperature_c_min": 65,
+                    "temperature_c_max": 95,
+                    "instrument_default_permitted": True,
+                },
             },
             "readout": "SYBR Green fluorescence with a dissociation/melt-curve review",
             "sequence_decision_impact": "none",
@@ -902,7 +1129,11 @@ def qpcr_protocol(
             "source_revision_date_precision": "month",
             "master_mix": "Luna Universal qPCR Master Mix",
             "reaction_volume_uL": {"recommended_96_well": 20, "recommended_384_well": 10},
-            "primer_final_concentration_nM": {"starting": 250, "optimization_min": 100, "optimization_max": 500},
+            "primer_final_concentration_nM": {
+                "starting": 250,
+                "optimization_min": 100,
+                "optimization_max": 500,
+            },
             "amplicon_bp_preferred": {"min": 70, "max": 200},
             "primer_tm_c": {"target": 60},
             "cycles": {"min": 40, "max": 45},
@@ -951,7 +1182,11 @@ def qpcr_protocol(
             "reaction_volume_uL": 20,
             "primer_final_concentration_nM": {"min": 200, "max": 1000},
             "cycling_model": {
-                "hot_start_activation": {"temperature_c": 95, "minutes": 2, "fixed_by_supplier": True},
+                "hot_start_activation": {
+                    "temperature_c": 95,
+                    "minutes": 2,
+                    "fixed_by_supplier": True,
+                },
                 "standard": {
                     "cycles": 40,
                     "denaturation": {"temperature_c": 95, "seconds": 15},
@@ -962,7 +1197,11 @@ def qpcr_protocol(
                     "denaturation": {"temperature_c": 95, "seconds": 3},
                     "annealing_extension": {"temperature_c": 60, "seconds": 30},
                 },
-                "dissociation_curve": {"temperature_c_min": 60, "temperature_c_max": 95, "recommended": True},
+                "dissociation_curve": {
+                    "temperature_c_min": 60,
+                    "temperature_c_max": 95,
+                    "recommended": True,
+                },
             },
             "reference_dye": {
                 "low_CXR_in_master_mix": True,
@@ -998,8 +1237,17 @@ def qpcr_protocol(
             "lifecycle": {"status": "current"},
             "master_mix": "GoTaq qPCR Master Mix 2X + GoScript RT Mix for 1-Step RT-qPCR; BRYT Green readout",
             "reaction_volume_uL": 20,
-            "primer_final_concentration_nM": {"starting": 200, "optimization_min": 50, "optimization_max": 300},
-            "rna_template": {"supplier_starting_total_rna_ng": 100, "documented_range_fg_min": 500, "documented_max_ng": 100, "note": "Template amount depends on transcript abundance; the upper value is not a universal sensitivity limit."},
+            "primer_final_concentration_nM": {
+                "starting": 200,
+                "optimization_min": 50,
+                "optimization_max": 300,
+            },
+            "rna_template": {
+                "supplier_starting_total_rna_ng": 100,
+                "documented_range_fg_min": 500,
+                "documented_max_ng": 100,
+                "note": "Template amount depends on transcript abundance; the upper value is not a universal sensitivity limit.",
+            },
             "cycling_model": {
                 "reverse_transcription": {"temperature_c_min": 37, "minutes": 15},
                 "rt_inactivation_and_polymerase_activation": {"temperature_c": 95, "minutes": 10},
@@ -1017,7 +1265,7 @@ def qpcr_protocol(
                 "temperature_c_rule": ">=37",
                 "incubation_minutes": 15,
                 "reverse_transcriptase": "GoScript RT Mix for 1-Step RT-qPCR",
-                "note": "TM355 gives a one-step RT hold of at least 37 C for 15 min, followed by 95 C/10 min RT inactivation and GoTaq activation; PCRStudio records 37 C as the minimum named starting hold rather than claiming it is optimal for every transcript."
+                "note": "TM355 gives a one-step RT hold of at least 37 C for 15 min, followed by 95 C/10 min RT inactivation and GoTaq activation; PCRStudio records 37 C as the minimum named starting hold rather than claiming it is optimal for every transcript.",
             },
             "reference_dye": {
                 "CXR_present_in_master_mix": True,
@@ -1038,7 +1286,9 @@ def qpcr_protocol(
     # PowerUp has distinct fast/standard branches and a separate standard
     if selected == "thermo-powertrack-sybr-a46xxx":
         if from_rna:
-            raise ValueError("PowerTrack SYBR Green is a DNA/cDNA qPCR mix in this overlay; one-step RNA requires an explicit RT-qPCR chemistry.")
+            raise ValueError(
+                "PowerTrack SYBR Green is a DNA/cDNA qPCR mix in this overlay; one-step RNA requires an explicit RT-qPCR chemistry."
+            )
         return {
             "kind": "qpcr-sybr",
             "protocol_id": selected,
@@ -1048,20 +1298,57 @@ def qpcr_protocol(
             "source_revision_date": "2022-07-29",
             "source_revision_date_precision": "day",
             "lifecycle": {"status": "current", "package_sizes_are_aliases": True},
-            "reaction_volume_uL": {"supported_10": 10, "supported_20": 20, "below_10_recommended": False},
+            "reaction_volume_uL": {
+                "supported_10": 10,
+                "supported_20": 20,
+                "below_10_recommended": False,
+            },
             "master_mix": "PowerTrack SYBR Green Master Mix 2X; SYBR Green I + hot-start polymerase + heat-labile UDG + ROX + dUTP/dTTP blend",
-            "primer_final_concentration_nM": {"starting": 400, "optimization_min": 300, "optimization_max": 800},
-            "template_input": {"cDNA_ng": {"min": 1, "max": 10}, "genomic_DNA_ng": {"min": 10, "max": 100}, "recommended_reaction_fraction_percent": {"min": 10, "max": 20}},
+            "primer_final_concentration_nM": {
+                "starting": 400,
+                "optimization_min": 300,
+                "optimization_max": 800,
+            },
+            "template_input": {
+                "cDNA_ng": {"min": 1, "max": 10},
+                "genomic_DNA_ng": {"min": 10, "max": 100},
+                "recommended_reaction_fraction_percent": {"min": 10, "max": 20},
+            },
             "tracking_system": {"yellow_sample_buffer_stock_x": 40, "final_x": 1, "optional": True},
-            "carryover_prevention": {"heat_labile_UDG_built_in": True, "separate_UDG_incubation_required": False},
-            "reference_dye": {"ROX_in_mix": True, "cross_vendor_instrument_use": "supplier states broad real-time-instrument compatibility; exact instrument configuration must still be recorded"},
+            "carryover_prevention": {
+                "heat_labile_UDG_built_in": True,
+                "separate_UDG_incubation_required": False,
+            },
+            "reference_dye": {
+                "ROX_in_mix": True,
+                "cross_vendor_instrument_use": "supplier states broad real-time-instrument compatibility; exact instrument configuration must still be recorded",
+            },
             "cycling_model": {
-                "fast": {"activation": {"temperature_c": 95, "minutes": 2}, "cycles": 40, "denaturation": {"temperature_c": 95, "seconds": 5}, "anneal_extend": {"temperature_c": 60, "seconds": 30}},
-                "standard": {"activation": {"temperature_c": 95, "minutes": 2}, "cycles": 40, "denaturation": {"temperature_c": 95, "seconds": 15}, "anneal_extend": {"temperature_c": 60, "seconds": 60}},
+                "fast": {
+                    "activation": {"temperature_c": 95, "minutes": 2},
+                    "cycles": 40,
+                    "denaturation": {"temperature_c": 95, "seconds": 5},
+                    "anneal_extend": {"temperature_c": 60, "seconds": 30},
+                },
+                "standard": {
+                    "activation": {"temperature_c": 95, "minutes": 2},
+                    "cycles": 40,
+                    "denaturation": {"temperature_c": 95, "seconds": 15},
+                    "anneal_extend": {"temperature_c": 60, "seconds": 60},
+                },
                 "dissociation_curve": {"required_immediately_after_qpcr": True},
             },
             "readout": "SYBR Green I intercalating dye; amplicon-specific melt evidence required for specificity interpretation",
-            "constraints": {"length_min": 18, "length_max": 30, "tm_min": 58.0, "tm_max": 62.0, "tm_pair_max_difference": 2.0, "gc_min": 30.0, "gc_max": 70.0, "max_poly_x": 3},
+            "constraints": {
+                "length_min": 18,
+                "length_max": 30,
+                "tm_min": 58.0,
+                "tm_max": 62.0,
+                "tm_pair_max_difference": 2.0,
+                "gc_min": 30.0,
+                "gc_max": 70.0,
+                "max_poly_x": 3,
+            },
             "sequence_decision_impact": "none",
             "note": "PowerTrack numeric setup is source-conditioned. Yellow tracking buffer is optional and the exact instrument/run file remains experimental provenance; neither is a Primer3 ranking parameter.",
         }
@@ -1091,9 +1378,29 @@ def qpcr_protocol(
             },
             "udg_activation": {"temperature_c": 50, "minutes": 2},
             "polymerase_activation": {"temperature_c": 95, "minutes": 2},
-            "fast_tm_ge_60": {"cycles": 40, "denaturation_c": 95, "denaturation_seconds": [1, 3], "anneal_extend_c": 60, "anneal_extend_seconds": 30},
-            "standard_tm_ge_60": {"cycles": 40, "denaturation_c": 95, "denaturation_seconds": 15, "anneal_extend_c": 60, "anneal_extend_seconds": 60},
-            "standard_tm_lt_60": {"cycles": 40, "denaturation_c": 95, "denaturation_seconds": 15, "anneal_c": {"min": 55, "max": 60}, "anneal_seconds": 15, "extension_c": 72, "extension_seconds": 60},
+            "fast_tm_ge_60": {
+                "cycles": 40,
+                "denaturation_c": 95,
+                "denaturation_seconds": [1, 3],
+                "anneal_extend_c": 60,
+                "anneal_extend_seconds": 30,
+            },
+            "standard_tm_ge_60": {
+                "cycles": 40,
+                "denaturation_c": 95,
+                "denaturation_seconds": 15,
+                "anneal_extend_c": 60,
+                "anneal_extend_seconds": 60,
+            },
+            "standard_tm_lt_60": {
+                "cycles": 40,
+                "denaturation_c": 95,
+                "denaturation_seconds": 15,
+                "anneal_c": {"min": 55, "max": 60},
+                "anneal_seconds": 15,
+                "extension_c": 72,
+                "extension_seconds": 60,
+            },
         },
         "carryover_prevention": {
             "dUTP_in_master_mix": True,
@@ -1110,6 +1417,7 @@ def qpcr_protocol(
             "Selecting this overlay does not alter primer ranking."
         ),
     }
+
 
 def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] | None:
     """Return one explicitly reviewed long-range PCR bench branch.
@@ -1160,17 +1468,35 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "cDNA_RNA_equivalent_ng_max": 750,
                 "crude_sample_uL_per_50uL_max": 5,
             },
-            "primer_design_guidance": {"length_nt_min": 25, "length_nt_max": 35, "tm_c_min": 65, "gc_percent_min": 45, "gc_percent_max": 60},
+            "primer_design_guidance": {
+                "length_nt_min": 25,
+                "length_nt_max": 35,
+                "tm_c_min": 65,
+                "gc_percent_min": 45,
+                "gc_percent_max": 60,
+            },
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 94, "minutes": 1},
                 "denaturation": {"temperature_c": 98, "seconds": 10},
                 "annealing": {"temperature_c_rule": "primer Tm - 5 C", "seconds": 5},
-                "extension": {"temperature_c": 68, "under_10kb_seconds_per_kb": 5, "at_or_above_10kb_seconds_per_kb": 10},
+                "extension": {
+                    "temperature_c": 68,
+                    "under_10kb_seconds_per_kb": 5,
+                    "at_or_above_10kb_seconds_per_kb": 10,
+                },
                 "cycles": {"min": 25, "max": 45},
             },
             "manufacturer_reach": {"human_genomic_DNA_kb_approx_max": 50},
-            "polymerase_properties": {"proofreading": True, "hot_start": True, "hot_start_mechanism": "two anti-KOD antibodies", "product_end": "blunt"},
-            "screening_thermodynamics": {"sequence_decision_impact": "none", "note": "Vendor primer-design guidance is reported but does not silently replace PCRStudio's versioned Primer3 screening model."},
+            "polymerase_properties": {
+                "proofreading": True,
+                "hot_start": True,
+                "hot_start_mechanism": "two anti-KOD antibodies",
+                "product_end": "blunt",
+            },
+            "screening_thermodynamics": {
+                "sequence_decision_impact": "none",
+                "note": "Vendor primer-design guidance is reported but does not silently replace PCRStudio's versioned Primer3 screening model.",
+            },
             "sequence_decision_impact": "none",
             "thermodynamic_model_impact": "none",
             "note": "Length-dependent extension is resolved only when target length is explicit; PCRStudio does not infer a long-range cycling branch from a vague product label.",
@@ -1203,7 +1529,10 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "routine_three_step": {
                     "cycles": 30,
                     "denaturation": {"temperature_c": 94, "seconds": {"min": 15, "max": 30}},
-                    "annealing": {"temperature_c": {"min": 45, "max": 65}, "seconds": {"min": 15, "max": 60}},
+                    "annealing": {
+                        "temperature_c": {"min": 45, "max": 65},
+                        "seconds": {"min": 15, "max": 60},
+                    },
                     "extension": {"temperature_c": 65, "seconds_per_kb": 50},
                 },
                 "two_step_eligibility": "supplier states a two-step branch is possible above 60 C annealing temperature",
@@ -1268,7 +1597,11 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "initial_activation": {"temperature_c": 93, "minutes": 3},
                 "standard_two_step": {
                     "cycles_max": 35,
-                    "denaturation": {"temperature_c": 93, "seconds": 30, "do_not_exceed_temperature": True},
+                    "denaturation": {
+                        "temperature_c": 93,
+                        "seconds": 30,
+                        "do_not_exceed_temperature": True,
+                    },
                     "anneal_extend": {
                         "temperature_c": 65,
                         "seconds_per_kb": 30,
@@ -1277,9 +1610,21 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 },
                 "alternative_three_step": {
                     "cycles_max": 35,
-                    "denaturation": {"temperature_c": 93, "seconds": 30, "do_not_exceed_temperature": True},
-                    "annealing": {"temperature_c": 55, "seconds": 15, "supplier_rule": "approximately 5 C below primer Tm"},
-                    "extension": {"temperature_c": 68, "seconds_per_kb": 30, "genomic_dna_context": True},
+                    "denaturation": {
+                        "temperature_c": 93,
+                        "seconds": 30,
+                        "do_not_exceed_temperature": True,
+                    },
+                    "annealing": {
+                        "temperature_c": 55,
+                        "seconds": 15,
+                        "supplier_rule": "approximately 5 C below primer Tm",
+                    },
+                    "extension": {
+                        "temperature_c": 68,
+                        "seconds_per_kb": 30,
+                        "genomic_dna_context": True,
+                    },
                 },
                 "final_extension": {"temperature_c": 72, "minutes": 10},
             },
@@ -1333,15 +1678,32 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                 "cycles": {"min": 25, "max": 35},
                 "denaturation": {"temperature_c": 98, "seconds": 10},
-                "annealing": {"temperature_c_min": 50, "temperature_c_max": 72, "seconds": 20, "authority": "NEB Tm Calculator or gradient"},
-                "extension": {"temperature_c": 72, "seconds_per_kb_min": 5, "seconds_per_kb_max": 15},
+                "annealing": {
+                    "temperature_c_min": 50,
+                    "temperature_c_max": 72,
+                    "seconds": 20,
+                    "authority": "NEB Tm Calculator or gradient",
+                },
+                "extension": {
+                    "temperature_c": 72,
+                    "seconds_per_kb_min": 5,
+                    "seconds_per_kb_max": 15,
+                },
                 "final_extension_required": False,
             },
             "difficult_template": {
-                "q5_high_gc_enhancer": {"stock_x": 5, "final_x": 1, "recommended_above_gc_percent": 65},
+                "q5_high_gc_enhancer": {
+                    "stock_x": 5,
+                    "final_x": 1,
+                    "recommended_above_gc_percent": 65,
+                },
                 "automatic_additive_selection": False,
             },
-            "polymerase_properties": {"proofreading": True, "hot_start": True, "product_end": "blunt"},
+            "polymerase_properties": {
+                "proofreading": True,
+                "hot_start": True,
+                "product_end": "blunt",
+            },
             "screening_thermodynamics": "shared long-range calculation adapter; proprietary Q5-XT formulation is not reconstructed",
             "thermodynamic_model_impact": "none",
             "sequence_decision_impact": "none",
@@ -1369,9 +1731,22 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
             "master_mix": "2X hot-start recombinant Taq + proofreading DNA polymerase blend",
             "reaction_volume_uL": 50,
             "master_mix_numeric": {"stock_x": 2, "volume_uL": 25, "final_x": 1},
-            "primer_final_concentration_uM": {"reviewed_min": 0.1, "reviewed_max": 1.0, "control_example": 0.2},
-            "template_input": {"human_genomic_DNA_ug_min": 0.1, "human_genomic_DNA_ug_max": 0.5, "less_complex_template_ng_min": 0.25, "less_complex_template_ng_max": 2.5},
-            "magnesium_final_mM": {"baseline": 2.5, "reviewed_titration_max": 4.0, "titration_increment": 0.5},
+            "primer_final_concentration_uM": {
+                "reviewed_min": 0.1,
+                "reviewed_max": 1.0,
+                "control_example": 0.2,
+            },
+            "template_input": {
+                "human_genomic_DNA_ug_min": 0.1,
+                "human_genomic_DNA_ug_max": 0.5,
+                "less_complex_template_ng_min": 0.25,
+                "less_complex_template_ng_max": 2.5,
+            },
+            "magnesium_final_mM": {
+                "baseline": 2.5,
+                "reviewed_titration_max": 4.0,
+                "titration_increment": 0.5,
+            },
             "manufacturer_reach": {"genomic_dna_kb_max": 30, "lower_complexity_target_kb_max": 40},
             "polymerase_properties": {
                 "hot_start": True,
@@ -1379,13 +1754,44 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "note": "The formulation combines antibody-inhibited recombinant Taq with a smaller proofreading polymerase component.",
             },
             "cycling_model": {
-                "initial_denaturation": {"temperature_c_min": 94, "temperature_c_max": 95, "minutes": 2},
-                "two_step": {"primer_tm_above_c": 60, "denaturation_temperature_c_min": 92, "denaturation_temperature_c_max": 94, "denaturation_seconds_min": 10, "denaturation_seconds_max": 30, "anneal_extension_temperature_c": 65, "extension_minutes_per_kb": 1},
-                "three_step": {"primer_tm_below_c": 60, "annealing_rule": "start 5 C below primer Tm", "annealing_seconds_min": 15, "annealing_seconds_max": 30, "extension_temperature_c_min": 65, "extension_temperature_c_max": 72, "extension_minutes_per_kb": 1},
-                "cycles_min": 25, "cycles_max": 35, "final_extension": {"temperature_c": 72, "minutes": 10},
-                "very_long_target_ramp": {"above_kb": 15, "add_seconds_per_cycle_min": 10, "add_seconds_per_cycle_max": 20, "after_cycle_min": 10, "after_cycle_max": 15},
+                "initial_denaturation": {
+                    "temperature_c_min": 94,
+                    "temperature_c_max": 95,
+                    "minutes": 2,
+                },
+                "two_step": {
+                    "primer_tm_above_c": 60,
+                    "denaturation_temperature_c_min": 92,
+                    "denaturation_temperature_c_max": 94,
+                    "denaturation_seconds_min": 10,
+                    "denaturation_seconds_max": 30,
+                    "anneal_extension_temperature_c": 65,
+                    "extension_minutes_per_kb": 1,
+                },
+                "three_step": {
+                    "primer_tm_below_c": 60,
+                    "annealing_rule": "start 5 C below primer Tm",
+                    "annealing_seconds_min": 15,
+                    "annealing_seconds_max": 30,
+                    "extension_temperature_c_min": 65,
+                    "extension_temperature_c_max": 72,
+                    "extension_minutes_per_kb": 1,
+                },
+                "cycles_min": 25,
+                "cycles_max": 35,
+                "final_extension": {"temperature_c": 72, "minutes": 10},
+                "very_long_target_ramp": {
+                    "above_kb": 15,
+                    "add_seconds_per_cycle_min": 10,
+                    "add_seconds_per_cycle_max": 20,
+                    "after_cycle_min": 10,
+                    "after_cycle_max": 15,
+                },
             },
-            "template_integrity": {"HMW_required_for_very_long_targets": True, "very_long_threshold_kb": 15},
+            "template_integrity": {
+                "HMW_required_for_very_long_targets": True,
+                "very_long_threshold_kb": 15,
+            },
             "product_end": "majority 3-prime overhang with some blunt fragments",
             "screening_thermodynamics": "shared long-range calculation adapter; proprietary GoTaq Long formulation is not reconstructed",
             "thermodynamic_model_impact": "none",
@@ -1413,13 +1819,20 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
             "lifecycle": {"status": "current"},
             "manufacturer_reach": {"routine_kb_max": 20, "optimization_context_kb_max": 40},
             "reaction_volume_uL": 50,
-            "primer_final_concentration_uM": {"starting": 0.5, "long_target_or_multiplex_starting": 0.2},
+            "primer_final_concentration_uM": {
+                "starting": 0.5,
+                "long_target_or_multiplex_starting": 0.2,
+            },
             "magnesium_final_mM": 1.75,
             "cycling_model": {
                 "initial_denaturation": {"temperature_c": 98, "seconds": 30},
                 "cycles": {"min": 25, "max": 35},
                 "denaturation": {"temperature_c": 98, "seconds_min": 5, "seconds_max": 10},
-                "annealing": {"temperature_c_starting": 60, "seconds": 10, "authority": "vendor isostabilized-buffer starting point; optimize by gradient when needed"},
+                "annealing": {
+                    "temperature_c_starting": 60,
+                    "seconds": 10,
+                    "authority": "vendor isostabilized-buffer starting point; optimize by gradient when needed",
+                },
                 "extension": {
                     "temperature_c": 72,
                     "low_complexity_seconds_per_kb": 15,
@@ -1458,7 +1871,11 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
             "source_revision_date_precision": "month",
             "lifecycle": {"status": "current", "current_product_listing_reviewed": "2026-09-03"},
             "reaction_volume_uL": 50,
-            "primer_final_concentration_uM": {"starting_min": 0.2, "starting_max": 0.3, "at_or_above_10kb": 0.2},
+            "primer_final_concentration_uM": {
+                "starting_min": 0.2,
+                "starting_max": 0.3,
+                "at_or_above_10kb": 0.2,
+            },
             "magnesium_chloride_mM": 1.0,
             "dntp_each_mM": 0.2,
             "enzyme_units": {"per_50_uL": 1.25},
@@ -1472,7 +1889,11 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "up_to_10kb": {
                     "cycles": 30,
                     "denaturation": {"temperature_c": 98, "seconds": 10},
-                    "three_step_annealing": {"temperature_c": [55, 60], "seconds": 15, "vendor_tm_formula_required": True},
+                    "three_step_annealing": {
+                        "temperature_c": [55, 60],
+                        "seconds": 15,
+                        "vendor_tm_formula_required": True,
+                    },
                     "extension": {"temperature_c": 68, "seconds_per_kb": 60},
                     "two_step_available": True,
                 },
@@ -1523,7 +1944,11 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
         "primer_final_concentration_uM": {"min": 0.3, "max": 1.0},
         "magnesium_chloride_mM": 1.5,
         "dntp_each_mM": 0.2,
-        "enzyme_units": {"up_to_20kb_min": 1.0, "up_to_20kb_max": 1.25, "at_or_above_20kb_max": 2.5},
+        "enzyme_units": {
+            "up_to_20kb_min": 1.0,
+            "up_to_20kb_max": 1.25,
+            "at_or_above_20kb_max": 2.5,
+        },
         "cycling_model": {
             "supplier_preference": "two-step-in-most-cases",
             "branch_selection": {
@@ -1536,7 +1961,10 @@ def long_range_protocol(named: str | None, *, assay_id: str) -> dict[str, Any] |
                 "phase_1": {
                     "cycles": 10,
                     "denaturation": {"temperature_c": {"min": 94, "max": 96}, "seconds": 20},
-                    "anneal_extend": {"temperature_c": 68, "seconds_per_kb": {"min": 45, "max": 60}},
+                    "anneal_extend": {
+                        "temperature_c": 68,
+                        "seconds_per_kb": {"min": 45, "max": 60},
+                    },
                 },
                 "phase_2": {
                     "cycles": {"min": 15, "max": 25},
@@ -1617,7 +2045,12 @@ def rpa_protocol(
                 "boundaries until their modified-probe/nuclease contracts are implemented."
             )
         return None
-    if selected not in {"twistamp-basic", "twistamp-liquid-basic", "thermo-lyo-ready-rpa", "gbiosciences-rpa-786-2155"}:
+    if selected not in {
+        "twistamp-basic",
+        "twistamp-liquid-basic",
+        "thermo-lyo-ready-rpa",
+        "gbiosciences-rpa-786-2155",
+    }:
         branch = {
             "twistamp-exo": "TwistAmp Exo",
             "twistamp-nfo": "TwistAmp Nfo",
@@ -1651,7 +2084,11 @@ def rpa_protocol(
             "source_revision_date_precision": "day",
             "format": "glycerol-free liquid components; lyo-ready formulation",
             "reaction_volume_uL": {"standard": 20, "source_backed_scaled": 50},
-            "reaction_scaling": {"source": "Thermo Fisher Lyo-ready RPA FAQ", "supported_uL": [20, 50], "note": "Scale all reaction components proportionally; the vendor FAQ supports scaling 20-uL reactions to 50 uL."},
+            "reaction_scaling": {
+                "source": "Thermo Fisher Lyo-ready RPA FAQ",
+                "supported_uL": [20, 50],
+                "note": "Scale all reaction components proportionally; the vendor FAQ supports scaling 20-uL reactions to 50 uL.",
+            },
             "primer_length_nt": {
                 "rapid_preferred_min": 30,
                 "rapid_preferred_max": 35,
@@ -1680,10 +2117,21 @@ def rpa_protocol(
             "temperature_c": 42,
             "temperature_range_c": {"min": 34, "max": 45},
             "incubation_minutes": 20,
-            "incubation_range_minutes": {"min": 10, "max": 25, "context": "template-input and multiplex dependent"},
-            "mixing": {"optional_rpm": 300, "effect": "supplier says shaking during incubation may increase sensitivity"},
+            "incubation_range_minutes": {
+                "min": 10,
+                "max": 25,
+                "context": "template-input and multiplex dependent",
+            },
+            "mixing": {
+                "optional_rpm": 300,
+                "effect": "supplier says shaking during incubation may increase sensitivity",
+            },
             "primer_final_concentration_nM": 300,
-            "primer_final_concentration_nM_multiplex": {"starting": 100, "optimization_min": 100, "optimization_max": 300},
+            "primer_final_concentration_nM_multiplex": {
+                "starting": 100,
+                "optimization_min": 100,
+                "optimization_max": 300,
+            },
             "magnesium_chloride_mM": 14,
             "dntp_each_mM": 0.2,
             "protein_starting_points": {
@@ -1767,12 +2215,19 @@ def rpa_protocol(
                 "reviewed_upper_nt": 45,
                 "below_preferred_note": "Shorter PCR-length oligos may work, but TwistDx states kinetics can be slower and primer screening remains empirical.",
             },
-            "amplicon_bp": {"preferred_rapid_min": 100, "preferred_rapid_max": 200, "supported_context_max": 500},
+            "amplicon_bp": {
+                "preferred_rapid_min": 100,
+                "preferred_rapid_max": 200,
+                "supported_context_max": 500,
+            },
             "temperature_c": 40,
             "temperature_range_c": {"min": 37, "max": 42},
             "incubation_minutes": 20,
             "incubation_range_minutes": {"min": 20, "max": 40},
-            "agitation": {"after_minutes": 4, "action": "six inversions and brief spin for low-copy template; supplier permits assay-dependent mixing optimisation"},
+            "agitation": {
+                "after_minutes": 4,
+                "action": "six inversions and brief spin for low-copy template; supplier permits assay-dependent mixing optimisation",
+            },
             "primer_final_concentration_nM": 480,
             "magnesium_acetate_mM": 14,
             "dntp_total_mM": 1.8,
@@ -1824,7 +2279,11 @@ def rpa_protocol(
             "reviewed_upper_nt": 45,
             "below_preferred_note": "Oligos shorter than 30 nt can function, but the current TwistDx manual reports typically slower amplification kinetics; no evidence-backed hard minimum is asserted here.",
         },
-        "amplicon_bp": {"preferred_rapid_min": 100, "preferred_rapid_max": 200, "supported_context_max": 500},
+        "amplicon_bp": {
+            "preferred_rapid_min": 100,
+            "preferred_rapid_max": 200,
+            "supported_context_max": 500,
+        },
         "temperature_c": 39,
         "incubation_minutes": 20,
         "agitation": {"after_minutes": 4, "action": "vortex-and-brief-spin"},
@@ -1866,8 +2325,9 @@ def rpa_protocol(
     }
 
 
-
-def colony_protocol(named: str | None, *, assay_id: str, host_class: str, preparation: str) -> dict[str, Any] | None:
+def colony_protocol(
+    named: str | None, *, assay_id: str, host_class: str, preparation: str
+) -> dict[str, Any] | None:
     selected = str(named or "").strip()
     if assay_id != "colony-pcr":
         if selected:
@@ -1879,17 +2339,24 @@ def colony_protocol(named: str | None, *, assay_id: str, host_class: str, prepar
         return None
     record = dict(COLONY_PROTOCOL_RECORDS[selected])
     if host_class not in record["host_classes"]:
-        raise ValueError(f"{selected} is source-backed only for host classes: {', '.join(record['host_classes'])}")
+        raise ValueError(
+            f"{selected} is source-backed only for host classes: {', '.join(record['host_classes'])}"
+        )
     if preparation not in record["preparations"]:
-        raise ValueError(f"{selected} is source-backed only for preparations: {', '.join(record['preparations'])}")
+        raise ValueError(
+            f"{selected} is source-backed only for preparations: {', '.join(record['preparations'])}"
+        )
     return record
 
 
 def colony_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any] | None:
     """Resolve source-backed colony-PCR SOP identity without inventing a universal lysis programme."""
     fields = (
-        "colony_host_class", "colony_preparation", "colony_protocol_id",
-        "colony_protocol_name", "colony_protocol_provenance",
+        "colony_host_class",
+        "colony_preparation",
+        "colony_protocol_id",
+        "colony_protocol_name",
+        "colony_protocol_provenance",
     )
     supplied = any(request.get(field) not in (None, "") for field in fields)
     if assay_id != "colony-pcr":
@@ -1905,22 +2372,32 @@ def colony_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any] 
     protocol_name = str(request.get("colony_protocol_name") or "").strip()
     protocol_provenance = str(request.get("colony_protocol_provenance") or "").strip()
     if host not in COLONY_HOST_CLASSES:
-        raise ValueError("colony_host_class must be one of: " + ", ".join(sorted(COLONY_HOST_CLASSES)))
+        raise ValueError(
+            "colony_host_class must be one of: " + ", ".join(sorted(COLONY_HOST_CLASSES))
+        )
     if preparation not in COLONY_PREPARATIONS:
-        raise ValueError("colony_preparation must be one of: " + ", ".join(sorted(COLONY_PREPARATIONS)))
+        raise ValueError(
+            "colony_preparation must be one of: " + ", ".join(sorted(COLONY_PREPARATIONS))
+        )
     if not protocol_id:
         # Historical request compatibility: an explicit name+provenance pair is
         # treated as the custom SOP branch, never as a vendor protocol.
         if protocol_name and protocol_provenance:
             protocol_id = "custom-sop"
         else:
-            raise ValueError("colony_protocol_id is required; choose a reviewed vendor branch or custom-sop")
-    selected = colony_protocol(protocol_id, assay_id=assay_id, host_class=host, preparation=preparation)
+            raise ValueError(
+                "colony_protocol_id is required; choose a reviewed vendor branch or custom-sop"
+            )
+    selected = colony_protocol(
+        protocol_id, assay_id=assay_id, host_class=host, preparation=preparation
+    )
     if protocol_id == "custom-sop":
         if not protocol_name:
             raise ValueError("custom-sop requires colony_protocol_name")
         if not protocol_provenance:
-            raise ValueError("custom-sop requires colony_protocol_provenance with owner/source and revision/date")
+            raise ValueError(
+                "custom-sop requires colony_protocol_provenance with owner/source and revision/date"
+            )
         authority = {
             "protocol_id": protocol_id,
             "selection": protocol_name,
@@ -1973,7 +2450,16 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
     and template-fragmentation requirements are not interchangeable. Threshold,
     rain/cluster review and Poisson estimates remain measured-run evidence.
     """
-    fields = ("digital_partition_format", "digital_platform_id", "digital_platform_name", "digital_instrument_model", "digital_fragmentation_state", "digital_multiplex_mode", "digital_multiplex_panel", "digital_run_evidence")
+    fields = (
+        "digital_partition_format",
+        "digital_platform_id",
+        "digital_platform_name",
+        "digital_instrument_model",
+        "digital_fragmentation_state",
+        "digital_multiplex_mode",
+        "digital_multiplex_panel",
+        "digital_run_evidence",
+    )
     supplied = any(request.get(field) not in (None, "") for field in fields)
     if assay_id != "digital-pcr":
         if supplied:
@@ -1989,7 +2475,8 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
     fragmentation = str(request.get("digital_fragmentation_state") or "").strip()
     if partition not in DIGITAL_PARTITION_FORMATS:
         raise ValueError(
-            "digital_partition_format must be one of: " + ", ".join(sorted(DIGITAL_PARTITION_FORMATS))
+            "digital_partition_format must be one of: "
+            + ", ".join(sorted(DIGITAL_PARTITION_FORMATS))
         )
     if platform_id not in DIGITAL_PLATFORM_IDS:
         raise ValueError(
@@ -2011,10 +2498,16 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             )
         platform = canonical_name
     numeric_context = request.get("flanking_numeric_context") or {}
-    consumable_id = str(numeric_context.get("digital_consumable_id") or "").strip() if isinstance(numeric_context, dict) else ""
+    consumable_id = (
+        str(numeric_context.get("digital_consumable_id") or "").strip()
+        if isinstance(numeric_context, dict)
+        else ""
+    )
     if consumable_id:
         if consumable_id not in DIGITAL_CONSUMABLE_IDS:
-            raise ValueError("digital_consumable_id must be one of: " + ", ".join(sorted(DIGITAL_CONSUMABLE_IDS)))
+            raise ValueError(
+                "digital_consumable_id must be one of: " + ", ".join(sorted(DIGITAL_CONSUMABLE_IDS))
+            )
         allowed_platforms = DIGITAL_CONSUMABLE_PLATFORMS.get(consumable_id, frozenset())
         if platform_id not in allowed_platforms:
             raise ValueError(
@@ -2056,7 +2549,9 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             )
     multiplex_mode = str(request.get("digital_multiplex_mode") or "none").strip().lower()
     if multiplex_mode not in {"none", "channel", "amplitude", "hybrid", "probe-mix"}:
-        raise ValueError("digital_multiplex_mode must be one of: none, channel, amplitude, hybrid, probe-mix")
+        raise ValueError(
+            "digital_multiplex_mode must be one of: none, channel, amplitude, hybrid, probe-mix"
+        )
     panel_raw = request.get("digital_multiplex_panel")
     if panel_raw is None:
         panel: list[dict[str, Any]] = []
@@ -2070,12 +2565,21 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             target = str(raw.get("target") or "").strip()
             reporter = str(raw.get("reporter") or "").strip() or None
             channel = str(raw.get("channel") or "").strip() or None
-            amplitude = str(raw.get("amplitude_class") or raw.get("amplitudeClass") or "").strip() or None
+            amplitude = (
+                str(raw.get("amplitude_class") or raw.get("amplitudeClass") or "").strip() or None
+            )
             primer_each = raw.get("primer_each_nm", raw.get("primerEachNm"))
             probe_nm = raw.get("probe_nm", raw.get("probeNm"))
             if not target:
-                raise ValueError(f"digital_multiplex_panel target {index} requires a target identity")
-            values = {"target": target, "reporter": reporter, "channel": channel, "amplitude_class": amplitude}
+                raise ValueError(
+                    f"digital_multiplex_panel target {index} requires a target identity"
+                )
+            values = {
+                "target": target,
+                "reporter": reporter,
+                "channel": channel,
+                "amplitude_class": amplitude,
+            }
             for key, value in (("primer_each_nm", primer_each), ("probe_nm", probe_nm)):
                 if value not in (None, ""):
                     try:
@@ -2090,7 +2594,9 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
         raise ValueError("digital_multiplex_panel requires a non-none digital_multiplex_mode")
     if multiplex_mode != "none":
         if len(panel) < 2 or len(panel) > DIGITAL_MULTIPLEX_SOFTWARE_MAX_TARGETS:
-            raise ValueError("digital multiplex planning requires 2–12 targets; 12 is a software/planning bound, not a wet-lab qualification claim")
+            raise ValueError(
+                "digital multiplex planning requires 2–12 targets; 12 is a software/planning bound, not a wet-lab qualification claim"
+            )
         target_ids = [row["target"] for row in panel]
         if len(set(target_ids)) != len(target_ids):
             raise ValueError("digital multiplex target identities must be unique")
@@ -2103,15 +2609,25 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             channels = []
             for row in panel:
                 if not row.get("reporter") or not row.get("channel"):
-                    raise ValueError("channel dPCR multiplex requires reporter and channel for every target")
+                    raise ValueError(
+                        "channel dPCR multiplex requires reporter and channel for every target"
+                    )
                 channels.append(str(row["channel"]))
             if len(set(channels)) != len(channels):
-                raise ValueError("channel dPCR multiplex requires unique explicit channels; use amplitude/hybrid mode for intentional channel sharing")
-        if multiplex_mode in {"amplitude", "hybrid"} and any(not row.get("amplitude_class") for row in panel):
-            raise ValueError("amplitude/hybrid dPCR multiplex requires amplitude_class for every target")
+                raise ValueError(
+                    "channel dPCR multiplex requires unique explicit channels; use amplitude/hybrid mode for intentional channel sharing"
+                )
+        if multiplex_mode in {"amplitude", "hybrid"} and any(
+            not row.get("amplitude_class") for row in panel
+        ):
+            raise ValueError(
+                "amplitude/hybrid dPCR multiplex requires amplitude_class for every target"
+            )
         authority_key = instrument_model if platform_id == "qiagen-qiacuity" else platform_id
         if platform_id == "qiagen-qiacuity" and not instrument_model:
-            raise ValueError("digital_instrument_model is required for QIAcuity multiplex planning because model optical capacity differs")
+            raise ValueError(
+                "digital_instrument_model is required for QIAcuity multiplex planning because model optical capacity differs"
+            )
         authority = DIGITAL_MULTIPLEX_PLATFORM_AUTHORITIES.get(str(authority_key or ""))
         if platform_id == "qiagen-qiacuity" and authority is None:
             raise ValueError("unsupported QIAcuity multiplex instrument model")
@@ -2137,8 +2653,11 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
     if run_evidence is not None and not isinstance(run_evidence, dict):
         raise ValueError("digital_run_evidence must be an object when supplied")
     panel_sha256 = (
-        hashlib.sha256(json.dumps(panel, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
-        if panel else None
+        hashlib.sha256(
+            json.dumps(panel, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if panel
+        else None
     )
     partition_volume_authority = (
         "record-current-nanoplate-type/lot-and-QIAcuity-volume/VPF-policy"
@@ -2165,8 +2684,12 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             "threshold_rain_cluster_inference": "forbidden-from-sequence",
             "run_evidence": run_evidence,
             "decision_impact": "planning-and-run-evidence-only",
-        } if multiplex_mode != "none" else None,
-        "run_status": "multiplex-planning-evidence-handoff" if multiplex_mode != "none" else "design-handoff",
+        }
+        if multiplex_mode != "none"
+        else None,
+        "run_status": "multiplex-planning-evidence-handoff"
+        if multiplex_mode != "none"
+        else "design-handoff",
         "threshold_status": "measured-run-required",
         "quantification_status": "not-computed-from-design",
         "partition_volume_authority_status": partition_volume_authority,
@@ -2193,7 +2716,9 @@ def digital_context(request: dict[str, Any], *, assay_id: str) -> dict[str, Any]
             "Poisson/occupancy estimate from the measured run",
             "exact analysis software/version and the partition-volume model/calibration used for quantification",
             *(
-                ["QIAcuity Nanoplate type/lot and VPF or effective-volume policy used by the analysis"]
+                [
+                    "QIAcuity Nanoplate type/lot and VPF or effective-volume policy used by the analysis"
+                ]
                 if platform_id == "qiagen-qiacuity"
                 else ["platform-specific droplet/partition volume source or calibration revision"]
             ),
@@ -2355,7 +2880,12 @@ def digital_protocol(
             "partition_model": "platform-bound droplet/chip consumable; RDG16 on QX700/Nio/naica or Sapphire Chip on naica according to the reviewed IFU",
             "amplicon_bp_preferred": {"min": 60, "max": 130},
             "primer_concentration_status": "supplier-variable; assay-specific optimization required",
-            "buffer_b_final_percent": {"start": 4.0, "typical_min": 2.0, "typical_max": 5.0, "maximum": 5.0},
+            "buffer_b_final_percent": {
+                "start": 4.0,
+                "typical_min": 2.0,
+                "typical_max": 5.0,
+                "maximum": 5.0,
+            },
             "evagreen_final_x": 1.5,
             "fragmentation_guidance": {
                 "supplier_trigger": "average DNA length >=10 kb",
@@ -2474,5 +3004,3 @@ def digital_protocol(
             "threshold/rain policy, restriction-digest choice and Poisson uncertainty remain measured run evidence."
         ),
     }
-
-

@@ -48,8 +48,10 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Python quality and dependency audit
         run: |
+          cd tools
           uvx --from ruff==0.16.5 ruff check .
           uvx --from ruff==0.16.5 ruff format --check .
+          cd ..
           uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
           uvx --from pip-audit==2.10.1 pip-audit -r "$RUNNER_TEMP/tools-requirements.txt"
       - name: Secret scan

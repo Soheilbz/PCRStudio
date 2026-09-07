@@ -458,12 +458,6 @@ def test_an_inner_primer_duplicated_in_the_outer_product_is_refused():
 # ── Carry-over prevention ──────────────────────────────────────────────────
 
 
-
-
-
-
-
-
 def test_one_tube_is_refused_as_a_noncurrent_topology_in_every_policy_mode(monkeypatch):
     """Policy mode must never turn a different assay topology back on."""
     monkeypatch.setenv("PCRSTUDIO_SCIENTIFIC_POLICY", "permissive")

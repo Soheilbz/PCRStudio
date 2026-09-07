@@ -17,14 +17,6 @@ from goldens import check
 from pcr_tools.pipeline import run
 
 
-
-
-
-
-
-
-
-
 @pytest.mark.parametrize("accession", ["NM_000546.6", "L09137.2", "X65299.1"])
 def test_the_best_pair_is_first_and_the_order_sheet_agrees(accession: str):
     """True of every result, on every template, whatever the goldens say.
@@ -66,8 +58,6 @@ def _reduce_nested(answer: dict) -> dict:
         ],
         "order_sheet": [oligo["name"] for oligo in answer["order_sheet"]],
     }
-
-
 
 
 def test_inverse_pcr_reading_out_of_puc19():

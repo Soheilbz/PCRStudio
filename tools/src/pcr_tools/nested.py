@@ -50,18 +50,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from . import rt
+from . import rt, screen
 from . import specificity as spec
-from . import screen
 from .design import CandidatePair, Constraints, clean_template, design
 from .intake import target_to_dict
 from .presets import Reaction, thermodynamic_model
 from .provenance import provenance
+from .registries.authorities import NESTED_AUTHORITY
 from .settings import excluded_from, how_many_from, label, prepare
 from .thermo import DEFAULT_CONDITIONS, report_to_dict
-from .registries.authorities import NESTED_AUTHORITY
-
 from .workflow_evidence import evidence_block
+
 #: The most nested designs one run will return.
 MOST_NESTS = 20
 
@@ -547,12 +546,13 @@ def nest_to_dict(nest: Nest, *, shares: str = "nothing") -> dict[str, Any]:
     return answer
 
 
-
 def _reaction_conditions(base: dict[str, float], supplied: Any, *, label: str) -> dict[str, float]:
     if supplied is None:
         return dict(base)
     if not isinstance(supplied, dict):
-        raise NestedError(f"{label} must be an object of explicit thermodynamic reaction conditions")
+        raise NestedError(
+            f"{label} must be an object of explicit thermodynamic reaction conditions"
+        )
     allowed = set(Reaction.__dataclass_fields__)
     strange = sorted(set(supplied) - allowed)
     if strange:
@@ -569,23 +569,36 @@ def _transfer_contract(request: dict[str, Any]) -> dict[str, Any]:
     cleanup = str(request.get("cleanup_protocol") or "not-selected")
     if cleanup not in CLEANUP_PROTOCOLS:
         raise NestedError("cleanup_protocol must be one of: " + ", ".join(CLEANUP_PROTOCOLS))
-    implied = {"msz-exonuclease-i":"neb-msz-exonuclease-i", "thermolabile-exonuclease-i":"neb-thermolabile-exonuclease-i"}.get(mode)
+    implied = {
+        "msz-exonuclease-i": "neb-msz-exonuclease-i",
+        "thermolabile-exonuclease-i": "neb-thermolabile-exonuclease-i",
+    }.get(mode)
     if implied and cleanup not in {"not-selected", implied}:
-        raise NestedError(f"{mode} is incompatible with cleanup_protocol={cleanup}; choose {implied}")
+        raise NestedError(
+            f"{mode} is incompatible with cleanup_protocol={cleanup}; choose {implied}"
+        )
     if implied:
         cleanup = implied
     factor = request.get("transfer_dilution_factor")
     if mode == "diluted-transfer":
-        if isinstance(factor,bool) or not isinstance(factor,(int,float)) or float(factor) <= 1:
+        if isinstance(factor, bool) or not isinstance(factor, (int, float)) or float(factor) <= 1:
             raise NestedError("diluted-transfer requires transfer_dilution_factor > 1")
     else:
         factor = None
     volume = request.get("transfer_volume_ul", request.get("transfer_volume_uL"))
-    if volume is not None and (isinstance(volume,bool) or not isinstance(volume,(int,float)) or float(volume) <= 0):
+    if volume is not None and (
+        isinstance(volume, bool) or not isinstance(volume, (int, float)) or float(volume) <= 0
+    ):
         raise NestedError("transfer_volume_uL must be positive when supplied")
     record = None if cleanup == "not-selected" else dict(NESTED_AUTHORITY["records"][cleanup])
-    if record and volume is not None and float(volume) > float(record["first_round_product_uL_max"]):
-        raise NestedError(f"transfer_volume_uL exceeds the reviewed {record['first_round_product_uL_max']} uL first-round-product boundary for {cleanup}")
+    if (
+        record
+        and volume is not None
+        and float(volume) > float(record["first_round_product_uL_max"])
+    ):
+        raise NestedError(
+            f"transfer_volume_uL exceeds the reviewed {record['first_round_product_uL_max']} uL first-round-product boundary for {cleanup}"
+        )
     return {
         "mode": mode,
         "transfer_volume_ul": float(volume) if volume is not None else None,
@@ -597,21 +610,63 @@ def _transfer_contract(request: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _nested_false_product_graph(outer_scan: dict[str, Any], inner_named: dict[str,str], contigs: list[spec.Contig], reaction: Reaction) -> dict[str,Any]:
+def _nested_false_product_graph(
+    outer_scan: dict[str, Any],
+    inner_named: dict[str, str],
+    contigs: list[spec.Contig],
+    reaction: Reaction,
+) -> dict[str, Any]:
     """Rescan every reported outer off-target product for a viable inner amplicon."""
     if not outer_scan.get("checked"):
-        return {"checked":False,"edges":[],"claim_boundary":"No finite background was supplied, so causal nested off-target propagation was not evaluated."}
-    by_name={c.name:c for c in contigs}
-    edges=[]
-    for product in outer_scan.get("products",[]):
-        contig=by_name.get(str(product.get("contig")))
-        if contig is None: continue
-        start=max(0,int(product.get("start",1))-1); end=min(len(contig.sequence),int(product.get("end",0)))
-        if end<=start: continue
-        outer_product=contig.sequence[start:end]
-        local=screen.oligos(inner_named,[spec.Contig(name=f"outer-offtarget:{contig.name}:{start+1}-{end}",sequence=outer_product)],reaction=reaction,max_product=max(50,len(outer_product)),max_products=4)
-        edges.append({"outer_product":{"contig":contig.name,"start":start+1,"end":end,"size":len(outer_product)},"inner_product_count":int(local.get("product_count",0)),"inner_products":local.get("products",[]),"risk":"nested-false-product" if local.get("product_count",0) else "no-inner-product-detected"})
-    return {"checked":True,"edges":edges,"propagating_outer_products":sum(e["inner_product_count"]>0 for e in edges),"method":"outer off-target product -> exact inner-primer rescan on that product sequence","claim_boundary":"Finite supplied background only; absence here is not global specificity."}
+        return {
+            "checked": False,
+            "edges": [],
+            "claim_boundary": "No finite background was supplied, so causal nested off-target propagation was not evaluated.",
+        }
+    by_name = {c.name: c for c in contigs}
+    edges = []
+    for product in outer_scan.get("products", []):
+        contig = by_name.get(str(product.get("contig")))
+        if contig is None:
+            continue
+        start = max(0, int(product.get("start", 1)) - 1)
+        end = min(len(contig.sequence), int(product.get("end", 0)))
+        if end <= start:
+            continue
+        outer_product = contig.sequence[start:end]
+        local = screen.oligos(
+            inner_named,
+            [
+                spec.Contig(
+                    name=f"outer-offtarget:{contig.name}:{start + 1}-{end}", sequence=outer_product
+                )
+            ],
+            reaction=reaction,
+            max_product=max(50, len(outer_product)),
+            max_products=4,
+        )
+        edges.append(
+            {
+                "outer_product": {
+                    "contig": contig.name,
+                    "start": start + 1,
+                    "end": end,
+                    "size": len(outer_product),
+                },
+                "inner_product_count": int(local.get("product_count", 0)),
+                "inner_products": local.get("products", []),
+                "risk": "nested-false-product"
+                if local.get("product_count", 0)
+                else "no-inner-product-detected",
+            }
+        )
+    return {
+        "checked": True,
+        "edges": edges,
+        "propagating_outer_products": sum(e["inner_product_count"] > 0 for e in edges),
+        "method": "outer off-target product -> exact inner-primer rescan on that product sequence",
+        "claim_boundary": "Finite supplied background only; absence here is not global specificity.",
+    }
 
 
 def run(request: dict[str, Any]) -> dict[str, Any]:
@@ -682,8 +737,12 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("carryover_prevention must be one of: " + ", ".join(CARRYOVER_PREVENTION))
 
     transfer = _transfer_contract(request)
-    round1_conditions = _reaction_conditions(chosen.reaction.as_conditions(), request.get("round1_reaction"), label="round1_reaction")
-    round2_conditions = _reaction_conditions(chosen.reaction.as_conditions(), request.get("round2_reaction"), label="round2_reaction")
+    round1_conditions = _reaction_conditions(
+        chosen.reaction.as_conditions(), request.get("round1_reaction"), label="round1_reaction"
+    )
+    round2_conditions = _reaction_conditions(
+        chosen.reaction.as_conditions(), request.get("round2_reaction"), label="round2_reaction"
+    )
 
     found = design_nested(
         chosen.target.sequence,
@@ -777,8 +836,8 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             for where, named, intended, products, round_reaction in rounds
         }
         entry["nested_false_product_graph"] = _nested_false_product_graph(
-            entry["off_targets"].get("first round", {"checked":False}),
-            {"left":nest.inner.left.sequence,"right":nest.inner.right.sequence},
+            entry["off_targets"].get("first round", {"checked": False}),
+            {"left": nest.inner.left.sequence, "right": nest.inner.right.sequence},
             contigs,
             Reaction(**round2_conditions),
         )
@@ -801,15 +860,40 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "model": thermodynamic_model(chosen.preset, chosen.reaction),
         },
         "round_reactions": {
-            "round1": {"conditions": round1_conditions, "polymerase_identity": str(request.get("round1_polymerase") or chosen.preset.id), "thermal_program": request.get("round1_thermal_program") or [], "claim_boundary":"Caller-declared program; PCRStudio does not infer an annealing schedule from screening Tm."},
-            "round2": {"conditions": round2_conditions, "polymerase_identity": str(request.get("round2_polymerase") or chosen.preset.id), "thermal_program": request.get("round2_thermal_program") or [], "claim_boundary":"Caller-declared program; PCRStudio does not infer an annealing schedule from screening Tm."},
+            "round1": {
+                "conditions": round1_conditions,
+                "polymerase_identity": str(request.get("round1_polymerase") or chosen.preset.id),
+                "thermal_program": request.get("round1_thermal_program") or [],
+                "claim_boundary": "Caller-declared program; PCRStudio does not infer an annealing schedule from screening Tm.",
+            },
+            "round2": {
+                "conditions": round2_conditions,
+                "polymerase_identity": str(request.get("round2_polymerase") or chosen.preset.id),
+                "thermal_program": request.get("round2_thermal_program") or [],
+                "claim_boundary": "Caller-declared program; PCRStudio does not infer an annealing schedule from screening Tm.",
+            },
         },
         "transfer": transfer,
         "workflow_evidence": evidence_block(request.get("workflow_evidence")),
         "contamination_evidence_contract": {
-            "required_fields": ["round1_ntc","round2_ntc","positive_control","pre_pcr_area","round1_area","transfer_area","round2_area","transfer_run_id"],
-            "optional_fields": ["operator","timestamp","source_tube_or_well","destination_tube_or_well","raw_data_reference"],
-            "claim_boundary":"Physical separation and controls are recorded evidence; they cannot be inferred from primer geometry or a cleanup selection.",
+            "required_fields": [
+                "round1_ntc",
+                "round2_ntc",
+                "positive_control",
+                "pre_pcr_area",
+                "round1_area",
+                "transfer_area",
+                "round2_area",
+                "transfer_run_id",
+            ],
+            "optional_fields": [
+                "operator",
+                "timestamp",
+                "source_tube_or_well",
+                "destination_tube_or_well",
+                "raw_data_reference",
+            ],
+            "claim_boundary": "Physical separation and controls are recorded evidence; they cannot be inferred from primer geometry or a cleanup selection.",
         },
         "constraints": {
             "outer": {
@@ -843,7 +927,9 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         # inactivation. Do not turn a contamination-control idea into a bench recipe.
         "protocol": {
             "selection": carryover_prevention,
-            "execution_status": "strategy-only" if carryover_prevention == "dutp-ung-strategy-only" else "not-selected",
+            "execution_status": "strategy-only"
+            if carryover_prevention == "dutp-ung-strategy-only"
+            else "not-selected",
             "note": (
                 "dUTP/UNG carry-over prevention was selected as a strategy, not as an executable bench protocol. "
                 "PCRStudio has no named kit/SOP here for dUTP substitution ratio, UNG identity or amount, incubation/inactivation, polymerase compatibility or controls; resolve those from a named protocol before bench use."

@@ -4,11 +4,12 @@ This module is intentionally data-only. Canonical authority lives in
 ``contracts/*.toml``; ``scripts/generate-foundation-contracts.py`` projects it
 into package-local JSON so an installed worker never needs repository paths.
 """
+
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from importlib.resources import files
-import json
 from typing import Any, Final
 
 
@@ -106,4 +107,6 @@ MODULE_CONTRACTS: Final[dict[str, dict[str, Any]]] = {
 }
 
 if len(MODULES) != 21 or len(ENGINES) != 11:
-    raise RuntimeError("generated Generation 1 foundation contract must remain 21 modules -> 11 engines")
+    raise RuntimeError(
+        "generated Generation 1 foundation contract must remain 21 modules -> 11 engines"
+    )

@@ -4,6 +4,7 @@ Authored for the user's Linux test run. This module deliberately avoids
 external scientific tools so it checks authority/projection drift separately
 from native tool qualification.
 """
+
 from __future__ import annotations
 
 import json
@@ -20,7 +21,7 @@ def test_engine_json_projections_equal_canonical_sources():
     mapping = {
         "contracts/chemistry/qpcr-probe-protocols.json": "tools/src/pcr_tools/data/probe-authority.generated.json",
         "contracts/chemistry/race-protocols.json": "tools/src/pcr_tools/data/race-authority.generated.json",
-                "contracts/chemistry/single-differential-corpus.json": "tools/src/pcr_tools/data/single-differential-corpus.generated.json",
+        "contracts/chemistry/single-differential-corpus.json": "tools/src/pcr_tools/data/single-differential-corpus.generated.json",
     }
     for canonical, projection in mapping.items():
         assert load(canonical) == load(projection), (canonical, projection)
@@ -35,7 +36,10 @@ def test_qpcr_vendor_rules_are_not_internal_search_defaults():
     idt = records["idt-primetime-conventional"]
     assert idt["probe_constraints"] == {"length_max": 28}
     assert idt["probe_tm_delta_min_c"] == 6.0
-    assert idt["internal_search_defaults"]["decision_authority"] == "PCRStudio-search-envelope-not-vendor-rule"
+    assert (
+        idt["internal_search_defaults"]["decision_authority"]
+        == "PCRStudio-search-envelope-not-vendor-rule"
+    )
     assert records["taqman-mgb-reference"]["execution_status"] == "external-authority-required"
 
 

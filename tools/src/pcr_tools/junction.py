@@ -44,12 +44,13 @@ from typing import Any
 
 from .accessibility import fold_oligos
 from .design import Constraints, DesignResult, clean_template, design_terminal_pair
+from .registries.authorities import ASSEMBLY_AUTHORITY
+from .registries.authorities import record as authority_record
 from .thermo import (
     analyse,
     pair_dimer,
     reverse_complement,
 )
-from .registries.authorities import ASSEMBLY_AUTHORITY, record as authority_record
 from .workflow_evidence import evidence_block
 
 # NEBuilder standard quantity table scope. Above this fragment count PCRStudio
@@ -74,9 +75,15 @@ class JunctionError(ValueError):
 #: to carry the tail. A fragment that is not being amplified has no primer to
 #: put a tail on, so the whole overlap has to come from its neighbour.
 KINDS = (
-    "amplified", "fixed", "literal",  # legacy compatibility aliases
-    "pcr-amplified", "restriction-digest", "synthetic-dsdna",
-    "ssdna-oligo", "annealed-oligos", "existing-linear",
+    "amplified",
+    "fixed",
+    "literal",  # legacy compatibility aliases
+    "pcr-amplified",
+    "restriction-digest",
+    "synthetic-dsdna",
+    "ssdna-oligo",
+    "annealed-oligos",
+    "existing-linear",
 )
 PCR_KINDS = frozenset({"amplified", "pcr-amplified"})
 LITERAL_KINDS = frozenset({"literal"})
@@ -111,11 +118,17 @@ class Segment:
             raise JunctionError(f"`{self.name}` has no sequence.")
         if self.orientation not in {"forward", "reverse"}:
             raise JunctionError(f"`{self.name}` orientation must be forward or reverse.")
-        for label, value in (("concentration_ng_ul", self.concentration_ng_ul), ("mass_ng", self.mass_ng), ("volume_ul", self.volume_ul)):
+        for label, value in (
+            ("concentration_ng_ul", self.concentration_ng_ul),
+            ("mass_ng", self.mass_ng),
+            ("volume_ul", self.volume_ul),
+        ):
             if value is not None and value <= 0:
                 raise JunctionError(f"`{self.name}` {label} must be positive when supplied.")
         if self.kind == "restriction-digest" and not self.restriction:
-            raise JunctionError(f"`{self.name}` is restriction-digest material and requires explicit restriction metadata.")
+            raise JunctionError(
+                f"`{self.name}` is restriction-digest material and requires explicit restriction metadata."
+            )
 
     @property
     def tailable(self) -> bool:
@@ -227,17 +240,32 @@ METHODS = (
 
 BY_ID = {method.id: method for method in METHODS}
 
-ASSEMBLY_PROTOCOLS = ("not-selected", "neb-e5510", "neb-nebuilder-e2621", "neb-nebuilder-e5520", "neb-nebuilder-e2623")
+ASSEMBLY_PROTOCOLS = (
+    "not-selected",
+    "neb-e5510",
+    "neb-nebuilder-e2621",
+    "neb-nebuilder-e5520",
+    "neb-nebuilder-e2623",
+)
 
 
 def _nebuilder_numeric_projection(payload: dict[str, Any], branch: str) -> dict[str, Any]:
     """Project one reviewed NEBuilder branch without creating a second numeric authority."""
     source_branch = payload["branches"][branch]
     return {
-        "overlap_bp": {"min": source_branch["overlap_bp_min"], "max": source_branch["overlap_bp_max"]},
-        "total_fragment_input_pmol": {"min": source_branch["total_pmol_min"], "max": source_branch["total_pmol_max"]},
+        "overlap_bp": {
+            "min": source_branch["overlap_bp_min"],
+            "max": source_branch["overlap_bp_max"],
+        },
+        "total_fragment_input_pmol": {
+            "min": source_branch["total_pmol_min"],
+            "max": source_branch["total_pmol_max"],
+        },
         "vector_insert_molar_ratio": source_branch["vector_insert_ratio"],
-        "incubation": {"temperature_c": source_branch["incubation_c"], "minutes": source_branch["incubation_min"]},
+        "incubation": {
+            "temperature_c": source_branch["incubation_c"],
+            "minutes": source_branch["incubation_min"],
+        },
     }
 
 
@@ -261,22 +289,31 @@ def protocol(named: str | None, fragments: int) -> dict[str, Any] | None:
         )
     if named == "neb-e5510":
         if not 2 <= fragments <= 6:
-            raise JunctionError("The NEB E5510 numeric overlay is published for 2–6 physical fragments.")
+            raise JunctionError(
+                "The NEB E5510 numeric overlay is published for 2–6 physical fragments."
+            )
         payload = authority_record(ASSEMBLY_AUTHORITY, named)
         branch = "2-3-fragments" if fragments <= 3 else "4-6-fragments"
         numeric = dict(payload["branches"][branch])
         return {
-            "id": named, "selection": payload["selection"],
-            "source_identity": payload["source_identity"], "source_url": payload["source_url"],
+            "id": named,
+            "selection": payload["selection"],
+            "source_identity": payload["source_identity"],
+            "source_url": payload["source_url"],
             "source_reviewed_date": payload["source_reviewed_date"],
             "master_mix": "Gibson Assembly Master Mix (2X)",
-            "reaction_volume_uL": numeric["reaction_volume_uL"], "fragment_count": fragments,
+            "reaction_volume_uL": numeric["reaction_volume_uL"],
+            "fragment_count": fragments,
             "overlap_bp": {"min": numeric["overlap_bp_min"], "max": numeric["overlap_bp_max"]},
             "total_fragment_input_pmol_min": numeric["total_pmol_min"],
             "total_fragment_input_pmol_max": numeric["total_pmol_max"],
             "vector_input_ng": numeric["vector_input_ng"],
             "insert_molar_excess": numeric["insert_molar_excess"],
-            "incubation": {"temperature_c": numeric["incubation_c"], "minutes": numeric["incubation_min"], "branch": branch},
+            "incubation": {
+                "temperature_c": numeric["incubation_c"],
+                "minutes": numeric["incubation_min"],
+                "branch": branch,
+            },
             "unpurified_pcr_fraction_max": numeric["unpurified_pcr_fraction_max"],
             "after_incubation": "hold on ice or at −20 °C until transformation",
             "note": "E5510-only overlay; numeric values are authority-owned by the selected fragment-count branch.",
@@ -284,7 +321,13 @@ def protocol(named: str | None, fragments: int) -> dict[str, Any] | None:
     # Current NEBuilder branch is driven by the public protocol authority.
     if fragments < 2:
         raise JunctionError("NEBuilder requires at least two physical fragments.")
-    branch = "2-3-fragments" if fragments <= 3 else "4-6-fragments" if fragments <= 6 else "7+-design-only"
+    branch = (
+        "2-3-fragments"
+        if fragments <= 3
+        else "4-6-fragments"
+        if fragments <= 6
+        else "7+-design-only"
+    )
     payload = authority_record(ASSEMBLY_AUTHORITY, named)
     if fragments <= 6:
         numeric = _nebuilder_numeric_projection(payload, branch)
@@ -295,9 +338,14 @@ def protocol(named: str | None, fragments: int) -> dict[str, Any] | None:
         execution_status = "design-only-numeric-reaction-unresolved"
         note = "Above six fragments the reviewed standard-table numeric branch is unresolved; PCRStudio does not inherit the 4–6-fragment numbers."
     return {
-        "id": named, "selection": payload["selection"], "source_identity": payload["source_identity"],
-        "source_url": payload["source_url"], "source_reviewed_date": payload["source_reviewed_date"],
-        "fragment_count": fragments, "branch": branch, **numeric,
+        "id": named,
+        "selection": payload["selection"],
+        "source_identity": payload["source_identity"],
+        "source_url": payload["source_url"],
+        "source_reviewed_date": payload["source_reviewed_date"],
+        "fragment_count": fragments,
+        "branch": branch,
+        **numeric,
         "capabilities": payload.get("capabilities", []),
         "short_fragment_note": payload.get("short_fragment_note"),
         "execution_status": execution_status,
@@ -372,6 +420,7 @@ def ends_badly(window: str, longest_run: int = LONGEST_RUN_AT_AN_END) -> str:
 #: terminal bases makes the overlap invalid".  The previous Gen-1 implementation
 #: did exactly that.  We now expose the observed terminal run lengths and leave
 #: validity to sequence uniqueness plus the named method's actual constraints.
+
 
 def terminal_run_length(sequence: str, *, from_start: bool) -> int:
     """Length of the identical-base run at one end of ``sequence``."""
@@ -637,14 +686,11 @@ def windows_for(
         return found, ""
 
     gate = (
-        f" The source-backed Tm gate is {how.overlap_tm_min} °C in "
-        f"{how.overlap_tm_metric}."
+        f" The source-backed Tm gate is {how.overlap_tm_min} °C in {how.overlap_tm_metric}."
         if how.overlap_tm_min is not None and how.overlap_tm_metric
         else " No generic overlap-Tm gate was invented for this method."
     )
-    details = ", ".join(
-        f"{count} were {reason}" for reason, count in sorted(refused.items())
-    )
+    details = ", ".join(f"{count} were {reason}" for reason, count in sorted(refused.items()))
     return [], (
         f"No overlap between {how.overlap_min} and {how.overlap_max} bases worked here."
         + (f" {details}." if details else "")
@@ -988,12 +1034,8 @@ def choose(
         junction.candidate_windows_measured = int(
             audit.get("candidate_windows_measured", len(found))
         )
-        junction.fold_diagnostic_complete = bool(
-            audit.get("fold_diagnostic_complete", True)
-        )
-        junction.candidate_search_complete = bool(
-            audit.get("candidate_search_complete", True)
-        )
+        junction.fold_diagnostic_complete = bool(audit.get("fold_diagnostic_complete", True))
+        junction.candidate_search_complete = bool(audit.get("candidate_search_complete", True))
         junction.alternates = found
         junction.why_nothing = why
         junction.chosen = found[0] if found else None
@@ -1030,11 +1072,15 @@ def choose(
     search_meta["backtrack_limit_hit"] = True
     search_meta["backtrack_steps_used"] = MOST_BACKTRACKS
     search_meta["complete"] = False
-    return junctions, clashes(
-        {one.index: one.chosen for one in workable if one.chosen},
-        construct,
-        plan.circular,
-    ), search_meta
+    return (
+        junctions,
+        clashes(
+            {one.index: one.chosen for one in workable if one.chosen},
+            construct,
+            plan.circular,
+        ),
+        search_meta,
+    )
 
 
 #: How many times the search may move a junction onto another overlap.
@@ -1374,7 +1420,19 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "assembly of fewer than two fragments is a PCR."
         )
 
-    known = {"name", "kind", "sequence", "template", "orientation", "concentration_ng_ul", "mass_ng", "volume_ul", "restriction", "features", "provenance"}
+    known = {
+        "name",
+        "kind",
+        "sequence",
+        "template",
+        "orientation",
+        "concentration_ng_ul",
+        "mass_ng",
+        "volume_ul",
+        "restriction",
+        "features",
+        "provenance",
+    }
     segments: list[Segment] = []
     for index, entry in enumerate(supplied):
         if not isinstance(entry, dict):
@@ -1398,10 +1456,22 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                 sequence=clean_template(str(entry.get("sequence") or "")),
                 template=str(entry.get("template") or ""),
                 orientation=str(entry.get("orientation") or "forward"),
-                concentration_ng_ul=(float(entry["concentration_ng_ul"]) if entry.get("concentration_ng_ul") not in (None, "") else None),
-                mass_ng=(float(entry["mass_ng"]) if entry.get("mass_ng") not in (None, "") else None),
-                volume_ul=(float(entry["volume_ul"]) if entry.get("volume_ul") not in (None, "") else None),
-                restriction=(dict(entry.get("restriction")) if isinstance(entry.get("restriction"), dict) else None),
+                concentration_ng_ul=(
+                    float(entry["concentration_ng_ul"])
+                    if entry.get("concentration_ng_ul") not in (None, "")
+                    else None
+                ),
+                mass_ng=(
+                    float(entry["mass_ng"]) if entry.get("mass_ng") not in (None, "") else None
+                ),
+                volume_ul=(
+                    float(entry["volume_ul"]) if entry.get("volume_ul") not in (None, "") else None
+                ),
+                restriction=(
+                    dict(entry.get("restriction"))
+                    if isinstance(entry.get("restriction"), dict)
+                    else None
+                ),
                 features=tuple(entry.get("features") or ()),
                 provenance=(str(entry.get("provenance") or "").strip() or None),
             )
@@ -1415,7 +1485,10 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
     plan.check()
     assay = request.get("assay") or {}
     assay_id = str(assay.get("id") or "") if isinstance(assay, dict) else ""
-    if assay_id == "gibson-assembly" and str(request.get("method") or "") not in {"gibson", "nebuilder"}:
+    if assay_id == "gibson-assembly" and str(request.get("method") or "") not in {
+        "gibson",
+        "nebuilder",
+    }:
         raise JunctionError(
             "The current Junction Primers surface executes the reviewed Gibson or distinct NEBuilder HiFi branch. In-Fusion/IVA remain characterization/reference branches."
         )
@@ -1492,10 +1565,19 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "The NEB E5510 overlay belongs to the Gibson Assembly chemistry; "
             "choose method `gibson` or leave the vendor overlay unselected."
         )
-    if assembly_protocol in {"neb-nebuilder-e2621", "neb-nebuilder-e5520", "neb-nebuilder-e2623"} and how.id != "nebuilder":
+    if (
+        assembly_protocol in {"neb-nebuilder-e2621", "neb-nebuilder-e5520", "neb-nebuilder-e2623"}
+        and how.id != "nebuilder"
+    ):
         raise JunctionError("The selected NEBuilder kit overlay requires method `nebuilder`.")
-    if how.id == "nebuilder" and assembly_protocol not in {"neb-nebuilder-e2621", "neb-nebuilder-e5520", "neb-nebuilder-e2623"}:
-        raise JunctionError("Executable NEBuilder requires an explicit current NEBuilder protocol identity (E2621/E5520/E2623).")
+    if how.id == "nebuilder" and assembly_protocol not in {
+        "neb-nebuilder-e2621",
+        "neb-nebuilder-e5520",
+        "neb-nebuilder-e2623",
+    }:
+        raise JunctionError(
+            "Executable NEBuilder requires an explicit current NEBuilder protocol identity (E2621/E5520/E2623)."
+        )
     if how.id == "iva":
         raise JunctionError(
             "IVA is recognised but not executable in Generation-1: the original optimisation "
@@ -1619,11 +1701,17 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
                     "restriction": segment.restriction,
                     "features": list(segment.features),
                     "provenance": segment.provenance,
-                    "molarity": ({
-                        "pmol_from_mass": round(segment.mass_ng / (0.66 * len(segment.sequence)), 6),
-                        "formula": "pmol = mass_ng / (0.66 * bp) for dsDNA approximation",
-                        "claim_boundary": "Approximate dsDNA mass↔mole conversion; use exact molecular weight/provider calculator when required."
-                    } if segment.mass_ng is not None and segment.kind != "ssdna-oligo" else None),
+                    "molarity": (
+                        {
+                            "pmol_from_mass": round(
+                                segment.mass_ng / (0.66 * len(segment.sequence)), 6
+                            ),
+                            "formula": "pmol = mass_ng / (0.66 * bp) for dsDNA approximation",
+                            "claim_boundary": "Approximate dsDNA mass↔mole conversion; use exact molecular weight/provider calculator when required.",
+                        }
+                        if segment.mass_ng is not None and segment.kind != "ssdna-oligo"
+                        else None
+                    ),
                 }
                 for segment in plan.segments
             ],
@@ -1636,8 +1724,20 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             ),
         },
         "assembly_graph": {
-            "nodes": [{"id": segment.name, "kind": segment.kind, "length": len(segment.sequence)} for segment in plan.segments if segment.kind not in LITERAL_KINDS],
-            "edges": [{"junction": one.index, "from": one.upstream, "to": one.downstream, "interposed": one.interposed} for one in plan.junctions()],
+            "nodes": [
+                {"id": segment.name, "kind": segment.kind, "length": len(segment.sequence)}
+                for segment in plan.segments
+                if segment.kind not in LITERAL_KINDS
+            ],
+            "edges": [
+                {
+                    "junction": one.index,
+                    "from": one.upstream,
+                    "to": one.downstream,
+                    "interposed": one.interposed,
+                }
+                for one in plan.junctions()
+            ],
             "topology": "circular" if plan.circular else "linear",
             "rotation_invariance": "segment-order rotation is a representational change only for circular constructs; scientific output is compared by canonicalized graph/sequence in property tests",
         },
@@ -1647,10 +1747,17 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
             "warnings": [
                 warning
                 for segment in plan.segments
-                for warning in ([f"{segment.name}: coding feature length is not divisible by 3"] if any(
-                    str(feature.get("type", "")).lower() in {"cds", "orf"} and isinstance(feature.get("start"), int) and isinstance(feature.get("end"), int) and (int(feature["end"])-int(feature["start"])) % 3 != 0
-                    for feature in segment.features
-                ) else [])
+                for warning in (
+                    [f"{segment.name}: coding feature length is not divisible by 3"]
+                    if any(
+                        str(feature.get("type", "")).lower() in {"cds", "orf"}
+                        and isinstance(feature.get("start"), int)
+                        and isinstance(feature.get("end"), int)
+                        and (int(feature["end"]) - int(feature["start"])) % 3 != 0
+                        for feature in segment.features
+                    )
+                    else []
+                )
             ],
             "claim_boundary": "PCRStudio reports declared feature/frame inconsistencies; it does not infer biological feature annotations from raw sequence.",
         },
@@ -1679,27 +1786,31 @@ def run(request: dict[str, Any]) -> dict[str, Any]:
         "why_nothing": _why_nothing(unjoinable, refused, remaining, primers),
         "orderability": orderability,
         "workflow_evidence": evidence_block(request.get("workflow_evidence")),
-        "order_sheet": ([] if incomplete_design else [
-            {
-                "name": one.name,
-                "sequence": one.sequence,
-                "annealing_sequence": one.anneals,
-                "tail_sequence": one.tail,
-                "kind": "primer",
-                "length": one.length,
-                "gc_percent": analyse(one.sequence, **reaction).gc_percent,
-                "tm": analyse(one.anneals, **reaction).tm,
-                "tube": one.fragment,
-                "note": (
-                    f"The temperature here is the annealing portion's, not the whole "
-                    f"oligo's — {len(one.tail)} of its {one.length} bases are the join "
-                    "and are not on the template in the first cycle."
-                )
-                if one.tail
-                else "",
-            }
-            for one in primers
-        ]),
+        "order_sheet": (
+            []
+            if incomplete_design
+            else [
+                {
+                    "name": one.name,
+                    "sequence": one.sequence,
+                    "annealing_sequence": one.anneals,
+                    "tail_sequence": one.tail,
+                    "kind": "primer",
+                    "length": one.length,
+                    "gc_percent": analyse(one.sequence, **reaction).gc_percent,
+                    "tm": analyse(one.anneals, **reaction).tm,
+                    "tube": one.fragment,
+                    "note": (
+                        f"The temperature here is the annealing portion's, not the whole "
+                        f"oligo's — {len(one.tail)} of its {one.length} bases are the join "
+                        "and are not on the template in the first cycle."
+                    )
+                    if one.tail
+                    else "",
+                }
+                for one in primers
+            ]
+        ),
     }
     if selected_protocol is not None:
         answer["protocol"] = selected_protocol
