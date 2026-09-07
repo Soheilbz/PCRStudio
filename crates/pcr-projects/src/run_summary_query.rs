@@ -1,5 +1,10 @@
 pub(super) const RUNS: &str = "WITH summaries AS (
-    SELECT id, label, created_at, target_name,
+    SELECT id, label, created_at,
+           CASE
+               WHEN target_name <> '' THEN target_name
+               WHEN jsonb_typeof(result -> 'target') = 'object' THEN COALESCE(result -> 'target' ->> 'name', '')
+               ELSE ''
+           END AS target_name,
            share_hash IS NOT NULL AS shared,
            CASE
                WHEN result_unit <> 'result' THEN result_count
