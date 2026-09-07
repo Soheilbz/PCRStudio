@@ -1479,10 +1479,10 @@ impl Projects {
         self.get(user_id, project_id).await?;
 
         let rows = sqlx::query_as::<_, RunSummaryRow>(run_summary_query::RUNS)
-        .bind(project_id)
-        .fetch_all(&self.pool)
-        .await
-        .map_err(store)?;
+            .bind(project_id)
+            .fetch_all(&self.pool)
+            .await
+            .map_err(store)?;
 
         Ok(rows.into_iter().map(Into::into).collect())
     }
