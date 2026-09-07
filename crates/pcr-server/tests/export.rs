@@ -109,7 +109,8 @@ async fn account_with_a_draft(router: &Router) -> String {
     assert_eq!(
         status,
         StatusCode::OK,
-        "registration should succeed before the project fixture is built: {registered}"
+        "registration should succeed before the project fixture is built (status={status}, kind={:?})",
+        registered.get("kind")
     );
     let token = registered["token"].as_str().expect("a token").to_owned();
 
@@ -128,7 +129,7 @@ async fn account_with_a_draft(router: &Router) -> String {
     );
 
     let id = project["id"].as_str().expect("an id");
-    let (status, _) = send(
+    let (status, draft) = send(
         router,
         "PATCH",
         &format!("/api/projects/{id}"),
@@ -139,7 +140,12 @@ async fn account_with_a_draft(router: &Router) -> String {
         })),
     )
     .await;
-    assert_eq!(status, StatusCode::OK, "the draft should save");
+    assert_eq!(
+        status,
+        StatusCode::OK,
+        "the draft should save (status={status}, kind={:?})",
+        draft.get("kind")
+    );
 
     token
 }
