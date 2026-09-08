@@ -1853,9 +1853,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 212771,
+      "bytes": 212770,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "c8e5724f7aad2a2d9109fcae1fa63b5aa561ea7c2353451b63e8b38253b4cb1f"
+      "sha256": "56c6a03880adddfb8535bcd66763dd27cd0e5fd1579d9a8a81aa57198957eb34"
     },
     {
       "bytes": 2031,
@@ -3618,9 +3618,9 @@
       "sha256": "bc0f1d324318fb438904063ba0e9e94ad3e14b7f102109fad4912163b6410997"
     },
     {
-      "bytes": 336,
+      "bytes": 288,
       "path": "web/next-env.d.ts",
-      "sha256": "92efde56b0371556b1c93a108af8a9c96e208715b8a49b4bf69cbbd639fcde8f"
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
     },
     {
       "bytes": 4442,
@@ -5253,9 +5253,9 @@
       "sha256": "b208ee8f79afd61ca80420369e99333bb40f3096699ba12b2b8d47b69e5a4ca2"
     },
     {
-      "bytes": 1378,
+      "bytes": 914,
       "path": "web/tsconfig.json",
-      "sha256": "9775a43c05204acd23d67d2031e1dfd244473036b70f858fc9d59364f76f3491"
+      "sha256": "65fe0c89a00031a5afe52e341323ab731fe7b946e4c878a79c2cd88a5e646c1e"
     },
     {
       "bytes": 826,
