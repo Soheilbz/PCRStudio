@@ -1702,8 +1702,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 10443,
-      "after_sha256": "79ce6dcc8909056294030dea92ac667bc21e08c88ec2c538297613837b659086",
+      "after_bytes": 11032,
+      "after_sha256": "1ccbcfa8a63d6d7afe335d0a75995cef7149970d4825442f08610074c71e2bf5",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -4019,8 +4019,8 @@
       "path": "web/e2e/try.spec.ts"
     },
     {
-      "after_bytes": 288,
-      "after_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+      "after_bytes": 336,
+      "after_sha256": "92efde56b0371556b1c93a108af8a9c96e208715b8a49b4bf69cbbd639fcde8f",
       "before_bytes": 303,
       "before_sha256": "b8b3a344484b959af5e4e3fc1a1609dac3cb9ece0cdeb6c145be29bc4c491000",
       "path": "web/next-env.d.ts"
@@ -4943,8 +4943,8 @@
       "path": "web/src/proxy.ts"
     },
     {
-      "after_bytes": 1206,
-      "after_sha256": "537c77ed8239e0f8a3a30745a889904e64d0c581b714f72b91d21c6f470d37f3",
+      "after_bytes": 1378,
+      "after_sha256": "9775a43c05204acd23d67d2031e1dfd244473036b70f858fc9d59364f76f3491",
       "before_bytes": 913,
       "before_sha256": "e9033837f178dbf7be66d7b897c68a39904d18ccd947580f514ad4e0f23d19f1",
       "path": "web/tsconfig.json"

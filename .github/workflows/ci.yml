@@ -214,6 +214,19 @@ jobs:
             fi
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish actionable image findings
+        if: always()
+        run: |
+          if [ -s trivy-api-image.txt ]; then
+            sed -n '1,120p' trivy-api-image.txt | while IFS= read -r line; do
+              line="${line//'%'/'%25'}"
+              line="${line//$'\r'/'%0D'}"
+              line="${line//$'\n'/'%0A'}"
+              echo "::error file=docker/api.Dockerfile,line=1,title=Trivy finding::${line}"
+            done
+          else
+            echo '::warning file=docker/api.Dockerfile,line=1,title=Trivy report::Trivy did not produce a report file.'
+          fi
       - name: Generate image SBOMs
         run: |
           docker sbom --format cyclonedx-json --output image-sbom-api.cdx.json pcrstudio-api:ci
