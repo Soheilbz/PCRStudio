@@ -1,0 +1,51 @@
+# Keep local credentials, caches, and build products out of every Docker
+# build context. The Dockerfiles copy only source files and lockfiles they
+# explicitly need; these exclusions keep local toolchains from inflating the
+# context or leaking into image layers.
+.git
+.git/**
+.local
+.local/**
+.agents
+.agents/**
+.codex
+.codex/**
+
+node_modules
+**/node_modules
+target
+**/target
+web/.next
+**/.next
+tools/.venv
+**/.venv
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+**/.pytest_cache
+.ruff_cache
+**/.ruff_cache
+.mypy_cache
+**/.mypy_cache
+coverage
+**/coverage
+test-results
+**/test-results
+playwright-report
+**/playwright-report
+dist
+**/dist
+build
+**/build
+
+# Local secrets and runtime overrides; retain safe examples for compose.
+.env
+.env.*
+!.env.example
+!.env.vm.example
+compose.override.local.yaml
+
+*.log
