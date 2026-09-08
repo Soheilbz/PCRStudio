@@ -196,9 +196,24 @@ jobs:
         with:
           image-ref: pcrstudio-api:ci
           format: table
+          output: trivy-api-image.txt
           exit-code: 1
           severity: CRITICAL,HIGH
           ignore-unfixed: true
+      - name: Publish API image scan report
+        if: always()
+        run: |
+          {
+            echo '## API image vulnerability scan'
+            echo
+            echo '```text'
+            if [ -s trivy-api-image.txt ]; then
+              cat trivy-api-image.txt
+            else
+              echo 'Trivy did not produce a report file.'
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Generate image SBOMs
         run: |
           docker sbom --format cyclonedx-json --output image-sbom-api.cdx.json pcrstudio-api:ci

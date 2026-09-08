@@ -33,9 +33,9 @@
       "sha256": "f922d517569db6df0569b24691dcba6f7cd06ce0d6edede236459f607ea56aa2"
     },
     {
-      "bytes": 9981,
+      "bytes": 10443,
       "path": ".github/workflows/ci.yml",
-      "sha256": "adcf7db7df0d0d324a7da0bd2030c8e21f9937c9edc13841a2c64a6dbe133dc1"
+      "sha256": "79ce6dcc8909056294030dea92ac667bc21e08c88ec2c538297613837b659086"
     },
     {
       "bytes": 816,
@@ -1853,9 +1853,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 212770,
+      "bytes": 212771,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "5af7916f63756624abcfb0514ed74c21a52ceed7d206e6406b0fd6bf3fa59d80"
+      "sha256": "b5def3a61d1fdbd9b291c232c86e0de9045a852971f31f2fa8f7eb63916514c8"
     },
     {
       "bytes": 2031,

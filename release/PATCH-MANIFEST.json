@@ -1702,8 +1702,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 9981,
-      "after_sha256": "adcf7db7df0d0d324a7da0bd2030c8e21f9937c9edc13841a2c64a6dbe133dc1",
+      "after_bytes": 10443,
+      "after_sha256": "79ce6dcc8909056294030dea92ac667bc21e08c88ec2c538297613837b659086",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
