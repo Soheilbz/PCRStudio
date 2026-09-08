@@ -45,6 +45,7 @@ RUN case "$PCRSTUDIO_BUILD_ID" in \
     || (echo 'fatal: PCRSTUDIO_BUILD_ID must be a 64-character SHA-256 digest' >&2; exit 64)
 LABEL org.pcrstudio.source-manifest.sha256="$PCRSTUDIO_BUILD_ID"
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install --no-install-recommends -y ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --system --gid 10001 pcr \

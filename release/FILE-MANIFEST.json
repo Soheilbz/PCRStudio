@@ -1073,9 +1073,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 5700,
+      "bytes": 5728,
       "path": "docker/api.Dockerfile",
-      "sha256": "ec963bf6cb5ddd14ce67921c4be6138f1e8957f6da67e6ca1bd3d49968abf823"
+      "sha256": "7414234e94e293d76603108aebcaf2317aa75491897e6387e6042b8057da1770"
     },
     {
       "bytes": 1762,
@@ -1855,7 +1855,7 @@
     {
       "bytes": 212771,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "b5def3a61d1fdbd9b291c232c86e0de9045a852971f31f2fa8f7eb63916514c8"
+      "sha256": "6df55796801813efbbdea7124cc0db7ed337a07cf5ad8bf425169e73d4b3ca03"
     },
     {
       "bytes": 2031,
@@ -1978,9 +1978,9 @@
       "sha256": "dcb0d3dd18decaa9e3de9cba33d3ae61cc7d824556530fbbf1edad4e0817af14"
     },
     {
-      "bytes": 5266,
+      "bytes": 5355,
       "path": "release/current/SOURCE-QUALIFICATION.json",
-      "sha256": "d1db99d2d185c60476714d28a5ac4a53ec5523f42c039d6f9c6045d009daee04"
+      "sha256": "a6ed58821e7e43e20a923631f30e2eaf1a969aaf9a7d1f77cff5b2665ea1345e"
     },
     {
       "bytes": 974,

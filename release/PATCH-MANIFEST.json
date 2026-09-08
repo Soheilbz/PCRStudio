@@ -2304,8 +2304,8 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 5700,
-      "after_sha256": "ec963bf6cb5ddd14ce67921c4be6138f1e8957f6da67e6ca1bd3d49968abf823",
+      "after_bytes": 5728,
+      "after_sha256": "7414234e94e293d76603108aebcaf2317aa75491897e6387e6042b8057da1770",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"
@@ -2801,8 +2801,8 @@
       "path": "release/current/PERFORMANCE-STATUS.md"
     },
     {
-      "after_bytes": 5266,
-      "after_sha256": "d1db99d2d185c60476714d28a5ac4a53ec5523f42c039d6f9c6045d009daee04",
+      "after_bytes": 5355,
+      "after_sha256": "a6ed58821e7e43e20a923631f30e2eaf1a969aaf9a7d1f77cff5b2665ea1345e",
       "before_bytes": 3630,
       "before_sha256": "60cae79862da151902beb2beb68fa4f4213bd769b2c4d5c93d5a4dd39a1e9ae3",
       "path": "release/current/SOURCE-QUALIFICATION.json"

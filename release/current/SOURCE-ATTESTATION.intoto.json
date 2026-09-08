@@ -22,19 +22,19 @@
   "subject": [
     {
       "digest": {
-        "sha256": "f86e05ea0e85ef4b402af0a78f8e57471e44a792e1118d617fab5f54797f9565"
+        "sha256": "6fb4dadb52f1d20ea4c6143ddc7e5e9dc9cdd2cdf2638b5ae9f4d27bec2c7dfa"
       },
       "name": "release/FILE-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "7d1b70ceed492984de87fad745fec52b49f1f2f3960bede1a0d14e77143ea503"
+        "sha256": "72accc47f0b61f23d2114621d999ed53ac311d8c5c8bc39b70555863fe08785e"
       },
       "name": "release/PATCH-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "88b6f130a91c4626bfe3939f00e96838ec9816184df41ea14261214939ecbfb7"
+        "sha256": "9a28531586ff2ea217f199c602b1c4de5c0fc7519debc8e8f0524df8393a4c04"
       },
       "name": "release/RUNTIME-CONTRACT-MANIFEST.json"
     },

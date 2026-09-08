@@ -34,7 +34,7 @@
     {
       "name": "runtime-artifact-generator-check",
       "status": "PASS",
-      "stdout": "RUNTIME_ARTIFACTS=CHECK-PASS knowledge/runtime/profile-bindings.generated.json, knowledge/runtime/module-rule-trace.generated.json, web/src/lib/projects/required-context.generated.json, web/src/lib/lamp-numeric-recipes.generated.json and web/src/lib/flanking-numeric-recipes.generated.json modules=21"
+      "stdout": "RUNTIME_ARTIFACTS=CHECK-PASS knowledge/runtime/profile-bindings.generated.json, knowledge/runtime/module-rule-trace.generated.json, web/src/lib/projects/required-context.generated.json, web/src/lib/module-copy.generated.json, web/src/lib/module-documentation.generated.json, web/src/lib/lamp-numeric-recipes.generated.json and web/src/lib/flanking-numeric-recipes.generated.json modules=21"
     },
     {
       "name": "operations-policy-generator-check",
@@ -89,7 +89,7 @@
     {
       "name": "high-confidence-secret-scan",
       "status": "PASS",
-      "stdout": "Secret scan: PASS (1053 text files; high-confidence credential formats only)"
+      "stdout": "Secret scan: PASS (1069 text files; high-confidence credential formats only)"
     },
     {
       "name": "linux-bootstrap-source-regression",
@@ -129,7 +129,7 @@
     {
       "name": "focused-source-regression-tests",
       "status": "PASS",
-      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 1.05s"
+      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 1.81s"
     }
   ],
   "hygiene": {
@@ -143,10 +143,10 @@
     "status": "NOT_ASSERTED_HERE"
   },
   "parse": {
-    "json": 225,
+    "json": 228,
     "python": 232,
     "toml": 23,
-    "typescript_tsx_syntax_parse": 279
+    "typescript_tsx_syntax_parse": 284
   },
   "release_class": "generation-1-unified-engine-linux-current",
   "release_id": "CURRENT",
@@ -154,7 +154,7 @@
   "scope": "environment-independent-source-qualification",
   "status": "PASS",
   "supply_chain": {
-    "container_images_pinned": 10,
-    "github_actions_sha_pinned": 14
+    "container_images_pinned": 11,
+    "github_actions_sha_pinned": 17
   }
 }
