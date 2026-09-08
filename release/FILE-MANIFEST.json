@@ -5,8 +5,13 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1050,
+  "file_count": 1051,
   "files": [
+    {
+      "bytes": 817,
+      "path": ".dockerignore",
+      "sha256": "de366eaf2bf351f62a06e60d1eca773cfc20c6114e66afa2f3c38217b9dea5f4"
+    },
     {
       "bytes": 1487,
       "path": ".env.example",
@@ -1848,9 +1853,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 212654,
+      "bytes": 212770,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "fa83c0841f59639936b6576310aa06e6d59ec6522851cbbbf4b035c9572d7b0b"
+      "sha256": "40d9d816ab650f274b22a76c407864d207c7e2fbd8b767e74fbaf66ebc845334"
     },
     {
       "bytes": 2031,
@@ -1945,12 +1950,12 @@
     {
       "bytes": 1611,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "ed834067160e32f960304165c41f978a929d90c20507c9a5586ef0e0ada842b1"
+      "sha256": "afeb824535725def974b3a899bd20efd3df982c4f48c9db604f5b33108e01057"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "ba4945b63c62e8afe74847ff127313f36ec8ef9030a2e166bd02eddd1ad34e6a"
+      "sha256": "972084f21edd6f0b32dcafd9b959a0e9b50004f9999caf021d799cfbe57b769e"
     },
     {
       "bytes": 7620,

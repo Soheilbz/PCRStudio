@@ -773,12 +773,12 @@
     {
       "bytes": 1611,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "ed834067160e32f960304165c41f978a929d90c20507c9a5586ef0e0ada842b1"
+      "sha256": "afeb824535725def974b3a899bd20efd3df982c4f48c9db604f5b33108e01057"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "ba4945b63c62e8afe74847ff127313f36ec8ef9030a2e166bd02eddd1ad34e6a"
+      "sha256": "972084f21edd6f0b32dcafd9b959a0e9b50004f9999caf021d799cfbe57b769e"
     },
     {
       "bytes": 7620,
@@ -1673,6 +1673,13 @@
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
   "modified": [
+    {
+      "after_bytes": 817,
+      "after_sha256": "de366eaf2bf351f62a06e60d1eca773cfc20c6114e66afa2f3c38217b9dea5f4",
+      "before_bytes": 557,
+      "before_sha256": "5bebad8aff89df98065be3c7da66e06ce87e46038bf1c72c5e46f936e7969128",
+      "path": ".dockerignore"
+    },
     {
       "after_bytes": 1487,
       "after_sha256": "07b82d94a489871af9eb80d9499bd829f72753dd6e15bc31bafe137693c09980",
@@ -4951,11 +4958,6 @@
       "path": ".cargo/audit.toml"
     },
     {
-      "before_bytes": 557,
-      "before_sha256": "5bebad8aff89df98065be3c7da66e06ce87e46038bf1c72c5e46f936e7969128",
-      "path": ".dockerignore"
-    },
-    {
       "before_bytes": 2869,
       "before_sha256": "679c1c6475805bf93eec05b604cfb1ef9fd6aa9af11130644b94c0281ffe7436",
       "path": ".github/workflows/windows-source-qualification.yml"
@@ -5229,7 +5231,7 @@
   "schema_version": "2.1.0",
   "summary": {
     "added": 332,
-    "modified": 467,
-    "removed": 56
+    "modified": 468,
+    "removed": 55
   }
 }
