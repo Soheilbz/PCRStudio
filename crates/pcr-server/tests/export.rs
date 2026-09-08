@@ -9,7 +9,6 @@ use axum::http::{Request, StatusCode};
 use axum::Router;
 use http_body_util::BodyExt;
 use pcr_accounts::Accounts;
-use pcr_core::Registry;
 use serde_json::{json, Value};
 use tower::ServiceExt;
 
@@ -35,7 +34,7 @@ async fn app() -> Option<Router> {
     let separator = if base.contains('?') { '&' } else { '?' };
     let url = format!("{base}{separator}options=-c%20search_path%3D{schema}");
     let accounts = Accounts::connect(&url).await.expect("the store opens");
-    let registry = Registry::new();
+    let registry = pcr_core::default_registry().expect("the shipped catalogue should load");
 
     Some(
         Router::new()
