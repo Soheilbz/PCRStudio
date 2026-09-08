@@ -19,7 +19,7 @@ RUN cargo build --locked --release -p pcr-server --bin pcr-server \
     && cargo build --locked --release -p pcr-server --bin pcr-migrate
 
 # ── Worker + scientific toolchain ──────────────────────────────────────────
-FROM python:3.12-slim-bookworm@sha256:782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254 AS science-builder
+FROM python:3.14-slim-bookworm@sha256:9ab8d9c8514b44f90cf0029dd42fdd7e9e211e639c8b995304cc04568dee900f AS science-builder
 WORKDIR /src
 RUN apt-get update \
     && apt-get install --no-install-recommends -y build-essential ca-certificates \
@@ -36,7 +36,7 @@ RUN PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
     && rm -rf /opt/pcrstudio/tools/downloads /opt/pcrstudio/tools/primerpooler-build
 
 # ── Minimal common runtime ──────────────────────────────────────────────────
-FROM python:3.12-slim-bookworm@sha256:782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254 AS process-runtime-base
+FROM python:3.14-slim-bookworm@sha256:9ab8d9c8514b44f90cf0029dd42fdd7e9e211e639c8b995304cc04568dee900f AS process-runtime-base
 ARG PCRSTUDIO_BUILD_ID
 RUN case "$PCRSTUDIO_BUILD_ID" in \
       (*[!0-9a-f]*|'') echo 'fatal: PCRSTUDIO_BUILD_ID must be lowercase hex' >&2; exit 64 ;; \
