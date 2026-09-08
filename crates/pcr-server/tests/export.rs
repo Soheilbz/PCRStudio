@@ -441,6 +441,10 @@ async fn probes_with_worker(
     Some((
         Router::new()
             .route("/ready", axum::routing::get(pcr_server::readiness::ready))
+            .route(
+                "/ready/scientific",
+                axum::routing::get(pcr_server::readiness::scientific_ready),
+            )
             .with_state(readiness.clone()),
         readiness,
     ))
@@ -465,7 +469,7 @@ async fn readiness_says_which_dependency_is_missing() {
         return;
     };
 
-    let (status, body) = send(&router, "GET", "/ready", None, None).await;
+    let (status, body) = send(&router, "GET", "/ready/scientific", None, None).await;
 
     assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
     assert_eq!(body["ready"], false);
