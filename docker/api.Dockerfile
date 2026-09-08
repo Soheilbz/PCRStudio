@@ -10,7 +10,7 @@
 # not carry that attack surface or image weight merely for build convenience.
 
 # ── Rust binaries ───────────────────────────────────────────────────────────
-FROM rust:1.94-bookworm@sha256:6ae102bdbf528294bc79ad6e1fae682f6f7c2a6e6621506ba959f9685b308a55 AS rust-builder
+FROM rust:1.98-bookworm@sha256:82150a52ec202c1b14d7817e14516c392bb7f5cfebd88f1ed531cb37ebd39922 AS rust-builder
 WORKDIR /src
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
