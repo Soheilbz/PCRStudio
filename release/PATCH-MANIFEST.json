@@ -401,6 +401,11 @@
       "sha256": "93d17434cb2ecff42aae633d7275c1673b0ae3ede48795e25cdf61591f3f73ec"
     },
     {
+      "bytes": 2005,
+      "path": "crates/pcr-projects/src/run_summary_query.rs",
+      "sha256": "f459536e333a1c0a2e17daa0594a56f4203ca1c12aea974182b508593e3f24e6"
+    },
+    {
       "bytes": 1332,
       "path": "crates/pcr-projects/src/save_run_input.rs",
       "sha256": "30c7446ae31fff7bf705e1ce3da139af4cf767f12f35fc1b10692befe3098b5f"
@@ -768,12 +773,12 @@
     {
       "bytes": 1611,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "091e401e7dc89facbea493a60b2e581944991e33b1831aaa4aa3efbdfa57a035"
+      "sha256": "ed834067160e32f960304165c41f978a929d90c20507c9a5586ef0e0ada842b1"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "33abb62e65ff5254adc5869bb8f4b7bcda98c9ab1ed49150aae6723849d507d6"
+      "sha256": "ba4945b63c62e8afe74847ff127313f36ec8ef9030a2e166bd02eddd1ad34e6a"
     },
     {
       "bytes": 7620,
@@ -1690,8 +1695,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 8836,
-      "after_sha256": "fefd55948673d9ec8f22b982961ad86a7ebe5de44ddaaa02c95a436d362735db",
+      "after_bytes": 9892,
+      "after_sha256": "b39ee9657a36b95a3cfb8b2a1552d3a081cbf69a813f240728b74babbf6a17e4",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -2124,8 +2129,8 @@
       "path": "crates/pcr-projects/Cargo.toml"
     },
     {
-      "after_bytes": 81032,
-      "after_sha256": "1c2449dad2e17acbd41667613293d1596029ce8ed7e5792cf2a7684abf879358",
+      "after_bytes": 80155,
+      "after_sha256": "5ce03c3f093e3849e15ccfcccb64f8200559109218e286f03d9d0e4366c97aad",
       "before_bytes": 64252,
       "before_sha256": "b94d0396a8e4643d41f0ad74d543f2446b67339b5497bdd962963c219c3614b9",
       "path": "crates/pcr-projects/src/lib.rs"
@@ -2243,8 +2248,8 @@
       "path": "crates/pcr-server/tests/api.rs"
     },
     {
-      "after_bytes": 26470,
-      "after_sha256": "8b182b6618edda4715430dc9ac3a27d4bbd4a5032edb0cc6fdc7b6f2808ae6e4",
+      "after_bytes": 26996,
+      "after_sha256": "fff0ff968feb9a332e49dd1919dfffc632a4e56060fbeef54a20f20f41db6079",
       "before_bytes": 26432,
       "before_sha256": "8248466180d04dbb642a1701c64e2a135ccb846247681bd4cbe27e12864595cf",
       "path": "crates/pcr-server/tests/export.rs"
@@ -5223,7 +5228,7 @@
   ],
   "schema_version": "2.1.0",
   "summary": {
-    "added": 331,
+    "added": 332,
     "modified": 467,
     "removed": 56
   }

@@ -107,6 +107,9 @@ jobs:
           NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat "$key_file")" pnpm --filter web build
       - name: Validate deployment configurations
         run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
+          build_id="$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)"
+          export PCRSTUDIO_BUILD_ID="$build_id"
           docker compose -f compose.yaml config -q
           docker compose -f compose.yaml -f compose.vm.yaml config -q
 
