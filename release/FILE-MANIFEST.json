@@ -1083,9 +1083,9 @@
       "sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b"
     },
     {
-      "bytes": 2531,
+      "bytes": 2498,
       "path": "docker/web.Dockerfile",
-      "sha256": "6e2c03b05cd7b0fb891c91bf15c2742535f1479b595c223d13d229a944ff54f5"
+      "sha256": "2354d4dedf4bb4de5df900d62fae872dee675f155034ea5564fb3afc11f093e5"
     },
     {
       "bytes": 3729,
@@ -1855,7 +1855,7 @@
     {
       "bytes": 212770,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "40d9d816ab650f274b22a76c407864d207c7e2fbd8b767e74fbaf66ebc845334"
+      "sha256": "5af7916f63756624abcfb0514ed74c21a52ceed7d206e6406b0fd6bf3fa59d80"
     },
     {
       "bytes": 2031,

@@ -2311,8 +2311,8 @@
       "path": "docker/api.Dockerfile"
     },
     {
-      "after_bytes": 2531,
-      "after_sha256": "6e2c03b05cd7b0fb891c91bf15c2742535f1479b595c223d13d229a944ff54f5",
+      "after_bytes": 2498,
+      "after_sha256": "2354d4dedf4bb4de5df900d62fae872dee675f155034ea5564fb3afc11f093e5",
       "before_bytes": 1678,
       "before_sha256": "c9457a3cf245d04b4bdc566f9e83bda6bf53c6ab2504b5d13bd70758c05cb97b",
       "path": "docker/web.Dockerfile"

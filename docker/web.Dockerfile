@@ -33,12 +33,7 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 # there, so the build does not depend on the core being up.
 RUN --mount=type=secret,id=next_server_actions_key,required=true \
     NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat /run/secrets/next_server_actions_key)" \
-    node -e '
-      const k=process.env.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY || "";
-      const b=Buffer.from(k, "base64");
-      if (![16,24,32].includes(b.length) || b.toString("base64") !== k) {
-        throw new Error("NEXT_SERVER_ACTIONS_ENCRYPTION_KEY must be canonical base64 for 16/24/32 bytes");
-      }' \
+    node -e 'const k=process.env.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY || ""; const b=Buffer.from(k, "base64"); if (![16,24,32].includes(b.length) || b.toString("base64") !== k) { throw new Error("NEXT_SERVER_ACTIONS_ENCRYPTION_KEY must be canonical base64 for 16/24/32 bytes"); }' \
     && NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat /run/secrets/next_server_actions_key)" pnpm --filter web build
 
 FROM base AS runtime
