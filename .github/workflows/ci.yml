@@ -195,8 +195,8 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
           image-ref: pcrstudio-api:ci
-          format: table
-          output: trivy-api-image.txt
+          format: json
+          output: trivy-api-image.json
           exit-code: 1
           severity: CRITICAL,HIGH
           ignore-unfixed: true
@@ -207,8 +207,14 @@ jobs:
             echo '## API image vulnerability scan'
             echo
             echo '```text'
-            if [ -s trivy-api-image.txt ]; then
-              cat trivy-api-image.txt
+            if [ -s trivy-api-image.json ]; then
+              jq -r '
+                .Results[]?
+                | . as $result
+                | ($result.Vulnerabilities // [])[]
+                | [$result.Target, .VulnerabilityID, .PkgName, .InstalledVersion, (.FixedVersion // "-"), .Severity]
+                | @tsv
+              ' trivy-api-image.json
             else
               echo 'Trivy did not produce a report file.'
             fi
@@ -217,8 +223,14 @@ jobs:
       - name: Publish actionable image findings
         if: always()
         run: |
-          if [ -s trivy-api-image.txt ]; then
-            sed -n '1,120p' trivy-api-image.txt | while IFS= read -r line; do
+          if [ -s trivy-api-image.json ]; then
+            jq -r '
+              .Results[]?
+              | . as $result
+              | ($result.Vulnerabilities // [])[]
+              | [$result.Target, .VulnerabilityID, .PkgName, .InstalledVersion, (.FixedVersion // "-"), .Severity]
+              | @tsv
+            ' trivy-api-image.json | while IFS= read -r line; do
               line="${line//'%'/'%25'}"
               line="${line//$'\r'/'%0D'}"
               line="${line//$'\n'/'%0A'}"
