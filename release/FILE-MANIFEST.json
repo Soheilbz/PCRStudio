@@ -28,9 +28,9 @@
       "sha256": "d69c38ee1053b25d9b7d480cb8f5197ed061b17d4548fa6490ac2c5951600adc"
     },
     {
-      "bytes": 2477,
+      "bytes": 2480,
       "path": ".github/dependabot.yml",
-      "sha256": "474b1cc2ba91a69e990ded4c1efb4106e92bccd0e587a96f66a9e0f99cd25827"
+      "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
       "bytes": 17276,
@@ -1865,7 +1865,7 @@
     {
       "bytes": 215058,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "c79761ad8bff5675acaf5b1d1d73bfbea0552d207857d1fa828c1e5a14addaad"
+      "sha256": "b60170c22bbdcf062e1efd2603af07d01f19d81ca372195eff49bd58300efc45"
     },
     {
       "bytes": 2048,
