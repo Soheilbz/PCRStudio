@@ -1700,8 +1700,8 @@
       "path": ".env.vm.example"
     },
     {
-      "after_bytes": 746,
-      "after_sha256": "4688b9f7b9a0e70cabf77b69c1fbbe12825ce9a37d8e1fcb84dd7701116941bb",
+      "after_bytes": 2477,
+      "after_sha256": "474b1cc2ba91a69e990ded4c1efb4106e92bccd0e587a96f66a9e0f99cd25827",
       "before_bytes": 417,
       "before_sha256": "ddcd5627daf1993c3a08b86098388aa38a1fdbf4fc65cc348a8b061e9f7d55c8",
       "path": ".github/dependabot.yml"

@@ -1,32 +1,100 @@
 version: 2
+
+# Dependabot is intentionally limited to grouped proposals per dependency
+# boundary. The default branch is the only integration target; production
+# pins and lockfiles still require the normal repository gates.
 updates:
   - package-ecosystem: github-actions
     directory: "/"
+    target-branch: main
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 10
+      day: monday
+      time: "04:00"
+      timezone: UTC
+    groups:
+      github-actions-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 1
+    rebase-strategy: auto
+    labels: [dependencies, github-actions]
+    commit-message:
+      prefix: "deps(actions)"
+
   - package-ecosystem: npm
     directory: "/web"
+    target-branch: main
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+      day: monday
+      time: "04:15"
+      timezone: UTC
+    groups:
+      web-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 2
+    rebase-strategy: auto
+    labels: [dependencies, web]
+    commit-message:
+      prefix: "deps(web)"
+
   - package-ecosystem: pip
     directory: "/tools"
+    target-branch: main
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+      day: monday
+      time: "04:30"
+      timezone: UTC
+    groups:
+      python-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 1
+    rebase-strategy: auto
+    labels: [dependencies, python]
+    commit-message:
+      prefix: "deps(python)"
+
   - package-ecosystem: cargo
     directory: "/"
+    target-branch: main
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+      day: monday
+      time: "04:45"
+      timezone: UTC
+    groups:
+      rust-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 2
+    rebase-strategy: auto
+    labels: [dependencies, rust]
+    commit-message:
+      prefix: "deps(rust)"
+
   - package-ecosystem: docker
     directory: "/docker"
+    target-branch: main
     schedule:
       interval: monthly
-    open-pull-requests-limit: 5
+      day: "1"
+      time: "05:00"
+      timezone: UTC
+    groups:
+      docker-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 1
+    rebase-strategy: auto
+    labels: [dependencies, docker]
+    commit-message:
+      prefix: "deps(docker)"
