@@ -1707,8 +1707,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 17276,
-      "after_sha256": "406df93bf291267aec816f79b7fcf89613d1b8d9833a3fb03582ff7a0b9ea0e8",
+      "after_bytes": 17491,
+      "after_sha256": "1433913052f485b7b656114d5878aa4b4df37d27c0398ea5ed9830ec7eda0fbc",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -1763,8 +1763,8 @@
       "path": "compose.vm.yaml"
     },
     {
-      "after_bytes": 15403,
-      "after_sha256": "e37c4167039e6d8394dcf1efcb1d17a144bb77e241669e86f43bb4a828b97181",
+      "after_bytes": 15516,
+      "after_sha256": "bf1eafd7096d52b918f0ae2d04da2510b589fe3c8dfe9ccd6ee23623cafc21ed",
       "before_bytes": 7351,
       "before_sha256": "a6599b33461c02c68bf94cfb68609d96e547bfb4505d42f5501eb20d15219e80",
       "path": "compose.yaml"
@@ -2309,8 +2309,8 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 5729,
-      "after_sha256": "2d799f45ac784382d69f09047b8c734c6a3e8f0c68b0df8a142f2b9d99f3677f",
+      "after_bytes": 5819,
+      "after_sha256": "d314ba2a9abdde0a55719559e78d5afe6de9ae18b4cc8524b9b337d9eee7b085",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"

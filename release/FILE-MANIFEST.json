@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 17276,
+      "bytes": 17491,
       "path": ".github/workflows/ci.yml",
-      "sha256": "406df93bf291267aec816f79b7fcf89613d1b8d9833a3fb03582ff7a0b9ea0e8"
+      "sha256": "1433913052f485b7b656114d5878aa4b4df37d27c0398ea5ed9830ec7eda0fbc"
     },
     {
       "bytes": 1204,
@@ -123,9 +123,9 @@
       "sha256": "d23599199410bc497a3e4a4c6ced0b1decbc029e7fe457f4e9ae0cedd069b14b"
     },
     {
-      "bytes": 15403,
+      "bytes": 15516,
       "path": "compose.yaml",
-      "sha256": "e37c4167039e6d8394dcf1efcb1d17a144bb77e241669e86f43bb4a828b97181"
+      "sha256": "bf1eafd7096d52b918f0ae2d04da2510b589fe3c8dfe9ccd6ee23623cafc21ed"
     },
     {
       "bytes": 4633,
@@ -1083,9 +1083,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 5729,
+      "bytes": 5819,
       "path": "docker/api.Dockerfile",
-      "sha256": "2d799f45ac784382d69f09047b8c734c6a3e8f0c68b0df8a142f2b9d99f3677f"
+      "sha256": "d314ba2a9abdde0a55719559e78d5afe6de9ae18b4cc8524b9b337d9eee7b085"
     },
     {
       "bytes": 1762,
@@ -1865,7 +1865,7 @@
     {
       "bytes": 215058,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "b60170c22bbdcf062e1efd2603af07d01f19d81ca372195eff49bd58300efc45"
+      "sha256": "136891278fa3efd208b7f1d0d65ad3631e9368fb207881c6ed7eb494d179baab"
     },
     {
       "bytes": 2048,

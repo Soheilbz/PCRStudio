@@ -24,7 +24,9 @@ WORKDIR /src
 RUN apt-get update \
     && apt-get install --no-install-recommends -y build-essential ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-RUN python -m pip install --no-cache-dir uv==0.12.10
+RUN python -m venv /opt/uv \
+    && /opt/uv/bin/python -m pip install --no-cache-dir uv==0.12.10
+ENV PATH=/opt/uv/bin:${PATH}
 COPY tools ./tools
 COPY contracts/tools.toml ./contracts/tools.toml
 COPY scripts/provision-tools.py scripts/toolchain_config.py ./scripts/
@@ -49,7 +51,7 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --system --gid 10001 pcr \
-    && useradd --system --uid 10001 --gid 10001 --no-create-home pcr
+    && useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin pcr
 ENV PCRSTUDIO_BUILD_ID=${PCRSTUDIO_BUILD_ID} \
     HOME=/tmp/pcrstudio-home
 

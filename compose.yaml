@@ -19,6 +19,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-pcr}
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       POSTGRES_DB: ${POSTGRES_DB:-pcrstudio}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+      LANG: C
+      LC_ALL: C
     command: ["postgres", "-c", "max_connections=${POSTGRES_MAX_CONNECTIONS:-200}"]
     volumes:
       # Postgres 18+ images keep the cluster in a major-version subdirectory,
