@@ -41,6 +41,9 @@ RUN --mount=type=secret,id=next_server_actions_key,required=true \
     && NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat /run/secrets/next_server_actions_key)" pnpm --filter web build
 
 FROM base AS runtime
+LABEL org.pcrstudio.product="PCRStudio" \
+      org.pcrstudio.lifecycle="managed" \
+      org.pcrstudio.cache-policy="dedicated-builder-20GB"
 ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0

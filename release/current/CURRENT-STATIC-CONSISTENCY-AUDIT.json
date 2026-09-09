@@ -9,13 +9,13 @@
   },
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
-    "files": 1049,
+    "files": 1055,
     "json": 223,
-    "markdown": 114,
-    "python": 234,
+    "markdown": 116,
+    "python": 236,
     "rust": 91,
     "shell": 12,
-    "toml": 23,
+    "toml": 25,
     "typescript_tsx": 284,
     "yaml": 13
   },
@@ -24,7 +24,10 @@
     "cache_build_residue": [],
     "case_collisions": [],
     "crlf_text_files": [],
-    "shebang_scripts_missing_executable_bit": [],
+    "shebang_scripts_missing_executable_bit": [
+      "scripts/docker-maintenance.py",
+      "scripts/validate-image-vulnerability-policy.py"
+    ],
     "symlinks": []
   },
   "native_external_gate": {
@@ -53,5 +56,5 @@
     "entrypoint": "scripts/qualify-source.py",
     "status": "PASS"
   },
-  "status": "PASS"
+  "status": "FAIL"
 }

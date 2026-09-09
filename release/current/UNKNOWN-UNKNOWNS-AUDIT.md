@@ -18,7 +18,7 @@ and deployment system was complete.
 | Dependency review | No dependency-review workflow existed. | Resolved by adding `.github/workflows/dependency-review.yml`, failing on high severity changes with a pinned action. |
 | Code scanning coverage | CodeQL covered Rust only even though the repository ships Rust, Python and TypeScript; the hosted Rust initializer also rejected the obsolete `manual` build mode. | Resolved by covering Rust, Python and JavaScript/TypeScript with the supported `none` build mode; Rust compilation and tests remain separate CI gates. |
 | Image SBOM portability | CI invoked `docker sbom`, a non-core Docker plugin unavailable on the audit host. | Resolved by using pinned Anchore SBOM action/Syft and retaining all image SBOMs as a 14-day CI artifact. |
-| Image vulnerability gate | Hosted image qualification failed the API image scan on 22 HIGH Go standard-library findings in the pinned MFEprimer 4.5.1 binary (`CVE-2026-25679`, `CVE-2026-27137`, `CVE-2026-27145`, `CVE-2026-32280`, `CVE-2026-32281`, `CVE-2026-32283`, `CVE-2026-33810`, `CVE-2026-33811`, `CVE-2026-33814`, `CVE-2026-39820`, `CVE-2026-39821`, `CVE-2026-39822`, `CVE-2026-39836`, `CVE-2026-42499`, `CVE-2026-42504`, `CVE-2026-46600`, `CVE-2026-56853`, `CVE-2026-56858`, `CVE-2026-56859`, `CVE-2026-56860`, and `CVE-2026-56862`). | **Open external dependency gate.** The latest hosted run is `34377961610` for candidate commit `0998a7f`. The upstream distribution repository has no newer release or source tree for a repository-owned rebuild at audit time. Findings are not suppressed; the candidate is not GitHub-release-ready until an upstream-fixed artifact is adopted and requalified, or a security owner documents an explicit, time-bounded VEX decision with compensating controls. |
+| Image vulnerability gate | Hosted image qualification reports the explicitly listed HIGH Go standard-library findings in the pinned MFEprimer 4.5.1 binary (`CVE-2026-25679`, `CVE-2026-27137`, `CVE-2026-27145`, `CVE-2026-32280`, `CVE-2026-32281`, `CVE-2026-32283`, `CVE-2026-33810`, `CVE-2026-33811`, `CVE-2026-33814`, `CVE-2026-39820`, `CVE-2026-39821`, `CVE-2026-39822`, `CVE-2026-39836`, `CVE-2026-42499`, `CVE-2026-42504`, `CVE-2026-46600`, `CVE-2026-56853`, `CVE-2026-56858`, `CVE-2026-56859`, `CVE-2026-56860`, and `CVE-2026-56862`). | **Accepted temporarily, not suppressed.** `SEC-EXC-2026-09-MFEPRIMER-451` is exact-hash/path/version/CVE scoped and expires for review on `2026-10-09`. Trivy includes unfixed findings; the validator prints all findings and fails on any mismatch or new component. |
 The run IDs in this audit identify the hosted qualification captured for this
 evidence snapshot; later reruns are tracked separately and do not change the
 disposition recorded here.
@@ -45,7 +45,7 @@ disposition recorded here.
 The hosted run captured by this evidence snapshot (`34377961610`) for candidate commit `0998a7f` passed source/Rust/Python/
 Web checks, CodeQL, dependency review and Linux source qualification. Linux
 image qualification completed all exact image builds and failed only at the
-Trivy security scan on the 22 HIGH Go standard-library findings in
+Trivy security scan on the listed HIGH Go standard-library findings in
 `/opt/pcrstudio/tools/mfeprimer/mfeprimer`. The candidate is open as PR #19. The
 run does not indicate a Docker Hub, authentication, or mutable package-resolution
 failure; exact pinned image pulls/builds completed successfully.

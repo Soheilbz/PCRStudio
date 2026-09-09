@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1045,
+  "file_count": 1051,
   "files": [
     {
       "bytes": 816,
@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 17529,
+      "bytes": 18237,
       "path": ".github/workflows/ci.yml",
-      "sha256": "867635f09043aad0b303fec3c37531e67320b7e4f6ae1b68b117c788843f940d"
+      "sha256": "ff56fef43aa5510c5819f84f559abc2cf98b70ca19f69f55509254ba0462aa77"
     },
     {
       "bytes": 1221,
@@ -103,9 +103,9 @@
       "sha256": "a062c6347693ee186e6ef783b65331b43f26318cb3cebc2cb800b9b2ff47dc5d"
     },
     {
-      "bytes": 1179,
+      "bytes": 1451,
       "path": "SECURITY.md",
-      "sha256": "02e19690e5b0165f0fccc93b618f92485c891b2f7ef2aa7258fa7f810ffba821"
+      "sha256": "4ca809b8af7dee37f16a762dd3c18debd076b0f16461fb49ea00e5b58c4df01e"
     },
     {
       "bytes": 250,
@@ -416,6 +416,11 @@
       "bytes": 3332,
       "path": "contracts/scientific-authorities.json",
       "sha256": "fb3b3015ac0564f091fba3b71a34c003cb04a6c4f4a2c3d9d1bf2ed8699f5123"
+    },
+    {
+      "bytes": 1898,
+      "path": "contracts/security-exceptions.toml",
+      "sha256": "01c618f4d1a5e76996751feec7c1466254fc4ff28da4d358419789025918e800"
     },
     {
       "bytes": 7429,
@@ -1083,9 +1088,14 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 5819,
+      "bytes": 5961,
       "path": "docker/api.Dockerfile",
-      "sha256": "d314ba2a9abdde0a55719559e78d5afe6de9ae18b4cc8524b9b337d9eee7b085"
+      "sha256": "b7176e8022afff56a9a7beb7eb8f8e578ab7850e0136297bb56177c655243416"
+    },
+    {
+      "bytes": 438,
+      "path": "docker/buildkitd.toml",
+      "sha256": "0bd1311fe8c10ad39b1a0715a91b9d5485f2b9d24a13865d68e38feb3e3242df"
     },
     {
       "bytes": 1762,
@@ -1093,9 +1103,9 @@
       "sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b"
     },
     {
-      "bytes": 2778,
+      "bytes": 2920,
       "path": "docker/web.Dockerfile",
-      "sha256": "967f3f691ed35e888d5437633457a852caf8db3b6d5e9350a3da5c28ca07e650"
+      "sha256": "b98289aebee85310dca6ac903acda3796243890ee0b09477c991c7ce091f24b2"
     },
     {
       "bytes": 3963,
@@ -1103,9 +1113,14 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 8439,
+      "bytes": 1589,
+      "path": "docs/DOCKER-STORAGE.md",
+      "sha256": "aeca49934960f35b36a63e7ea331b2defce2b8cf6b5b2b60ecbde4172c7d9105"
+    },
+    {
+      "bytes": 8766,
       "path": "docs/OPERATIONS.md",
-      "sha256": "a3ef474309e3c821d72e472d098689aa118feaf2b90184f8647e93994d58f6b8"
+      "sha256": "d2904f9deadd6cd5a028795c0d4a618dc252cc9f28f69015463201c3041f41ef"
     },
     {
       "bytes": 2598,
@@ -1863,9 +1878,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 215058,
+      "bytes": 216057,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "e49007111ba7c8541722c8b957286fc9068d6d80c8753f8a1ec530afe4d38d33"
+      "sha256": "4c57ca3b939ca370ca604976d05008f7c0d271d3b767bd265a311dda3aea60b5"
     },
     {
       "bytes": 2048,
@@ -1938,19 +1953,19 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1571,
+      "bytes": 1670,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "0a6fd5819f60dfcbd59b75d269ddfe538d5519a69480062ddd546e00011407e3"
+      "sha256": "093f6b0ad7a13afaf6ee02b37dc153a2c64d00fb6e0a7f8db63bccb50aa7122a"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "eacbb2d87ce35925b81659e84556406e81a8694b36c0d47c1442d8b27dbd1b72"
+      "sha256": "0493262e515cf182a01ea40a31e89b255cab6e9141a7aa030ea4d64c77ff2cef"
     },
     {
-      "bytes": 32094,
+      "bytes": 32133,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "af8eac111eb1738470fd4a725de3b85316759d2164f3ae6396c700a0065862c4"
+      "sha256": "fbc03b059b2b75f0f8e3dddc49f39c0451f65b6fd7af1cfb0df4bd79df6517c2"
     },
     {
       "bytes": 507,
@@ -1961,6 +1976,11 @@
       "bytes": 1589,
       "path": "release/current/README.md",
       "sha256": "a23662c5bf6d18fa972f8c5503508dae3cdc67a390ab29bab3ecb3f84935b6ea"
+    },
+    {
+      "bytes": 1301,
+      "path": "release/current/SECURITY-EXCEPTIONS.md",
+      "sha256": "5ab7d453742c3338f4d2ed816f1410cc4e45920b58b66653c73f8d0c7e564af5"
     },
     {
       "bytes": 5355,
@@ -1978,9 +1998,9 @@
       "sha256": "ceb912d6a98435fda489bb961cf55f84e6fb33a9bc85cff015bfe4f042930214"
     },
     {
-      "bytes": 7058,
+      "bytes": 6869,
       "path": "release/current/UNKNOWN-UNKNOWNS-AUDIT.md",
-      "sha256": "82efb1e347f575a984944df85403b1fab37609b58be2af5fe6880b772674db56"
+      "sha256": "4082113d457e4bf1014202caaa30e13fa139310109b256370f8462c2a5f29887"
     },
     {
       "bytes": 450,
@@ -2093,9 +2113,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 61195,
+      "bytes": 63127,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "3bd76b19895eeb5263cd73b4488dde0604fad541437167e3f54e5bb3d1d4edda"
+      "sha256": "3a8e58e9c19a4d58eb01dd23ec7a1ed8a13b8f5698c29a1de52df6fc5003d2d2"
     },
     {
       "bytes": 17770,
@@ -2206,6 +2226,11 @@
       "bytes": 3117,
       "path": "scripts/dev-user.mjs",
       "sha256": "0307c3a93748f1d5d13947b5a8a49b821f8164dd1ff12cad3b8d83aeb50368d8"
+    },
+    {
+      "bytes": 3275,
+      "path": "scripts/docker-maintenance.py",
+      "sha256": "553049fca94c80bb7731e02784b635bd5799cfcc9c3bdba4c7bac8a974888abe"
     },
     {
       "bytes": 10516,
@@ -2411,6 +2436,11 @@
       "bytes": 2431,
       "path": "scripts/toolchain_config.py",
       "sha256": "98f502061c62ac85bda17051ae1aa4eaeda2ab63f4419ea035328a004312311b"
+    },
+    {
+      "bytes": 7124,
+      "path": "scripts/validate-image-vulnerability-policy.py",
+      "sha256": "62b295245caa44e71ea2c88c7f9ec9dff7cfacaa984f6edf62be32e75d38d5b6"
     },
     {
       "bytes": 2149,

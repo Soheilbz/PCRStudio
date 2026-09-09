@@ -11,6 +11,7 @@ until the image-level smoke gate has passed.
 from __future__ import annotations
 
 import argparse
+import atexit
 import base64
 import hashlib
 import ipaddress
@@ -38,6 +39,8 @@ SECRETS = LOCAL / "secrets"
 DEPLOY = LOCAL / "deploy"
 DEFAULT_ENV = ROOT / ".env"
 REGISTRY_HOSTS = ("auth.docker.io", "registry-1.docker.io", "production.cloudfront.docker.com")
+BUILDX_BUILDER = "pcrstudio"
+BUILDX_BUILDER_IMAGE = "moby/buildkit@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8"
 PINNED_IMAGE_RE = re.compile(
     r"(?<![A-Za-z0-9._/-])(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._/-]+"
     r"(?::[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}(?![A-Za-z0-9])"
@@ -203,6 +206,36 @@ def docker_prefix() -> list[str]:
         raise SystemExit(f"Docker Compose >= 2.24.4 is required by the private-profile !override contract; found {raw_version}")
     print(f"Docker Compose {raw_version}")
     return prefix
+
+
+def ensure_dedicated_buildx_builder(docker: list[str]) -> None:
+    """Use an isolated, garbage-collected builder for every PCRStudio build."""
+    config = ROOT / "docker" / "buildkitd.toml"
+    inspected = subprocess.run(
+        [*docker, "buildx", "inspect", BUILDX_BUILDER],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+    )
+    if inspected.returncode or BUILDX_BUILDER_IMAGE not in inspected.stdout:
+        if inspected.returncode == 0:
+            run([*docker, "buildx", "rm", "--force", BUILDX_BUILDER])
+        run([*docker, "buildx", "create", "--name", BUILDX_BUILDER, "--driver", "docker-container",
+             "--driver-opt", f"image={BUILDX_BUILDER_IMAGE}", "--config", str(config)])
+    run([*docker, "buildx", "inspect", "--bootstrap", BUILDX_BUILDER])
+    os.environ["BUILDX_BUILDER"] = BUILDX_BUILDER
+    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, maximum 20GB")
+
+
+def prune_dedicated_buildx_builder(docker: list[str]) -> None:
+    """Bound only PCRStudio's cache; never run a daemon-wide system prune."""
+    subprocess.run(
+        [*docker, "buildx", "prune", "--builder", BUILDX_BUILDER, "--all",
+         "--max-used-space", "20GB", "--force"],
+        cwd=ROOT, text=True, check=False,
+    )
+    subprocess.run(
+        [*docker, "image", "prune", "--force", "--filter", "label=org.pcrstudio.product=PCRStudio"],
+        cwd=ROOT, text=True, check=False,
+    )
 
 
 def pinned_external_image_refs(root: Path = ROOT) -> list[str]:
@@ -1108,6 +1141,11 @@ def main() -> int:
     build_identity = sha256_file(ROOT / "release" / "FILE-MANIFEST.json")
 
     docker = docker_prefix()
+    ensure_dedicated_buildx_builder(docker)
+    # Also run after a failed build: BuildKit intermediates are reconstructible,
+    # and a qualification failure must not leave an unbounded cache behind.
+    prune_dedicated_buildx_builder(docker)
+    atexit.register(prune_dedicated_buildx_builder, docker)
     values = parse_env(DEFAULT_ENV)
     values["PCRSTUDIO_BUILD_ID"] = build_identity
     values["PCRSTUDIO_COMPOSE_PROJECT"] = validate_compose_project(values.get("PCRSTUDIO_COMPOSE_PROJECT", "pcrstudio"))

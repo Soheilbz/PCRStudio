@@ -1,0 +1,12 @@
+# PCRStudio's dedicated docker-container builder policy.
+# The builder is isolated from the daemon's shared default builder and its
+# BuildKit garbage collector keeps a bounded working set. Exact image digests,
+# TLS and provenance are unaffected; only reconstructible build intermediates
+# are eligible for collection.
+[worker.oci]
+  gc = true
+  gckeepstorage = 21474836480
+
+[worker.containerd]
+  gc = true
+  gckeepstorage = 21474836480

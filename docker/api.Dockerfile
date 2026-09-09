@@ -40,6 +40,9 @@ RUN PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
 # ── Minimal common runtime ──────────────────────────────────────────────────
 FROM python:3.12-slim-bookworm@sha256:782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254 AS process-runtime-base
 ARG PCRSTUDIO_BUILD_ID
+LABEL org.pcrstudio.product="PCRStudio" \
+      org.pcrstudio.lifecycle="managed" \
+      org.pcrstudio.cache-policy="dedicated-builder-20GB"
 RUN case "$PCRSTUDIO_BUILD_ID" in \
       (*[!0-9a-f]*|'') echo 'fatal: PCRSTUDIO_BUILD_ID must be lowercase hex' >&2; exit 64 ;; \
     esac \

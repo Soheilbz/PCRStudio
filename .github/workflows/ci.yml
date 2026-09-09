@@ -258,9 +258,18 @@ jobs:
           image-ref: pcrstudio-api:ci
           format: json
           output: trivy-api-image.json
-          exit-code: 1
+          # Trivy must report every finding. The repository policy validator
+          # below decides whether an exact, time-bounded exception applies.
+          exit-code: 0
           severity: CRITICAL,HIGH
-          ignore-unfixed: true
+          ignore-unfixed: false
+      - name: Validate image vulnerability policy
+        run: |
+          mfeprimer_sha256="$(docker run --rm --entrypoint /usr/bin/sha256sum pcrstudio-api:ci /opt/pcrstudio/tools/mfeprimer/mfeprimer | awk '{print $1}')"
+          test "${#mfeprimer_sha256}" -eq 64
+          python3 scripts/validate-image-vulnerability-policy.py \
+            --report trivy-api-image.json \
+            --artifact-sha256 "$mfeprimer_sha256"
       - name: Publish API image scan report
         if: always()
         run: |
@@ -281,7 +290,7 @@ jobs:
             fi
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Publish actionable image findings
+      - name: Publish image findings
         if: always()
         run: |
           if [ -s trivy-api-image.json ]; then
@@ -295,7 +304,7 @@ jobs:
               line="${line//'%'/'%25'}"
               line="${line//$'\r'/'%0D'}"
               line="${line//$'\n'/'%0A'}"
-              echo "::error file=docker/api.Dockerfile,line=1,title=Trivy finding::${line}"
+              echo "::notice file=docker/api.Dockerfile,line=1,title=Trivy finding::${line}"
             done
           else
             echo '::warning file=docker/api.Dockerfile,line=1,title=Trivy report::Trivy did not produce a report file.'
@@ -352,6 +361,9 @@ jobs:
           path: image-sbom-*.cdx.json
           if-no-files-found: error
           retention-days: 14
+      - name: Reclaim ephemeral BuildKit cache
+        if: always()
+        run: docker buildx prune --all --max-used-space 8GB --force
 
   dependency-contract:
     name: Frozen dependency contract

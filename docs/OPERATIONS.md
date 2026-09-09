@@ -1,5 +1,11 @@
 # PCRStudio CURRENT operations runbook
 
+Docker build storage is bounded separately in
+[`DOCKER-STORAGE.md`](DOCKER-STORAGE.md). The supported bootstrap uses the
+dedicated `pcrstudio` BuildKit builder with a 20 GB cache ceiling and performs
+scoped cleanup on both success and failure; it never performs a daemon-wide
+prune that could remove another project's images.
+
 This runbook describes the operational contract shipped with the source tree. The machine-readable authority is `contracts/operations.toml`; Prometheus-compatible alert rules are generated at `ops/prometheus/pcrstudio-alerts.yml` and the normalized runtime projection is `knowledge/runtime/operations.generated.json`.
 
 ## Recovery objectives
