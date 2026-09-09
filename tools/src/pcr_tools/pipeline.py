@@ -60,7 +60,7 @@ from .presets import (
 )
 from .provenance import provenance
 from .registries.flanking_protocols import (
-    STANDARD_PCR_PROTOCOLS, colony_context,
+    colony_context,
     digital_context,
     digital_protocol,
     long_range_protocol,

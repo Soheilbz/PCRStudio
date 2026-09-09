@@ -538,7 +538,7 @@
     {
       "bytes": 159756,
       "path": "knowledge/reviews/EXPERT-MODULE-AUDIT.json",
-      "sha256": "1fc15d72d50aee118c0e35c19da8f81fcceeb9a15c13af3db01a5d3c3f67cad9"
+      "sha256": "5b56fb56711e68674ba453c4a38dcf1e59f3c3807116efc6ecbae07d0df8dce8"
     },
     {
       "bytes": 21081,
@@ -563,7 +563,7 @@
     {
       "bytes": 49732,
       "path": "knowledge/reviews/UI-UX-MODULE-AUDIT.json",
-      "sha256": "6f856c3a942f65330cb6fe2fb8569e58c6d085be22abb44d67681f51b7c2ccff"
+      "sha256": "5d67538ef1ae674d18b6139cc02fda75bb25a4b55da4f1e650e9382b76833381"
     },
     {
       "bytes": 2148,
@@ -2555,7 +2555,7 @@
     },
     {
       "after_bytes": 23822,
-      "after_sha256": "5078981979a16db553d7eaf586687247371624da2ca8015beb0d7abfa33d5e8b",
+      "after_sha256": "9f65673099456cc36d3c7628b6bca133e447599b5fbc2d5ab920b8ea4dda7be7",
       "before_bytes": 20481,
       "before_sha256": "6b6700eac78e1098c7ea4e7f242f1d80645ea8f0da81410048e9633eddbc284b",
       "path": "knowledge/reviews/EXPERT-UPGRADE-BACKLOG.json"
@@ -2583,7 +2583,7 @@
     },
     {
       "after_bytes": 63684,
-      "after_sha256": "81e4a7a09d5a96872b7aa9b14208f89655c375c10e41c08610e789f26cba6535",
+      "after_sha256": "20736a7cf8c1bbf5b94b5b57e25581ebade7e4362c571ef53ff9f89b315a3219",
       "before_bytes": 56488,
       "before_sha256": "38e8d902db411ad80e85808dc131e5e832158b0657abf32a123f86a6ad37426b",
       "path": "knowledge/reviews/MODULE-TOOLCHAIN-MATRIX.json"
@@ -2597,7 +2597,7 @@
     },
     {
       "after_bytes": 14899,
-      "after_sha256": "dbe6fbf5ab004a1280a32d2fde96bcaaf0777cc7dc49e338805e19cf32dae42d",
+      "after_sha256": "95bfea6422cb07409a6d9b19f668e88136c3d5235f1d9ef2f46a47d720efb3fc",
       "before_bytes": 9132,
       "before_sha256": "3018f0d195988f1a0b8a7170e02c29752850cfc705c2ca8e6dc8f0de7bfc9390",
       "path": "knowledge/reviews/SCIENTIFIC-RISK-REGISTER.json"
@@ -2709,7 +2709,7 @@
     },
     {
       "after_bytes": 200204,
-      "after_sha256": "be92d6882cf6ab7f1e807c564c4e2fb0f9e5328080be73f25e346ab037a532e3",
+      "after_sha256": "a4bced233917e3c9c17c0e2a234ca05d846ea6cee8405adba7ec4639e5bf889a",
       "before_bytes": 187193,
       "before_sha256": "cf739c04f1764865d5a373b96a6a6b5011b96a8640083e41956f7ee74e0670bc",
       "path": "knowledge/runtime/numeric-provenance-registry.json"
@@ -3443,8 +3443,8 @@
       "path": "tools/src/pcr_tools/orchestrator.py"
     },
     {
-      "after_bytes": 185887,
-      "after_sha256": "ccf62dab29d7d3d882117661e8636daef8d6756315688d54afdfc3328f7994fe",
+      "after_bytes": 185863,
+      "after_sha256": "17f3cb79dbbcd568ad22604257c4d4aa688bdd3dcbd820f614165f3c34ac29e3",
       "before_bytes": 182988,
       "before_sha256": "67e11b072fb914dcbf42abe97aa8302efca606fd4e683f2877343a299ff713a8",
       "path": "tools/src/pcr_tools/pipeline.py"
