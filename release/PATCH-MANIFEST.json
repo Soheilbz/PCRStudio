@@ -1749,8 +1749,8 @@
       "path": "NOTICE"
     },
     {
-      "after_bytes": 2856,
-      "after_sha256": "e33502cb64793d5e4d739352c72b2448842b2bb6c9a08e96ae7f59ee8ffe30dc",
+      "after_bytes": 2926,
+      "after_sha256": "a062c6347693ee186e6ef783b65331b43f26318cb3cebc2cb800b9b2ff47dc5d",
       "before_bytes": 18728,
       "before_sha256": "3c7ba56d752c13b0299a7184c6f1a60c214940ae658e27969358f9850cd78821",
       "path": "README.md"

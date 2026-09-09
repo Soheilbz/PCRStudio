@@ -98,9 +98,9 @@
       "sha256": "16d0b1d8ab1118775fe714e849cd81b6dad98270d40cf8074a9dd243abdd486a"
     },
     {
-      "bytes": 2856,
+      "bytes": 2926,
       "path": "README.md",
-      "sha256": "e33502cb64793d5e4d739352c72b2448842b2bb6c9a08e96ae7f59ee8ffe30dc"
+      "sha256": "a062c6347693ee186e6ef783b65331b43f26318cb3cebc2cb800b9b2ff47dc5d"
     },
     {
       "bytes": 1179,
@@ -1865,7 +1865,7 @@
     {
       "bytes": 215057,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "727b9bab314533644050bb65f1bd82f7771e0f963856a963493378328ac74975"
+      "sha256": "15fda11f0d8a3708029d9e87f0d8e17d2f4efbca7c6208e31d1561b8e290a53a"
     },
     {
       "bytes": 2048,

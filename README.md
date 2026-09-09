@@ -7,7 +7,9 @@ it.
 
 ## What it offers
 
-- Primer design and checking across 21 computational design systems.
+- Primer design and checking across twenty-one design systems over eleven
+  engines, and every engine is represented in the same evidence-aware
+  workflow.
 - Clear module pages with the inputs, outputs, method status, and known limits.
 - Support for single-assay, multiplex, qPCR, and related PCR workflows where
   the required method and evidence are available.
@@ -17,7 +19,7 @@ it.
 
 ## Read results carefully
 
-Every public module is currently marked **experimental**. This means that its
+Every system is marked **experimental**. This means that its
 implementation is computationally testable; it does not mean that the output
 has been validated at the bench. Results should be reviewed by a qualified
 researcher and validated experimentally before ordering oligos or relying on
