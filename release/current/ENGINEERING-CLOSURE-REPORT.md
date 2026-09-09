@@ -231,14 +231,17 @@ with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
 
-Hosted boundary evidence is now available. GitHub Actions run 73 for commit
-`4fac357` passed the complete Source/Rust/Python/Web checks, scientific
-readiness contract, frozen dependency contract, and Web production/browser
-qualification. Its Linux image qualification built the exact API, runner,
-migrator, and Web images, then failed only at the API image security scan on
-the ten HIGH Go-standard-library findings carried by the pinned MFEprimer 4.5.1
-binary. The finding is retained as the open external dependency gate; no image
-identity, digest, TLS, provenance, or scan policy was weakened.
+Hosted boundary evidence is now available. GitHub Actions run 73 for the
+source-equivalent commit `4fac357` passed the complete Source/Rust/Python/Web
+checks, scientific readiness contract, frozen dependency contract, and Web
+production/browser qualification. Its Linux image qualification built the
+exact API, runner, migrator, and Web images, then failed only at the API image
+security scan on the ten HIGH Go-standard-library findings carried by the
+pinned MFEprimer 4.5.1 binary. Run 74 for the final documentation/artifact
+commit `992ee6b` has passed Linux source qualification and remains in progress
+for the full CI workflow at the time of this report. The finding is retained
+as the open external dependency gate; no image identity, digest, TLS,
+provenance, or scan policy was weakened.
 
 ## Architecture fitness functions
 
@@ -338,7 +341,7 @@ Linux qualification/CI workflows; no hidden suppression was introduced.
 | The exact pinned Docker image can be pulled by a release host | VERIFIED: OCI preflight resolved all Docker Hub endpoints and pulled all five exact digest-pinned external references; Compose database/bootstrap and backup/restore passed |
 | The official npm advisory service is reachable for the final audit | VERIFIED: exact `pnpm audit --prod --audit-level=high` returned no known vulnerabilities after the Next.js/Sharp remediation |
 | Strict scientific execution artifacts and approved reference data are present | VERIFIED: strict toolchain verifier PASS; all required artifacts/indexes and the approved scientific-Python freeze hash-match; `/ready/scientific` HTTP 200 |
-| The current directory proves canonical Git lineage | VERIFIED: local and published candidate HEAD is `4fac357e663f942dc80ed6e6f1eb378d5725f9d6` on `release-candidate-20260909`; remote `main` remains at `51c94f009048ff60fd3c93c17a63caeb9edcd08d` |
+| The current directory proves canonical Git lineage | VERIFIED: local and published candidate HEAD is `992ee6bc9189be5cce28db83746ca2534a695ee6` on `release-candidate-20260909`; remote `main` remains at `51c94f009048ff60fd3c93c17a63caeb9edcd08d` |
 | Standalone output is the deployable Web runtime | VERIFIED: deployment-shaped standalone launch, smoke and browser checks passed |
 | The final patch-level toolchain can be exercised on this host | VERIFIED for non-biological gates: exact Node, pnpm, uv and Rust are installed and exercised |
 

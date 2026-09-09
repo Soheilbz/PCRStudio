@@ -39,11 +39,14 @@ and deployment system was complete.
   deployment configuration.
 
 The baseline public Actions run showed successful source checks, dependency
-contract, readiness contract, Linux source qualification and CodeQL. The latest
-hosted run for commit `4fac357` passed source/Rust/Python/Web checks, but the
-Linux image qualification still fails at the security scan on the same ten HIGH
-Go standard-library findings in `/opt/pcrstudio/tools/mfeprimer`; this is not a
-Docker Hub, authentication, or mutable package-resolution failure.
+contract, readiness contract, Linux source qualification and CodeQL. The
+latest completed hosted run for source-equivalent commit `4fac357` passed
+source/Rust/Python/Web checks, but Linux image qualification failed at the
+security scan on the same ten HIGH Go standard-library findings in
+`/opt/pcrstudio/tools/mfeprimer`. The final documentation/artifact commit
+`992ee6b` has passed Linux source qualification and its full CI run is still in
+progress at report time; neither result indicates a Docker Hub,
+authentication, or mutable package-resolution failure.
 
 ## Authenticated GitHub state and remaining owner actions
 
