@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1053,
+  "file_count": 1051,
   "files": [
     {
       "bytes": 816,
@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 19123,
+      "bytes": 19345,
       "path": ".github/workflows/ci.yml",
-      "sha256": "b3ec439bb41b7ff0e0d7c46fecc37b8f6de204fb0e2fb35b3eb2cac97b08b7b6"
+      "sha256": "9169167bf43b6497aa6c910ae4a2e203ac7800178b02cd6f6353ba45620de5a7"
     },
     {
       "bytes": 1221,
@@ -1883,9 +1883,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 216398,
+      "bytes": 216040,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "546b386b8d76d2a67aee2d9d9154ba1ff8682597446841f5e25ac9e8912de7ef"
+      "sha256": "5b2672eaf326cd44657c0e67ac8001967a43551cf07714d76b55f8a7ae50c8ea"
     },
     {
       "bytes": 2048,
@@ -1923,11 +1923,6 @@
       "sha256": "04c2fcb4f01c96f53a052fc8141504baa509a5f450b3809e1aafc2fd545709bb"
     },
     {
-      "bytes": 603,
-      "path": "release/current/CURRENT-ENGINE-MATURITY-AUDIT.md",
-      "sha256": "143c47ac9a088117f407a14f6c31281895e53cbe3134c7cdbee3b30eb5f0adda"
-    },
-    {
       "bytes": 1108,
       "path": "release/current/CURRENT-ENGINE-SYSTEM.md",
       "sha256": "9bce416ccb675fafed6ea42dc8ebd2c4f31646bbf3e67bc756402db2683b6b52"
@@ -1958,19 +1953,19 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1670,
+      "bytes": 1571,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "f6d7204ccbe814d315de83426aa453e8cf3ef4e3e16e93ae891d439e90b3b1a8"
+      "sha256": "d140811dd4fcb56435691169042084b952b1936939493abc61711bb37ed48532"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "098141f27f7b5db283c43953446ece3aa3cd5ddaab00a6d7dd8becea7f15a6ba"
+      "sha256": "d0a6c21ff67e8d0b4c37470ed359d18b18fb4e459ca4e1abf23aa090c1cab558"
     },
     {
-      "bytes": 32133,
+      "bytes": 31910,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "fbc03b059b2b75f0f8e3dddc49f39c0451f65b6fd7af1cfb0df4bd79df6517c2"
+      "sha256": "24237e4eccb75cc566356645db17118606b06c9f35422baad76376078baf9c1d"
     },
     {
       "bytes": 507,
@@ -1978,9 +1973,9 @@
       "sha256": "8d5f3dbb4841781a4b4aa7f59a930f4715561ccc460ca79023a87bff89a00ea8"
     },
     {
-      "bytes": 1589,
+      "bytes": 1792,
       "path": "release/current/README.md",
-      "sha256": "a23662c5bf6d18fa972f8c5503508dae3cdc67a390ab29bab3ecb3f84935b6ea"
+      "sha256": "4ccbbcabe1aeb60f6c8d2b4ec9f248ca00489a4ee2074a0b6264403d94fdf2ee"
     },
     {
       "bytes": 1301,
@@ -2001,11 +1996,6 @@
       "bytes": 636,
       "path": "release/current/SUPPLY-CHAIN.md",
       "sha256": "ceb912d6a98435fda489bb961cf55f84e6fb33a9bc85cff015bfe4f042930214"
-    },
-    {
-      "bytes": 6869,
-      "path": "release/current/UNKNOWN-UNKNOWNS-AUDIT.md",
-      "sha256": "4082113d457e4bf1014202caaa30e13fa139310109b256370f8462c2a5f29887"
     },
     {
       "bytes": 450,

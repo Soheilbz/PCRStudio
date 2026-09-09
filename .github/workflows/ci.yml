@@ -391,6 +391,10 @@ jobs:
     name: Web production and browser qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    # Do not spend a full browser run on a change that already failed the
+    # cheap source/contract preflight. The final browser gate still runs on
+    # every change whose targeted checks pass.
+    needs: fast-feedback
     env:
       # Keep the browser binary cache project-scoped and keyed by the locked
       # Playwright dependency. The browser is never downloaded into a mutable

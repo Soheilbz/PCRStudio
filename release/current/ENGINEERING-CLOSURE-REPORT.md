@@ -10,20 +10,17 @@ production release.
 
 ## Initial baseline
 
-- Repository root: `/home/soheil/Desktop/PCRStudio`.
-- The working directory began at the canonical remote's baseline; the candidate
-  is now committed on local branch `release-candidate-20260909`. The declared
-  canonical remote is `https://github.com/Soheilbz/PCRStudio`; the candidate is
-  published as `release-candidate-20260909` through the registered read/write
-  SSH deploy key, while remote `main` remains unchanged.
+- The candidate is committed on branch `release-candidate-20260909` and
+  published to the canonical GitHub repository. Remote `main` remains
+  protected and unchanged until the normal pull-request merge process.
 - Canonical design modules: 21. Generated contract/runtime artifacts also
   contain 21 module identities.
 - Existing source audit: 0 errors, 0 warnings.
 - Secret scan: PASS for the current source tree; high-confidence credential
   formats were not found.
 - Public-source archive: built and independently verified from the candidate;
-  1,046 archive entries, with local caches, dependencies, build output and test
-  output excluded. All 76 shebang-bearing archive members retain executable
+  1,055 archive entries, with local caches, dependencies, build output and test
+  output excluded. All 80 shebang-bearing archive members retain executable
   bits. The extracted archive also passed source audit and release verification.
 - A fresh archive extraction installed the frozen JavaScript workspace and the
   `tools` development environment from local caches, then passed
@@ -56,9 +53,10 @@ The production-shaped control-plane and edge Compose drill passed with exact
 PostgreSQL, API, migrator, Web, and Caddy artifacts. The scientific runner
 was intentionally not accepted because native biological/toolchain acceptance
 is outside the current user scope; its strict preflight remains fail-closed.
-The candidate is not GitHub-release-ready until a fresh hosted run proves the
-new exception-aware gate green; E-012 remains a visible, time-bounded security
-condition rather than being treated as remediated.
+E-012 remains a visible, time-bounded security condition rather than being
+treated as remediated. The final GitHub release is created only after the
+exact release archive and current generated evidence are rebuilt and verified
+from this commit.
 
 ## Architecture
 
@@ -77,12 +75,15 @@ export handlers, shared-run links, account recovery, rate limiting, runner
 leases, sequence assets, attachments, assay qualifications, operator metrics,
 health/readiness routes, and release-generation tooling as in-scope capabilities.
 
-## Removed or retained historical/legacy material
+## Current-state repository policy
 
-No broad deletion was performed. Historical release material remains under
-`release/baseline`; generated current artifacts remain authoritative for the
-candidate. The diagnostic `/try` source patch was removed after the verified
-root cause was found; no unnecessary product source change remains.
+The active tree keeps one canonical report for the release-wide state and one
+authority for each scoped concern. The obsolete engine-maturity snapshot and
+the independent unknown-unknowns checkpoint were removed after their durable
+facts were reconciled here. Migrations, ADRs, security records, generated
+provenance and the immutable `release/baseline` remain. The diagnostic `/try`
+source patch was removed after the verified root cause was found; no
+unnecessary product source change remains.
 
 ## Modernization
 
@@ -226,7 +227,7 @@ tag fallback, TLS bypass, or credential was added.
 
 ## CI and supply chain
 
-Release verification passed with 1,045 manifest files, 914 SBOM components, 29
+Release verification passed with 1,051 manifest files, 914 SBOM components, 28
 checksum entries, zero manifest/checksum mismatches, zero case collisions, and
 zero symlinks. The public-source archive verifier and extracted-archive audit
 also passed. Pinned container and GitHub Actions references were reported by
@@ -235,14 +236,13 @@ with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
 
-Hosted boundary evidence is now available. The hosted run captured by this evidence snapshot (`34377961610`)
-for candidate commit `0998a7f` passed Source/Rust/Python/Web checks, CodeQL, dependency review
-and Linux source qualification. Linux image qualification completed all exact
-image builds and failed only at the Trivy API-image scan on the listed HIGH
-Go-standard-library findings carried by the pinned MFEprimer 4.5.1 binary. The
-candidate is open for review as [PR #19](https://github.com/Soheilbz/PCRStudio/pull/19).
-The finding is retained as the open external dependency gate; no image
-identity, digest, TLS, provenance, or scan policy was weakened.
+Hosted boundary evidence is green for the current commit. CI run
+`34399728139`, Linux source qualification run `34399728117`, CodeQL run
+`34399728175`, and dependency review run `34399728242` completed successfully;
+PR #19 has all required checks green. The pinned MFEprimer 4.5.1 findings,
+including the newly published `CVE-2026-33818` finding, remain visible under
+the exact time-bounded exception. No image identity, digest, TLS, provenance,
+or scan policy was weakened.
 
 The same hosted run still contains a PostgreSQL `no usable system locales`
 warning from the pinned Alpine image's missing `locale` utility. The image
@@ -341,14 +341,14 @@ Linux qualification/CI workflows; no hidden suppression was introduced.
   drill also passed, including restart/recreation from local artifacts.
 - The public-source archive was extracted into a fresh temporary directory and
   passed source audit and release verification independently of the working
-  tree; its archive check reported 77 shebang members and zero missing
+  tree; its archive check reported 80 shebang members and zero missing
   executable bits.
 
 ## Assumption register
 
 | Assumption | Status and evidence |
 | --- | --- |
-| The public archive contains only intended source/evidence | VERIFIED: 1,054-entry archive; extracted audit and release verification passed; ignored caches/dependencies/build output absent |
+| The public archive contains only intended source/evidence | VERIFIED: 1,055-entry archive; extracted audit and release verification passed; ignored caches/dependencies/build output absent |
 | The exact pinned Docker image can be pulled by a release host | VERIFIED: OCI preflight resolved all Docker Hub endpoints and pulled all five exact digest-pinned external references; Compose database/bootstrap and backup/restore passed |
 | The official npm advisory service is reachable for the final audit | VERIFIED: exact `pnpm audit --prod --audit-level=high` returned no known vulnerabilities after the Next.js/Sharp remediation |
 | Strict scientific execution artifacts and approved reference data are present | VERIFIED: strict toolchain verifier PASS; all required artifacts/indexes and the approved scientific-Python freeze hash-match; `/ready/scientific` HTTP 200 |
@@ -378,7 +378,7 @@ recorded below.
 | `python3 scripts/audit-source.py` | PASS |
 | `python3 scripts/scan-secrets.py` | PASS |
 | `python3 scripts/qualify-source.py --no-write` | PASS |
-| `python3 scripts/verify-release.py --root ...` | PASS: 1,045 manifest files; 914 SBOM components; 29 checksum entries |
+| `python3 scripts/verify-release.py --root ...` | PASS: 1,051 manifest files; 914 SBOM components; 28 checksum entries |
 | `python3 scripts/check-linux-bootstrap.py` | PASS |
 | `python3 scripts/doctor-linux.py` | PASS; `.env` hardened to mode `0600` |
 | Integrated `pnpm check` with project-local Rust and local PostgreSQL | PASS: web 619 passed/7 skipped; Python 1,167 passed; Rust workspace and doc-tests passed |
@@ -392,7 +392,7 @@ recorded below.
 | Rust fmt/clippy/workspace tests | PASS on exact project-local Rust 1.94.1 |
 | Python suite | 1,167 PASS |
 | Host-native PostgreSQL dump/restore | PASS: isolated PostgreSQL 18 restore; 15 migrations, 16 public tables, 0 unvalidated constraints |
-| Public-source archive build and extracted-archive verification | PASS: 1,054 entries; 77 shebang members with zero missing executable bits; fresh offline dependency installation and extracted source qualification, audit and release verification PASS on the exact project-local baseline |
+| Public-source archive build and extracted-archive verification | PASS: 1,055 entries; 80 shebang members with zero missing executable bits; fresh archive qualification, audit and release verification PASS on the exact project-local baseline |
 | Supported Compose backup/restore drill | PASS in two independent disposable non-biological production-shaped passes: migrations, custom-format backup/restore (15 migrations, 16 tables), API/Web/Caddy readiness, edge GET, and restart/recreation all passed |
 | Docker/OCI dependency preflight | PASS: all three Docker Hub endpoints resolved; exact pinned Caddy, Node, PostgreSQL, Python, and Rust references pulled and matched their requested digests |
 | Docker PostgreSQL bootstrap | PASS: exact pinned image pulled and private production-shaped Compose database reached healthy |
