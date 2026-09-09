@@ -20,7 +20,7 @@ jobs:
       matrix:
         include:
           - language: rust
-            build-mode: manual
+            build-mode: none
           - language: javascript-typescript
             build-mode: none
           - language: python
@@ -39,8 +39,5 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: security-extended
-      - name: Build Rust workspace
-        if: matrix.language == 'rust'
-        run: cargo build --locked --workspace
       - name: Analyze
         uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938
