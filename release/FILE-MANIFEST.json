@@ -418,9 +418,9 @@
       "sha256": "fb3b3015ac0564f091fba3b71a34c003cb04a6c4f4a2c3d9d1bf2ed8699f5123"
     },
     {
-      "bytes": 1898,
+      "bytes": 1918,
       "path": "contracts/security-exceptions.toml",
-      "sha256": "01c618f4d1a5e76996751feec7c1466254fc4ff28da4d358419789025918e800"
+      "sha256": "682480d63b02750092b88babbbbbbe17e5f381355c20a073e33570f1d3a85666"
     },
     {
       "bytes": 7429,
@@ -1885,7 +1885,7 @@
     {
       "bytes": 216398,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "d2ea8079a67cf102ed38b64322a3a9198a5bcaa0496b739a893fe7206e01c43a"
+      "sha256": "546b386b8d76d2a67aee2d9d9154ba1ff8682597446841f5e25ac9e8912de7ef"
     },
     {
       "bytes": 2048,
