@@ -1098,8 +1098,10 @@ def test_every_pair_carries_a_profile_of_its_own_product():
 
 
 def test_named_standard_pcr_protocols_are_bench_overlays_not_ranking_models():
-    expected = set(pipeline.STANDARD_PCR_PROTOCOLS) - {"not-selected"}
-    assert set(pipeline.STANDARD_PCR_PROTOCOLS) == {"not-selected", *expected}
+    from pcr_tools.registries.flanking_protocols import STANDARD_PCR_PROTOCOLS
+
+    expected = set(STANDARD_PCR_PROTOCOLS) - {"not-selected"}
+    assert set(STANDARD_PCR_PROTOCOLS) == {"not-selected", *expected}
     for protocol_id in sorted(expected):
         protocol = pipeline.standard_pcr_protocol(
             protocol_id,

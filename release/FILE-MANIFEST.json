@@ -1865,7 +1865,7 @@
     {
       "bytes": 215058,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "1725409d25bc3a36ee9ead79c85a57e91698ac789483d2b53efad3574b22024b"
+      "sha256": "6ca87e67080d2b16ddb2f6df0707e1297598a1f0088fa3d9671577d27531bdbd"
     },
     {
       "bytes": 2048,
@@ -3463,9 +3463,9 @@
       "sha256": "f66cb116e277a5aef6a80a0ba13566c20f9a075b5e2b699b16561003b2403a72"
     },
     {
-      "bytes": 49612,
+      "bytes": 49674,
       "path": "tools/tests/test_standard_pcr.py",
-      "sha256": "5418e3a2a4ff1b6ca64c71c4a242cf19372a99d397bee8cc614f0eb12841323e"
+      "sha256": "ddf4b2ede696b352b463092195b4a0ad903ac16653a42683589d575d44867e67"
     },
     {
       "bytes": 9677,
