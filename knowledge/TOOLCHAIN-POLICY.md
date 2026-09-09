@@ -1,6 +1,6 @@
 # Generation-1 toolchain policy
 
-Pinned production identities: Primer3 core 2.6.1 / primer3-py 2.3.0, MFEprimer 4.5.1,
+Pinned production identities: Primer3 core 2.6.1 / primer3-py 2.3.1, MFEprimer 4.5.1,
 NCBI BLAST+ 2.17.0, MAFFT 7.526, PrimerPooler 1.89, PrimalScheme3 3.3.0. ViennaRNA 2.7.2 and
 pydna 5.5.16 remain optional specialized validators/simulators. Primer-BLAST and licensing-blocked
 or remote-only tools are references rather than silent backend dependencies.

@@ -10,23 +10,21 @@
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
     "files": 1055,
-    "json": 228,
-    "markdown": 119,
-    "python": 232,
+    "json": 223,
+    "markdown": 114,
+    "python": 236,
     "rust": 91,
-    "shell": 13,
-    "toml": 23,
+    "shell": 14,
+    "toml": 25,
     "typescript_tsx": 284,
-    "yaml": 11
+    "yaml": 13
   },
   "linux_hygiene": {
     "active_powershell_cmd_batch_files": [],
     "cache_build_residue": [],
     "case_collisions": [],
     "crlf_text_files": [],
-    "shebang_scripts_missing_executable_bit": [
-      "scripts/bootstrap-local.py"
-    ],
+    "shebang_scripts_missing_executable_bit": [],
     "symlinks": []
   },
   "native_external_gate": {
@@ -55,5 +53,5 @@
     "entrypoint": "scripts/qualify-source.py",
     "status": "PASS"
   },
-  "status": "FAIL"
+  "status": "PASS"
 }

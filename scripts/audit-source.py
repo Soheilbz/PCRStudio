@@ -23,6 +23,7 @@ from audit.scientific import (
     audit_toolchain_contract_parity, audit_worker_scientific_environment_contract,
 )
 from audit.engine_closure import audit_engine_contract_integrity
+from audit.authority_single_source import audit_active_authority_single_sources
 from audit.release import (
     audit_expert_release_artifacts, audit_expected_files, audit_hygiene,
     audit_markdown_links, audit_assay_page_architecture, audit_source_release_hardening,
@@ -44,6 +45,7 @@ def main() -> int:
         audit_python_json_toml, audit_module_engine_parity,
         audit_lamp_web_contract, audit_lamp_protocol_contract,
         audit_flanking_protocol_contract, audit_lamp_evidence_ledger,
+        audit_active_authority_single_sources,
         audit_toolchain_contract_parity, audit_scientific_integrity, audit_scientific_authority_provenance, audit_capability_truth,
         audit_engine_contract_integrity,
         audit_tool_deployment_contract, audit_assay_page_architecture,

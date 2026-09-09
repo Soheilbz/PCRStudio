@@ -64,6 +64,19 @@ def main() -> int:
     assert bootstrap.parse_compose_version("5.5.0") == (5, 5, 0)
     assert bootstrap.parse_compose_version("unknown") is None
 
+    pinned = bootstrap.pinned_external_image_refs(ROOT)
+    assert len(pinned) == 6, pinned
+    assert any(ref.startswith("rust:1.94-bookworm@sha256:") for ref in pinned)
+    assert any(ref.startswith("busybox:1.37.0-glibc@sha256:") for ref in pinned)
+    assert any(ref.startswith("postgres:18-alpine@sha256:") for ref in pinned)
+    assert any(ref.startswith("caddy:2-alpine@sha256:") for ref in pinned)
+    assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
+    assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
+    assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"
+    assert bootstrap.registry_error_class("TLS handshake timeout") == "tls"
+    assert bootstrap.registry_error_class("i/o timeout") == "transient-network"
+    assert bootstrap.registry_error_class("manifest unknown") == "registry-or-pin"
+
     assert str(bootstrap.validate_compose_subnet("PCR_APP_SUBNET", "172.29.0.0/24")) == "172.29.0.0/24"
     assert str(bootstrap.validate_compose_subnet("PCR_DATA_SUBNET", "10.251.0.0/24")) == "10.251.0.0/24"
     for bad_subnet in (

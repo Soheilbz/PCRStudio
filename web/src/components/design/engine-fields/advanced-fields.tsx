@@ -302,9 +302,6 @@ export function VariantFields({
               <option value="lgc-kasp-tf-v5">
                 LGC KASP-TF V5.0 Master Mix · current reviewed branch
               </option>
-              <option value="lgc-standard">
-                Legacy PCRStudio LGC-standard identity · historical compatibility
-              </option>
             </select>
           </div>
           {named ? (

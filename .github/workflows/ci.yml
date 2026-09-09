@@ -2,8 +2,13 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: pcrstudio-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -12,12 +17,60 @@ env:
   CARGO_TERM_COLOR: always
   COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
   COREPACK_DEFAULT_TO_LATEST: "0"
+  GIT_CONFIG_COUNT: "1"
+  GIT_CONFIG_KEY_0: init.defaultBranch
+  GIT_CONFIG_VALUE_0: main
   RUST_BACKTRACE: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
 
 jobs:
+  fast-feedback:
+    name: Fast feedback and targeted contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Run static and secret preflight
+        run: python3 -B scripts/scan-secrets.py
+      - name: Install Python 3.14
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: 3.14
+      - name: Install uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        with:
+          version: "0.12.10"
+      - name: Install locked Python dependencies
+        run: uv sync --project tools --frozen --extra dev --extra folding
+      - name: Install Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.20.0
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack install --global pnpm@11.26.0
+      - name: Install locked web dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run source qualification after dependency materialization
+        run: python3 -B scripts/qualify-source.py --no-write
+      - name: Run targeted web contracts
+        run: |
+          pnpm --filter web typecheck
+          pnpm --filter web lint
+      - name: Install Rust 1.94
+        run: |
+          rustup toolchain install 1.94.1 --profile minimal --no-self-update
+          rustup default 1.94.1
+      - name: Run targeted registry contract
+        run: cargo test --locked -p pcr-core --test readme_matches_the_registry
+
   checks:
     name: Source, Rust, Python and Web checks
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    needs: fast-feedback
     services:
       postgres:
         image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
@@ -25,6 +78,9 @@ jobs:
           POSTGRES_USER: pcrtest
           POSTGRES_PASSWORD: pcrtest
           POSTGRES_DB: pcrtest
+          POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+          LANG: C
+          LC_ALL: C
         ports:
           - 5432:5432
         options: >-
@@ -36,28 +92,28 @@ jobs:
       PCR_TEST_DATABASE_URL: postgres://pcrtest:pcrtest@127.0.0.1:5432/pcrtest
     steps:
       - name: Check out source
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Install Node.js 24
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 24.19.0
+          node-version: 24.20.0
       - name: Install Python 3.14
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: 3.14
       - name: Install Rust 1.94
         run: |
-          rustup toolchain install 1.94.0 --profile minimal --no-self-update
-          rustup default 1.94.0
+          rustup toolchain install 1.94.1 --profile minimal --no-self-update
+          rustup default 1.94.1
           rustup component add rustfmt clippy
       - name: Enable pnpm
         run: |
           corepack enable
-          corepack install --global pnpm@11.19.0
+          corepack install --global pnpm@11.26.0
       - name: Install uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
-          version: "0.12.8"
+          version: "0.12.10"
       - name: Install locked dependencies
         run: |
           uv sync --project tools --frozen --extra dev --extra folding
@@ -68,12 +124,15 @@ jobs:
           uvx --from ruff==0.16.5 ruff check .
           uvx --from ruff==0.16.5 ruff format --check .
           cd ..
+          uv run --project tools --frozen --extra dev pytest tools/tests -q
           uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
           uvx --from pip-audit==2.10.1 pip-audit -r "$RUNNER_TEMP/tools-requirements.txt"
+      - name: JavaScript production dependency audit
+        run: pnpm audit --prod --audit-level=high
       - name: Secret scan
-        run: python3 scripts/scan-secrets.py
+        run: python3 -B scripts/scan-secrets.py
       - name: Static source qualification
-        run: python3 scripts/qualify-source.py --no-write
+        run: python3 -B scripts/qualify-source.py --no-write
       - name: Rust formatting
         run: cargo fmt --all -- --check
       - name: Rust lint
@@ -107,7 +166,7 @@ jobs:
           NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat "$key_file")" pnpm --filter web build
       - name: Validate deployment configurations
         run: |
-          PYTHONDONTWRITEBYTECODE=1 python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
+          PYTHONDONTWRITEBYTECODE=1 python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           build_id="$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)"
           export PCRSTUDIO_BUILD_ID="$build_id"
           export SITE_URL="https://ci.invalid"
@@ -118,9 +177,10 @@ jobs:
   scientific-readiness-contract:
     name: Scientific readiness contract
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - name: Check out source
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Validate readiness response shape when a stack is available
         run: |
           node <<'NODE'
@@ -147,13 +207,13 @@ jobs:
   image-qualification:
     name: Linux image qualification
     runs-on: ubuntu-24.04
-    needs: checks
+    timeout-minutes: 45
+    needs: fast-feedback
     permissions:
       contents: read
-      security-events: write
     steps:
       - name: Check out source
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Compute source identity
         id: identity
         run: |
@@ -162,9 +222,9 @@ jobs:
       - name: Create build-only Server Actions secret
         run: python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$RUNNER_TEMP/next-server-actions-key"
       - name: Install uv for image tooling
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
-          version: "0.12.8"
+          version: "0.12.10"
       - name: Verify frozen Python export for the image boundary
         run: uv export --frozen --extra folding --no-emit-project --project tools > /dev/null
       - name: Build API image
@@ -197,9 +257,18 @@ jobs:
           image-ref: pcrstudio-api:ci
           format: json
           output: trivy-api-image.json
-          exit-code: 1
+          # Trivy must report every finding. The repository policy validator
+          # below decides whether an exact, time-bounded exception applies.
+          exit-code: 0
           severity: CRITICAL,HIGH
-          ignore-unfixed: true
+          ignore-unfixed: false
+      - name: Validate image vulnerability policy
+        run: |
+          mfeprimer_sha256="$(docker run --rm --entrypoint /bin/sha256sum pcrstudio-api:ci /opt/pcrstudio/tools/mfeprimer/mfeprimer | awk '{print $1}')"
+          test "${#mfeprimer_sha256}" -eq 64
+          python3 scripts/validate-image-vulnerability-policy.py \
+            --report trivy-api-image.json \
+            --artifact-sha256 "$mfeprimer_sha256"
       - name: Publish API image scan report
         if: always()
         run: |
@@ -220,7 +289,7 @@ jobs:
             fi
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Publish actionable image findings
+      - name: Publish image findings
         if: always()
         run: |
           if [ -s trivy-api-image.json ]; then
@@ -234,36 +303,156 @@ jobs:
               line="${line//'%'/'%25'}"
               line="${line//$'\r'/'%0D'}"
               line="${line//$'\n'/'%0A'}"
-              echo "::error file=docker/api.Dockerfile,line=1,title=Trivy finding::${line}"
+              echo "::notice file=docker/api.Dockerfile,line=1,title=Trivy finding::${line}"
             done
           else
             echo '::warning file=docker/api.Dockerfile,line=1,title=Trivy report::Trivy did not produce a report file.'
           fi
       - name: Generate image SBOMs
-        run: |
-          docker sbom --format cyclonedx-json --output image-sbom-api.cdx.json pcrstudio-api:ci
-          docker sbom --format cyclonedx-json --output image-sbom-runner.cdx.json pcrstudio-runner:ci
-          docker sbom --format cyclonedx-json --output image-sbom-migrate.cdx.json pcrstudio-migrate:ci
-          docker sbom --format cyclonedx-json --output image-sbom-web.cdx.json pcrstudio-web:ci
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          image: pcrstudio-api:ci
+          format: cyclonedx-json
+          output-file: image-sbom-api.cdx.json
+          syft-version: v1.51.1
+          upload-artifact: false
+          upload-release-assets: false
+      - name: Generate runner image SBOM
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          image: pcrstudio-runner:ci
+          format: cyclonedx-json
+          output-file: image-sbom-runner.cdx.json
+          syft-version: v1.51.1
+          upload-artifact: false
+          upload-release-assets: false
+      - name: Generate migrator image SBOM
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          image: pcrstudio-migrate:ci
+          format: cyclonedx-json
+          output-file: image-sbom-migrate.cdx.json
+          syft-version: v1.51.1
+          upload-artifact: false
+          upload-release-assets: false
+      - name: Generate web image SBOM
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
+        with:
+          image: pcrstudio-web:ci
+          format: cyclonedx-json
+          output-file: image-sbom-web.cdx.json
+          syft-version: v1.51.1
+          upload-artifact: false
+          upload-release-assets: false
       - name: Verify runtime targets are present
         run: |
           test -s image-sbom-api.cdx.json
           test -s image-sbom-runner.cdx.json
           test -s image-sbom-migrate.cdx.json
           test -s image-sbom-web.cdx.json
+          for image in pcrstudio-api:ci pcrstudio-runner:ci pcrstudio-migrate:ci; do
+            docker run --rm --entrypoint /bin/sh "$image" -c '
+              test -x /bin/sh
+              test -x /bin/kill
+              test -f /etc/ssl/certs/ca-certificates.crt
+              test ! -e /usr/bin/apt-get
+              test ! -e /var/lib/dpkg/status
+            '
+          done
           grep -q -- "--target api-runtime" .github/workflows/ci.yml
           grep -q -- "--target runner-runtime" .github/workflows/ci.yml
           grep -q -- "--target migrate-runtime" .github/workflows/ci.yml
+      - name: Retain image SBOMs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: image-sboms
+          path: image-sbom-*.cdx.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Reclaim ephemeral BuildKit cache
+        if: always()
+        run: docker buildx prune --all --max-used-space 8GB --force
 
   dependency-contract:
     name: Frozen dependency contract
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - name: Check out source
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Install uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
-          version: "0.12.8"
+          version: "0.12.10"
       - name: Export production folding dependencies
         run: uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
+
+  web-release-qualification:
+    name: Web production and browser qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # Do not spend a full browser run on a change that already failed the
+    # cheap source/contract preflight. The final browser gate still runs on
+    # every change whose targeted checks pass.
+    needs: fast-feedback
+    env:
+      # Keep the browser binary cache project-scoped and keyed by the locked
+      # Playwright dependency. The browser is never downloaded into a mutable
+      # global cache shared by unrelated repositories.
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.local/playwright-browsers
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install Node.js 24
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.20.0
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack install --global pnpm@11.26.0
+      - name: Install locked web dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Restore locked Playwright browser cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: .local/playwright-browsers
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Build production web server
+        env:
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3100
+        run: |
+          key_file="$RUNNER_TEMP/next-server-actions-key"
+          python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
+          NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat "$key_file")" pnpm --filter web build
+      - name: Start production web server
+        run: |
+          pnpm --filter web exec next start --hostname 127.0.0.1 --port 3100 > "$RUNNER_TEMP/web.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/web.pid"
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:3100/sign-in > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3100/sign-in > /dev/null
+      - name: Verify production route and security budgets
+        run: node scripts/web-production-smoke.mjs --url=http://127.0.0.1:3100
+      - name: Install Chromium for browser qualification
+        run: ./scripts/install-playwright-browser.sh
+      - name: Run public browser journeys
+        env:
+          CI: "true"
+          PCR_E2E_BASE_URL: http://127.0.0.1:3100
+        run: >-
+          pnpm --filter web exec playwright test
+          e2e/home.spec.ts e2e/public-pages.spec.ts e2e/sign-in.spec.ts
+          e2e/accessibility-smoke.spec.ts --project=chromium
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: web-release-qualification
+          path: |
+            web/playwright-report
+            web/test-results
+            \${{ runner.temp }}/web.log
+          if-no-files-found: ignore

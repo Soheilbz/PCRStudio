@@ -7,7 +7,7 @@ license = { text = "GPL-2.0-or-later" }
 dependencies = [
     # GPLv2. Imported here and nowhere else, which is what keeps the rest of
     # PCRStudio under its own licence -- see README.md.
-    "primer3-py==2.3.0",
+    "primer3-py==2.3.1",
 ]
 
 # PrimalScheme3 and pydna are deliberately provisioned as separately audited

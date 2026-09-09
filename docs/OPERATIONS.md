@@ -1,5 +1,11 @@
 # PCRStudio CURRENT operations runbook
 
+Docker build storage is bounded separately in
+[`DOCKER-STORAGE.md`](DOCKER-STORAGE.md). The supported bootstrap uses the
+dedicated `pcrstudio` BuildKit builder with an 8 GB cache ceiling and performs
+scoped cleanup on both success and failure; it never performs a daemon-wide
+prune that could remove another project's images.
+
 This runbook describes the operational contract shipped with the source tree. The machine-readable authority is `contracts/operations.toml`; Prometheus-compatible alert rules are generated at `ops/prometheus/pcrstudio-alerts.yml` and the normalized runtime projection is `knowledge/runtime/operations.generated.json`.
 
 ## Recovery objectives
@@ -58,3 +64,54 @@ python3 scripts/run-linux-qualification.py --full --require-functional-acceptanc
 ```
 
 Source/static qualification, generated alert rules and a successful local restore drill do not substitute for native scientific, Docker, PostgreSQL and functional acceptance on the Linux qualification host.
+
+## OCI registry failure diagnosis
+
+Production bootstrap owns the OCI dependency gate. Before BuildKit starts, it
+checks system DNS for `auth.docker.io`, `registry-1.docker.io`, and
+`production.cloudfront.docker.com`, then pulls the exact digest-pinned
+references discovered in `compose.yaml`, `docker/api.Dockerfile`, and
+`docker/web.Dockerfile`. It uses the configured Docker credential helper and
+never weakens TLS, changes an image identity, or falls back to a tag. Only
+timeouts and comparable transport failures are retried, with a finite
+exponential backoff. Authentication, rate-limit, TLS, DNS, and digest/pin
+errors stop immediately with a distinct diagnosis.
+
+When this gate reports DNS failure, inspect both the resolver and the active
+network path:
+
+```bash
+resolvectl status
+resolvectl query auth.docker.io
+resolvectl query registry-1.docker.io
+ip -4 route
+ip -6 route
+docker info
+```
+
+On NetworkManager hosts, disable broken DHCP-provided DNS on the active
+connection and set the network-approved resolvers persistently, then reapply
+the device. If IPv6 has no default route, IPv4 must still resolve and reach the
+registry; this is reported as an address-family condition, not hidden as an
+authentication failure. If the network requires a proxy, configure the Docker
+daemon's proxy drop-in and restart Docker; shell proxy variables alone do not
+configure daemon pulls. For private or rate-limited registries, use `docker
+login` and a credential helper. Never copy credentials into the repository,
+`.env`, image layers, or build arguments.
+
+## Runtime configuration reference
+
+The following settings are operator controls rather than end-user options.
+`PCR_MAX_QUEUED_WORKERS` bounds callers waiting for a worker permit; it defaults
+to 256 and accepts 0–1024. `PCR_CORS_ORIGINS` is a comma-separated allow-list of
+exact `http`/`https` browser origins. It defaults to empty because the normal
+Next server talks to the API server-side; paths, credentials and malformed origins are rejected.
+`PCR_WORKER_TIMEOUT_SECONDS` bounds one worker run and
+accepts 1–299 seconds.
+
+`PCR_DB_MAX_CONNECTIONS`, `PCR_DB_MIN_CONNECTIONS`, and
+`PCR_DB_ACQUIRE_TIMEOUT_SECONDS` control the API PostgreSQL pool. Invalid
+explicit values fail startup. Production uses file-backed deployment secrets:
+PostgreSQL reads `/run/secrets/postgres_password`, while the API, migrator, and
+runner read `/run/secrets/database_url`; secret bytes do not belong in `.env` or
+container environment interpolation.

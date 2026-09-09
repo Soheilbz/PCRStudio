@@ -19,6 +19,31 @@ if (!process.env.PLAYWRIGHT_BROWSERS_PATH && existsSync(projectBrowsers)) {
  * gated behind PCR_E2E_WITH_API.
  */
 const externalBaseURL = process.env.PCR_E2E_BASE_URL?.trim();
+const baseURL = externalBaseURL || "http://localhost:3100";
+const configuredSiteURL = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+/**
+ * A built server's public origin is part of its runtime contract. When E2E
+ * points at an already-built server, reject a target that could make browser
+ * mutations look like product failures because Next's origin guard is doing
+ * its job. The comparison is intentionally opt-in: a development server with
+ * no explicit public-origin configuration keeps its normal localhost default.
+ */
+if (externalBaseURL && configuredSiteURL) {
+  let targetOrigin;
+  let configuredOrigin;
+  try {
+    targetOrigin = new URL(baseURL).origin;
+    configuredOrigin = new URL(configuredSiteURL).origin;
+  } catch {
+    throw new Error("PCR_E2E_BASE_URL and NEXT_PUBLIC_SITE_URL must both be valid absolute URLs");
+  }
+  if (targetOrigin !== configuredOrigin) {
+    throw new Error(
+      `E2E origin mismatch: target ${targetOrigin} does not match built public origin ${configuredOrigin}`,
+    );
+  }
+}
 
 export default defineConfig({
   testDir: "./e2e",
@@ -45,7 +70,7 @@ export default defineConfig({
     // app. `localhost` rather than 127.0.0.1 because the dev server blocks
     // static chunks from origins outside its allowlist, which would leave the
     // client half of every page unhydrated.
-    baseURL: externalBaseURL || "http://localhost:3100",
+    baseURL,
     trace: "retain-on-failure",
   },
   projects: [

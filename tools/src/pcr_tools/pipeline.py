@@ -402,7 +402,7 @@ def _pair_has_product_on_contig(
 # hard limit in `Constraints` still gates the search, so a weighted run offers
 # pairs that satisfy exactly the constraints an unweighted one would.
 #
-# primer3-py 2.3.0 accepts unknown tags in silence -- `PRIMER_WT_PRODUCT_SIZE`
+# primer3-py 2.3.1 accepts unknown tags in silence -- `PRIMER_WT_PRODUCT_SIZE`
 # and `PRIMER_WT_GC_PERCENT`, once shipped here, changed nothing and said
 # nothing. So a weight earns its place by behaviour, never by the absence of
 # an error: every tag is checked against the manual, and then a run with it is

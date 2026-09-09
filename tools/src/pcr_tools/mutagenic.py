@@ -42,7 +42,7 @@ class MutagenesisError(ValueError):
 
 
 #: What kinds of edit this makes.
-EDITS = ("substitute", "insert", "delete")
+EDITS = tuple(MUTAGENESIS_AUTHORITY["groups"]["edit_kinds"])
 
 # Parental-template removal and post-amplification recovery are properties of
 # the named mutagenesis protocol, not of every pair carrying an edit. Keeping
@@ -77,18 +77,8 @@ GAP_WORTH_MENTIONING = 3.0
 #: Named recovery/routing protocols are topology-specific. Q5, QuikChange Lightning
 #: single-site, Lightning Multi and NEBuilder multi-site are never treated as
 #: interchangeable presets; each branch validates its own protocol identity.
-POST_AMPLIFICATION_PROTOCOLS = (
-    "neb-q5-e0554",
-    "agilent-quikchange-lightning-210518",
-    "agilent-quikchange-lightning-multi-210513-210516",
-    "neb-nebuilder-multisite",
-)
-MUTAGENESIS_TOPOLOGIES = (
-    "q5-back-to-back",
-    "quikchange-complementary",
-    "quikchange-lightning-multi",
-    "nebuilder-multisite",
-)
+POST_AMPLIFICATION_PROTOCOLS = tuple(MUTAGENESIS_AUTHORITY["groups"]["protocols"])
+MUTAGENESIS_TOPOLOGIES = tuple(MUTAGENESIS_AUTHORITY["groups"]["topology_families"])
 
 
 @dataclass(frozen=True)

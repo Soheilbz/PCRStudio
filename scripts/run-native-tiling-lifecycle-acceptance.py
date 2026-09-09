@@ -59,7 +59,7 @@ def run(operation: str) -> dict:
                 "tilingOperation": "panel-create",
                 "panelMode": "region-only",
                 "pools": 2,
-                "regionBed": "NC_012920.1\t1000\t5000\n",
+                "regionBed": "NC_012920.1\t1000\t5000\tregion-1\t1\n",
             }
         )
     baseline = create_scheme()

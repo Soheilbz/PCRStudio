@@ -24,3 +24,8 @@ Production deployments should use unique database credentials, a stable secret
 for Next.js Server Actions when required, TLS at the edge, and an operator token
 only when operator diagnostics are intentionally enabled. PostgreSQL and the API
 should remain on private networks as described by the production Compose files.
+
+Current time-bounded image security exceptions are recorded in
+[`release/current/SECURITY-EXCEPTIONS.md`](release/current/SECURITY-EXCEPTIONS.md)
+and enforced by the machine-readable contract at
+[`contracts/security-exceptions.toml`](contracts/security-exceptions.toml).

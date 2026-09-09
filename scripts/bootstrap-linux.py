@@ -11,6 +11,7 @@ until the image-level smoke gate has passed.
 from __future__ import annotations
 
 import argparse
+import atexit
 import base64
 import hashlib
 import ipaddress
@@ -21,10 +22,12 @@ import re
 import secrets
 import shlex
 import shutil
+import socket
 import stat
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,6 +38,15 @@ LOCAL = ROOT / ".local"
 SECRETS = LOCAL / "secrets"
 DEPLOY = LOCAL / "deploy"
 DEFAULT_ENV = ROOT / ".env"
+REGISTRY_HOSTS = ("auth.docker.io", "registry-1.docker.io", "production.cloudfront.docker.com")
+BUILDX_BUILDER = "pcrstudio"
+BUILDX_BUILDER_IMAGE = "moby/buildkit@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8"
+BUILDX_MAX_CACHE = "8GB"
+BUILDX_GC_MARKER = "gckeepstorage = 8589934592"
+PINNED_IMAGE_RE = re.compile(
+    r"(?<![A-Za-z0-9._/-])(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._/-]+"
+    r"(?::[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}(?![A-Za-z0-9])"
+)
 
 
 def run(argv: Iterable[str], *, capture: bool = False, check: bool = True, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
@@ -196,6 +208,228 @@ def docker_prefix() -> list[str]:
         raise SystemExit(f"Docker Compose >= 2.24.4 is required by the private-profile !override contract; found {raw_version}")
     print(f"Docker Compose {raw_version}")
     return prefix
+
+
+def ensure_dedicated_buildx_builder(docker: list[str]) -> None:
+    """Use an isolated, garbage-collected builder for every PCRStudio build."""
+    config = ROOT / "docker" / "buildkitd.toml"
+    inspected = subprocess.run(
+        [*docker, "buildx", "inspect", BUILDX_BUILDER],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
+    )
+    if inspected.returncode or BUILDX_BUILDER_IMAGE not in inspected.stdout or BUILDX_GC_MARKER not in inspected.stdout:
+        if inspected.returncode == 0:
+            run([*docker, "buildx", "rm", "--force", BUILDX_BUILDER])
+        run([*docker, "buildx", "create", "--name", BUILDX_BUILDER, "--driver", "docker-container",
+             "--driver-opt", f"image={BUILDX_BUILDER_IMAGE}", "--config", str(config)])
+    run([*docker, "buildx", "inspect", "--bootstrap", BUILDX_BUILDER])
+    os.environ["BUILDX_BUILDER"] = BUILDX_BUILDER
+    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, maximum {BUILDX_MAX_CACHE}")
+
+
+def prune_dedicated_buildx_builder(docker: list[str]) -> None:
+    """Bound only PCRStudio's cache; never run a daemon-wide system prune."""
+    subprocess.run(
+        [*docker, "buildx", "prune", "--builder", BUILDX_BUILDER, "--all",
+         "--max-used-space", BUILDX_MAX_CACHE, "--force"],
+        cwd=ROOT, text=True, check=False,
+    )
+    subprocess.run(
+        [*docker, "image", "prune", "--force", "--filter", "label=org.pcrstudio.product=PCRStudio"],
+        cwd=ROOT, text=True, check=False,
+    )
+
+
+def pinned_external_image_refs(root: Path = ROOT) -> list[str]:
+    """Return every registry image pinned by the production source tree.
+
+    BuildKit resolves Dockerfile bases lazily, so a successful Compose config or
+    a pulled runtime image does not prove that the complete build dependency
+    set is obtainable. Only external digest-pinned references are returned;
+    locally-built Compose images and stage aliases are intentionally ignored.
+    """
+    paths = [root / "compose.yaml", root / "docker" / "compose.devdb.yaml"]
+    paths.extend(sorted((root / "docker").glob("*.Dockerfile")))
+    found: set[str] = set()
+    for path in paths:
+        if not path.is_file():
+            continue
+        for match in PINNED_IMAGE_RE.finditer(path.read_text(encoding="utf-8")):
+            ref = match.group(0)
+            found.add(ref)
+    return sorted(found)
+
+
+def registry_error_class(output: str) -> str:
+    """Classify Docker/OCI failures without treating permanent failures as transient."""
+    text = output.lower()
+    if any(token in text for token in ("no such host", "temporary failure in name resolution", "could not resolve host", "server misbehaving")):
+        return "dns"
+    if any(token in text for token in ("certificate", "x509:", "tls: bad", "tls handshake")):
+        return "tls"
+    if any(token in text for token in ("toomanyrequests", "rate limit", "429 too many")):
+        return "rate-limit"
+    if any(token in text for token in ("unauthorized", "authentication required", "access denied", "denied: requested access", "401", "403")):
+        return "auth"
+    if any(token in text for token in ("manifest unknown", "not found", "no matching manifest", "digest invalid", "unexpected digest")):
+        return "registry-or-pin"
+    if any(token in text for token in ("i/o timeout", "timed out", "connection reset", "connection refused", "network is unreachable", "no route to host", "502 bad gateway", "503 service unavailable", "504 gateway")):
+        return "transient-network"
+    return "registry"
+
+
+def _resolver_addresses(host: str, family: int) -> list[str]:
+    try:
+        rows = socket.getaddrinfo(host, 443, family, socket.SOCK_STREAM)
+    except socket.gaierror:
+        return []
+    return sorted({row[4][0] for row in rows})
+
+
+def _has_ipv6_default_route() -> bool:
+    ip = shutil.which("ip")
+    if not ip:
+        return False
+    cp = subprocess.run([ip, "-6", "route", "show", "default"], capture_output=True, text=True, check=False)
+    return cp.returncode == 0 and bool(cp.stdout.strip())
+
+
+def _https_status(url: str) -> tuple[int | None, str]:
+    """Return an HTTPS status without exposing response bodies or credentials."""
+    curl = shutil.which("curl")
+    if not curl:
+        return None, "curl unavailable; Docker pull remains the transport probe"
+    cp = subprocess.run(
+        [curl, "--silent", "--show-error", "--output", os.devnull, "--write-out", "%{http_code}",
+         "--proto", "=https", "--tlsv1.2", "--connect-timeout", "5", "--max-time", "15", url],
+        capture_output=True, text=True, check=False,
+    )
+    status = cp.stdout.strip()
+    if cp.returncode != 0:
+        return None, (cp.stderr.strip() or f"curl exited {cp.returncode}")
+    try:
+        return int(status), ""
+    except ValueError:
+        return None, f"unexpected HTTP status {status!r}"
+
+
+def diagnose_registry_network() -> None:
+    """Print actionable DNS/address-family diagnostics before expensive builds."""
+    print("OCI registry preflight: checking Docker Hub DNS and transport prerequisites")
+    failures: list[str] = []
+    for host in REGISTRY_HOSTS:
+        ipv4 = _resolver_addresses(host, socket.AF_INET)
+        ipv6 = _resolver_addresses(host, socket.AF_INET6)
+        print(f"  {host}: IPv4={','.join(ipv4) or 'unresolved'} IPv6={','.join(ipv6) or 'unresolved'}")
+        if not ipv4:
+            failures.append(f"{host} has no IPv4 answer")
+    if failures:
+        raise SystemExit(
+            "Docker registry DNS preflight failed: " + "; ".join(failures) + ". "
+            "Repair the active host resolver or trusted network DNS before retrying; "
+            "do not replace digest-pinned images."
+        )
+    ipv6_default = _has_ipv6_default_route()
+    if not ipv6_default:
+        print("  IPv6: no default route; requiring successful IPv4 transport")
+    elif not any(_resolver_addresses(host, socket.AF_INET6) for host in REGISTRY_HOSTS):
+        print("  IPv6: no usable DNS answers; continuing with IPv4 (no IPv6 default route is not fatal)")
+    else:
+        print("  IPv6: DNS answers present; Docker will select a usable address family")
+
+    probes = {
+        "auth.docker.io": "https://auth.docker.io/token?service=registry.docker.io&scope=repository:library/hello-world:pull",
+        "registry-1.docker.io": "https://registry-1.docker.io/v2/",
+        "production.cloudfront.docker.com": "https://production.cloudfront.docker.com/",
+    }
+    for host, url in probes.items():
+        status, detail = _https_status(url)
+        if status is None:
+            print(f"  {host}: HTTPS probe failed ({detail})")
+            continue
+        # Docker Hub's token service is expected to return 200; the registry
+        # deliberately returns 401 to advertise its bearer challenge; the CDN
+        # root commonly returns 403/404 because it needs a blob path. Those
+        # responses prove the TLS/HTTP boundary is reachable.
+        if host == "auth.docker.io" and status in {401, 403}:
+            raise SystemExit(f"Docker registry authentication preflight failed: {host} returned HTTP {status}")
+        if host == "registry-1.docker.io" and status >= 500:
+            raise SystemExit(f"Docker registry preflight failed: {host} returned HTTP {status}")
+        if host == "production.cloudfront.docker.com" and status >= 500:
+            raise SystemExit(f"Docker CDN preflight failed: {host} returned HTTP {status}")
+        print(f"  {host}: HTTPS HTTP {status} (expected boundary response)")
+
+
+def pull_pinned_external_images(docker: list[str], *, attempts: int = 3) -> list[str]:
+    """Pull exact base/runtime refs with bounded retries and fail-closed errors."""
+    if attempts < 1 or attempts > 5:
+        raise ValueError("registry preflight attempts must be between 1 and 5")
+    diagnose_registry_network()
+    refs = pinned_external_image_refs()
+    if not refs:
+        raise SystemExit("OCI registry preflight found no digest-pinned external image references")
+    print(f"OCI registry preflight: verifying {len(refs)} exact digest-pinned image references")
+    for ref in refs:
+        for attempt in range(1, attempts + 1):
+            print(f"  pull {ref} (attempt {attempt}/{attempts})")
+            try:
+                cp = subprocess.run(
+                    [*docker, "pull", ref], cwd=ROOT, text=True, capture_output=True, check=False,
+                    timeout=180,
+                )
+                output = (cp.stdout or "") + (cp.stderr or "")
+            except subprocess.TimeoutExpired as exc:
+                cp = None
+                output = f"docker pull timed out after 180 seconds: {exc}"
+            if output:
+                print(output, end="")
+            if cp is not None and cp.returncode == 0:
+                expected_digest = ref.rsplit("@", 1)[1]
+                inspected = subprocess.run(
+                    [*docker, "image", "inspect", ref, "--format", "{{json .RepoDigests}}"],
+                    cwd=ROOT, text=True, capture_output=True, check=False,
+                )
+                if inspected.returncode != 0 or expected_digest not in inspected.stdout:
+                    raise SystemExit(
+                        f"exact OCI pull completed but local digest verification failed for {ref}; "
+                        "the pinned identity was not accepted."
+                    )
+                break
+            error_class = registry_error_class(output)
+            if error_class != "transient-network" or attempt == attempts:
+                raise SystemExit(
+                    f"exact OCI pull failed for {ref} ({error_class}); "
+                    "the pinned identity was not changed. Inspect the diagnostic above "
+                    "and repair DNS, credentials, rate limits, TLS, or network policy as indicated."
+                )
+            delay = 2 ** (attempt - 1)
+            print(f"  transient registry transport failure; retrying in {delay}s")
+            time.sleep(delay)
+    print("OCI registry preflight PASS: exact pinned references are locally obtainable")
+    return refs
+
+
+def build_compose_images(docker: list[str], private: bool, *, attempts: int = 3) -> None:
+    """Build production images with bounded retries for transport-only failures."""
+    command = [*compose(docker, private), "build", "api", "web"]
+    for attempt in range(1, attempts + 1):
+        print(f"production image build (attempt {attempt}/{attempts})")
+        try:
+            cp = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False, timeout=3600)
+            output = (cp.stdout or "") + (cp.stderr or "")
+        except subprocess.TimeoutExpired as exc:
+            cp = None
+            output = f"production image build timed out after 3600 seconds: {exc}"
+        if output:
+            print(output, end="")
+        if cp is not None and cp.returncode == 0:
+            return
+        error_class = registry_error_class(output)
+        if error_class != "transient-network" or attempt == attempts:
+            raise SystemExit(f"production image build failed ({error_class}); see the captured build output above")
+        delay = 2 ** (attempt - 1)
+        print(f"transient registry transport failure during image build; retrying in {delay}s")
+        time.sleep(delay)
 
 
 def nearest_existing_parent(path: Path) -> Path:
@@ -834,7 +1068,10 @@ def quiesce_and_backup_if_running(docker: list[str], private: bool, build_identi
 
 
 def verify_scientific_ready(docker: list[str], private: bool) -> dict:
-    cp = run([*compose(docker, private), "exec", "-T", "api", "curl", "-fsS", "http://127.0.0.1:8080/ready/scientific"], capture=True)
+    cp = run([
+        *compose(docker, private), "exec", "-T", "api", "python", "-c",
+        "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8080/ready/scientific', timeout=10).read().decode())",
+    ], capture=True)
     try: payload = json.loads(cp.stdout)
     except json.JSONDecodeError: raise SystemExit(f"/ready/scientific returned non-JSON: {cp.stdout[:500]!r}")
     if payload.get("ready") is not True:
@@ -932,6 +1169,11 @@ def main() -> int:
     build_identity = sha256_file(ROOT / "release" / "FILE-MANIFEST.json")
 
     docker = docker_prefix()
+    ensure_dedicated_buildx_builder(docker)
+    # Also run after a failed build: BuildKit intermediates are reconstructible,
+    # and a qualification failure must not leave an unbounded cache behind.
+    prune_dedicated_buildx_builder(docker)
+    atexit.register(prune_dedicated_buildx_builder, docker)
     values = parse_env(DEFAULT_ENV)
     values["PCRSTUDIO_BUILD_ID"] = build_identity
     values["PCRSTUDIO_COMPOSE_PROJECT"] = validate_compose_project(values.get("PCRSTUDIO_COMPOSE_PROJECT", "pcrstudio"))
@@ -967,10 +1209,21 @@ def main() -> int:
     )
     write_env(DEFAULT_ENV, values)
 
+    # Resolve every external build/runtime dependency before the expensive
+    # BuildKit graph. The helper uses Docker's configured credential store, but
+    # never invents credentials or substitutes a mirror for a pinned digest.
+    pull_pinned_external_images(docker)
+
     # Compose validation happens before the expensive image build.
     run([*compose(docker, args.private), "config", "-q"])
     run([*compose(docker, args.private), "pull", "db", "caddy"])
-    run([*compose(docker, args.private), "build", "--pull", "api", "web"])
+    # The exact-digest OCI preflight above already pulled and verified every
+    # external image. Do not force Compose to re-contact Docker Hub/CDN here:
+    # that used to bypass the verified local content and made a healthy
+    # preflight depend on a second live registry transaction. A cold host still
+    # obtains the pinned digest through the normal BuildKit resolver; repeated
+    # qualifications reuse the dedicated builder/daemon content instead.
+    build_compose_images(docker, args.private)
     image = api_image_id(docker, args.private)
 
     qualification = qualify_image(docker, image)

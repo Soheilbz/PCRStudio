@@ -6,7 +6,7 @@ PCRStudio CURRENT is qualified on Linux x86_64. This gate is intentionally separ
 
 - Linux x86_64 with a POSIX shell
 - Python 3.11+ (the production worker image uses Python 3.12)
-- Node.js 24.x and Corepack/pnpm 11.19.0 (matching the production Web image)
+- Node.js 24.x and Corepack/pnpm 11.26.0 (matching the production Web image)
 - Rust toolchain pinned by the repository
 - `uv`, C/C++ build tools and `make`
 - PostgreSQL/Docker only when exercising the deployment stack

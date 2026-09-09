@@ -2,9 +2,11 @@ import { cookies, headers } from "next/headers";
 import { AppFooter } from "@/components/layout/app-footer";
 import { AppShell } from "@/components/layout/app-shell";
 import { PublicHeader } from "@/components/layout/public-header";
+import { MODULE_BINDINGS } from "@/lib/contracts/module-bindings.generated";
 import { loadModules, loadVocabulary } from "@/lib/api/load";
 import { requireUser } from "@/lib/auth/current-user";
 import { isSafeDestination } from "@/lib/auth/destination";
+import { notFound } from "next/navigation";
 
 /**
  * Everything that lives inside the workbench.
@@ -41,13 +43,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     );
   }
 
-  const [{ modules, error }, { goals }, cookieStore] = await Promise.all([
-    loadModules(),
-    loadVocabulary(),
-    cookies(),
-  ]);
-
+  const cookieStore = await cookies();
   const user = await requireUser(destination);
+
+  // The proxy redirects visitors without a session before this layout runs.
+  // Once a session is present, reject an unknown module before loading the
+  // shell's catalogue or rendering any child content; otherwise a streamed
+  // dynamic layout can turn `notFound()` in the page into an HTTP 200.
+  const moduleId = /^\/modules\/([^/]+)(?:\/|$)/.exec(pathname)?.[1];
+  if (moduleId && !Object.hasOwn(MODULE_BINDINGS, moduleId)) notFound();
+
+  const [{ modules, error }, { goals }] = await Promise.all([loadModules(), loadVocabulary()]);
 
   // The sidebar writes this itself when it is toggled. Reading it here is what
   // keeps a collapsed sidebar collapsed after a reload, instead of springing

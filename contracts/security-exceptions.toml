@@ -1,0 +1,50 @@
+schema_version = "1.0.0"
+
+# This is a deliberately narrow, time-bounded exception. It is consumed by
+# scripts/validate-image-vulnerability-policy.py; it is not a Trivy ignorefile.
+[[exception]]
+id = "SEC-EXC-2026-09-MFEPRIMER-451"
+status = "accepted-temporarily"
+review_by = "2026-10-09"
+owner = "PCRStudio security maintainers"
+tool_id = "mfeprimer"
+tool_version = "4.5.1"
+artifact_path = "/opt/pcrstudio/tools/mfeprimer/mfeprimer"
+artifact_sha256 = "248e69da75a1a0f71f5314975e9faaf4c50cc95331d6b37068c9b93ebe27a205"
+package_name = "stdlib"
+installed_version = "v1.26.0"
+severity = "HIGH"
+
+vulnerability_ids = [
+  "CVE-2026-25679",
+  "CVE-2026-27137",
+  "CVE-2026-27145",
+  "CVE-2026-32280",
+  "CVE-2026-32281",
+  "CVE-2026-32283",
+  "CVE-2026-33810",
+  "CVE-2026-33811",
+  "CVE-2026-33814",
+  "CVE-2026-33818",
+  "CVE-2026-39820",
+  "CVE-2026-39821",
+  "CVE-2026-39822",
+  "CVE-2026-39836",
+  "CVE-2026-42499",
+  "CVE-2026-42504",
+  "CVE-2026-46600",
+  "CVE-2026-56853",
+  "CVE-2026-56858",
+  "CVE-2026-56859",
+  "CVE-2026-56860",
+  "CVE-2026-56862",
+]
+
+reason = "The exact upstream MFEprimer 4.5.1 binary is required for the current validator contract. Its public distribution repository publishes binaries only, with no buildable source for a repository-owned rebuild, and the current findings are Go standard-library issues inside that immutable executable."
+compensating_controls = [
+  "The provision archive and runtime executable remain exact SHA-256 pinned.",
+  "Trivy still runs with unfixed findings included and every finding is printed in the job summary.",
+  "Only this exact path, executable hash, package, installed version, severity and CVE set may pass.",
+  "Any changed MFEprimer artifact, new CVE, different severity or finding in another component fails closed.",
+  "The exception is re-reviewed by the review_by date and is removed immediately after an upstream-fixed artifact is qualified.",
+]

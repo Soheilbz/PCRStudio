@@ -1,18 +1,14 @@
 {
   "provenance": {
-    "worker": "0.1.0",
-    "runtime_contract_version": "1.1.0",
-    "parameter_map_version": "gen1-2026-08-30.2",
-    "input_schema_version": "pcrstudio-worker-input-v1",
-    "output_schema_version": "pcrstudio-worker-output-v2",
+    "worker": "17.0.0",
+    "runtime_contract_version": "2.2.0",
+    "parameter_map_version": "generation1-current",
+    "input_schema_version": "pcrstudio-worker-input-v2",
+    "output_schema_version": "pcrstudio-worker-output-v4",
     "toolchain_manifest": {
-      "primer3_core": {
-        "configured_version": "2.6.1",
-        "execution_scope": "embedded-package"
-      },
-      "primer3_py": {
-        "configured_version": "2.3.0",
-        "execution_scope": "embedded-package"
+      "mafft": {
+        "configured_version": "7.526",
+        "execution_scope": "local"
       },
       "mfeprimer": {
         "configured_version": "4.5.1",
@@ -22,49 +18,57 @@
         "configured_version": "2.17.0",
         "execution_scope": "local"
       },
-      "mafft": {
-        "configured_version": "7.526",
-        "execution_scope": "local"
+      "nupack4": {
+        "configured_version": "4.x",
+        "execution_scope": "manual-reference"
       },
-      "primerpooler": {
-        "configured_version": "1.89",
-        "execution_scope": "local"
+      "olivar": {
+        "configured_version": "1.3.3",
+        "execution_scope": "external-managed"
       },
       "primalscheme3": {
         "configured_version": "3.3.0",
         "execution_scope": "local"
       },
-      "viennarna": {
-        "configured_version": "2.7.2",
-        "execution_scope": "optional-package"
+      "primer3_core": {
+        "configured_version": "2.6.1",
+        "execution_scope": "embedded-package"
       },
-      "pydna": {
-        "configured_version": "5.5.16",
-        "execution_scope": "local"
+      "primer3_py": {
+        "configured_version": "2.3.1",
+        "execution_scope": "embedded-package"
       },
       "primer_blast": {
         "configured_version": "live",
         "execution_scope": "remote-reference"
       },
-      "nupack4": {
-        "configured_version": "4.x",
-        "execution_scope": "manual-reference"
+      "primerpooler": {
+        "configured_version": "1.89",
+        "execution_scope": "local"
+      },
+      "pydna": {
+        "configured_version": "5.5.16",
+        "execution_scope": "local"
+      },
+      "viennarna": {
+        "configured_version": "2.7.2",
+        "execution_scope": "optional-package"
       }
     },
-    "primer3_py": "2.3.0",
+    "primer3_py": "2.3.1",
     "primer3_artifact": {
-      "primer3_py_record_sha256": "f5b07beefc8b9fd32dafcea7430fefecb42048e049b9e1bc64c8e37e565ea8f4",
-      "libprimer3_carrier_record_sha256": "f5b07beefc8b9fd32dafcea7430fefecb42048e049b9e1bc64c8e37e565ea8f4",
+      "primer3_py_record_sha256": "9fe2605a4ed1ebd91aef98700899f783bb8265796ee8073f964102dc3c2186ad",
+      "libprimer3_carrier_record_sha256": "9fe2605a4ed1ebd91aef98700899f783bb8265796ee8073f964102dc3c2186ad",
       "libprimer3_version_matches_contract": true,
       "artifact_identity": "sha256(primer3-py distribution RECORD metadata)"
     },
     "tool_versions": {
-      "pcrstudio_tools": "0.1.0",
-      "primer3_py": "2.3.0",
+      "pcrstudio_tools": "17.0.0",
+      "primer3_py": "2.3.1",
       "libprimer3": "libprimer3 release 2.6.1",
       "viennarna": "2.7.2"
     },
-    "python": "3.12.13",
+    "python": "3.14.4",
     "model": {
       "name": "SantaLucia 1998 nearest-neighbour with SantaLucia 1998 salt correction",
       "tm_formula": "SantaLucia 1998",
@@ -111,7 +115,7 @@
         }
       }
     },
-    "platform": "Windows AMD64",
+    "platform": "Linux x86_64",
     "note": "Primer3 is bundled with primer3-py rather than installed separately; both the primer3-py package version and bundled libprimer3 engine version are recorded."
   },
   "result": {

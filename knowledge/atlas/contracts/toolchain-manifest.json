@@ -81,12 +81,12 @@
       "qualifiers": [
         "development_adapter"
       ],
-      "source_ref": "PyPI:2.3.0",
-      "source_url": "https://pypi.org/project/primer3-py/2.3.0/",
+      "source_ref": "PyPI:2.3.1",
+      "source_url": "https://pypi.org/project/primer3-py/2.3.1/",
       "tool_id": "primer3_py",
       "version_policy": {
         "mode": "exact",
-        "version": "2.3.0"
+        "version": "2.3.1"
       }
     },
     {

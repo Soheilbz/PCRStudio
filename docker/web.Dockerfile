@@ -13,7 +13,11 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY web/package.json ./web/
 RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
+FROM deps AS builder
+# Keep the Corepack materialised pnpm bundle from the dependency layer in the
+# builder layer. Re-invoking the Corepack shim otherwise performs a second
+# network fetch after COPY invalidates the build cache, which made a clean
+# build depend on a second npm-registry connection.
 COPY --from=deps /src/node_modules ./node_modules
 COPY --from=deps /src/web/node_modules ./web/node_modules
 COPY . .
@@ -37,6 +41,9 @@ RUN --mount=type=secret,id=next_server_actions_key,required=true \
     && NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat /run/secrets/next_server_actions_key)" pnpm --filter web build
 
 FROM base AS runtime
+LABEL org.pcrstudio.product="PCRStudio" \
+      org.pcrstudio.lifecycle="managed" \
+      org.pcrstudio.cache-policy="dedicated-builder-8GB"
 ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0

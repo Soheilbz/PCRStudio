@@ -58,6 +58,13 @@ export default async function ModulePage({ params }: PageProps) {
   const { moduleId } = await params;
   await requireUser(`/modules/${moduleId}`);
 
+  // `dynamicParams = false` protects statically generated builds, but this
+  // page is intentionally dynamic because it loads the authenticated project
+  // list. Keep the closed module contract authoritative at the request
+  // boundary too, so an authenticated typo cannot fall through to a generic
+  // unavailable-module shell with HTTP 200.
+  if (!Object.hasOwn(MODULE_BINDINGS, moduleId)) notFound();
+
   const [
     { data: module, error, missing },
     { engines },

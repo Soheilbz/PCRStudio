@@ -15,7 +15,7 @@ executable only with the exact caller-supplied partner plus content-addressed SO
 revision. PrimalScheme/Olivar remain independent tiling backends; circular scheme creation,
 native visual evidence, depth/dropout repair handoff and scheme/version diff are surfaced with provenance.
 
-The current static remediation closes the latest full-stack findings while retaining the Linux-qualification-candidate release class; current source-only evidence is indexed under `release/current/CURRENT-*`.
+The current candidate's source, runtime, Docker/OCI, and release evidence is indexed under [`release/current/README.md`](current/README.md); source-only audits remain clearly scoped and do not replace native or wet-lab gates.
 
 Method-fidelity closure is part of the current source candidate. `contracts/method-fidelity.json` classifies every public module's named methods as upstream-exact, exact public component port, manual-rule-faithful, compatible/approximate, or external-authority-only. The source gate prevents Scientific-Strict primary decisions from using an ineligible approximation and keeps active run methods separate from reference/vendor authorities. The generated review is `knowledge/reviews/METHOD-FIDELITY-AUDIT.md`.
 

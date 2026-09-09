@@ -115,10 +115,7 @@ PROBE_PROTOCOL_ALIASES = {
 }
 PROBE_PROTOCOLS = (
     "not-selected",
-    "thermofisher-taqman-conventional",
-    "idt-primetime-conventional",
-    "taqman-mgb-reference",
-    "taqman-mgb",
+    *PROBE_AUTHORITY["groups"]["probe_protocols"],
 )
 
 

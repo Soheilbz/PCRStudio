@@ -39,7 +39,7 @@ TAILS: tuple[tuple[str, str], ...] = tuple(
 #: them behind an explicit selector prevents a KASP calculation from being
 #: mistaken for a universal genotyping protocol, or for a protocol of another
 #: master-mix revision or instrument.
-PROTOCOLS = ("not-selected", "lgc-kasp-tf-v5", "lgc-standard")
+PROTOCOLS = tuple(DISCRIMINATING_AUTHORITY["groups"]["kasp_protocols"])
 
 
 def protocol(
@@ -52,7 +52,7 @@ def protocol(
     """Return the selected LGC overlay with explicit plate/instrument context."""
     if not named or named == "not-selected":
         return None
-    if named not in {"lgc-kasp-tf-v5", "lgc-standard"}:
+    if named not in set(PROTOCOLS) - {"not-selected"}:
         raise ValueError(
             f"`{named}` is not a KASP protocol this worker knows. It knows: {', '.join(PROTOCOLS)}."
         )

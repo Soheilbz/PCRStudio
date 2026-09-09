@@ -55,7 +55,7 @@ def main():
   pnpm=pnpm_cmd()
   require_version(['rustc'],'rustc','rustc 1.94.')
   require_version(['node'],'Node.js','v24.')
-  require_version(pnpm,'pnpm','11.19.0')
+  require_version(pnpm,'pnpm','11.26.0')
   py=ROOT/'tools/.venv/bin/python'
   if not py.is_file(): raise SystemExit('Full qualification requires tools/.venv/bin/python; run prepare-linux.py --sync-dependencies')
   env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','PYTEST_DISABLE_PLUGIN_AUTOLOAD':'1'}

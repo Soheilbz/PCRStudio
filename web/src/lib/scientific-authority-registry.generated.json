@@ -33,7 +33,7 @@
     "discriminating-protocols.json": {
       "authority_id": "discriminating-protocols",
       "authority_revision": "1.0.0",
-      "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+      "canonical_sha256": "6db0dff72e74eccf8db7396e0453bf3cdaebbbef45b7712425539bade689fda3",
       "canonical_source": "contracts/chemistry/discriminating-protocols.json",
       "effective_date": "2026-09-04"
     },
@@ -171,7 +171,7 @@
       {
         "authority_id": "discriminating-protocols",
         "authority_revision": "1.0.0",
-        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_sha256": "6db0dff72e74eccf8db7396e0453bf3cdaebbbef45b7712425539bade689fda3",
         "canonical_source": "contracts/chemistry/discriminating-protocols.json",
         "effective_date": "2026-09-04"
       },
@@ -265,7 +265,7 @@
       {
         "authority_id": "discriminating-protocols",
         "authority_revision": "1.0.0",
-        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_sha256": "6db0dff72e74eccf8db7396e0453bf3cdaebbbef45b7712425539bade689fda3",
         "canonical_source": "contracts/chemistry/discriminating-protocols.json",
         "effective_date": "2026-09-04"
       },
@@ -515,7 +515,7 @@
       {
         "authority_id": "discriminating-protocols",
         "authority_revision": "1.0.0",
-        "canonical_sha256": "c1f58e73308a87e83fc3d07319a83cd669c3680ccc5bc2bed36bcb7bebc3114e",
+        "canonical_sha256": "6db0dff72e74eccf8db7396e0453bf3cdaebbbef45b7712425539bade689fda3",
         "canonical_source": "contracts/chemistry/discriminating-protocols.json",
         "effective_date": "2026-09-04"
       },

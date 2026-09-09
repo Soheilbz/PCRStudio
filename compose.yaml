@@ -19,6 +19,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-pcr}
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       POSTGRES_DB: ${POSTGRES_DB:-pcrstudio}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+      LANG: C
+      LC_ALL: C
     command: ["postgres", "-c", "max_connections=${POSTGRES_MAX_CONNECTIONS:-200}"]
     volumes:
       # Postgres 18+ images keep the cluster in a major-version subdirectory,
@@ -158,7 +161,7 @@ services:
       # durable-runner readiness are exposed separately to qualification and
       # operator probes so temporary scientific degradation does not hide
       # account/project recovery behind an orchestrator-level restart loop.
-      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8080/ready"]
+      test: ["CMD", "python", "-c", "import urllib.request; response = urllib.request.urlopen('http://127.0.0.1:8080/ready', timeout=5); raise SystemExit(0 if 200 <= response.status < 400 else 1)"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -315,7 +318,11 @@ services:
       # The admin API answers on loopback even when no site block matches this
       # host, which is exactly what a liveness check needs from a server whose
       # public name lives in an environment variable.
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:2019/config/ || exit 1"]
+      # BusyBox may prefer ::1 for localhost even when Caddy's admin listener
+      # is IPv4-only. Keep health status independent of an unavailable IPv6
+      # loopback path; public HTTP/3 and registry address-family policy remain
+      # unchanged.
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:2019/config/ || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5

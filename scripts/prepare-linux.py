@@ -17,6 +17,28 @@ def pnpm_cmd():
  if corepack: return [corepack,'pnpm']
  raise SystemExit('Required package manager unavailable: install pnpm or Node Corepack')
 
+def web_dependencies_are_linked():
+ # pnpm can retain a workspace-state file after an interrupted install. In
+ # that state the virtual store may exist while the package executables that
+ # every gate invokes do not. Detect the usable boundary, not just the
+ # presence of node_modules.
+ required = ('next', 'prettier', 'playwright', 'tsc')
+ return all((ROOT/'web/node_modules/.bin'/name).is_file() for name in required)
+
+def install_web_dependencies(pnpm, store_dir=None):
+ install_cmd=[*pnpm,'install','--frozen-lockfile']
+ if store_dir: install_cmd.extend(['--store-dir',store_dir])
+ run(*install_cmd)
+ if web_dependencies_are_linked(): return
+ print('Web dependency links are incomplete; rebuilding generated node_modules.', flush=True)
+ # These directories are generated package-manager state, not source. A
+ # recoverable interrupted install must not poison every later bootstrap run.
+ for path in (ROOT/'node_modules', ROOT/'web/node_modules'):
+  if path.is_dir(): shutil.rmtree(path)
+ run(*install_cmd)
+ if not web_dependencies_are_linked():
+  raise SystemExit('pnpm completed but the Web workspace executables are missing; rerun bootstrap with network access')
+
 def purge_source_cache_residue():
  # Qualification treats generated Python/test caches as source contamination.
  # Remove only cache directories/files under the project source roots so a
@@ -41,9 +63,7 @@ def main():
  run(sys.executable,f'scripts/{static_script}')
  if a.sync_dependencies:
   req('uv'); pnpm=pnpm_cmd(); run('uv','sync','--project','tools','--frozen','--extra','dev','--extra','folding')
-  install_cmd=[*pnpm,'install','--frozen-lockfile']
-  if a.pnpm_store_dir: install_cmd.extend(['--store-dir',a.pnpm_store_dir])
-  run(*install_cmd)
+  install_web_dependencies(pnpm, a.pnpm_store_dir)
  if a.provision_tools:
   provision_args=[sys.executable,'scripts/provision-tools.py']
   if a.approve_scientific_freeze: provision_args.append('--approve-scientific-freeze')

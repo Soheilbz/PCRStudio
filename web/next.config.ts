@@ -109,9 +109,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {
-    // Use Next's compiler API for type checking; the CLI path in Next
-    // 16.3.3 cannot parse the pinned TypeScript 5.9 --showConfig payload.
-    useTypeScriptCli: false,
     serverActions: {
       /*
        * Next defaults this to 1 MB, and everything here goes through a server

@@ -855,14 +855,14 @@ def audit_application_foundation() -> None:
     if "reserved operational probe" not in gate_source or "sequentially" not in readiness:
         error("worker-capacity documentation/readiness serialization contract drifted")
 
-    readme = text("README.md")
+    operations = text("docs/OPERATIONS.md")
     for marker in (
         "PCR_MAX_QUEUED_WORKERS",
         "PCR_CORS_ORIGINS",
         "1–299 seconds",
         "malformed origins are rejected",
     ):
-        if marker not in readme:
+        if marker not in operations:
             error(f"deployment configuration documentation lost marker: {marker}")
 
     # Build-toolchain declarations are one contract. SQLx 0.9's supported Rust
@@ -891,7 +891,7 @@ def audit_application_foundation() -> None:
     ):
         if marker not in ci:
             error(f"CI quality/security tool pin drifted: {marker}")
-    if ci.count('uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9') < 3 or ci.count('version: "0.12.8"') < 3:
+    if ci.count('uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d') < 3 or ci.count('version: "0.12.10"') < 3:
         error("CI uv installer/version pin drifted from the release toolchain contract")
     if 'uv export --frozen --extra folding --no-emit-project' not in ci:
         error("Python dependency audit no longer covers the production folding extra")
@@ -906,7 +906,7 @@ def audit_application_foundation() -> None:
         if marker not in ci:
             error(f"CI deployment configuration validation lost marker: {marker}")
     for marker in (
-        "uv==0.12.8",
+        "uv==0.12.10",
         "uv sync --project tools --frozen --extra folding --no-dev --no-editable",
     ):
         if marker not in api_dockerfile:
@@ -1033,7 +1033,7 @@ def audit_application_foundation() -> None:
         "PCR_DB_ACQUIRE_TIMEOUT_SECONDS",
         "fail startup",
     ):
-        if marker not in readme:
+        if marker not in operations:
             error(f"database-pool deployment documentation lost marker: {marker}")
 
     cookie = text("web/src/lib/auth/session-cookie.ts")
@@ -1060,7 +1060,7 @@ def audit_application_foundation() -> None:
     if "PCR_DATABASE_URL: postgres://" in compose or "POSTGRES_PASSWORD: ${" in compose:
         error("stock Compose regressed to exposing the database credential through environment interpolation")
     for marker in ("file-backed deployment secrets", "/run/secrets/postgres_password", "/run/secrets/database_url"):
-        if marker not in readme:
+        if marker not in operations:
             error(f"file-backed deployment secret documentation lost marker: {marker}")
     for marker in ("data:", "app:", "egress:", "edge:"):
         if marker not in compose:

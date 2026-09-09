@@ -2,6 +2,11 @@
 
 PCRStudio CURRENT uses Linux x86_64 as the canonical development, CI and production platform. Machine-specific workstation state is not part of the public source contract.
 
+The current-state organization and cleanup rules are defined in
+[`REPOSITORY-POLICY.md`](REPOSITORY-POLICY.md). Keep new documentation under
+its canonical concern, and keep generated/local state in the ignored paths
+described below.
+
 ## Generated and local state
 
 Keep mutable state inside ignored project-local paths: `.local/logs/`, `.local/backups/`, `.local/tmp/`, `target/`, `node_modules/`, `tools/.venv/`, `web/.next/`, `test-results/`, and `playwright-report/`. Do not commit credentials, databases, caches, local environments or build output.

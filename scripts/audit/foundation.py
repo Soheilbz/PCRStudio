@@ -177,7 +177,6 @@ def audit_current_surface_hygiene() -> None:
         "knowledge/reviews/HISTORICAL-WORKING-SNAPSHOT-STATUS-2026-08-31.md",
         "knowledge/atlas/provenance/research-history-2026-08.json",
         "knowledge/atlas/provenance/pre-refactor-markdown-history-2026-08-30.zip",
-        "tools/tests/goldens/inverse-pcr__L09137.2__legacy-split-anchor.json",
     }
     for rel in sorted(forbidden_exact):
         if (ROOT / rel).exists():
@@ -525,4 +524,3 @@ def audit_module_engine_parity() -> None:
     lamp_fallback = str(lamp.get("fallback", ""))
     if lamp_fallback and lamp_fallback not in full_row:
         error("lamp: full-system review fallback drifted from canonical module contract")
-

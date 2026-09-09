@@ -755,7 +755,7 @@ def audit_current_release_identity() -> None:
         "baseline_kind": "R15-final-file-manifest-authority",
         "foundation_release": "CURRENT",
         "source_qualification_label": "linux-native-unified-engine-source-qualified",
-        "current_report": "release/current/CURRENT-LINUX-MIGRATION.md",
+        "current_report": "release/current/ENGINEERING-CLOSURE-REPORT.md",
     }
     for key, value in expected.items():
         if identity.get(key) != value:
@@ -959,10 +959,18 @@ def audit_source_release_hardening() -> None:
             "pcrstudio-runner:${PCRSTUDIO_IMAGE_TAG:-local}",
             "pcrstudio-migrate:${PCRSTUDIO_IMAGE_TAG:-local}",
         }
+        local_ci_images = {
+            "pcrstudio-api:ci",
+            "pcrstudio-runner:ci",
+            "pcrstudio-migrate:ci",
+            "pcrstudio-web:ci",
+        }
         if source == "compose.yaml" and ref in local_project_images:
             compose_text = (ROOT / source).read_text(encoding="utf-8")
             if "dockerfile: docker/api.Dockerfile" not in compose_text:
                 error("local PCRStudio application images lost their source-build binding")
+            continue
+        if source.startswith(".github/workflows/") and ref in local_ci_images:
             continue
         if not re.search(r"@sha256:[0-9a-f]{64}$", ref):
             error(f"source release hardening: external container image is not digest pinned in {source}: {ref}")
@@ -991,15 +999,41 @@ def audit_source_release_hardening() -> None:
         "image-sbom-runner.cdx.json",
         "image-sbom-migrate.cdx.json",
         "image-sbom-web.cdx.json",
+        "test ! -e /var/lib/dpkg/status",
         "--target api-runtime",
         "--target runner-runtime",
         "--target migrate-runtime",
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+        "scripts/install-playwright-browser.sh",
     ):
         if marker not in ci_text:
             error(f"source release hardening: Linux image qualification lost required security/build marker: {marker}")
+    api_dockerfile = (
+        (ROOT / "docker/api.Dockerfile").read_text(encoding="utf-8")
+        + "\n"
+        + (ROOT / "docker/configure-debian-snapshot.sh").read_text(encoding="utf-8")
+    )
+    for marker in (
+        "python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79",
+        "busybox:1.37.0-glibc@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c0865b0f540d868df0",
+        "DEBIAN_SNAPSHOT=20260901T000000Z",
+        "configure-debian-snapshot",
+        "Acquire::Check-Valid-Until",
+    ):
+        if marker not in api_dockerfile:
+            error(f"source release hardening: Docker package provenance marker missing: {marker}")
     codeql_path = ROOT / ".github/workflows/codeql.yml"
     codeql_text = codeql_path.read_text(encoding="utf-8") if codeql_path.is_file() else ""
-    for marker in ("github/codeql-action/init@", "github/codeql-action/analyze@", "security-extended", "languages: rust"):
+    for marker in (
+        "github/codeql-action/init@",
+        "github/codeql-action/analyze@",
+        "security-extended",
+        "languages: ${{ matrix.language }}",
+        "language: rust",
+        "language: python",
+        "language: javascript-typescript",
+    ):
         if marker not in codeql_text:
             error(f"source release hardening: CodeQL coverage marker missing: {marker}")
 
