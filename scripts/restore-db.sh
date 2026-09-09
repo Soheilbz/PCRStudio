@@ -77,7 +77,9 @@ fi
 # additionally requires /ready/scientific, so restore follows the same strict
 # operational standard rather than accepting control-plane-only readiness.
 "$compose" up -d --wait
-"$compose" exec -T api curl --fail --silent http://127.0.0.1:8080/ready/scientific >/dev/null
+"$compose" exec -T api python -c \
+  'import urllib.request; response = urllib.request.urlopen("http://127.0.0.1:8080/ready/scientific", timeout=10); raise SystemExit(0 if 200 <= response.status < 400 else 1)' \
+  >/dev/null
 
 app_stopped=0
 echo "database restored, migrated, invariant-validated, and scientific readiness verified"

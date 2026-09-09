@@ -21,9 +21,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 5912,
+      "bytes": 6120,
       "path": ".github/workflows/staging-deploy.yml",
-      "sha256": "4270f7c2bdb0d6a94094be0aa5ca49d439508012323552d83eb47b714b57a446"
+      "sha256": "275cb329b44ee7ca2166a0a69f22bd11b34eaeefdd2c013d5cee9fe08697f372"
     },
     {
       "bytes": 2041,
@@ -516,6 +516,11 @@
       "sha256": "0bd1311fe8c10ad39b1a0715a91b9d5485f2b9d24a13865d68e38feb3e3242df"
     },
     {
+      "bytes": 1030,
+      "path": "docker/configure-debian-snapshot.sh",
+      "sha256": "4cb2c599f403d19d83bef1f41c074363cddfec2baaefbce979a9ba477b69945d"
+    },
+    {
       "bytes": 3963,
       "path": "docs/DEVELOPMENT.md",
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
@@ -778,12 +783,12 @@
     {
       "bytes": 1670,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "093f6b0ad7a13afaf6ee02b37dc153a2c64d00fb6e0a7f8db63bccb50aa7122a"
+      "sha256": "f6d7204ccbe814d315de83426aa453e8cf3ef4e3e16e93ae891d439e90b3b1a8"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "0493262e515cf182a01ea40a31e89b255cab6e9141a7aa030ea4d64c77ff2cef"
+      "sha256": "098141f27f7b5db283c43953446ece3aa3cd5ddaab00a6d7dd8becea7f15a6ba"
     },
     {
       "bytes": 32133,
@@ -851,9 +856,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 63127,
+      "bytes": 63234,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "3a8e58e9c19a4d58eb01dd23ec7a1ed8a13b8f5698c29a1de52df6fc5003d2d2"
+      "sha256": "4731a73bd0ad0f771a9b84bb2df2dc1b453662c92941284c602bd775c805ab19"
     },
     {
       "bytes": 17770,
@@ -959,6 +964,11 @@
       "bytes": 4382,
       "path": "scripts/generate-scientific-authority-registry.py",
       "sha256": "71477eb3e49a3ede063960795a0e8a629119236ca83466d0a4380838802654f1"
+    },
+    {
+      "bytes": 702,
+      "path": "scripts/install-playwright-browser.sh",
+      "sha256": "c657dd5b54c068d518cfc28bd76f78f73fde05e25bfc1511b616851deae228fb"
     },
     {
       "bytes": 391,
@@ -1737,8 +1747,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 18237,
-      "after_sha256": "ff56fef43aa5510c5819f84f559abc2cf98b70ca19f69f55509254ba0462aa77",
+      "after_bytes": 18745,
+      "after_sha256": "4b2aa75071e1efc5068c3d1b56c7076e33606236e38ccfdd2188cab3ddecebf6",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -1793,8 +1803,8 @@
       "path": "compose.vm.yaml"
     },
     {
-      "after_bytes": 15516,
-      "after_sha256": "bf1eafd7096d52b918f0ae2d04da2510b589fe3c8dfe9ccd6ee23623cafc21ed",
+      "after_bytes": 15633,
+      "after_sha256": "a4d5f7a7650981a76287c571f4a47721a4e732214c2236016c22ae18c4fab406",
       "before_bytes": 7351,
       "before_sha256": "a6599b33461c02c68bf94cfb68609d96e547bfb4505d42f5501eb20d15219e80",
       "path": "compose.yaml"
@@ -2339,8 +2349,8 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 5961,
-      "after_sha256": "b7176e8022afff56a9a7beb7eb8f8e578ab7850e0136297bb56177c655243416",
+      "after_bytes": 6633,
+      "after_sha256": "c37551e897363097f2f8abc6077852abc8ca0dcea7cb0fa6ba8824ac00884ac3",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"
@@ -2563,8 +2573,8 @@
       "path": "knowledge/atlas/knowledge/design-intelligence.md"
     },
     {
-      "after_bytes": 9118,
-      "after_sha256": "10bca8cbd2438addcc8282c0785786c44f0465b4453f6955309118acbedfac5d",
+      "after_bytes": 9187,
+      "after_sha256": "b4ea257fb79d8e153cbfa872a103d5ef9b204262498461000d31acf595acab80",
       "before_bytes": 7447,
       "before_sha256": "689b960e277d16f2a51ba0ef5a00ec10f36f8caecec8151398eda8ebc10cac1a",
       "path": "knowledge/atlas/operations/deployment.md"
@@ -2934,8 +2944,8 @@
       "path": "scripts/audit/lamp.py"
     },
     {
-      "after_bytes": 66947,
-      "after_sha256": "290fa541c2e0588b8e5bb912e3de1113685b0b65874e257ad2941fb0b57de63e",
+      "after_bytes": 67689,
+      "after_sha256": "ac3fb7a65c952decca63a624cbba0d22c440ee8153fee616b6dc908d7070051d",
       "before_bytes": 45119,
       "before_sha256": "93d6a42fcd39f5c544bbd589ddfa116939a439b739318842cdb5cbdb6f3b962b",
       "path": "scripts/audit/release.py"
@@ -3123,8 +3133,8 @@
       "path": "scripts/render-design-review.py"
     },
     {
-      "after_bytes": 3669,
-      "after_sha256": "962575b62a239a387e1c57e4ddad21c7cfde498faedbae3c57220a4909d4c6cc",
+      "after_bytes": 3800,
+      "after_sha256": "500d904502ddba08f0f70778d05b3201811e64ca32fa68c200e22149c9227dfd",
       "before_bytes": 1223,
       "before_sha256": "12f57b7e8fa91daa1c7683c340025d641bbc361d98d7dc3c1180b2c6121540b0",
       "path": "scripts/restore-db.sh"
@@ -5321,7 +5331,7 @@
   ],
   "schema_version": "2.1.0",
   "summary": {
-    "added": 339,
+    "added": 341,
     "modified": 471,
     "removed": 62
   }

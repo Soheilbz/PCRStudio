@@ -1043,7 +1043,10 @@ def quiesce_and_backup_if_running(docker: list[str], private: bool, build_identi
 
 
 def verify_scientific_ready(docker: list[str], private: bool) -> dict:
-    cp = run([*compose(docker, private), "exec", "-T", "api", "curl", "-fsS", "http://127.0.0.1:8080/ready/scientific"], capture=True)
+    cp = run([
+        *compose(docker, private), "exec", "-T", "api", "python", "-c",
+        "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8080/ready/scientific', timeout=10).read().decode())",
+    ], capture=True)
     try: payload = json.loads(cp.stdout)
     except json.JSONDecodeError: raise SystemExit(f"/ready/scientific returned non-JSON: {cp.stdout[:500]!r}")
     if payload.get("ready") is not True:

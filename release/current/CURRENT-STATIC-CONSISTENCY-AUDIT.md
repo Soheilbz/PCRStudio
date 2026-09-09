@@ -6,14 +6,14 @@
 
 ## Current Linux snapshot
 
-- Source files represented: **1055**
+- Source files represented: **1057**
 - Python: **236**
 - Rust: **91**
 - TypeScript/TSX: **284**
 - JSON: **223**
 - TOML: **25**
 - YAML: **13**
-- Shell: **12**
+- Shell: **14**
 - Public engines/modules: **11 / 21**
 - Experimental/stable modules: **21 / 0**
 - Active PowerShell/CMD/BAT files: **0**

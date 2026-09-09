@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1051,
+  "file_count": 1053,
   "files": [
     {
       "bytes": 816,
@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 18237,
+      "bytes": 18745,
       "path": ".github/workflows/ci.yml",
-      "sha256": "ff56fef43aa5510c5819f84f559abc2cf98b70ca19f69f55509254ba0462aa77"
+      "sha256": "4b2aa75071e1efc5068c3d1b56c7076e33606236e38ccfdd2188cab3ddecebf6"
     },
     {
       "bytes": 1221,
@@ -53,9 +53,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 5912,
+      "bytes": 6120,
       "path": ".github/workflows/staging-deploy.yml",
-      "sha256": "4270f7c2bdb0d6a94094be0aa5ca49d439508012323552d83eb47b714b57a446"
+      "sha256": "275cb329b44ee7ca2166a0a69f22bd11b34eaeefdd2c013d5cee9fe08697f372"
     },
     {
       "bytes": 415,
@@ -123,9 +123,9 @@
       "sha256": "d23599199410bc497a3e4a4c6ced0b1decbc029e7fe457f4e9ae0cedd069b14b"
     },
     {
-      "bytes": 15516,
+      "bytes": 15633,
       "path": "compose.yaml",
-      "sha256": "bf1eafd7096d52b918f0ae2d04da2510b589fe3c8dfe9ccd6ee23623cafc21ed"
+      "sha256": "a4d5f7a7650981a76287c571f4a47721a4e732214c2236016c22ae18c4fab406"
     },
     {
       "bytes": 4633,
@@ -1088,9 +1088,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 5961,
+      "bytes": 6633,
       "path": "docker/api.Dockerfile",
-      "sha256": "b7176e8022afff56a9a7beb7eb8f8e578ab7850e0136297bb56177c655243416"
+      "sha256": "c37551e897363097f2f8abc6077852abc8ca0dcea7cb0fa6ba8824ac00884ac3"
     },
     {
       "bytes": 438,
@@ -1101,6 +1101,11 @@
       "bytes": 1762,
       "path": "docker/compose.devdb.yaml",
       "sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b"
+    },
+    {
+      "bytes": 1030,
+      "path": "docker/configure-debian-snapshot.sh",
+      "sha256": "4cb2c599f403d19d83bef1f41c074363cddfec2baaefbce979a9ba477b69945d"
     },
     {
       "bytes": 2920,
@@ -1483,9 +1488,9 @@
       "sha256": "4364b29de24df42e42e90e4df158a5cfefb917056661d3c3282cb4e53e04f255"
     },
     {
-      "bytes": 9118,
+      "bytes": 9187,
       "path": "knowledge/atlas/operations/deployment.md",
-      "sha256": "10bca8cbd2438addcc8282c0785786c44f0465b4453f6955309118acbedfac5d"
+      "sha256": "b4ea257fb79d8e153cbfa872a103d5ef9b204262498461000d31acf595acab80"
     },
     {
       "bytes": 1088,
@@ -1878,9 +1883,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 216057,
+      "bytes": 216398,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "4c57ca3b939ca370ca604976d05008f7c0d271d3b767bd265a311dda3aea60b5"
+      "sha256": "c95023b7b9b59ee2d6d239fc33ff969ff472a350248e7f3a97264f92cfa80a1c"
     },
     {
       "bytes": 2048,
@@ -1955,12 +1960,12 @@
     {
       "bytes": 1670,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "093f6b0ad7a13afaf6ee02b37dc153a2c64d00fb6e0a7f8db63bccb50aa7122a"
+      "sha256": "f6d7204ccbe814d315de83426aa453e8cf3ef4e3e16e93ae891d439e90b3b1a8"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "0493262e515cf182a01ea40a31e89b255cab6e9141a7aa030ea4d64c77ff2cef"
+      "sha256": "098141f27f7b5db283c43953446ece3aa3cd5ddaab00a6d7dd8becea7f15a6ba"
     },
     {
       "bytes": 32133,
@@ -2088,9 +2093,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 66947,
+      "bytes": 67689,
       "path": "scripts/audit/release.py",
-      "sha256": "290fa541c2e0588b8e5bb912e3de1113685b0b65874e257ad2941fb0b57de63e"
+      "sha256": "ac3fb7a65c952decca63a624cbba0d22c440ee8153fee616b6dc908d7070051d"
     },
     {
       "bytes": 28670,
@@ -2113,9 +2118,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 63127,
+      "bytes": 63234,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "3a8e58e9c19a4d58eb01dd23ec7a1ed8a13b8f5698c29a1de52df6fc5003d2d2"
+      "sha256": "4731a73bd0ad0f771a9b84bb2df2dc1b453662c92941284c602bd775c805ab19"
     },
     {
       "bytes": 17770,
@@ -2333,6 +2338,11 @@
       "sha256": "036fe55c11a7950459ad9a02c16019fcd160244736828f2087c3bd83d4fbe537"
     },
     {
+      "bytes": 702,
+      "path": "scripts/install-playwright-browser.sh",
+      "sha256": "c657dd5b54c068d518cfc28bd76f78f73fde05e25bfc1511b616851deae228fb"
+    },
+    {
       "bytes": 391,
       "path": "scripts/new-linux-acceptance-results.py",
       "sha256": "1c8b94fe10e79e879cf71676276dc52ddedadbd12366e7ee81d5415f8ad62f96"
@@ -2383,9 +2393,9 @@
       "sha256": "0ef212fc8b3b298f2700fef4210a08daa34450035bbce4042988432685e07c34"
     },
     {
-      "bytes": 3669,
+      "bytes": 3800,
       "path": "scripts/restore-db.sh",
-      "sha256": "962575b62a239a387e1c57e4ddad21c7cfde498faedbae3c57220a4909d4c6cc"
+      "sha256": "500d904502ddba08f0f70778d05b3201811e64ca32fa68c200e22149c9227dfd"
     },
     {
       "bytes": 5569,

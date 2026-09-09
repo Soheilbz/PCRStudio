@@ -135,7 +135,8 @@ Treat a release as immutable source + image + scientific/database fingerprints. 
 The repository includes a manual-only `.github/workflows/staging-deploy.yml`
 workflow for a supplied staging host. It is not a production deployment trigger
 and it performs no action on push. The workflow checks out the selected ref,
-transfers that exact committed source archive, preserves deployment state under
+passes the repository source/release qualification on that checkout, transfers
+that exact committed source archive, preserves deployment state under
 `/srv/pcrstudio/state`, invokes the repository-supported `bootstrap.sh`, and
 checks the host-local health endpoint. It requires a GitHub `staging` environment
 and a dedicated non-root `pcrstudio-deploy` account with access only to the

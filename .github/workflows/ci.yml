@@ -211,7 +211,6 @@ jobs:
     needs: fast-feedback
     permissions:
       contents: read
-      security-events: write
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -383,6 +382,11 @@ jobs:
     name: Web production and browser qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    env:
+      # Keep the browser binary cache project-scoped and keyed by the locked
+      # Playwright dependency. The browser is never downloaded into a mutable
+      # global cache shared by unrelated repositories.
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.local/playwright-browsers
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -396,6 +400,11 @@ jobs:
           corepack install --global pnpm@11.26.0
       - name: Install locked web dependencies
         run: pnpm install --frozen-lockfile
+      - name: Restore locked Playwright browser cache
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+        with:
+          path: .local/playwright-browsers
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Build production web server
         env:
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3100
@@ -415,7 +424,7 @@ jobs:
       - name: Verify production route and security budgets
         run: node scripts/web-production-smoke.mjs --url=http://127.0.0.1:3100
       - name: Install Chromium for browser qualification
-        run: pnpm --filter web exec playwright install --with-deps chromium
+        run: ./scripts/install-playwright-browser.sh
       - name: Run public browser journeys
         env:
           CI: "true"

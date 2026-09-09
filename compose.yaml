@@ -161,7 +161,7 @@ services:
       # durable-runner readiness are exposed separately to qualification and
       # operator probes so temporary scientific degradation does not hide
       # account/project recovery behind an orchestrator-level restart loop.
-      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8080/ready"]
+      test: ["CMD", "python", "-c", "import urllib.request; response = urllib.request.urlopen('http://127.0.0.1:8080/ready', timeout=5); raise SystemExit(0 if 200 <= response.status < 400 else 1)"]
       interval: 10s
       timeout: 5s
       retries: 5

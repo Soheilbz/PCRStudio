@@ -1002,9 +1002,25 @@ def audit_source_release_hardening() -> None:
         "--target api-runtime",
         "--target runner-runtime",
         "--target migrate-runtime",
+        "PLAYWRIGHT_BROWSERS_PATH",
+        "actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809",
+        "scripts/install-playwright-browser.sh",
     ):
         if marker not in ci_text:
             error(f"source release hardening: Linux image qualification lost required security/build marker: {marker}")
+    api_dockerfile = (
+        (ROOT / "docker/api.Dockerfile").read_text(encoding="utf-8")
+        + "\n"
+        + (ROOT / "docker/configure-debian-snapshot.sh").read_text(encoding="utf-8")
+    )
+    for marker in (
+        "python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79",
+        "DEBIAN_SNAPSHOT=20260901T000000Z",
+        "configure-debian-snapshot",
+        "Acquire::Check-Valid-Until",
+    ):
+        if marker not in api_dockerfile:
+            error(f"source release hardening: Docker package provenance marker missing: {marker}")
     codeql_path = ROOT / ".github/workflows/codeql.yml"
     codeql_text = codeql_path.read_text(encoding="utf-8") if codeql_path.is_file() else ""
     for marker in (

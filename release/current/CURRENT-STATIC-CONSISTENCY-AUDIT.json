@@ -9,12 +9,12 @@
   },
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
-    "files": 1055,
+    "files": 1057,
     "json": 223,
     "markdown": 116,
     "python": 236,
     "rust": 91,
-    "shell": 12,
+    "shell": 14,
     "toml": 25,
     "typescript_tsx": 284,
     "yaml": 13

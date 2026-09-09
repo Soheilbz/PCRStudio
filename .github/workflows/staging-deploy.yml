@@ -37,6 +37,12 @@ jobs:
           ref: ${{ inputs.source_ref }}
           fetch-depth: 1
 
+      - name: Verify checked-out release contract
+        run: |
+          set -euo pipefail
+          python3 -B scripts/qualify-source.py --no-write
+          python3 -B scripts/verify-release.py --root .
+
       - name: Validate deployment inputs
         env:
           STAGING_DOMAIN: ${{ inputs.domain }}
