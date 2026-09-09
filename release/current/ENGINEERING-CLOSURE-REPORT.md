@@ -49,12 +49,14 @@ production release.
 | E-009 | Docker BuildKit could not reach the npm registry while building the pinned Web image | P1 external | VERIFIED | The Web builder now inherits its already-materialized pinned pnpm 11.26.0 bundle from the dependency layer, eliminating the second hidden npm-registry fetch; the exact pinned Node image build, Next.js 16.3.4 build, file-backed Server Actions key, and read-only non-root HTTP smoke all passed |
 | E-010 | Docker could not resolve the exact Rust base layer required by the production API/runner image | P1 external | VERIFIED | Persistent NetworkManager DNS repair restored canonical Docker Hub answers; the exact Rust digest pull passed, and clean API, runner, and migrator builds passed with the pinned identities |
 | E-011 | Caddy healthcheck selected unavailable IPv6 loopback for `localhost` | P2 repository | VERIFIED | The edge probe now targets `127.0.0.1:2019` explicitly; the private loopback production-shaped Compose stack reached healthy and served an edge GET |
+| E-012 | Hosted image qualification rejects the pinned MFEprimer 4.5.1 binary on 22 HIGH Go standard-library findings | P1 external security | OPEN | The latest hosted run `34360729083` completed all exact image builds and failed only at Trivy's API-image scan for `stdlib v1.26.0` in `/opt/pcrstudio/tools/mfeprimer/mfeprimer`; the upstream release is still the exact pinned binary and its public repository distributes binaries rather than buildable source, so no safe repository-owned rebuild or identity change is available |
 
-No unresolved repository defect remains in the exercised non-biological scope.
+No unresolved repository-owned defect remains in the exercised non-biological scope.
 The production-shaped control-plane and edge Compose drill passed with exact
 PostgreSQL, API, migrator, Web, and Caddy artifacts. The scientific runner
 was intentionally not accepted because native biological/toolchain acceptance
 is outside the current user scope; its strict preflight remains fail-closed.
+The candidate is not GitHub-release-ready while E-012 remains open.
 
 ## Architecture
 
@@ -231,16 +233,14 @@ with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
 
-Hosted boundary evidence is now available. GitHub Actions run 73 for the
-source-equivalent commit `4fac357` passed the complete Source/Rust/Python/Web
-checks, scientific readiness contract, frozen dependency contract, and Web
-production/browser qualification. Run 75 for the current candidate likewise
-passed those source, readiness and browser jobs, then failed only at Linux API
-image security scan on the ten HIGH Go-standard-library findings carried by
-the pinned MFEprimer 4.5.1 binary. The candidate is open for review as [PR
-#19](https://github.com/Soheilbz/PCRStudio/pull/19). The finding is retained as
-the open external dependency gate; no image identity, digest, TLS, provenance,
-or scan policy was weakened.
+Hosted boundary evidence is now available. The latest hosted run for candidate
+commit `c956e42` passed Source/Rust/Python/Web checks, CodeQL, dependency review
+and Linux source qualification. Linux image qualification completed all exact
+image builds and failed only at the Trivy API-image scan on the 22 HIGH
+Go-standard-library findings carried by the pinned MFEprimer 4.5.1 binary. The
+candidate is open for review as [PR #19](https://github.com/Soheilbz/PCRStudio/pull/19).
+The finding is retained as the open external dependency gate; no image
+identity, digest, TLS, provenance, or scan policy was weakened.
 
 ## Architecture fitness functions
 
@@ -405,8 +405,8 @@ verified static, web, API-contract, local database, browser, and release-
 artifact evidence, but no live deployment, production domain, production
 secrets, or production database was touched. The candidate is committed in a
 clean local worktree and published on the review branch; remote `main` remains
-unchanged. Hosted source qualification is green, while the pinned MFEprimer
-security finding remains an external release gate.
+unchanged. Hosted source qualification and all non-image CI checks are green;
+the pinned MFEprimer security finding remains an external release gate.
 
 For E-002, the registry-access removal condition is met: the exact pinned
 `postgres:18-alpine@sha256:d3e1620b...` image was pulled and started through
@@ -440,8 +440,9 @@ pnpm web:smoke -- --url=http://localhost:3400
 
 PCRStudio is a locally verified and GitHub-published release candidate with
 strong static, web, Rust, Python, database, browser, Docker/OCI, and
-release-artifact evidence. Hosted source qualification is green; the pinned
-MFEprimer security finding remains an explicit external release gate.
+release-artifact evidence. Hosted source qualification and all non-image CI
+checks are green; the pinned MFEprimer security finding remains an explicit
+external release gate.
 The non-biological production-shaped control-plane/edge Compose drill passed,
 including migrations, readiness, backup/restore, restart, and recreation from
 cached local artifacts. Native biological acceptance remains intentionally
