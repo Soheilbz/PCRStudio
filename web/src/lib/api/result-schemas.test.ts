@@ -467,7 +467,7 @@ describe("historical capture parsing and current field retention", () => {
       },
       provenance: {
         worker: "0.1.0",
-        primer3_py: "2.3.0",
+        primer3_py: "2.3.1",
         python: "3.12.13",
         platform: "Linux",
         note: "fixture",

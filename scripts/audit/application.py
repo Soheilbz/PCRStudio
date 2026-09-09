@@ -891,7 +891,7 @@ def audit_application_foundation() -> None:
     ):
         if marker not in ci:
             error(f"CI quality/security tool pin drifted: {marker}")
-    if ci.count('uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9') < 3 or ci.count('version: "0.12.8"') < 3:
+    if ci.count('uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d') < 3 or ci.count('version: "0.12.10"') < 3:
         error("CI uv installer/version pin drifted from the release toolchain contract")
     if 'uv export --frozen --extra folding --no-emit-project' not in ci:
         error("Python dependency audit no longer covers the production folding extra")
@@ -906,7 +906,7 @@ def audit_application_foundation() -> None:
         if marker not in ci:
             error(f"CI deployment configuration validation lost marker: {marker}")
     for marker in (
-        "uv==0.12.8",
+        "uv==0.12.10",
         "uv sync --project tools --frozen --extra folding --no-dev --no-editable",
     ):
         if marker not in api_dockerfile:

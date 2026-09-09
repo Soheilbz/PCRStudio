@@ -23,6 +23,11 @@
       "ambiguous-cluster",
       "failed-assay"
     ],
+    "kasp_protocols": [
+      "not-selected",
+      "lgc-kasp-tf-v5",
+      "lgc-standard"
+    ],
     "polymerase_classes": [
       "taq-no-proofreading",
       "unknown-no-proofreading",

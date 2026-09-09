@@ -27,8 +27,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LOCAL = ROOT / ".local"
 UV_BOOTSTRAP = LOCAL / "uv-venv"
-UV_VERSION = "0.12.8"
-RUST_TOOLCHAIN = "1.94.0"
+UV_VERSION = "0.12.10"
+RUST_TOOLCHAIN = "1.94.1"
 
 
 def run(argv: list[str], *, env: dict[str, str] | None = None) -> None:
@@ -107,7 +107,7 @@ def package_manager() -> list[str]:
         # but the prompt must never block an unattended bootstrap.
         return [corepack, "pnpm"]
     raise SystemExit(
-        "Node.js 24 with Corepack (or pnpm 11.19.0) is required for the Web workspace; "
+        "Node.js 24 with Corepack (or pnpm 11.26.0) is required for the Web workspace; "
         "install Node first, then rerun ./bootstrap.sh --local"
     )
 

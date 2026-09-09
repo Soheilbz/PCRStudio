@@ -117,11 +117,11 @@
       "version": "0.5.3"
     },
     {
-      "bom-ref": "cargo:async-compression@0.4.43",
+      "bom-ref": "cargo:async-compression@0.4.45",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3976abdc8fe7d1133d43d304afd42abdf5bc3e1319d263d223bde07b5efc4be8"
+          "content": "24a8ec73eb862508b7041723c89386365894b4e7d9f6998bf1b8529e5b0ee254"
         }
       ],
       "name": "async-compression",
@@ -135,9 +135,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/async-compression@0.4.43",
+      "purl": "pkg:cargo/async-compression@0.4.45",
       "type": "library",
-      "version": "0.4.43"
+      "version": "0.4.45"
     },
     {
       "bom-ref": "cargo:atoi@2.0.0",
@@ -462,11 +462,11 @@
       "version": "1.12.1"
     },
     {
-      "bom-ref": "cargo:cc@1.4.4",
+      "bom-ref": "cargo:cc@1.4.5",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0ad534f4357a5264cce5019c989cf66a4f0dc4e0d1b1d15f8aacec0ff7360273"
+          "content": "005ec2760ca554fae18df7a11195552ec576cd665632a881bc011d5bb2fd4d80"
         }
       ],
       "name": "cc",
@@ -480,9 +480,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/cc@1.4.4",
+      "purl": "pkg:cargo/cc@1.4.5",
       "type": "library",
-      "version": "1.4.4"
+      "version": "1.4.5"
     },
     {
       "bom-ref": "cargo:cfg-if@1.0.4",
@@ -508,11 +508,11 @@
       "version": "1.0.4"
     },
     {
-      "bom-ref": "cargo:chacha20@0.10.1",
+      "bom-ref": "cargo:chacha20@0.10.2",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d524456ba66e72eb8b115ff89e01e497f8e6d11d78b70b1aa13c0fbd97540a81"
+          "content": "65c35e4b699c7e15ccbe7ee35c005e4fc0a278d22238a2857e6ce2dadeda1b06"
         }
       ],
       "name": "chacha20",
@@ -526,9 +526,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/chacha20@0.10.1",
+      "purl": "pkg:cargo/chacha20@0.10.2",
       "type": "library",
-      "version": "0.10.1"
+      "version": "0.10.2"
     },
     {
       "bom-ref": "cargo:chrono@0.4.45",
@@ -577,11 +577,11 @@
       "version": "0.5.4"
     },
     {
-      "bom-ref": "cargo:compression-codecs@0.4.38",
+      "bom-ref": "cargo:compression-codecs@0.4.40",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "ce2548391e9c1929c21bf6aa2680af86fe4c1b33e6cea9ac1cfeec0bd11218cf"
+          "content": "100590da849306918656ffbb22576bbdfc1382b50ad10d1d50ec177d3b205fb2"
         }
       ],
       "name": "compression-codecs",
@@ -595,16 +595,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/compression-codecs@0.4.38",
+      "purl": "pkg:cargo/compression-codecs@0.4.40",
       "type": "library",
-      "version": "0.4.38"
+      "version": "0.4.40"
     },
     {
-      "bom-ref": "cargo:compression-core@0.4.32",
+      "bom-ref": "cargo:compression-core@0.4.33",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "cc14f565cf027a105f7a44ccf9e5b424348421a1d8952a8fc9d499d313107789"
+          "content": "6e8ccc4ea9f6acc32d102c0f6d471d11d913ad15f20c04de743374861fa1d414"
         }
       ],
       "name": "compression-core",
@@ -618,9 +618,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/compression-core@0.4.32",
+      "purl": "pkg:cargo/compression-core@0.4.33",
       "type": "library",
-      "version": "0.4.32"
+      "version": "0.4.33"
     },
     {
       "bom-ref": "cargo:core-foundation@0.10.1",
@@ -692,11 +692,11 @@
       "version": "0.2.17"
     },
     {
-      "bom-ref": "cargo:cpufeatures@0.3.0",
+      "bom-ref": "cargo:cpufeatures@0.3.1",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8b2a41393f66f16b0823bb79094d54ac5fbd34ab292ddafb9a0456ac9f87d201"
+          "content": "5ca28b0ae3115b884660db4118d803791fd6756b6e88f39c0f3f7859060d7566"
         }
       ],
       "name": "cpufeatures",
@@ -710,9 +710,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/cpufeatures@0.3.0",
+      "purl": "pkg:cargo/cpufeatures@0.3.1",
       "type": "library",
-      "version": "0.3.0"
+      "version": "0.3.1"
     },
     {
       "bom-ref": "cargo:crc@3.4.0",
@@ -784,11 +784,11 @@
       "version": "1.5.1"
     },
     {
-      "bom-ref": "cargo:crossbeam-queue@0.3.13",
+      "bom-ref": "cargo:crossbeam-queue@0.3.14",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "803d13fb3b09d88be9f4dbc29062c66b19bf7170867ceb746d2a8689bf6c7a26"
+          "content": "03e8bd762f7479489c70ed6c768ddca99d7296857de437a68dcb2a94365b3fae"
         }
       ],
       "name": "crossbeam-queue",
@@ -802,16 +802,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/crossbeam-queue@0.3.13",
+      "purl": "pkg:cargo/crossbeam-queue@0.3.14",
       "type": "library",
-      "version": "0.3.13"
+      "version": "0.3.14"
     },
     {
-      "bom-ref": "cargo:crossbeam-utils@0.8.22",
+      "bom-ref": "cargo:crossbeam-utils@0.8.23",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
+          "content": "a31eee39dddec8330830986fcd7625edb5a24ec90ea038215273bbc3adb08ac6"
         }
       ],
       "name": "crossbeam-utils",
@@ -825,9 +825,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/crossbeam-utils@0.8.22",
+      "purl": "pkg:cargo/crossbeam-utils@0.8.23",
       "type": "library",
-      "version": "0.8.22"
+      "version": "0.8.23"
     },
     {
       "bom-ref": "cargo:crypto-common@0.1.7",
@@ -1106,11 +1106,11 @@
       "version": "5.4.2"
     },
     {
-      "bom-ref": "cargo:find-msvc-tools@0.1.11",
+      "bom-ref": "cargo:find-msvc-tools@0.1.12",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d45db016d36b838f563236e9193d0ee6ce38f3f68b6c94e914b4929c96bbb890"
+          "content": "3e0f1c7c3a72c66fd80abe965175f7523475c0489a87d3ff9d6e8c87d87a9d2d"
         }
       ],
       "name": "find-msvc-tools",
@@ -1124,16 +1124,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/find-msvc-tools@0.1.11",
+      "purl": "pkg:cargo/find-msvc-tools@0.1.12",
       "type": "library",
-      "version": "0.1.11"
+      "version": "0.1.12"
     },
     {
-      "bom-ref": "cargo:flate2@1.1.9",
+      "bom-ref": "cargo:flate2@1.1.10",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "843fba2746e448b37e26a819579957415c8cef339bf08564fe8b7ddbd959573c"
+          "content": "6e634e2e0ebac1ee034020da1ca582e17ffe4e0f5e985823721e168928136dcb"
         }
       ],
       "name": "flate2",
@@ -1147,9 +1147,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/flate2@1.1.9",
+      "purl": "pkg:cargo/flate2@1.1.10",
       "type": "library",
-      "version": "1.1.9"
+      "version": "1.1.10"
     },
     {
       "bom-ref": "cargo:flume@0.12.0",
@@ -1773,11 +1773,11 @@
       "version": "0.4.14"
     },
     {
-      "bom-ref": "cargo:hyper@1.11.0",
+      "bom-ref": "cargo:hyper@1.11.1",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d22053281f852e11534f5198498373cbb59295120a20771d90f7ed1897490a72"
+          "content": "27b501faa50e7a26c3d3560ca625132f4078a17771f4810baf70475ae48cbe43"
         }
       ],
       "name": "hyper",
@@ -1791,9 +1791,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/hyper@1.11.0",
+      "purl": "pkg:cargo/hyper@1.11.1",
       "type": "library",
-      "version": "1.11.0"
+      "version": "1.11.1"
     },
     {
       "bom-ref": "cargo:hyper-util@0.1.20",
@@ -2072,11 +2072,11 @@
       "version": "1.2.2"
     },
     {
-      "bom-ref": "cargo:indexmap@2.14.0",
+      "bom-ref": "cargo:indexmap@2.14.2",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "d466e9454f08e4a911e14806c24e16fba1b4c121d1ea474396f396069cf949d9"
+          "content": "cc4e190f5d26ca7051642629da2c52fc03bde85a03197c99408dcd291734c855"
         }
       ],
       "name": "indexmap",
@@ -2090,9 +2090,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/indexmap@2.14.0",
+      "purl": "pkg:cargo/indexmap@2.14.2",
       "type": "library",
-      "version": "2.14.0"
+      "version": "2.14.2"
     },
     {
       "bom-ref": "cargo:itoa@1.0.18",
@@ -2118,11 +2118,11 @@
       "version": "1.0.18"
     },
     {
-      "bom-ref": "cargo:js-sys@0.3.104",
+      "bom-ref": "cargo:js-sys@0.3.105",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0e0c1080212aad755ea003d18543e8768dd432c48819efd73a7bf1e39b7a5a3a"
+          "content": "ce57d20d1ea864ce2ac172ab472d409214f4fd359f0b2a2775abdf522e2af99e"
         }
       ],
       "name": "js-sys",
@@ -2136,9 +2136,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/js-sys@0.3.104",
+      "purl": "pkg:cargo/js-sys@0.3.105",
       "type": "library",
-      "version": "0.3.104"
+      "version": "0.3.105"
     },
     {
       "bom-ref": "cargo:lazy_static@1.5.0",
@@ -2394,11 +2394,11 @@
       "version": "0.3.17"
     },
     {
-      "bom-ref": "cargo:miniz_oxide@0.8.9",
+      "bom-ref": "cargo:miniz_oxide@0.9.1",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1fa76a2c86f704bdb222d66965fb3d63269ce38518b83cb0575fca855ebb6316"
+          "content": "b63fbc4a50860e98e7b2aa7804ded1db5cbc3aff9193adaff57a6931bf7c4b4c"
         }
       ],
       "name": "miniz_oxide",
@@ -2412,16 +2412,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/miniz_oxide@0.8.9",
+      "purl": "pkg:cargo/miniz_oxide@0.9.1",
       "type": "library",
-      "version": "0.8.9"
+      "version": "0.9.1"
     },
     {
-      "bom-ref": "cargo:mio@1.2.2",
+      "bom-ref": "cargo:mio@1.2.3",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "30d65c71f1ce40ab09135ce117d742b9f8a19ff91a41a8b57ed50bc2de59c427"
+          "content": "4b18443e9c262bfe8fa82f51666e2642c53393f7e5c27b3e1aeab922cff5b9d8"
         }
       ],
       "name": "mio",
@@ -2435,9 +2435,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/mio@1.2.2",
+      "purl": "pkg:cargo/mio@1.2.3",
       "type": "library",
-      "version": "1.2.2"
+      "version": "1.2.3"
     },
     {
       "bom-ref": "cargo:nu-ansi-term@0.50.3",
@@ -2946,11 +2946,11 @@
       "version": "0.17.14"
     },
     {
-      "bom-ref": "cargo:rustls@0.23.43",
+      "bom-ref": "cargo:rustls@0.23.44",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "0283386ce02abc0151e1761d08802dfe86c173b0b494af5cbc086574e453da06"
+          "content": "6725596c3f2c3a0aef021139e145d4eafe314a6623e4680ca83852b2c67ab2ba"
         }
       ],
       "name": "rustls",
@@ -2964,9 +2964,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/rustls@0.23.43",
+      "purl": "pkg:cargo/rustls@0.23.44",
       "type": "library",
-      "version": "0.23.43"
+      "version": "0.23.44"
     },
     {
       "bom-ref": "cargo:rustls-native-certs@0.8.4",
@@ -3521,11 +3521,11 @@
       "version": "0.4.12"
     },
     {
-      "bom-ref": "cargo:smallvec@1.15.2",
+      "bom-ref": "cargo:smallvec@1.16.0",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
+          "content": "b9be42f50aa861c555654aa3a37f52f4b1074bacf4e48fe0ef7fa584e80f1f0f"
         }
       ],
       "name": "smallvec",
@@ -3539,9 +3539,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/smallvec@1.15.2",
+      "purl": "pkg:cargo/smallvec@1.16.0",
       "type": "library",
-      "version": "1.15.2"
+      "version": "1.16.0"
     },
     {
       "bom-ref": "cargo:socket2@0.6.5",
@@ -3843,11 +3843,11 @@
       "version": "2.0.119"
     },
     {
-      "bom-ref": "cargo:syn@3.0.4",
+      "bom-ref": "cargo:syn@3.0.5",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e6275cddf4610d1775e6d1fe9469b2e77d0f39fd98fb7450901b821e0c53649f"
+          "content": "12df2e0110f65b775f769bb17ef989067a1d931b2eb822bd4346631eeada89f9"
         }
       ],
       "name": "syn",
@@ -3861,9 +3861,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/syn@3.0.4",
+      "purl": "pkg:cargo/syn@3.0.5",
       "type": "library",
-      "version": "3.0.4"
+      "version": "3.0.5"
     },
     {
       "bom-ref": "cargo:sync_wrapper@1.0.2",
@@ -4004,11 +4004,11 @@
       "version": "0.8.4"
     },
     {
-      "bom-ref": "cargo:tinyvec@1.12.0",
+      "bom-ref": "cargo:tinyvec@1.13.2",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "bb4ebadaa0af04fab11ae01eb5f9fdb5f9c5b875506e210e71c07873528baa7f"
+          "content": "4cf0ded5c4e56918d8f8a339e1bb67d038d3bc6d144ac407904015ba2e4cde9b"
         }
       ],
       "name": "tinyvec",
@@ -4022,9 +4022,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/tinyvec@1.12.0",
+      "purl": "pkg:cargo/tinyvec@1.13.2",
       "type": "library",
-      "version": "1.12.0"
+      "version": "1.13.2"
     },
     {
       "bom-ref": "cargo:tinyvec_macros@0.1.1",
@@ -4142,11 +4142,11 @@
       "version": "0.7.19"
     },
     {
-      "bom-ref": "cargo:toml@1.1.4+spec-1.1.0",
+      "bom-ref": "cargo:toml@1.1.5+spec-1.1.0",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "3aace63f4bbcdfc2c965b059de67119c89c4017a70d633be6c104910f67056f5"
+          "content": "12c0ba9680044b4ce98d391a62094047eada0d64860b80166c39f4a6b5640785"
         }
       ],
       "name": "toml",
@@ -4160,9 +4160,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/toml@1.1.4+spec-1.1.0",
+      "purl": "pkg:cargo/toml@1.1.5+spec-1.1.0",
       "type": "library",
-      "version": "1.1.4+spec-1.1.0"
+      "version": "1.1.5+spec-1.1.0"
     },
     {
       "bom-ref": "cargo:toml_datetime@1.1.1+spec-1.1.0",
@@ -4257,11 +4257,11 @@
       "version": "0.5.3"
     },
     {
-      "bom-ref": "cargo:tower-http@0.7.0",
+      "bom-ref": "cargo:tower-http@0.7.1",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "b11f75e912b0c2be01b63d8cf8057b8c3f97cf34abb3d431a3a4c8675498e233"
+          "content": "08a05a66a4fdd61cbbe0a1d755ffe0ca6aba159dd4820936a0ff8a8278245b9c"
         }
       ],
       "name": "tower-http",
@@ -4275,9 +4275,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/tower-http@0.7.0",
+      "purl": "pkg:cargo/tower-http@0.7.1",
       "type": "library",
-      "version": "0.7.0"
+      "version": "0.7.1"
     },
     {
       "bom-ref": "cargo:tower-layer@0.3.3",
@@ -4648,11 +4648,11 @@
       "version": "1.0.4"
     },
     {
-      "bom-ref": "cargo:uuid@1.25.0",
+      "bom-ref": "cargo:uuid@1.26.0",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f053576934f05a761a402421fbbe3d425d9366f75f978806a037b3ca481abecc"
+          "content": "b5772d71c9be8a8a6ac2117d949c5b224c1b72241bb611d9a3012edcf8af7812"
         }
       ],
       "name": "uuid",
@@ -4666,9 +4666,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/uuid@1.25.0",
+      "purl": "pkg:cargo/uuid@1.26.0",
       "type": "library",
-      "version": "1.25.0"
+      "version": "1.26.0"
     },
     {
       "bom-ref": "cargo:valuable@0.1.1",
@@ -4763,11 +4763,11 @@
       "version": "0.11.1+wasi-snapshot-preview1"
     },
     {
-      "bom-ref": "cargo:wasm-bindgen@0.2.127",
+      "bom-ref": "cargo:wasm-bindgen@0.2.128",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "1b70935747edd64d89de3efa29d73789b806c15798f8e7dca4d8ac356b50ce70"
+          "content": "aecb87a33d3b0c5e3b7aa46336eaf486cffafbd281b195e4c8b80d50df2351bf"
         }
       ],
       "name": "wasm-bindgen",
@@ -4781,16 +4781,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/wasm-bindgen@0.2.127",
+      "purl": "pkg:cargo/wasm-bindgen@0.2.128",
       "type": "library",
-      "version": "0.2.127"
+      "version": "0.2.128"
     },
     {
-      "bom-ref": "cargo:wasm-bindgen-macro@0.2.127",
+      "bom-ref": "cargo:wasm-bindgen-macro@0.2.128",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "77775f8f3f7217702089053b94958f8f54061a3f663417df76e19cbdcca29bc1"
+          "content": "a690d511e3c1a8b3a55e33511e3c2c00c78415cd23650f32b808627f5696b9ed"
         }
       ],
       "name": "wasm-bindgen-macro",
@@ -4804,16 +4804,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/wasm-bindgen-macro@0.2.127",
+      "purl": "pkg:cargo/wasm-bindgen-macro@0.2.128",
       "type": "library",
-      "version": "0.2.127"
+      "version": "0.2.128"
     },
     {
-      "bom-ref": "cargo:wasm-bindgen-macro-support@0.2.127",
+      "bom-ref": "cargo:wasm-bindgen-macro-support@0.2.128",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e11d33f857dc2fb11b8bc75aee111aa9cbeb12cd9f25efd3d4c2a3dd4e235284"
+          "content": "411e4887f0071ef2d2164a9d5fdf2d20efbef78fccd3a78b0c10a1dc5295e48a"
         }
       ],
       "name": "wasm-bindgen-macro-support",
@@ -4827,16 +4827,16 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/wasm-bindgen-macro-support@0.2.127",
+      "purl": "pkg:cargo/wasm-bindgen-macro-support@0.2.128",
       "type": "library",
-      "version": "0.2.127"
+      "version": "0.2.128"
     },
     {
-      "bom-ref": "cargo:wasm-bindgen-shared@0.2.127",
+      "bom-ref": "cargo:wasm-bindgen-shared@0.2.128",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "7ef64dbcc55df09c7e5a46182d181c2cfa3e925f3da937ea764728b4bbb9dcbf"
+          "content": "81941cd78d0c92026c33e5e01312845a4cb1e9af3407f9134b100dd03144103e"
         }
       ],
       "name": "wasm-bindgen-shared",
@@ -4850,9 +4850,9 @@
           "value": "registry+https://github.com/rust-lang/crates.io-index"
         }
       ],
-      "purl": "pkg:cargo/wasm-bindgen-shared@0.2.127",
+      "purl": "pkg:cargo/wasm-bindgen-shared@0.2.128",
       "type": "library",
-      "version": "0.2.127"
+      "version": "0.2.128"
     },
     {
       "bom-ref": "cargo:whoami@2.1.3",
@@ -5497,6 +5497,29 @@
       "purl": "pkg:cargo/zerovec-derive@0.11.6",
       "type": "library",
       "version": "0.11.6"
+    },
+    {
+      "bom-ref": "cargo:zlib-rs@0.6.7",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "34b31d188d9d685a4f9c7b46d6e36631b07058d2cfe190267adce54dc230bf12"
+        }
+      ],
+      "name": "zlib-rs",
+      "properties": [
+        {
+          "name": "pcrstudio:ecosystem",
+          "value": "cargo"
+        },
+        {
+          "name": "source",
+          "value": "registry+https://github.com/rust-lang/crates.io-index"
+        }
+      ],
+      "purl": "pkg:cargo/zlib-rs@0.6.7",
+      "type": "library",
+      "version": "0.6.7"
     },
     {
       "bom-ref": "cargo:zmij@1.0.23",
@@ -6524,7 +6547,7 @@
       "version": "1.1.0"
     },
     {
-      "bom-ref": "npm:@img/sharp-darwin-arm64@0.35.3",
+      "bom-ref": "npm:@img/sharp-darwin-arm64@0.35.4",
       "name": "@img/sharp-darwin-arm64",
       "properties": [
         {
@@ -6532,12 +6555,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-darwin-arm64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-darwin-arm64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-darwin-x64@0.35.3",
+      "bom-ref": "npm:@img/sharp-darwin-x64@0.35.4",
       "name": "@img/sharp-darwin-x64",
       "properties": [
         {
@@ -6545,12 +6568,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-darwin-x64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-darwin-x64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-freebsd-wasm32@0.35.3",
+      "bom-ref": "npm:@img/sharp-freebsd-wasm32@0.35.4",
       "name": "@img/sharp-freebsd-wasm32",
       "properties": [
         {
@@ -6558,12 +6581,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-freebsd-wasm32@0.35.3",
+      "purl": "pkg:npm/@img/sharp-freebsd-wasm32@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-darwin-arm64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-darwin-arm64@1.3.3",
       "name": "@img/sharp-libvips-darwin-arm64",
       "properties": [
         {
@@ -6571,12 +6594,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-darwin-arm64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-darwin-arm64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-darwin-x64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-darwin-x64@1.3.3",
       "name": "@img/sharp-libvips-darwin-x64",
       "properties": [
         {
@@ -6584,12 +6607,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-darwin-x64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-darwin-x64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-arm@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-arm@1.3.3",
       "name": "@img/sharp-libvips-linux-arm",
       "properties": [
         {
@@ -6597,12 +6620,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-arm@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-arm@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-arm64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-arm64@1.3.3",
       "name": "@img/sharp-libvips-linux-arm64",
       "properties": [
         {
@@ -6610,12 +6633,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-arm64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-arm64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-ppc64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-ppc64@1.3.3",
       "name": "@img/sharp-libvips-linux-ppc64",
       "properties": [
         {
@@ -6623,12 +6646,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-ppc64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-ppc64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-riscv64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-riscv64@1.3.3",
       "name": "@img/sharp-libvips-linux-riscv64",
       "properties": [
         {
@@ -6636,12 +6659,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-riscv64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-riscv64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-s390x@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-s390x@1.3.3",
       "name": "@img/sharp-libvips-linux-s390x",
       "properties": [
         {
@@ -6649,12 +6672,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-s390x@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-s390x@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linux-x64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linux-x64@1.3.3",
       "name": "@img/sharp-libvips-linux-x64",
       "properties": [
         {
@@ -6662,12 +6685,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linux-x64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linux-x64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linuxmusl-arm64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linuxmusl-arm64@1.3.3",
       "name": "@img/sharp-libvips-linuxmusl-arm64",
       "properties": [
         {
@@ -6675,12 +6698,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linuxmusl-arm64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linuxmusl-arm64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-libvips-linuxmusl-x64@1.3.2",
+      "bom-ref": "npm:@img/sharp-libvips-linuxmusl-x64@1.3.3",
       "name": "@img/sharp-libvips-linuxmusl-x64",
       "properties": [
         {
@@ -6688,12 +6711,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-libvips-linuxmusl-x64@1.3.2",
+      "purl": "pkg:npm/@img/sharp-libvips-linuxmusl-x64@1.3.3",
       "type": "library",
-      "version": "1.3.2"
+      "version": "1.3.3"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-arm@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-arm@0.35.4",
       "name": "@img/sharp-linux-arm",
       "properties": [
         {
@@ -6701,12 +6724,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-arm@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-arm@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-arm64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-arm64@0.35.4",
       "name": "@img/sharp-linux-arm64",
       "properties": [
         {
@@ -6714,12 +6737,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-arm64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-arm64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-ppc64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-ppc64@0.35.4",
       "name": "@img/sharp-linux-ppc64",
       "properties": [
         {
@@ -6727,12 +6750,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-ppc64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-ppc64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-riscv64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-riscv64@0.35.4",
       "name": "@img/sharp-linux-riscv64",
       "properties": [
         {
@@ -6740,12 +6763,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-riscv64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-riscv64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-s390x@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-s390x@0.35.4",
       "name": "@img/sharp-linux-s390x",
       "properties": [
         {
@@ -6753,12 +6776,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-s390x@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-s390x@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linux-x64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linux-x64@0.35.4",
       "name": "@img/sharp-linux-x64",
       "properties": [
         {
@@ -6766,12 +6789,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linux-x64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linux-x64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linuxmusl-arm64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linuxmusl-arm64@0.35.4",
       "name": "@img/sharp-linuxmusl-arm64",
       "properties": [
         {
@@ -6779,12 +6802,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linuxmusl-arm64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linuxmusl-arm64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-linuxmusl-x64@0.35.3",
+      "bom-ref": "npm:@img/sharp-linuxmusl-x64@0.35.4",
       "name": "@img/sharp-linuxmusl-x64",
       "properties": [
         {
@@ -6792,12 +6815,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-linuxmusl-x64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-linuxmusl-x64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-wasm32@0.35.3",
+      "bom-ref": "npm:@img/sharp-wasm32@0.35.4",
       "name": "@img/sharp-wasm32",
       "properties": [
         {
@@ -6805,12 +6828,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-wasm32@0.35.3",
+      "purl": "pkg:npm/@img/sharp-wasm32@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-webcontainers-wasm32@0.35.3",
+      "bom-ref": "npm:@img/sharp-webcontainers-wasm32@0.35.4",
       "name": "@img/sharp-webcontainers-wasm32",
       "properties": [
         {
@@ -6818,12 +6841,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-webcontainers-wasm32@0.35.3",
+      "purl": "pkg:npm/@img/sharp-webcontainers-wasm32@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-win32-arm64@0.35.3",
+      "bom-ref": "npm:@img/sharp-win32-arm64@0.35.4",
       "name": "@img/sharp-win32-arm64",
       "properties": [
         {
@@ -6831,12 +6854,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-win32-arm64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-win32-arm64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-win32-ia32@0.35.3",
+      "bom-ref": "npm:@img/sharp-win32-ia32@0.35.4",
       "name": "@img/sharp-win32-ia32",
       "properties": [
         {
@@ -6844,12 +6867,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-win32-ia32@0.35.3",
+      "purl": "pkg:npm/@img/sharp-win32-ia32@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:@img/sharp-win32-x64@0.35.3",
+      "bom-ref": "npm:@img/sharp-win32-x64@0.35.4",
       "name": "@img/sharp-win32-x64",
       "properties": [
         {
@@ -6857,9 +6880,9 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@img/sharp-win32-x64@0.35.3",
+      "purl": "pkg:npm/@img/sharp-win32-x64@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
       "bom-ref": "npm:@jridgewell/gen-mapping@0.3.13",
@@ -6952,11 +6975,11 @@
       "version": "1.2.3"
     },
     {
-      "bom-ref": "npm:@next/env@16.3.3",
+      "bom-ref": "npm:@next/env@16.3.4",
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "536798411c178fe76cab157bf7316a1310dd6ad9cd63f6567369ec254d69fce813edf777757c2517a3a361a15009f328793035f4f5aafb05666208a6540f95fa"
+          "content": "7235999d451aea366ada415a35efd9c89759a27399fd0a0dd1991ada7cff14b3ab7f1d78a50b8cf5ce5169256458caa076de24b203c03163f21d2b3f0b2578f1"
         }
       ],
       "name": "@next/env",
@@ -6966,9 +6989,9 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/env@16.3.3",
+      "purl": "pkg:npm/@next/env@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
       "bom-ref": "npm:@next/eslint-plugin-next@16.3.2",
@@ -6984,7 +7007,7 @@
       "version": "16.3.2"
     },
     {
-      "bom-ref": "npm:@next/swc-darwin-arm64@16.3.3",
+      "bom-ref": "npm:@next/swc-darwin-arm64@16.3.4",
       "name": "@next/swc-darwin-arm64",
       "properties": [
         {
@@ -6992,12 +7015,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-darwin-arm64@16.3.3",
+      "purl": "pkg:npm/@next/swc-darwin-arm64@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-darwin-x64@16.3.3",
+      "bom-ref": "npm:@next/swc-darwin-x64@16.3.4",
       "name": "@next/swc-darwin-x64",
       "properties": [
         {
@@ -7005,12 +7028,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-darwin-x64@16.3.3",
+      "purl": "pkg:npm/@next/swc-darwin-x64@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-linux-arm64-gnu@16.3.3",
+      "bom-ref": "npm:@next/swc-linux-arm64-gnu@16.3.4",
       "name": "@next/swc-linux-arm64-gnu",
       "properties": [
         {
@@ -7018,12 +7041,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-linux-arm64-gnu@16.3.3",
+      "purl": "pkg:npm/@next/swc-linux-arm64-gnu@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-linux-arm64-musl@16.3.3",
+      "bom-ref": "npm:@next/swc-linux-arm64-musl@16.3.4",
       "name": "@next/swc-linux-arm64-musl",
       "properties": [
         {
@@ -7031,12 +7054,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-linux-arm64-musl@16.3.3",
+      "purl": "pkg:npm/@next/swc-linux-arm64-musl@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-linux-x64-gnu@16.3.3",
+      "bom-ref": "npm:@next/swc-linux-x64-gnu@16.3.4",
       "name": "@next/swc-linux-x64-gnu",
       "properties": [
         {
@@ -7044,12 +7067,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-linux-x64-gnu@16.3.3",
+      "purl": "pkg:npm/@next/swc-linux-x64-gnu@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-linux-x64-musl@16.3.3",
+      "bom-ref": "npm:@next/swc-linux-x64-musl@16.3.4",
       "name": "@next/swc-linux-x64-musl",
       "properties": [
         {
@@ -7057,12 +7080,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-linux-x64-musl@16.3.3",
+      "purl": "pkg:npm/@next/swc-linux-x64-musl@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-win32-arm64-msvc@16.3.3",
+      "bom-ref": "npm:@next/swc-win32-arm64-msvc@16.3.4",
       "name": "@next/swc-win32-arm64-msvc",
       "properties": [
         {
@@ -7070,12 +7093,12 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-win32-arm64-msvc@16.3.3",
+      "purl": "pkg:npm/@next/swc-win32-arm64-msvc@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
-      "bom-ref": "npm:@next/swc-win32-x64-msvc@16.3.3",
+      "bom-ref": "npm:@next/swc-win32-x64-msvc@16.3.4",
       "name": "@next/swc-win32-x64-msvc",
       "properties": [
         {
@@ -7083,9 +7106,9 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/@next/swc-win32-x64-msvc@16.3.3",
+      "purl": "pkg:npm/@next/swc-win32-x64-msvc@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
       "bom-ref": "npm:@nodelib/fs.scandir@2.1.5",
@@ -9539,6 +9562,12 @@
     },
     {
       "bom-ref": "npm:debug@3.2.7",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0858f3618022e1385f890be2ceb1507af4d35c7b670aa59f7bbc75021804b1c4f3e996cb6dfa0b44b3ee81343206d87a7fc644455512c961c50ffed6bb8b755d"
+        }
+      ],
       "name": "debug",
       "properties": [
         {
@@ -9552,6 +9581,12 @@
     },
     {
       "bom-ref": "npm:debug@4.4.3",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "446c305a7c10be455f6af295b76d8518bc3ec5849dcc04709b4aeee83853540dee994e6165cdbc57790ee2cb6062bcab4e52e9baf808f468a28e5b408cd6dca8"
+        }
+      ],
       "name": "debug",
       "properties": [
         {
@@ -9562,6 +9597,32 @@
       "purl": "pkg:npm/debug@4.4.3",
       "type": "library",
       "version": "4.4.3"
+    },
+    {
+      "bom-ref": "npm:debug@3.2.7(supports-color@7.2.0)",
+      "name": "debug@3.2.7(supports-color",
+      "properties": [
+        {
+          "name": "pcrstudio:ecosystem",
+          "value": "npm"
+        }
+      ],
+      "purl": "pkg:npm/debug@3.2.7(supports-color@7.2.0)",
+      "type": "library",
+      "version": "7.2.0)"
+    },
+    {
+      "bom-ref": "npm:debug@4.4.3(supports-color@7.2.0)",
+      "name": "debug@4.4.3(supports-color",
+      "properties": [
+        {
+          "name": "pcrstudio:ecosystem",
+          "value": "npm"
+        }
+      ],
+      "purl": "pkg:npm/debug@4.4.3(supports-color@7.2.0)",
+      "type": "library",
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:decimal.js@10.6.0",
@@ -10043,20 +10104,26 @@
       "version": "16.3.2"
     },
     {
-      "bom-ref": "npm:eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)",
-      "name": "eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript",
+      "bom-ref": "npm:eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)",
+      "name": "eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)",
+      "purl": "pkg:npm/eslint-config-next@16.3.2(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)",
       "type": "library",
       "version": "5.9.3)"
     },
     {
       "bom-ref": "npm:eslint-import-resolver-node@0.3.10",
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b51acaa85c8268a89cb7984e776e38b0be844053727273109c17be8fcbaa18d5d8cec22619b19453889bb686819afe452f027070524d7a0d467958d07db32b0d"
+        }
+      ],
       "name": "eslint-import-resolver-node",
       "properties": [
         {
@@ -10067,6 +10134,19 @@
       "purl": "pkg:npm/eslint-import-resolver-node@0.3.10",
       "type": "library",
       "version": "0.3.10"
+    },
+    {
+      "bom-ref": "npm:eslint-import-resolver-node@0.3.10(supports-color@7.2.0)",
+      "name": "eslint-import-resolver-node@0.3.10(supports-color",
+      "properties": [
+        {
+          "name": "pcrstudio:ecosystem",
+          "value": "npm"
+        }
+      ],
+      "purl": "pkg:npm/eslint-import-resolver-node@0.3.10(supports-color@7.2.0)",
+      "type": "library",
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:eslint-import-resolver-typescript@3.10.1",
@@ -10088,17 +10168,17 @@
       "version": "3.10.1"
     },
     {
-      "bom-ref": "npm:eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
+      "name": "eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:eslint-module-utils@2.14.0",
@@ -10120,17 +10200,17 @@
       "version": "2.14.0"
     },
     {
-      "bom-ref": "npm:eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-node@0.3.10)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-node@0.3.10)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-node@0.3.10(supports-color@7.2.0))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
+      "name": "eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-node@0.3.10(supports-color@7.2.0))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-node@0.3.10)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-module-utils@2.14.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-node@0.3.10(supports-color@7.2.0))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:eslint-plugin-import@2.32.0",
@@ -10152,17 +10232,17 @@
       "version": "2.32.0"
     },
     {
-      "bom-ref": "npm:eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
+      "name": "eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:eslint-plugin-jsx-a11y@6.10.2",
@@ -10184,17 +10264,17 @@
       "version": "6.10.2"
     },
     {
-      "bom-ref": "npm:eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))",
+      "name": "eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-plugin-jsx-a11y@6.10.2(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0))"
     },
     {
       "bom-ref": "npm:eslint-plugin-react@7.37.5",
@@ -10235,30 +10315,30 @@
       "version": "7.1.1"
     },
     {
-      "bom-ref": "npm:eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
+      "name": "eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-plugin-react-hooks@7.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0)"
     },
     {
-      "bom-ref": "npm:eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0))",
-      "name": "eslint-plugin-react@7.37.5(eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))",
+      "name": "eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0))",
+      "purl": "pkg:npm/eslint-plugin-react@7.37.5(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))",
       "type": "library",
-      "version": "2.7.0))"
+      "version": "7.2.0))"
     },
     {
       "bom-ref": "npm:eslint-scope@8.4.0",
@@ -10331,17 +10411,17 @@
       "version": "5.0.1"
     },
     {
-      "bom-ref": "npm:eslint@9.39.5(jiti@2.7.0)",
-      "name": "eslint@9.39.5(jiti",
+      "bom-ref": "npm:eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0)",
+      "name": "eslint@9.39.5(jiti@2.7.0)(supports-color",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/eslint@9.39.5(jiti@2.7.0)",
+      "purl": "pkg:npm/eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0)",
       "type": "library",
-      "version": "2.7.0)"
+      "version": "7.2.0)"
     },
     {
       "bom-ref": "npm:espree@10.4.0",
@@ -12706,11 +12786,11 @@
       "version": "1.4.0"
     },
     {
-      "bom-ref": "npm:next@16.3.3",
+      "bom-ref": "npm:next@16.3.4",
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "b6e453c759d0ff2570f37730241a3d17e9e319480c9f750743272b7961c1f17b12b6fbc087502d85b23cff82292a715a179f05fa24a21de8d83a5310fdeabcde"
+          "content": "fd9b5fe827911fe7a311752b62da88e20912eba785207b92c2a8bad1181ca562a8771159c76fdda9508c281c082df0075d0f85d5bd6f02e7608f79a7c6ab6820"
         }
       ],
       "name": "next",
@@ -12720,9 +12800,9 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/next@16.3.3",
+      "purl": "pkg:npm/next@16.3.4",
       "type": "library",
-      "version": "16.3.3"
+      "version": "16.3.4"
     },
     {
       "bom-ref": "npm:next-themes@0.4.6",
@@ -12757,15 +12837,15 @@
       "version": "19.2.8)"
     },
     {
-      "bom-ref": "npm:next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)",
-      "name": "next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react",
+      "bom-ref": "npm:next@16.3.4(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)",
+      "name": "next@16.3.4(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)",
+      "purl": "pkg:npm/next@16.3.4(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)",
       "type": "library",
       "version": "19.2.8)"
     },
@@ -13890,11 +13970,11 @@
       "version": "1.0.0"
     },
     {
-      "bom-ref": "npm:sharp@0.35.3",
+      "bom-ref": "npm:sharp@0.35.4",
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "7a3d33547b991870a20015dc3717988694673cd3c072f6c6f1131d0408430312ca9024554a92b7232bbba9bab0dc9333a23d1111e33a7f7b492ed570974d36dd"
+          "content": "9fefbc5d6723fa308eaf620e97b87c2db2a71810d8e1a3db9a9acc38d04d15d9f42265eaa4656fe739620ecd15f476e66c240ba5bba8d9e8fdac0a0e413bcc0c"
         }
       ],
       "name": "sharp",
@@ -13904,20 +13984,20 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/sharp@0.35.3",
+      "purl": "pkg:npm/sharp@0.35.4",
       "type": "library",
-      "version": "0.35.3"
+      "version": "0.35.4"
     },
     {
-      "bom-ref": "npm:sharp@0.35.3(@types/node@26.2.0)",
-      "name": "sharp@0.35.3(@types/node",
+      "bom-ref": "npm:sharp@0.35.4(@types/node@26.2.0)",
+      "name": "sharp@0.35.4(@types/node",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/sharp@0.35.3(@types/node@26.2.0)",
+      "purl": "pkg:npm/sharp@0.35.4(@types/node@26.2.0)",
       "type": "library",
       "version": "26.2.0)"
     },
@@ -14294,15 +14374,15 @@
       "version": "5.1.6"
     },
     {
-      "bom-ref": "npm:styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.8)",
-      "name": "styled-jsx@5.1.6(@babel/core@7.29.7)(react",
+      "bom-ref": "npm:styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@19.2.8)",
+      "name": "styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/styled-jsx@5.1.6(@babel/core@7.29.7)(react@19.2.8)",
+      "purl": "pkg:npm/styled-jsx@5.1.6(@babel/core@7.29.7(supports-color@7.2.0))(react@19.2.8)",
       "type": "library",
       "version": "19.2.8)"
     },
@@ -14742,15 +14822,15 @@
       "version": "8.68.0"
     },
     {
-      "bom-ref": "npm:typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)",
-      "name": "typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript",
+      "bom-ref": "npm:typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)",
+      "name": "typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript",
       "properties": [
         {
           "name": "pcrstudio:ecosystem",
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)",
+      "purl": "pkg:npm/typescript-eslint@8.68.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)",
       "type": "library",
       "version": "5.9.3)"
     },
@@ -15456,11 +15536,11 @@
       "version": "1.6.0"
     },
     {
-      "bom-ref": "pypi:primer3-py@2.3.0",
+      "bom-ref": "pypi:primer3-py@2.3.1",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "234fb6e3c9eb0ca537eb30befa03c9880bbb411a4066693ba59d8abcf7c813be"
+          "content": "ec8de40371ece267228a4811b41acddff9771a921147888794917035c9d80eb5"
         }
       ],
       "name": "primer3-py",
@@ -15474,9 +15554,9 @@
           "value": "https://pypi.org/simple"
         }
       ],
-      "purl": "pkg:pypi/primer3-py@2.3.0",
+      "purl": "pkg:pypi/primer3-py@2.3.1",
       "type": "library",
-      "version": "2.3.0"
+      "version": "2.3.1"
     },
     {
       "bom-ref": "pypi:pygments@2.21.0",
@@ -15571,7 +15651,7 @@
       "version": "2.7.2"
     },
     {
-      "bom-ref": "scientific-tool:primer3_py@2.3.0",
+      "bom-ref": "scientific-tool:primer3_py@2.3.1",
       "name": "primer3_py",
       "properties": [
         {
@@ -15588,11 +15668,11 @@
         },
         {
           "name": "source_ref",
-          "value": "PyPI:2.3.0"
+          "value": "PyPI:2.3.1"
         }
       ],
       "type": "library",
-      "version": "2.3.0"
+      "version": "2.3.1"
     },
     {
       "bom-ref": "scientific-tool:pydna@5.5.16",
@@ -15901,19 +15981,19 @@
       },
       {
         "name": "pcrstudio:lock-sha256:Cargo.lock",
-        "value": "f8fb9a35b19eb45ec0cca9ba19d9f9609ab563b402ac5621124c9425a508ff66"
+        "value": "3e9a90d37802e02133eceaa4f69fca89b550bccbb41f766aa6d7e07900a67217"
       },
       {
         "name": "pcrstudio:lock-sha256:pnpm-lock.yaml",
-        "value": "e849b6a65dee0f325f875558bb2b134e3af55a1b1ea368b4253488db0a8e6dca"
+        "value": "c7e02faf9e4bfba6458bf32fa1647831f2018bcfa304bf16dd8dd335203e56c1"
       },
       {
         "name": "pcrstudio:lock-sha256:tools/uv.lock",
-        "value": "1ae52b982e8e837429e91f95a5b753f38fbbb812ba253bb9724e6340915d77c7"
+        "value": "8028a41ed5309685d264b2a79ca2bd2f43e5726f5fc559c2730fad4513e69025"
       }
     ]
   },
-  "serialNumber": "urn:uuid:c729de51-6337-502a-b161-863ea0c2c115",
+  "serialNumber": "urn:uuid:9e314932-7943-5e48-a60f-295812c496f3",
   "specVersion": "1.6",
   "version": 1
 }

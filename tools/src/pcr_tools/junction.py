@@ -240,13 +240,10 @@ METHODS = (
 
 BY_ID = {method.id: method for method in METHODS}
 
-ASSEMBLY_PROTOCOLS = (
-    "not-selected",
-    "neb-e5510",
-    "neb-nebuilder-e2621",
-    "neb-nebuilder-e5520",
-    "neb-nebuilder-e2623",
-)
+# Protocol identities are projected from the canonical authority. This module
+# may add geometry-specific behaviour, but it must not create a second list of
+# current protocol IDs that can drift from the Rust/Web contracts.
+ASSEMBLY_PROTOCOLS = tuple(ASSEMBLY_AUTHORITY["groups"]["protocols"])
 
 
 def _nebuilder_numeric_projection(payload: dict[str, Any], branch: str) -> dict[str, Any]:

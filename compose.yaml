@@ -315,7 +315,11 @@ services:
       # The admin API answers on loopback even when no site block matches this
       # host, which is exactly what a liveness check needs from a server whose
       # public name lives in an environment variable.
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:2019/config/ || exit 1"]
+      # BusyBox may prefer ::1 for localhost even when Caddy's admin listener
+      # is IPv4-only. Keep health status independent of an unavailable IPv6
+      # loopback path; public HTTP/3 and registry address-family policy remain
+      # unchanged.
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:2019/config/ || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5

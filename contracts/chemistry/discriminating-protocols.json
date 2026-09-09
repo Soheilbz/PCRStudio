@@ -35,6 +35,11 @@
       "lgc-kasp-tf-v5",
       "lgc-standard"
     ],
+    "kasp_protocols": [
+      "not-selected",
+      "lgc-kasp-tf-v5",
+      "lgc-standard"
+    ],
     "variant_classes": [
       "snv",
       "mnv",

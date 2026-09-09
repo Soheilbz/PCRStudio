@@ -128,6 +128,10 @@ def supply_chain()->dict[str,int]:
         'pcrstudio-api:${PCRSTUDIO_IMAGE_TAG:-local}',
         'pcrstudio-runner:${PCRSTUDIO_IMAGE_TAG:-local}',
         'pcrstudio-migrate:${PCRSTUDIO_IMAGE_TAG:-local}',
+        'pcrstudio-api:ci',
+        'pcrstudio-runner:ci',
+        'pcrstudio-migrate:ci',
+        'pcrstudio-web:ci',
     }
     unpinned=[ref for ref in image_refs if ref not in local_project_images and not re.search(r'@sha256:[0-9a-f]{64}$',ref)]
     if unpinned: raise SystemExit(f'unpinned external container image(s): {unpinned}')

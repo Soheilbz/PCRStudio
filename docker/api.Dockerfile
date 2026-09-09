@@ -24,7 +24,7 @@ WORKDIR /src
 RUN apt-get update \
     && apt-get install --no-install-recommends -y build-essential ca-certificates \
     && rm -rf /var/lib/apt/lists/*
-RUN python -m pip install --no-cache-dir uv==0.12.8
+RUN python -m pip install --no-cache-dir uv==0.12.10
 COPY tools ./tools
 COPY contracts/tools.toml ./contracts/tools.toml
 COPY scripts/provision-tools.py scripts/toolchain_config.py ./scripts/

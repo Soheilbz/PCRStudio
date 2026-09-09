@@ -20,7 +20,7 @@ Internet
  one-shot pcr-migrate (deployment only)
 ```
 
-Only Caddy is published. PostgreSQL lives on the internal `data` network. Web sees API through the internal `app` network. The runner has `data` + outbound `egress` access but no edge-facing network. Production durable jobs are queued in PostgreSQL and executed by `pcr-runner`; API does not own the durable executor loop.
+Only Caddy is published. PostgreSQL lives on the internal `data` network. Web sees API through the internal `app` network. The runner joins only the internal `data` network and has no edge-facing or outbound network path; its scientific tools operate on the queued request and deployment-owned local data. The API alone joins the outbound `egress` network for explicitly remote sequence references. Production durable jobs are queued in PostgreSQL and executed by `pcr-runner`; API does not own the durable executor loop.
 
 A deployment is not ready merely because the HTTP process answers. In external execution mode `/ready` also requires a fresh runner heartbeat in PostgreSQL. The heartbeat is bound to the approved scientific Python freeze when one is configured, so a runner built from a different scientific environment does not satisfy readiness.
 
@@ -129,6 +129,42 @@ Never restore an unverified backup over production. The restore script validates
 ## Updates
 
 Treat a release as immutable source + image + scientific/database fingerprints. For an update, rebuild from the intended source revision, run the Linux release qualification, take an off-host backup, and then rerun bootstrap/deploy. Do not `pip install`, `apt install` scientific tools, or edit container files interactively after qualification; that creates an unrecorded runtime different from the release evidence.
+
+## GitHub Actions staging deployment over SSH
+
+The repository includes a manual-only `.github/workflows/staging-deploy.yml`
+workflow for a supplied staging host. It is not a production deployment trigger
+and it performs no action on push. The workflow checks out the selected ref,
+transfers that exact committed source archive, preserves deployment state under
+`/srv/pcrstudio/state`, invokes the repository-supported `bootstrap.sh`, and
+checks the host-local health endpoint. It requires a GitHub `staging` environment
+and a dedicated non-root `pcrstudio-deploy` account with access only to the
+deployment directory and the Docker operations needed by the bootstrap. Do not
+use a root login or disable host-key checking.
+
+Generate a dedicated CI key only when no suitable key exists:
+
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_pcrstudio_deploy -C pcrstudio-staging-deploy
+```
+
+Add the resulting `.pub` line to the staging account's `authorized_keys` with
+`no-agent-forwarding,no-port-forwarding,no-X11-forwarding` restrictions. Review
+the server host key out of band, then store the complete reviewed `known_hosts`
+line—not fresh unaudited `ssh-keyscan` output—as the GitHub environment secrets:
+
+| Secret | Value |
+| --- | --- |
+| `PCRSTUDIO_STAGING_SSH_PRIVATE_KEY` | Complete Ed25519 private-key text; never commit or print it. |
+| `PCRSTUDIO_STAGING_SSH_KNOWN_HOSTS` | Reviewed host-key line(s) for the staging hostname. |
+| `PCRSTUDIO_STAGING_SSH_HOST` | Staging SSH hostname or address. |
+| `PCRSTUDIO_STAGING_SSH_USER` | Dedicated non-root deployment username, normally `pcrstudio-deploy`. |
+
+The workflow uses `StrictHostKeyChecking=yes`, `IdentitiesOnly=yes`, and the
+exact pinned checkout action. The staging environment should require approval
+and should contain no production credentials. Configure the server's DNS,
+firewall, Docker Engine/Compose, persistent storage, TLS prerequisites, and
+off-host backup policy separately before dispatching it.
 
 ## Operational ownership rule
 

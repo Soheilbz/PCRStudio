@@ -142,7 +142,7 @@ def main() -> int:
         "print('ViennaRNA='+m.version('ViennaRNA'))",
     ])
     results["worker_python"] = {"exit_code": code, "identity": out[:500]}
-    for token in ("primer3-py=2.3.0", "libprimer3=2.6.1", "ViennaRNA=2.7.2"):
+    for token in ("primer3-py=2.3.1", "libprimer3=2.6.1", "ViennaRNA=2.7.2"):
         if token not in out:
             errors.append(f"worker_python: missing identity token {token!r}")
 

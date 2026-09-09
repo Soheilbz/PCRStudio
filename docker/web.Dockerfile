@@ -13,7 +13,11 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY web/package.json ./web/
 RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
+FROM deps AS builder
+# Keep the Corepack materialised pnpm bundle from the dependency layer in the
+# builder layer. Re-invoking the Corepack shim otherwise performs a second
+# network fetch after COPY invalidates the build cache, which made a clean
+# build depend on a second npm-registry connection.
 COPY --from=deps /src/node_modules ./node_modules
 COPY --from=deps /src/web/node_modules ./web/node_modules
 COPY . .

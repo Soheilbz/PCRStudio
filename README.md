@@ -55,7 +55,8 @@ see [`release/STATUS.md`](release/STATUS.md).
 
 Security, development, and release guidance live in
 [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md),
-[`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md), and
+[`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md),
+[`docs/REPOSITORY-POLICY.md`](docs/REPOSITORY-POLICY.md), and
 [`release/INDEX.md`](release/INDEX.md).
 
 ## Repository layout
@@ -181,7 +182,7 @@ passes the selected API address to the web server, and closes only the child
 processes it started. `./bootstrap.sh --local` performs this launch and the
 readiness checks for you.
 
-The workspace pins pnpm to `11.19.0`. Its project `.npmrc` also permits a
+The workspace pins pnpm to `11.26.0`. Its project `.npmrc` also permits a
 non-interactive reconciliation of stale `node_modules`, so IDE and CI runs do
 not hang waiting for a confirmation that cannot be typed. Docker and the
 Linux launcher disable Corepack's download prompt as well; if Corepack has
@@ -321,6 +322,34 @@ a host, run the read-only doctor to expose RAM/disk/Docker/DNS/permission issues
 ```bash
 python3 scripts/doctor-linux.py --domain pcrstudio.example.org --allow-docker-install
 ```
+
+The bootstrap performs an OCI preflight before any expensive build. It resolves
+`auth.docker.io`, `registry-1.docker.io`, and
+`production.cloudfront.docker.com`, then pulls every external image reference
+used by the Compose files and Dockerfiles by its exact SHA-256 digest. Docker's
+normal credential helper is honored for authenticated pulls. Failures are
+classified as DNS, authentication, rate-limit, TLS, registry/pin, or transient
+transport failures; only the last category receives a bounded retry. No tag or
+digest is substituted.
+
+On NetworkManager-managed hosts, configure the active connection with trusted
+DNS rather than relying on a broken DHCP resolver. For example, review the
+connection name first, then apply the equivalent of:
+
+```bash
+nmcli connection modify "<active-connection>" \
+  ipv4.dns "1.1.1.1,8.8.8.8" ipv4.ignore-auto-dns yes ipv4.dns-priority -50
+nmcli device reapply "<device>"
+resolvectl query auth.docker.io
+```
+
+Use the DNS servers approved by the host/network owner; the important controls
+are persistent resolver selection and verification of the Docker Hub endpoints.
+If a proxy is required, configure it in the Docker daemon/service environment
+and restart the daemon, then rerun the preflight. Do not put registry passwords
+in `.env` or build arguments; use `docker login` with Docker's credential-store
+configuration. A host with no usable IPv6 route may continue safely over IPv4,
+but an IPv4 DNS answer and IPv4 connectivity are mandatory.
 
 On a Debian/Ubuntu x86_64 VM, point DNS at the host, copy the source tree, then run:
 

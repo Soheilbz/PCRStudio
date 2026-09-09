@@ -22,49 +22,49 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6fb4dadb52f1d20ea4c6143ddc7e5e9dc9cdd2cdf2638b5ae9f4d27bec2c7dfa"
+        "sha256": "f612f85c3d227de926eedbf201d3c600ba375f894cbdd64adfa8ee5c8324419e"
       },
       "name": "release/FILE-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "72accc47f0b61f23d2114621d999ed53ac311d8c5c8bc39b70555863fe08785e"
+        "sha256": "f7d56f10c7011207e791de8d0e396f7755ddbac86eb7d9a4b483acd3726eb15c"
       },
       "name": "release/PATCH-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "9a28531586ff2ea217f199c602b1c4de5c0fc7519debc8e8f0524df8393a4c04"
+        "sha256": "3e5bc054395ae37fe5d0a4845aa75144bf2e8b97035b01656ae28e2b384c8b59"
       },
       "name": "release/RUNTIME-CONTRACT-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "3de32cb1bb09e5665d4686884e62e5a9b4d04baa8c9482a90432ce2db47c476d"
+        "sha256": "891695d57f258052ec80a5f096dbd354c39a4ac4c228ace36d6bbed17f4c5f23"
       },
       "name": "release/current/SBOM.cdx.json"
     },
     {
       "digest": {
-        "sha256": "682e168eacfe50c383f3ce4138cf206b966dd8b948cb1ecd1f290137d54bd5c9"
+        "sha256": "5b654d488c6b2a7f8507b02929072d43e86da37fc9c27a613c1756c384e62bee"
       },
       "name": "knowledge/runtime/foundation.generated.json"
     },
     {
       "digest": {
-        "sha256": "212af74a7d4101f1b435fd50034ec2e9942c8fb967f073491e1e00e4ded8bf66"
+        "sha256": "ae7c91b0da9e4ac95e0da9b2e90081db4870739e3e395e9bb12a3d8373ac7dc3"
       },
       "name": "knowledge/runtime/module-contracts.generated.json"
     },
     {
       "digest": {
-        "sha256": "ebadd32de249fca0570876f9ffdeecb46d3f022625780a662c2786f5c075ec23"
+        "sha256": "86874f45ead3032f971ecd2c77e120aa23d68646648acd2eec30288a78050ef6"
       },
       "name": "knowledge/runtime/engine-contracts.generated.json"
     },
     {
       "digest": {
-        "sha256": "2509d24adb25e0251ee27ec9b801a508af3be9aae58cb81f7193f0af468078c2"
+        "sha256": "73dbce1746e0bb8ebbe3992c354a434c6b9e13e79cb38066ef7f5df32625ecd6"
       },
       "name": "knowledge/runtime/tool-contracts.generated.json"
     },

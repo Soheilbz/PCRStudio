@@ -33,6 +33,7 @@ export const DISCRIMINATING_GEOMETRIES = ["arms-two-tube", "tetra", "kasp"] as c
 export const DISCRIMINATING_KASP_CALL_STATES = ["AA", "AB", "BB", "no-template", "no-call", "weak", "ambiguous-cluster", "failed-assay"] as const;
 export const DISCRIMINATING_POLYMERASE_CLASSES = ["taq-no-proofreading", "unknown-no-proofreading", "proofreading-prohibited"] as const;
 export const DISCRIMINATING_PROTOCOLS = ["not-selected", "arms-experimental-taq", "tetra-collins-day-2001-reference", "lgc-kasp-tf-v5", "lgc-standard"] as const;
+export const DISCRIMINATING_KASP_PROTOCOLS = ["not-selected", "lgc-kasp-tf-v5", "lgc-standard"] as const;
 export const DISCRIMINATING_VARIANT_CLASSES = ["snv", "mnv", "insertion", "deletion", "complex-replacement", "presence-absence"] as const;
 export const DISCRIMINATING_MISMATCH_MODEL_ID = "pcrstudio-gen1-taq-terminal-mismatch-evidence-2026" as const;
 

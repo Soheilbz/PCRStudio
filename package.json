@@ -1,7 +1,7 @@
 {
   "name": "pcrstudio",
   "private": true,
-  "packageManager": "pnpm@11.19.0",
+  "packageManager": "pnpm@11.26.0",
   "description": "PCRStudio - primer design on the web.",
   "license": "UNLICENSED",
   "scripts": {
@@ -14,12 +14,15 @@
     "format:check": "pnpm --filter web format:check",
     "typecheck": "pnpm --filter web typecheck",
     "test": "pnpm --filter web test",
+    "python:test": "python3 scripts/run-python-tests.py",
+    "web:smoke": "node scripts/web-production-smoke.mjs",
     "api": "node scripts/dev-api.mjs",
     "admin": "node scripts/dev-admin.mjs",
     "rust:fmt": "cargo fmt --all",
     "rust:lint": "cargo clippy --locked --workspace --all-targets -- -D warnings",
     "rust:test": "cargo test --locked --workspace",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm rust:lint && pnpm rust:test",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm python:test && pnpm rust:lint && pnpm rust:test",
+    "check:release": "pnpm check && pnpm web:smoke",
     "capacity:smoke": "node scripts/capacity-smoke.mjs"
   }
 }

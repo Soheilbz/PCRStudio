@@ -755,7 +755,7 @@ def audit_current_release_identity() -> None:
         "baseline_kind": "R15-final-file-manifest-authority",
         "foundation_release": "CURRENT",
         "source_qualification_label": "linux-native-unified-engine-source-qualified",
-        "current_report": "release/current/CURRENT-LINUX-MIGRATION.md",
+        "current_report": "release/current/ENGINEERING-CLOSURE-REPORT.md",
     }
     for key, value in expected.items():
         if identity.get(key) != value:
@@ -959,10 +959,18 @@ def audit_source_release_hardening() -> None:
             "pcrstudio-runner:${PCRSTUDIO_IMAGE_TAG:-local}",
             "pcrstudio-migrate:${PCRSTUDIO_IMAGE_TAG:-local}",
         }
+        local_ci_images = {
+            "pcrstudio-api:ci",
+            "pcrstudio-runner:ci",
+            "pcrstudio-migrate:ci",
+            "pcrstudio-web:ci",
+        }
         if source == "compose.yaml" and ref in local_project_images:
             compose_text = (ROOT / source).read_text(encoding="utf-8")
             if "dockerfile: docker/api.Dockerfile" not in compose_text:
                 error("local PCRStudio application images lost their source-build binding")
+            continue
+        if source.startswith(".github/workflows/") and ref in local_ci_images:
             continue
         if not re.search(r"@sha256:[0-9a-f]{64}$", ref):
             error(f"source release hardening: external container image is not digest pinned in {source}: {ref}")
@@ -999,7 +1007,15 @@ def audit_source_release_hardening() -> None:
             error(f"source release hardening: Linux image qualification lost required security/build marker: {marker}")
     codeql_path = ROOT / ".github/workflows/codeql.yml"
     codeql_text = codeql_path.read_text(encoding="utf-8") if codeql_path.is_file() else ""
-    for marker in ("github/codeql-action/init@", "github/codeql-action/analyze@", "security-extended", "languages: rust"):
+    for marker in (
+        "github/codeql-action/init@",
+        "github/codeql-action/analyze@",
+        "security-extended",
+        "languages: ${{ matrix.language }}",
+        "language: rust",
+        "language: python",
+        "language: javascript-typescript",
+    ):
         if marker not in codeql_text:
             error(f"source release hardening: CodeQL coverage marker missing: {marker}")
 

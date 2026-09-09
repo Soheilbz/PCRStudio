@@ -40,6 +40,14 @@ function optionalNumber(form: FormData, name: string): number | undefined {
   }
   return value;
 }
+
+/** Normalize an old saved-draft alias before it crosses the current wire contract. */
+function currentProbeProtocol(form: FormData): DesignPayload["probeProtocol"] | undefined {
+  const selected = field(form, "probeProtocol");
+  if (!selected) return undefined;
+  if (selected === "taqman-mgb") return "taqman-mgb-reference";
+  return selected as DesignPayload["probeProtocol"];
+}
 /** Parse a dynamic numeric form entry without turning malformed input into absence. */
 function numberText(raw: string, name: string): number {
   const value = Number(raw);
@@ -658,8 +666,7 @@ export function requestFor(engine: string, template: string, form: FormData): De
         excluded: excludedFrom(form),
         background: field(form, "background") || undefined,
         probe: roundFrom(form, "probe"),
-        probeProtocol:
-          (field(form, "probeProtocol") as DesignPayload["probeProtocol"]) || undefined,
+        probeProtocol: currentProbeProtocol(form),
         probeChemistry:
           (field(form, "probeChemistry") as DesignPayload["probeChemistry"]) || undefined,
         probeReporter: field(form, "probeReporter") || undefined,

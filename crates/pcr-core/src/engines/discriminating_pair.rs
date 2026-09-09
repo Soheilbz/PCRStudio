@@ -66,7 +66,7 @@ const GEOMETRIES: &[&str] = &["arms-two-tube", "tetra", "kasp"];
 
 /// Named KASP wet-lab overlays.  Absence is intentional: a geometry does not
 /// identify a master-mix revision, instrument or cycling branch by itself.
-const KASP_PROTOCOLS: &[&str] = &["not-selected", "lgc-kasp-tf-v5", "lgc-standard"];
+const KASP_PROTOCOLS: &[&str] = DISCRIMINATING_KASP_PROTOCOLS;
 const KASP_ASSAY_MODES: &[&str] = &["biallelic-genotype", "plus-minus-presence-absence"];
 const KASP_PLATE_FORMATS: &[&str] = &["96", "384"];
 const KASP_ROX_POLICIES: &[&str] = &["none", "low", "standard", "high", "unresolved"];

@@ -10,7 +10,6 @@
 .agents/**
 .codex
 .codex/**
-
 node_modules
 **/node_modules
 target

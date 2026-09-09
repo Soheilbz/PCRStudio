@@ -338,7 +338,9 @@ describe("no form sends a field its engine refuses", () => {
   it("routes the named probe chemistry only through the pair-and-probe request", () => {
     const form = new FormData();
     form.set("probeProtocol", "taqman-mgb");
-    expect(requestFor("pair-and-probe", ">t\nACGT", form).probeProtocol).toBe("taqman-mgb");
+    expect(requestFor("pair-and-probe", ">t\nACGT", form).probeProtocol).toBe(
+      "taqman-mgb-reference",
+    );
     expect(requestFor("flanking-pair", ">t\nACGT", form).probeProtocol).toBeUndefined();
   });
 
