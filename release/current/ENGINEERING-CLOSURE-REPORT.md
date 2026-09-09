@@ -49,7 +49,7 @@ production release.
 | E-009 | Docker BuildKit could not reach the npm registry while building the pinned Web image | P1 external | VERIFIED | The Web builder now inherits its already-materialized pinned pnpm 11.26.0 bundle from the dependency layer, eliminating the second hidden npm-registry fetch; the exact pinned Node image build, Next.js 16.3.4 build, file-backed Server Actions key, and read-only non-root HTTP smoke all passed |
 | E-010 | Docker could not resolve the exact Rust base layer required by the production API/runner image | P1 external | VERIFIED | Persistent NetworkManager DNS repair restored canonical Docker Hub answers; the exact Rust digest pull passed, and clean API, runner, and migrator builds passed with the pinned identities |
 | E-011 | Caddy healthcheck selected unavailable IPv6 loopback for `localhost` | P2 repository | VERIFIED | The edge probe now targets `127.0.0.1:2019` explicitly; the private loopback production-shaped Compose stack reached healthy and served an edge GET |
-| E-012 | Hosted image qualification rejects the pinned MFEprimer 4.5.1 binary on 22 HIGH Go standard-library findings | P1 external security | OPEN | The latest hosted run `34377961610` completed all exact image builds and failed only at Trivy's API-image scan for `stdlib v1.26.0` in `/opt/pcrstudio/tools/mfeprimer/mfeprimer`; the upstream release is still the exact pinned binary and its public repository distributes binaries rather than buildable source, so no safe repository-owned rebuild or identity change is available |
+| E-012 | Hosted image qualification rejects the pinned MFEprimer 4.5.1 binary on 22 HIGH Go standard-library findings | P1 external security | OPEN | The hosted qualification captured by this evidence snapshot (`34377961610`) completed all exact image builds and failed only at Trivy's API-image scan for `stdlib v1.26.0` in `/opt/pcrstudio/tools/mfeprimer/mfeprimer`; the upstream release is still the exact pinned binary and its public repository distributes binaries rather than buildable source, so no safe repository-owned rebuild or identity change is available |
 
 No unresolved repository-owned defect remains in the exercised non-biological scope.
 The production-shaped control-plane and edge Compose drill passed with exact
@@ -233,7 +233,7 @@ with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
 
-Hosted boundary evidence is now available. The latest hosted run (`34377961610`)
+Hosted boundary evidence is now available. The hosted run captured by this evidence snapshot (`34377961610`)
 for candidate commit `0998a7f` passed Source/Rust/Python/Web checks, CodeQL, dependency review
 and Linux source qualification. Linux image qualification completed all exact
 image builds and failed only at the Trivy API-image scan on the 22 HIGH
