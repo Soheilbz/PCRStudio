@@ -719,15 +719,15 @@ impl Worker {
     /// Send a signal to the complete POSIX process group for one request.
     ///
     /// `kill(1)` is used rather than `libc::kill` so this crate can retain
-    /// `forbid(unsafe_code)`. The Linux runtime image installs `procps`, which
-    /// provides the utility. A failed group signal is harmless when the group
-    /// has already disappeared; the direct-child fallback in
+    /// `forbid(unsafe_code)`. The Linux runtime image supplies the utility at
+    /// `/bin/kill` through its minimal BusyBox foundation. A failed group
+    /// signal is harmless when the group has already disappeared; the direct-child fallback in
     /// [`Self::terminate_tree`] still guarantees the interpreter is reaped.
     fn kill_process_group(process_group: u32, signal: &str) {
         #[cfg(unix)]
         {
             let group = format!("-{process_group}");
-            let _ = Command::new("/usr/bin/kill")
+            let _ = Command::new("/bin/kill")
                 .args([signal, "--", &group])
                 .stdin(Stdio::null())
                 .stdout(Stdio::null())

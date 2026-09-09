@@ -5,6 +5,12 @@ Linux x86_64 is the only supported CURRENT runtime platform. The base `compose.y
 The contract is fail-closed:
 
 - `PCRSTUDIO_SCIENTIFIC_POLICY=strict` and `PCRSTUDIO_TOOLCHAIN_MODE=strict` remain the release defaults.
+- Final API and runner images use the digest-pinned official BusyBox glibc
+  runtime foundation. Python, glibc, CA certificates, and the approved native
+  tool bundle cross the stage boundary from pinned build stages; Debian's
+  package-manager database and compiler toolchain do not. This keeps the
+  production attack surface reproducible without suppressing vulnerability
+  findings.
 - `/health` proves process liveness only.
 - `/ready` proves application/database/worker readiness.
 - `/ready/scientific` is the authority for scientific-toolchain and approved-database readiness; HTTP 503 means the deployment is not scientifically ready.

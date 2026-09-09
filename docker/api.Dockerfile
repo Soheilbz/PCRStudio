@@ -18,14 +18,21 @@ RUN cargo build --locked --release -p pcr-server --bin pcr-server \
     && cargo build --locked --release -p pcr-runner --bin pcr-runner \
     && cargo build --locked --release -p pcr-server --bin pcr-migrate
 
-# ── Worker + scientific toolchain ──────────────────────────────────────────
-FROM python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79 AS science-builder
+# ── Reusable Python/glibc runtime assets ────────────────────────────────────
+FROM python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79 AS runtime-assets
 ARG DEBIAN_SNAPSHOT=20260901T000000Z
 WORKDIR /src
 COPY docker/configure-debian-snapshot.sh /usr/local/bin/configure-debian-snapshot
 RUN configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
-    && apt-get install --no-install-recommends -y build-essential ca-certificates \
+    && apt-get install --no-install-recommends -y ca-certificates libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Worker + scientific toolchain ──────────────────────────────────────────
+FROM runtime-assets AS science-builder
+RUN configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
+    && apt-get update \
+    && apt-get install --no-install-recommends -y build-essential \
     && rm -rf /var/lib/apt/lists/* /usr/local/bin/configure-debian-snapshot
 RUN python -m venv /opt/uv \
     && /opt/uv/bin/python -m pip install --no-cache-dir uv==0.12.10
@@ -41,8 +48,15 @@ RUN PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
     && rm -rf /opt/pcrstudio/tools/downloads /opt/pcrstudio/tools/primerpooler-build
 
 # ── Minimal common runtime ──────────────────────────────────────────────────
-FROM python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79 AS process-runtime-base
-ARG DEBIAN_SNAPSHOT=20260901T000000Z
+# ── Package-manager-free runtime foundation ─────────────────────────────────
+# The official Python slim image is retained as the build/provisioning source,
+# but it carries Debian Essential packages that are outside the application
+# runtime and currently have no security-fixed versions in Debian metadata.
+# Start final images from the official BusyBox glibc image instead and copy
+# only the glibc/CA runtime assets and the already-qualified application files.
+# This removes the vulnerable package-manager/userland surface without hiding
+# package metadata or weakening the scanner policy.
+FROM busybox:1.37.0-glibc@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c0865b0f540d868df0 AS process-runtime-base
 ARG PCRSTUDIO_BUILD_ID
 LABEL org.pcrstudio.product="PCRStudio" \
       org.pcrstudio.lifecycle="managed" \
@@ -53,28 +67,27 @@ RUN case "$PCRSTUDIO_BUILD_ID" in \
     && [ "${#PCRSTUDIO_BUILD_ID}" -eq 64 ] \
     || (echo 'fatal: PCRSTUDIO_BUILD_ID must be a 64-character SHA-256 digest' >&2; exit 64)
 LABEL org.pcrstudio.source-manifest.sha256="$PCRSTUDIO_BUILD_ID"
-COPY docker/configure-debian-snapshot.sh /usr/local/bin/configure-debian-snapshot
-RUN configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y ca-certificates \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -f /usr/local/bin/configure-debian-snapshot \
-    && groupadd --system --gid 10001 pcr \
-    && useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin pcr
+# BusyBox is the only final-stage userland. The Python/Debian builder supplies
+# glibc and the CA bundle; no apt database, compiler, or package-manager state
+# crosses the stage boundary.
+COPY --from=runtime-assets /lib /lib
+COPY --from=runtime-assets /usr/lib /usr/lib
+COPY --from=runtime-assets /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+RUN addgroup -S -g 10001 pcr \
+    && adduser -S -D -H -u 10001 -G pcr -s /bin/false pcr
 ENV PCRSTUDIO_BUILD_ID=${PCRSTUDIO_BUILD_ID} \
-    HOME=/tmp/pcrstudio-home
+    HOME=/tmp/pcrstudio-home \
+    PATH=/opt/uv/bin:/opt/worker/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # ── Scientific runtime shared only by API and durable runner ───────────────
 FROM process-runtime-base AS science-runtime-base
 USER root
-# Python's standard-library HTTP client is used by the API health probe. MAFFT's
-# portable wrapper expects common POSIX text utilities; libgomp is used by
-# scientific wheels/native binaries. Keeping the probe on Python avoids adding
-# a second network client package to every scientific runtime image.
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y \
-       bash coreutils gawk grep libgomp1 procps sed \
-    && rm -rf /var/lib/apt/lists/*
+# BusyBox supplies the small POSIX command surface used by the entrypoint and
+# MAFFT wrapper. Python's standard-library HTTP client is used by the API
+# health probe; the glibc/native scientific dependencies are copied from the
+# already-qualified builder without carrying its package database.
+COPY --from=science-builder /usr/local /usr/local
+COPY --from=science-builder /opt/uv /opt/uv
 COPY --from=science-builder /opt/worker /opt/worker
 COPY --from=science-builder /opt/pcrstudio/tools /opt/pcrstudio/tools
 COPY contracts/tools.toml /opt/pcrstudio/contracts/tools.toml

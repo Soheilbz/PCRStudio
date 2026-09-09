@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 18745,
+      "bytes": 19127,
       "path": ".github/workflows/ci.yml",
-      "sha256": "4b2aa75071e1efc5068c3d1b56c7076e33606236e38ccfdd2188cab3ddecebf6"
+      "sha256": "a563c5e1fa84af4bef65269731ec902ab0488bdd227116fc74dc876afc48e81b"
     },
     {
       "bytes": 1221,
@@ -1058,9 +1058,9 @@
       "sha256": "8982dc775d8f101ca847c633f534855c9fa70a5812b1d31283ae7fe37d9a3f0f"
     },
     {
-      "bytes": 43493,
+      "bytes": 43518,
       "path": "crates/pcr-worker-client/src/lib.rs",
-      "sha256": "bcd99306bbd57921f8635862abcfcb5ae1ab6fcdb92de818fa0cee45cbcf6de4"
+      "sha256": "9f3fce24ad50852199d09551c0559421c87ba682cdd506a6091f9ec02c1b3695"
     },
     {
       "bytes": 605,
@@ -1078,9 +1078,9 @@
       "sha256": "d4de2b821f659f2c95399bd8bbf4c52fcdaeca87dd6bc51b037e722f66f78465"
     },
     {
-      "bytes": 1343,
+      "bytes": 1730,
       "path": "docker/SCIENTIFIC-RUNTIME.md",
-      "sha256": "cc362603eb0f5499eb685c92ad781e301fd583e48f2bb786b9bc13b9b04d3ff3"
+      "sha256": "1449b90ffbe07a8c6eef933b8d56a9a33b36d1b6cdea37585e0695cbc1111247"
     },
     {
       "bytes": 807,
@@ -1088,9 +1088,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 6633,
+      "bytes": 7641,
       "path": "docker/api.Dockerfile",
-      "sha256": "c37551e897363097f2f8abc6077852abc8ca0dcea7cb0fa6ba8824ac00884ac3"
+      "sha256": "8fe44e8c7ba8404265f18160bf0fdaa59d9866a151857ffe4ef33044b1f5c6c8"
     },
     {
       "bytes": 438,
@@ -1885,7 +1885,7 @@
     {
       "bytes": 216398,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "c95023b7b9b59ee2d6d239fc33ff969ff472a350248e7f3a97264f92cfa80a1c"
+      "sha256": "57335a206f157813de3a23ec11d8abe12402fd3455ccb17b84d5ce7f319472d9"
     },
     {
       "bytes": 2048,
@@ -2093,9 +2093,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 67689,
+      "bytes": 67835,
       "path": "scripts/audit/release.py",
-      "sha256": "ac3fb7a65c952decca63a624cbba0d22c440ee8153fee616b6dc908d7070051d"
+      "sha256": "f90152b7c075456838a181362cd8e6e148f5b195653da7f0f0beb8ee7275db40"
     },
     {
       "bytes": 28670,
@@ -2173,9 +2173,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 9190,
+      "bytes": 9271,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "4209394242debaa948e5f1bd56785a3d2673a83ee5ddaa13e82c5549a80ef770"
+      "sha256": "a3d335388e40e3921e8f3038b3b5d39d6e5aff24b3bc3e7f75ad202804dd5cc7"
     },
     {
       "bytes": 4486,
@@ -2358,9 +2358,9 @@
       "sha256": "8be2a552ba79bd8ab3b3668d2920e7468136599f6b59a650a5ef0c4df9890c91"
     },
     {
-      "bytes": 20408,
+      "bytes": 20400,
       "path": "scripts/provision-tools.py",
-      "sha256": "15885d49e7c1113de940025c79b9fd1e6722af6a3c3a3d11fa59fd9f5754e696"
+      "sha256": "6ddf652e8f9d2197b072ca7291cb77609855c1c3a8cbf53b7450491d978d7601"
     },
     {
       "bytes": 827,

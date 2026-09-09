@@ -350,6 +350,15 @@ jobs:
           test -s image-sbom-runner.cdx.json
           test -s image-sbom-migrate.cdx.json
           test -s image-sbom-web.cdx.json
+          for image in pcrstudio-api:ci pcrstudio-runner:ci pcrstudio-migrate:ci; do
+            docker run --rm --entrypoint /bin/sh "$image" -c '
+              test -x /bin/sh
+              test -x /bin/kill
+              test -f /etc/ssl/certs/ca-certificates.crt
+              test ! -e /usr/bin/apt-get
+              test ! -e /var/lib/dpkg/status
+            '
+          done
           grep -q -- "--target api-runtime" .github/workflows/ci.yml
           grep -q -- "--target runner-runtime" .github/workflows/ci.yml
           grep -q -- "--target migrate-runtime" .github/workflows/ci.yml

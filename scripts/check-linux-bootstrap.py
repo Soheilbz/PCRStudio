@@ -65,8 +65,9 @@ def main() -> int:
     assert bootstrap.parse_compose_version("unknown") is None
 
     pinned = bootstrap.pinned_external_image_refs(ROOT)
-    assert len(pinned) == 5, pinned
+    assert len(pinned) == 6, pinned
     assert any(ref.startswith("rust:1.94-bookworm@sha256:") for ref in pinned)
+    assert any(ref.startswith("busybox:1.37.0-glibc@sha256:") for ref in pinned)
     assert any(ref.startswith("postgres:18-alpine@sha256:") for ref in pinned)
     assert any(ref.startswith("caddy:2-alpine@sha256:") for ref in pinned)
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"

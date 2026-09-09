@@ -298,7 +298,7 @@ def provision_native() -> dict[str, Path]:
     mafft_archive_sha256 = sha256(archive)
     mafft_bundle_sha256 = tree_sha256(mafft_bundle)
     mafft = mafft_root / "mafft"
-    mafft.write_text('#!/usr/bin/env sh\nset -eu\nHERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)\nexec "$HERE/mafft-linux64/mafft.bat" "$@"\n', encoding="utf-8")
+    mafft.write_text('#!/bin/sh\nset -eu\nHERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)\nexec "$HERE/mafft-linux64/mafft.bat" "$@"\n', encoding="utf-8")
     executable(mafft)
 
     # PrimerPooler: build audited v1.89 source on the target Linux host.

@@ -999,6 +999,7 @@ def audit_source_release_hardening() -> None:
         "image-sbom-runner.cdx.json",
         "image-sbom-migrate.cdx.json",
         "image-sbom-web.cdx.json",
+        "test ! -e /var/lib/dpkg/status",
         "--target api-runtime",
         "--target runner-runtime",
         "--target migrate-runtime",
@@ -1015,6 +1016,7 @@ def audit_source_release_hardening() -> None:
     )
     for marker in (
         "python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79",
+        "busybox:1.37.0-glibc@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c0865b0f540d868df0",
         "DEBIAN_SNAPSHOT=20260901T000000Z",
         "configure-debian-snapshot",
         "Acquire::Check-Valid-Until",
