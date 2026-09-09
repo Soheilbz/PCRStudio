@@ -511,9 +511,9 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 7501,
+      "bytes": 8439,
       "path": "docs/OPERATIONS.md",
-      "sha256": "cc9695269544cbf69a4b99bf71c0ea67623094000118c989f7bb29a7af025ec4"
+      "sha256": "a3ef474309e3c821d72e472d098689aa118feaf2b90184f8647e93994d58f6b8"
     },
     {
       "bytes": 2598,
@@ -1749,8 +1749,8 @@
       "path": "NOTICE"
     },
     {
-      "after_bytes": 28441,
-      "after_sha256": "c62eb3c346d95accd4dff663714e63af011cefde8037d58dfdde41726994514c",
+      "after_bytes": 2856,
+      "after_sha256": "e33502cb64793d5e4d739352c72b2448842b2bb6c9a08e96ae7f59ee8ffe30dc",
       "before_bytes": 18728,
       "before_sha256": "3c7ba56d752c13b0299a7184c6f1a60c214940ae658e27969358f9850cd78821",
       "path": "README.md"
@@ -2869,8 +2869,8 @@
       "path": "scripts/audit/__init__.py"
     },
     {
-      "after_bytes": 60391,
-      "after_sha256": "40b1c9870aacdea79c100b543a9c8385be20587c7d77711fa83c089a6f5aca8e",
+      "after_bytes": 60416,
+      "after_sha256": "eb33fe6c5320dfd16df474b1664ec18b157b5bc8680ebdb16701556b0bf2d243",
       "before_bytes": 46359,
       "before_sha256": "40ce1a3dd7f87319198edadd96f09b3e800596d53103e8b2817330612df317a1",
       "path": "scripts/audit/application.py"

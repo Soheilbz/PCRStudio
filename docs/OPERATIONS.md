@@ -92,3 +92,20 @@ daemon's proxy drop-in and restart Docker; shell proxy variables alone do not
 configure daemon pulls. For private or rate-limited registries, use `docker
 login` and a credential helper. Never copy credentials into the repository,
 `.env`, image layers, or build arguments.
+
+## Runtime configuration reference
+
+The following settings are operator controls rather than end-user options.
+`PCR_MAX_QUEUED_WORKERS` bounds callers waiting for a worker permit; it defaults
+to 256 and accepts 0–1024. `PCR_CORS_ORIGINS` is a comma-separated allow-list of
+exact `http`/`https` browser origins. It defaults to empty because the normal
+Next server talks to the API server-side; paths, credentials and malformed origins are rejected.
+`PCR_WORKER_TIMEOUT_SECONDS` bounds one worker run and
+accepts 1–299 seconds.
+
+`PCR_DB_MAX_CONNECTIONS`, `PCR_DB_MIN_CONNECTIONS`, and
+`PCR_DB_ACQUIRE_TIMEOUT_SECONDS` control the API PostgreSQL pool. Invalid
+explicit values fail startup. Production uses file-backed deployment secrets:
+PostgreSQL reads `/run/secrets/postgres_password`, while the API, migrator, and
+runner read `/run/secrets/database_url`; secret bytes do not belong in `.env` or
+container environment interpolation.

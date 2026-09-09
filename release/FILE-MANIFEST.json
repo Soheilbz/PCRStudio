@@ -98,9 +98,9 @@
       "sha256": "16d0b1d8ab1118775fe714e849cd81b6dad98270d40cf8074a9dd243abdd486a"
     },
     {
-      "bytes": 28441,
+      "bytes": 2856,
       "path": "README.md",
-      "sha256": "c62eb3c346d95accd4dff663714e63af011cefde8037d58dfdde41726994514c"
+      "sha256": "e33502cb64793d5e4d739352c72b2448842b2bb6c9a08e96ae7f59ee8ffe30dc"
     },
     {
       "bytes": 1179,
@@ -1103,9 +1103,9 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 7501,
+      "bytes": 8439,
       "path": "docs/OPERATIONS.md",
-      "sha256": "cc9695269544cbf69a4b99bf71c0ea67623094000118c989f7bb29a7af025ec4"
+      "sha256": "a3ef474309e3c821d72e472d098689aa118feaf2b90184f8647e93994d58f6b8"
     },
     {
       "bytes": 2598,
@@ -1863,9 +1863,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 215058,
+      "bytes": 215057,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "899b3427283f578101763b18abb3d6836ddb1594d15fc8515ac47c337f66aeb9"
+      "sha256": "727b9bab314533644050bb65f1bd82f7771e0f963856a963493378328ac74975"
     },
     {
       "bytes": 2048,
@@ -2008,9 +2008,9 @@
       "sha256": "2713aed79b0b67ea1059dbce444d9fc750a89dcfc83b066503ae7d66ff3a5871"
     },
     {
-      "bytes": 60391,
+      "bytes": 60416,
       "path": "scripts/audit/application.py",
-      "sha256": "40b1c9870aacdea79c100b543a9c8385be20587c7d77711fa83c089a6f5aca8e"
+      "sha256": "eb33fe6c5320dfd16df474b1664ec18b157b5bc8680ebdb16701556b0bf2d243"
     },
     {
       "bytes": 15430,

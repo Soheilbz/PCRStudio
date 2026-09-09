@@ -855,14 +855,14 @@ def audit_application_foundation() -> None:
     if "reserved operational probe" not in gate_source or "sequentially" not in readiness:
         error("worker-capacity documentation/readiness serialization contract drifted")
 
-    readme = text("README.md")
+    operations = text("docs/OPERATIONS.md")
     for marker in (
         "PCR_MAX_QUEUED_WORKERS",
         "PCR_CORS_ORIGINS",
         "1–299 seconds",
         "malformed origins are rejected",
     ):
-        if marker not in readme:
+        if marker not in operations:
             error(f"deployment configuration documentation lost marker: {marker}")
 
     # Build-toolchain declarations are one contract. SQLx 0.9's supported Rust
@@ -1033,7 +1033,7 @@ def audit_application_foundation() -> None:
         "PCR_DB_ACQUIRE_TIMEOUT_SECONDS",
         "fail startup",
     ):
-        if marker not in readme:
+        if marker not in operations:
             error(f"database-pool deployment documentation lost marker: {marker}")
 
     cookie = text("web/src/lib/auth/session-cookie.ts")
@@ -1060,7 +1060,7 @@ def audit_application_foundation() -> None:
     if "PCR_DATABASE_URL: postgres://" in compose or "POSTGRES_PASSWORD: ${" in compose:
         error("stock Compose regressed to exposing the database credential through environment interpolation")
     for marker in ("file-backed deployment secrets", "/run/secrets/postgres_password", "/run/secrets/database_url"):
-        if marker not in readme:
+        if marker not in operations:
             error(f"file-backed deployment secret documentation lost marker: {marker}")
     for marker in ("data:", "app:", "egress:", "edge:"):
         if marker not in compose:
