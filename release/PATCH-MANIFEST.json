@@ -6,19 +6,19 @@
       "sha256": "d69c38ee1053b25d9b7d480cb8f5197ed061b17d4548fa6490ac2c5951600adc"
     },
     {
-      "bytes": 1204,
+      "bytes": 1221,
       "path": ".github/workflows/codeql.yml",
-      "sha256": "405351f9bb77d60846e9311d9ce0e734aba869fa8af2b43e833238c9d024d981"
+      "sha256": "2941a534c316f3f6f4118d7ddf9514fd0f15b9dfe22cd6f15bded225f6aa4ff6"
     },
     {
-      "bytes": 522,
+      "bytes": 539,
       "path": ".github/workflows/dependency-review.yml",
-      "sha256": "c115da1862d0c0397bd98786321c35725a029e3c0644236b1b8642cc997fe6cb"
+      "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 1363,
+      "bytes": 1380,
       "path": ".github/workflows/linux-source-qualification.yml",
-      "sha256": "6326ef16d460bb82ca6e63366014724aaeaa51189cb4b91fadd51c0ec84c8723"
+      "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
       "bytes": 5912,
@@ -1707,8 +1707,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 17512,
-      "after_sha256": "5da36e26ebd66498ffcb7cdeb04cf4cffa0acd08bc02e3a5e369c559c7dbcac0",
+      "after_bytes": 17529,
+      "after_sha256": "867635f09043aad0b303fec3c37531e67320b7e4f6ae1b68b117c788843f940d",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
