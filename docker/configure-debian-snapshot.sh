@@ -24,4 +24,11 @@ printf '%s\n' \
   'Components: main' \
   'Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' \
   > /etc/apt/sources.list.d/pcrstudio-snapshot.sources
-printf '%s\n' 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/80pcrstudio-snapshot
+printf '%s\n' \
+  'Acquire::Check-Valid-Until "false";' \
+  'Acquire::Retries "2";' \
+  'Acquire::ConnectTimeout "15";' \
+  'Acquire::http::Timeout "30";' \
+  'Acquire::https::Timeout "30";' \
+  'Dpkg::Use-Pty "0";' \
+  > /etc/apt/apt.conf.d/80pcrstudio-snapshot

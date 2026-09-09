@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BUILDER = "pcrstudio"
 BUILDKIT_CONFIG = ROOT / "docker" / "buildkitd.toml"
 BUILDKIT_IMAGE = "moby/buildkit@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8"
-DEFAULT_MAX_USED_SPACE = "20GB"
+DEFAULT_MAX_USED_SPACE = "8GB"
+BUILDKIT_GC_MARKER = "gckeepstorage = 8589934592"
 
 
 def docker_prefix() -> list[str]:
@@ -41,7 +42,7 @@ def ensure_builder(docker: list[str]) -> None:
         [*docker, "buildx", "inspect", BUILDER], cwd=ROOT, text=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
     )
-    if inspected.returncode or BUILDKIT_IMAGE not in inspected.stdout:
+    if inspected.returncode or BUILDKIT_IMAGE not in inspected.stdout or BUILDKIT_GC_MARKER not in inspected.stdout:
         if inspected.returncode == 0:
             run(docker, ["buildx", "rm", "--force", BUILDER])
         run(docker, ["buildx", "create", "--name", BUILDER, "--driver", "docker-container",

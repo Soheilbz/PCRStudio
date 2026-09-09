@@ -511,14 +511,14 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 438,
+      "bytes": 436,
       "path": "docker/buildkitd.toml",
-      "sha256": "0bd1311fe8c10ad39b1a0715a91b9d5485f2b9d24a13865d68e38feb3e3242df"
+      "sha256": "db4534c68eb5ee0969c482d56308021016cfcdd8c1f96506200602a15cdaffa7"
     },
     {
-      "bytes": 1030,
+      "bytes": 1198,
       "path": "docker/configure-debian-snapshot.sh",
-      "sha256": "4cb2c599f403d19d83bef1f41c074363cddfec2baaefbce979a9ba477b69945d"
+      "sha256": "84ddf32b5704c1a7979185b5eb5bc1f18e44c9cb948e80bf46ab9c053da07d0f"
     },
     {
       "bytes": 3963,
@@ -526,14 +526,14 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 1589,
+      "bytes": 1588,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "aeca49934960f35b36a63e7ea331b2defce2b8cf6b5b2b60ecbde4172c7d9105"
+      "sha256": "546eb9f0fe3d3bc2522a0c785595923b8b8e5ddca27b956ab32075ccb6c4d528"
     },
     {
       "bytes": 8766,
       "path": "docs/OPERATIONS.md",
-      "sha256": "d2904f9deadd6cd5a028795c0d4a618dc252cc9f28f69015463201c3041f41ef"
+      "sha256": "4759d688011750d2438d9f6157b04cd5dbccc4a546a365dcd76e6af97c5eeaef"
     },
     {
       "bytes": 2598,
@@ -856,9 +856,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 63234,
+      "bytes": 65014,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "4731a73bd0ad0f771a9b84bb2df2dc1b453662c92941284c602bd775c805ab19"
+      "sha256": "8dc8966a7b4f29cb16d541c4b1f43d5ad7823fb374efb2ad16e411961c6a6a23"
     },
     {
       "bytes": 17770,
@@ -911,9 +911,9 @@
       "sha256": "9ad5f1d075a46f6652158673ca33ac1f5a927f70aa78e4a9be9898fe7e26f2bb"
     },
     {
-      "bytes": 3275,
+      "bytes": 3370,
       "path": "scripts/docker-maintenance.py",
-      "sha256": "553049fca94c80bb7731e02784b635bd5799cfcc9c3bdba4c7bac8a974888abe"
+      "sha256": "2766feeee8ab690f3838e46746929c896baa4713715a5f1d113db178a038d1f6"
     },
     {
       "bytes": 10516,
@@ -2349,15 +2349,15 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 7641,
-      "after_sha256": "8fe44e8c7ba8404265f18160bf0fdaa59d9866a151857ffe4ef33044b1f5c6c8",
+      "after_bytes": 7640,
+      "after_sha256": "28ac23a7a6a80b132bdc57af1b14a57b6dc179c9c0cf08d1c1e20f0efc822c7e",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"
     },
     {
-      "after_bytes": 2920,
-      "after_sha256": "b98289aebee85310dca6ac903acda3796243890ee0b09477c991c7ce091f24b2",
+      "after_bytes": 2919,
+      "after_sha256": "de8c1e6a1059bb2617ca225c1ba45370a574b98fc54d753daf52d6da86aaf01d",
       "before_bytes": 1678,
       "before_sha256": "c9457a3cf245d04b4bdc566f9e83bda6bf53c6ab2504b5d13bd70758c05cb97b",
       "path": "docker/web.Dockerfile"

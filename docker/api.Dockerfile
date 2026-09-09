@@ -60,7 +60,7 @@ FROM busybox:1.37.0-glibc@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c
 ARG PCRSTUDIO_BUILD_ID
 LABEL org.pcrstudio.product="PCRStudio" \
       org.pcrstudio.lifecycle="managed" \
-      org.pcrstudio.cache-policy="dedicated-builder-20GB"
+      org.pcrstudio.cache-policy="dedicated-builder-8GB"
 RUN case "$PCRSTUDIO_BUILD_ID" in \
       (*[!0-9a-f]*|'') echo 'fatal: PCRSTUDIO_BUILD_ID must be lowercase hex' >&2; exit 64 ;; \
     esac \

@@ -5,8 +5,8 @@
 # are eligible for collection.
 [worker.oci]
   gc = true
-  gckeepstorage = 21474836480
+  gckeepstorage = 8589934592
 
 [worker.containerd]
   gc = true
-  gckeepstorage = 21474836480
+  gckeepstorage = 8589934592

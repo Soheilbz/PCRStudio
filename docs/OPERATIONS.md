@@ -2,7 +2,7 @@
 
 Docker build storage is bounded separately in
 [`DOCKER-STORAGE.md`](DOCKER-STORAGE.md). The supported bootstrap uses the
-dedicated `pcrstudio` BuildKit builder with a 20 GB cache ceiling and performs
+dedicated `pcrstudio` BuildKit builder with an 8 GB cache ceiling and performs
 scoped cleanup on both success and failure; it never performs a daemon-wide
 prune that could remove another project's images.
 

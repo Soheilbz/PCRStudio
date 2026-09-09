@@ -41,6 +41,8 @@ DEFAULT_ENV = ROOT / ".env"
 REGISTRY_HOSTS = ("auth.docker.io", "registry-1.docker.io", "production.cloudfront.docker.com")
 BUILDX_BUILDER = "pcrstudio"
 BUILDX_BUILDER_IMAGE = "moby/buildkit@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8"
+BUILDX_MAX_CACHE = "8GB"
+BUILDX_GC_MARKER = "gckeepstorage = 8589934592"
 PINNED_IMAGE_RE = re.compile(
     r"(?<![A-Za-z0-9._/-])(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._/-]+"
     r"(?::[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}(?![A-Za-z0-9])"
@@ -215,21 +217,21 @@ def ensure_dedicated_buildx_builder(docker: list[str]) -> None:
         [*docker, "buildx", "inspect", BUILDX_BUILDER],
         cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False,
     )
-    if inspected.returncode or BUILDX_BUILDER_IMAGE not in inspected.stdout:
+    if inspected.returncode or BUILDX_BUILDER_IMAGE not in inspected.stdout or BUILDX_GC_MARKER not in inspected.stdout:
         if inspected.returncode == 0:
             run([*docker, "buildx", "rm", "--force", BUILDX_BUILDER])
         run([*docker, "buildx", "create", "--name", BUILDX_BUILDER, "--driver", "docker-container",
              "--driver-opt", f"image={BUILDX_BUILDER_IMAGE}", "--config", str(config)])
     run([*docker, "buildx", "inspect", "--bootstrap", BUILDX_BUILDER])
     os.environ["BUILDX_BUILDER"] = BUILDX_BUILDER
-    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, maximum 20GB")
+    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, maximum {BUILDX_MAX_CACHE}")
 
 
 def prune_dedicated_buildx_builder(docker: list[str]) -> None:
     """Bound only PCRStudio's cache; never run a daemon-wide system prune."""
     subprocess.run(
         [*docker, "buildx", "prune", "--builder", BUILDX_BUILDER, "--all",
-         "--max-used-space", "20GB", "--force"],
+         "--max-used-space", BUILDX_MAX_CACHE, "--force"],
         cwd=ROOT, text=True, check=False,
     )
     subprocess.run(
@@ -405,6 +407,29 @@ def pull_pinned_external_images(docker: list[str], *, attempts: int = 3) -> list
             time.sleep(delay)
     print("OCI registry preflight PASS: exact pinned references are locally obtainable")
     return refs
+
+
+def build_compose_images(docker: list[str], private: bool, *, attempts: int = 3) -> None:
+    """Build production images with bounded retries for transport-only failures."""
+    command = [*compose(docker, private), "build", "api", "web"]
+    for attempt in range(1, attempts + 1):
+        print(f"production image build (attempt {attempt}/{attempts})")
+        try:
+            cp = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False, timeout=3600)
+            output = (cp.stdout or "") + (cp.stderr or "")
+        except subprocess.TimeoutExpired as exc:
+            cp = None
+            output = f"production image build timed out after 3600 seconds: {exc}"
+        if output:
+            print(output, end="")
+        if cp is not None and cp.returncode == 0:
+            return
+        error_class = registry_error_class(output)
+        if error_class != "transient-network" or attempt == attempts:
+            raise SystemExit(f"production image build failed ({error_class}); see the captured build output above")
+        delay = 2 ** (attempt - 1)
+        print(f"transient registry transport failure during image build; retrying in {delay}s")
+        time.sleep(delay)
 
 
 def nearest_existing_parent(path: Path) -> Path:
@@ -1192,7 +1217,13 @@ def main() -> int:
     # Compose validation happens before the expensive image build.
     run([*compose(docker, args.private), "config", "-q"])
     run([*compose(docker, args.private), "pull", "db", "caddy"])
-    run([*compose(docker, args.private), "build", "--pull", "api", "web"])
+    # The exact-digest OCI preflight above already pulled and verified every
+    # external image. Do not force Compose to re-contact Docker Hub/CDN here:
+    # that used to bypass the verified local content and made a healthy
+    # preflight depend on a second live registry transaction. A cold host still
+    # obtains the pinned digest through the normal BuildKit resolver; repeated
+    # qualifications reuse the dedicated builder/daemon content instead.
+    build_compose_images(docker, args.private)
     image = api_image_id(docker, args.private)
 
     qualification = qualify_image(docker, image)

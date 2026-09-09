@@ -2,7 +2,7 @@
 
 PCRStudio builds use a dedicated `docker-container` BuildKit builder named
 `pcrstudio`, using the exact BuildKit image digest recorded by the bootstrap
-and maintenance scripts. Its garbage collector keeps at most 20 GB of reconstructible
+and maintenance scripts. Its garbage collector keeps at most 8 GB of reconstructible
 build cache. Production image identities remain exact digest pins; cache
 collection cannot change an image digest, TLS verification, provenance, or the
 OCI supply-chain gate.
