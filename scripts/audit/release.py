@@ -1004,7 +1004,7 @@ def audit_source_release_hardening() -> None:
         "--target runner-runtime",
         "--target migrate-runtime",
         "PLAYWRIGHT_BROWSERS_PATH",
-        "actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809",
+        "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
         "scripts/install-playwright-browser.sh",
     ):
         if marker not in ci_text:

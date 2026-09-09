@@ -1748,7 +1748,7 @@
     },
     {
       "after_bytes": 19127,
-      "after_sha256": "a563c5e1fa84af4bef65269731ec902ab0488bdd227116fc74dc876afc48e81b",
+      "after_sha256": "6cd9568a5e6146d92b67a26d48b4a4794535bd26acdc9b70243cbb1b0659f775",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -2945,7 +2945,7 @@
     },
     {
       "after_bytes": 67835,
-      "after_sha256": "f90152b7c075456838a181362cd8e6e148f5b195653da7f0f0beb8ee7275db40",
+      "after_sha256": "3db76c505a3f2f26b4eda35bb7da95b8cd1d4db54593b1131ce07af397788629",
       "before_bytes": 45119,
       "before_sha256": "93d6a42fcd39f5c544bbd589ddfa116939a439b739318842cdb5cbdb6f3b962b",
       "path": "scripts/audit/release.py"

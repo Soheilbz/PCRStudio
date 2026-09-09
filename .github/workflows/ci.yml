@@ -410,7 +410,7 @@ jobs:
       - name: Install locked web dependencies
         run: pnpm install --frozen-lockfile
       - name: Restore locked Playwright browser cache
-        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: .local/playwright-browsers
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
