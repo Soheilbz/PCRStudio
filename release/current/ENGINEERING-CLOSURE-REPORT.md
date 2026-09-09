@@ -13,10 +13,9 @@ production release.
 - Repository root: `/home/soheil/Desktop/PCRStudio`.
 - The working directory began at the canonical remote's baseline; the candidate
   is now committed on local branch `release-candidate-20260909`. The declared
-  canonical remote is
-  `https://github.com/Soheilbz/PCRStudio`; publication was attempted but the
-  host has neither an HTTPS credential helper nor the private key for the
-  account's registered SSH key.
+  canonical remote is `https://github.com/Soheilbz/PCRStudio`; the candidate is
+  published as `release-candidate-20260909` through the registered read/write
+  SSH deploy key, while remote `main` remains unchanged.
 - Canonical design modules: 21. Generated contract/runtime artifacts also
   contain 21 module identities.
 - Existing source audit: 0 errors, 0 warnings.
@@ -223,7 +222,7 @@ tag fallback, TLS bypass, or credential was added.
 
 ## CI and supply chain
 
-Release verification passed with 1,050 manifest files, 914 SBOM components, 34
+Release verification passed with 1,045 manifest files, 914 SBOM components, 29
 checksum entries, zero manifest/checksum mismatches, zero case collisions, and
 zero symlinks. The public-source archive verifier and extracted-archive audit
 also passed. Pinned container and GitHub Actions references were reported by
@@ -231,6 +230,15 @@ the verifier. The exact `pnpm audit --prod --audit-level=high` now completes
 with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
+
+Hosted boundary evidence is now available. GitHub Actions run 73 for commit
+`4fac357` passed the complete Source/Rust/Python/Web checks, scientific
+readiness contract, frozen dependency contract, and Web production/browser
+qualification. Its Linux image qualification built the exact API, runner,
+migrator, and Web images, then failed only at the API image security scan on
+the ten HIGH Go-standard-library findings carried by the pinned MFEprimer 4.5.1
+binary. The finding is retained as the open external dependency gate; no image
+identity, digest, TLS, provenance, or scan policy was weakened.
 
 ## Architecture fitness functions
 
@@ -287,8 +295,8 @@ content types.
   `51c94f009048ff60fd3c93c17a63caeb9edcd08d` was reconciled against the
   current candidate by content hash. Candidate-only additions are limited to
   current evidence and supporting audit/test helpers; the working directory is
-  rooted at that canonical commit and all changes remain uncommitted for human
-  review.
+  rooted at that canonical commit; the candidate is now represented by the clean
+  published review branch `release-candidate-20260909`.
 
 ## Assurance-gap and fitness-function review
 
@@ -330,7 +338,7 @@ Linux qualification/CI workflows; no hidden suppression was introduced.
 | The exact pinned Docker image can be pulled by a release host | VERIFIED: OCI preflight resolved all Docker Hub endpoints and pulled all five exact digest-pinned external references; Compose database/bootstrap and backup/restore passed |
 | The official npm advisory service is reachable for the final audit | VERIFIED: exact `pnpm audit --prod --audit-level=high` returned no known vulnerabilities after the Next.js/Sharp remediation |
 | Strict scientific execution artifacts and approved reference data are present | VERIFIED: strict toolchain verifier PASS; all required artifacts/indexes and the approved scientific-Python freeze hash-match; `/ready/scientific` HTTP 200 |
-| The current directory proves canonical Git lineage | VERIFIED: local Git HEAD is canonical commit `51c94f009048ff60fd3c93c17a63caeb9edcd08d`; the candidate remains an explicit uncommitted review diff |
+| The current directory proves canonical Git lineage | VERIFIED: local and published candidate HEAD is `4fac357e663f942dc80ed6e6f1eb378d5725f9d6` on `release-candidate-20260909`; remote `main` remains at `51c94f009048ff60fd3c93c17a63caeb9edcd08d` |
 | Standalone output is the deployable Web runtime | VERIFIED: deployment-shaped standalone launch, smoke and browser checks passed |
 | The final patch-level toolchain can be exercised on this host | VERIFIED for non-biological gates: exact Node, pnpm, uv and Rust are installed and exercised |
 
@@ -356,7 +364,7 @@ recorded below.
 | `python3 scripts/audit-source.py` | PASS |
 | `python3 scripts/scan-secrets.py` | PASS |
 | `python3 scripts/qualify-source.py --no-write` | PASS |
-| `python3 scripts/verify-release.py --root ...` | PASS: 1,050 manifest files; 914 SBOM components; 34 checksum entries |
+| `python3 scripts/verify-release.py --root ...` | PASS: 1,045 manifest files; 914 SBOM components; 29 checksum entries |
 | `python3 scripts/check-linux-bootstrap.py` | PASS |
 | `python3 scripts/doctor-linux.py` | PASS; `.env` hardened to mode `0600` |
 | Integrated `pnpm check` with project-local Rust and local PostgreSQL | PASS: web 619 passed/7 skipped; Python 1,167 passed; Rust workspace and doc-tests passed |
@@ -394,8 +402,9 @@ The repository/live boundary is explicit: the current source candidate has
 verified static, web, API-contract, local database, browser, and release-
 artifact evidence, but no live deployment, production domain, production
 secrets, or production database was touched. The candidate is committed in a
-clean local worktree, while the canonical GitHub remote remains unchanged
-because HTTPS and SSH publication both lacked usable host credentials.
+clean local worktree and published on the review branch; remote `main` remains
+unchanged. Hosted source qualification is green, while the pinned MFEprimer
+security finding remains an external release gate.
 
 For E-002, the registry-access removal condition is met: the exact pinned
 `postgres:18-alpine@sha256:d3e1620b...` image was pulled and started through
@@ -427,8 +436,10 @@ pnpm web:smoke -- --url=http://localhost:3400
 
 ## Completion statement
 
-PCRStudio is a locally verified release candidate with strong static, web,
-Rust, Python, database, browser, Docker/OCI, and release-artifact evidence.
+PCRStudio is a locally verified and GitHub-published release candidate with
+strong static, web, Rust, Python, database, browser, Docker/OCI, and
+release-artifact evidence. Hosted source qualification is green; the pinned
+MFEprimer security finding remains an explicit external release gate.
 The non-biological production-shaped control-plane/edge Compose drill passed,
 including migrations, readiness, backup/restore, restart, and recreation from
 cached local artifacts. Native biological acceptance remains intentionally
