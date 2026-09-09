@@ -1865,7 +1865,7 @@
     {
       "bytes": 215058,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "136891278fa3efd208b7f1d0d65ad3631e9368fb207881c6ed7eb494d179baab"
+      "sha256": "272f0a3d5c7592aa4b124d3f70aa19354b2fbb8c1ce5b84e516a29dda0dfa0f7"
     },
     {
       "bytes": 2048,
@@ -1948,9 +1948,9 @@
       "sha256": "eacbb2d87ce35925b81659e84556406e81a8694b36c0d47c1442d8b27dbd1b72"
     },
     {
-      "bytes": 31367,
+      "bytes": 32026,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "99749f12d05fba3eb3abfd764588c6543946d7a29ed70548f6c08a29dd358f39"
+      "sha256": "10b564a2e1eb59d295fac773861ec7ce09d80fe24123fa657f8b97e60c9398af"
     },
     {
       "bytes": 507,
@@ -1978,9 +1978,9 @@
       "sha256": "ceb912d6a98435fda489bb961cf55f84e6fb33a9bc85cff015bfe4f042930214"
     },
     {
-      "bytes": 6818,
+      "bytes": 6865,
       "path": "release/current/UNKNOWN-UNKNOWNS-AUDIT.md",
-      "sha256": "34f0e32a0d42489015213e9e132a5b6828b51d10af2deecfc7a4ec4aea039f4c"
+      "sha256": "6091589e35672c5cc87637c8aad7bf45ffb2970bf6e799dd24baf8675f6c2ac9"
     },
     {
       "bytes": 450,
