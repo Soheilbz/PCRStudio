@@ -771,9 +771,9 @@
       "sha256": "eacbb2d87ce35925b81659e84556406e81a8694b36c0d47c1442d8b27dbd1b72"
     },
     {
-      "bytes": 30909,
+      "bytes": 30817,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "37f59c1f7babce826c536d555b4c79ae41681e8205c9e79ffa0b42f141daa248"
+      "sha256": "e5ebe16472bc4387d204f3638375ca68c81ef46614bc5360187c5f0d66522f8f"
     },
     {
       "bytes": 1589,
@@ -781,9 +781,9 @@
       "sha256": "a23662c5bf6d18fa972f8c5503508dae3cdc67a390ab29bab3ecb3f84935b6ea"
     },
     {
-      "bytes": 6845,
+      "bytes": 6657,
       "path": "release/current/UNKNOWN-UNKNOWNS-AUDIT.md",
-      "sha256": "c4e49aa6f5e7d47c94c65361e2c72c044d806b741fb6974f8fdd6946339d825a"
+      "sha256": "68c4b99f287e69dc331a2fe27da53df7ce8bb8707c24573bfb0ed4c1db939994"
     },
     {
       "bytes": 145,

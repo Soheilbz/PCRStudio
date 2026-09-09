@@ -20,7 +20,7 @@ and deployment system was complete.
 | Image SBOM portability | CI invoked `docker sbom`, a non-core Docker plugin unavailable on the audit host. | Resolved by using pinned Anchore SBOM action/Syft and retaining all image SBOMs as a 14-day CI artifact. |
 | Image vulnerability gate | Public baseline CI failed the API image scan on ten HIGH Go standard-library findings in the pinned MFEprimer 4.5.1 binary (CVE-2026-25679, CVE-2026-27137, CVE-2026-27145, CVE-2026-32280, CVE-2026-32281, CVE-2026-32283, CVE-2026-33810, CVE-2026-33811, CVE-2026-33814 and CVE-2026-33818). | **Open external dependency gate.** The upstream distribution repository has no newer release or source tree for a repository-owned rebuild at audit time. Findings are not suppressed; the candidate is not GitHub-release-ready until an upstream-fixed artifact is adopted and requalified, or a security owner documents an explicit, time-bounded VEX decision with compensating controls. |
 | Deployment topology | Deployment prose previously said the runner had outbound egress while Compose correctly keeps it on the internal data network only. | Resolved by making the deployment authority match Compose: API owns explicit external-reference egress; runner has no outbound network. |
-| GitHub repository metadata | Public repository still has no description or topics. | Deliberately unchanged because metadata editing was outside the requested engineering boundary; suggested values remain documented below. |
+| GitHub repository metadata | Public repository metadata was initially empty. | Resolved through the authenticated GitHub CLI: description and focused topics are now set for PCRStudio. |
 | GitHub security settings | Ruleset and security controls were verified through the authenticated owner session. | Resolved: active `Protect main` ruleset blocks deletion/force-push, requires pull requests, one approval, Code Owner review, conversation resolution, up-to-date required checks, and the two available CI checks; dependency graph, Dependabot alerts/security updates, secret scanning/push protection and private vulnerability reporting are enabled. |
 | Cloud staging | No cloud host, deployment account, DNS zone, TLS endpoint or staging secrets were supplied. | The repository-supported Linux bootstrap and manual-only SSH staging workflow are complete and documented. Cloud execution remains an infrastructure boundary, not a hidden local claim. |
 
@@ -44,9 +44,10 @@ latest completed hosted run for source-equivalent commit `4fac357` passed
 source/Rust/Python/Web checks, but Linux image qualification failed at the
 security scan on the same ten HIGH Go standard-library findings in
 `/opt/pcrstudio/tools/mfeprimer`. The final documentation/artifact commit
-`992ee6b` has passed Linux source qualification and its full CI run is still in
-progress at report time; neither result indicates a Docker Hub,
-authentication, or mutable package-resolution failure.
+`992ee6b` and the current branch candidate have passed Linux source
+qualification; the full pull-request CI remains subject to the same image
+security gate at report time. The candidate is open as PR #19. Neither result
+indicates a Docker Hub, authentication, or mutable package-resolution failure.
 
 ## Authenticated GitHub state and remaining owner actions
 
@@ -54,19 +55,15 @@ The authenticated owner session was used to inspect and update repository
 settings. SSH remains the Git transport; it does not grant access to Actions
 settings, environments, or secret values.
 
-1. Set the repository description to: **“Evidence-first primer design and PCR
-   workflow engineering platform.”** Add focused topics such as `pcr`,
-   `primer-design`, `bioinformatics`, `rust`, `python`, `nextjs`, and
-   `scientific-software`.
-2. Keep `main` as the default branch. The active `Protect main` ruleset now
+1. Keep `main` as the default branch. The active `Protect main` ruleset now
    enforces the safe subset available in the repository: pull requests, one
    approval, Code Owner review, stale-review dismissal, latest-push approval,
    conversation resolution, two required CI checks, branch freshness, and no
    force-push or deletion. CodeQL/dependency-review results are not required
    until those checks have a stable result on the protected branch.
-3. Dependency graph, Dependabot alerts/security updates, secret scanning and
+2. Dependency graph, Dependabot alerts/security updates, secret scanning and
    push protection are enabled. No repository or environment secrets exist.
-4. Configure a `staging` environment only after the target server exists;
+3. Configure a `staging` environment only after the target server exists;
    environment secrets must be scoped to that environment and never repository
    plaintext.
 
