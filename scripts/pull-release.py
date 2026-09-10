@@ -140,13 +140,38 @@ def safe_extract(source: Path, destination: Path) -> None:
 
 
 def image_ids(manifest: dict) -> None:
-    for image in manifest["images"]:
-        name = image["name"]
-        tag = image["tag"]
-        expected = image["image_id"]
-        actual = json.loads(run(["docker", "image", "inspect", f"{name}:{tag}"]).stdout)[0]["Id"]
-        if actual != expected:
-            raise SystemExit(f"OCI image identity mismatch for {name}:{tag}: {actual} != {expected}")
+    """Verify portable OCI config digests, not engine-local image IDs.
+
+    Docker's inspect ``Id`` can be a storage-engine chain ID after an
+    export/import boundary (notably with the containerd image store).  The
+    config digest in the OCI-compatible ``docker save`` archive is portable
+    and remains bound to the exact image configuration in the release
+    manifest.
+    """
+    expected = {f"{image['name']}:{image['tag']}": image["image_id"] for image in manifest["images"]}
+    with tempfile.TemporaryFile() as saved:
+        subprocess.run(["docker", "save", *expected], check=True, stdout=saved)
+        saved.seek(0)
+        with tarfile.open(fileobj=saved, mode="r:") as archive:
+            entries = json.load(archive.extractfile("manifest.json"))
+            actual: dict[str, str] = {}
+            for entry in entries:
+                config_name = entry.get("Config")
+                if not isinstance(config_name, str):
+                    raise SystemExit("OCI image archive has no config descriptor")
+                config_stream = archive.extractfile(config_name)
+                if config_stream is None:
+                    raise SystemExit(f"OCI image archive is missing config {config_name}")
+                with config_stream:
+                    config_digest = "sha256:" + hashlib.sha256(config_stream.read()).hexdigest()
+                if Path(config_name).stem != config_digest.removeprefix("sha256:"):
+                    raise SystemExit(f"OCI image config filename does not match its digest: {config_name}")
+                for ref in entry.get("RepoTags", []):
+                    actual[ref] = config_digest
+    for ref, expected_digest in expected.items():
+        actual_digest = actual.get(ref)
+        if actual_digest != expected_digest:
+            raise SystemExit(f"OCI image identity mismatch for {ref}: {actual_digest} != {expected_digest}")
 
 
 def validate_source_version(release_dir: Path, tag: str) -> None:
