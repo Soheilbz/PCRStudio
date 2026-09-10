@@ -536,9 +536,9 @@
       "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
     },
     {
-      "bytes": 11810,
+      "bytes": 12326,
       "path": "docs/OPERATIONS.md",
-      "sha256": "1a3ea4c2e79fdc5293b0eed2931e6aa05d7db8b42f5e86f11015a8b12618baaa"
+      "sha256": "4e121144e949eed65f3dbf6555bd6945a206ba9d25f6f644b07677b379571190"
     },
     {
       "bytes": 2598,
@@ -851,9 +851,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 70019,
+      "bytes": 71883,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "7780567655835bfe0929b3c136f776c3bb452d926df8fab377f72cb779df948e"
+      "sha256": "edbe68f2530096e099423c214fe99b2dc93c72ddfa5e9800694837655160d628"
     },
     {
       "bytes": 17770,
@@ -871,9 +871,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 10793,
+      "bytes": 10900,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "635758c6dd276ddbf59f96de87ad3f32c33a917eecacb92152ff561cb05b483d"
+      "sha256": "204d4459d46a26bbd5621118e864b4bbdc4fe76098bedbaa2020b54e28cae6ca"
     },
     {
       "bytes": 4486,

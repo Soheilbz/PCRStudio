@@ -77,6 +77,7 @@ def main() -> int:
         expect_system_exit(bootstrap.validate_runner_scratch_size, bad_scratch_size)
     assert bootstrap.validate_storage_budget("20", "4") == ("20", "4")
     assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
+    assert "--control-plane-only" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
     for bad_reserves in (("4", "4"), ("3", "1"), ("65", "4"), ("twenty", "4")):
         try:
             bootstrap.validate_storage_budget(*bad_reserves)

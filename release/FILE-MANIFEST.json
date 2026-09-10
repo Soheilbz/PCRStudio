@@ -1133,9 +1133,9 @@
       "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
     },
     {
-      "bytes": 11810,
+      "bytes": 12326,
       "path": "docs/OPERATIONS.md",
-      "sha256": "1a3ea4c2e79fdc5293b0eed2931e6aa05d7db8b42f5e86f11015a8b12618baaa"
+      "sha256": "4e121144e949eed65f3dbf6555bd6945a206ba9d25f6f644b07677b379571190"
     },
     {
       "bytes": 2598,
@@ -1895,7 +1895,7 @@
     {
       "bytes": 216491,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "decb4e55857be4ec03bc04a0cd0c40e9a1ac6086daa83bd53edf68d71c8363d7"
+      "sha256": "ecccb6d6498c5460c5da1a4822030f57f622451d98242316b852b8a0167be2ca"
     },
     {
       "bytes": 2048,
@@ -2118,9 +2118,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 70019,
+      "bytes": 71883,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "7780567655835bfe0929b3c136f776c3bb452d926df8fab377f72cb779df948e"
+      "sha256": "edbe68f2530096e099423c214fe99b2dc93c72ddfa5e9800694837655160d628"
     },
     {
       "bytes": 17770,
@@ -2173,9 +2173,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 10793,
+      "bytes": 10900,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "635758c6dd276ddbf59f96de87ad3f32c33a917eecacb92152ff561cb05b483d"
+      "sha256": "204d4459d46a26bbd5621118e864b4bbdc4fe76098bedbaa2020b54e28cae6ca"
     },
     {
       "bytes": 4486,

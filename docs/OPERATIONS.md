@@ -168,6 +168,18 @@ The full production bootstrap is run only after DNS, secrets and the approved
 deployment data are ready; it additionally enables the database backup and
 restore-drill timers after the application passes readiness.
 
+If the public website must be brought online before the scientific database is
+reviewed, use the explicit control-plane path:
+
+```bash
+./bootstrap.sh --install-system-deps --domain pcrstudio.ir --control-plane-only
+```
+
+This starts PostgreSQL, migrations, API, Web and Caddy and verifies `/ready`,
+but deliberately does not start the durable runner or claim `/ready/scientific`.
+It must not be presented as BLAST/MFEprimer-qualified production until an
+approved reference snapshot has been built and fingerprinted.
+
 `PCR_DB_MAX_CONNECTIONS`, `PCR_DB_MIN_CONNECTIONS`, and
 `PCR_DB_ACQUIRE_TIMEOUT_SECONDS` control the API PostgreSQL pool. Invalid
 explicit values fail startup. Production uses file-backed deployment secrets:

@@ -1089,6 +1089,18 @@ def verify_scientific_ready(docker: list[str], private: bool) -> dict:
     return payload
 
 
+def verify_control_plane_ready(docker: list[str], private: bool) -> dict:
+    cp = run([
+        *compose(docker, private), "exec", "-T", "api", "python", "-c",
+        "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8080/ready', timeout=10).read().decode())",
+    ], capture=True)
+    try: payload = json.loads(cp.stdout)
+    except json.JSONDecodeError: raise SystemExit(f"/ready returned non-JSON: {cp.stdout[:500]!r}")
+    if payload.get("ready") is not True:
+        raise SystemExit("/ready is not ready after control-plane bootstrap: " + json.dumps(payload, sort_keys=True)[:1500])
+    return payload
+
+
 def verify_runner(docker: list[str], private: bool) -> dict:
     # PID 1 must be the dedicated runner, and the same immutable scientific
     # image must pass its smoke gate from inside the runner container.
@@ -1194,6 +1206,11 @@ def main() -> int:
         action="store_true",
         help="install/verify Docker host dependencies and stop before source/build/deployment work",
     )
+    ap.add_argument(
+        "--control-plane-only",
+        action="store_true",
+        help="start the public control plane without claiming scientific/BLAST readiness; requires no reference database",
+    )
     ap.add_argument("--domain", help="public DNS hostname; required unless --private or already present in .env")
     ap.add_argument("--reference-fasta", type=Path, help="approved/reference FASTA used to build specificity indexes")
     ap.add_argument("--database-id", default="reference")
@@ -1209,6 +1226,9 @@ def main() -> int:
         help="explicitly accept a changed scientific Python freeze or MAFFT archive/bundle identity on an existing deployment",
     )
     args = ap.parse_args()
+
+    if args.control_plane_only and args.reference_fasta:
+        raise SystemExit("--control-plane-only cannot be combined with --reference-fasta")
 
     if args.prepare_host_only:
         if not args.install_system_deps:
@@ -1307,7 +1327,13 @@ def main() -> int:
         values, qualification, allow_change=args.approve_scientific_environment_change
     )
 
-    if args.reference_fasta:
+    manifest: Path | None = None
+    if args.control_plane_only:
+        if not values.get("PCR_SCIENTIFIC_DB_ID", "").strip() or not re.fullmatch(
+            r"[0-9a-f]{64}", values.get("PCR_SCIENTIFIC_DB_SHA256", "").strip().lower()
+        ):
+            values["PCR_SCIENTIFIC_DB_SCOPE"] = "smoke"
+    elif args.reference_fasta:
         digest, manifest = build_database(docker, image, args.reference_fasta, args.database_id, args.database_scope, dbdir)
         values["PCR_SCIENTIFIC_DB_ID"] = args.database_id
         values["PCR_SCIENTIFIC_DB_SHA256"] = digest
@@ -1330,11 +1356,15 @@ def main() -> int:
     pre_deploy_backup: Path | None = None
     if not args.skip_up:
         pre_deploy_backup = quiesce_and_backup_if_running(docker, args.private, build_identity)
-        run([*compose(docker, args.private), "up", "-d", "--wait"])
-        ready_payload = verify_scientific_ready(docker, args.private)
-        runner_payload = verify_runner(docker, args.private)
-        if runner_payload["scientific_python_freeze_sha256"] != freeze:
-            raise SystemExit("runner scientific environment fingerprint differs from qualified API image")
+        services = ["db", "migrate", "api", "web", "caddy"] if args.control_plane_only else []
+        run([*compose(docker, args.private), "up", "-d", "--wait", *services])
+        if args.control_plane_only:
+            ready_payload = verify_control_plane_ready(docker, args.private)
+        else:
+            ready_payload = verify_scientific_ready(docker, args.private)
+            runner_payload = verify_runner(docker, args.private)
+            if runner_payload["scientific_python_freeze_sha256"] != freeze:
+                raise SystemExit("runner scientific environment fingerprint differs from qualified API image")
         if not args.no_systemd_automation:
             installed_automation = install_systemd_automation(
                 args.backup_retention_days, storage_budget, storage_headroom
@@ -1344,6 +1374,7 @@ def main() -> int:
     evidence = {
         "schema_version": "1.0.0",
         "status": "pass",
+        "deployment_mode": "control-plane-only" if args.control_plane_only else "full-production",
         "platform": "linux",
         "architecture": platform.machine(),
         "completed_at": datetime.now(timezone.utc).isoformat(),
@@ -1364,7 +1395,7 @@ def main() -> int:
         "disk_preflight": disk_preflight,
         "scientific_ready": ready_payload,
         "runner": runner_payload,
-        "job_execution_mode": "external",
+        "job_execution_mode": "external" if not args.control_plane_only else "disabled-until-scientific-database-qualification",
         "runner_scratch_size": values["PCR_RUNNER_SCRATCH_SIZE"],
         "systemd_automation_units": installed_automation,
         "backup_retention_days": args.backup_retention_days,
@@ -1375,6 +1406,8 @@ def main() -> int:
     }
     atomic_write(DEPLOY / "linux-bootstrap-evidence.json", json.dumps(evidence, indent=2, sort_keys=True) + "\n", 0o600)
     print("\nPCRStudio Linux bootstrap PASS")
+    if args.control_plane_only:
+        print("  mode: control-plane-only (scientific/BLAST readiness intentionally not claimed)")
     print(f"  API image: {image}")
     print(f"  source manifest: {build_identity}")
     print(f"  science freeze: {freeze}")
