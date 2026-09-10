@@ -154,7 +154,8 @@ def install_systemd() -> None:
     source = Path(__file__).resolve()
     target = Path("/usr/local/libexec/pcrstudio-release-pull.py")
     target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(source, target)
+    if source != target:
+        shutil.copy2(source, target)
     target.chmod(0o755)
     Path("/etc/pcrstudio-release-pull.env").write_text(
         "PCRSTUDIO_RELEASE_REPO=Soheilbz/PCRStudio\n"
