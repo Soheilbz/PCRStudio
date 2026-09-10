@@ -112,8 +112,9 @@ jobs:
           import hashlib
           import json
           import os
-          import subprocess
           import sys
+          import gzip
+          import tarfile
           from pathlib import Path
 
           manifest_path, source_path, image_path = map(Path, sys.argv[1:])
@@ -128,11 +129,32 @@ jobs:
                       value.update(chunk)
               return value.hexdigest()
 
+          image_config_digests = {}
+          with image_path.open("rb") as compressed:
+              with gzip.GzipFile(fileobj=compressed, mode="rb") as stream:
+                  with tarfile.open(fileobj=stream, mode="r|") as archive:
+                      entries = json.load(archive.extractfile("manifest.json"))
+                      for entry in entries:
+                          config_name = entry.get("Config")
+                          if not isinstance(config_name, str):
+                              raise SystemExit("OCI image archive has no config descriptor")
+                          config_stream = archive.extractfile(config_name)
+                          if config_stream is None:
+                              raise SystemExit(f"OCI image archive is missing config {config_name}")
+                          with config_stream:
+                              config_digest = hashlib.sha256(config_stream.read()).hexdigest()
+                          if Path(config_name).stem != config_digest:
+                              raise SystemExit(f"OCI image config filename does not match its digest: {config_name}")
+                          for ref in entry.get("RepoTags", []):
+                              image_config_digests[ref] = "sha256:" + config_digest
+
           images = []
           for name in image_names:
               tag = f"{name}:{release_sha}"
-              details = json.loads(subprocess.check_output(["docker", "image", "inspect", tag], text=True))[0]
-              images.append({"name": name, "tag": release_sha, "image_id": details["Id"]})
+              image_id = image_config_digests.get(tag)
+              if image_id is None:
+                  raise SystemExit(f"OCI image archive is missing {tag}")
+              images.append({"name": name, "tag": release_sha, "image_id": image_id})
           manifest_path.write_text(json.dumps({
               "format_version": 1,
               "release_ref": release_ref,

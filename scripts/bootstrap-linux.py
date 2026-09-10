@@ -982,10 +982,17 @@ def compose(docker: list[str], private: bool) -> list[str]:
     return cmd
 
 
-def api_image_id(docker: list[str], private: bool) -> str:
-    cp = run([*compose(docker, private), "images", "-q", "api"], capture=True)
-    image = cp.stdout.strip().splitlines()[0] if cp.stdout.strip() else ""
-    if not image: raise SystemExit("could not resolve built API image id")
+def api_image_ref(docker: list[str], image_tag: str) -> str:
+    """Resolve the tagged API image without requiring a Compose container.
+
+    ``docker compose images`` reports images attached to project containers;
+    prebuilt release images are deliberately loaded before any containers
+    exist, so that command returns nothing on a clean host.  Inspecting the
+    exact tag verifies the image is present while preserving the immutable
+    release reference used by the qualification container.
+    """
+    image = f"pcrstudio-api:{image_tag}"
+    run([*docker, "image", "inspect", image])
     return image
 
 
@@ -1376,7 +1383,7 @@ def main() -> int:
         verify_prebuilt_images(docker, image_tag)
     else:
         build_compose_images(docker, args.private)
-    image = api_image_id(docker, args.private)
+    image = api_image_ref(docker, image_tag)
 
     qualification = qualify_image(docker, image)
     freeze = approve_immutable_scientific_identity(

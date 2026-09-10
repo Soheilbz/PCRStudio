@@ -64,6 +64,7 @@ def main() -> int:
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
     pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
     assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
+    assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "if source != target:" in pull_agent
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.0")
@@ -84,6 +85,7 @@ def main() -> int:
     assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
     assert "--control-plane-only" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
     assert "--offline-pinned-images" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
+    assert "def api_image_ref(docker: list[str], image_tag: str)" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
     assert bootstrap.validate_image_tag("release-abc123") == "release-abc123"
     for bad_tag in ("", "has/slash", "has space", "-leading"):
         expect_system_exit(bootstrap.validate_image_tag, bad_tag)
