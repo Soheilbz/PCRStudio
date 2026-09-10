@@ -986,9 +986,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 12321,
+      "bytes": 12350,
       "path": "scripts/pull-release.py",
-      "sha256": "1f1ebc678e0b8976d750d8dc228d6fcdeea4e3ad8878945d500b5efa19d04534"
+      "sha256": "a175ab16f40d0d293d358dc7f5a074fa8ed118c317ef7fa9d4901f6a83c4895c"
     },
     {
       "bytes": 996,
