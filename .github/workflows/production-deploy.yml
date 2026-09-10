@@ -43,12 +43,20 @@ jobs:
         with:
           node-version: 24.20.0
 
+      - name: Install uv for release verification
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        with:
+          version: "0.12.10"
+
       - name: Install locked web verification dependencies
         run: |
           set -euo pipefail
           corepack enable
           corepack install --global pnpm@11.26.0
           pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install locked Python verification dependencies
+        run: uv sync --project tools --frozen --extra dev --extra folding
 
       - name: Verify release identity and deployment inputs
         id: release
