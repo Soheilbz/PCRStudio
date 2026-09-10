@@ -117,7 +117,6 @@ GitHub `production` environment should require approval and should contain
 these environment secrets:
 
 - `PCRSTUDIO_PRODUCTION_DOMAIN`
-- `PCRSTUDIO_PRODUCTION_DATABASE_ID`
 - `PCRSTUDIO_PRODUCTION_SSH_HOST`
 - `PCRSTUDIO_PRODUCTION_SSH_USER`
 - `PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY`

@@ -30,7 +30,6 @@ jobs:
     env:
       RELEASE_REF: ${{ github.event.release.tag_name || inputs.source_ref }}
       PRODUCTION_DOMAIN: ${{ secrets.PCRSTUDIO_PRODUCTION_DOMAIN }}
-      PRODUCTION_DATABASE_ID: ${{ secrets.PCRSTUDIO_PRODUCTION_DATABASE_ID }}
     steps:
       - name: Check out the exact release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -45,8 +44,6 @@ jobs:
           [[ "$RELEASE_REF" =~ ^CURRENT-[0-9]+$ ]]
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
-          [[ "$PRODUCTION_DATABASE_ID" =~ ^[A-Za-z0-9._-]+$ ]]
-          [[ "$PRODUCTION_DATABASE_ID" != .* && "$PRODUCTION_DATABASE_ID" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
           python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
@@ -146,7 +143,7 @@ jobs:
             -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
           release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
           ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --database-id '$PRODUCTION_DATABASE_ID' --control-plane-only --prebuilt-images --image-tag '$RELEASE_SHA'"
+            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --control-plane-only --prebuilt-images --image-tag '$RELEASE_SHA'"
 
       - name: Verify production readiness from the deployment host
         env:

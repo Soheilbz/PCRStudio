@@ -53,9 +53,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 9352,
+      "bytes": 9086,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "c14c5c0ea45d52364e0a246cdde44547bdb38fcaa6b4748382480bd56d70c4e0"
+      "sha256": "c8d4c0722adcfa962a11f9c7b29efb36cca02177bba772b31200fe954b9f1a7b"
     },
     {
       "bytes": 6120,
@@ -1133,9 +1133,9 @@
       "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
     },
     {
-      "bytes": 12519,
+      "bytes": 12482,
       "path": "docs/OPERATIONS.md",
-      "sha256": "88bd763ddcc67145dd0747bb1fac3463b1d99cda2eed9efc1957c96c9efa5e4c"
+      "sha256": "ec6f84bc2c15382db4684a5c098aa819a83dbacf81f4300dc78cad7fa35f9598"
     },
     {
       "bytes": 2598,
@@ -1895,7 +1895,7 @@
     {
       "bytes": 216491,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "ce3482ba7f60254c481cdc2289aaff85f8cefe9ab84586c546068fbed01f49cd"
+      "sha256": "8b5f443b71e4fd16b12e7fc6cffe7cdf740832b14065ca4694aa4385ecf4b083"
     },
     {
       "bytes": 2048,
