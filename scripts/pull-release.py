@@ -162,6 +162,10 @@ def validate_source_version(release_dir: Path, tag: str) -> None:
 def install_systemd() -> None:
     if os.geteuid() != 0:
         raise SystemExit("--install-systemd must run as root")
+    # ReadWritePaths is applied while systemd creates the mount namespace,
+    # before ExecStart/ExecStartPre can run.  Create the allow-listed root
+    # during installation so a fresh host can start the timer successfully.
+    Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)
     source = Path(__file__).resolve()
     target = Path("/usr/local/libexec/pcrstudio-release-pull.py")
     target.parent.mkdir(parents=True, exist_ok=True)

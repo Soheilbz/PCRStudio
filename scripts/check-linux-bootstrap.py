@@ -64,6 +64,7 @@ def main() -> int:
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
     pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
     assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
+    assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "if source != target:" in pull_agent
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.0")
