@@ -30,6 +30,7 @@ jobs:
     env:
       RELEASE_REF: ${{ github.event.release.tag_name || inputs.source_ref }}
       PRODUCTION_DOMAIN: ${{ secrets.PCRSTUDIO_PRODUCTION_DOMAIN }}
+      PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - name: Check out the exact release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -45,7 +46,7 @@ jobs:
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
-          python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
+          python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           python3 -B scripts/qualify-source.py --no-write
           python3 -B scripts/verify-release.py --root .
@@ -57,7 +58,7 @@ jobs:
         run: |
           set -euo pipefail
           key_file="$RUNNER_TEMP/next-server-actions-key"
-          python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
+          python3 -B -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
           chmod 600 "$key_file"
           for target in api-runtime runner-runtime migrate-runtime; do
             docker buildx build --load --allow network.host --target "$target" \
