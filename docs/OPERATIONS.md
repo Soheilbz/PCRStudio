@@ -129,7 +129,9 @@ SSH, runs the repository bootstrap in explicit control-plane mode, and checks
 readiness on the server. The server still verifies pinned base images, image
 presence, migrations, public readiness and bounded Docker cleanup. Scientific
 readiness and the durable runner remain intentionally withheld until the
-approved reference database is supplied.
+approved reference database is supplied. The current deployment uses the
+server's previously verified local OCI cache for pinned base images, so a
+successful release does not depend on a second live Docker Hub transaction.
 
 For several applications on one host, one host-level Caddy/Traefik instance
 must own ports 80/443. Each application gets its own Compose project, internal

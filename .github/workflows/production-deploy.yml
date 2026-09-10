@@ -143,7 +143,7 @@ jobs:
             -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
           release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
           ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --control-plane-only --prebuilt-images --image-tag '$RELEASE_SHA'"
+            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --control-plane-only --prebuilt-images --offline-pinned-images --image-tag '$RELEASE_SHA'"
 
       - name: Verify production readiness from the deployment host
         env:

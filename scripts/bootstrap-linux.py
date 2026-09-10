@@ -415,6 +415,23 @@ def pull_pinned_external_images(docker: list[str], *, attempts: int = 3) -> list
     return refs
 
 
+def verify_pinned_external_images_local(docker: list[str]) -> list[str]:
+    """Verify the exact pinned image digests already present in the daemon."""
+    refs = pinned_external_image_refs(ROOT)
+    for ref in refs:
+        expected_digest = ref.rsplit("@", 1)[1]
+        inspected = subprocess.run(
+            [*docker, "image", "inspect", ref, "--format", "{{json .RepoDigests}}"],
+            cwd=ROOT, text=True, capture_output=True, check=False,
+        )
+        if inspected.returncode != 0 or expected_digest not in inspected.stdout:
+            raise SystemExit(
+                f"offline OCI verification failed for {ref}; the exact pinned image is not present locally"
+            )
+    print("OCI local-cache verification PASS: exact pinned references are present")
+    return refs
+
+
 def build_compose_images(docker: list[str], private: bool, *, attempts: int = 3) -> None:
     """Build production images with bounded retries for transport-only failures."""
     command = [*compose(docker, private), "build", "api", "web"]
@@ -1232,6 +1249,11 @@ def main() -> int:
         help="use the already transferred pcrstudio runtime images and skip the local BuildKit build",
     )
     ap.add_argument(
+        "--offline-pinned-images",
+        action="store_true",
+        help="verify pinned base images from the local daemon cache without contacting Docker Hub",
+    )
+    ap.add_argument(
         "--image-tag",
         default="local",
         help="Docker tag for the pcrstudio runtime image set (default: local)",
@@ -1335,11 +1357,15 @@ def main() -> int:
     # Resolve every external build/runtime dependency before the expensive
     # BuildKit graph. The helper uses Docker's configured credential store, but
     # never invents credentials or substitutes a mirror for a pinned digest.
-    pull_pinned_external_images(docker)
+    if args.offline_pinned_images:
+        verify_pinned_external_images_local(docker)
+    else:
+        pull_pinned_external_images(docker)
 
     # Compose validation happens before the expensive image build.
     run([*compose(docker, args.private), "config", "-q"])
-    run([*compose(docker, args.private), "pull", "db", "caddy"])
+    if not args.offline_pinned_images:
+        run([*compose(docker, args.private), "pull", "db", "caddy"])
     # The exact-digest OCI preflight above already pulled and verified every
     # external image. Do not force Compose to re-contact Docker Hub/CDN here:
     # that used to bypass the verified local content and made a healthy

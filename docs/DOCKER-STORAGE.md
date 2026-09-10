@@ -50,3 +50,7 @@ falls below roughly 28 GiB. At each run it prunes only PCRStudio's bounded
 builder cache and owned backup artifacts. It never deletes PostgreSQL data or
 another Compose project's resources. The guard is a last-resort safety brake,
 not a substitute for off-host backups or a larger disk.
+
+The prebuilt production deployment verifies those same exact base-image digests
+from the server's local OCI cache and fails closed if any is absent or differs;
+it does not silently substitute a tag, mirror or unpinned image.

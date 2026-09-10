@@ -53,9 +53,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 9086,
+      "bytes": 9110,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "c8d4c0722adcfa962a11f9c7b29efb36cca02177bba772b31200fe954b9f1a7b"
+      "sha256": "4ec310a74241f9d65e91e4ba2ca1c590dd3a507a3ccebf23057bd855e2ba3634"
     },
     {
       "bytes": 6120,
@@ -1128,14 +1128,14 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 2767,
+      "bytes": 2993,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
+      "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 12482,
+      "bytes": 12664,
       "path": "docs/OPERATIONS.md",
-      "sha256": "ec6f84bc2c15382db4684a5c098aa819a83dbacf81f4300dc78cad7fa35f9598"
+      "sha256": "3b891ebb43105b0c8a9a78520a88df8054507880ad99d51814f8c19fdc00ef3c"
     },
     {
       "bytes": 2598,
@@ -1895,7 +1895,7 @@
     {
       "bytes": 216491,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "8b5f443b71e4fd16b12e7fc6cffe7cdf740832b14065ca4694aa4385ecf4b083"
+      "sha256": "40f3f62948ccab29fc313b3cbb9a2cff58a03f9f382988707ad3d231b6dc5530"
     },
     {
       "bytes": 2048,
@@ -2118,9 +2118,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 73062,
+      "bytes": 74195,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "554d3570683c9a0f6f744474d9f914ef6e61ab44d725d6792a163e01536df241"
+      "sha256": "1940c5361fa265610e4bfcf8412c29f58975f3ac89668c3bd1157278dc908afd"
     },
     {
       "bytes": 17770,
@@ -2173,9 +2173,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 11107,
+      "bytes": 11217,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "67f7d33d48821d00b51d40aea1476142208d1061d90cc73145a783d0000c47f0"
+      "sha256": "43dfc4365de7287f076b16ac659461b2497d50588cce890fa9a61b014ba26ab8"
     },
     {
       "bytes": 4486,

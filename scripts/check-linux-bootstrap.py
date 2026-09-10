@@ -78,6 +78,7 @@ def main() -> int:
     assert bootstrap.validate_storage_budget("20", "4") == ("20", "4")
     assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
     assert "--control-plane-only" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
+    assert "--offline-pinned-images" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
     assert bootstrap.validate_image_tag("release-abc123") == "release-abc123"
     for bad_tag in ("", "has/slash", "has space", "-leading"):
         expect_system_exit(bootstrap.validate_image_tag, bad_tag)
