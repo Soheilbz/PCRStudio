@@ -106,8 +106,11 @@ jobs:
     name: Source, Rust, Python and Web checks
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    needs: [fast-feedback, changes]
-    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' }}
+    # Staged gate: browser production journeys are the fast end-to-end
+    # boundary. Do not spend 45 minutes on the broad source suite when that
+    # boundary has already failed.
+    needs: [fast-feedback, changes, web-release-qualification]
+    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && needs.web-release-qualification.result == 'success' }}
     services:
       postgres:
         image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
@@ -245,8 +248,10 @@ jobs:
     name: Linux image qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    needs: [fast-feedback, changes]
-    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' }}
+    # Image builds are the other expensive stage; wait for the targeted web
+    # production gate before allocating a fresh runner and Docker graph.
+    needs: [fast-feedback, changes, web-release-qualification]
+    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && needs.web-release-qualification.result == 'success' }}
     permissions:
       contents: read
     steps:
