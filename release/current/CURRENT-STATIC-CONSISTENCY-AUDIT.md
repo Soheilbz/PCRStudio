@@ -7,13 +7,13 @@
 
 ## Current Linux snapshot
 
-- Source files represented: **1060**
+- Source files represented: **1059**
 - Python: **239**
 - Rust: **91**
 - TypeScript/TSX: **284**
 - JSON: **223**
 - TOML: **25**
-- YAML: **14**
+- YAML: **13**
 - Shell: **14**
 - Public engines/modules: **11 / 21**
 - Experimental/stable modules: **21 / 0**

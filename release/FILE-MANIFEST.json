@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1056,
+  "file_count": 1055,
   "files": [
     {
       "bytes": 816,
@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 21047,
+      "bytes": 21542,
       "path": ".github/workflows/ci.yml",
-      "sha256": "331a4ec93520d08bcf0c9cba3880a893ef65f596749d81432e5e0bad7b677fdb"
+      "sha256": "92002b4126d2f353fcb4d38a99143cbeac84d465335eb8ac7b546461c28f6cf9"
     },
     {
       "bytes": 1221,
@@ -46,11 +46,6 @@
       "bytes": 539,
       "path": ".github/workflows/dependency-review.yml",
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
-    },
-    {
-      "bytes": 1380,
-      "path": ".github/workflows/linux-source-qualification.yml",
-      "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
       "bytes": 6733,
@@ -1123,9 +1118,9 @@
       "sha256": "6ecd8bfbcf62b8eb06ef8af773455dff07c855c9793ad4ba787e95e26d67a544"
     },
     {
-      "bytes": 3963,
+      "bytes": 4565,
       "path": "docs/DEVELOPMENT.md",
-      "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
+      "sha256": "0fa3085de48bbe53527e11d331d93d3496d158f7cb1e61ddd17818336770618c"
     },
     {
       "bytes": 2993,
@@ -1878,9 +1873,9 @@
       "sha256": "53e374a5bd3735f19232685b6a9b93462fc93a8be72526dbf4e6213e436a588f"
     },
     {
-      "bytes": 1475,
+      "bytes": 1678,
       "path": "release/INDEX.md",
-      "sha256": "de55fa9b86fbc01c83aa8cc42591ee5ee1435222556ee39e6ef225eab3cac7f3"
+      "sha256": "ece7b391ce0530a37c807f679c77b91a535ed37e8006ec4bd2d8fddbbc0b0bd7"
     },
     {
       "bytes": 39959,
@@ -1893,9 +1888,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 217110,
+      "bytes": 216927,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "e5566a3e932255545845c56ee0bef2b13c2bacbf626d14f5fd2ea8cfa388e071"
+      "sha256": "a1c17ce021b136f1cfc803eb12f86ee04c9977087fe80ed83a7ecebb0102626b"
     },
     {
       "bytes": 2048,
@@ -1903,9 +1898,9 @@
       "sha256": "914cd8c95c0a0438772cc15184a41ab37761e1b32d027f070b3e102bea4e3563"
     },
     {
-      "bytes": 5831,
+      "bytes": 6157,
       "path": "release/RELEASE-NOTES.md",
-      "sha256": "439386883c7328dbbdcb942a7fc8f83ec603f3054518e25326c21a151af3b006"
+      "sha256": "166cfcc132d37361f3f514b2174f32a4244e28fbbab0b28a9b45d367fc47b705"
     },
     {
       "bytes": 98728,
@@ -1965,12 +1960,12 @@
     {
       "bytes": 1742,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "cf437dc736a9cb708db968befda4b1ccb8d314ce2cdd5319f677e16c94358592"
+      "sha256": "ac66f522a8796ccace207e00f097c21283f32aee5dd0ec0b8dd08f98ed213333"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "37da5031f297c15dd6f766dbabcdd8ce9323ed914308353f4830c7904603806f"
+      "sha256": "ce7143a78763da0a16c808f4559f2b60cc184abb0538e6470e0c828b2fefa0ce"
     },
     {
       "bytes": 31910,

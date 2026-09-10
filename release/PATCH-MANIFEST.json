@@ -16,11 +16,6 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 1380,
-      "path": ".github/workflows/linux-source-qualification.yml",
-      "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
-    },
-    {
       "bytes": 6733,
       "path": ".github/workflows/production-deploy.yml",
       "sha256": "09a3bc888d3b7c179195c0172df9a2426340a7dea48e08be42f703f4a9ea6e5d"
@@ -526,9 +521,9 @@
       "sha256": "84ddf32b5704c1a7979185b5eb5bc1f18e44c9cb948e80bf46ab9c053da07d0f"
     },
     {
-      "bytes": 3963,
+      "bytes": 4565,
       "path": "docs/DEVELOPMENT.md",
-      "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
+      "sha256": "0fa3085de48bbe53527e11d331d93d3496d158f7cb1e61ddd17818336770618c"
     },
     {
       "bytes": 2993,
@@ -783,12 +778,12 @@
     {
       "bytes": 1742,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "cf437dc736a9cb708db968befda4b1ccb8d314ce2cdd5319f677e16c94358592"
+      "sha256": "ac66f522a8796ccace207e00f097c21283f32aee5dd0ec0b8dd08f98ed213333"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "37da5031f297c15dd6f766dbabcdd8ce9323ed914308353f4830c7904603806f"
+      "sha256": "ce7143a78763da0a16c808f4559f2b60cc184abb0538e6470e0c828b2fefa0ce"
     },
     {
       "bytes": 31910,
@@ -1757,8 +1752,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 21047,
-      "after_sha256": "331a4ec93520d08bcf0c9cba3880a893ef65f596749d81432e5e0bad7b677fdb",
+      "after_bytes": 21542,
+      "after_sha256": "92002b4126d2f353fcb4d38a99143cbeac84d465335eb8ac7b546461c28f6cf9",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -2828,8 +2823,8 @@
       "path": "release/FLANKING-PAIR-EVIDENCE-LEDGER.md"
     },
     {
-      "after_bytes": 1475,
-      "after_sha256": "de55fa9b86fbc01c83aa8cc42591ee5ee1435222556ee39e6ef225eab3cac7f3",
+      "after_bytes": 1678,
+      "after_sha256": "ece7b391ce0530a37c807f679c77b91a535ed37e8006ec4bd2d8fddbbc0b0bd7",
       "before_bytes": 603,
       "before_sha256": "1d323b3844f8ebf3953a1dd79f479be5abb5dd3b6a35af2bc3ad97471acd3df5",
       "path": "release/INDEX.md"
@@ -2856,8 +2851,8 @@
       "path": "release/PUBLIC-SOURCE.md"
     },
     {
-      "after_bytes": 5831,
-      "after_sha256": "439386883c7328dbbdcb942a7fc8f83ec603f3054518e25326c21a151af3b006",
+      "after_bytes": 6157,
+      "after_sha256": "166cfcc132d37361f3f514b2174f32a4244e28fbbab0b28a9b45d367fc47b705",
       "before_bytes": 1111,
       "before_sha256": "e34d1974f2c960513499d801308192e08c6c483f6610abae0b705f69f68f5c31",
       "path": "release/RELEASE-NOTES.md"
@@ -5350,7 +5345,7 @@
   ],
   "schema_version": "2.1.0",
   "summary": {
-    "added": 343,
+    "added": 342,
     "modified": 473,
     "removed": 61
   }
