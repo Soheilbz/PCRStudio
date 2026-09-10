@@ -11,7 +11,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: pcrstudio-production-deployment
@@ -91,94 +91,55 @@ jobs:
             --secret id=next_server_actions_key,src="$key_file" \
             -t "pcrstudio-web:$RELEASE_SHA" -f docker/web.Dockerfile .
 
-      - name: Prepare ephemeral SSH credentials
+      - name: Publish the verified HTTPS deployment bundle
         env:
-          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
-          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
-          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
-        run: |
-          set -euo pipefail
-          test -n "$PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY"
-          test -n "$PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS"
-          test -n "$PCRSTUDIO_PRODUCTION_SSH_HOST"
-          key_file="$RUNNER_TEMP/pcrstudio-production-key"
-          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
-          umask 077
-          printf '%s\n' "$PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY" > "$key_file"
-          printf '%s\n' "$PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS" > "$known_hosts_file"
-          ssh-keygen -y -f "$key_file" > /dev/null
-          ssh-keygen -F "$PCRSTUDIO_PRODUCTION_SSH_HOST" -f "$known_hosts_file" > /dev/null
-
-      - name: Transfer the exact committed source archive
-        env:
-          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
-          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
-          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
-          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
+          GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
         run: |
           set -euo pipefail
-          test -n "$PCRSTUDIO_PRODUCTION_SSH_USER"
-          key_file="$RUNNER_TEMP/pcrstudio-production-key"
-          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
-          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
-            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
-          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
-          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "umask 077; mkdir -p '$release_dir' /srv/pcrstudio/state/.local; ln -sfn /srv/pcrstudio/state/.local '$release_dir/.local'; ln -sfn /srv/pcrstudio/state/.env '$release_dir/.env'"
-          git archive --format=tar "$RELEASE_REF" | gzip -n | \
-            ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "tar -xzf - -C '$release_dir'"
-
-      - name: Transfer the qualified runtime image set
-        env:
-          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
-          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
-          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
-          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
-          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
-        run: |
-          set -euo pipefail
-          key_file="$RUNNER_TEMP/pcrstudio-production-key"
-          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
-          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
-            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
+          asset_dir="$RUNNER_TEMP/pcrstudio-release-assets"
+          mkdir -p "$asset_dir"
+          source_archive="$asset_dir/pcrstudio-source-$RELEASE_SHA.tar.gz"
+          image_archive="$asset_dir/pcrstudio-images-$RELEASE_SHA.tar.gz"
+          manifest="$asset_dir/pcrstudio-deploy-manifest-$RELEASE_SHA.json"
+          git archive --format=tar --prefix="PCRStudio-$RELEASE_SHA/" "$RELEASE_REF" | gzip -n > "$source_archive"
           images=("pcrstudio-api:$RELEASE_SHA" "pcrstudio-runner:$RELEASE_SHA"
             "pcrstudio-migrate:$RELEASE_SHA" "pcrstudio-web:$RELEASE_SHA")
           docker image inspect "${images[@]}" > /dev/null
-          docker save "${images[@]}" | gzip -n | \
-            ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" 'docker load'
+          docker save "${images[@]}" | gzip -n > "$image_archive"
+          python3 -B - "$manifest" "$source_archive" "$image_archive" <<'PY'
+          import hashlib
+          import json
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
 
-      - name: Run the repository-supported production bootstrap
-        env:
-          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
-          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
-          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
-          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
-          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
-        run: |
-          set -euo pipefail
-          key_file="$RUNNER_TEMP/pcrstudio-production-key"
-          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
-          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
-            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
-          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
-          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --control-plane-only --prebuilt-images --offline-pinned-images --image-tag '$RELEASE_SHA'"
+          manifest_path, source_path, image_path = map(Path, sys.argv[1:])
+          release_sha = os.environ["RELEASE_SHA"]
+          release_ref = os.environ["RELEASE_REF"]
+          image_names = ["pcrstudio-api", "pcrstudio-runner", "pcrstudio-migrate", "pcrstudio-web"]
 
-      - name: Verify production readiness from the deployment host
-        env:
-          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
-          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
-          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
-          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
-          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
-        run: |
-          set -euo pipefail
-          key_file="$RUNNER_TEMP/pcrstudio-production-key"
-          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
-          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
-            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
-          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
-          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "cd '$release_dir' && docker compose -f compose.yaml ps --status running && curl --fail --silent --show-error --resolve '$PRODUCTION_DOMAIN:443:127.0.0.1' 'https://$PRODUCTION_DOMAIN/ready' > /dev/null"
+          def digest(path: Path) -> str:
+              value = hashlib.sha256()
+              with path.open("rb") as stream:
+                  for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                      value.update(chunk)
+              return value.hexdigest()
+
+          images = []
+          for name in image_names:
+              tag = f"{name}:{release_sha}"
+              details = json.loads(subprocess.check_output(["docker", "image", "inspect", tag], text=True))[0]
+              images.append({"name": name, "tag": release_sha, "image_id": details["Id"]})
+          manifest_path.write_text(json.dumps({
+              "format_version": 1,
+              "release_ref": release_ref,
+              "source_sha": release_sha,
+              "source_archive": {"name": source_path.name, "sha256": digest(source_path), "bytes": source_path.stat().st_size},
+              "image_archive": {"name": image_path.name, "sha256": digest(image_path), "bytes": image_path.stat().st_size},
+              "images": images,
+          }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+          gh release upload "$RELEASE_REF" "$source_archive" "$image_archive" "$manifest" --repo "$GITHUB_REPOSITORY" --clobber
+          echo "published HTTPS deployment assets for $RELEASE_REF ($RELEASE_SHA)"
