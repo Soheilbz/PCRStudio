@@ -2790,15 +2790,15 @@
       "path": "package.json"
     },
     {
-      "after_bytes": 210817,
-      "after_sha256": "c7e02faf9e4bfba6458bf32fa1647831f2018bcfa304bf16dd8dd335203e56c1",
+      "after_bytes": 261216,
+      "after_sha256": "e88c6b3274cf1c528cc5e7fc44f8a71bcf7adf6ce9cb23936d12af5be073f53d",
       "before_bytes": 206611,
       "before_sha256": "e849b6a65dee0f325f875558bb2b134e3af55a1b1ea368b4253488db0a8e6dca",
       "path": "pnpm-lock.yaml"
     },
     {
-      "after_bytes": 460,
-      "after_sha256": "46892dd7dcaf6943d681aba2cef28a5fe458e88c277d49a4d3eea52c1540124f",
+      "after_bytes": 489,
+      "after_sha256": "955e111258e8c7a4e55f6f5739f8d5df7d4100bb80bca85c9b61eb6da993061f",
       "before_bytes": 346,
       "before_sha256": "ea79cb0e40f136a2ede01c3b927cf197951bf59217821efab241a5b4e937d60a",
       "path": "pnpm-workspace.yaml"

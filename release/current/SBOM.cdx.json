@@ -11892,7 +11892,7 @@
       "version": "4.0.0"
     },
     {
-      "bom-ref": "npm:js-yaml@4.3.1",
+      "bom-ref": "npm:js-yaml@4.3.2",
       "name": "js-yaml",
       "properties": [
         {
@@ -11900,9 +11900,9 @@
           "value": "npm"
         }
       ],
-      "purl": "pkg:npm/js-yaml@4.3.1",
+      "purl": "pkg:npm/js-yaml@4.3.2",
       "type": "library",
-      "version": "4.3.1"
+      "version": "4.3.2"
     },
     {
       "bom-ref": "npm:jsdom@30.0.1",
@@ -15985,7 +15985,7 @@
       },
       {
         "name": "pcrstudio:lock-sha256:pnpm-lock.yaml",
-        "value": "c7e02faf9e4bfba6458bf32fa1647831f2018bcfa304bf16dd8dd335203e56c1"
+        "value": "e88c6b3274cf1c528cc5e7fc44f8a71bcf7adf6ce9cb23936d12af5be073f53d"
       },
       {
         "name": "pcrstudio:lock-sha256:tools/uv.lock",
@@ -15993,7 +15993,7 @@
       }
     ]
   },
-  "serialNumber": "urn:uuid:9e314932-7943-5e48-a60f-295812c496f3",
+  "serialNumber": "urn:uuid:0e521832-186b-5254-ac7e-707a376d7afe",
   "specVersion": "1.6",
   "version": 1
 }

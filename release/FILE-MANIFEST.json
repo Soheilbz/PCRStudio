@@ -1858,14 +1858,14 @@
       "sha256": "348afb8a73ebfe2c02f9b3cd6aa61441fa1eeb66b3e8c55879a89ddf118cc5e0"
     },
     {
-      "bytes": 210817,
+      "bytes": 261216,
       "path": "pnpm-lock.yaml",
-      "sha256": "c7e02faf9e4bfba6458bf32fa1647831f2018bcfa304bf16dd8dd335203e56c1"
+      "sha256": "e88c6b3274cf1c528cc5e7fc44f8a71bcf7adf6ce9cb23936d12af5be073f53d"
     },
     {
-      "bytes": 460,
+      "bytes": 489,
       "path": "pnpm-workspace.yaml",
-      "sha256": "46892dd7dcaf6943d681aba2cef28a5fe458e88c277d49a4d3eea52c1540124f"
+      "sha256": "955e111258e8c7a4e55f6f5739f8d5df7d4100bb80bca85c9b61eb6da993061f"
     },
     {
       "bytes": 17040,
@@ -1895,7 +1895,7 @@
     {
       "bytes": 216491,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "0e76fcd1531dde2a48020b0f872d5876ddac4518d49e89a16e8394136504c0dc"
+      "sha256": "a708c2ec9bcd3914a3e140bb43e6860638693564a74b1e0ecaab3ab4f3f3694b"
     },
     {
       "bytes": 2048,
