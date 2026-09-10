@@ -21,9 +21,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 6554,
+      "bytes": 6603,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "242a6661ed7330026f264aec0f801cc9baf5e942e802da0dacf2a366225bb222"
+      "sha256": "81320b599b08051b5527f711da8cb86b5cbe5136bf6fc54c4994f31ea08b0f16"
     },
     {
       "bytes": 6120,
@@ -536,9 +536,9 @@
       "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 13325,
+      "bytes": 13354,
       "path": "docs/OPERATIONS.md",
-      "sha256": "5cac3516fac982e93273a70feb508c4cb30f5efa805d0da8f1f2745ceadfd3ab"
+      "sha256": "909d7e5381cb3a9d96f5e771907b8afa0aa4ab0983d36a70957bd58522d0072f"
     },
     {
       "bytes": 2598,
@@ -986,9 +986,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 12365,
+      "bytes": 12420,
       "path": "scripts/pull-release.py",
-      "sha256": "5108b907c3d2b6447d97ce94c2651323306beb7264809334f3999dc78cec2c12"
+      "sha256": "ee6b176551c9ff66ff0dbbe48e28ae0f2f14f60bed47e9a5861c5e05ed0cdfcc"
     },
     {
       "bytes": 996,

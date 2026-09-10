@@ -29,7 +29,7 @@ from urllib.request import Request, urlopen
 
 DEFAULT_REPO = "Soheilbz/PCRStudio"
 DEFAULT_DOMAIN = "pcrstudio.ir"
-TAG_RE = re.compile(r"^CURRENT-[0-9]+$")
+TAG_RE = re.compile(r"^v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 ASSET_HOSTS = {"github.com", "objects.githubusercontent.com", "release-assets.githubusercontent.com"}
 
@@ -73,12 +73,12 @@ def release_metadata(repo: str, release_ref: str) -> dict:
         url = f"https://api.github.com/repos/{repo}/releases/latest"
     else:
         if not TAG_RE.fullmatch(release_ref):
-            raise SystemExit(f"release ref must be latest or CURRENT-N, got {release_ref!r}")
+            raise SystemExit(f"release ref must be latest or vMAJOR.MINOR.PATCH, got {release_ref!r}")
         url = f"https://api.github.com/repos/{repo}/releases/tags/{quote(release_ref, safe='')}"
     release = api_json(url)
     tag = release.get("tag_name")
     if not isinstance(tag, str) or not TAG_RE.fullmatch(tag) or release.get("draft") or release.get("prerelease"):
-        raise SystemExit("GitHub release is not a published CURRENT-N release")
+        raise SystemExit("GitHub release is not a published stable SemVer release")
     return release
 
 
