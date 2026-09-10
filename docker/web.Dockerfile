@@ -4,14 +4,25 @@ FROM node:24-alpine@sha256:e67514e5d0f6c46656005e1b693b2ec9d52e80b641307de684d4a
 # and non-interactive when it materialises the pnpm version pinned in
 # package.json.
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
-    COREPACK_DEFAULT_TO_LATEST=0
+    COREPACK_DEFAULT_TO_LATEST=0 \
+    COREPACK_NPM_REGISTRY=https://registry.npmjs.com/ \
+    NPM_CONFIG_REGISTRY=https://registry.npmjs.com/ \
+    npm_config_fetch_retries=4 \
+    npm_config_fetch_retry_factor=2 \
+    npm_config_fetch_retry_mintimeout=1000 \
+    npm_config_fetch_retry_maxtimeout=30000 \
+    npm_config_fetch_timeout=120000
 RUN corepack enable
 WORKDIR /src
 
 FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY web/package.json ./web/
-RUN pnpm install --frozen-lockfile
+# The host's Docker bridge can have a different egress policy from the host
+# itself. Restrict host networking to the dependency-fetch boundary; runtime
+# images and the rest of the build retain normal BuildKit isolation.
+RUN --network=host sh -ec 'for attempt in 1 2 3; do version="$(pnpm --version 2>/dev/null || true)"; if [ "$version" = "11.26.0" ]; then exit 0; fi; sleep $((attempt * 2)); done; echo "pnpm 11.26.0 could not be materialised" >&2; exit 1'
+RUN --network=host pnpm install --frozen-lockfile
 
 FROM deps AS builder
 # Keep the Corepack materialised pnpm bundle from the dependency layer in the

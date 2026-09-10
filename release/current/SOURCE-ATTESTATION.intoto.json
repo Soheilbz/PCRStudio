@@ -22,13 +22,13 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6d6d502d3421735efca81c60ba254e98019ebc519409be6350c06812e93e82ea"
+        "sha256": "651503e6299f4fa4a095470e919e426482a26c6309acaf4b6c0b11bc07219396"
       },
       "name": "release/FILE-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "5b2672eaf326cd44657c0e67ac8001967a43551cf07714d76b55f8a7ae50c8ea"
+        "sha256": "40f3f62948ccab29fc313b3cbb9a2cff58a03f9f382988707ad3d231b6dc5530"
       },
       "name": "release/PATCH-MANIFEST.json"
     },
@@ -40,7 +40,7 @@
     },
     {
       "digest": {
-        "sha256": "891695d57f258052ec80a5f096dbd354c39a4ac4c228ace36d6bbed17f4c5f23"
+        "sha256": "f6040d76f86231b2a1096d6fe00c7c1c4addb4781688b024a1b129ad4ab7fbb8"
       },
       "name": "release/current/SBOM.cdx.json"
     },

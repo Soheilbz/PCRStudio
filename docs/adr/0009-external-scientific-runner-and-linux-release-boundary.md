@@ -40,8 +40,10 @@ not.
 
 Scientific Python/native executables are part of the immutable API/runner image.
 Large reference/index data is deployment-owned, content-addressed and mounted
-read-only. Scientific scratch is writable only in the runner's dedicated scratch
-mount.
+read-only. Scientific scratch is writable only in the runner's dedicated bounded
+tmpfs mount. It is ephemeral by design and cannot consume the host's persistent
+filesystem; the deployment controls its maximum size with
+`PCR_RUNNER_SCRATCH_SIZE`.
 
 Every spawned scientific worker is placed in its own POSIX process group. Timeout,
 cancellation and shutdown target the complete process group so BLAST/MAFFT or

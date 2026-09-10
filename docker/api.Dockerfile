@@ -11,10 +11,14 @@
 
 # ── Rust binaries ───────────────────────────────────────────────────────────
 FROM rust:1.94-bookworm@sha256:6ae102bdbf528294bc79ad6e1fae682f6f7c2a6e6621506ba959f9685b308a55 AS rust-builder
+ENV CARGO_NET_RETRY=5 \
+    CARGO_HTTP_TIMEOUT=180 \
+    CARGO_HTTP_LOW_SPEED_LIMIT=1 \
+    CARGO_HTTP_MULTIPLEXING=false
 WORKDIR /src
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
-RUN cargo build --locked --release -p pcr-server --bin pcr-server \
+RUN --network=host cargo build --locked --release -p pcr-server --bin pcr-server \
     && cargo build --locked --release -p pcr-runner --bin pcr-runner \
     && cargo build --locked --release -p pcr-server --bin pcr-migrate
 
@@ -23,26 +27,26 @@ FROM python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11
 ARG DEBIAN_SNAPSHOT=20260901T000000Z
 WORKDIR /src
 COPY docker/configure-debian-snapshot.sh /usr/local/bin/configure-debian-snapshot
-RUN configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
+RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
     && apt-get install --no-install-recommends -y ca-certificates libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Worker + scientific toolchain ──────────────────────────────────────────
 FROM runtime-assets AS science-builder
-RUN configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
+RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
     && apt-get install --no-install-recommends -y build-essential \
     && rm -rf /var/lib/apt/lists/* /usr/local/bin/configure-debian-snapshot
-RUN python -m venv /opt/uv \
+RUN --network=host python -m venv /opt/uv \
     && /opt/uv/bin/python -m pip install --no-cache-dir uv==0.12.10
 ENV PATH=/opt/uv/bin:${PATH}
 COPY tools ./tools
 COPY contracts/tools.toml ./contracts/tools.toml
 COPY scripts/provision-tools.py scripts/toolchain_config.py ./scripts/
-RUN UV_PROJECT_ENVIRONMENT=/opt/worker \
+RUN --network=host UV_PROJECT_ENVIRONMENT=/opt/worker \
     uv sync --project tools --frozen --extra folding --no-dev --no-editable
-RUN PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
+RUN --network=host PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
     PCRSTUDIO_PROVISION_WORKER_PYTHON=/opt/worker/bin/python \
     python scripts/provision-tools.py \
     && rm -rf /opt/pcrstudio/tools/downloads /opt/pcrstudio/tools/primerpooler-build
