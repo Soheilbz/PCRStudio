@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import tomllib
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlparse
@@ -29,7 +30,7 @@ from urllib.request import Request, urlopen
 
 DEFAULT_REPO = "Soheilbz/PCRStudio"
 DEFAULT_DOMAIN = "pcrstudio.ir"
-TAG_RE = re.compile(r"^CURRENT-[0-9]+$")
+TAG_RE = re.compile(r"^v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 ASSET_HOSTS = {"github.com", "objects.githubusercontent.com", "release-assets.githubusercontent.com"}
 
@@ -73,12 +74,12 @@ def release_metadata(repo: str, release_ref: str) -> dict:
         url = f"https://api.github.com/repos/{repo}/releases/latest"
     else:
         if not TAG_RE.fullmatch(release_ref):
-            raise SystemExit(f"release ref must be latest or CURRENT-N, got {release_ref!r}")
+            raise SystemExit(f"release ref must be latest or vMAJOR.MINOR.PATCH, got {release_ref!r}")
         url = f"https://api.github.com/repos/{repo}/releases/tags/{quote(release_ref, safe='')}"
     release = api_json(url)
     tag = release.get("tag_name")
     if not isinstance(tag, str) or not TAG_RE.fullmatch(tag) or release.get("draft") or release.get("prerelease"):
-        raise SystemExit("GitHub release is not a published CURRENT-N release")
+        raise SystemExit("GitHub release is not a published stable SemVer release")
     return release
 
 
@@ -146,6 +147,16 @@ def image_ids(manifest: dict) -> None:
         actual = json.loads(run(["docker", "image", "inspect", f"{name}:{tag}"]).stdout)[0]["Id"]
         if actual != expected:
             raise SystemExit(f"OCI image identity mismatch for {name}:{tag}: {actual} != {expected}")
+
+
+def validate_source_version(release_dir: Path, tag: str) -> None:
+    identity_path = release_dir / "release" / "release.toml"
+    try:
+        identity = tomllib.loads(identity_path.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as error:
+        raise SystemExit(f"release source identity is unreadable: {error}") from error
+    if identity.get("versioning_scheme") != "semver-2.0.0" or identity.get("public_tag") != tag:
+        raise SystemExit("release source public version does not match the GitHub release tag")
 
 
 def install_systemd() -> None:
@@ -249,6 +260,7 @@ def deploy(args: argparse.Namespace) -> None:
             shutil.move(str(source_stage), str(release_dir))
         elif not release_dir.is_dir():
             raise SystemExit(f"release path exists but is not a directory: {release_dir}")
+        validate_source_version(release_dir, tag)
         with gzip.open(image_path, "rb") as image_stream:
             subprocess.run(["docker", "load"], check=True, stdin=image_stream, text=False)
         image_ids(manifest)

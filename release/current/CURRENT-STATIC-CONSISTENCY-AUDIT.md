@@ -1,18 +1,19 @@
 # CURRENT static consistency audit
 
 **Status:** **FAIL**
+**Public release:** **v1.0.0** (SemVer 1.0.0)
 **Platform authority:** Linux x86_64
 **Scope:** deterministic current-tree source/static consistency. Native dependency-backed and container/scientific execution is an explicit separate gate.
 
 ## Current Linux snapshot
 
 - Source files represented: **1059**
-- Python: **238**
+- Python: **239**
 - Rust: **91**
 - TypeScript/TSX: **284**
 - JSON: **223**
 - TOML: **25**
-- YAML: **14**
+- YAML: **13**
 - Shell: **14**
 - Public engines/modules: **11 / 21**
 - Experimental/stable modules: **21 / 0**
@@ -21,7 +22,7 @@
 - Case-only collisions: **0**
 - Cache/build residue: **0**
 - CRLF text files: **0**
-- Shebang scripts missing executable bit: **2**
+- Shebang scripts missing executable bit: **3**
 
 ## Architecture-hardening markers
 

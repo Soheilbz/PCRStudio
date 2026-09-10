@@ -86,6 +86,8 @@ def inventory() -> dict[str, object]:
     return {
         "schema_version": "2.0.0",
         "release_id": identity["release_id"],
+        "public_version": identity["public_version"],
+        "public_tag": identity["public_tag"],
         "release_class": identity["release_class"],
         "archive_prefix": identity["archive_prefix"],
         "platform_authority": "linux-x86_64",
@@ -135,6 +137,7 @@ def render_md(data: dict[str, object]) -> str:
     return f"""# CURRENT static consistency audit
 
 **Status:** **{data['status']}**
+**Public release:** **{data['public_tag']}** (SemVer {data['public_version']})
 **Platform authority:** Linux x86_64
 **Scope:** deterministic current-tree source/static consistency. Native dependency-backed and container/scientific execution is an explicit separate gate.
 

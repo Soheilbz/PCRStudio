@@ -2,6 +2,10 @@
 
 `CURRENT` is the public-source authority for Generation 1 on Linux x86_64. The active engine architecture is a single registry of 11 engines; no release-count engine families participate in generation, qualification or runtime behavior.
 
+The current public product version is **v1.0.0**. Public releases follow
+Semantic Versioning 2.0.0; internal fixes do not change that version until a
+maintainer deliberately publishes the next release.
+
 ## Current authority
 
 - [`STATUS.md`](STATUS.md) — current disposition.

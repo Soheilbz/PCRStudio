@@ -100,6 +100,7 @@ def load_release_identity(root: Path) -> dict[str, str]:
         "schema_version", "release_id", "release_class", "archive_prefix",
         "archive_timestamp", "baseline_release", "baseline_kind",
         "foundation_release", "source_qualification_label", "current_report",
+        "public_version", "public_tag", "versioning_scheme",
     )
     missing = [key for key in required if not isinstance(raw.get(key), str) or not raw[key].strip()]
     if missing:

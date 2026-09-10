@@ -110,8 +110,14 @@ entitlement; it does not affect the runtime network or image identity.
 
 ## Release deployment
 
-Production does not follow `main` or execute arbitrary branch contents. The
-The `production-deploy.yml` workflow handles only a published `CURRENT-*`
+PCRStudio's public release policy is Semantic Versioning 2.0.0. A public
+product release uses one stable `vMAJOR.MINOR.PATCH` tag; the tag must match
+`public_version` and `public_tag` in `release/release.toml`. Bug fixes and
+internal cleanup do not create a new public version until the operator decides
+to publish one. `CURRENT` remains the internal foundation/current-state
+identity and is not a public version.
+
+The `production-deploy.yml` workflow handles only a published `vMAJOR.MINOR.PATCH`
 release tag, or the same exact tag when an operator starts the workflow
 manually. The GitHub `production` environment should require approval and
 contain only:
@@ -121,7 +127,7 @@ contain only:
 The server uses the one-time local-admin installation below, then pulls the
 approved release bundle over outbound GitHub HTTPS. It does not accept inbound
 connections from GitHub-hosted runners and it does not need a GitHub write token.
-The pull agent accepts only a published `CURRENT-N` release, verifies the tag's
+The pull agent accepts only a published stable SemVer release, such as `v1.0.0`, verifies the tag's
 resolved commit, SHA-256 hashes for the source and OCI archives, and the exact
 Docker image IDs recorded in the release manifest. It then runs the normal
 control-plane bootstrap with prebuilt images and offline pinned base images.

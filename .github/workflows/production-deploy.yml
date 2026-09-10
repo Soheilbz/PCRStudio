@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       source_ref:
-        description: Exact CURRENT-* release tag to deploy
+        description: Exact vMAJOR.MINOR.PATCH release tag to deploy
         required: true
         type: string
 
@@ -21,9 +21,9 @@ jobs:
   deploy:
     name: Deploy the published release
     # Production never follows arbitrary branch pushes. A release publication
-    # or an explicit dispatch of an exact CURRENT-* tag is required. The
+    # or an explicit dispatch of an exact stable SemVer tag is required. The
     # protected GitHub environment supplies the final human approval gate.
-    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    if: github.event_name == 'workflow_dispatch' || (github.event.release.prerelease == false && startsWith(github.event.release.tag_name, 'v'))
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     environment: production
@@ -62,7 +62,8 @@ jobs:
         id: release
         run: |
           set -euo pipefail
-          [[ "$RELEASE_REF" =~ ^CURRENT-[0-9]+$ ]]
+          [[ "$RELEASE_REF" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          python3 -B scripts/validate-release-version.py --tag "$RELEASE_REF"
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"

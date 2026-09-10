@@ -7,6 +7,17 @@ The current-state organization and cleanup rules are defined in
 its canonical concern, and keep generated/local state in the ignored paths
 described below.
 
+## CI workflow structure
+
+Every pull request has one routine `CI` workflow. It runs the fast source and
+contract checks first, then the browser production journey; the expensive
+source and image qualification stages run only when the change scope requires
+them and the browser gate is green. CodeQL and dependency review remain
+separate because they use distinct security permissions and produce independent
+security evidence. Production and staging workflows are manual/release-driven,
+not general pull-request test workflows. Main pushes and the nightly schedule
+retain the full qualification path.
+
 ## Generated and local state
 
 Keep mutable state inside ignored project-local paths: `.local/logs/`, `.local/backups/`, `.local/tmp/`, `target/`, `node_modules/`, `tools/.venv/`, `web/.next/`, `test-results/`, and `playwright-report/`. Do not commit credentials, databases, caches, local environments or build output.

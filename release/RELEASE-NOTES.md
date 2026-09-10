@@ -1,5 +1,13 @@
 # CURRENT public source — release notes
 
+## v1.0.0
+
+The first standard public product release. It includes the current Linux
+control-plane, bounded Docker storage and reproducible release/deployment
+workflow. Production deployment pulls a verified source and OCI bundle over
+HTTPS and validates the release tag, archive hashes and image identities before
+bootstrap.
+
 ## Linux architecture and operations hardening
 
 The current candidate is now Linux x86_64-native at the release/runtime boundary. Production durable jobs execute in a dedicated PostgreSQL-backed `pcr-runner`, deployment migrations are owned by a one-shot `pcr-migrate`, and the Rust HTTP API remains the enqueue/control plane. Scientific subprocesses are isolated into POSIX process groups so timeout/cancellation/shutdown reap native descendants rather than leaving BLAST/MAFFT-style orphans.

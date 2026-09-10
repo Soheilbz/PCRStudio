@@ -749,6 +749,9 @@ def audit_current_release_identity() -> None:
 
     expected = {
         "release_id": "CURRENT",
+        "public_version": "1.0.0",
+        "public_tag": "v1.0.0",
+        "versioning_scheme": "semver-2.0.0",
         "release_class": "generation-1-unified-engine-linux-current",
         "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
         "baseline_release": "R15",
