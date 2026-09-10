@@ -48,9 +48,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 6733,
+      "bytes": 8084,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "09a3bc888d3b7c179195c0172df9a2426340a7dea48e08be42f703f4a9ea6e5d"
+      "sha256": "a6e2b6bce8f1acb41e6e812073c2f5e632f832484e9d7cac3f50510f9d8457f7"
     },
     {
       "bytes": 6120,
@@ -1128,9 +1128,9 @@
       "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 13693,
+      "bytes": 13704,
       "path": "docs/OPERATIONS.md",
-      "sha256": "73830f3b8424a8986fc5f89f49e679b75d2127f161736bd3efcbe6bb47389ef2"
+      "sha256": "09797dc45a7751d56afa20bcb129964690b352cda27e6d8d8a51d5e181d566c0"
     },
     {
       "bytes": 2598,
@@ -1875,7 +1875,7 @@
     {
       "bytes": 1678,
       "path": "release/INDEX.md",
-      "sha256": "ece7b391ce0530a37c807f679c77b91a535ed37e8006ec4bd2d8fddbbc0b0bd7"
+      "sha256": "60ca0361b67616ee14f96e2ed4d58381c0ed8a9a559ea3486f9b04711fb70851"
     },
     {
       "bytes": 39959,
@@ -1890,7 +1890,7 @@
     {
       "bytes": 216927,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "a1c17ce021b136f1cfc803eb12f86ee04c9977087fe80ed83a7ecebb0102626b"
+      "sha256": "74cfad910fdd4c1074ed2864dba96ff4ad62d4ca64ede018289b491749dbda16"
     },
     {
       "bytes": 2048,
@@ -1898,9 +1898,9 @@
       "sha256": "914cd8c95c0a0438772cc15184a41ab37761e1b32d027f070b3e102bea4e3563"
     },
     {
-      "bytes": 6157,
+      "bytes": 6497,
       "path": "release/RELEASE-NOTES.md",
-      "sha256": "166cfcc132d37361f3f514b2174f32a4244e28fbbab0b28a9b45d367fc47b705"
+      "sha256": "3d04e0ab7c4957d49a1a4764787effed43af6b81b5dda3d252821aff3cddc687"
     },
     {
       "bytes": 98728,
@@ -1958,14 +1958,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1742,
+      "bytes": 1626,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "ac66f522a8796ccace207e00f097c21283f32aee5dd0ec0b8dd08f98ed213333"
+      "sha256": "251e5ff1e59d50a6b7c3dd2a4abb995629a22a3907985ce3184ccd8bc48d6628"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "ce7143a78763da0a16c808f4559f2b60cc184abb0538e6470e0c828b2fefa0ce"
+      "sha256": "d018abbfa58061e51a70a11a48725757f8697dd492a9bf69c4be0b62b435aed8"
     },
     {
       "bytes": 31910,
@@ -2005,7 +2005,7 @@
     {
       "bytes": 532,
       "path": "release/release.toml",
-      "sha256": "01e302a0df597f0354a836afc78b5f6092d72a5f69853884a702371cc6b443d8"
+      "sha256": "21ed318ec3b7dbda6c655bdad62b07b279a9189ba48ccffe58c73fa451fbe12e"
     },
     {
       "bytes": 145,
@@ -2090,7 +2090,7 @@
     {
       "bytes": 67947,
       "path": "scripts/audit/release.py",
-      "sha256": "009debc033ac04892383ad44bdcd03c005db3ecf3eed8ed5e4b86f317c761fcf"
+      "sha256": "e91d0579ba19cc8b024b1af4849d9039f9e110eb746fd93b5c4bdadaa2961b79"
     },
     {
       "bytes": 28670,
@@ -2113,9 +2113,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 74195,
+      "bytes": 74498,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "1940c5361fa265610e4bfcf8412c29f58975f3ac89668c3bd1157278dc908afd"
+      "sha256": "11b5b8e58f3493a8a5cb22a38ee925f7cbc9f47377c49f5d6b92007b47fd32ba"
     },
     {
       "bytes": 17770,
@@ -2168,9 +2168,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 11598,
+      "bytes": 11822,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "458c7d2061fd0adbf7ef625c402db76016d6073667727b05f31aa5d8cc4af9fd"
+      "sha256": "b11d8e9c13ab6f94d7b922b1c04876a99563cea14518c0b35ec33b4a9223079e"
     },
     {
       "bytes": 4486,
@@ -2363,9 +2363,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 13035,
+      "bytes": 14858,
       "path": "scripts/pull-release.py",
-      "sha256": "4ddfcc4ebfbc4990a065df9006dd79e7e9681d7dac256edda9e1135f80f667dc"
+      "sha256": "428e78ab8bcd199152c4094354104e60ed7a717e32d633b07dbc04f8c937d890"
     },
     {
       "bytes": 11763,

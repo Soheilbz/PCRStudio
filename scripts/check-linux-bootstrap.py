@@ -67,7 +67,7 @@ def main() -> int:
     assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "if source != target:" in pull_agent
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
-    assert release_version.VERSION_RE.fullmatch("1.0.0")
+    assert release_version.VERSION_RE.fullmatch("1.0.1")
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):

@@ -1,5 +1,13 @@
 # CURRENT public source — release notes
 
+## v1.0.1
+
+This patch release stabilizes fresh-host production deployment. The pull agent
+creates its systemd allow-listed state root before sandbox setup, and release
+bundles verify portable OCI config digests plus exact prebuilt image tags across
+Docker export/import boundaries. No image identity or TLS/provenance control is
+weakened.
+
 ## v1.0.0
 
 The first standard public product release. It includes the current Linux

@@ -127,9 +127,9 @@ contain only:
 The server uses the one-time local-admin installation below, then pulls the
 approved release bundle over outbound GitHub HTTPS. It does not accept inbound
 connections from GitHub-hosted runners and it does not need a GitHub write token.
-The pull agent accepts only a published stable SemVer release, such as `v1.0.0`, verifies the tag's
+The pull agent accepts only a published stable SemVer release, such as `v1.0.1`, verifies the tag's
 resolved commit, SHA-256 hashes for the source and OCI archives, and the exact
-Docker image IDs recorded in the release manifest. It then runs the normal
+portable OCI config digests recorded in the release manifest. It then runs the normal
 control-plane bootstrap with prebuilt images and offline pinned base images.
 The timer is bounded and idempotent; a failed attempt is retried on the next
 scheduled run without changing image identities or weakening TLS checks.

@@ -1,7 +1,7 @@
 # CURRENT static consistency audit
 
-**Status:** **FAIL**
-**Public release:** **v1.0.0** (SemVer 1.0.0)
+**Status:** **PASS**
+**Public release:** **v1.0.1** (SemVer 1.0.1)
 **Platform authority:** Linux x86_64
 **Scope:** deterministic current-tree source/static consistency. Native dependency-backed and container/scientific execution is an explicit separate gate.
 
@@ -22,7 +22,7 @@
 - Case-only collisions: **0**
 - Cache/build residue: **0**
 - CRLF text files: **0**
-- Shebang scripts missing executable bit: **3**
+- Shebang scripts missing executable bit: **0**
 
 ## Architecture-hardening markers
 
