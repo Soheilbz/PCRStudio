@@ -21,9 +21,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 6740,
+      "bytes": 9352,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "6d7716e86f87327322b395da76d7c0093c9a75464589c33f9808ed7d31e0ac79"
+      "sha256": "c14c5c0ea45d52364e0a246cdde44547bdb38fcaa6b4748382480bd56d70c4e0"
     },
     {
       "bytes": 6120,
@@ -536,9 +536,9 @@
       "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
     },
     {
-      "bytes": 12326,
+      "bytes": 12519,
       "path": "docs/OPERATIONS.md",
-      "sha256": "4e121144e949eed65f3dbf6555bd6945a206ba9d25f6f644b07677b379571190"
+      "sha256": "88bd763ddcc67145dd0747bb1fac3463b1d99cda2eed9efc1957c96c9efa5e4c"
     },
     {
       "bytes": 2598,
@@ -851,9 +851,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 71883,
+      "bytes": 73062,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "edbe68f2530096e099423c214fe99b2dc93c72ddfa5e9800694837655160d628"
+      "sha256": "554d3570683c9a0f6f744474d9f914ef6e61ab44d725d6792a163e01536df241"
     },
     {
       "bytes": 17770,
@@ -871,9 +871,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 10900,
+      "bytes": 11107,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "204d4459d46a26bbd5621118e864b4bbdc4fe76098bedbaa2020b54e28cae6ca"
+      "sha256": "67f7d33d48821d00b51d40aea1476142208d1061d90cc73145a783d0000c47f0"
     },
     {
       "bytes": 4486,
@@ -1726,15 +1726,15 @@
       "path": ".dockerignore"
     },
     {
-      "after_bytes": 1542,
-      "after_sha256": "856bfe9886f7ec9caa774832ea6852ba2e264ce235ccf30cfebb30d565cdb911",
+      "after_bytes": 1568,
+      "after_sha256": "22eb3165e4ff78333dc1769824ac5c3c76f669b56c47850d7439759725be3556",
       "before_bytes": 1632,
       "before_sha256": "93bd1557b8fedb6816431ef64e1bb14759cacaee8b24719aebb191667b353dab",
       "path": ".env.example"
     },
     {
-      "after_bytes": 1486,
-      "after_sha256": "44bf7bd4a0bf881bbf603fe2446ccb5d7c1e6146d60602ae35ad48e5253a7a65",
+      "after_bytes": 1512,
+      "after_sha256": "a9cb1f5d2e12349cf91c9c21304a6d1a82ad2456956a64b7087bb14c71753710",
       "before_bytes": 1591,
       "before_sha256": "d034abf78c768c5abe3a7c4111d89eaba2083c43eac6b7ff3bf278a186b8d90d",
       "path": ".env.vm.example"

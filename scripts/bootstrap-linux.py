@@ -438,6 +438,14 @@ def build_compose_images(docker: list[str], private: bool, *, attempts: int = 3)
         time.sleep(delay)
 
 
+def verify_prebuilt_images(docker: list[str], image_tag: str) -> None:
+    """Require all locally transferred runtime images before skipping a build."""
+    for service in ("api", "runner", "migrate", "web"):
+        image = f"pcrstudio-{service}:{image_tag}"
+        run([*docker, "image", "inspect", image])
+    print(f"prebuilt runtime image set PASS: tag={image_tag}")
+
+
 def nearest_existing_parent(path: Path) -> Path:
     candidate = path.resolve()
     while not candidate.exists():
@@ -567,7 +575,7 @@ def write_env(path: Path, values: dict[str, str]) -> None:
         "SITE_DOMAIN", "SITE_URL", "PCRSTUDIO_COMPOSE_PROJECT", "POSTGRES_USER", "POSTGRES_DB",
         "PCR_POSTGRES_PASSWORD_FILE", "PCR_DATABASE_URL_FILE_HOST", "PCR_NEXT_SERVER_ACTIONS_KEY_FILE",
         "PCR_OPERATOR_TOKEN_FILE_HOST", "PCR_NCBI_API_KEY_FILE_HOST",
-        "PCRSTUDIO_BUILD_ID", "PCR_SCIENTIFIC_DB_DIR",
+        "PCRSTUDIO_BUILD_ID", "PCRSTUDIO_IMAGE_TAG", "PCR_SCIENTIFIC_DB_DIR",
         "PCR_SCIENTIFIC_DB_ID", "PCR_SCIENTIFIC_DB_SHA256", "PCR_SCIENTIFIC_DB_SCOPE",
         "PCRSTUDIO_APPROVED_SCIENTIFIC_PYTHON_FREEZE_SHA256",
         "PCRSTUDIO_QUALIFIED_MAFFT_ARCHIVE_SHA256", "PCRSTUDIO_QUALIFIED_MAFFT_BUNDLE_SHA256",
@@ -695,6 +703,13 @@ def validate_storage_budget(budget: str, headroom: str) -> tuple[str, str]:
     if not 4 <= headroom_gib < budget_gib <= 64:
         raise SystemExit("storage budget must satisfy 4 <= emergency_headroom < budget <= 64 GiB")
     return str(budget_gib), str(headroom_gib)
+
+
+def validate_image_tag(value: str) -> str:
+    tag = value.strip()
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,127}", tag):
+        raise SystemExit("PCRSTUDIO_IMAGE_TAG must be a Docker tag without a registry or slash")
+    return tag
 
 
 def validate_domain(value: str) -> str:
@@ -1211,6 +1226,16 @@ def main() -> int:
         action="store_true",
         help="start the public control plane without claiming scientific/BLAST readiness; requires no reference database",
     )
+    ap.add_argument(
+        "--prebuilt-images",
+        action="store_true",
+        help="use the already transferred pcrstudio runtime images and skip the local BuildKit build",
+    )
+    ap.add_argument(
+        "--image-tag",
+        default="local",
+        help="Docker tag for the pcrstudio runtime image set (default: local)",
+    )
     ap.add_argument("--domain", help="public DNS hostname; required unless --private or already present in .env")
     ap.add_argument("--reference-fasta", type=Path, help="approved/reference FASTA used to build specificity indexes")
     ap.add_argument("--database-id", default="reference")
@@ -1265,6 +1290,8 @@ def main() -> int:
     prune_dedicated_buildx_builder(docker)
     atexit.register(prune_dedicated_buildx_builder, docker)
     values = parse_env(DEFAULT_ENV)
+    image_tag = validate_image_tag(args.image_tag)
+    values["PCRSTUDIO_IMAGE_TAG"] = image_tag
     values["PCRSTUDIO_BUILD_ID"] = build_identity
     values["PCRSTUDIO_COMPOSE_PROJECT"] = validate_compose_project(values.get("PCRSTUDIO_COMPOSE_PROJECT", "pcrstudio"))
     values.setdefault("POSTGRES_USER", "pcr"); values.setdefault("POSTGRES_DB", "pcrstudio")
@@ -1319,7 +1346,10 @@ def main() -> int:
     # preflight depend on a second live registry transaction. A cold host still
     # obtains the pinned digest through the normal BuildKit resolver; repeated
     # qualifications reuse the dedicated builder/daemon content instead.
-    build_compose_images(docker, args.private)
+    if args.prebuilt_images:
+        verify_prebuilt_images(docker, image_tag)
+    else:
+        build_compose_images(docker, args.private)
     image = api_image_id(docker, args.private)
 
     qualification = qualify_image(docker, image)

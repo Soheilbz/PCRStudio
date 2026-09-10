@@ -48,8 +48,30 @@ jobs:
           [[ "$PRODUCTION_DATABASE_ID" =~ ^[A-Za-z0-9._-]+$ ]]
           [[ "$PRODUCTION_DATABASE_ID" != .* && "$PRODUCTION_DATABASE_ID" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
+          python3 scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
+          echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           python3 -B scripts/qualify-source.py --no-write
           python3 -B scripts/verify-release.py --root .
+
+      - name: Build the qualified runtime image set on GitHub's runner
+        env:
+          BUILD_ID: ${{ steps.release.outputs.build_id }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/next-server-actions-key"
+          python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$key_file"
+          chmod 600 "$key_file"
+          for target in api-runtime runner-runtime migrate-runtime; do
+            docker buildx build --load --allow network.host --target "$target" \
+              --build-arg PCRSTUDIO_BUILD_ID="$BUILD_ID" \
+              --secret id=next_server_actions_key,src="$key_file" \
+              -t "pcrstudio-${target%-runtime}:$RELEASE_SHA" -f docker/api.Dockerfile .
+          done
+          docker buildx build --load --allow network.host \
+            --build-arg NEXT_PUBLIC_SITE_URL="https://$PRODUCTION_DOMAIN" \
+            --secret id=next_server_actions_key,src="$key_file" \
+            -t "pcrstudio-web:$RELEASE_SHA" -f docker/web.Dockerfile .
 
       - name: Prepare ephemeral SSH credentials
         env:
@@ -90,6 +112,25 @@ jobs:
             ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
             "tar -xzf - -C '$release_dir'"
 
+      - name: Transfer the qualified runtime image set
+        env:
+          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
+          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
+          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
+          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/pcrstudio-production-key"
+          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
+          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
+          images=("pcrstudio-api:$RELEASE_SHA" "pcrstudio-runner:$RELEASE_SHA"
+            "pcrstudio-migrate:$RELEASE_SHA" "pcrstudio-web:$RELEASE_SHA")
+          docker image inspect "${images[@]}" > /dev/null
+          docker save "${images[@]}" | gzip -n | \
+            ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" 'docker load'
+
       - name: Run the repository-supported production bootstrap
         env:
           PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
@@ -105,7 +146,7 @@ jobs:
             -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
           release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
           ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
-            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --database-id '$PRODUCTION_DATABASE_ID'"
+            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --database-id '$PRODUCTION_DATABASE_ID' --control-plane-only --prebuilt-images --image-tag '$RELEASE_SHA'"
 
       - name: Verify production readiness from the deployment host
         env:

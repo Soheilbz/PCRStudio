@@ -124,10 +124,13 @@ these environment secrets:
 - `PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS`
 
 The server is not granted a GitHub write token and does not poll GitHub. GitHub
-Actions transfers the verified release archive over host-key-pinned SSH, runs
-the repository bootstrap, and checks readiness on the server. The bootstrap
-pre-pull/build gate, pre-deploy database backup, migrations, scientific
-readiness, runner readiness and bounded Docker cleanup remain authoritative.
+Actions builds the qualified runtime image set on the ephemeral runner,
+transfers the verified release archive and those images over host-key-pinned
+SSH, runs the repository bootstrap in explicit control-plane mode, and checks
+readiness on the server. The server still verifies pinned base images, image
+presence, migrations, public readiness and bounded Docker cleanup. Scientific
+readiness and the durable runner remain intentionally withheld until the
+approved reference database is supplied.
 
 For several applications on one host, one host-level Caddy/Traefik instance
 must own ports 80/443. Each application gets its own Compose project, internal
