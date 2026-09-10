@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1055,
+  "file_count": 1056,
   "files": [
     {
       "bytes": 816,
@@ -53,9 +53,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 6603,
+      "bytes": 6733,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "81320b599b08051b5527f711da8cb86b5cbe5136bf6fc54c4994f31ea08b0f16"
+      "sha256": "09a3bc888d3b7c179195c0172df9a2426340a7dea48e08be42f703f4a9ea6e5d"
     },
     {
       "bytes": 6120,
@@ -1133,9 +1133,9 @@
       "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 13354,
+      "bytes": 13693,
       "path": "docs/OPERATIONS.md",
-      "sha256": "909d7e5381cb3a9d96f5e771907b8afa0aa4ab0983d36a70957bd58522d0072f"
+      "sha256": "73830f3b8424a8986fc5f89f49e679b75d2127f161736bd3efcbe6bb47389ef2"
     },
     {
       "bytes": 2598,
@@ -1893,9 +1893,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 216650,
+      "bytes": 217110,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "241ff61b482e2807585be7397c25f350a8c32acb0efee484eb54261c6a59bb55"
+      "sha256": "e5566a3e932255545845c56ee0bef2b13c2bacbf626d14f5fd2ea8cfa388e071"
     },
     {
       "bytes": 2048,
@@ -1963,14 +1963,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1642,
+      "bytes": 1742,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "96feac589e278090f9b7fe1b64a82ba7a4be5420cfc3b25aea55945c73d444a1"
+      "sha256": "cf437dc736a9cb708db968befda4b1ccb8d314ce2cdd5319f677e16c94358592"
     },
     {
-      "bytes": 1662,
+      "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "d356768d64a6cf799635b9baf53394c6d25ee12a8ffd95d9fd85edbeb2faf0b8"
+      "sha256": "37da5031f297c15dd6f766dbabcdd8ce9323ed914308353f4830c7904603806f"
     },
     {
       "bytes": 31910,
@@ -2008,9 +2008,9 @@
       "sha256": "ceb912d6a98435fda489bb961cf55f84e6fb33a9bc85cff015bfe4f042930214"
     },
     {
-      "bytes": 450,
+      "bytes": 532,
       "path": "release/release.toml",
-      "sha256": "e35af542f36f4785583f1d3e3e5c461e2960c70bf3bab75d4c5be9d5d18aef57"
+      "sha256": "01e302a0df597f0354a836afc78b5f6092d72a5f69853884a702371cc6b443d8"
     },
     {
       "bytes": 145,
@@ -2093,9 +2093,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 67835,
+      "bytes": 67947,
       "path": "scripts/audit/release.py",
-      "sha256": "3db76c505a3f2f26b4eda35bb7da95b8cd1d4db54593b1131ce07af397788629"
+      "sha256": "009debc033ac04892383ad44bdcd03c005db3ecf3eed8ed5e4b86f317c761fcf"
     },
     {
       "bytes": 28670,
@@ -2173,9 +2173,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 11217,
+      "bytes": 11598,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "43dfc4365de7287f076b16ac659461b2497d50588cce890fa9a61b014ba26ab8"
+      "sha256": "458c7d2061fd0adbf7ef625c402db76016d6073667727b05f31aa5d8cc4af9fd"
     },
     {
       "bytes": 4486,
@@ -2243,9 +2243,9 @@
       "sha256": "9232a7fa0c639e397c6fbec9b5cdd4f70f23450214f4453149588b6c8d75a2a2"
     },
     {
-      "bytes": 9335,
+      "bytes": 9514,
       "path": "scripts/generate-current-static-audit.py",
-      "sha256": "7b9daf4d25e2627bea055294f4ce3d3f516983c41861e6c1af3355624a57df6e"
+      "sha256": "937b78ad2fc6790965699f11b237730d97c96abb8151678dfd7551c848367803"
     },
     {
       "bytes": 3412,
@@ -2368,9 +2368,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 12420,
+      "bytes": 13035,
       "path": "scripts/pull-release.py",
-      "sha256": "ee6b176551c9ff66ff0dbbe48e28ae0f2f14f60bed47e9a5861c5e05ed0cdfcc"
+      "sha256": "4ddfcc4ebfbc4990a065df9006dd79e7e9681d7dac256edda9e1135f80f667dc"
     },
     {
       "bytes": 11763,
@@ -2388,9 +2388,9 @@
       "sha256": "517ece76d558f276fcc145b8fbda06038401469555712f3b72b9f8d85cdfaa0f"
     },
     {
-      "bytes": 3882,
+      "bytes": 3943,
       "path": "scripts/release_utils.py",
-      "sha256": "bc10d5d988653ba64ec176e4a5615b070535e681b9ae3a029318a43f71149703"
+      "sha256": "65994caa6f1d00822687b8f15656dab68310b704383b20ced7c37077833cb6d3"
     },
     {
       "bytes": 6332,
@@ -2466,6 +2466,11 @@
       "bytes": 2149,
       "path": "scripts/validate-linux-acceptance-results.py",
       "sha256": "9b7ee1d9b6b6b147d271732f8727b1b8b5a2ab511aaaa338ae0ac017924ddea3"
+    },
+    {
+      "bytes": 1194,
+      "path": "scripts/validate-release-version.py",
+      "sha256": "f1d11251c75ca6c8905f60cce2c8ce2b2274ee65856be60b1176f6bdcaef825f"
     },
     {
       "bytes": 1364,

@@ -62,6 +62,11 @@ def main() -> int:
     assert "fetch-retries=6" in npmrc
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
+    pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
+    assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
+    assert "if source != target:" in pull_agent
+    release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
+    assert release_version.VERSION_RE.fullmatch("1.0.0")
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):

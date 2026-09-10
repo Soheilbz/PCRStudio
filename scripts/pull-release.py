@@ -21,6 +21,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import tomllib
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlparse
@@ -148,6 +149,16 @@ def image_ids(manifest: dict) -> None:
             raise SystemExit(f"OCI image identity mismatch for {name}:{tag}: {actual} != {expected}")
 
 
+def validate_source_version(release_dir: Path, tag: str) -> None:
+    identity_path = release_dir / "release" / "release.toml"
+    try:
+        identity = tomllib.loads(identity_path.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as error:
+        raise SystemExit(f"release source identity is unreadable: {error}") from error
+    if identity.get("versioning_scheme") != "semver-2.0.0" or identity.get("public_tag") != tag:
+        raise SystemExit("release source public version does not match the GitHub release tag")
+
+
 def install_systemd() -> None:
     if os.geteuid() != 0:
         raise SystemExit("--install-systemd must run as root")
@@ -249,6 +260,7 @@ def deploy(args: argparse.Namespace) -> None:
             shutil.move(str(source_stage), str(release_dir))
         elif not release_dir.is_dir():
             raise SystemExit(f"release path exists but is not a directory: {release_dir}")
+        validate_source_version(release_dir, tag)
         with gzip.open(image_path, "rb") as image_stream:
             subprocess.run(["docker", "load"], check=True, stdin=image_stream, text=False)
         image_ids(manifest)

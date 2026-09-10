@@ -9,10 +9,10 @@
   },
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
-    "files": 1059,
+    "files": 1060,
     "json": 223,
     "markdown": 114,
-    "python": 238,
+    "python": 239,
     "rust": 91,
     "shell": 14,
     "toml": 25,
@@ -26,7 +26,8 @@
     "crlf_text_files": [],
     "shebang_scripts_missing_executable_bit": [
       "scripts/pull-release.py",
-      "scripts/storage-guard.py"
+      "scripts/storage-guard.py",
+      "scripts/validate-release-version.py"
     ],
     "symlinks": []
   },
@@ -48,6 +49,8 @@
     "modules": 21,
     "stable_modules": 0
   },
+  "public_tag": "v1.0.0",
+  "public_version": "1.0.0",
   "release_class": "generation-1-unified-engine-linux-current",
   "release_id": "CURRENT",
   "schema_version": "2.0.0",

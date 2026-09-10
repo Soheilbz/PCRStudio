@@ -110,7 +110,13 @@ entitlement; it does not affect the runtime network or image identity.
 
 ## Release deployment
 
-Production does not follow `main` or execute arbitrary branch contents. The
+PCRStudio's public release policy is Semantic Versioning 2.0.0. A public
+product release uses one stable `vMAJOR.MINOR.PATCH` tag; the tag must match
+`public_version` and `public_tag` in `release/release.toml`. Bug fixes and
+internal cleanup do not create a new public version until the operator decides
+to publish one. `CURRENT` remains the internal foundation/current-state
+identity and is not a public version.
+
 The `production-deploy.yml` workflow handles only a published `vMAJOR.MINOR.PATCH`
 release tag, or the same exact tag when an operator starts the workflow
 manually. The GitHub `production` environment should require approval and
