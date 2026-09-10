@@ -65,6 +65,7 @@ def main() -> int:
     pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
     assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
     assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
+    assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.1")
