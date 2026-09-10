@@ -163,7 +163,7 @@ def install_systemd() -> None:
         "PCRSTUDIO_PRODUCTION_DOMAIN=pcrstudio.ir\n",
         encoding="utf-8",
     )
-    Path("/etc/pcrstudio-release-pull.service").write_text(
+    Path("/etc/systemd/system/pcrstudio-release-pull.service").write_text(
         """[Unit]
 Description=Pull and deploy the latest verified PCRStudio release
 Wants=network-online.target
