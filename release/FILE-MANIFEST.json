@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1054,
+  "file_count": 1055,
   "files": [
     {
       "bytes": 816,
@@ -33,9 +33,9 @@
       "sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e"
     },
     {
-      "bytes": 19469,
+      "bytes": 21047,
       "path": ".github/workflows/ci.yml",
-      "sha256": "b2ea2803e863bc7a397a61a089e9da97c325eb3988e29162f64fc58a40efc648"
+      "sha256": "331a4ec93520d08bcf0c9cba3880a893ef65f596749d81432e5e0bad7b677fdb"
     },
     {
       "bytes": 1221,
@@ -53,9 +53,9 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
-      "bytes": 9110,
+      "bytes": 6554,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "4ec310a74241f9d65e91e4ba2ca1c590dd3a507a3ccebf23057bd855e2ba3634"
+      "sha256": "242a6661ed7330026f264aec0f801cc9baf5e942e802da0dacf2a366225bb222"
     },
     {
       "bytes": 6120,
@@ -1133,9 +1133,9 @@
       "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 12664,
+      "bytes": 13325,
       "path": "docs/OPERATIONS.md",
-      "sha256": "3b891ebb43105b0c8a9a78520a88df8054507880ad99d51814f8c19fdc00ef3c"
+      "sha256": "5cac3516fac982e93273a70feb508c4cb30f5efa805d0da8f1f2745ceadfd3ab"
     },
     {
       "bytes": 2598,
@@ -1893,9 +1893,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 216491,
+      "bytes": 216650,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "40f3f62948ccab29fc313b3cbb9a2cff58a03f9f382988707ad3d231b6dc5530"
+      "sha256": "f209037f09ba595ae1abd9fa56a85ca1be178a5a0de21d20e73c51f2464274b5"
     },
     {
       "bytes": 2048,
@@ -1963,14 +1963,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1609,
+      "bytes": 1642,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "3cbbf08814845a44bfc695f4de0b71e61d1a98da0e1c980456f2feb326687bab"
+      "sha256": "96feac589e278090f9b7fe1b64a82ba7a4be5420cfc3b25aea55945c73d444a1"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "da77ea08266e09d059c196f6e9d4c4a01c0942698d3d16e8072a8ccc71a1f567"
+      "sha256": "d356768d64a6cf799635b9baf53394c6d25ee12a8ffd95d9fd85edbeb2faf0b8"
     },
     {
       "bytes": 31910,
@@ -2366,6 +2366,11 @@
       "bytes": 827,
       "path": "scripts/prune-backups.sh",
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
+    },
+    {
+      "bytes": 12321,
+      "path": "scripts/pull-release.py",
+      "sha256": "1f1ebc678e0b8976d750d8dc228d6fcdeea4e3ad8878945d500b5efa19d04534"
     },
     {
       "bytes": 11763,

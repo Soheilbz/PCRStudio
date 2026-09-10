@@ -108,30 +108,44 @@ integrity checks and bounded fetch retries. Only those
 dependency-fetch build steps use the dedicated builder's `network.host`
 entitlement; it does not affect the runtime network or image identity.
 
-## GitHub-to-server deployment
+## Release deployment
 
 Production does not follow `main` or execute arbitrary branch contents. The
-`production-deploy.yml` workflow deploys only a published `CURRENT-*` release
-tag, or the same exact tag when an operator starts the workflow manually. The
-GitHub `production` environment should require approval and should contain
-these environment secrets:
+The `production-deploy.yml` workflow handles only a published `CURRENT-*`
+release tag, or the same exact tag when an operator starts the workflow
+manually. The GitHub `production` environment should require approval and
+contain only:
 
 - `PCRSTUDIO_PRODUCTION_DOMAIN`
-- `PCRSTUDIO_PRODUCTION_SSH_HOST`
-- `PCRSTUDIO_PRODUCTION_SSH_USER`
-- `PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY`
-- `PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS`
 
-The server is not granted a GitHub write token and does not poll GitHub. GitHub
-Actions builds the qualified runtime image set on the ephemeral runner,
-transfers the verified release archive and those images over host-key-pinned
-SSH, runs the repository bootstrap in explicit control-plane mode, and checks
-readiness on the server. The server still verifies pinned base images, image
-presence, migrations, public readiness and bounded Docker cleanup. Scientific
-readiness and the durable runner remain intentionally withheld until the
-approved reference database is supplied. The current deployment uses the
-server's previously verified local OCI cache for pinned base images, so a
-successful release does not depend on a second live Docker Hub transaction.
+The server uses the one-time local-admin installation below, then pulls the
+approved release bundle over outbound GitHub HTTPS. It does not accept inbound
+connections from GitHub-hosted runners and it does not need a GitHub write token.
+The pull agent accepts only a published `CURRENT-N` release, verifies the tag's
+resolved commit, SHA-256 hashes for the source and OCI archives, and the exact
+Docker image IDs recorded in the release manifest. It then runs the normal
+control-plane bootstrap with prebuilt images and offline pinned base images.
+The timer is bounded and idempotent; a failed attempt is retried on the next
+scheduled run without changing image identities or weakening TLS checks.
+
+Install the pull agent once from the checked-out release source as a local
+administrator:
+
+```bash
+sudo python3 scripts/pull-release.py --install-systemd
+systemctl list-timers pcrstudio-release-pull.timer
+journalctl -u pcrstudio-release-pull.service
+```
+
+The release workflow builds the qualified runtime image set on an ephemeral
+runner and publishes the source plus OCI bundle only after release verification.
+The server's agent performs the deployment and readiness checks locally. The
+server still verifies pinned base images, image presence, migrations, public
+readiness and bounded Docker cleanup. Scientific readiness and the durable
+runner remain intentionally withheld until the approved reference database is
+supplied. This transport uses the server's previously verified local OCI cache
+for pinned base images, so a successful release does not depend on a second
+live Docker Hub transaction.
 
 For several applications on one host, one host-level Caddy/Traefik instance
 must own ports 80/443. Each application gets its own Compose project, internal

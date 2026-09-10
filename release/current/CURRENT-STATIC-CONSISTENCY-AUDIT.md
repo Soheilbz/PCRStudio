@@ -6,8 +6,8 @@
 
 ## Current Linux snapshot
 
-- Source files represented: **1058**
-- Python: **237**
+- Source files represented: **1059**
+- Python: **238**
 - Rust: **91**
 - TypeScript/TSX: **284**
 - JSON: **223**
@@ -21,7 +21,7 @@
 - Case-only collisions: **0**
 - Cache/build residue: **0**
 - CRLF text files: **0**
-- Shebang scripts missing executable bit: **1**
+- Shebang scripts missing executable bit: **2**
 
 ## Architecture-hardening markers
 

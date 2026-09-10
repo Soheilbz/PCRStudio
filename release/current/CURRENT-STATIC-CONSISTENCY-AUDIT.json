@@ -9,10 +9,10 @@
   },
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
-    "files": 1058,
+    "files": 1059,
     "json": 223,
     "markdown": 114,
-    "python": 237,
+    "python": 238,
     "rust": 91,
     "shell": 14,
     "toml": 25,
@@ -25,6 +25,7 @@
     "case_collisions": [],
     "crlf_text_files": [],
     "shebang_scripts_missing_executable_bit": [
+      "scripts/pull-release.py",
       "scripts/storage-guard.py"
     ],
     "symlinks": []
