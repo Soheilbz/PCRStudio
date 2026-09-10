@@ -230,24 +230,28 @@ jobs:
       - name: Build API image
         run: >-
           docker buildx build --load --target api-runtime
+          --allow network.host
           --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
           --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
           -t pcrstudio-api:ci -f docker/api.Dockerfile .
       - name: Build runner image
         run: >-
           docker buildx build --load --target runner-runtime
+          --allow network.host
           --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
           --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
           -t pcrstudio-runner:ci -f docker/api.Dockerfile .
       - name: Build migrate image
         run: >-
           docker buildx build --load --target migrate-runtime
+          --allow network.host
           --build-arg PCRSTUDIO_BUILD_ID=${{ steps.identity.outputs.build_id }}
           --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
           -t pcrstudio-migrate:ci -f docker/api.Dockerfile .
       - name: Build web image
         run: >-
           docker buildx build --load
+          --allow network.host
           --build-arg NEXT_PUBLIC_SITE_URL=https://ci.invalid
           --secret id=next_server_actions_key,src=$RUNNER_TEMP/next-server-actions-key
           -t pcrstudio-web:ci -f docker/web.Dockerfile .

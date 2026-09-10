@@ -60,6 +60,8 @@ def main() -> int:
     npmrc = (ROOT / ".npmrc").read_text(encoding="utf-8")
     assert "registry=https://registry.npmjs.com/" in npmrc
     assert "fetch-retries=6" in npmrc
+    ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):

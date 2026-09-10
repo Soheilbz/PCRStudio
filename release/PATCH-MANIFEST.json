@@ -871,9 +871,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 10581,
+      "bytes": 10793,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "403a9759bee86047fdfa8350d66b2dca3c892403f5980a87a9e212a5178ece26"
+      "sha256": "635758c6dd276ddbf59f96de87ad3f32c33a917eecacb92152ff561cb05b483d"
     },
     {
       "bytes": 4486,
@@ -1747,8 +1747,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 19345,
-      "after_sha256": "9169167bf43b6497aa6c910ae4a2e203ac7800178b02cd6f6353ba45620de5a7",
+      "after_bytes": 19469,
+      "after_sha256": "b2ea2803e863bc7a397a61a089e9da97c325eb3988e29162f64fc58a40efc648",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
