@@ -22,13 +22,13 @@
   "subject": [
     {
       "digest": {
-        "sha256": "6d6d502d3421735efca81c60ba254e98019ebc519409be6350c06812e93e82ea"
+        "sha256": "d25738453654515af87d6dadee1b927d15af538a2d9fa14a7bb3ccec62082c25"
       },
       "name": "release/FILE-MANIFEST.json"
     },
     {
       "digest": {
-        "sha256": "5b2672eaf326cd44657c0e67ac8001967a43551cf07714d76b55f8a7ae50c8ea"
+        "sha256": "0e76fcd1531dde2a48020b0f872d5876ddac4518d49e89a16e8394136504c0dc"
       },
       "name": "release/PATCH-MANIFEST.json"
     },

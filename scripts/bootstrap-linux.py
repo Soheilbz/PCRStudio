@@ -265,6 +265,12 @@ def registry_error_class(output: str) -> str:
     text = output.lower()
     if any(token in text for token in ("no such host", "temporary failure in name resolution", "could not resolve host", "server misbehaving")):
         return "dns"
+    # Node/undici and Corepack report connect timeouts without the word
+    # "timed out". Check these before TLS so a failed handshake timeout is
+    # retried as transport, while certificate/verification failures remain
+    # permanent and fail closed.
+    if any(token in text for token in ("connecttimeouterror", "connect timeout", "und_err_connect_timeout", "etimedout", "fetch failed", "socket hang up", "timeout was reached", "operation too slow", "failed to download from")):
+        return "transient-network"
     if any(token in text for token in ("certificate", "x509:", "tls: bad", "tls handshake")):
         return "tls"
     if any(token in text for token in ("toomanyrequests", "rate limit", "429 too many")):
@@ -462,14 +468,15 @@ def preflight_disk_capacity(
     *,
     reference_fasta: Path | None,
     scientific_db_dir: Path,
-    runner_scratch_dir: Path,
 ) -> dict[str, int | str | bool]:
     """Fail before an expensive build when the host cannot safely stage it.
 
     The Docker build allowance covers Rust/Node/scientific build layers and
     transient package caches. The local-data allowance covers database indexes,
-    runner scratch, manifests and one operational reserve. Reference indexes can
-    expand several-fold, so a 6x multiplier is intentionally conservative.
+    manifests and one operational reserve. Runner scratch is a bounded tmpfs,
+    so it is deliberately not counted as host-persistent disk. Reference
+    indexes can expand several-fold, so a 6x multiplier is intentionally
+    conservative.
     """
     gib = 1024 ** 3
     fasta_bytes = 0
@@ -483,15 +490,12 @@ def preflight_disk_capacity(
 
     docker_root = nearest_existing_parent(docker_root_dir(docker))
     local_root = nearest_existing_parent(scientific_db_dir)
-    scratch_root = nearest_existing_parent(runner_scratch_dir)
     docker_required = 10 * gib
     local_required = 4 * gib + fasta_bytes * 6
-    scratch_required = 2 * gib
 
     roots = {
         "docker": (docker_root, docker_required),
         "scientific_data": (local_root, local_required),
-        "runner_scratch": (scratch_root, scratch_required),
     }
     by_device: dict[int, dict[str, object]] = {}
     for role, (path, required) in roots.items():
@@ -527,7 +531,6 @@ def preflight_disk_capacity(
         "reference_fasta_bytes": fasta_bytes,
         "docker_root": str(docker_root),
         "scientific_db_root": str(local_root),
-        "runner_scratch_root": str(scratch_root),
         "checks": checks,
         "ok": True,
     }
@@ -668,6 +671,32 @@ def configure_resource_profile(values: dict[str, str]) -> tuple[str, int, int]:
     return resolved, total, cpus
 
 
+def validate_runner_scratch_size(value: str) -> str:
+    """Validate the bounded tmpfs used for scientific worker scratch files."""
+    raw = value.strip().lower()
+    match = re.fullmatch(r"([0-9]+)([kmg])?", raw)
+    if not match:
+        raise SystemExit("PCR_RUNNER_SCRATCH_SIZE must be an integer with optional k, m, or g suffix")
+    amount = int(match.group(1))
+    multiplier = {None: 1, "k": 1024, "m": 1024**2, "g": 1024**3}[match.group(2)]
+    size = amount * multiplier
+    if not 128 * 1024**2 <= size <= 8 * 1024**3:
+        raise SystemExit("PCR_RUNNER_SCRATCH_SIZE must be between 128m and 8g")
+    return raw
+
+
+def validate_storage_budget(budget: str, headroom: str) -> tuple[str, str]:
+    """Keep PCRStudio within a bounded host-disk budget with recovery headroom."""
+    try:
+        budget_gib = int(budget.strip())
+        headroom_gib = int(headroom.strip())
+    except ValueError as exc:
+        raise SystemExit("storage budget and emergency headroom must be integer GiB values") from exc
+    if not 4 <= headroom_gib < budget_gib <= 64:
+        raise SystemExit("storage budget must satisfy 4 <= emergency_headroom < budget <= 64 GiB")
+    return str(budget_gib), str(headroom_gib)
+
+
 def validate_domain(value: str) -> str:
     value = value.strip().lower().rstrip(".")
     if len(value) > 253 or not re.fullmatch(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?", value):
@@ -788,25 +817,6 @@ def choose_subnets(docker: list[str], values: dict[str, str], force: bool) -> No
                 values[key] = str(net); chosen.append(net); break
         else:
             raise SystemExit(f"could not select a non-conflicting subnet for {key}")
-
-
-def ensure_runner_scratch(values: dict[str, str]) -> Path:
-    raw = values.get("PCR_RUNNER_SCRATCH_DIR", "./.local/runner-scratch")
-    path = (ROOT / raw).resolve() if not Path(raw).is_absolute() else Path(raw).resolve()
-    local_root = LOCAL.resolve()
-    if path != local_root and local_root not in path.parents:
-        raise SystemExit(f"bootstrap-managed runner scratch must live under {local_root}: {path}")
-    path.mkdir(parents=True, exist_ok=True)
-    # Runtime UID is fixed by docker/api.Dockerfile. Use install/chown through
-    # sudo when the invoking user cannot change ownership directly.
-    try:
-        os.chown(path, 10001, 10001)
-        os.chmod(path, 0o700)
-    except PermissionError:
-        sudo = sudo_prefix()
-        run([*sudo, "chown", "10001:10001", str(path)])
-        run([*sudo, "chmod", "0700", str(path)])
-    return path
 
 
 PCR_RUNTIME_GID = 10001
@@ -1093,13 +1103,18 @@ def verify_runner(docker: list[str], private: bool) -> dict:
 
 
 def systemd_quote(path: Path) -> str:
-    # systemd expands percent specifiers even in quoted arguments. JSON gives us
-    # correct C-style escaping for spaces/quotes/backslashes; double `%` keeps a
-    # literal path component intact.
-    return json.dumps(str(path.resolve()).replace("%", "%%"))
+    # Unit-file path settings are not shell syntax: wrapping the whole path in
+    # JSON quotes makes systemd treat the leading quote as part of the path.
+    # The supported checkout path has no whitespace, and doubling `%` protects
+    # systemd specifier expansion if a future checkout path contains one.
+    return str(path.resolve()).replace("%", "%%")
 
 
-def install_systemd_automation(retention_days: int) -> list[str]:
+def install_systemd_automation(
+    retention_days: int,
+    storage_budget_gib: str,
+    storage_emergency_headroom_gib: str,
+) -> list[str]:
     if not 1 <= retention_days <= 3650:
         raise SystemExit("backup retention must be between 1 and 3650 days")
     systemctl = shutil.which("systemctl")
@@ -1114,12 +1129,16 @@ def install_systemd_automation(retention_days: int) -> list[str]:
     qbackup = systemd_quote(ROOT / "scripts" / "backup-db.sh")
     qprune = systemd_quote(ROOT / "scripts" / "prune-backups.sh")
     qdrill = systemd_quote(ROOT / "scripts" / "backup-restore-drill.sh")
+    qguard = systemd_quote(ROOT / "scripts" / "storage-guard.py")
+    qpython = systemd_quote(Path(sys.executable))
     common = f"""[Unit]\nAfter=docker.service network-online.target\nRequires=docker.service\nConditionPathExists={ROOT / '.env'}\n\n[Service]\nType=oneshot\nWorkingDirectory={qroot}\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=full\nProtectKernelTunables=true\nProtectKernelModules=true\nProtectControlGroups=true\nRestrictSUIDSGID=true\n"""
     files = {
         "pcrstudio-backup.service": common + f"Environment=PCRSTUDIO_BACKUP_RETENTION_DAYS={retention_days}\nExecStart=/bin/bash {qbackup}\nExecStartPost=/bin/bash {qprune}\nTimeoutStartSec=1h\n",
         "pcrstudio-backup.timer": """[Unit]\nDescription=Daily PCRStudio PostgreSQL backup\n\n[Timer]\nOnCalendar=*-*-* 02:20:00 UTC\nPersistent=true\nRandomizedDelaySec=10m\nUnit=pcrstudio-backup.service\n\n[Install]\nWantedBy=timers.target\n""",
         "pcrstudio-restore-drill.service": common + f"ExecStart=/bin/bash {qdrill}\nTimeoutStartSec=2h\n",
         "pcrstudio-restore-drill.timer": """[Unit]\nDescription=Weekly PCRStudio backup restore drill\n\n[Timer]\nOnCalendar=Sun *-*-* 03:20:00 UTC\nPersistent=true\nRandomizedDelaySec=15m\nUnit=pcrstudio-restore-drill.service\n\n[Install]\nWantedBy=timers.target\n""",
+        "pcrstudio-storage-guard.service": common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
+        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage reserve guard\n\n[Timer]\nOnBootSec=5m\nOnUnitActiveSec=15m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
     }
     installed: list[str] = []
     for name, content in files.items():
@@ -1128,8 +1147,41 @@ def install_systemd_automation(retention_days: int) -> list[str]:
         run([*sudo, "install", "-o", "root", "-g", "root", "-m", "0644", str(local), str(unit_dir / name)])
         installed.append(name)
     run([*sudo, systemctl, "daemon-reload"])
-    run([*sudo, systemctl, "enable", "--now", "pcrstudio-backup.timer", "pcrstudio-restore-drill.timer"])
-    run([*sudo, systemctl, "list-timers", "--no-pager", "pcrstudio-backup.timer", "pcrstudio-restore-drill.timer"], check=False)
+    run([*sudo, systemctl, "enable", "--now", "pcrstudio-backup.timer", "pcrstudio-restore-drill.timer", "pcrstudio-storage-guard.timer"])
+    run([*sudo, systemctl, "list-timers", "--no-pager", "pcrstudio-backup.timer", "pcrstudio-restore-drill.timer", "pcrstudio-storage-guard.timer"], check=False)
+    return installed
+
+
+def install_storage_guard_automation(
+    storage_budget_gib: str,
+    storage_emergency_headroom_gib: str,
+) -> list[str]:
+    """Install the host storage brake without enabling app-dependent timers."""
+    systemctl = shutil.which("systemctl")
+    if not systemctl or not Path("/run/systemd/system").exists():
+        print("! systemd is not active; storage guard timer was not installed")
+        return []
+    sudo = sudo_prefix()
+    unit_dir = Path("/etc/systemd/system")
+    staging = LOCAL / "systemd"
+    staging.mkdir(parents=True, exist_ok=True)
+    qroot = systemd_quote(ROOT)
+    qguard = systemd_quote(ROOT / "scripts" / "storage-guard.py")
+    qpython = systemd_quote(Path(sys.executable))
+    common = f"""[Unit]\nAfter=docker.service network-online.target\nRequires=docker.service\nConditionPathExists={ROOT / '.env'}\n\n[Service]\nType=oneshot\nWorkingDirectory={qroot}\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=full\nProtectKernelTunables=true\nProtectKernelModules=true\nProtectControlGroups=true\nRestrictSUIDSGID=true\n"""
+    files = {
+        "pcrstudio-storage-guard.service": common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
+        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage reserve guard\n\n[Timer]\nOnBootSec=5m\nOnUnitActiveSec=15m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
+    }
+    installed: list[str] = []
+    for name, content in files.items():
+        local = staging / name
+        atomic_write(local, content, 0o644)
+        run([*sudo, "install", "-o", "root", "-g", "root", "-m", "0644", str(local), str(unit_dir / name)])
+        installed.append(name)
+    run([*sudo, systemctl, "daemon-reload"])
+    run([*sudo, systemctl, "enable", "--now", "pcrstudio-storage-guard.timer"])
+    run([*sudo, systemctl, "list-timers", "--no-pager", "pcrstudio-storage-guard.timer"], check=False)
     return installed
 
 
@@ -1137,6 +1189,11 @@ def main() -> int:
     require_linux()
     ap = argparse.ArgumentParser()
     ap.add_argument("--private", action="store_true", help="loopback-only HTTP bootstrap (compose.vm.yaml)")
+    ap.add_argument(
+        "--prepare-host-only",
+        action="store_true",
+        help="install/verify Docker host dependencies and stop before source/build/deployment work",
+    )
     ap.add_argument("--domain", help="public DNS hostname; required unless --private or already present in .env")
     ap.add_argument("--reference-fasta", type=Path, help="approved/reference FASTA used to build specificity indexes")
     ap.add_argument("--database-id", default="reference")
@@ -1152,6 +1209,19 @@ def main() -> int:
         help="explicitly accept a changed scientific Python freeze or MAFFT archive/bundle identity on an existing deployment",
     )
     args = ap.parse_args()
+
+    if args.prepare_host_only:
+        if not args.install_system_deps:
+            raise SystemExit("--prepare-host-only requires --install-system-deps")
+        install_system_dependencies()
+        host_values = parse_env(DEFAULT_ENV) if DEFAULT_ENV.is_file() else {}
+        storage_budget, storage_headroom = validate_storage_budget(
+            host_values.get("PCRSTUDIO_STORAGE_BUDGET_GIB", "20"),
+            host_values.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"),
+        )
+        install_storage_guard_automation(storage_budget, storage_headroom)
+        print("\nPCRStudio host preparation PASS (application build/deployment not run)")
+        return 0
 
     if args.install_system_deps: install_system_dependencies()
 
@@ -1184,7 +1254,15 @@ def main() -> int:
     values.setdefault("PCR_OPERATOR_TOKEN_FILE_HOST", "./.local/secrets/operator_token")
     values.setdefault("PCR_NCBI_API_KEY_FILE_HOST", "./.local/secrets/ncbi_api_key")
     values.setdefault("PCR_SCIENTIFIC_DB_DIR", "./.local/scientific-db")
-    values.setdefault("PCR_RUNNER_SCRATCH_DIR", "./.local/runner-scratch")
+    values["PCR_RUNNER_SCRATCH_SIZE"] = validate_runner_scratch_size(
+        values.get("PCR_RUNNER_SCRATCH_SIZE", "2g")
+    )
+    storage_budget, storage_headroom = validate_storage_budget(
+        values.get("PCRSTUDIO_STORAGE_BUDGET_GIB", "20"),
+        values.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"),
+    )
+    values["PCRSTUDIO_STORAGE_BUDGET_GIB"] = storage_budget
+    values["PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB"] = storage_headroom
     values.setdefault("PCR_SCIENTIFIC_DB_SCOPE", args.database_scope)
     values.setdefault("RUST_LOG", "pcr_server=info,tower_http=info")
     if not 1 <= args.backup_retention_days <= 3650:
@@ -1199,13 +1277,11 @@ def main() -> int:
         values["SITE_DOMAIN"] = domain; values["SITE_URL"] = f"https://{domain}"
     choose_subnets(docker, values, args.reselect_subnets)
     ensure_secrets(values)
-    scratch_dir = ensure_runner_scratch(values)
     dbdir = (ROOT / values["PCR_SCIENTIFIC_DB_DIR"]).resolve(); dbdir.mkdir(parents=True, exist_ok=True)
     disk_preflight = preflight_disk_capacity(
         docker,
         reference_fasta=args.reference_fasta,
         scientific_db_dir=dbdir,
-        runner_scratch_dir=scratch_dir,
     )
     write_env(DEFAULT_ENV, values)
 
@@ -1260,7 +1336,9 @@ def main() -> int:
         if runner_payload["scientific_python_freeze_sha256"] != freeze:
             raise SystemExit("runner scientific environment fingerprint differs from qualified API image")
         if not args.no_systemd_automation:
-            installed_automation = install_systemd_automation(args.backup_retention_days)
+            installed_automation = install_systemd_automation(
+                args.backup_retention_days, storage_budget, storage_headroom
+            )
 
     DEPLOY.mkdir(parents=True, exist_ok=True)
     evidence = {
@@ -1287,9 +1365,11 @@ def main() -> int:
         "scientific_ready": ready_payload,
         "runner": runner_payload,
         "job_execution_mode": "external",
-        "runner_scratch_dir": str(scratch_dir.relative_to(ROOT)) if scratch_dir.is_relative_to(ROOT) else str(scratch_dir),
+        "runner_scratch_size": values["PCR_RUNNER_SCRATCH_SIZE"],
         "systemd_automation_units": installed_automation,
         "backup_retention_days": args.backup_retention_days,
+        "storage_budget_gib": storage_budget,
+        "storage_emergency_headroom_gib": storage_headroom,
         "pre_deploy_backup": (str(pre_deploy_backup.relative_to(ROOT)) if pre_deploy_backup and pre_deploy_backup.is_relative_to(ROOT) else (str(pre_deploy_backup) if pre_deploy_backup else None)),
         "pre_deploy_backup_sha256": (sha256_file(pre_deploy_backup) if pre_deploy_backup else None),
     }

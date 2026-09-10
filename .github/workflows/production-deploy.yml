@@ -1,0 +1,125 @@
+name: Production deployment
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Exact CURRENT-* release tag to deploy
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pcrstudio-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy the published release
+    # Production never follows arbitrary branch pushes. A release publication
+    # or an explicit dispatch of an exact CURRENT-* tag is required. The
+    # protected GitHub environment supplies the final human approval gate.
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    environment: production
+    env:
+      RELEASE_REF: ${{ github.event.release.tag_name || inputs.source_ref }}
+      PRODUCTION_DOMAIN: ${{ secrets.PCRSTUDIO_PRODUCTION_DOMAIN }}
+      PRODUCTION_DATABASE_ID: ${{ secrets.PCRSTUDIO_PRODUCTION_DATABASE_ID }}
+    steps:
+      - name: Check out the exact release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.source_ref }}
+          fetch-depth: 1
+
+      - name: Verify release identity and deployment inputs
+        id: release
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_REF" =~ ^CURRENT-[0-9]+$ ]]
+          [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
+          [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
+          [[ "$PRODUCTION_DATABASE_ID" =~ ^[A-Za-z0-9._-]+$ ]]
+          [[ "$PRODUCTION_DATABASE_ID" != .* && "$PRODUCTION_DATABASE_ID" != *..* ]]
+          echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
+          python3 -B scripts/qualify-source.py --no-write
+          python3 -B scripts/verify-release.py --root .
+
+      - name: Prepare ephemeral SSH credentials
+        env:
+          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
+          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
+          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
+        run: |
+          set -euo pipefail
+          test -n "$PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY"
+          test -n "$PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS"
+          test -n "$PCRSTUDIO_PRODUCTION_SSH_HOST"
+          key_file="$RUNNER_TEMP/pcrstudio-production-key"
+          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
+          umask 077
+          printf '%s\n' "$PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY" > "$key_file"
+          printf '%s\n' "$PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS" > "$known_hosts_file"
+          ssh-keygen -y -f "$key_file" > /dev/null
+          ssh-keygen -F "$PCRSTUDIO_PRODUCTION_SSH_HOST" -f "$known_hosts_file" > /dev/null
+
+      - name: Transfer the exact committed source archive
+        env:
+          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
+          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
+          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
+          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          test -n "$PCRSTUDIO_PRODUCTION_SSH_USER"
+          key_file="$RUNNER_TEMP/pcrstudio-production-key"
+          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
+          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
+          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
+          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
+            "umask 077; mkdir -p '$release_dir' /srv/pcrstudio/state/.local; ln -sfn /srv/pcrstudio/state/.local '$release_dir/.local'; ln -sfn /srv/pcrstudio/state/.env '$release_dir/.env'"
+          git archive --format=tar "$RELEASE_REF" | gzip -n | \
+            ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
+            "tar -xzf - -C '$release_dir'"
+
+      - name: Run the repository-supported production bootstrap
+        env:
+          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
+          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
+          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
+          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/pcrstudio-production-key"
+          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
+          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
+          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
+          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
+            "cd '$release_dir' && ./bootstrap.sh --domain '$PRODUCTION_DOMAIN' --database-id '$PRODUCTION_DATABASE_ID'"
+
+      - name: Verify production readiness from the deployment host
+        env:
+          PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY }}
+          PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS }}
+          PCRSTUDIO_PRODUCTION_SSH_HOST: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_HOST }}
+          PCRSTUDIO_PRODUCTION_SSH_USER: ${{ secrets.PCRSTUDIO_PRODUCTION_SSH_USER }}
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          key_file="$RUNNER_TEMP/pcrstudio-production-key"
+          known_hosts_file="$RUNNER_TEMP/pcrstudio-production-known-hosts"
+          ssh_opts=(-i "$key_file" -o BatchMode=yes -o IdentitiesOnly=yes
+            -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known_hosts_file")
+          release_dir="/srv/pcrstudio/releases/$RELEASE_SHA"
+          ssh "${ssh_opts[@]}" "$PCRSTUDIO_PRODUCTION_SSH_USER@$PCRSTUDIO_PRODUCTION_SSH_HOST" \
+            "cd '$release_dir' && docker compose -f compose.yaml ps --status running && curl --fail --silent --show-error --resolve '$PRODUCTION_DOMAIN:443:127.0.0.1' 'https://$PRODUCTION_DOMAIN/ready' > /dev/null"

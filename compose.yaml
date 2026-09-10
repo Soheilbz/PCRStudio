@@ -9,6 +9,11 @@ name: ${PCRSTUDIO_COMPOSE_PROJECT:-pcrstudio}
 x-build-common: &build-common
   context: .
   dockerfile: docker/api.Dockerfile
+  # The API build also fetches Cargo, Debian and Python artifacts. The
+  # dedicated builder explicitly allows this build-time-only entitlement;
+  # runtime containers remain on the Compose application networks.
+  entitlements:
+    - network.host
   args:
     PCRSTUDIO_BUILD_ID: ${PCRSTUDIO_BUILD_ID:?bootstrap must set PCRSTUDIO_BUILD_ID from release/FILE-MANIFEST.json}
 
@@ -217,7 +222,6 @@ services:
       PCR_LOG_FORMAT: ${PCR_LOG_FORMAT:-json}
     volumes:
       - ${PCR_SCIENTIFIC_DB_DIR:-./.local/scientific-db}:/opt/pcrstudio/db:ro
-      - ${PCR_RUNNER_SCRATCH_DIR:-./.local/runner-scratch}:/var/lib/pcrstudio/scratch
     secrets:
       - database_url
     depends_on:
@@ -229,7 +233,10 @@ services:
       - data
     mem_limit: ${PCR_RUNNER_MEMORY_LIMIT:-4g}
     read_only: true
+    # Keep scientific scratch ephemeral and bounded. A host bind mount here
+    # could let abandoned jobs consume the server's persistent disk.
     tmpfs:
+      - /var/lib/pcrstudio/scratch:size=${PCR_RUNNER_SCRATCH_SIZE:-2g},mode=1770
       - /tmp:size=128m,mode=1777
     cap_drop:
       - ALL
@@ -254,6 +261,11 @@ services:
     build:
       context: .
       dockerfile: docker/web.Dockerfile
+      # Only the web dependency-fetch RUN steps request host networking. The
+      # dedicated builder explicitly allows this narrow build-time entitlement;
+      # runtime containers remain on the Compose application networks.
+      entitlements:
+        - network.host
       args:
         NEXT_PUBLIC_SITE_URL: ${SITE_URL:?set SITE_URL in .env, e.g. https://pcrstudio.example.org}
       secrets:

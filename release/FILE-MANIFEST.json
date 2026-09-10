@@ -5,7 +5,7 @@
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json"
   ],
-  "file_count": 1051,
+  "file_count": 1054,
   "files": [
     {
       "bytes": 816,
@@ -13,14 +13,14 @@
       "sha256": "88856e80954692a3488d283b78ce05357cd1c496bfc7dc3f03e330d885364eb4"
     },
     {
-      "bytes": 1487,
+      "bytes": 1542,
       "path": ".env.example",
-      "sha256": "07b82d94a489871af9eb80d9499bd829f72753dd6e15bc31bafe137693c09980"
+      "sha256": "856bfe9886f7ec9caa774832ea6852ba2e264ce235ccf30cfebb30d565cdb911"
     },
     {
-      "bytes": 1431,
+      "bytes": 1486,
       "path": ".env.vm.example",
-      "sha256": "e1a854633590cd4f75fb9a6bc63cb5e01144e5c8424b465f06971c4fd27bbad2"
+      "sha256": "44bf7bd4a0bf881bbf603fe2446ccb5d7c1e6146d60602ae35ad48e5253a7a65"
     },
     {
       "bytes": 144,
@@ -53,6 +53,11 @@
       "sha256": "c64eccc3d6856b5f3ad6ac5fc70e86ffc951148b5961acb9149cf9ef6083eaca"
     },
     {
+      "bytes": 6740,
+      "path": ".github/workflows/production-deploy.yml",
+      "sha256": "6d7716e86f87327322b395da76d7c0093c9a75464589c33f9808ed7d31e0ac79"
+    },
+    {
       "bytes": 6120,
       "path": ".github/workflows/staging-deploy.yml",
       "sha256": "275cb329b44ee7ca2166a0a69f22bd11b34eaeefdd2c013d5cee9fe08697f372"
@@ -61,6 +66,11 @@
       "bytes": 415,
       "path": ".gitignore",
       "sha256": "b8b2d2f7ccbbcc754d1efd17ccb2958a0ba81da2392a01ea8c84a03d3482e1da"
+    },
+    {
+      "bytes": 331,
+      "path": ".npmrc",
+      "sha256": "6e4fd39e6708b21033c89ce2d34b17013e098c95de8ea9f3f042043cab01f513"
     },
     {
       "bytes": 2041,
@@ -123,9 +133,9 @@
       "sha256": "d23599199410bc497a3e4a4c6ced0b1decbc029e7fe457f4e9ae0cedd069b14b"
     },
     {
-      "bytes": 15633,
+      "bytes": 16291,
       "path": "compose.yaml",
-      "sha256": "a4d5f7a7650981a76287c571f4a47721a4e732214c2236016c22ae18c4fab406"
+      "sha256": "ecad877907ac3bd5fbf8ee4d02847d63480fec66e6856620643bd0148f710ba1"
     },
     {
       "bytes": 4633,
@@ -1088,9 +1098,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 7640,
+      "bytes": 7852,
       "path": "docker/api.Dockerfile",
-      "sha256": "28ac23a7a6a80b132bdc57af1b14a57b6dc179c9c0cf08d1c1e20f0efc822c7e"
+      "sha256": "469525818bbf59552cdbb900665a75482a01e0a6616e268012eceaccfe8b6f65"
     },
     {
       "bytes": 436,
@@ -1108,9 +1118,9 @@
       "sha256": "84ddf32b5704c1a7979185b5eb5bc1f18e44c9cb948e80bf46ab9c053da07d0f"
     },
     {
-      "bytes": 2919,
+      "bytes": 3711,
       "path": "docker/web.Dockerfile",
-      "sha256": "de8c1e6a1059bb2617ca225c1ba45370a574b98fc54d753daf52d6da86aaf01d"
+      "sha256": "6ecd8bfbcf62b8eb06ef8af773455dff07c855c9793ad4ba787e95e26d67a544"
     },
     {
       "bytes": 3963,
@@ -1118,14 +1128,14 @@
       "sha256": "057e9724b2096f2022b068ecfd1ab48665a17a1b0de5dec61cf008de24035932"
     },
     {
-      "bytes": 1588,
+      "bytes": 2767,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "546eb9f0fe3d3bc2522a0c785595923b8b8e5ddca27b956ab32075ccb6c4d528"
+      "sha256": "b8d5468aa63ca80f6e7e7bca2057b9eaee01ff7cbb6e1ff962375979f99ff460"
     },
     {
-      "bytes": 8766,
+      "bytes": 11810,
       "path": "docs/OPERATIONS.md",
-      "sha256": "4759d688011750d2438d9f6157b04cd5dbccc4a546a365dcd76e6af97c5eeaef"
+      "sha256": "1a3ea4c2e79fdc5293b0eed2931e6aa05d7db8b42f5e86f11015a8b12618baaa"
     },
     {
       "bytes": 2598,
@@ -1173,9 +1183,9 @@
       "sha256": "c2c46c6f2a3cc11dfe41cf9fa1d56a5e6b7c902173e9253a145c8b555ab3fecd"
     },
     {
-      "bytes": 3032,
+      "bytes": 3190,
       "path": "docs/adr/0009-external-scientific-runner-and-linux-release-boundary.md",
-      "sha256": "8ec120f1240add283928bca58919f18cd61761f0dba046ea1b2e9938af532c7c"
+      "sha256": "f78f0683215d2bfd59c561dcc3e97a3575ec561d9a31457a3c538a242c4a8838"
     },
     {
       "bytes": 473,
@@ -1883,9 +1893,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 216040,
+      "bytes": 216491,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "5b2672eaf326cd44657c0e67ac8001967a43551cf07714d76b55f8a7ae50c8ea"
+      "sha256": "0e76fcd1531dde2a48020b0f872d5876ddac4518d49e89a16e8394136504c0dc"
     },
     {
       "bytes": 2048,
@@ -1953,14 +1963,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1571,
+      "bytes": 1609,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "d140811dd4fcb56435691169042084b952b1936939493abc61711bb37ed48532"
+      "sha256": "3cbbf08814845a44bfc695f4de0b71e61d1a98da0e1c980456f2feb326687bab"
     },
     {
       "bytes": 1662,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "d0a6c21ff67e8d0b4c37470ed359d18b18fb4e459ca4e1abf23aa090c1cab558"
+      "sha256": "da77ea08266e09d059c196f6e9d4c4a01c0942698d3d16e8072a8ccc71a1f567"
     },
     {
       "bytes": 31910,
@@ -2108,9 +2118,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 65014,
+      "bytes": 70019,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "8dc8966a7b4f29cb16d541c4b1f43d5ad7823fb374efb2ad16e411961c6a6a23"
+      "sha256": "7780567655835bfe0929b3c136f776c3bb452d926df8fab377f72cb779df948e"
     },
     {
       "bytes": 17770,
@@ -2163,9 +2173,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 9271,
+      "bytes": 10581,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "a3d335388e40e3921e8f3038b3b5d39d6e5aff24b3bc3e7f75ad202804dd5cc7"
+      "sha256": "403a9759bee86047fdfa8350d66b2dca3c892403f5980a87a9e212a5178ece26"
     },
     {
       "bytes": 4486,
@@ -2431,6 +2441,11 @@
       "bytes": 16046,
       "path": "scripts/start-app.mjs",
       "sha256": "42dbe3111fc4f007ff4674d6d496166443988221ac94cd8df79647bccf007ed5"
+    },
+    {
+      "bytes": 5404,
+      "path": "scripts/storage-guard.py",
+      "sha256": "4b8a88cd52a941535d369fba47347959cd75d684dbf9e8248972fa2e2baac95f"
     },
     {
       "bytes": 2431,

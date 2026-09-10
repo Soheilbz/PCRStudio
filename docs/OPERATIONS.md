@@ -99,6 +99,43 @@ configure daemon pulls. For private or rate-limited registries, use `docker
 login` and a credential helper. Never copy credentials into the repository,
 `.env`, image layers, or build arguments.
 
+The web dependency boundary is separate from Docker Hub: this host can reach
+the official `registry.npmjs.com` endpoint while its Docker bridge times out at
+the Cloudflare-backed `registry.npmjs.org` hostname. The repository therefore
+uses the official alternate npm endpoint, the exact pnpm `11.26.0`
+package-manager version with Corepack signature/integrity checks, frozen-lockfile
+integrity checks and bounded fetch retries. Only those
+dependency-fetch build steps use the dedicated builder's `network.host`
+entitlement; it does not affect the runtime network or image identity.
+
+## GitHub-to-server deployment
+
+Production does not follow `main` or execute arbitrary branch contents. The
+`production-deploy.yml` workflow deploys only a published `CURRENT-*` release
+tag, or the same exact tag when an operator starts the workflow manually. The
+GitHub `production` environment should require approval and should contain
+these environment secrets:
+
+- `PCRSTUDIO_PRODUCTION_DOMAIN`
+- `PCRSTUDIO_PRODUCTION_DATABASE_ID`
+- `PCRSTUDIO_PRODUCTION_SSH_HOST`
+- `PCRSTUDIO_PRODUCTION_SSH_USER`
+- `PCRSTUDIO_PRODUCTION_SSH_PRIVATE_KEY`
+- `PCRSTUDIO_PRODUCTION_SSH_KNOWN_HOSTS`
+
+The server is not granted a GitHub write token and does not poll GitHub. GitHub
+Actions transfers the verified release archive over host-key-pinned SSH, runs
+the repository bootstrap, and checks readiness on the server. The bootstrap
+pre-pull/build gate, pre-deploy database backup, migrations, scientific
+readiness, runner readiness and bounded Docker cleanup remain authoritative.
+
+For several applications on one host, one host-level Caddy/Traefik instance
+must own ports 80/443. Each application gets its own Compose project, internal
+networks, volumes, secrets and resource limits. PCRStudio's default Compose
+file owns 80/443 for a single-application host; a multi-application host must
+use a reviewed shared-edge overlay before production deployment. Do not
+publish PostgreSQL, API or runner ports directly.
+
 ## Runtime configuration reference
 
 The following settings are operator controls rather than end-user options.
@@ -108,6 +145,28 @@ exact `http`/`https` browser origins. It defaults to empty because the normal
 Next server talks to the API server-side; paths, credentials and malformed origins are rejected.
 `PCR_WORKER_TIMEOUT_SECONDS` bounds one worker run and
 accepts 1–299 seconds.
+
+`PCR_RUNNER_SCRATCH_SIZE` sets the runner's ephemeral tmpfs ceiling and accepts
+128m through 8g. It is not a host directory and is discarded when the runner
+is recreated, so abandoned scientific temporary files cannot accumulate on
+the server filesystem. Increase it only together with a reviewed runner
+memory/resource profile.
+
+The host storage guard limits PCRStudio to a 20 GiB host-storage budget with
+4 GiB emergency headroom. It is installed as
+`pcrstudio-storage-guard.timer`; inspect it with:
+
+```bash
+systemctl list-timers pcrstudio-storage-guard.timer
+journalctl -u pcrstudio-storage-guard.service
+```
+
+For a new host, `./bootstrap.sh --install-system-deps --prepare-host-only`
+installs and verifies the supported Docker/Compose host dependencies and
+activates the storage guard without building images or starting the application.
+The full production bootstrap is run only after DNS, secrets and the approved
+deployment data are ready; it additionally enables the database backup and
+restore-drill timers after the application passes readiness.
 
 `PCR_DB_MAX_CONNECTIONS`, `PCR_DB_MIN_CONNECTIONS`, and
 `PCR_DB_ACQUIRE_TIMEOUT_SECONDS` control the API PostgreSQL pool. Invalid

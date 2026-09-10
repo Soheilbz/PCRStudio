@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import shutil
 import stat
@@ -54,6 +55,11 @@ def main() -> int:
     )
     assert "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY" not in public_keys
     assert "PCR_NEXT_SERVER_ACTIONS_KEY_FILE" in public_keys
+    package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    assert package["packageManager"] == "pnpm@11.26.0"
+    npmrc = (ROOT / ".npmrc").read_text(encoding="utf-8")
+    assert "registry=https://registry.npmjs.com/" in npmrc
+    assert "fetch-retries=6" in npmrc
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):
@@ -63,6 +69,19 @@ def main() -> int:
     assert bootstrap.parse_compose_version("v2.24.4") == (2, 24, 4)
     assert bootstrap.parse_compose_version("5.5.0") == (5, 5, 0)
     assert bootstrap.parse_compose_version("unknown") is None
+    assert bootstrap.validate_runner_scratch_size("128m") == "128m"
+    assert bootstrap.validate_runner_scratch_size("2g") == "2g"
+    for bad_scratch_size in ("127m", "9g", "0", "two-gigabytes", "2gb"):
+        expect_system_exit(bootstrap.validate_runner_scratch_size, bad_scratch_size)
+    assert bootstrap.validate_storage_budget("20", "4") == ("20", "4")
+    assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
+    for bad_reserves in (("4", "4"), ("3", "1"), ("65", "4"), ("twenty", "4")):
+        try:
+            bootstrap.validate_storage_budget(*bad_reserves)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(f"invalid storage reserves accepted: {bad_reserves}")
 
     pinned = bootstrap.pinned_external_image_refs(ROOT)
     assert len(pinned) == 6, pinned
@@ -75,6 +94,9 @@ def main() -> int:
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"
     assert bootstrap.registry_error_class("TLS handshake timeout") == "tls"
     assert bootstrap.registry_error_class("i/o timeout") == "transient-network"
+    assert bootstrap.registry_error_class("ConnectTimeoutError: fetch failed") == "transient-network"
+    assert bootstrap.registry_error_class("UND_ERR_CONNECT_TIMEOUT") == "transient-network"
+    assert bootstrap.registry_error_class("[28] Timeout was reached (Operation too slow)") == "transient-network"
     assert bootstrap.registry_error_class("manifest unknown") == "registry-or-pin"
 
     assert str(bootstrap.validate_compose_subnet("PCR_APP_SUBNET", "172.29.0.0/24")) == "172.29.0.0/24"
@@ -192,7 +214,6 @@ def main() -> int:
                 ["docker"],
                 reference_fasta=fasta,
                 scientific_db_dir=root / "science-db",
-                runner_scratch_dir=root / "scratch",
             )
         finally:
             shutil.disk_usage = real_disk_usage

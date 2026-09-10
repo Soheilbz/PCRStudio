@@ -31,3 +31,22 @@ CI uses ephemeral runners and runs a final bounded BuildKit prune so a failed
 qualification cannot leave a large cache on a reused runner. Cloud hosts
 should invoke the repository bootstrap/maintenance path from the same release
 checkout rather than using ad-hoc daemon-wide pruning.
+
+The web build uses the official `registry.npmjs.com` endpoint and the exact
+pnpm `11.26.0` package-manager version (Corepack signature/integrity checks).
+Its dependency-fetch steps use the
+dedicated BuildKit builder's explicit `network.host` entitlement because this
+host's Docker bridge cannot complete TLS connections to the Cloudflare-backed
+`registry.npmjs.org` hostname; the entitlement is build-time only and is not
+granted to runtime containers. Frozen lockfile integrity hashes remain
+mandatory.
+
+The Linux bootstrap also installs `pcrstudio-storage-guard.timer` on systemd
+hosts. The current deployment budget is **20 GiB for PCRStudio's total host
+usage**, with a 4 GiB emergency headroom inside that budget. On the current
+48 GiB host, the guard therefore stops new scientific work before free space
+falls below roughly 32 GiB and stops the public API/web/edge services before it
+falls below roughly 28 GiB. At each run it prunes only PCRStudio's bounded
+builder cache and owned backup artifacts. It never deletes PostgreSQL data or
+another Compose project's resources. The guard is a last-resort safety brake,
+not a substitute for off-host backups or a larger disk.
