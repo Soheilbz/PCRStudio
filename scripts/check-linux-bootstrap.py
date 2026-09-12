@@ -273,36 +273,228 @@ def main() -> int:
     provision = load("pcrstudio_provision_tools", ROOT / "scripts" / "provision-tools.py")
     release_bundle = load("pcrstudio_release_bundle", ROOT / "scripts" / "release_bundle.py")
     ci_scope = load("pcrstudio_ci_scope", ROOT / "scripts" / "classify-ci-scope.py")
+    ci_gate = load("pcrstudio_ci_gate", ROOT / "scripts" / "ci-qualification-gate.py")
+    maintenance = load("pcrstudio_docker_maintenance", ROOT / "scripts" / "docker-maintenance.py")
+    storage_guard_module = load("pcrstudio_storage_guard", ROOT / "scripts" / "storage-guard.py")
+    pull_release_module = load("pcrstudio_pull_release", ROOT / "scripts" / "pull-release.py")
+
+    # Developer cache cleanup is deterministic, per-checkout, and limited to
+    # PCRStudio's dedicated builder; it must never become a daemon-wide prune.
+    service_name, service_unit, timer_name, timer_unit = maintenance.user_timer_units(
+        root=Path("/tmp/PCR Studio/$cache%"), python=Path("/usr/bin/python3")
+    )
+    assert service_name.endswith(".service") and timer_name.endswith(".timer")
+    assert service_name.removesuffix(".service") == timer_unit.split("Unit=", 1)[1].splitlines()[0].removesuffix(".service")
+    assert "WorkingDirectory=/tmp/PCR\\x20Studio/$cache%%" in service_unit
+    assert "prune --max-used-space 8GB" in service_unit
+    assert "NoNewPrivileges=true" in service_unit and "UMask=0077" in service_unit
+    assert "Persistent=true" in timer_unit and "RandomizedDelaySec=20m" in timer_unit
+    assert "docker system prune" not in service_unit
+    buildkit_config = (ROOT / "docker" / "buildkitd.toml").read_text(encoding="utf-8")
+    assert 'maxUsedSpace = "8GB"' in buildkit_config
+    assert 'reservedSpace = "1GB"' in buildkit_config
+    assert 'gckeepstorage' not in buildkit_config
+    assert bootstrap.BUILDX_GC_MARKER == maintenance.BUILDKIT_GC_MARKER
+    assert "export BUILDX_BUILDER=pcrstudio" in (ROOT / "scripts" / "compose-linux.sh").read_text(encoding="utf-8")
+    try:
+        maintenance.systemd_quote("unsafe\nunit")
+    except SystemExit:
+        pass
+    else:
+        raise AssertionError("systemd unit command accepted an injected newline")
+    recorded_docker_commands: list[list[str]] = []
+    with (
+        mock.patch.object(
+            maintenance.subprocess,
+            "run",
+            return_value=subprocess.CompletedProcess(["docker"], 0),
+        ),
+        mock.patch.object(
+            maintenance,
+            "run",
+            side_effect=lambda docker, args: recorded_docker_commands.append([*docker, *args]),
+        ),
+    ):
+        maintenance.prune(["docker"], "8GB")
+    assert recorded_docker_commands == [
+        ["docker", "buildx", "du", "--builder", "pcrstudio"],
+        ["docker", "buildx", "prune", "--builder", "pcrstudio", "--all", "--max-used-space", "8GB", "--force"],
+        ["docker", "image", "prune", "--force", "--filter", "label=org.pcrstudio.product=PCRStudio"],
+        ["docker", "buildx", "du", "--builder", "pcrstudio"],
+    ]
+    guard_commands: list[tuple[list[str], bool]] = []
+
+    def record_guard_command(command: list[str], *, check: bool = True) -> int:
+        guard_commands.append((command, check))
+        return 1 if len(guard_commands) == 1 else 0
+
+    with mock.patch.object(storage_guard_module, "run", side_effect=record_guard_command):
+        assert storage_guard_module.cleanup_owned_artifacts() == [
+            "PCRStudio Docker cache/image cleanup"
+        ]
+    assert len(guard_commands) == 2 and all(not check for _, check in guard_commands)
+    assert all(
+        not any(command[index : index + 2] == ["system", "prune"] for index in range(len(command) - 1))
+        for command, _ in guard_commands
+    )
+    guard_source = (ROOT / "scripts" / "storage-guard.py").read_text(encoding="utf-8")
+    assert "storage cleanup failed:" in guard_source and "or cleanup_failures" in guard_source
+    assert "def containerd_root()" in guard_source and "paths = [ROOT, docker_root(docker), containerd_root()]" in guard_source
+
+    # Successful release activation retains current + previous rollback tags,
+    # and only removes full-SHA tags from PCRStudio's four product images.
+    current_sha, previous_sha, obsolete_sha = "a" * 40, "b" * 40, "c" * 40
+    image_listing = "\n".join(
+        (
+            f"pcrstudio-api:{current_sha}",
+            f"pcrstudio-web:{previous_sha}",
+            f"pcrstudio-api:{obsolete_sha}",
+            f"pcrstudio-runner:{obsolete_sha}",
+            "pcrstudio-api:local",
+            f"uniora-api:{obsolete_sha}",
+            f"pcrstudio-migrate:{'d' * 40}",
+        )
+    )
+    successful_docker_calls: list[list[str]] = []
+
+    def record_image_cleanup(command: list[str], **_kwargs):
+        successful_docker_calls.append(command)
+        if command[1:3] == ["image", "ls"]:
+            return subprocess.CompletedProcess(command, 0, stdout=image_listing, stderr="")
+        return subprocess.CompletedProcess(command, 0, stdout=f"Untagged: {command[-1]}\n", stderr="")
+
+    with (
+        mock.patch.object(pull_release_module.subprocess, "run", side_effect=record_image_cleanup),
+        redirect_stdout(io.StringIO()),
+        redirect_stderr(io.StringIO()),
+    ):
+        assert pull_release_module.prune_old_release_images(current_sha, previous_sha) == []
+    assert successful_docker_calls[0] == [
+        "docker", "image", "ls", "--filter", "label=org.pcrstudio.product=PCRStudio",
+        "--format", "{{.Repository}}:{{.Tag}}",
+    ]
+    assert [command[-1] for command in successful_docker_calls[1:]] == [
+        f"pcrstudio-api:{obsolete_sha}", f"pcrstudio-migrate:{'d' * 40}",
+        f"pcrstudio-runner:{obsolete_sha}"
+    ]
+    assert all("--force" not in command for command in successful_docker_calls)
+    refused_removal = subprocess.CompletedProcess(
+        ["docker", "image", "rm"], 1, stdout="", stderr="conflict: image is used by a container"
+    )
+    with (
+        mock.patch.object(
+            pull_release_module.subprocess,
+            "run",
+            side_effect=[
+                subprocess.CompletedProcess(["docker", "image", "ls"], 0, stdout=f"pcrstudio-api:{obsolete_sha}\n", stderr=""),
+                refused_removal,
+            ],
+        ),
+        redirect_stdout(io.StringIO()),
+        redirect_stderr(io.StringIO()),
+    ):
+        assert pull_release_module.prune_old_release_images(current_sha, previous_sha) == [
+            f"kept old image pcrstudio-api:{obsolete_sha}; Docker refused removal: conflict: image is used by a container"
+        ]
 
     # Narrow CI paths require direct executable coverage; unknown and sensitive
     # product/tooling paths must retain the broad qualification gates.
-    assert ci_scope.classify_paths(["README.md"]) == {"full": False, "web": False}
-    assert ci_scope.classify_paths(["docs/OPERATIONS.md"]) == {"full": False, "web": False}
-    assert ci_scope.classify_paths(["scripts/release_bundle.py"]) == {"full": False, "web": False}
-    assert ci_scope.classify_paths(["scripts/check-linux-bootstrap.py"]) == {"full": False, "web": False}
-    assert ci_scope.classify_paths(["scripts/classify-ci-scope.py"]) == {
-        "full": False,
-        "web": False,
-    }
-    assert ci_scope.classify_paths([".github/workflows/production-deploy.yml"]) == {
-        "full": False,
-        "web": False,
-    }
-    assert ci_scope.classify_paths([
+    def assert_scope(
+        paths: list[str],
+        *,
+        full: bool,
+        web: bool,
+        contracts: bool = False,
+        docs: bool = False,
+        action_pins: bool = False,
+        action_pins_only: bool = False,
+    ) -> None:
+        assert ci_scope.classify_paths(paths, action_pins_only=action_pins_only) == {
+            "full": full,
+            "web": web,
+            "contracts": contracts,
+            "docs": docs,
+            "action_pins": action_pins,
+        }
+
+    assert_scope([], full=True, web=True)
+    assert_scope(["README.md"], full=False, web=False, docs=True)
+    assert_scope(["docs/OPERATIONS.md"], full=False, web=False, docs=True)
+    assert_scope(["scripts/release_bundle.py"], full=False, web=False, contracts=True)
+    assert_scope(["scripts/check-linux-bootstrap.py"], full=False, web=False, contracts=True)
+    assert_scope(["scripts/classify-ci-scope.py"], full=False, web=False, contracts=True)
+    assert_scope([".github/workflows/production-deploy.yml"], full=False, web=False, contracts=True)
+    assert_scope([
         ".github/dependabot.yml",
         "contracts/maintenance-exceptions.json",
         "scripts/audit/release.py",
-    ]) == {"full": False, "web": False}
-    assert ci_scope.classify_paths([
-        ".github/dependabot.yml",
-        "crates/pcr-core/src/lib.rs",
-    ]) == {"full": True, "web": False}
-    assert ci_scope.classify_paths(["scripts/bootstrap-linux.py"]) == {"full": True, "web": False}
-    assert ci_scope.classify_paths(["crates/pcr-core/src/lib.rs"]) == {"full": True, "web": False}
-    assert ci_scope.classify_paths(["web/src/app/page.tsx"]) == {"full": True, "web": True}
-    assert ci_scope.classify_paths([".github/workflows/ci.yml"]) == {"full": True, "web": False}
-    assert ci_scope.classify_paths(["release/current/README.md"]) == {"full": True, "web": False}
-    assert ci_scope.classify_paths(["new-unknown-config.toml"]) == {"full": True, "web": True}
+    ], full=False, web=False, contracts=True)
+    assert_scope([
+        ".github/dependabot.yml", "crates/pcr-core/src/lib.rs",
+    ], full=True, web=False)
+    assert_scope(["scripts/bootstrap-linux.py"], full=True, web=False)
+    assert_scope(["crates/pcr-core/src/lib.rs"], full=True, web=False)
+    assert_scope(["web/src/app/page.tsx"], full=True, web=True)
+    assert_scope([".github/workflows/ci.yml"], full=True, web=False)
+    assert_scope(["release/current/README.md"], full=True, web=False)
+    assert_scope(["new-unknown-config.toml"], full=True, web=True)
+    assert_scope(
+        ["README.md", "scripts/pull-release.py"], full=False, web=False, contracts=True,
+    )
+    assert_scope(
+        ["docs/OPERATIONS.md", "crates/pcr-core/src/lib.rs"], full=True, web=False,
+    )
+    assert_scope(
+        [".github/workflows/codeql.yml"],
+        full=False, web=False, action_pins=True, action_pins_only=True,
+    )
+    assert_scope(
+        [".github/workflows/production-deploy.yml"],
+        full=False, web=False, action_pins=True, action_pins_only=True,
+    )
+    assert_scope(
+        [".github/workflows/codeql.yml", "README.md"],
+        full=False, web=False, docs=True, action_pins=True, action_pins_only=True,
+    )
+
+    codeql_pin_diff = """diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml
+@@ -1 +1 @@
+-        uses: github/codeql-action/init@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
++        uses: github/codeql-action/init@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+"""
+    assert ci_scope.is_action_pin_only_diff_text(codeql_pin_diff)
+    assert not ci_scope.is_action_pin_only_diff_text(
+        codeql_pin_diff + "+        timeout-minutes: 30\n"
+    )
+    assert not ci_scope.is_action_pin_only_diff_text(
+        codeql_pin_diff.replace(
+            "-        uses: github/codeql-action/init@",
+            "-        uses: attacker/other-action@",
+        )
+    )
+    assert not ci_scope.is_action_pin_only_diff_text(
+        codeql_pin_diff.replace("b" * 40, "v5")
+    )
+    assert ci_gate.validate_results(
+        full="false", web="false", changes="success", fast="success",
+        source="skipped", image="skipped", browser="skipped",
+    ) == []
+    assert ci_gate.validate_results(
+        full="false", web="false", changes="success", fast="success",
+        source="failure", image="skipped", browser="skipped",
+    )
+    assert ci_gate.validate_results(
+        full="true", web="false", changes="success", fast="success",
+        source="success", image="failure", browser="skipped",
+    )
+    assert ci_gate.validate_results(
+        full="true", web="true", changes="success", fast="success",
+        source="success", image="success", browser="failure",
+    )
+    assert ci_gate.validate_results(
+        full="false", web="true", changes="success", fast="success",
+        source="skipped", image="skipped", browser="success",
+    )
     assert provision.ARTIFACTS["mafft"]["sha256"] == "bf59d016f1b2030bc7fc83b7715ae1f0823570de3bd059c26eb522a72f9c2952"
     assert provision.ARTIFACTS["mafft"]["mirror_urls"] == (
         "https://mafft.cbrc.jp/alignment/software/mafft-7.526-linux.tgz",
@@ -335,13 +527,25 @@ def main() -> int:
     assert "registry=https://registry.npmjs.com/" in npmrc
     assert "fetch-retries=6" in npmrc
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert ci.count("uses: astral-sh/setup-uv@") == 3
+    assert ci.count("prune-cache: true") == 3, "every CI uv cache must prune before saving"
+    assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in ci
+    assert "--locale=C --encoding=UTF8" in ci
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
+    qualification_gate = ci.split("  qualification-gate:\n", 1)[1]
+    assert "    permissions:\n      contents: read\n" in qualification_gate
+    checkout_step = qualification_gate.index("uses: actions/checkout@")
+    enforcement_step = qualification_gate.index("python3 -B scripts/ci-qualification-gate.py")
+    assert checkout_step < enforcement_step
+    assert "persist-credentials: false" in qualification_gate[:enforcement_step]
     pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
     assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
     assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
     production = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    assert production.count("uses: astral-sh/setup-uv@") == 1
+    assert production.count("prune-cache: true") == 1, "production qualification uv cache must prune before saving"
     release_verify = production.split("name: Verify release identity and deployment inputs", 1)[1].split(
         "name: Build the qualified runtime image set", 1
     )[0]
@@ -470,6 +674,32 @@ def main() -> int:
     for bad_scratch_size in ("127m", "9g", "0", "two-gigabytes", "2gb"):
         expect_system_exit(bootstrap.validate_runner_scratch_size, bad_scratch_size)
     assert bootstrap.validate_storage_budget("20", "4") == ("20", "4")
+    assert bootstrap.validate_storage_enforcement("HARD-QUOTA") == "hard-quota"
+    assert bootstrap.validate_storage_enforcement("guard-only") == "guard-only"
+    expect_system_exit(bootstrap.validate_storage_enforcement, "best-effort")
+    gib = 1024 ** 3
+    quota_entries = [
+        ("application", Path("/srv/pcrstudio"), 42, 20 * gib),
+        ("docker", Path("/srv/pcrstudio-storage/docker"), 42, 20 * gib),
+        ("containerd", Path("/srv/pcrstudio-storage/containerd"), 42, 20 * gib),
+    ]
+    quota_layout = bootstrap.evaluate_hard_storage_layout(
+        quota_entries, root_device=1, quota_gib=20
+    )
+    assert quota_layout["status"] == "PASS" and quota_layout["failures"] == []
+    assert bootstrap.evaluate_hard_storage_layout(
+        quota_entries, root_device=42, quota_gib=20
+    )["status"] == "FAIL"
+    assert bootstrap.evaluate_hard_storage_layout(
+        [*quota_entries[:2], ("containerd", Path("/var/lib/containerd"), 43, 20 * gib)],
+        root_device=1,
+        quota_gib=20,
+    )["status"] == "FAIL"
+    assert bootstrap.evaluate_hard_storage_layout(
+        [(role, path, device, 21 * gib) for role, path, device, _ in quota_entries],
+        root_device=1,
+        quota_gib=20,
+    )["status"] == "FAIL"
     assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
     assert "--control-plane-only" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
     assert "--offline-pinned-images" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
@@ -489,8 +719,15 @@ def main() -> int:
     assert len(pinned) == 6, pinned
     assert any(ref.startswith("rust:1.94-bookworm@sha256:") for ref in pinned)
     assert any(ref.startswith("busybox:1.37.0-glibc@sha256:") for ref in pinned)
-    assert any(ref.startswith("postgres:18-alpine@sha256:") for ref in pinned)
+    assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in pinned
     assert any(ref.startswith("caddy:2-alpine@sha256:") for ref in pinned)
+    production_compose = (ROOT / "compose.yaml").read_text(encoding="utf-8")
+    devdb_compose = (ROOT / "docker" / "compose.devdb.yaml").read_text(encoding="utf-8")
+    for database_compose in (production_compose, devdb_compose):
+        assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in database_compose
+        assert "--locale=C --encoding=UTF8" in database_compose
+    api_dockerfile = (ROOT / "docker" / "api.Dockerfile").read_text(encoding="utf-8")
+    assert "apt-get install --no-install-recommends -y build-essential xz-doc" in api_dockerfile
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
     assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"

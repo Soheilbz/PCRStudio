@@ -16,9 +16,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 7305,
+      "bytes": 6637,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "b4f0a7f7196a42ef9808af3d25ca81d6ae75aa440f18c808762520eaf33b12e7"
+      "sha256": "15aa72cd454351ad4ecded6901aebedf015a8feef247ae57be3e7f524fdac515"
     },
     {
       "bytes": 6120,
@@ -36,9 +36,9 @@
       "sha256": "fb722e939aee9307cbf1aeba1d0910855251a6a5e5b3428b62faa2c51482e52c"
     },
     {
-      "bytes": 1577,
+      "bytes": 2767,
       "path": "CONTRIBUTING.md",
-      "sha256": "e8731cbdc31a22643f238d3c2b82982c9b636f8346a4e5edca306d56ef5b2d28"
+      "sha256": "e3f31a1436b4f40cfe117486255a44c0476af504ac92af36c6740916b14c97c5"
     },
     {
       "bytes": 1451,
@@ -241,9 +241,9 @@
       "sha256": "919043ca2dfda56d421ec79cc504f2997f3e95c2311f1e6599e9ed251d1e3cc0"
     },
     {
-      "bytes": 977,
+      "bytes": 1055,
       "path": "contracts/maintenance-exceptions.json",
-      "sha256": "c53455c2d2672b7f1daebff995e3768e52863dc237200843bd15b7c17c18c5e2"
+      "sha256": "148883216c1c64c1c4d6c66447148eacffbc773084a5e9d26bc6d8c6b69aaa96"
     },
     {
       "bytes": 26605,
@@ -256,9 +256,9 @@
       "sha256": "6f86ca309f42f2a9d832c2d7b96f1a324ff284ed7ff46a3689d156befaf109f7"
     },
     {
-      "bytes": 2711,
+      "bytes": 3132,
       "path": "contracts/operations.toml",
-      "sha256": "2b9c3bc949c668a966de22105624aceb87a571a166cf7be50067c07ca005ff2e"
+      "sha256": "6c959fd1306b415656087afc93e44ab36afcb0dbe250a467c0306127e62a4e9d"
     },
     {
       "bytes": 3332,
@@ -511,9 +511,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 436,
+      "bytes": 520,
       "path": "docker/buildkitd.toml",
-      "sha256": "db4534c68eb5ee0969c482d56308021016cfcdd8c1f96506200602a15cdaffa7"
+      "sha256": "3dbae01fc2e037f65255f205848d256659b6c0f45000370465a2d1628fb7d192"
     },
     {
       "bytes": 1198,
@@ -526,14 +526,14 @@
       "sha256": "0fa3085de48bbe53527e11d331d93d3496d158f7cb1e61ddd17818336770618c"
     },
     {
-      "bytes": 2993,
+      "bytes": 6694,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
+      "sha256": "abeac70fce7e1c0b833ee925d7ecdf92efe18b876e67c18fca0ccc04e7b23e04"
     },
     {
-      "bytes": 13704,
+      "bytes": 14064,
       "path": "docs/OPERATIONS.md",
-      "sha256": "09797dc45a7751d56afa20bcb129964690b352cda27e6d8d8a51d5e181d566c0"
+      "sha256": "2a014bceb21eebfbcd82e836723e10f61b0c09eb6ef40825472f7005db573a25"
     },
     {
       "bytes": 2598,
@@ -681,9 +681,9 @@
       "sha256": "eac451398eb9fac0bae1e2c83ab1d9477c065dc151e3d85eb20843d9c6d33f37"
     },
     {
-      "bytes": 3269,
+      "bytes": 3558,
       "path": "knowledge/runtime/operations.generated.json",
-      "sha256": "7dce0fbaae8bc1d1fca32286c69bf1d6353b26735dc218febd3e491d6243f414"
+      "sha256": "84367db87d0b182351c58efe0a43ad962af4819599a5eda54722c0fc77130cbc"
     },
     {
       "bytes": 6653,
@@ -776,19 +776,19 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1626,
+      "bytes": 1672,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "922dc0951f9ba10351b9c0b977761fda3d4a4da765cfb1260a632a9796acf3d7"
+      "sha256": "334bf29a622b386093476b76b303374db279268e5734b58365430aad85169fcb"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "dd557fdad1ac8d3944bc27affd50fb9860add02895811fac73c8fe59cc4bf716"
+      "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 31910,
+      "bytes": 39824,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "24237e4eccb75cc566356645db17118606b06c9f35422baad76376078baf9c1d"
+      "sha256": "bbb07d34d4b3333d5fbe0cec86589d44db1ac28619d76cfd6561d1bff1bf1c10"
     },
     {
       "bytes": 1792,
@@ -841,14 +841,14 @@
       "sha256": "b87bb423b4477a64edbac302a517a66cbb2c79bcf04d99d52bca3a28ed8400ee"
     },
     {
-      "bytes": 3940,
+      "bytes": 4816,
       "path": "scripts/audit/operations.py",
-      "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
+      "sha256": "577673e1fcecbd17b40309fa5cc5f5dcd20432a2d112db41604fa993c7bea5a8"
     },
     {
-      "bytes": 74498,
+      "bytes": 79388,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "11b5b8e58f3493a8a5cb22a38ee925f7cbc9f47377c49f5d6b92007b47fd32ba"
+      "sha256": "cbf3993a09d7fd8391a13fd6117e89867db2b28271d9832caf0b19755809ab9d"
     },
     {
       "bytes": 17770,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 26577,
+      "bytes": 41055,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "86718498201ad1d8d631f4b4731e8f790ede2445fe4bfe63c48e90b3131465f5"
+      "sha256": "1d52ad07081cd134c8ce395f53641bc112f1d50cf2b116cdeed18ee891208c55"
     },
     {
       "bytes": 4486,
@@ -876,14 +876,19 @@
       "sha256": "29847c9a1b7a25fbd3fac68b08fcec8a0d2f328dbce544f62e67ebce75845ddc"
     },
     {
-      "bytes": 3994,
-      "path": "scripts/classify-ci-scope.py",
-      "sha256": "853043ae0c1788473bcda2d63201f772ebc9819c64869db5c898d7eb4b1f96b6"
+      "bytes": 2175,
+      "path": "scripts/ci-qualification-gate.py",
+      "sha256": "79c3569c850975220882b95f650e5748341c9af30d97eee3f4fbbb1ec54612f0"
     },
     {
-      "bytes": 923,
+      "bytes": 7072,
+      "path": "scripts/classify-ci-scope.py",
+      "sha256": "4a24bbbd55a0a13c7c30e59cf896b31e0237f7d0adf4f6eaa33185bf7dfdcd38"
+    },
+    {
+      "bytes": 1116,
       "path": "scripts/compose-linux.sh",
-      "sha256": "e2c3d706adc903b9faa4b05e6c3efb9f603f30c48e99b41bc8353f843fb93d4a"
+      "sha256": "beefb515f7dd602727e5feb2c30ffc19ae4d2a53c650e53bc1685b4ebd82b545"
     },
     {
       "bytes": 2876,
@@ -906,9 +911,9 @@
       "sha256": "9ad5f1d075a46f6652158673ca33ac1f5a927f70aa78e4a9be9898fe7e26f2bb"
     },
     {
-      "bytes": 3370,
+      "bytes": 7607,
       "path": "scripts/docker-maintenance.py",
-      "sha256": "2766feeee8ab690f3838e46746929c896baa4713715a5f1d113db178a038d1f6"
+      "sha256": "f48c8889e0d8dc02dd279343826581bf27a8f33c1cda382e5320ee3aa9012866"
     },
     {
       "bytes": 10516,
@@ -951,9 +956,9 @@
       "sha256": "0a53dab72406d98cbbd960272e6af1a803bb410351faa0a707a14eb239914c49"
     },
     {
-      "bytes": 5211,
+      "bytes": 6117,
       "path": "scripts/generate-operations-policy.py",
-      "sha256": "1f1d9a454f13aac73ecfb59fa3898b04f8474f5470891ade6f52fe61e40ef85b"
+      "sha256": "74015ad48870df79ab633517cb7644965ca72270c39e7a19131694a8b5e4ff42"
     },
     {
       "bytes": 4382,
@@ -986,9 +991,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 15407,
+      "bytes": 18155,
       "path": "scripts/pull-release.py",
-      "sha256": "0bfa8eb3ba156239cb9e7cff90c4f27b2cf6fc38d410a26277c039bf798113f4"
+      "sha256": "ed3199ae8112b09327bdf4ed6aa38841573cb0564db1b6f429adc47777ad7cd1"
     },
     {
       "bytes": 996,
@@ -1001,9 +1006,9 @@
       "sha256": "517ece76d558f276fcc145b8fbda06038401469555712f3b72b9f8d85cdfaa0f"
     },
     {
-      "bytes": 5292,
+      "bytes": 8421,
       "path": "scripts/release_bundle.py",
-      "sha256": "38228dfb5defc0ca4fa9e7633db940b9820da4c33e6496e5c38e9af579ca4d41"
+      "sha256": "8015f5e8ac3ff4730f6bef391999ced686b831abe1f454ee1605491e45cf0e3e"
     },
     {
       "bytes": 5569,
@@ -1041,9 +1046,9 @@
       "sha256": "1b2dc7c10df0b876555e22dbbbf72633b5ca123514c91c0de660e7e36c7bb93d"
     },
     {
-      "bytes": 5404,
+      "bytes": 6812,
       "path": "scripts/storage-guard.py",
-      "sha256": "4b8a88cd52a941535d369fba47347959cd75d684dbf9e8248972fa2e2baac95f"
+      "sha256": "7223b7c297cbbb440628bb6cd61972ed693acd2490b944c3fa718a2609a81baa"
     },
     {
       "bytes": 2431,
@@ -1741,29 +1746,29 @@
       "path": ".dockerignore"
     },
     {
-      "after_bytes": 1568,
-      "after_sha256": "22eb3165e4ff78333dc1769824ac5c3c76f669b56c47850d7439759725be3556",
+      "after_bytes": 1820,
+      "after_sha256": "ba8130c816ec7130855161892b617d0b3568fbc687571e4445546af622c59764",
       "before_bytes": 1632,
       "before_sha256": "93bd1557b8fedb6816431ef64e1bb14759cacaee8b24719aebb191667b353dab",
       "path": ".env.example"
     },
     {
-      "after_bytes": 1512,
-      "after_sha256": "a9cb1f5d2e12349cf91c9c21304a6d1a82ad2456956a64b7087bb14c71753710",
+      "after_bytes": 1553,
+      "after_sha256": "5bc21f2d79ef556bddc4c04094e7552bc1372d416022b8e712ed93912d09ee8b",
       "before_bytes": 1591,
       "before_sha256": "d034abf78c768c5abe3a7c4111d89eaba2083c43eac6b7ff3bf278a186b8d90d",
       "path": ".env.vm.example"
     },
     {
-      "after_bytes": 2480,
-      "after_sha256": "20b690328d70aa4dadc83fd0131ebcfaa1c574236ebe25bc525bc1b446ba0e4e",
+      "after_bytes": 2972,
+      "after_sha256": "4d88dcd57476d709621e9a14221c806438af5af0d9f0178e3277d26f93855100",
       "before_bytes": 417,
       "before_sha256": "ddcd5627daf1993c3a08b86098388aa38a1fdbf4fc65cc348a8b061e9f7d55c8",
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 19431,
-      "after_sha256": "9f3bb379788331dc278d54a5ea5fe4736f8ad7a92ddf7998151cf4135d7b893e",
+      "after_bytes": 22754,
+      "after_sha256": "fdf68bdfe5454d48454b5d0556403686a2ebae2ea7986dc322b306e692da27c2",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -1825,8 +1830,8 @@
       "path": "compose.vm.yaml"
     },
     {
-      "after_bytes": 16291,
-      "after_sha256": "ecad877907ac3bd5fbf8ee4d02847d63480fec66e6856620643bd0148f710ba1",
+      "after_bytes": 16322,
+      "after_sha256": "2a470822f34694468d7702e468fc5fe488f91ab1e6dda23d9cc92032c400d205",
       "before_bytes": 7351,
       "before_sha256": "a6599b33461c02c68bf94cfb68609d96e547bfb4505d42f5501eb20d15219e80",
       "path": "compose.yaml"
@@ -2315,8 +2320,8 @@
       "path": "crates/pcr-server/src/sequences.rs"
     },
     {
-      "after_bytes": 34428,
-      "after_sha256": "36836b31127cca4fcdfbfe74956414331480e8b7d8ed1fa5a64c6d8ce6725001",
+      "after_bytes": 34794,
+      "after_sha256": "fc96c52de54dfeaa5c510e55ef4f6e20d0d78af0128a6619a72da6bfd7288013",
       "before_bytes": 34359,
       "before_sha256": "c555340fae794963a4000b3385fffb0a60f7ca8ff856e9c19125569a592cc393",
       "path": "crates/pcr-server/tests/api.rs"
@@ -2371,11 +2376,18 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 7852,
-      "after_sha256": "469525818bbf59552cdbb900665a75482a01e0a6616e268012eceaccfe8b6f65",
+      "after_bytes": 7859,
+      "after_sha256": "d4e8dc88fcff15279f78e379b16a6e79ac62063beea5c4a09e636f3712287ec9",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"
+    },
+    {
+      "after_bytes": 1906,
+      "after_sha256": "eb350b912bbd65e7e2be932505ddcd76ec1e32fc2be9b0ecc01900fd3f069b8d",
+      "before_bytes": 1762,
+      "before_sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b",
+      "path": "docker/compose.devdb.yaml"
     },
     {
       "after_bytes": 3711,
@@ -2966,8 +2978,8 @@
       "path": "scripts/audit/lamp.py"
     },
     {
-      "after_bytes": 67947,
-      "after_sha256": "e91d0579ba19cc8b024b1af4849d9039f9e110eb746fd93b5c4bdadaa2961b79",
+      "after_bytes": 69990,
+      "after_sha256": "212b9f843c64d579451e31d91d8485b99a543601e32a22b5e0043040da3da59e",
       "before_bytes": 45119,
       "before_sha256": "93d6a42fcd39f5c544bbd589ddfa116939a439b739318842cdb5cbdb6f3b962b",
       "path": "scripts/audit/release.py"
@@ -5355,8 +5367,8 @@
   ],
   "schema_version": "2.1.0",
   "summary": {
-    "added": 344,
-    "modified": 473,
+    "added": 345,
+    "modified": 474,
     "removed": 61
   }
 }

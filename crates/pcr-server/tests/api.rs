@@ -1,8 +1,9 @@
 //! Drives the router directly rather than over a socket, so the tests assert
 //! on routing and status mapping without needing a free port.
 
-use axum::body::Body;
+use axum::body::{Body, Bytes};
 use axum::http::{Request, StatusCode};
+use axum::routing::post;
 use http_body_util::BodyExt;
 use pcr_server::module_routes;
 use pcr_server::rate_limit::DESIGNS_PER_WINDOW;
@@ -606,22 +607,29 @@ async fn a_caller_supplied_request_id_is_kept_rather_than_replaced() {
 
 #[tokio::test]
 async fn a_body_larger_than_the_limit_is_refused_before_a_handler_sees_it() {
-    // Every engine already refuses a template it cannot work with, but those
-    // checks run after the body is in memory. This one runs before, and it does
-    // not need an account to matter.
-    let enormous = "A".repeat(32 * 1024 * 1024);
-    let status = call_on(
-        &shared(),
-        "POST",
-        "/api/modules/standard-pcr/design",
-        Some(json!({ "template": enormous })),
-    )
-    .await;
+    // Do not accidentally rely on the design engine's own sequence validation
+    // or on a Content-Length header. A streamed import may not carry that
+    // header, so consume bytes in a trivial route behind the exact global
+    // hardening layers used by the production router.
+    let router = pcr_server::harden(axum::Router::new().route(
+        "/consume",
+        post(|_body: Bytes| async { StatusCode::NO_CONTENT }),
+    ));
+    let response = router
+        .oneshot(
+            Request::builder()
+                .method("POST")
+                .uri("/consume")
+                .body(Body::from(vec![
+                    b'x';
+                    pcr_contracts::MAX_HTTP_BODY_BYTES + 1
+                ]))
+                .expect("request builds"),
+        )
+        .await
+        .expect("the router answers");
 
-    assert!(
-        status == StatusCode::PAYLOAD_TOO_LARGE || status == StatusCode::BAD_REQUEST,
-        "a 32 MB body answered {status}"
-    );
+    assert_eq!(response.status(), StatusCode::PAYLOAD_TOO_LARGE);
 }
 
 #[tokio::test]
