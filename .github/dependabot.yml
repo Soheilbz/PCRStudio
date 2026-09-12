@@ -1,12 +1,11 @@
 version: 2
 
-# Dependabot is intentionally limited to grouped proposals per dependency
-# boundary. The default branch is the only integration target; production
-# pins and lockfiles still require the normal repository gates.
+# Keep one bounded proposal per dependency boundary. The default branch is the
+# only integration target; immutable production pins and lockfiles still pass
+# the normal repository gates before they can be merged.
 updates:
   - package-ecosystem: github-actions
     directory: "/"
-    target-branch: main
     schedule:
       interval: weekly
       day: monday
@@ -19,32 +18,28 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 1
     rebase-strategy: auto
-    labels: [dependencies, github-actions]
+    labels: [dependencies]
     commit-message:
       prefix: "deps(actions)"
 
   - package-ecosystem: npm
-    directory: "/web"
-    target-branch: main
+    # pnpm-lock.yaml and the workspace package.json are at the repository root.
+    # Dependabot currently documents pnpm support only through v10, while this
+    # repository pins pnpm 11. Keep the correct discovery path ready, but pause
+    # version PRs (limit 0) until the updater can safely rewrite this lockfile.
+    # Dependabot security updates remain enabled separately in repository settings.
+    directory: "/"
     schedule:
       interval: weekly
       day: monday
       time: "04:15"
       timezone: UTC
-    groups:
-      web-minor-patch:
-        applies-to: version-updates
-        update-types: [minor, patch]
-        patterns: ["*"]
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 0
     rebase-strategy: auto
-    labels: [dependencies, web]
-    commit-message:
-      prefix: "deps(web)"
+    labels: [dependencies]
 
-  - package-ecosystem: pip
+  - package-ecosystem: uv
     directory: "/tools"
-    target-branch: main
     schedule:
       interval: weekly
       day: monday
@@ -57,13 +52,12 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 1
     rebase-strategy: auto
-    labels: [dependencies, python]
+    labels: [dependencies]
     commit-message:
       prefix: "deps(python)"
 
   - package-ecosystem: cargo
     directory: "/"
-    target-branch: main
     schedule:
       interval: weekly
       day: monday
@@ -74,15 +68,14 @@ updates:
         applies-to: version-updates
         update-types: [minor, patch]
         patterns: ["*"]
-    open-pull-requests-limit: 2
+    open-pull-requests-limit: 1
     rebase-strategy: auto
-    labels: [dependencies, rust]
+    labels: [dependencies]
     commit-message:
       prefix: "deps(rust)"
 
   - package-ecosystem: docker
     directory: "/docker"
-    target-branch: main
     schedule:
       interval: monthly
       day: monday
@@ -95,6 +88,24 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 1
     rebase-strategy: auto
-    labels: [dependencies, docker]
+    labels: [dependencies]
     commit-message:
       prefix: "deps(docker)"
+
+  - package-ecosystem: docker-compose
+    directory: "/"
+    schedule:
+      interval: monthly
+      day: monday
+      time: "05:15"
+      timezone: UTC
+    groups:
+      compose-images-minor-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ["*"]
+    open-pull-requests-limit: 1
+    rebase-strategy: auto
+    labels: [dependencies]
+    commit-message:
+      prefix: "deps(compose)"

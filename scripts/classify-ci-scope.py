@@ -2,8 +2,8 @@
 """Classify a pull request into stable, testable PCRStudio CI scopes.
 
 Unknown paths deliberately select every broad gate. Narrow exceptions are
-limited to documentation and release-bundle files with direct, always-run
-contract coverage.
+limited to documentation, release-bundle tooling, and dependency-maintenance
+policy files with direct, always-run contract coverage.
 """
 from __future__ import annotations
 
@@ -26,6 +26,11 @@ TARGETED_RELEASE_FILES = {
     "scripts/check-linux-bootstrap.py",
     "scripts/pull-release.py",
     "scripts/release_bundle.py",
+}
+TARGETED_MAINTENANCE_POLICY_FILES = {
+    ".github/dependabot.yml",
+    "contracts/maintenance-exceptions.json",
+    "scripts/audit/release.py",
 }
 WEB_DEPENDENCY_FILES = {
     ".npmrc",
@@ -59,6 +64,8 @@ def classify_paths(paths: list[str]) -> dict[str, bool]:
         if path in DOCS_ONLY_ROOT_FILES or path.startswith(("docs/", "history/", "archive/")):
             continue
         if path in TARGETED_RELEASE_FILES:
+            continue
+        if path in TARGETED_MAINTENANCE_POLICY_FILES:
             continue
         if path in WEB_DEPENDENCY_FILES:
             full = True
