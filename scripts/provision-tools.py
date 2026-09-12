@@ -1,30 +1,38 @@
 #!/usr/bin/env python3
 """Provision PCRStudio's canonical scientific toolchain on Linux x86_64.
 
-The provisioner is intentionally host-local and idempotent.  Downloaded
-artifacts are either SHA-256 pinned in ``contracts/tools.toml`` or, for MAFFT's
-official portable bundle (whose download page does not publish a digest),
-bound to the current Linux qualification by the generated executable/freeze
-fingerprints.  Runtime strict mode verifies those fingerprints on every use.
+Downloads require exact SHA-256 pins from ``contracts/tools.toml``. Transient
+network failures receive bounded retries, and MAFFT's alternate official host
+is accepted only when it serves the same pinned bytes. Runtime strict mode
+continues to verify the installed executable and bundle fingerprints.
 """
 from __future__ import annotations
 
 import argparse
+import email.utils
+import errno
 import gzip
 import hashlib
+import http.client
 import json
 import os
 import platform
+import random
 import shutil
 import shlex
+import socket
 import stat
+import ssl
 import subprocess
 import sys
 import tarfile
 import tempfile
+import time
+import urllib.error
 import urllib.request
 import tomllib
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -40,29 +48,48 @@ ARTIFACTS = {
         "url": "https://github.com/quwubin/MFEprimer-3.0/releases/download/v4.5.1/mfeprimer-4.5.1-linux-amd64.gz",
         "archive": "mfeprimer-4.5.1-linux-amd64.gz",
         "sha256": "56abb0789497a6273e0b7d226671d5f1d959d3bceaba5be53f0d2b2edc13c839",
+        "mirror_urls": (),
     },
     "blast": {
         "version": "2.17.0",
         "url": "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast%2B/2.17.0/ncbi-blast-2.17.0%2B-x64-linux.tar.gz",
         "archive": "ncbi-blast-2.17.0-x64-linux.tar.gz",
         "sha256": "3888112d8207831aa47371d93583c601f058f88b5db22dc782438b039a3a411b",
+        "mirror_urls": (),
     },
     "mafft": {
         "version": "7.526",
         "url": "https://mafft.ddbj.nig.ac.jp/alignment/software/mafft-7.526-linux.tgz",
         "archive": "mafft-7.526-linux.tgz",
-        "sha256": "",  # upstream portable-package page publishes no digest
+        "sha256": "bf59d016f1b2030bc7fc83b7715ae1f0823570de3bd059c26eb522a72f9c2952",
+        "mirror_urls": (
+            "https://mafft.cbrc.jp/alignment/software/mafft-7.526-linux.tgz",
+        ),
     },
     "primerpooler": {
         "version": "1.89",
         "url": "https://codeload.github.com/ssb22/PrimerPooler/tar.gz/refs/tags/v1.89",
         "archive": "PrimerPooler-v1.89.tar.gz",
         "sha256": "df07e19c8c11a4aa7e7550fca59209615c3a8483b4cba36d320bb06e30eef414",
+        "mirror_urls": (),
     },
 }
 SCIENCE_WHEELS = {
     "primalscheme3": ("3.3.0", "primalscheme3-3.3.0-py3-none-any.whl", "4ac2455c6071ddef40fd5bed881ad9c129f8590b66e7bf6b73462a0ea9aad30e"),
     "pydna": ("5.5.16", "pydna-5.5.16-py3-none-any.whl", "f89c0787da7f405286c5d4fa8a827bbefbb09c7da382860834d7103dddb452aa"),
+}
+DOWNLOAD_TIMEOUT_SECONDS = 45
+DOWNLOAD_MAX_ATTEMPTS = 3
+RETRYABLE_HTTP_STATUSES = {408, 425, 429, 500, 502, 503, 504}
+RETRYABLE_CDN_STATUSES = {520, 521, 522, 523, 524}
+DOWNLOAD_MAX_SOURCES = 2
+RETRYABLE_NETWORK_ERRNOS = {
+    errno.ECONNRESET,
+    errno.ECONNREFUSED,
+    errno.EHOSTUNREACH,
+    errno.ENETUNREACH,
+    errno.ETIMEDOUT,
+    errno.EPIPE,
 }
 
 
@@ -89,9 +116,16 @@ def verify_contract_alignment() -> None:
             "url": str(item.get("provision_url") or ""),
             "archive": str(item.get("provision_archive") or ""),
             "sha256": str(item.get("provision_sha256") or ""),
+            "mirror_urls": tuple(str(url) for url in item.get("provision_mirror_urls") or ()),
         }
         if fields != expected:
             die(f"Provision metadata drift for {provision_id}: contract={fields!r} installer={expected!r}")
+        if len(expected["sha256"]) != 64 or any(
+            char not in "0123456789abcdef" for char in expected["sha256"]
+        ):
+            die(f"Provision artifact {provision_id} has no exact lowercase SHA-256 pin")
+        if any(not mirror.startswith("https://") for mirror in expected["mirror_urls"]):
+            die(f"Provision artifact {provision_id} has a non-HTTPS mirror")
     for tool_id, (version, filename, digest) in SCIENCE_WHEELS.items():
         item = tools.get(tool_id)
         if not item:
@@ -120,6 +154,102 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             h.update(block)
     return h.hexdigest()
+
+
+def download_failure_class(error: Exception) -> str:
+    """Classify transfer failures without treating integrity/policy errors as transient."""
+    if isinstance(error, urllib.error.HTTPError):
+        if error.code == 429:
+            return "rate-limit"
+        if error.code == 407:
+            return "proxy-authentication"
+        if error.code in {401, 403}:
+            return "authentication-or-policy"
+        if error.code in RETRYABLE_CDN_STATUSES:
+            return "transient-cdn"
+        if error.code in RETRYABLE_HTTP_STATUSES:
+            return "transient-http"
+        return f"http-{error.code}"
+
+    reason = error.reason if isinstance(error, urllib.error.URLError) else error
+    if isinstance(reason, ssl.SSLCertVerificationError):
+        return "tls-certificate"
+    if isinstance(reason, ssl.SSLError):
+        return "tls"
+    if isinstance(reason, socket.gaierror):
+        return "dns-temporary" if reason.errno == socket.EAI_AGAIN else "dns-resolution"
+    if isinstance(reason, (socket.timeout, TimeoutError)):
+        return "connect-or-read-timeout"
+    if isinstance(reason, http.client.IncompleteRead):
+        return "incomplete-response"
+    if isinstance(reason, (ConnectionError, http.client.RemoteDisconnected)):
+        return "transient-network"
+    if isinstance(reason, OSError) and reason.errno in RETRYABLE_NETWORK_ERRNOS:
+        return "transient-network"
+    if isinstance(reason, str):
+        lowered = reason.lower()
+        if "temporary failure in name resolution" in lowered:
+            return "dns-temporary"
+        if "timed out" in lowered or "timeout" in lowered:
+            return "connect-or-read-timeout"
+    return "non-retryable"
+
+
+def retry_delay_seconds(error: Exception, attempt: int) -> float:
+    """Return bounded exponential jitter, honoring a bounded Retry-After hint."""
+    if isinstance(error, urllib.error.HTTPError):
+        retry_after = error.headers.get("Retry-After", "").strip()
+        if retry_after:
+            try:
+                delay = float(retry_after)
+            except ValueError:
+                try:
+                    retry_at = email.utils.parsedate_to_datetime(retry_after)
+                    delay = retry_at.timestamp() - time.time()
+                except (TypeError, ValueError, OverflowError):
+                    delay = -1
+            if delay >= 0:
+                return min(delay, 10.0)
+    maximum = min(2 ** attempt, 8)
+    return random.uniform(0.0, float(maximum))
+
+
+def _require_https_url(url: str, label: str) -> str:
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+        die(f"{label} requires a credential-free HTTPS URL")
+    return parsed.hostname
+
+
+def _retry_url_operation(url: str, operation, label: str) -> tuple[bool, object | None, str]:
+    host = _require_https_url(url, label)
+    for attempt in range(1, DOWNLOAD_MAX_ATTEMPTS + 1):
+        try:
+            return True, operation(), ""
+        except Exception as error:
+            category = download_failure_class(error)
+            if category not in {
+                "rate-limit",
+                "transient-http",
+                "transient-cdn",
+                "dns-temporary",
+                "connect-or-read-timeout",
+                "incomplete-response",
+                "transient-network",
+            }:
+                die(f"{label} failed host={host} class={category}")
+            if isinstance(error, urllib.error.HTTPError):
+                error.close()
+            if attempt == DOWNLOAD_MAX_ATTEMPTS:
+                return False, None, category
+            delay = retry_delay_seconds(error, attempt)
+            print(
+                f"Transient download failure host={host} class={category} "
+                f"attempt={attempt}/{DOWNLOAD_MAX_ATTEMPTS} retry_in={delay:.1f}s",
+                file=sys.stderr,
+            )
+            time.sleep(delay)
+    return False, None, "retry-budget-exhausted"
 
 
 def executable(path: Path) -> Path:
@@ -160,18 +290,74 @@ def tree_sha256(root: Path) -> str:
     return h.hexdigest()
 
 
-def download(url: str, target: Path, expected: str = "") -> Path:
+def download(
+    url: str,
+    target: Path,
+    expected: str,
+    *,
+    mirror_urls: tuple[str, ...] = (),
+) -> Path:
+    if len(expected) != 64 or any(char not in "0123456789abcdef" for char in expected):
+        die(f"An exact lowercase SHA-256 pin is required for {target.name}")
     target.parent.mkdir(parents=True, exist_ok=True)
-    if target.is_file() and (not expected or sha256(target) == expected):
-        return target
-    target.unlink(missing_ok=True)
+    if target.is_file():
+        actual_cached = sha256(target)
+        if actual_cached == expected:
+            return target
+        print(
+            f"Pinned download cache digest mismatch for {target.name}; discarding the cached bytes",
+            file=sys.stderr,
+        )
+        target.unlink()
     tmp = target.with_suffix(target.suffix + ".part")
     tmp.unlink(missing_ok=True)
-    request = urllib.request.Request(url, headers={"User-Agent": "PCRStudio-CURRENT-Linux-Provisioner/1.0"})
-    with urllib.request.urlopen(request, timeout=120) as response, tmp.open("wb") as out:
-        shutil.copyfileobj(response, out)
+
+    urls = tuple(dict.fromkeys((url, *mirror_urls)))
+    if len(urls) > DOWNLOAD_MAX_SOURCES:
+        die(f"At most {DOWNLOAD_MAX_SOURCES} pinned HTTPS sources are allowed per artifact")
+    for index, candidate in enumerate(urls):
+        def transfer() -> None:
+            tmp.unlink(missing_ok=True)
+            request = urllib.request.Request(
+                candidate,
+                headers={"User-Agent": "PCRStudio-CURRENT-Linux-Provisioner/1.0"},
+            )
+            try:
+                with urllib.request.urlopen(
+                    request, timeout=DOWNLOAD_TIMEOUT_SECONDS
+                ) as response:
+                    final_url = (
+                        response.geturl()
+                        if callable(getattr(response, "geturl", None))
+                        else candidate
+                    )
+                    _require_https_url(final_url, f"Download {target.name} redirect")
+                    with tmp.open("wb") as out:
+                        shutil.copyfileobj(response, out)
+            except Exception:
+                tmp.unlink(missing_ok=True)
+                raise
+
+        succeeded, _, last_class = _retry_url_operation(
+            candidate, transfer, f"Download {target.name}"
+        )
+        if succeeded:
+            break
+        tmp.unlink(missing_ok=True)
+        if index + 1 == len(urls):
+            die(
+                f"Download {target.name} exhausted {DOWNLOAD_MAX_ATTEMPTS} "
+                f"bounded attempts per approved HTTPS source; last_class={last_class}"
+            )
+        next_host = urlsplit(urls[index + 1]).hostname or "invalid-host"
+        print(
+            f"Pinned download source unavailable class={last_class}; "
+            f"trying approved HTTPS mirror host={next_host}",
+            file=sys.stderr,
+        )
+
     actual = sha256(tmp)
-    if expected and actual != expected:
+    if actual != expected:
         tmp.unlink(missing_ok=True)
         die(f"SHA-256 mismatch for {target.name}: expected {expected}, got {actual}")
     tmp.replace(target)
@@ -182,8 +368,34 @@ def download(url: str, target: Path, expected: str = "") -> Path:
 def get_verified_pypi_wheel(package: str, version: str, filename: str, expected: str) -> Path:
     """Get-VerifiedPyPiWheel: resolve the exact published wheel and verify it."""
     metadata_url = f"https://pypi.org/pypi/{package}/{version}/json"
-    with urllib.request.urlopen(metadata_url, timeout=60) as response:
-        metadata = json.load(response)
+    metadata_request = urllib.request.Request(
+        metadata_url,
+        headers={"User-Agent": "PCRStudio-CURRENT-Linux-Provisioner/1.0"},
+    )
+
+    def read_metadata() -> dict[str, object]:
+        with urllib.request.urlopen(
+            metadata_request, timeout=DOWNLOAD_TIMEOUT_SECONDS
+        ) as response:
+            final_url = (
+                response.geturl()
+                if callable(getattr(response, "geturl", None))
+                else metadata_url
+            )
+            _require_https_url(final_url, f"PyPI metadata {package}=={version} redirect")
+            return json.load(response)
+
+    metadata_ok, metadata_result, metadata_error = _retry_url_operation(
+        metadata_url, read_metadata, f"PyPI metadata for {package}=={version}"
+    )
+    if not metadata_ok:
+        die(
+            f"PyPI metadata exhausted {DOWNLOAD_MAX_ATTEMPTS} bounded attempts; "
+            f"last_class={metadata_error}"
+        )
+    if not isinstance(metadata_result, dict):
+        die(f"PyPI metadata response is not an object for {package}=={version}")
+    metadata = metadata_result
     published = None
     for item in metadata.get("urls", []):
         if item.get("filename") == filename:
@@ -283,11 +495,16 @@ def provision_native() -> dict[str, Path]:
     if not makeblastdb.is_file(): die("makeblastdb is unavailable beside blastn")
     executable(makeblastdb)
 
-    # MAFFT official Linux portable package. Upstream provides no published
-    # package digest. Record the actually downloaded archive digest and bind the
-    # entire extracted portable bundle deterministically at runtime.
+    # MAFFT's versioned official portable archive is pinned to bytes independently
+    # fetched from both documented project hosts. The alternate host is used
+    # only after bounded transient failures and must satisfy the same digest.
     item = ARTIFACTS["mafft"]
-    archive = download(item["url"], DOWNLOADS / item["archive"], item["sha256"])
+    archive = download(
+        item["url"],
+        DOWNLOADS / item["archive"],
+        item["sha256"],
+        mirror_urls=item["mirror_urls"],
+    )
     mafft_root = LOCAL / "mafft"
     if mafft_root.exists(): shutil.rmtree(mafft_root)
     safe_extract_tar(archive, mafft_root)

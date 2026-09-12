@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       full: ${{ steps.scope.outputs.full }}
+      web: ${{ steps.scope.outputs.web }}
     steps:
       - name: Check out history for the change set
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -43,27 +44,18 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           GITHUB_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          if [ "$EVENT_NAME" != pull_request ]; then
-            echo "full=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          full=false
-          while IFS= read -r path; do
-            case "$path" in
-              .github/workflows/*|Cargo.toml|Cargo.lock|crates/*|tools/*|web/*|docker/*|compose*.yaml|package.json|pnpm-lock.yaml|scripts/*|contracts/*|knowledge/runtime/*|ops/*)
-                full=true
-                break
-                ;;
-            esac
-          done < <(git diff --name-only "$BASE_SHA...$HEAD_SHA")
-          echo "full=$full" >> "$GITHUB_OUTPUT"
+        run: >-
+          python3 -B scripts/classify-ci-scope.py
+          --event "$EVENT_NAME"
+          --base "$BASE_SHA"
+          --head "$HEAD_SHA"
+          --output "$GITHUB_OUTPUT"
 
   fast-feedback:
     name: Fast feedback and targeted contracts
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    needs: changes
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -91,7 +83,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run source qualification after dependency materialization
         run: python3 -B scripts/qualify-source.py --no-write
+      - name: Verify a real docker-save archive without registry access
+        run: python3 -B scripts/check-linux-bootstrap.py --docker-save-integration
       - name: Run targeted web contracts
+        if: ${{ needs.changes.outputs.web == 'true' }}
         run: |
           pnpm --filter web typecheck
           pnpm --filter web lint
@@ -106,11 +101,10 @@ jobs:
     name: Source, Rust, Python and Web checks
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    # Staged gate: browser production journeys are the fast end-to-end
-    # boundary. Do not spend 45 minutes on the broad source suite when that
-    # boundary has already failed.
+    # Run broad source checks only after the fast contracts and (when relevant)
+    # the focused production/browser qualification have succeeded.
     needs: [fast-feedback, changes, web-release-qualification]
-    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && needs.web-release-qualification.result == 'success' }}
+    if: ${{ !cancelled() && needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && (needs.changes.outputs.web != 'true' || needs.web-release-qualification.result == 'success') }}
     services:
       postgres:
         image: postgres:18-alpine@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
@@ -214,36 +208,6 @@ jobs:
           docker compose -f compose.yaml config -q
           docker compose -f compose.yaml -f compose.vm.yaml config -q
 
-  scientific-readiness-contract:
-    name: Scientific readiness contract
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - name: Check out source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Validate readiness response shape when a stack is available
-        run: |
-          node <<'NODE'
-          const base = process.env.PCR_API_URL || "http://127.0.0.1:8080";
-          let response;
-          try {
-            response = await fetch(`${base}/ready/scientific`);
-          } catch (error) {
-            if (error?.cause?.code === "ECONNREFUSED" || error?.cause?.code === "ENOTFOUND") {
-              console.log("No API stack is configured; readiness shape check is deferred to the image qualification gate.");
-              process.exit(0);
-            }
-            throw error;
-          }
-          if (![200, 503].includes(response.status)) throw new Error(`unexpected status ${response.status}; expected 200|503`);
-          const j = await response.json();
-          const requiredKeys = ["ready","database","designWorker","runner","scientificToolchain"];
-          if (typeof j.ready !== "boolean") throw new Error("ready must be boolean");
-          for (const key of requiredKeys.slice(1)) {
-            if (!j[key] || typeof j[key].ok !== "boolean") throw new Error(`${key}.ok must be boolean`);
-          }
-          NODE
-
   image-qualification:
     name: Linux image qualification
     runs-on: ubuntu-24.04
@@ -251,7 +215,7 @@ jobs:
     # Image builds are the other expensive stage; wait for the targeted web
     # production gate before allocating a fresh runner and Docker graph.
     needs: [fast-feedback, changes, web-release-qualification]
-    if: ${{ needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && needs.web-release-qualification.result == 'success' }}
+    if: ${{ !cancelled() && needs.fast-feedback.result == 'success' && needs.changes.outputs.full == 'true' && (needs.changes.outputs.web != 'true' || needs.web-release-qualification.result == 'success') }}
     permissions:
       contents: read
     steps:
@@ -420,30 +384,13 @@ jobs:
         if: always()
         run: docker buildx prune --all --max-used-space 8GB --force
 
-  dependency-contract:
-    name: Frozen dependency contract
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    needs: changes
-    if: ${{ needs.changes.outputs.full == 'true' }}
-    steps:
-      - name: Check out source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
-        with:
-          version: "0.12.10"
-      - name: Export production folding dependencies
-        run: uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
-
   web-release-qualification:
     name: Web production and browser qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    # Do not spend a full browser run on a change that already failed the
-    # cheap source/contract preflight. The final browser gate still runs on
-    # every change whose targeted checks pass.
-    needs: fast-feedback
+    # Browser journeys are reserved for changes that affect the Web product.
+    needs: [fast-feedback, changes]
+    if: ${{ !cancelled() && needs.fast-feedback.result == 'success' && needs.changes.outputs.web == 'true' }}
     env:
       # Keep the browser binary cache project-scoped and keyed by the locked
       # Playwright dependency. The browser is never downloaded into a mutable

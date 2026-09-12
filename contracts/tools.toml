@@ -101,7 +101,10 @@ executable_names = ["mafft"]
 provision_id = "mafft"
 provision_url = "https://mafft.ddbj.nig.ac.jp/alignment/software/mafft-7.526-linux.tgz"
 provision_archive = "mafft-7.526-linux.tgz"
-provision_sha256 = ""
+# The upstream page publishes no digest. This pin was independently checked
+# against byte-identical downloads from the official DDBJ and CBRC project hosts.
+provision_sha256 = "bf59d016f1b2030bc7fc83b7715ae1f0823570de3bd059c26eb522a72f9c2952"
+provision_mirror_urls = ["https://mafft.cbrc.jp/alignment/software/mafft-7.526-linux.tgz"]
 
 [[tool]]
 id = "primerpooler"
