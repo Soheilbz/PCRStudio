@@ -184,6 +184,21 @@ def validate_source_version(release_dir: Path, tag: str) -> None:
         raise SystemExit("release source public version does not match the GitHub release tag")
 
 
+def remove_empty_path(path: Path) -> None:
+    """Remove only an empty generated mount point before creating a symlink."""
+    if path.is_symlink() or path.is_file():
+        path.unlink()
+        return
+    if not path.is_dir():
+        return
+    descendants = sorted(path.rglob("*"), key=lambda item: len(item.parts), reverse=True)
+    if any(item.is_file() or item.is_symlink() for item in descendants):
+        raise SystemExit(f"refusing to replace non-empty release state path: {path}")
+    for item in descendants:
+        item.rmdir()
+    path.rmdir()
+
+
 def install_systemd() -> None:
     if os.geteuid() != 0:
         raise SystemExit("--install-systemd must run as root")
@@ -294,8 +309,8 @@ def deploy(args: argparse.Namespace) -> None:
             subprocess.run(["docker", "load"], check=True, stdin=image_stream, text=False)
         image_ids(manifest)
         state = Path(args.state_dir)
-        (release_dir / ".local").unlink(missing_ok=True)
-        (release_dir / ".env").unlink(missing_ok=True)
+        remove_empty_path(release_dir / ".local")
+        remove_empty_path(release_dir / ".env")
         (release_dir / ".local").symlink_to(state / ".local")
         (release_dir / ".env").symlink_to(state / ".env")
         run(

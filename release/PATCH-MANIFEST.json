@@ -16,9 +16,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 6733,
+      "bytes": 8084,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "09a3bc888d3b7c179195c0172df9a2426340a7dea48e08be42f703f4a9ea6e5d"
+      "sha256": "a6e2b6bce8f1acb41e6e812073c2f5e632f832484e9d7cac3f50510f9d8457f7"
     },
     {
       "bytes": 6120,
@@ -531,9 +531,9 @@
       "sha256": "5d15b136b7ec2458fb233fb77355c3b22ba11dc4a3aa388c257a803a8f0a1b0a"
     },
     {
-      "bytes": 13693,
+      "bytes": 13704,
       "path": "docs/OPERATIONS.md",
-      "sha256": "73830f3b8424a8986fc5f89f49e679b75d2127f161736bd3efcbe6bb47389ef2"
+      "sha256": "09797dc45a7751d56afa20bcb129964690b352cda27e6d8d8a51d5e181d566c0"
     },
     {
       "bytes": 2598,
@@ -776,14 +776,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1742,
+      "bytes": 1626,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "ac66f522a8796ccace207e00f097c21283f32aee5dd0ec0b8dd08f98ed213333"
+      "sha256": "251e5ff1e59d50a6b7c3dd2a4abb995629a22a3907985ce3184ccd8bc48d6628"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "ce7143a78763da0a16c808f4559f2b60cc184abb0538e6470e0c828b2fefa0ce"
+      "sha256": "d018abbfa58061e51a70a11a48725757f8697dd492a9bf69c4be0b62b435aed8"
     },
     {
       "bytes": 31910,
@@ -846,9 +846,9 @@
       "sha256": "c0f44e36948aae120770d191dc99560282a028336a01d74f94bc3df360e9d306"
     },
     {
-      "bytes": 74195,
+      "bytes": 74498,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "1940c5361fa265610e4bfcf8412c29f58975f3ac89668c3bd1157278dc908afd"
+      "sha256": "11b5b8e58f3493a8a5cb22a38ee925f7cbc9f47377c49f5d6b92007b47fd32ba"
     },
     {
       "bytes": 17770,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 11598,
+      "bytes": 11822,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "458c7d2061fd0adbf7ef625c402db76016d6073667727b05f31aa5d8cc4af9fd"
+      "sha256": "b11d8e9c13ab6f94d7b922b1c04876a99563cea14518c0b35ec33b4a9223079e"
     },
     {
       "bytes": 4486,
@@ -981,9 +981,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 13035,
+      "bytes": 14858,
       "path": "scripts/pull-release.py",
-      "sha256": "4ddfcc4ebfbc4990a065df9006dd79e7e9681d7dac256edda9e1135f80f667dc"
+      "sha256": "428e78ab8bcd199152c4094354104e60ed7a717e32d633b07dbc04f8c937d890"
     },
     {
       "bytes": 996,
@@ -2824,7 +2824,7 @@
     },
     {
       "after_bytes": 1678,
-      "after_sha256": "ece7b391ce0530a37c807f679c77b91a535ed37e8006ec4bd2d8fddbbc0b0bd7",
+      "after_sha256": "60ca0361b67616ee14f96e2ed4d58381c0ed8a9a559ea3486f9b04711fb70851",
       "before_bytes": 603,
       "before_sha256": "1d323b3844f8ebf3953a1dd79f479be5abb5dd3b6a35af2bc3ad97471acd3df5",
       "path": "release/INDEX.md"
@@ -2851,8 +2851,8 @@
       "path": "release/PUBLIC-SOURCE.md"
     },
     {
-      "after_bytes": 6157,
-      "after_sha256": "166cfcc132d37361f3f514b2174f32a4244e28fbbab0b28a9b45d367fc47b705",
+      "after_bytes": 6497,
+      "after_sha256": "3d04e0ab7c4957d49a1a4764787effed43af6b81b5dda3d252821aff3cddc687",
       "before_bytes": 1111,
       "before_sha256": "e34d1974f2c960513499d801308192e08c6c483f6610abae0b705f69f68f5c31",
       "path": "release/RELEASE-NOTES.md"
@@ -2901,7 +2901,7 @@
     },
     {
       "after_bytes": 532,
-      "after_sha256": "01e302a0df597f0354a836afc78b5f6092d72a5f69853884a702371cc6b443d8",
+      "after_sha256": "21ed318ec3b7dbda6c655bdad62b07b279a9189ba48ccffe58c73fa451fbe12e",
       "before_bytes": 490,
       "before_sha256": "d63da32f516385bdc88a84d718fa721f632294774845112edaf2197c5b884333",
       "path": "release/release.toml"
@@ -2957,7 +2957,7 @@
     },
     {
       "after_bytes": 67947,
-      "after_sha256": "009debc033ac04892383ad44bdcd03c005db3ecf3eed8ed5e4b86f317c761fcf",
+      "after_sha256": "e91d0579ba19cc8b024b1af4849d9039f9e110eb746fd93b5c4bdadaa2961b79",
       "before_bytes": 45119,
       "before_sha256": "93d6a42fcd39f5c544bbd589ddfa116939a439b739318842cdb5cbdb6f3b962b",
       "path": "scripts/audit/release.py"

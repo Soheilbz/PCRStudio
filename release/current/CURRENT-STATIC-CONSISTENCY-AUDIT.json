@@ -24,11 +24,7 @@
     "cache_build_residue": [],
     "case_collisions": [],
     "crlf_text_files": [],
-    "shebang_scripts_missing_executable_bit": [
-      "scripts/pull-release.py",
-      "scripts/storage-guard.py",
-      "scripts/validate-release-version.py"
-    ],
+    "shebang_scripts_missing_executable_bit": [],
     "symlinks": []
   },
   "native_external_gate": {
@@ -49,8 +45,8 @@
     "modules": 21,
     "stable_modules": 0
   },
-  "public_tag": "v1.0.0",
-  "public_version": "1.0.0",
+  "public_tag": "v1.0.1",
+  "public_version": "1.0.1",
   "release_class": "generation-1-unified-engine-linux-current",
   "release_id": "CURRENT",
   "schema_version": "2.0.0",
@@ -59,5 +55,5 @@
     "entrypoint": "scripts/qualify-source.py",
     "status": "PASS"
   },
-  "status": "FAIL"
+  "status": "PASS"
 }
