@@ -7,8 +7,8 @@
 
 ## Current Linux snapshot
 
-- Source files represented: **1059**
-- Python: **239**
+- Source files represented: **1060**
+- Python: **240**
 - Rust: **91**
 - TypeScript/TSX: **284**
 - JSON: **223**
