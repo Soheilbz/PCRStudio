@@ -786,9 +786,9 @@
       "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 37738,
+      "bytes": 39824,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "6bd2516eaf35f7f4a946d68675384df4c876695fd55400c99f1bcacb11e09c41"
+      "sha256": "bbb07d34d4b3333d5fbe0cec86589d44db1ac28619d76cfd6561d1bff1bf1c10"
     },
     {
       "bytes": 1792,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 40246,
+      "bytes": 41055,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "9a5feb67b865a544b2ed1544736dcb11cc7765eba354c8cc4c50bf428a5a6e49"
+      "sha256": "1d52ad07081cd134c8ce395f53641bc112f1d50cf2b116cdeed18ee891208c55"
     },
     {
       "bytes": 4486,
@@ -1767,8 +1767,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 22723,
-      "after_sha256": "dd04fcd55539f0c6c539398a166216c0c533af4c20ced89636bfff8d511dc9e3",
+      "after_bytes": 22754,
+      "after_sha256": "fdf68bdfe5454d48454b5d0556403686a2ebae2ea7986dc322b306e692da27c2",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -1830,8 +1830,8 @@
       "path": "compose.vm.yaml"
     },
     {
-      "after_bytes": 16291,
-      "after_sha256": "ecad877907ac3bd5fbf8ee4d02847d63480fec66e6856620643bd0148f710ba1",
+      "after_bytes": 16322,
+      "after_sha256": "2a470822f34694468d7702e468fc5fe488f91ab1e6dda23d9cc92032c400d205",
       "before_bytes": 7351,
       "before_sha256": "a6599b33461c02c68bf94cfb68609d96e547bfb4505d42f5501eb20d15219e80",
       "path": "compose.yaml"
@@ -2376,11 +2376,18 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 7852,
-      "after_sha256": "469525818bbf59552cdbb900665a75482a01e0a6616e268012eceaccfe8b6f65",
+      "after_bytes": 7859,
+      "after_sha256": "d4e8dc88fcff15279f78e379b16a6e79ac62063beea5c4a09e636f3712287ec9",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"
+    },
+    {
+      "after_bytes": 1906,
+      "after_sha256": "eb350b912bbd65e7e2be932505ddcd76ec1e32fc2be9b0ecc01900fd3f069b8d",
+      "before_bytes": 1762,
+      "before_sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b",
+      "path": "docker/compose.devdb.yaml"
     },
     {
       "after_bytes": 3711,
@@ -5361,7 +5368,7 @@
   "schema_version": "2.1.0",
   "summary": {
     "added": 345,
-    "modified": 473,
+    "modified": 474,
     "removed": 61
   }
 }

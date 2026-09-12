@@ -529,6 +529,8 @@ def main() -> int:
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert ci.count("uses: astral-sh/setup-uv@") == 3
     assert ci.count("prune-cache: true") == 3, "every CI uv cache must prune before saving"
+    assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in ci
+    assert "--locale=C --encoding=UTF8" in ci
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
     qualification_gate = ci.split("  qualification-gate:\n", 1)[1]
     assert "    permissions:\n      contents: read\n" in qualification_gate
@@ -717,8 +719,15 @@ def main() -> int:
     assert len(pinned) == 6, pinned
     assert any(ref.startswith("rust:1.94-bookworm@sha256:") for ref in pinned)
     assert any(ref.startswith("busybox:1.37.0-glibc@sha256:") for ref in pinned)
-    assert any(ref.startswith("postgres:18-alpine@sha256:") for ref in pinned)
+    assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in pinned
     assert any(ref.startswith("caddy:2-alpine@sha256:") for ref in pinned)
+    production_compose = (ROOT / "compose.yaml").read_text(encoding="utf-8")
+    devdb_compose = (ROOT / "docker" / "compose.devdb.yaml").read_text(encoding="utf-8")
+    for database_compose in (production_compose, devdb_compose):
+        assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in database_compose
+        assert "--locale=C --encoding=UTF8" in database_compose
+    api_dockerfile = (ROOT / "docker" / "api.Dockerfile").read_text(encoding="utf-8")
+    assert "apt-get install --no-install-recommends -y build-essential xz-doc" in api_dockerfile
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
     assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"

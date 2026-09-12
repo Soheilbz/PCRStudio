@@ -33,9 +33,9 @@
       "sha256": "4d88dcd57476d709621e9a14221c806438af5af0d9f0178e3277d26f93855100"
     },
     {
-      "bytes": 22723,
+      "bytes": 22754,
       "path": ".github/workflows/ci.yml",
-      "sha256": "dd04fcd55539f0c6c539398a166216c0c533af4c20ced89636bfff8d511dc9e3"
+      "sha256": "fdf68bdfe5454d48454b5d0556403686a2ebae2ea7986dc322b306e692da27c2"
     },
     {
       "bytes": 1221,
@@ -128,9 +128,9 @@
       "sha256": "d23599199410bc497a3e4a4c6ced0b1decbc029e7fe457f4e9ae0cedd069b14b"
     },
     {
-      "bytes": 16291,
+      "bytes": 16322,
       "path": "compose.yaml",
-      "sha256": "ecad877907ac3bd5fbf8ee4d02847d63480fec66e6856620643bd0148f710ba1"
+      "sha256": "2a470822f34694468d7702e468fc5fe488f91ab1e6dda23d9cc92032c400d205"
     },
     {
       "bytes": 4633,
@@ -1093,9 +1093,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 7852,
+      "bytes": 7859,
       "path": "docker/api.Dockerfile",
-      "sha256": "469525818bbf59552cdbb900665a75482a01e0a6616e268012eceaccfe8b6f65"
+      "sha256": "d4e8dc88fcff15279f78e379b16a6e79ac62063beea5c4a09e636f3712287ec9"
     },
     {
       "bytes": 520,
@@ -1103,9 +1103,9 @@
       "sha256": "3dbae01fc2e037f65255f205848d256659b6c0f45000370465a2d1628fb7d192"
     },
     {
-      "bytes": 1762,
+      "bytes": 1906,
       "path": "docker/compose.devdb.yaml",
-      "sha256": "8a82e772e6fce4d61bc089f2a0a4990711df83363191be721b4e10a7b18bfd6b"
+      "sha256": "eb350b912bbd65e7e2be932505ddcd76ec1e32fc2be9b0ecc01900fd3f069b8d"
     },
     {
       "bytes": 1198,
@@ -1888,9 +1888,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 217419,
+      "bytes": 217710,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "a28998801e816518abf3652c343edd43444f9395d38462b2060c69c0b4d1a9be"
+      "sha256": "c1c4c7a79616036ef24436d86b3532aba35517888199c460d1cc6902bae72aaf"
     },
     {
       "bytes": 2048,
@@ -1968,9 +1968,9 @@
       "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 37738,
+      "bytes": 39824,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "6bd2516eaf35f7f4a946d68675384df4c876695fd55400c99f1bcacb11e09c41"
+      "sha256": "bbb07d34d4b3333d5fbe0cec86589d44db1ac28619d76cfd6561d1bff1bf1c10"
     },
     {
       "bytes": 507,
@@ -2168,9 +2168,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 40246,
+      "bytes": 41055,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "9a5feb67b865a544b2ed1544736dcb11cc7765eba354c8cc4c50bf428a5a6e49"
+      "sha256": "1d52ad07081cd134c8ce395f53641bc112f1d50cf2b116cdeed18ee891208c55"
     },
     {
       "bytes": 4486,

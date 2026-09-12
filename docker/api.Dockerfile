@@ -36,7 +36,7 @@ RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
 FROM runtime-assets AS science-builder
 RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
-    && apt-get install --no-install-recommends -y build-essential \
+    && apt-get install --no-install-recommends -y build-essential xz-doc \
     && rm -rf /var/lib/apt/lists/* /usr/local/bin/configure-debian-snapshot
 RUN --network=host python -m venv /opt/uv \
     && /opt/uv/bin/python -m pip install --no-cache-dir uv==0.12.10
