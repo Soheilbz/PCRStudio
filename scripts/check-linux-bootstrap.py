@@ -527,13 +527,23 @@ def main() -> int:
     assert "registry=https://registry.npmjs.com/" in npmrc
     assert "fetch-retries=6" in npmrc
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert ci.count("uses: astral-sh/setup-uv@") == 3
+    assert ci.count("prune-cache: true") == 3, "every CI uv cache must prune before saving"
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"
+    qualification_gate = ci.split("  qualification-gate:\n", 1)[1]
+    assert "    permissions:\n      contents: read\n" in qualification_gate
+    checkout_step = qualification_gate.index("uses: actions/checkout@")
+    enforcement_step = qualification_gate.index("python3 -B scripts/ci-qualification-gate.py")
+    assert checkout_step < enforcement_step
+    assert "persist-credentials: false" in qualification_gate[:enforcement_step]
     pull_agent = (ROOT / "scripts" / "pull-release.py").read_text(encoding="utf-8")
     assert 'Path("/etc/systemd/system/pcrstudio-release-pull.service")' in pull_agent
     assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
     production = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    assert production.count("uses: astral-sh/setup-uv@") == 1
+    assert production.count("prune-cache: true") == 1, "production qualification uv cache must prune before saving"
     release_verify = production.split("name: Verify release identity and deployment inputs", 1)[1].split(
         "name: Build the qualified runtime image set", 1
     )[0]

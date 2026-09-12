@@ -16,9 +16,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 6609,
+      "bytes": 6637,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "a34470f588b4708aabcbad3e0fa74b6bc747b9b588a0d8a6778cde6ac2aa06db"
+      "sha256": "15aa72cd454351ad4ecded6901aebedf015a8feef247ae57be3e7f524fdac515"
     },
     {
       "bytes": 6120,
@@ -786,9 +786,9 @@
       "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 31910,
+      "bytes": 37738,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "24237e4eccb75cc566356645db17118606b06c9f35422baad76376078baf9c1d"
+      "sha256": "6bd2516eaf35f7f4a946d68675384df4c876695fd55400c99f1bcacb11e09c41"
     },
     {
       "bytes": 1792,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 39487,
+      "bytes": 40246,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "227b79ea4a05d6d92a378dc4cb8b4ea70e46070a857be6f0b6d3d69c15605911"
+      "sha256": "9a5feb67b865a544b2ed1544736dcb11cc7765eba354c8cc4c50bf428a5a6e49"
     },
     {
       "bytes": 4486,
@@ -1767,8 +1767,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 22181,
-      "after_sha256": "511997fada9c14cfee4336581709ee9170238262b389dc754f1b1298a43f3446",
+      "after_bytes": 22723,
+      "after_sha256": "dd04fcd55539f0c6c539398a166216c0c533af4c20ced89636bfff8d511dc9e3",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -2320,8 +2320,8 @@
       "path": "crates/pcr-server/src/sequences.rs"
     },
     {
-      "after_bytes": 34736,
-      "after_sha256": "5c6ffbb29bebe25bcbeaf1154bda9cf544faa0a4b9f1ebe1fa81c612456aa5e0",
+      "after_bytes": 34794,
+      "after_sha256": "fc96c52de54dfeaa5c510e55ef4f6e20d0d78af0128a6619a72da6bfd7288013",
       "before_bytes": 34359,
       "before_sha256": "c555340fae794963a4000b3385fffb0a60f7ca8ff856e9c19125569a592cc393",
       "path": "crates/pcr-server/tests/api.rs"

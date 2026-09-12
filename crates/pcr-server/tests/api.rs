@@ -620,7 +620,10 @@ async fn a_body_larger_than_the_limit_is_refused_before_a_handler_sees_it() {
             Request::builder()
                 .method("POST")
                 .uri("/consume")
-                .body(Body::from(vec![b'x'; pcr_contracts::MAX_HTTP_BODY_BYTES + 1]))
+                .body(Body::from(vec![
+                    b'x';
+                    pcr_contracts::MAX_HTTP_BODY_BYTES + 1
+                ]))
                 .expect("request builds"),
         )
         .await

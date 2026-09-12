@@ -85,6 +85,7 @@ jobs:
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
           version: "0.12.10"
+          prune-cache: true
       - name: Install locked Python dependencies
         if: ${{ needs.changes.outputs.full == 'true' }}
         run: uv sync --project tools --frozen --extra dev --extra folding
@@ -172,6 +173,7 @@ jobs:
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
           version: "0.12.10"
+          prune-cache: true
       - name: Install locked dependencies
         run: |
           uv sync --project tools --frozen --extra dev --extra folding
@@ -182,7 +184,10 @@ jobs:
           uvx --from ruff==0.16.5 ruff check .
           uvx --from ruff==0.16.5 ruff format --check .
           cd ..
-          uv run --project tools --frozen --extra dev pytest tools/tests -q
+          # The standard ubuntu-24.04 runner has four vCPUs. xdist is already
+          # part of the locked dev extra; module-scope scheduling keeps
+          # module-scoped fixtures together while using that bounded capacity.
+          uv run --project tools --frozen --extra dev pytest tools/tests -q -n 4 --dist=loadscope --durations=20
           uv export --frozen --extra folding --no-emit-project --project tools > "$RUNNER_TEMP/tools-requirements.txt"
           uvx --from pip-audit==2.10.1 pip-audit -r "$RUNNER_TEMP/tools-requirements.txt"
       - name: JavaScript production dependency audit
@@ -256,6 +261,7 @@ jobs:
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
           version: "0.12.10"
+          prune-cache: true
       - name: Verify frozen Python export for the image boundary
         run: uv export --frozen --extra folding --no-emit-project --project tools > /dev/null
       - name: Build API image
@@ -485,9 +491,15 @@ jobs:
     name: Required PCRStudio qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 2
+    permissions:
+      contents: read
     if: ${{ always() && !cancelled() }}
     needs: [changes, fast-feedback, checks, image-qualification, web-release-qualification]
     steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
       - name: Enforce the scope-specific qualification contract
         env:
           FULL_SCOPE: ${{ needs.changes.outputs.full }}

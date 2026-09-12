@@ -1,14 +1,71 @@
 # PCRStudio Engineering Closure Report
 
-Date: 2026-09-09
-Status: **Non-biological engineering gates verified locally; Docker/OCI dependency access is stabilized and the production-shaped control-plane/edge drill passed. Native biological acceptance is outside the current scope.**
+Date: 2026-09-12
+Status: **OPEN. The 2026-09-09 non-biological verification remains historical evidence, but the current GitHub candidate has failing CI and an incomplete required-check ruleset. Local fixes are verified; hosted requalification and branch-rule correction remain pending.**
 
-This report records the repository-wide verification pass performed against the
-current source tree. It is intentionally explicit about external gates that
-could not be completed, so a green local check is not mistaken for a green
-production release.
+This is the canonical current engineering-closure report. It preserves the
+verified 2026-09-09 baseline below and records the newer candidate state
+separately; historical evidence is not presented as proof that the current
+candidate or a live deployment is green.
 
-## Initial baseline
+## Current GitHub and local state (2026-09-12)
+
+- The canonical repository is `Soheilbz/PCRStudio`; default branch is `main`.
+  At the last remote read before this correction, PR
+  [#39](https://github.com/Soheilbz/PCRStudio/pull/39) was open from
+  `codex/final-readiness-20260912` at `fbb8559af7f892a7f2dc79a656708e216833abcd`
+  against `599c736f63bb964fe2834d25785f7d69c154bdef`.
+- Its latest observed CI run, [34720256104](https://github.com/Soheilbz/PCRStudio/actions/runs/34720256104),
+  failed. The source job completed all 1,167 Python tests and the audits, then
+  stopped at Rust formatting. The final qualification job also failed because
+  it ran the repository script without first checking out the source.
+- Root causes were corrected locally: the Rust test now matches Rust 1.94.1
+  formatting; the aggregate job has a read-only checkout with persisted
+  credentials disabled; and a dependency-free regression check protects that
+  checkout-before-script invariant. Local evidence: all 41
+  `pcr-server` API integration tests passed, targeted Clippy passed, Rust
+  formatting passed, and `scripts/check-linux-bootstrap.py` passed.
+- The full locked Python suite passed locally under four `pytest-xdist`
+  workers: 1,167 passed in 610.09 seconds. The prior hosted serial run took
+  1,489.54 seconds for the same suite; these are different machines, so the
+  timing comparison is indicative, not a controlled benchmark. CI now uses a
+  bounded four-worker `loadscope` run; hosted timing and result are pending.
+  The local profile disabled pytest's cache provider, which produced expected
+  unknown-`cache_dir` warnings; CI keeps the cache provider enabled and sets
+  `PYTHONDONTWRITEBYTECODE=1`. Local bytecode created by the profile was removed.
+- All four `astral-sh/setup-uv` uses in CI and production qualification now set
+  `prune-cache: true`. The pinned action supports this input; upstream documents
+  that it removes prebuilt wheels before persisting the GitHub Actions cache,
+  while retaining wheels built from source. A source-contract assertion keeps
+  future setup-uv uses from silently reverting to unpruned cache saves. This
+  controls reusable CI cache size; it is separate from host-local Cargo output
+  and application/server storage. The cache-size effect is not separately
+  quantified.
+- The active `Protect main` ruleset currently requires only
+  `Fast feedback and targeted contracts` and `Web production and browser
+  qualification`; it does not require `Required PCRStudio qualification`.
+  This is the last authenticated API observation; the ruleset could not be
+  re-read during this pass. Per the contributor policy, its change must follow
+  a successful hosted run of the corrected aggregate gate. No merge, release,
+  or deployment has been performed; `main` remains untouched.
+- At that public read, PR #39 was open at `fbb8559`; its latest then-observed
+  CI run was failing (29m58s), with source qualification and the aggregate
+  gate failed. The accepted MFEprimer findings remain visible as
+  notices under the documented exception; they were not suppressed. That
+  failed run predates the local corrections above and cannot qualify them.
+- An initial GitHub read attempt timed out, but follow-up isolation succeeded:
+  DNS resolves both GitHub hosts, direct unauthenticated HTTPS returned HTTP
+  200 for `github.com` and `api.github.com`, `git ls-remote` returned the
+  expected branch SHA, and authenticated PR/ruleset reads succeeded. No
+  persistent auth, DNS, proxy, or transport fault remains evidenced; the first
+  timeout was transient.
+- Generated release manifests and the source attestation have now been
+  refreshed after the report/workflow changes. Local release verification
+  passes with 1,058 manifest files, 914 SBOM components, 28 checksum entries,
+  zero mismatches, zero case collisions, and zero symlinks. Hosted review is
+  still pending because these local changes have not been pushed.
+
+## Initial baseline (verified 2026-09-09)
 
 - The candidate is committed on branch `release-candidate-20260909` and
   published to the canonical GitHub repository. Remote `main` remains
@@ -47,16 +104,30 @@ production release.
 | E-010 | Docker could not resolve the exact Rust base layer required by the production API/runner image | P1 external | VERIFIED | Persistent NetworkManager DNS repair restored canonical Docker Hub answers; the exact Rust digest pull passed, and clean API, runner, and migrator builds passed with the pinned identities |
 | E-011 | Caddy healthcheck selected unavailable IPv6 loopback for `localhost` | P2 repository | VERIFIED | The edge probe now targets `127.0.0.1:2019` explicitly; the private loopback production-shaped Compose stack reached healthy and served an edge GET |
 | E-012 | Hosted image qualification reports HIGH Go standard-library findings in the pinned MFEprimer 4.5.1 binary | P1 external security | ACCEPTED-TEMPORARILY | `SEC-EXC-2026-09-MFEPRIMER-451` records the exact executable hash, target path, package/version, severity and CVE allowlist with review-by `2026-10-09`; Trivy findings remain visible and any mismatch fails closed |
+| E-013 | Rust formatting failure in the current PR's HTTP body-limit regression test | P2 CI correctness | FIXED | Rust 1.94.1 formatting check passes locally; all 41 `pcr-server` API tests pass. The corrected hosted CI run is pending |
+| E-014 | Aggregate qualification job invoked a repository script without checkout | P1 CI enforcement | FIXED | Added least-privilege checkout (`contents: read`, `persist-credentials: false`) and a fast regression assertion. Local aggregate-gate and bootstrap checks pass; hosted requalification is pending |
+| E-015 | Full Python suite ran serially for 1,489.54 seconds in hosted CI | P2 feedback latency | FIXED | CI now uses the already-locked `pytest-xdist` with four workers and module-scope scheduling; the same 1,167 tests passed locally in 610.09 seconds. Hosted timing is pending |
+| E-016 | `Protect main` does not require the aggregate qualification check | P1 branch protection | OPEN | GitHub's active ruleset currently requires only fast feedback and Web qualification. Require the aggregate after GitHub observes its corrected successful run; no settings change has yet been made |
+| E-017 | GitHub Actions persisted the full uv cache without pruning | P2 CI storage hygiene | FIXED | All four pinned setup-uv uses now prune before saving, guarded by `check-linux-bootstrap.py`; the cache-size effect has not been separately measured |
+| E-018 | Transient GitHub HTTPS timeout during initial remote verification | P2 external connectivity | RESOLVED | Follow-up direct HTTPS requests returned HTTP 200, `git ls-remote` returned the exact remote branch SHA, and authenticated PR/ruleset reads succeeded; no continuing network or credential issue was observed |
 
-No unresolved repository-owned defect remains in the exercised non-biological scope.
-The production-shaped control-plane and edge Compose drill passed with exact
-PostgreSQL, API, migrator, Web, and Caddy artifacts. The scientific runner
-was intentionally not accepted because native biological/toolchain acceptance
-is outside the current user scope; its strict preflight remains fail-closed.
-E-012 remains a visible, time-bounded security condition rather than being
-treated as remediated. The final GitHub release is created only after the
-exact release archive and current generated evidence are rebuilt and verified
-from this commit.
+At the 2026-09-09 checkpoint, no unresolved repository-owned defect remained
+in the exercised non-biological scope. That statement does not cover the
+current PR #39 findings above. The production-shaped control-plane and edge
+Compose drill passed with exact PostgreSQL, API, migrator, Web, and Caddy
+artifacts. The scientific runner was intentionally not accepted because
+native biological/toolchain acceptance is outside the current user scope; its
+strict preflight remains fail-closed. E-012 remains a visible, time-bounded
+security condition rather than being treated as remediated. The final GitHub
+release is created only after the exact release archive and current generated
+evidence are rebuilt and verified from the release commit.
+
+## Prior release baseline and historical qualification (2026-09-09)
+
+The following sections preserve the evidence from the earlier candidate. They
+are not evidence that the current PR's hosted checks or production deployment
+have completed.
+
 
 ## Architecture
 
@@ -236,13 +307,12 @@ with no known vulnerabilities after the Next.js 16.3.4 update. The exact
 Node/pnpm/uv/Rust baseline is installed and the non-biological qualification
 gates pass on it.
 
-Hosted boundary evidence is green for the current commit. CI run
-`34399728139`, Linux source qualification run `34399728117`, CodeQL run
-`34399728175`, and dependency review run `34399728242` completed successfully;
-PR #19 has all required checks green. The pinned MFEprimer 4.5.1 findings,
-including the newly published `CVE-2026-33818` finding, remain visible under
-the exact time-bounded exception. No image identity, digest, TLS, provenance,
-or scan policy was weakened.
+The runs `34399728139`, `34399728117`, `34399728175`, and `34399728242` and
+PR #19 are historical evidence from the 2026-09-09 candidate, not the current
+GitHub state. Current PR #39 and its failing run are recorded at the top of
+this report. The pinned MFEprimer 4.5.1 findings, including
+`CVE-2026-33818`, remain visible under the exact time-bounded exception. No
+image identity, digest, TLS, provenance, or scan policy was weakened.
 
 The same hosted run still contains a PostgreSQL `no usable system locales`
 warning from the pinned Alpine image's missing `locale` utility. The image
@@ -352,7 +422,7 @@ Linux qualification/CI workflows; no hidden suppression was introduced.
 | The exact pinned Docker image can be pulled by a release host | VERIFIED: OCI preflight resolved all Docker Hub endpoints and pulled all five exact digest-pinned external references; Compose database/bootstrap and backup/restore passed |
 | The official npm advisory service is reachable for the final audit | VERIFIED: exact `pnpm audit --prod --audit-level=high` returned no known vulnerabilities after the Next.js/Sharp remediation |
 | Strict scientific execution artifacts and approved reference data are present | VERIFIED: strict toolchain verifier PASS; all required artifacts/indexes and the approved scientific-Python freeze hash-match; `/ready/scientific` HTTP 200 |
-| The current directory proves canonical Git lineage | VERIFIED: the clean published review branch `release-candidate-20260909` is open as PR #19 against `main`; remote `main` remains at `51c94f009048ff60fd3c93c17a63caeb9edcd08d` |
+| The current directory proves canonical Git lineage | VERIFIED: this checkout has real Git metadata and tracks `origin/codex/final-readiness-20260912`; current PR #39 is open against `main`. This does not imply that PR is merged or that `main` contains the candidate |
 | Standalone output is the deployable Web runtime | VERIFIED: deployment-shaped standalone launch, smoke and browser checks passed |
 | The final patch-level toolchain can be exercised on this host | VERIFIED for non-biological gates: exact Node, pnpm, uv and Rust are installed and exercised |
 
@@ -412,14 +482,13 @@ deferred under the user's current scope; the scientific runner's strict
 preflight remains fail-closed rather than being waived. That is a scope
 boundary, not a registry or production control-plane blocker.
 
-The repository/live boundary is explicit: the current source candidate has
-verified static, web, API-contract, local database, browser, and release-
-artifact evidence, but no live deployment, production domain, production
-secrets, or production database was touched. The candidate is committed in a
-clean local worktree and published on the review branch; remote `main` remains
-unchanged. Hosted source qualification and all non-image CI checks are green;
-the pinned MFEprimer findings remain a visible external security exception that
-must be re-reviewed by `2026-10-09`.
+The repository/live boundary is explicit: prior evidence covers static, Web,
+API-contract, local database, browser, and release-artifact paths, but no live
+deployment, production domain, production secrets, or production database was
+touched. The current review branch is published, but the local corrections in
+this report are not yet on GitHub; the latest hosted run is not green. Remote
+`main` remains unchanged. The pinned MFEprimer findings remain a visible
+external security exception that must be re-reviewed by `2026-10-09`.
 
 For E-002, the registry-access removal condition is met: the exact pinned
 `postgres:18-alpine@sha256:d3e1620b...` image was pulled and started through
@@ -449,14 +518,11 @@ pnpm --filter web start:standalone
 pnpm web:smoke -- --url=http://localhost:3400
 ```
 
-## Completion statement
+## Current closure statement
 
-PCRStudio is a locally verified and GitHub-published release candidate with
-strong static, web, Rust, Python, database, browser, Docker/OCI, and
-release-artifact evidence. Hosted source qualification and all non-image CI
-checks are green; the pinned MFEprimer findings remain covered only by the
-explicit, time-bounded exception `SEC-EXC-2026-09-MFEPRIMER-451`.
-The non-biological production-shaped control-plane/edge Compose drill passed,
-including migrations, readiness, backup/restore, restart, and recreation from
-cached local artifacts. Native biological acceptance remains intentionally
-outside the current scope. Live deployment remains a separate pending phase.
+**Engineering closure is not achieved.** The current candidate still needs the
+local fixes to be reviewed by a successful hosted PR #39 run and the `main`
+ruleset to require the successful aggregate gate. Local release manifests are
+current and verified. Live deployment remains a later, separate phase.
+Native biological acceptance remains outside the current scope; the scientific
+runner remains fail-closed rather than waived.
