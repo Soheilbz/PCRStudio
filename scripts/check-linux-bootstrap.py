@@ -2,6 +2,7 @@
 """Dependency-free regression checks for Linux bootstrap/provision invariants."""
 from __future__ import annotations
 
+import argparse
 import gzip
 import hashlib
 import importlib.util
@@ -10,10 +11,14 @@ import json
 import os
 import shutil
 import stat
+import subprocess
 import sys
 import tarfile
 import tempfile
+import uuid
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +29,15 @@ def load(name: str, path: Path):
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load {path}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # SourceFileLoader may materialize __pycache__ even under -B when used via
+    # exec_module. These contract checks must leave the repository tree clean.
+    sys.modules[name] = module
+    try:
+        code = compile(path.read_bytes(), str(path), "exec", dont_inherit=True)
+        exec(code, module.__dict__)
+    except BaseException:
+        sys.modules.pop(name, None)
+        raise
     return module
 
 
@@ -36,10 +49,249 @@ def expect_system_exit(fn, value: str) -> None:
     raise AssertionError(f"expected rejection for {value!r}")
 
 
+def check_docker_save_integration(release_bundle) -> None:
+    docker = shutil.which("docker")
+    if docker is None:
+        raise SystemExit("Docker is required for --docker-save-integration")
+
+    image_tag = f"pcrstudio-release-contract:{uuid.uuid4().hex}"
+    imported = False
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-docker-save-") as tmp:
+        root_archive = Path(tmp) / "rootfs.tar"
+        image_archive = Path(tmp) / "image.tar.gz"
+        payload = b"pcrstudio docker-save archive contract\n"
+        with tarfile.open(root_archive, "w") as archive:
+            member = tarfile.TarInfo("contract.txt")
+            member.size = len(payload)
+            member.mode = 0o644
+            archive.addfile(member, io.BytesIO(payload))
+
+        try:
+            subprocess.run(
+                [docker, "image", "import", str(root_archive), image_tag],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=60,
+            )
+            imported = True
+            saved = subprocess.run(
+                [docker, "image", "save", image_tag],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=60,
+            )
+            with tarfile.open(fileobj=io.BytesIO(saved.stdout), mode="r:") as archive:
+                entries = json.load(archive.extractfile("manifest.json"))
+                entry = next(
+                    item for item in entries if image_tag in item.get("RepoTags", [])
+                )
+                config_name = entry["Config"]
+                config_stream = archive.extractfile(config_name)
+                if config_stream is None:
+                    raise AssertionError(f"docker save omitted config {config_name}")
+                with config_stream:
+                    expected_digest = "sha256:" + hashlib.sha256(config_stream.read()).hexdigest()
+            image_archive.write_bytes(gzip.compress(saved.stdout, mtime=0))
+            actual = release_bundle.docker_save_config_digests(image_archive)
+            assert actual == {image_tag: expected_digest}, (actual, expected_digest)
+
+            subprocess.run(
+                [docker, "image", "rm", "--force", image_tag],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=30,
+            )
+            subprocess.run(
+                [docker, "image", "load", "--input", str(image_archive)],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=60,
+            )
+            pull_release = load("pcrstudio_pull_release", ROOT / "scripts" / "pull-release.py")
+            name, tag = image_tag.rsplit(":", 1)
+            pull_release.image_ids(
+                {"images": [{"name": name, "tag": tag, "image_id": expected_digest}]}
+            )
+        finally:
+            if imported:
+                subprocess.run(
+                    [docker, "image", "rm", "--force", image_tag],
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=30,
+                )
+
+
+def check_download_retry_contract(provision) -> None:
+    payload = b"content-addressed archive fixture\n"
+    expected = hashlib.sha256(payload).hexdigest()
+    primary = "https://primary.example.invalid/pinned.tgz"
+    mirror = "https://mirror.example.invalid/pinned.tgz"
+    requests: list[str] = []
+
+    def fail_primary_then_serve_mirror(request, timeout):
+        requests.append(request.full_url)
+        if request.full_url == primary:
+            raise provision.urllib.error.URLError(
+                provision.socket.timeout("simulated connect timeout")
+            )
+        return io.BytesIO(payload)
+
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-download-contract-") as tmp:
+        target = Path(tmp) / "pinned.tgz"
+        with mock.patch.object(
+            provision.urllib.request,
+            "urlopen",
+            side_effect=AssertionError("unpinned download must fail before network access"),
+        ):
+            try:
+                provision.download(primary, target, "")
+            except SystemExit as error:
+                assert "exact lowercase SHA-256 pin" in str(error)
+            else:
+                raise AssertionError("provisioner accepted an artifact without a digest pin")
+
+        with (
+            mock.patch.object(
+                provision.urllib.request,
+                "urlopen",
+                side_effect=fail_primary_then_serve_mirror,
+            ),
+            mock.patch.object(provision.time, "sleep") as sleep,
+            redirect_stderr(io.StringIO()),
+            redirect_stdout(io.StringIO()),
+        ):
+            assert provision.download(
+                primary, target, expected, mirror_urls=(mirror,)
+            ) == target
+        assert target.read_bytes() == payload
+        assert requests == [primary] * provision.DOWNLOAD_MAX_ATTEMPTS + [mirror]
+        assert sleep.call_count == provision.DOWNLOAD_MAX_ATTEMPTS - 1
+
+        # A valid local pinned artifact is reusable without a network call.
+        with mock.patch.object(
+            provision.urllib.request,
+            "urlopen",
+            side_effect=AssertionError("verified cache unexpectedly accessed network"),
+        ):
+            assert provision.download(primary, target, expected) == target
+
+        # Corrupt content is fatal and must not trigger another source or retry.
+        bad_target = Path(tmp) / "corrupt.tgz"
+        with mock.patch.object(
+            provision.urllib.request, "urlopen", return_value=io.BytesIO(b"tampered")
+        ) as open_url:
+            try:
+                provision.download(
+                    primary, bad_target, expected, mirror_urls=(mirror,)
+                )
+            except SystemExit as error:
+                assert "SHA-256 mismatch" in str(error)
+            else:
+                raise AssertionError("download accepted bytes that violated its SHA-256 pin")
+            assert open_url.call_count == 1
+        assert not bad_target.exists()
+
+        class DowngradedResponse(io.BytesIO):
+            def geturl(self):
+                return "http://mirror.example.invalid/pinned.tgz"
+
+        with mock.patch.object(
+            provision.urllib.request,
+            "urlopen",
+            return_value=DowngradedResponse(payload),
+        ) as open_url:
+            try:
+                provision.download(
+                    primary, Path(tmp) / "downgraded.tgz", expected
+                )
+            except SystemExit as error:
+                assert "HTTPS" in str(error)
+            else:
+                raise AssertionError("download followed a redirect that downgraded TLS")
+            assert open_url.call_count == 1
+
+        # Permanent HTTP failures are diagnosed but never retried or hidden by
+        # switching to another source.
+        http_404 = provision.urllib.error.HTTPError(
+            primary, 404, "Not Found", {}, None
+        )
+        with mock.patch.object(
+            provision.urllib.request, "urlopen", side_effect=http_404
+        ) as open_url:
+            try:
+                provision.download(
+                    primary, Path(tmp) / "missing.tgz", expected, mirror_urls=(mirror,)
+                )
+            except SystemExit as error:
+                assert "class=http-404" in str(error)
+            else:
+                raise AssertionError("download retried or hid a permanent 404")
+            assert open_url.call_count == 1
+
+        assert provision.download_failure_class(
+            provision.urllib.error.URLError(
+                provision.socket.gaierror(provision.socket.EAI_AGAIN, "temporary DNS failure")
+            )
+        ) == "dns-temporary"
+        assert provision.download_failure_class(http_404) == "http-404"
+        http_403 = provision.urllib.error.HTTPError(primary, 403, "Forbidden", {}, None)
+        assert provision.download_failure_class(http_403) == "authentication-or-policy"
+        http_407 = provision.urllib.error.HTTPError(primary, 407, "Proxy auth", {}, None)
+        assert provision.download_failure_class(http_407) == "proxy-authentication"
+        http_429 = provision.urllib.error.HTTPError(
+            primary, 429, "Rate limited", {"Retry-After": "100"}, None
+        )
+        assert provision.download_failure_class(http_429) == "rate-limit"
+        assert provision.retry_delay_seconds(http_429, 1) == 10.0
+        cdn_522 = provision.urllib.error.HTTPError(primary, 522, "Origin timeout", {}, None)
+        assert provision.download_failure_class(cdn_522) == "transient-cdn"
+        assert provision.download_failure_class(
+            provision.urllib.error.URLError(
+                provision.ssl.SSLCertVerificationError(1, "invalid certificate")
+            )
+        ) == "tls-certificate"
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--docker-save-integration",
+        action="store_true",
+        help="exercise the digest reader against an image created and saved by the local Docker daemon",
+    )
+    args = parser.parse_args()
+
     bootstrap = load("pcrstudio_bootstrap_linux", ROOT / "scripts" / "bootstrap-linux.py")
     provision = load("pcrstudio_provision_tools", ROOT / "scripts" / "provision-tools.py")
     release_bundle = load("pcrstudio_release_bundle", ROOT / "scripts" / "release_bundle.py")
+    ci_scope = load("pcrstudio_ci_scope", ROOT / "scripts" / "classify-ci-scope.py")
+
+    # Narrow CI paths require direct executable coverage; unknown and sensitive
+    # product/tooling paths must retain the broad qualification gates.
+    assert ci_scope.classify_paths(["README.md"]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths(["docs/OPERATIONS.md"]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths(["scripts/release_bundle.py"]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths(["scripts/check-linux-bootstrap.py"]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths(["scripts/bootstrap-linux.py"]) == {"full": True, "web": False}
+    assert ci_scope.classify_paths(["crates/pcr-core/src/lib.rs"]) == {"full": True, "web": False}
+    assert ci_scope.classify_paths(["web/src/app/page.tsx"]) == {"full": True, "web": True}
+    assert ci_scope.classify_paths([".github/workflows/ci.yml"]) == {"full": True, "web": False}
+    assert ci_scope.classify_paths(["release/current/README.md"]) == {"full": True, "web": False}
+    assert ci_scope.classify_paths(["new-unknown-config.toml"]) == {"full": True, "web": True}
+    assert provision.ARTIFACTS["mafft"]["sha256"] == "bf59d016f1b2030bc7fc83b7715ae1f0823570de3bd059c26eb522a72f9c2952"
+    assert provision.ARTIFACTS["mafft"]["mirror_urls"] == (
+        "https://mafft.cbrc.jp/alignment/software/mafft-7.526-linux.tgz",
+    )
+    provision.verify_contract_alignment()
+    check_download_retry_contract(provision)
 
     # Public and private bootstrap examples are one configuration contract.
     # Private mode changes values (loopback origin), not the set of supported
@@ -98,11 +350,16 @@ def main() -> int:
         entries = []
         members: list[tuple[str, bytes]] = []
         expected_digests = {}
-        for tag, content in configs.items():
-            config_name = hashlib.sha256(content).hexdigest() + ".json"
+        for index, (tag, content) in enumerate(configs.items()):
+            config_digest = hashlib.sha256(content).hexdigest()
+            config_name = (
+                f"blobs/sha256/{config_digest}"
+                if index == 1
+                else config_digest + ".json"
+            )
             entries.append({"Config": config_name, "RepoTags": [tag], "Layers": ["layer/layer.tar"]})
             members.append((config_name, content))
-            expected_digests[tag] = "sha256:" + hashlib.sha256(content).hexdigest()
+            expected_digests[tag] = "sha256:" + config_digest
         with (
             archive_path.open("wb") as compressed_file,
             gzip.GzipFile(fileobj=compressed_file, mode="wb", mtime=0) as compressed_stream,
@@ -110,14 +367,19 @@ def main() -> int:
         ):
             manifest = json.dumps(entries, separators=(",", ":")).encode("utf-8")
             for name, content in [
+                # Put one config before the manifest to preserve order-agnostic coverage.
+                members[0],
                 ("manifest.json", manifest),
                 ("layer/layer.tar", b"layer-bytes-" * 4096),
-                *members,
+                members[1],
             ]:
                 info = tarfile.TarInfo(name)
                 info.size = len(content)
                 archive.addfile(info, io.BytesIO(content))
         assert release_bundle.docker_save_config_digests(archive_path) == expected_digests
+
+    if args.docker_save_integration:
+        check_docker_save_integration(release_bundle)
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):
@@ -285,7 +547,8 @@ def main() -> int:
         assert disk["reference_fasta_bytes"] == fasta.stat().st_size
         assert disk["checks"], disk
 
-    print("Linux bootstrap/provision source regression PASS")
+    suffix = " with real docker-save integration" if args.docker_save_integration else ""
+    print(f"Linux bootstrap/provision source regression PASS{suffix}")
     return 0
 
 

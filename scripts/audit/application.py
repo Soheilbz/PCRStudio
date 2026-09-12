@@ -440,19 +440,26 @@ def audit_application_foundation() -> None:
     if 'httpRoute("projects_export")' not in export_route or 'httpRoute("projects_import")' not in import_route:
         error("streaming account backup routes drifted from canonical project export/import endpoints")
 
-    # CI is allowed to observe scientific readiness as ready (200) or honestly
-    # unqualified (503), but it must validate the complete public component shape.
+    # The production readiness contract is exercised by the database-backed
+    # Rust integration test, not by a CI probe that silently passes when no API
+    # is running. Keep the actual route, failure mode, and privacy assertions
+    # tied to the test that executes them.
     ci = text(".github/workflows/ci.yml")
+    readiness_test = text("crates/pcr-server/tests/export.rs")
     readiness_markers = (
         "/ready/scientific",
-        "200|503",
-        '"ready","database","designWorker","runner","scientificToolchain"',
-        'typeof j.ready !== "boolean"',
-        'typeof j[key].ok !== "boolean"',
+        "readiness_says_which_dependency_is_missing",
+        "StatusCode::SERVICE_UNAVAILABLE",
+        'body["ready"], false',
+        'body["database"]["ok"], true',
+        'body["designWorker"]["ok"], false',
+        'body["designWorker"].get("why").is_none()',
     )
     for marker in readiness_markers:
-        if marker not in ci:
-            error(f"CI scientific-readiness contract lost marker: {marker}")
+        if marker not in readiness_test:
+            error(f"executable scientific-readiness contract lost marker: {marker}")
+    if "cargo test --locked --workspace" not in ci:
+        error("CI no longer runs the workspace test containing the readiness contract")
     for marker in (
         "with_runner_requirement",
         "active_runner_status",

@@ -15796,6 +15796,12 @@
     },
     {
       "bom-ref": "scientific-tool:mafft@7.526",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "bf59d016f1b2030bc7fc83b7715ae1f0823570de3bd059c26eb522a72f9c2952"
+        }
+      ],
       "name": "mafft",
       "properties": [
         {

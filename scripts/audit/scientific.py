@@ -38,6 +38,25 @@ def audit_toolchain_contract_parity() -> None:
         if not canonical_requirement:
             error(f"generated runtime ToolSpec readiness requirement missing for {tool_id}")
 
+    provision_rows = tomllib.loads(
+        (ROOT / "contracts/tools.toml").read_text(encoding="utf-8")
+    ).get("tool", [])
+    for row in provision_rows:
+        tool_id = str(row.get("id") or "")
+        if not row.get("provision_id"):
+            continue
+        digest = str(row.get("provision_sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            error(f"provisioned tool {tool_id} must have an exact lowercase SHA-256 pin")
+        urls = [str(row.get("provision_url") or ""), *map(str, row.get("provision_mirror_urls") or [])]
+        if any(not url.startswith("https://") for url in urls):
+            error(f"provisioned tool {tool_id} has a non-HTTPS source or mirror")
+        runtime_row = canonical_tools.get(tool_id)
+        if isinstance(runtime_row, dict) and runtime_row.get("provision_sha256") != digest:
+            error(f"generated runtime artifact pin drifted for {tool_id}")
+        if isinstance(runtime_row, dict) and runtime_row.get("provision_mirror_urls", []) != list(row.get("provision_mirror_urls") or []):
+            error(f"generated runtime mirror list drifted for {tool_id}")
+
     science = json.loads((ROOT / "tools/scientific-tools.json").read_text(encoding="utf-8"))
     for tool_id, item in science.get("tools", {}).items():
         filename = str(item.get("wheel_filename") or "")
