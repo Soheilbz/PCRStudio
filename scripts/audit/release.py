@@ -1080,6 +1080,9 @@ def audit_dependency_maintenance_exceptions() -> None:
         "docker": ("/docker", "monthly", "1"),
         "docker-compose": ("/", "monthly", "1"),
     }
+    unexpected_ecosystems = set(dependabot_blocks) - set(expected_dependabot)
+    if unexpected_ecosystems:
+        error(f"Dependabot policy contains unreviewed ecosystems: {sorted(unexpected_ecosystems)}")
     for ecosystem, (directory, interval, open_limit) in expected_dependabot.items():
         block = dependabot_blocks.get(ecosystem, "")
         if not block:
