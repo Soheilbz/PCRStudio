@@ -280,6 +280,14 @@ def main() -> int:
     assert ci_scope.classify_paths(["docs/OPERATIONS.md"]) == {"full": False, "web": False}
     assert ci_scope.classify_paths(["scripts/release_bundle.py"]) == {"full": False, "web": False}
     assert ci_scope.classify_paths(["scripts/check-linux-bootstrap.py"]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths(["scripts/classify-ci-scope.py"]) == {
+        "full": False,
+        "web": False,
+    }
+    assert ci_scope.classify_paths([".github/workflows/production-deploy.yml"]) == {
+        "full": False,
+        "web": False,
+    }
     assert ci_scope.classify_paths(["scripts/bootstrap-linux.py"]) == {"full": True, "web": False}
     assert ci_scope.classify_paths(["crates/pcr-core/src/lib.rs"]) == {"full": True, "web": False}
     assert ci_scope.classify_paths(["web/src/app/page.tsx"]) == {"full": True, "web": True}
@@ -334,7 +342,12 @@ def main() -> int:
     source_check = release_verify.index("scripts/qualify-source.py --no-write")
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
-    assert "docker_save_config_digests(image_path)" in production
+    assert "path: .release-tooling" in production
+    assert "github.event.repository.default_branch" in production
+    assert "persist-credentials: false" in production
+    assert "git -C .release-tooling rev-parse HEAD" in production
+    assert "--bundle-tool-source-sha \"$BUNDLE_TOOL_SOURCE_SHA\"" in production
+    assert "create-deploy-manifest" in production
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.1")
 
@@ -343,9 +356,20 @@ def main() -> int:
     # image IDs without creating an expanded archive on disk.
     with tempfile.TemporaryDirectory(prefix="pcrstudio-release-bundle-") as tmp:
         archive_path = Path(tmp) / "images.tar.gz"
+        source_sha = "a" * 40
         configs = {
-            "pcrstudio-api:release-test": b'{"architecture":"amd64","config":{"Labels":{"role":"api"}}}',
-            "pcrstudio-web:release-test": b'{"architecture":"amd64","config":{"Labels":{"role":"web"}}}',
+            f"pcrstudio-api:{source_sha}": (
+                b'{"architecture":"amd64","config":{"Labels":{"role":"api"}}}'
+            ),
+            f"pcrstudio-runner:{source_sha}": (
+                b'{"architecture":"amd64","config":{"Labels":{"role":"runner"}}}'
+            ),
+            f"pcrstudio-migrate:{source_sha}": (
+                b'{"architecture":"amd64","config":{"Labels":{"role":"migrate"}}}'
+            ),
+            f"pcrstudio-web:{source_sha}": (
+                b'{"architecture":"amd64","config":{"Labels":{"role":"web"}}}'
+            ),
         }
         entries = []
         members: list[tuple[str, bytes]] = []
@@ -366,17 +390,60 @@ def main() -> int:
             tarfile.open(fileobj=compressed_stream, mode="w") as archive,
         ):
             manifest = json.dumps(entries, separators=(",", ":")).encode("utf-8")
-            for name, content in [
-                # Put one config before the manifest to preserve order-agnostic coverage.
+            # Put one config before the manifest to preserve order-agnostic coverage.
+            archive_members = [
                 members[0],
                 ("manifest.json", manifest),
+                *members[1:],
                 ("layer/layer.tar", b"layer-bytes-" * 4096),
-                members[1],
-            ]:
+            ]
+            for name, content in archive_members:
                 info = tarfile.TarInfo(name)
                 info.size = len(content)
                 archive.addfile(info, io.BytesIO(content))
         assert release_bundle.docker_save_config_digests(archive_path) == expected_digests
+
+        source_archive = Path(tmp) / "source.tar.gz"
+        source_archive.write_bytes(b"exact immutable source archive fixture\n")
+        manifest = release_bundle.build_deployment_manifest(
+            release_ref="v1.0.1",
+            source_sha=source_sha,
+            bundle_tool_source_sha="b" * 40,
+            source_archive=source_archive,
+            image_archive=archive_path,
+        )
+        assert manifest["source_sha"] == source_sha
+        assert manifest["bundle_tool_source_sha"] == "b" * 40
+        assert {image["name"] for image in manifest["images"]} == {
+            "pcrstudio-api",
+            "pcrstudio-runner",
+            "pcrstudio-migrate",
+            "pcrstudio-web",
+        }
+        manifest_path = Path(tmp) / "deployment-manifest.json"
+        subprocess.run(
+            [
+                sys.executable,
+                "-B",
+                str(ROOT / "scripts" / "release_bundle.py"),
+                "create-deploy-manifest",
+                "--release-ref",
+                "v1.0.1",
+                "--source-sha",
+                source_sha,
+                "--bundle-tool-source-sha",
+                "b" * 40,
+                "--source-archive",
+                str(source_archive),
+                "--image-archive",
+                str(archive_path),
+                "--output",
+                str(manifest_path),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+        assert json.loads(manifest_path.read_text(encoding="utf-8")) == manifest
 
     if args.docker_save_integration:
         check_docker_save_integration(release_bundle)

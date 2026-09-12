@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import re
 import tarfile
 from pathlib import Path
 
@@ -56,7 +57,9 @@ def docker_save_config_digests(image_archive: Path) -> dict[str, str]:
                 }
             else:
                 member_digest = _config_member_sha256(member.name)
-                if member_digest is None or (entries is not None and member.name not in config_names):
+                if member_digest is None or (
+                    entries is not None and member.name not in config_names
+                ):
                     continue
                 if member.name in config_digests:
                     raise SystemExit(
@@ -104,7 +107,9 @@ def docker_save_config_digests(image_archive: Path) -> dict[str, str]:
             )
         for tag in tags:
             if tag in image_digests:
-                raise SystemExit(f"OCI image archive contains duplicate image tag {tag}")
+                raise SystemExit(
+                    f"OCI image archive contains duplicate image tag {tag}"
+                )
             image_digests[tag] = "sha256:" + config_digest
     return image_digests
 
@@ -117,3 +122,90 @@ def _config_member_sha256(member_name: str) -> str | None:
     if len(basename) != 64 or any(char not in "0123456789abcdef" for char in basename):
         return None
     return basename
+
+
+def build_deployment_manifest(
+    *,
+    release_ref: str,
+    source_sha: str,
+    bundle_tool_source_sha: str,
+    source_archive: Path,
+    image_archive: Path,
+) -> dict[str, object]:
+    """Build release metadata for the exact source and saved runtime images."""
+    if not re.fullmatch(
+        r"v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)",
+        release_ref,
+    ):
+        raise SystemExit(f"invalid stable release tag: {release_ref!r}")
+    for field, value in (
+        ("source SHA", source_sha),
+        ("bundle tooling source SHA", bundle_tool_source_sha),
+    ):
+        if not re.fullmatch(r"[0-9a-f]{40}", value):
+            raise SystemExit(f"invalid {field}: {value!r}")
+
+    image_config_digests = docker_save_config_digests(image_archive)
+    images = []
+    for name in (
+        "pcrstudio-api",
+        "pcrstudio-runner",
+        "pcrstudio-migrate",
+        "pcrstudio-web",
+    ):
+        image_id = image_config_digests.get(f"{name}:{source_sha}")
+        if image_id is None:
+            raise SystemExit(f"OCI image archive is missing {name}:{source_sha}")
+        images.append({"name": name, "tag": source_sha, "image_id": image_id})
+
+    def archive_record(path: Path) -> dict[str, object]:
+        digest = hashlib.sha256()
+        with path.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+        return {
+            "name": path.name,
+            "sha256": digest.hexdigest(),
+            "bytes": path.stat().st_size,
+        }
+
+    return {
+        "format_version": 1,
+        "release_ref": release_ref,
+        "source_sha": source_sha,
+        "bundle_tool_source_sha": bundle_tool_source_sha,
+        "source_archive": archive_record(source_archive),
+        "image_archive": archive_record(image_archive),
+        "images": images,
+    }
+
+
+def main() -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    manifest_parser = subparsers.add_parser("create-deploy-manifest")
+    manifest_parser.add_argument("--release-ref", required=True)
+    manifest_parser.add_argument("--source-sha", required=True)
+    manifest_parser.add_argument("--bundle-tool-source-sha", required=True)
+    manifest_parser.add_argument("--source-archive", type=Path, required=True)
+    manifest_parser.add_argument("--image-archive", type=Path, required=True)
+    manifest_parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+
+    manifest = build_deployment_manifest(
+        release_ref=args.release_ref,
+        source_sha=args.source_sha,
+        bundle_tool_source_sha=args.bundle_tool_source_sha,
+        source_archive=args.source_archive,
+        image_archive=args.image_archive,
+    )
+    args.output.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

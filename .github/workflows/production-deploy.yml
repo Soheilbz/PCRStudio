@@ -38,6 +38,17 @@ jobs:
           ref: ${{ github.event.release.tag_name || inputs.source_ref }}
           fetch-depth: 1
 
+      # Historical tags may predate newer Docker-save config paths. Keep the
+      # release source above immutable, but use the protected default-branch
+      # bundle reader and record its exact commit in the deployment manifest.
+      - name: Check out trusted deployment-bundle tooling
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: .release-tooling
+          fetch-depth: 1
+          persist-credentials: false
+
       - name: Materialize locked web verification dependencies
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -67,6 +78,7 @@ jobs:
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
+          echo "bundle_tool_source_sha=$(git -C .release-tooling rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           # The in-toto statement binds the generated manifests. Refresh it
@@ -101,6 +113,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+          BUNDLE_TOOL_SOURCE_SHA: ${{ steps.release.outputs.bundle_tool_source_sha }}
         run: |
           set -euo pipefail
           asset_dir="$RUNNER_TEMP/pcrstudio-release-assets"
@@ -113,43 +126,12 @@ jobs:
             "pcrstudio-migrate:$RELEASE_SHA" "pcrstudio-web:$RELEASE_SHA")
           docker image inspect "${images[@]}" > /dev/null
           docker save "${images[@]}" | gzip -n > "$image_archive"
-          python3 -B - "$manifest" "$source_archive" "$image_archive" <<'PY'
-          import hashlib
-          import json
-          import os
-          import sys
-          from pathlib import Path
-          from scripts.release_bundle import docker_save_config_digests
-
-          manifest_path, source_path, image_path = map(Path, sys.argv[1:])
-          release_sha = os.environ["RELEASE_SHA"]
-          release_ref = os.environ["RELEASE_REF"]
-          image_names = ["pcrstudio-api", "pcrstudio-runner", "pcrstudio-migrate", "pcrstudio-web"]
-
-          def digest(path: Path) -> str:
-              value = hashlib.sha256()
-              with path.open("rb") as stream:
-                  for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                      value.update(chunk)
-              return value.hexdigest()
-
-          image_config_digests = docker_save_config_digests(image_path)
-
-          images = []
-          for name in image_names:
-              tag = f"{name}:{release_sha}"
-              image_id = image_config_digests.get(tag)
-              if image_id is None:
-                  raise SystemExit(f"OCI image archive is missing {tag}")
-              images.append({"name": name, "tag": release_sha, "image_id": image_id})
-          manifest_path.write_text(json.dumps({
-              "format_version": 1,
-              "release_ref": release_ref,
-              "source_sha": release_sha,
-              "source_archive": {"name": source_path.name, "sha256": digest(source_path), "bytes": source_path.stat().st_size},
-              "image_archive": {"name": image_path.name, "sha256": digest(image_path), "bytes": image_path.stat().st_size},
-              "images": images,
-          }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-          PY
+          python3 -B .release-tooling/scripts/release_bundle.py create-deploy-manifest \
+            --release-ref "$RELEASE_REF" \
+            --source-sha "$RELEASE_SHA" \
+            --bundle-tool-source-sha "$BUNDLE_TOOL_SOURCE_SHA" \
+            --source-archive "$source_archive" \
+            --image-archive "$image_archive" \
+            --output "$manifest"
           gh release upload "$RELEASE_REF" "$source_archive" "$image_archive" "$manifest" --repo "$GITHUB_REPOSITORY" --clobber
           echo "published HTTPS deployment assets for $RELEASE_REF ($RELEASE_SHA)"

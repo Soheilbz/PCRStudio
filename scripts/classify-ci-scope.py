@@ -21,6 +21,8 @@ DOCS_ONLY_ROOT_FILES = {
     "SECURITY.md",
 }
 TARGETED_RELEASE_FILES = {
+    ".github/workflows/production-deploy.yml",
+    "scripts/classify-ci-scope.py",
     "scripts/check-linux-bootstrap.py",
     "scripts/pull-release.py",
     "scripts/release_bundle.py",
