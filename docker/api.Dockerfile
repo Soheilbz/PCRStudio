@@ -10,7 +10,7 @@
 # not carry that attack surface or image weight merely for build convenience.
 
 # ── Rust binaries ───────────────────────────────────────────────────────────
-FROM rust:1.94-bookworm@sha256:6ae102bdbf528294bc79ad6e1fae682f6f7c2a6e6621506ba959f9685b308a55 AS rust-builder
+FROM rust:1.98-bookworm@sha256:9a73a5088750b4c95158ab26629c854c3d6fc4b173cb7bc8079ad252d8ed7bfa AS rust-builder
 ENV CARGO_NET_RETRY=5 \
     CARGO_HTTP_TIMEOUT=180 \
     CARGO_HTTP_LOW_SPEED_LIMIT=1 \
@@ -23,7 +23,7 @@ RUN --network=host cargo build --locked --release -p pcr-server --bin pcr-server
     && cargo build --locked --release -p pcr-server --bin pcr-migrate
 
 # ── Reusable Python/glibc runtime assets ────────────────────────────────────
-FROM python:3.12-slim-trixie@sha256:2fe5997d249a808b8eeea52c58a1dbffbba28754dc11699ef5c029f2d818ce79 AS runtime-assets
+FROM python:3.14-slim-trixie@sha256:cad9a2c871761c413caa6fdd6441c783451e740a48aaeba60ae62a8b53525ef6 AS runtime-assets
 ARG DEBIAN_SNAPSHOT=20260901T000000Z
 WORKDIR /src
 COPY docker/configure-debian-snapshot.sh /usr/local/bin/configure-debian-snapshot
@@ -60,7 +60,7 @@ RUN --network=host PCRSTUDIO_PROVISION_PREFIX=/opt/pcrstudio/tools \
 # only the glibc/CA runtime assets and the already-qualified application files.
 # This removes the vulnerable package-manager/userland surface without hiding
 # package metadata or weakening the scanner policy.
-FROM busybox:1.37.0-glibc@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c0865b0f540d868df0 AS process-runtime-base
+FROM busybox:1.38.0-glibc@sha256:3ba030337caebbfc2232b22b1e435eb213b28e5844a34942c74555bf904a265a AS process-runtime-base
 ARG PCRSTUDIO_BUILD_ID
 LABEL org.pcrstudio.product="PCRStudio" \
       org.pcrstudio.lifecycle="managed" \
