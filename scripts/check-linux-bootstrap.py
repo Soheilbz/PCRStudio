@@ -288,6 +288,15 @@ def main() -> int:
         "full": False,
         "web": False,
     }
+    assert ci_scope.classify_paths([
+        ".github/dependabot.yml",
+        "contracts/maintenance-exceptions.json",
+        "scripts/audit/release.py",
+    ]) == {"full": False, "web": False}
+    assert ci_scope.classify_paths([
+        ".github/dependabot.yml",
+        "crates/pcr-core/src/lib.rs",
+    ]) == {"full": True, "web": False}
     assert ci_scope.classify_paths(["scripts/bootstrap-linux.py"]) == {"full": True, "web": False}
     assert ci_scope.classify_paths(["crates/pcr-core/src/lib.rs"]) == {"full": True, "web": False}
     assert ci_scope.classify_paths(["web/src/app/page.tsx"]) == {"full": True, "web": True}
