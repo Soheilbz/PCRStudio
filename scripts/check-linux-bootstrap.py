@@ -2,12 +2,16 @@
 """Dependency-free regression checks for Linux bootstrap/provision invariants."""
 from __future__ import annotations
 
+import gzip
+import hashlib
 import importlib.util
+import io
 import json
 import os
 import shutil
 import stat
 import sys
+import tarfile
 import tempfile
 from pathlib import Path
 
@@ -35,6 +39,7 @@ def expect_system_exit(fn, value: str) -> None:
 def main() -> int:
     bootstrap = load("pcrstudio_bootstrap_linux", ROOT / "scripts" / "bootstrap-linux.py")
     provision = load("pcrstudio_provision_tools", ROOT / "scripts" / "provision-tools.py")
+    release_bundle = load("pcrstudio_release_bundle", ROOT / "scripts" / "release_bundle.py")
 
     # Public and private bootstrap examples are one configuration contract.
     # Private mode changes values (loopback origin), not the set of supported
@@ -77,8 +82,42 @@ def main() -> int:
     source_check = release_verify.index("scripts/qualify-source.py --no-write")
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
+    assert "docker_save_config_digests(image_path)" in production
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.1")
+
+    # Regression for compressed docker-save bundles: inspect tar members only
+    # in their forward stream order. This remains cheap and proves portable
+    # image IDs without creating an expanded archive on disk.
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-release-bundle-") as tmp:
+        archive_path = Path(tmp) / "images.tar.gz"
+        configs = {
+            "pcrstudio-api:release-test": b'{"architecture":"amd64","config":{"Labels":{"role":"api"}}}',
+            "pcrstudio-web:release-test": b'{"architecture":"amd64","config":{"Labels":{"role":"web"}}}',
+        }
+        entries = []
+        members: list[tuple[str, bytes]] = []
+        expected_digests = {}
+        for tag, content in configs.items():
+            config_name = hashlib.sha256(content).hexdigest() + ".json"
+            entries.append({"Config": config_name, "RepoTags": [tag], "Layers": ["layer/layer.tar"]})
+            members.append((config_name, content))
+            expected_digests[tag] = "sha256:" + hashlib.sha256(content).hexdigest()
+        with (
+            archive_path.open("wb") as compressed_file,
+            gzip.GzipFile(fileobj=compressed_file, mode="wb", mtime=0) as compressed_stream,
+            tarfile.open(fileobj=compressed_stream, mode="w") as archive,
+        ):
+            manifest = json.dumps(entries, separators=(",", ":")).encode("utf-8")
+            for name, content in [
+                ("manifest.json", manifest),
+                ("layer/layer.tar", b"layer-bytes-" * 4096),
+                *members,
+            ]:
+                info = tarfile.TarInfo(name)
+                info.size = len(content)
+                archive.addfile(info, io.BytesIO(content))
+        assert release_bundle.docker_save_config_digests(archive_path) == expected_digests
 
     assert bootstrap.validate_domain("PCR.Example-Research.org.") == "pcr.example-research.org"
     for bad in ("localhost", "pcrstudio.example.org", "-bad.example.org", "bad..example.org", "bad host.example.org"):

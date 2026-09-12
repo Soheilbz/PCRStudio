@@ -16,9 +16,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 8491,
+      "bytes": 7305,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "7e2bae45f0606c33da4d86963f08f4ab527ec387ce2b4d1eba98607fbc365bf4"
+      "sha256": "b4f0a7f7196a42ef9808af3d25ca81d6ae75aa440f18c808762520eaf33b12e7"
     },
     {
       "bytes": 6120,
@@ -778,12 +778,12 @@
     {
       "bytes": 1626,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "251e5ff1e59d50a6b7c3dd2a4abb995629a22a3907985ce3184ccd8bc48d6628"
+      "sha256": "1386c3465aa030da3c2b03ad460901c5579058d083d01691dceb0b2c2cc35202"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "d018abbfa58061e51a70a11a48725757f8697dd492a9bf69c4be0b62b435aed8"
+      "sha256": "e62120930be26bb87cd4c543062e6fa3a856f1ebc898f98508cf8dd5e933c8a0"
     },
     {
       "bytes": 31910,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 12712,
+      "bytes": 14715,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "21be6918008bff236daf0aef0eb70a4ea3608a2ca7091d3f3e47324990e945bd"
+      "sha256": "114cfcb9b6a730a4f508014cea09b8e55fbb2a4b88768914105e749de4164348"
     },
     {
       "bytes": 4486,
@@ -994,6 +994,11 @@
       "bytes": 863,
       "path": "scripts/record-linux-module-acceptance.py",
       "sha256": "517ece76d558f276fcc145b8fbda06038401469555712f3b72b9f8d85cdfaa0f"
+    },
+    {
+      "bytes": 3947,
+      "path": "scripts/release_bundle.py",
+      "sha256": "ff0b40a441e98d4116042e66f3e3b35f072194b28f446f2c4dd4f58fce0ca238"
     },
     {
       "bytes": 5569,
@@ -5345,7 +5350,7 @@
   ],
   "schema_version": "2.1.0",
   "summary": {
-    "added": 342,
+    "added": 343,
     "modified": 473,
     "removed": 61
   }
