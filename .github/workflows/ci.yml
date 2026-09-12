@@ -32,6 +32,9 @@ jobs:
     outputs:
       full: ${{ steps.scope.outputs.full }}
       web: ${{ steps.scope.outputs.web }}
+      contracts: ${{ steps.scope.outputs.contracts }}
+      docs: ${{ steps.scope.outputs.docs }}
+      action_pins: ${{ steps.scope.outputs.action_pins }}
     steps:
       - name: Check out history for the change set
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -61,40 +64,61 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Run static and secret preflight
         run: python3 -B scripts/scan-secrets.py
+      - name: Verify documentation-only changes
+        if: ${{ needs.changes.outputs.docs == 'true' && needs.changes.outputs.contracts != 'true' && needs.changes.outputs.action_pins != 'true' }}
+        run: python3 -B scripts/audit-source.py
+      - name: Run directly covered maintenance and release contracts
+        if: ${{ needs.changes.outputs.contracts == 'true' }}
+        run: |
+          python3 -B scripts/audit-source.py
+          python3 -B scripts/check-linux-bootstrap.py
+      - name: Verify workflow action-pin-only changes
+        if: ${{ needs.changes.outputs.action_pins == 'true' && needs.changes.outputs.contracts != 'true' }}
+        run: python3 -B scripts/audit-source.py
       - name: Install Python 3.14
+        if: ${{ needs.changes.outputs.full == 'true' }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: 3.14
       - name: Install uv
+        if: ${{ needs.changes.outputs.full == 'true' }}
         uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
         with:
           version: "0.12.10"
       - name: Install locked Python dependencies
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: uv sync --project tools --frozen --extra dev --extra folding
       - name: Install Node.js 24
+        if: ${{ needs.changes.outputs.full == 'true' }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.20.0
       - name: Enable pnpm
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: |
           corepack enable
           corepack install --global pnpm@11.26.0
       - name: Install locked web dependencies
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: pnpm install --frozen-lockfile
       - name: Run source qualification after dependency materialization
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: python3 -B scripts/qualify-source.py --no-write
       - name: Verify a real docker-save archive without registry access
+        if: ${{ needs.changes.outputs.full == 'true' || needs.changes.outputs.contracts == 'true' }}
         run: python3 -B scripts/check-linux-bootstrap.py --docker-save-integration
       - name: Run targeted web contracts
-        if: ${{ needs.changes.outputs.web == 'true' }}
+        if: ${{ needs.changes.outputs.full == 'true' && needs.changes.outputs.web == 'true' }}
         run: |
           pnpm --filter web typecheck
           pnpm --filter web lint
       - name: Install Rust 1.94
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: |
           rustup toolchain install 1.94.1 --profile minimal --no-self-update
           rustup default 1.94.1
       - name: Run targeted registry contract
+        if: ${{ needs.changes.outputs.full == 'true' }}
         run: cargo test --locked -p pcr-core --test readme_matches_the_registry
 
   checks:
@@ -452,3 +476,30 @@ jobs:
             web/test-results
             \${{ runner.temp }}/web.log
           if-no-files-found: ignore
+          # Failure diagnostics are useful for triage but reconstructible from
+          # the locked commit. Keep their retention explicit and bounded just
+          # like the image SBOM diagnostics above.
+          retention-days: 14
+
+  qualification-gate:
+    name: Required PCRStudio qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    if: ${{ always() && !cancelled() }}
+    needs: [changes, fast-feedback, checks, image-qualification, web-release-qualification]
+    steps:
+      - name: Enforce the scope-specific qualification contract
+        env:
+          FULL_SCOPE: ${{ needs.changes.outputs.full }}
+          WEB_SCOPE: ${{ needs.changes.outputs.web }}
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          FAST_RESULT: ${{ needs.fast-feedback.result }}
+          SOURCE_RESULT: ${{ needs.checks.result }}
+          IMAGE_RESULT: ${{ needs.image-qualification.result }}
+          WEB_RESULT: ${{ needs.web-release-qualification.result }}
+        run: >-
+          python3 -B scripts/ci-qualification-gate.py
+          --full "$FULL_SCOPE" --web "$WEB_SCOPE"
+          --changes "$CHANGES_RESULT" --fast "$FAST_RESULT"
+          --source "$SOURCE_RESULT" --image "$IMAGE_RESULT"
+          --browser "$WEB_RESULT"

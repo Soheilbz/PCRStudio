@@ -29,4 +29,7 @@ compose=("${docker_cmd[@]}" compose --env-file "$env_file" -f "$root/compose.yam
 if [[ "${PCRSTUDIO_PRIVATE_COMPOSE:-0}" == "1" ]]; then
   compose+=( -f "$root/compose.vm.yaml" )
 fi
+# Never send PCRStudio Compose builds to Docker's host-wide shared default builder.
+# Bootstrap owns this dedicated builder and its repository-scoped GC policy.
+export BUILDX_BUILDER=pcrstudio
 exec "${compose[@]}" "$@"

@@ -36,9 +36,26 @@ def audit_operations_policy() -> None:
     if runtime.get("canonical_sha256") != digest:
         error("generated operations runtime projection is stale")
     backup = policy.get("backup") or {}
+    storage = policy.get("storage") or {}
     bootstrap = _text("scripts/bootstrap-linux.py")
     prune = _text("scripts/prune-backups.sh")
     docs = _text("docs/OPERATIONS.md")
+    storage_docs = _text("docs/DOCKER-STORAGE.md")
+    if runtime.get("storage") != storage:
+        error("generated operations runtime storage policy is stale")
+    if storage.get("hard_quota_required") is not True or storage.get("quota_gib") != 20:
+        error("operations storage policy no longer requires the 20 GiB hard quota")
+    for marker in (
+        "PCRSTUDIO_STORAGE_ENFORCEMENT",
+        "verify_hard_storage_layout",
+        "containerd_root_dir",
+        "--allow-guard-only-storage",
+    ):
+        if marker not in bootstrap:
+            error(f"Linux bootstrap lost hard-storage enforcement marker: {marker}")
+    for marker in ("Hard 20 GiB production boundary", "containerd", "hard-quota"):
+        if marker not in storage_docs:
+            error(f"Docker storage runbook lost hard-storage marker: {marker}")
     for marker in (
         str(backup.get("backup_on_calendar") or ""),
         str(backup.get("backup_randomized_delay") or ""),
