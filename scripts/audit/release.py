@@ -1060,10 +1060,45 @@ def audit_dependency_maintenance_exceptions() -> None:
         return
     dependabot = ROOT / ".github/dependabot.yml"
     dependabot_text = dependabot.read_text(encoding="utf-8") if dependabot.is_file() else ""
-    if "package-ecosystem: npm" not in dependabot_text or "interval: weekly" not in dependabot_text:
-        error("temporary Web dependency exception requires weekly npm Dependabot monitoring")
-    if "package-ecosystem: pip" not in dependabot_text or not re.search(r'directory:\s*["\']?/tools["\']?', dependabot_text):
-        error("Python scientific/tooling dependencies require weekly Dependabot monitoring for /tools")
+    ecosystem_headers = list(re.finditer(r"(?m)^  - package-ecosystem: ([^\s]+)\s*$", dependabot_text))
+    dependabot_blocks = {
+        match.group(1): dependabot_text[
+            match.start(): ecosystem_headers[index + 1].start()
+            if index + 1 < len(ecosystem_headers)
+            else len(dependabot_text)
+        ]
+        for index, match in enumerate(ecosystem_headers)
+    }
+    if len(dependabot_blocks) != len(ecosystem_headers):
+        error("Dependabot config contains duplicate ecosystem entries")
+
+    expected_dependabot = {
+        "github-actions": ("/", "weekly", "1"),
+        "npm": ("/", "weekly", "0"),
+        "uv": ("/tools", "weekly", "1"),
+        "cargo": ("/", "weekly", "1"),
+        "docker": ("/docker", "monthly", "1"),
+        "docker-compose": ("/", "monthly", "1"),
+    }
+    for ecosystem, (directory, interval, open_limit) in expected_dependabot.items():
+        block = dependabot_blocks.get(ecosystem, "")
+        if not block:
+            error(f"Dependabot policy is missing the {ecosystem} ecosystem")
+            continue
+        if not re.search(rf'(?m)^    directory:\s*["\']?{re.escape(directory)}["\']?\s*$', block):
+            error(f"Dependabot {ecosystem} policy points away from its canonical manifest/lock location")
+        if not re.search(rf"(?m)^      interval:\s*{interval}\s*$", block):
+            error(f"Dependabot {ecosystem} policy has an unexpected update cadence")
+        if not re.search(rf"(?m)^    open-pull-requests-limit:\s*{open_limit}\s*$", block):
+            error(f"Dependabot {ecosystem} proposal limit drifted from the reviewed policy")
+        if not re.search(r"(?m)^    labels:\s*\[dependencies\]\s*$", block):
+            error(f"Dependabot {ecosystem} policy uses an unverified or missing repository label")
+        if ecosystem == "npm" and re.search(r"(?m)^    target-branch:", block):
+            error("Dependabot npm security-update policy must apply to the default branch")
+
+    root_package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+    if root_package.get("packageManager") != "pnpm@11.26.0" or not (ROOT / "pnpm-lock.yaml").is_file():
+        error("Dependabot npm policy no longer matches the root pnpm workspace and lockfile")
     web_package = json.loads((ROOT / "web/package.json").read_text(encoding="utf-8"))
     eslint_spec = str(web_package.get("devDependencies", {}).get("eslint", ""))
     today = date.today()

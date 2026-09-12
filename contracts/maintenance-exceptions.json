@@ -15,7 +15,7 @@
         "https://github.com/jsx-eslint/eslint-plugin-react/issues/4027",
         "https://github.com/facebook/react/issues/35758"
       ],
-      "resolution": "Dependabot remains enabled weekly. Remove this exception and upgrade to ESLint 10 as soon as the resolved lint dependency graph declares compatible peers; the static source audit fails after the expiry date."
+      "resolution": "Dependabot security updates remain enabled. Routine Web version PRs are paused until Dependabot supports the repository's pinned pnpm 11 and can update the root lockfile. Re-evaluate the peer graph and updater support before expiry; the static source audit fails after the expiry date."
     }
   ]
 }
