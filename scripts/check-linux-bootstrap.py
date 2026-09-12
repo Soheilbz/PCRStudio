@@ -67,6 +67,16 @@ def main() -> int:
     assert 'Path("/srv/pcrstudio").mkdir(parents=True, exist_ok=True)' in pull_agent
     assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
+    production = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    release_verify = production.split("name: Verify release identity and deployment inputs", 1)[1].split(
+        "name: Build the qualified runtime image set", 1
+    )[0]
+    manifest_before_attestation = release_verify.index("scripts/generate-release-manifests.py")
+    attestation = release_verify.index("scripts/generate-source-attestation.py")
+    manifest_after_attestation = release_verify.rindex("scripts/generate-release-manifests.py")
+    source_check = release_verify.index("scripts/qualify-source.py --no-write")
+    release_check = release_verify.index("scripts/verify-release.py --root .")
+    assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")
     assert release_version.VERSION_RE.fullmatch("1.0.1")
 

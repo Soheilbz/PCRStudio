@@ -69,6 +69,11 @@ jobs:
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
           python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          # The in-toto statement binds the generated manifests. Refresh it
+          # between manifest passes, then refresh SHA256SUMS without creating
+          # a hash cycle before independently verifying the release tree.
+          python3 -B scripts/generate-source-attestation.py
+          python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           python3 -B scripts/qualify-source.py --no-write
           python3 -B scripts/verify-release.py --root .
 

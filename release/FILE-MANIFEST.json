@@ -48,9 +48,9 @@
       "sha256": "ae03a126bbd9ee0ce6cda981285b59d3d9aa1d7b5c128b068c3d48e8051d0e21"
     },
     {
-      "bytes": 8084,
+      "bytes": 8491,
       "path": ".github/workflows/production-deploy.yml",
-      "sha256": "a6e2b6bce8f1acb41e6e812073c2f5e632f832484e9d7cac3f50510f9d8457f7"
+      "sha256": "7e2bae45f0606c33da4d86963f08f4ab527ec387ce2b4d1eba98607fbc365bf4"
     },
     {
       "bytes": 6120,
@@ -1890,7 +1890,7 @@
     {
       "bytes": 216927,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "74cfad910fdd4c1074ed2864dba96ff4ad62d4ca64ede018289b491749dbda16"
+      "sha256": "0ef52da5916456aeda4135eefc0fc82f022415517062f52868742ae93e5d71a9"
     },
     {
       "bytes": 2048,
@@ -2168,9 +2168,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 11822,
+      "bytes": 12712,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "b11d8e9c13ab6f94d7b922b1c04876a99563cea14518c0b35ec33b4a9223079e"
+      "sha256": "21be6918008bff236daf0aef0eb70a4ea3608a2ca7091d3f3e47324990e945bd"
     },
     {
       "bytes": 4486,
@@ -2363,9 +2363,9 @@
       "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
     },
     {
-      "bytes": 14858,
+      "bytes": 15407,
       "path": "scripts/pull-release.py",
-      "sha256": "428e78ab8bcd199152c4094354104e60ed7a717e32d633b07dbc04f8c937d890"
+      "sha256": "0bfa8eb3ba156239cb9e7cff90c4f27b2cf6fc38d410a26277c039bf798113f4"
     },
     {
       "bytes": 11763,
