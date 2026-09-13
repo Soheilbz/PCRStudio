@@ -617,15 +617,19 @@ def main() -> int:
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
     bundle_tool_checkout = production.index("name: Check out trusted deployment-bundle tooling")
+    bundle_tool_identity = production.index("name: Record trusted deployment-bundle tooling revision")
     image_build = production.index("name: Build the qualified runtime image set")
     bundle_publish = production.index("name: Publish the verified HTTPS deployment bundle")
-    assert image_build < bundle_tool_checkout < bundle_publish, (
+    assert image_build < bundle_tool_checkout < bundle_tool_identity < bundle_publish, (
         "trusted bundle tooling must stay outside release qualification and image build contexts"
     )
     assert "path: .release-tooling" in production
     assert "github.event.repository.default_branch" in production
     assert "persist-credentials: false" in production
     assert "git -C .release-tooling rev-parse HEAD" in production
+    assert 'steps.bundle-tool.outputs.source_sha' in production
+    assert 'steps.release.outputs.bundle_tool_source_sha' not in production
+    assert 'bundle_tool_source_sha' not in release_verify
     assert "--bundle-tool-source-sha \"$BUNDLE_TOOL_SOURCE_SHA\"" in production
     assert "create-deploy-manifest" in production
     release_version = load("pcrstudio_release_version", ROOT / "scripts" / "validate-release-version.py")

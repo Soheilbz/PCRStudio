@@ -68,7 +68,6 @@ jobs:
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
           echo "release_sha=$(git rev-parse "$RELEASE_REF^{commit}")" >> "$GITHUB_OUTPUT"
-          echo "bundle_tool_source_sha=$(git -C .release-tooling rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           echo "build_id=$(sha256sum release/FILE-MANIFEST.json | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           # The in-toto statement binds the generated manifests. Refresh it
@@ -109,11 +108,19 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Record trusted deployment-bundle tooling revision
+        id: bundle-tool
+        run: |
+          set -euo pipefail
+          source_sha="$(git -C .release-tooling rev-parse HEAD)"
+          [[ "$source_sha" =~ ^[0-9a-f]{40}$ ]]
+          echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
+
       - name: Publish the verified HTTPS deployment bundle
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
-          BUNDLE_TOOL_SOURCE_SHA: ${{ steps.release.outputs.bundle_tool_source_sha }}
+          BUNDLE_TOOL_SOURCE_SHA: ${{ steps.bundle-tool.outputs.source_sha }}
         run: |
           set -euo pipefail
           asset_dir="$RUNNER_TEMP/pcrstudio-release-assets"
