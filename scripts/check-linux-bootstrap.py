@@ -1042,6 +1042,18 @@ def main() -> int:
     assert "build-essential xz-doc" not in api_dockerfile
     assert "apt-get install --no-install-recommends -y bash ca-certificates libgomp1" in api_dockerfile
     assert "COPY --from=runtime-assets /bin/bash /bin/bash" in api_dockerfile
+    bootstrap_source = (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
+    regular_deploy_start = bootstrap_source.index("# The host storage guard protects even the long image-pull/build phase.")
+    storage_guard_refresh = bootstrap_source.index(
+        "installed_automation = install_storage_guard_automation", regular_deploy_start
+    )
+    external_image_resolution = bootstrap_source.index("if args.offline_pinned_images:", regular_deploy_start)
+    assert storage_guard_refresh < external_image_resolution, (
+        "every ordinary deployment must refresh the host storage guard before expensive image operations"
+    )
+    assert 'systemctl, "restart", "pcrstudio-storage-guard.timer"' in bootstrap_source, (
+        "an already-active timer must reload the current release policy immediately"
+    )
     release_workflow = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
     assert "Smoke API and runner images as the service UID before publishing" in release_workflow
     assert 'docker run --rm --network none --user 10001:10001' in release_workflow

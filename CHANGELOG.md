@@ -11,6 +11,7 @@ qualification evidence is maintained under `release/current/`.
 
 - Fix production startup in the restricted runtime without changing pinned product images or user data.
 - Publish production releases only after image startup qualification passes, so an incomplete build cannot become the public Latest release.
+- Refresh the host storage guard before deployment image operations, so old reserve policies cannot stop services on the dedicated VM.
 
 ## v1.0.4 — 2026-09-13
 

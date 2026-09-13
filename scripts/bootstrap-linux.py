@@ -1375,6 +1375,9 @@ def install_storage_guard_automation(
         installed.append(name)
     run([*sudo, systemctl, "daemon-reload"])
     run([*sudo, systemctl, "enable", "--now", "pcrstudio-storage-guard.timer"])
+    # daemon-reload does not change the schedule of an already-active timer.
+    # Restart it so the current release's reserve policy takes effect now.
+    run([*sudo, systemctl, "restart", "pcrstudio-storage-guard.timer"])
     run([*sudo, systemctl, "list-timers", "--no-pager", "pcrstudio-storage-guard.timer"], check=False)
     return installed
 
@@ -1536,6 +1539,12 @@ def main() -> int:
         scientific_db_dir=dbdir,
     )
     write_env(DEFAULT_ENV, values)
+    # The host storage guard protects even the long image-pull/build phase.
+    # Do not rely on --prepare-host-only having been run or on an old timer
+    # remaining compatible with this release's storage policy.
+    installed_automation = install_storage_guard_automation(
+        storage_budget, storage_headroom, storage_min_free, storage_critical_free, backup_total_max
+    )
 
     # Resolve every external build/runtime dependency before the expensive
     # BuildKit graph. The helper uses Docker's configured credential store, but
@@ -1593,7 +1602,6 @@ def main() -> int:
 
     ready_payload = None
     runner_payload = None
-    installed_automation: list[str] = []
     pre_deploy_backup: Path | None = None
     if not args.skip_up:
         pre_deploy_backup = quiesce_and_backup_if_running(docker, args.private, build_identity)

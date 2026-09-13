@@ -53,9 +53,9 @@
       "sha256": "6e4fd39e6708b21033c89ce2d34b17013e098c95de8ea9f3f042043cab01f513"
     },
     {
-      "bytes": 2864,
+      "bytes": 2999,
       "path": "CHANGELOG.md",
-      "sha256": "45adbffc726fb73264d744488041bb12e3c72d61e98e79d8d93c182acbd14f68"
+      "sha256": "0b948cd0b5488bbd211343bfe10518a42768b4786b9a38ef527ea9042dc2f5b9"
     },
     {
       "bytes": 633,
@@ -1113,9 +1113,9 @@
       "sha256": "fe4741fa6ea8bde3555d9d4ed102c1c91c0106addc44caa5e7f8b01f5d4c69c5"
     },
     {
-      "bytes": 14548,
+      "bytes": 14729,
       "path": "docs/OPERATIONS.md",
-      "sha256": "f92c6f3972e9fdb5f20eafc5ec46ea08b03eec5b7e57ed795389618693a22f66"
+      "sha256": "62b1a1f2d315b58e2d32d22f47685ca3c23462eced78f379445204d220cf5954"
     },
     {
       "bytes": 2598,
@@ -1875,7 +1875,7 @@
     {
       "bytes": 217257,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "69b3dc93ae8fcc181851c3d906bc6fb818631d21fcd509a464325ad6b2b3f6dd"
+      "sha256": "19a5ab99b6c0e6e08b1aa8f22ef70409e2460e768ffb19a99567520f64d3ce49"
     },
     {
       "bytes": 2048,
@@ -1883,9 +1883,9 @@
       "sha256": "914cd8c95c0a0438772cc15184a41ab37761e1b32d027f070b3e102bea4e3563"
     },
     {
-      "bytes": 269,
+      "bytes": 418,
       "path": "release/RELEASE-NOTES.md",
-      "sha256": "4b4fbefd32380873307249bcce67d4a2300755b8521faaba151a9c9d5f68108b"
+      "sha256": "57c07bd12d303dddf4690be8269055278a4efe0c10936058dbceb07bd7de3ceb"
     },
     {
       "bytes": 98937,
@@ -1953,9 +1953,9 @@
       "sha256": "141eba89249115700cd20a5083b383466dc93e424f9aa1e410e852068e87e2c5"
     },
     {
-      "bytes": 3233,
+      "bytes": 3462,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "4894b93d737b16c1d9b4cb11a01c57311ae0bca1fe91f51a2593007888201884"
+      "sha256": "f2c109824485a71baa8ce7e1a1e62f4dea2fd23f9810e06bcfef0234e2a384cd"
     },
     {
       "bytes": 507,
@@ -1975,7 +1975,7 @@
     {
       "bytes": 5355,
       "path": "release/current/SOURCE-QUALIFICATION.json",
-      "sha256": "2d93294bb274cc6ac939b17168e5ef4308ced5a84d98f6f5a48ed0b1e8b1f4f4"
+      "sha256": "fe420222ba70590f65d8de1754d1a2b16ec24c324858d017e3ddbec7470ac891"
     },
     {
       "bytes": 974,
@@ -2098,9 +2098,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 84106,
+      "bytes": 84671,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "699fe85b2dd438bd4239651a564919a1eed19e23604e1862fa80d2a4c1023065"
+      "sha256": "1affc59b4ea53e212ec9b24657f700eb53a8737523764b89d7297d96d08dc93d"
     },
     {
       "bytes": 17770,
@@ -2153,9 +2153,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 58315,
+      "bytes": 59147,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "8c3f29467334441e2f93d994f6699ecc3a01e01ecc3d293a1221d61e3e577ce8"
+      "sha256": "8af7ce94d0663012a9943a80db38fe8209dd0062bd2c4837482714d9a68fa10b"
     },
     {
       "bytes": 4486,

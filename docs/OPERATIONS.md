@@ -189,7 +189,10 @@ it is an operational guard, not a kernel-enforced filesystem quota. It starts
 one minute after boot and rechecks every five minutes. At the 16 GiB budget
 threshold it pauses scientific work; at 20 GiB managed use or 4 GiB free host
 space it stops the application to protect the host. Cache and backup retention
-rules are documented in `docs/DOCKER-STORAGE.md`. Inspect the guard with:
+rules are documented in `docs/DOCKER-STORAGE.md`. Every normal bootstrap
+reinstalls the guard from the current release and restarts its timer before
+image pull/build operations, independently of the optional backup/restore
+timers. Inspect the guard with:
 
 ```bash
 systemctl list-timers pcrstudio-storage-guard.timer

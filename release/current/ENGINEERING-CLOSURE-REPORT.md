@@ -41,6 +41,10 @@ plus immediately previous release are retained. See [`DOCKER-STORAGE.md`](../../
 and [`OPERATIONS.md`](../../docs/OPERATIONS.md) for the supported policy and
 operator actions.
 
+Every normal server bootstrap installs the storage guard from the exact current
+release and restarts its timer before image operations. This prevents stale
+host-side reserve settings from overriding the versioned 20 GiB policy.
+
 ## Current runtime defect addressed by this release
 
 The official pinned MAFFT launcher requires Bash, while the minimal API/runner
