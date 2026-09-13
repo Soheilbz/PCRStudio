@@ -34,10 +34,14 @@ RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
 
 # ── Worker + scientific toolchain ──────────────────────────────────────────
 FROM runtime-assets AS science-builder
+# The official Python slim base excludes manpages via dpkg path filters. Keep
+# xz-utils' alternative targets available during package configuration, then
+# discard builder-only manuals so they never enter a runtime image.
 RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
-    && apt-get install --no-install-recommends -y build-essential \
-    && rm -rf /var/lib/apt/lists/* /usr/local/bin/configure-debian-snapshot
+    && apt-get -o 'DPkg::Options::=--path-include=/usr/share/man/*' \
+        install --no-install-recommends -y build-essential \
+    && rm -rf /usr/share/man /var/lib/apt/lists/* /usr/local/bin/configure-debian-snapshot
 RUN --network=host python -m venv /opt/uv \
     && /opt/uv/bin/python -m pip install --no-cache-dir uv==0.12.10
 ENV PATH=/opt/uv/bin:${PATH}

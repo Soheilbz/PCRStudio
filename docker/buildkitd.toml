@@ -5,8 +5,12 @@
 # are eligible for collection.
 [worker.oci]
   gc = true
-  gckeepstorage = 8589934592
+  reservedSpace = "1GB"
+  maxUsedSpace = "8GB"
+  minFreeSpace = "20GB"
 
 [worker.containerd]
   gc = true
-  gckeepstorage = 8589934592
+  reservedSpace = "1GB"
+  maxUsedSpace = "8GB"
+  minFreeSpace = "20GB"

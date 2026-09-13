@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -44,6 +45,22 @@ def docker_root(docker: list[str]) -> Path:
     if result.returncode or not result.stdout.strip():
         raise SystemExit("could not determine DockerRootDir")
     return Path(result.stdout.strip()).resolve()
+
+
+def containerd_root() -> Path:
+    """Include OCI content/snapshots that DockerRootDir may not contain."""
+    config = Path("/etc/containerd/config.toml")
+    try:
+        text = config.read_text(encoding="utf-8")
+    except OSError:
+        return Path("/var/lib/containerd")
+    match = re.search(r'(?m)^\s*root\s*=\s*"([^"\n]+)"\s*$', text)
+    if match is None:
+        return Path("/var/lib/containerd")
+    root = Path(match.group(1))
+    if not root.is_absolute():
+        raise SystemExit("containerd root in /etc/containerd/config.toml must be absolute")
+    return root
 
 
 def parse_gib(raw: str, name: str) -> int:
@@ -87,6 +104,18 @@ def stop_services(docker: list[str], services: list[str]) -> None:
     run([str(project_compose()), "stop", *services], check=False)
 
 
+def cleanup_owned_artifacts() -> list[str]:
+    """Prune only repository-owned rebuild/retention artifacts and report failures."""
+    cleanup = (
+        (
+            "PCRStudio Docker cache/image cleanup",
+            [sys.executable, str(ROOT / "scripts" / "docker-maintenance.py"), "prune"],
+        ),
+        ("expired PCRStudio backup cleanup", [str(ROOT / "scripts" / "prune-backups.sh")]),
+    )
+    return [label for label, command in cleanup if run(command, check=False)]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="enforce PCRStudio host storage reserves")
     parser.add_argument("--enforce", action="store_true", help="prune owned artifacts and apply service stop policy")
@@ -99,7 +128,11 @@ def main() -> int:
         raise SystemExit("emergency headroom must be lower than the storage budget")
 
     docker = docker_prefix()
-    paths = [ROOT, docker_root(docker)]
+    # Modern Docker may keep OCI blobs and overlay snapshots under containerd
+    # rather than DockerRootDir. Monitor both ownership roots so the guard is
+    # still meaningful when an operator uses separate mounts in guard-only
+    # development mode.
+    paths = [ROOT, docker_root(docker), containerd_root()]
     before, before_by_path = free_bytes(paths)
     capacities = {str(path): shutil.disk_usage(path if path.exists() else path.parent).total for path in paths}
     minimum = min((total - (budget - headroom) * GIB) // GIB for total in capacities.values())
@@ -107,8 +140,9 @@ def main() -> int:
     if args.enforce:
         # Both operations are scoped to PCRStudio. In particular, never use
         # `docker system prune`, which could remove another application.
-        run([sys.executable, str(ROOT / "scripts" / "docker-maintenance.py"), "prune"], check=False)
-        run([str(ROOT / "scripts" / "prune-backups.sh")], check=False)
+        cleanup_failures = cleanup_owned_artifacts()
+    else:
+        cleanup_failures = []
     after, after_by_path = free_bytes(paths)
     minimum_bytes = min(total - (budget - headroom) * GIB for total in capacities.values())
     critical_bytes = min(total - budget * GIB for total in capacities.values())
@@ -128,7 +162,9 @@ def main() -> int:
     )
     print(f"paths_before={before_by_path}")
     print(f"paths_after={after_by_path}")
-    return 1 if after < minimum_bytes else 0
+    if cleanup_failures:
+        print("storage cleanup failed: " + ", ".join(cleanup_failures), file=sys.stderr)
+    return 1 if after < minimum_bytes or cleanup_failures else 0
 
 
 if __name__ == "__main__":

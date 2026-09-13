@@ -14,6 +14,25 @@ must preserve both software correctness and scientific provenance.
    output, or `.local/` contents.
 6. Run the checks documented in `docs/DEVELOPMENT.md` on a supported host.
 
+## Pull-request qualification
+
+CI classifies changed paths before installing toolchains. Documentation-only
+changes run the secret scan and static repository audit. SHA-pin-only workflow
+updates run the static action-pin audit; GitHub's dedicated CodeQL and
+dependency-review workflows still run on their own triggers. A small set of
+release/maintenance helpers with direct regression coverage runs those
+contracts without compiling unrelated product components. Product and
+dependency changes, CI/security/deployment changes outside the explicitly
+tested narrow allowlist, and unclassified changes retain the full qualification
+path; unknown paths fail closed. Web browser qualification runs only when the
+Web surface changes, and broad source/image checks start only after fast
+feedback succeeds. The path rules and their regression tests live in
+`scripts/classify-ci-scope.py` and `scripts/check-linux-bootstrap.py`.
+The final aggregate is named `Required PCRStudio qualification`. Before relying
+on conditional jobs for merge protection, the `main` ruleset must require this
+aggregate; update/verify that rule only after GitHub has observed a successful
+run of the candidate workflow.
+
 ## Scientific contributions
 
 For a new or changed protocol/tool authority, include the exact upstream source,

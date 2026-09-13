@@ -2,9 +2,11 @@
 
 Docker build storage is bounded separately in
 [`DOCKER-STORAGE.md`](DOCKER-STORAGE.md). The supported bootstrap uses the
-dedicated `pcrstudio` BuildKit builder with an 8 GB cache ceiling and performs
-scoped cleanup on both success and failure; it never performs a daemon-wide
-prune that could remove another project's images.
+dedicated `pcrstudio` BuildKit builder and an explicit 8 GB maximum-used-space
+prune on both success and failure. BuildKit's GC setting is a retention target,
+not a strict ceiling. Server cleanup is scheduled every 15 minutes; developer
+workstations can install a daily checkout-scoped user timer. Neither path runs
+a daemon-wide prune or removes another project's images.
 
 This runbook describes the operational contract shipped with the source tree. The machine-readable authority is `contracts/operations.toml`; Prometheus-compatible alert rules are generated at `ops/prometheus/pcrstudio-alerts.yml` and the normalized runtime projection is `knowledge/runtime/operations.generated.json`.
 
@@ -176,9 +178,11 @@ is recreated, so abandoned scientific temporary files cannot accumulate on
 the server filesystem. Increase it only together with a reviewed runner
 memory/resource profile.
 
-The host storage guard limits PCRStudio to a 20 GiB host-storage budget with
-4 GiB emergency headroom. It is installed as
-`pcrstudio-storage-guard.timer`; inspect it with:
+The host storage guard preserves a 20 GiB host free-space reserve with 4 GiB
+emergency headroom. It is installed as `pcrstudio-storage-guard.timer`; it is
+not itself a quota. Production bootstrap separately requires a dedicated,
+shared 20 GiB filesystem for PCRStudio application state, Docker and
+containerd; see `docs/DOCKER-STORAGE.md`. Inspect the guard with:
 
 ```bash
 systemctl list-timers pcrstudio-storage-guard.timer

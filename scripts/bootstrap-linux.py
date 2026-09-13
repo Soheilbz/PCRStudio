@@ -42,7 +42,7 @@ REGISTRY_HOSTS = ("auth.docker.io", "registry-1.docker.io", "production.cloudfro
 BUILDX_BUILDER = "pcrstudio"
 BUILDX_BUILDER_IMAGE = "moby/buildkit@sha256:28a898719c18a33f4e8000685287fa36fd0dd9560c6440227d3a732d79bb41d8"
 BUILDX_MAX_CACHE = "8GB"
-BUILDX_GC_MARKER = "gckeepstorage = 8589934592"
+BUILDX_GC_MARKER = 'maxUsedSpace = "8GB"'
 PINNED_IMAGE_RE = re.compile(
     r"(?<![A-Za-z0-9._/-])(?:[A-Za-z0-9.-]+(?::[0-9]+)?/)?[A-Za-z0-9._/-]+"
     r"(?::[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}(?![A-Za-z0-9])"
@@ -224,7 +224,7 @@ def ensure_dedicated_buildx_builder(docker: list[str]) -> None:
              "--driver-opt", f"image={BUILDX_BUILDER_IMAGE}", "--config", str(config)])
     run([*docker, "buildx", "inspect", "--bootstrap", BUILDX_BUILDER])
     os.environ["BUILDX_BUILDER"] = BUILDX_BUILDER
-    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, maximum {BUILDX_MAX_CACHE}")
+    print(f"PCRStudio BuildKit cache policy: dedicated builder {BUILDX_BUILDER}, GC target {BUILDX_MAX_CACHE}")
 
 
 def prune_dedicated_buildx_builder(docker: list[str]) -> None:
@@ -486,6 +486,99 @@ def docker_root_dir(docker: list[str]) -> Path:
     if cp.returncode == 0 and cp.stdout.strip():
         return Path(cp.stdout.strip())
     return Path("/var/lib/docker")
+
+
+def containerd_root_dir() -> Path:
+    """Return containerd's content/snapshot root without guessing from DockerRootDir.
+
+    Docker Engine can delegate image and snapshot storage to containerd.  On
+    current Ubuntu hosts that state is normally under ``/var/lib/containerd``;
+    it is separate from DockerRootDir and must be included in a hard storage
+    boundary.  A configured containerd ``root =`` takes precedence.
+    """
+    config = Path("/etc/containerd/config.toml")
+    try:
+        text = config.read_text(encoding="utf-8")
+    except OSError:
+        return Path("/var/lib/containerd")
+    match = re.search(r'(?m)^\s*root\s*=\s*"([^"\n]+)"\s*$', text)
+    if match is None:
+        return Path("/var/lib/containerd")
+    root = Path(match.group(1))
+    if not root.is_absolute():
+        raise SystemExit("containerd root in /etc/containerd/config.toml must be absolute")
+    return root
+
+
+def validate_storage_enforcement(value: str) -> str:
+    """Validate the production storage boundary policy selected by the operator."""
+    mode = value.strip().lower()
+    if mode not in {"hard-quota", "guard-only"}:
+        raise SystemExit("PCRSTUDIO_STORAGE_ENFORCEMENT must be hard-quota or guard-only")
+    return mode
+
+
+def evaluate_hard_storage_layout(
+    entries: list[tuple[str, Path, int, int]], *, root_device: int, quota_gib: int
+) -> dict[str, object]:
+    """Evaluate a hard filesystem boundary from already-observed path metadata.
+
+    All writable PCRStudio ownership roots must share one non-root filesystem.
+    Its filesystem capacity, rather than a best-effort cleanup threshold, is
+    the non-bypassable aggregate upper bound for app state, OCI bytes and
+    backups.
+    """
+    gib = 1024 ** 3
+    allowed = quota_gib * gib
+    devices = {device for _, _, device, _ in entries}
+    capacities = {capacity for _, _, _, capacity in entries}
+    failures: list[str] = []
+    if len(devices) != 1:
+        failures.append("PCRStudio application, Docker and containerd roots are not on one filesystem")
+    elif next(iter(devices)) == root_device:
+        failures.append("PCRStudio storage is on the host root filesystem, not a dedicated filesystem")
+    if len(capacities) != 1:
+        failures.append("PCRStudio ownership roots report inconsistent filesystem capacities")
+    elif next(iter(capacities)) > allowed:
+        failures.append(
+            f"dedicated filesystem is {next(iter(capacities)) / gib:.2f} GiB; "
+            f"it exceeds the configured {quota_gib} GiB hard limit"
+        )
+    if len(capacities) == 1 and next(iter(capacities)) < 12 * gib:
+        failures.append("dedicated filesystem is below 12 GiB and cannot safely stage the qualified image set")
+    return {
+        "status": "PASS" if not failures else "FAIL",
+        "quota_gib": quota_gib,
+        "paths": [
+            {"role": role, "path": str(path), "device": device, "filesystem_bytes": capacity}
+            for role, path, device, capacity in entries
+        ],
+        "failures": failures,
+    }
+
+
+def verify_hard_storage_layout(docker: list[str], *, quota_gib: int) -> dict[str, object]:
+    """Fail closed unless all PCRStudio writable roots share a capped filesystem."""
+    roots = {
+        "application": ROOT,
+        "docker": docker_root_dir(docker),
+        "containerd": containerd_root_dir(),
+    }
+    entries: list[tuple[str, Path, int, int]] = []
+    for role, raw_path in roots.items():
+        path = nearest_existing_parent(raw_path)
+        entries.append((role, path, path.stat().st_dev, shutil.disk_usage(path).total))
+    result = evaluate_hard_storage_layout(
+        entries, root_device=Path("/").stat().st_dev, quota_gib=quota_gib
+    )
+    if result["status"] != "PASS":
+        details = "; ".join(result["failures"])
+        raise SystemExit(
+            "hard PCRStudio storage quota verification failed: " + details
+            + ". See docs/DOCKER-STORAGE.md before deploying."
+        )
+    print(f"hard PCRStudio storage quota PASS: {quota_gib} GiB dedicated filesystem")
+    return result
 
 
 def preflight_disk_capacity(
@@ -1273,6 +1366,11 @@ def main() -> int:
     ap.add_argument("--reselect-subnets", action="store_true")
     ap.add_argument("--skip-up", action="store_true", help="build/qualify assets but do not start the services")
     ap.add_argument("--no-systemd-automation", action="store_true", help="do not install daily backup/weekly restore-drill timers")
+    ap.add_argument(
+        "--allow-guard-only-storage",
+        action="store_true",
+        help="explicitly permit the non-production shared-filesystem storage guard instead of a hard quota",
+    )
     ap.add_argument("--backup-retention-days", type=int, default=14, help="days to retain scheduled database backups (default: 14)")
     ap.add_argument(
         "--approve-scientific-environment-change",
@@ -1339,6 +1437,12 @@ def main() -> int:
     )
     values["PCRSTUDIO_STORAGE_BUDGET_GIB"] = storage_budget
     values["PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB"] = storage_headroom
+    storage_enforcement = validate_storage_enforcement(
+        values.get("PCRSTUDIO_STORAGE_ENFORCEMENT", "hard-quota")
+    )
+    if args.allow_guard_only_storage:
+        storage_enforcement = "guard-only"
+    values["PCRSTUDIO_STORAGE_ENFORCEMENT"] = storage_enforcement
     values.setdefault("PCR_SCIENTIFIC_DB_SCOPE", args.database_scope)
     values.setdefault("RUST_LOG", "pcr_server=info,tower_http=info")
     if not 1 <= args.backup_retention_days <= 3650:
@@ -1353,6 +1457,11 @@ def main() -> int:
         values["SITE_DOMAIN"] = domain; values["SITE_URL"] = f"https://{domain}"
     choose_subnets(docker, values, args.reselect_subnets)
     ensure_secrets(values)
+    hard_storage = (
+        verify_hard_storage_layout(docker, quota_gib=int(storage_budget))
+        if storage_enforcement == "hard-quota"
+        else {"status": "NOT_REQUIRED", "quota_gib": int(storage_budget), "reason": "explicit guard-only override"}
+    )
     dbdir = (ROOT / values["PCR_SCIENTIFIC_DB_DIR"]).resolve(); dbdir.mkdir(parents=True, exist_ok=True)
     disk_preflight = preflight_disk_capacity(
         docker,
@@ -1464,6 +1573,8 @@ def main() -> int:
         "backup_retention_days": args.backup_retention_days,
         "storage_budget_gib": storage_budget,
         "storage_emergency_headroom_gib": storage_headroom,
+        "storage_enforcement": storage_enforcement,
+        "hard_storage_layout": hard_storage,
         "pre_deploy_backup": (str(pre_deploy_backup.relative_to(ROOT)) if pre_deploy_backup and pre_deploy_backup.is_relative_to(ROOT) else (str(pre_deploy_backup) if pre_deploy_backup else None)),
         "pre_deploy_backup_sha256": (sha256_file(pre_deploy_backup) if pre_deploy_backup else None),
     }

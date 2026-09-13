@@ -33,6 +33,13 @@ DEFAULT_DOMAIN = "pcrstudio.ir"
 TAG_RE = re.compile(r"^v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 ASSET_HOSTS = {"github.com", "objects.githubusercontent.com", "release-assets.githubusercontent.com"}
+RELEASE_IMAGE_REPOSITORIES = {
+    "pcrstudio-api",
+    "pcrstudio-runner",
+    "pcrstudio-migrate",
+    "pcrstudio-web",
+}
+PRODUCT_IMAGE_LABEL = "org.pcrstudio.product=PCRStudio"
 
 
 def api_json(url: str) -> dict:
@@ -67,6 +74,58 @@ def sha256(path: Path) -> str:
 
 def run(command: list[str], *, stdin=None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, check=True, text=True, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+
+def prune_old_release_images(current_sha: str, previous_sha: str | None) -> list[str]:
+    """Remove only unused-by-policy old PCRStudio release tags, retaining rollback."""
+    keep = {current_sha}
+    if previous_sha:
+        keep.add(previous_sha)
+    if any(not SHA_RE.fullmatch(value) for value in keep):
+        raise SystemExit("refusing release-image cleanup with an invalid retained source SHA")
+
+    listed = subprocess.run(
+        [
+            "docker", "image", "ls", "--filter", f"label={PRODUCT_IMAGE_LABEL}",
+            "--format", "{{.Repository}}:{{.Tag}}",
+        ],
+        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    )
+    if listed.returncode:
+        detail = (listed.stderr or listed.stdout).strip()[:300]
+        warning = f"could not list PCRStudio images for post-deploy retention cleanup: {detail}"
+        print("warning: " + warning, file=sys.stderr)
+        return [warning]
+
+    obsolete: set[str] = set()
+    for reference in listed.stdout.splitlines():
+        repository, separator, image_tag = reference.rpartition(":")
+        if (
+            separator
+            and repository in RELEASE_IMAGE_REPOSITORIES
+            and SHA_RE.fullmatch(image_tag)
+            and image_tag not in keep
+        ):
+            obsolete.add(f"{repository}:{image_tag}")
+
+    warnings: list[str] = []
+    for reference in sorted(obsolete):
+        # No --force: Docker must refuse to remove any image still referenced
+        # by a container. Current and previous release tags are excluded above.
+        result = subprocess.run(
+            ["docker", "image", "rm", reference],
+            check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        )
+        if result.returncode:
+            detail = (result.stderr or result.stdout).strip()[:300]
+            warning = f"kept old image {reference}; Docker refused removal: {detail}"
+            warnings.append(warning)
+            print("warning: " + warning, file=sys.stderr)
+        elif result.stdout.strip():
+            print(result.stdout.strip())
+    if obsolete and not warnings:
+        print(f"removed {len(obsolete)} obsolete PCRStudio release image tag(s); retained current and previous releases")
+    return warnings
 
 
 def release_metadata(repo: str, release_ref: str) -> dict:
@@ -293,7 +352,12 @@ def deploy(args: argparse.Namespace) -> None:
                 raise SystemExit(f"{key} SHA-256 mismatch")
         release_dir = Path(args.release_root) / source_sha
         current_pointer = Path(args.state_dir) / "current-release"
-        if release_dir.exists() and current_pointer.is_file() and current_pointer.read_text(encoding="utf-8").strip() == source_sha:
+        previous_sha = None
+        if current_pointer.is_file():
+            previous_sha = current_pointer.read_text(encoding="utf-8").strip() or None
+            if previous_sha and not SHA_RE.fullmatch(previous_sha):
+                raise SystemExit("current-release state contains an invalid source SHA")
+        if release_dir.exists() and previous_sha == source_sha:
             print(f"release {tag} already active")
             return
         release_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -328,6 +392,7 @@ def deploy(args: argparse.Namespace) -> None:
         (state / "current-release.tmp").write_text(source_sha + "\n", encoding="utf-8")
         os.replace(state / "current-release.tmp", state / "current-release")
         print(f"deployed {tag} ({source_sha})")
+        prune_old_release_images(source_sha, previous_sha)
 
 
 def main() -> None:

@@ -8,7 +8,9 @@ policy files with direct, always-run contract coverage.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import os
+import re
 import subprocess
 from pathlib import PurePosixPath
 
@@ -53,19 +55,79 @@ FULL_ROOT_FILES = {
     "compose.yaml",
     "compose.vm.yaml",
 }
+ACTION_USE_LINE = re.compile(r"^\s*(?:-\s*)?uses:\s*(\S+)\s*$")
+ACTION_SHA = re.compile(r"^[0-9a-f]{40}$")
 
 
-def classify_paths(paths: list[str]) -> dict[str, bool]:
-    """Return whether a PR requires the broad application and Web gates."""
+def is_action_pin_only_diff_text(diff: str) -> bool:
+    """Accept only paired GitHub Action SHA changes, with no workflow edits."""
+    removed: list[tuple[str, str]] = []
+    added: list[tuple[str, str]] = []
+    for line in diff.splitlines():
+        if line.startswith(("+++", "---")) or not line.startswith(("+", "-")):
+            continue
+        match = ACTION_USE_LINE.fullmatch(line[1:])
+        if match is None:
+            return False
+        reference = match.group(1)
+        action, separator, revision = reference.rpartition("@")
+        if not separator or not action or not ACTION_SHA.fullmatch(revision):
+            return False
+        (added if line.startswith("+") else removed).append((action, revision))
+
+    if not removed or len(removed) != len(added):
+        return False
+    # A change may update a SHA, but it may not add/remove/swap the action or
+    # modify permissions, triggers, inputs, job conditions, or any other YAML.
+    return (
+        Counter(action for action, _ in removed) == Counter(action for action, _ in added)
+        and Counter(removed) != Counter(added)
+    )
+
+
+def action_pin_only_change(base: str, head: str) -> bool:
+    result = subprocess.run(
+        [
+            "git", "diff", "--unified=0", f"{base}...{head}",
+            "--", ".github/workflows/",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return is_action_pin_only_diff_text(result.stdout)
+
+
+def classify_paths(paths: list[str], *, action_pins_only: bool = False) -> dict[str, bool]:
+    """Return broad and lightweight qualification scopes for a PR."""
     full = False
     web = False
+    contracts = False
+    documentation = False
+    action_pins = False
+    if not paths:
+        # An empty diff is unexpected; fail closed instead of silently skipping
+        # qualification when the event payload or checkout history is wrong.
+        return {
+            "full": True,
+            "web": True,
+            "contracts": False,
+            "docs": False,
+            "action_pins": False,
+        }
     for raw_path in paths:
         path = PurePosixPath(raw_path).as_posix()
         if path in DOCS_ONLY_ROOT_FILES or path.startswith(("docs/", "history/", "archive/")):
+            documentation = True
+            continue
+        if action_pins_only and path.startswith(".github/workflows/"):
+            action_pins = True
             continue
         if path in TARGETED_RELEASE_FILES:
+            contracts = True
             continue
         if path in TARGETED_MAINTENANCE_POLICY_FILES:
+            contracts = True
             continue
         if path in WEB_DEPENDENCY_FILES:
             full = True
@@ -78,7 +140,7 @@ def classify_paths(paths: list[str]) -> dict[str, bool]:
             continue
         if path.startswith("scripts/"):
             # Bootstrap, release, and deployment scripts affect production
-            # behavior. Only the three explicitly tested release helpers above
+            # behavior. Only the explicitly tested release helpers above
             # can use the narrow contract-only path.
             full = True
             continue
@@ -92,12 +154,19 @@ def classify_paths(paths: list[str]) -> dict[str, bool]:
         if path.lower().endswith((".md", ".rst", ".txt")):
             # The source qualification still checks generated metadata and
             # references; prose-only changes do not need product builds.
+            documentation = True
             continue
         # A new or unclassified path gets the complete gates until someone
         # deliberately adds and tests a narrower rule above.
         full = True
         web = True
-    return {"full": full, "web": web}
+    return {
+        "full": full,
+        "web": web,
+        "contracts": contracts and not full,
+        "docs": documentation and not contracts and not full,
+        "action_pins": action_pins and not full,
+    }
 
 
 def changed_paths(base: str, head: str) -> list[str]:
@@ -119,11 +188,19 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.event != "pull_request":
-        scope = {"full": True, "web": True}
+        scope = {
+            "full": True,
+            "web": True,
+            "contracts": False,
+            "docs": False,
+            "action_pins": False,
+        }
     else:
         if not args.base or not args.head:
             parser.error("pull_request scope requires --base and --head SHAs")
-        scope = classify_paths(changed_paths(args.base, args.head))
+        paths = changed_paths(args.base, args.head)
+        action_pins_only = action_pin_only_change(args.base, args.head)
+        scope = classify_paths(paths, action_pins_only=action_pins_only)
 
     for name, enabled in scope.items():
         print(f"{name}={str(enabled).lower()}")

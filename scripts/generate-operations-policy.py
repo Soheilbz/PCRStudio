@@ -35,6 +35,17 @@ def validate(data: dict[str, Any]) -> None:
             raise ValueError(f"operations backup.{key} must be a positive integer")
     if backup.get("off_host_copy_required_for_host_loss_dr") is not True:
         raise ValueError("host-loss disaster recovery must explicitly require an off-host copy")
+    storage = data.get("storage") or {}
+    if storage.get("hard_quota_required") is not True:
+        raise ValueError("operations storage policy must require a hard quota")
+    if storage.get("quota_gib") != 20 or storage.get("minimum_filesystem_gib") != 12:
+        raise ValueError("operations storage quota policy must remain 20 GiB with 12 GiB minimum")
+    if storage.get("enforcement_env") != "PCRSTUDIO_STORAGE_ENFORCEMENT":
+        raise ValueError("operations storage policy lost its explicit enforcement environment key")
+    if storage.get("ownership_roots") != ["application", "docker", "containerd"]:
+        raise ValueError("operations storage policy must include application, Docker and containerd roots")
+    if storage.get("guard_only_nonproduction") is not True:
+        raise ValueError("guard-only storage mode must be explicitly non-production")
 
     diagnostics = DIAGNOSTICS.read_text(encoding="utf-8")
     seen: set[str] = set()
@@ -66,6 +77,7 @@ def runtime_payload(data: dict[str, Any]) -> dict[str, Any]:
         "canonical_source": "contracts/operations.toml",
         "canonical_sha256": sha256(SOURCE),
         "backup": data["backup"],
+        "storage": data["storage"],
         "alerts": data.get("alert") or [],
     }
 

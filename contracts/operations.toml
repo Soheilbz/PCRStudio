@@ -16,6 +16,17 @@ restore_drill_interval = "weekly"
 local_backup_scope = "host-local"
 off_host_copy_required_for_host_loss_dr = true
 
+[storage]
+# A cleanup timer protects host headroom, but only a dedicated filesystem can
+# constrain every writable PCRStudio owner (application data, Docker and OCI
+# containerd state) as one aggregate budget.
+hard_quota_required = true
+quota_gib = 20
+minimum_filesystem_gib = 12
+enforcement_env = "PCRSTUDIO_STORAGE_ENFORCEMENT"
+ownership_roots = ["application", "docker", "containerd"]
+guard_only_nonproduction = true
+
 [[alert]]
 id = "PCRStudioNoFreshDurableRunner"
 severity = "critical"
