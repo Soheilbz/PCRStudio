@@ -1,5 +1,13 @@
 # CURRENT public source — release notes
 
+## v1.0.5
+
+This maintenance release makes complete pinned native-tool bundles readable to
+the restricted application account, including nested MAFFT helper programs and
+support files. It verifies the normalized runtime tree and retains the original
+upstream archive digest. No image pins, scientific outputs, or user data formats
+change.
+
 ## v1.0.4
 
 This maintenance release corrects permissions on bundled runtime tools so the

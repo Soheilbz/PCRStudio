@@ -254,13 +254,48 @@ def _retry_url_operation(url: str, operation, label: str) -> tuple[bool, object 
 
 def executable(path: Path) -> Path:
     mode = stat.S_IMODE(path.stat().st_mode)
-    mode |= (
-        stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
-        | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    mode |= stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+    mode |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    mode &= ~(
+        stat.S_IWGRP | stat.S_IWOTH
+        | stat.S_ISUID | stat.S_ISGID | stat.S_ISVTX
     )
-    mode &= ~(stat.S_IWGRP | stat.S_IWOTH)
     path.chmod(mode)
     return path
+
+
+def service_readable_tree(root: Path) -> None:
+    """Make a pinned runtime bundle traversable by the unprivileged service.
+
+    Upstream archive modes are part of the pinned bytes, but are not a safe or
+    portable runtime permission contract. Keep executability where upstream
+    marked a regular file executable, grant read/traverse access, and never
+    grant group/other write access. Symlinks are left intact and validated by
+    ``tree_sha256`` after normalization.
+    """
+    if not stat.S_ISDIR(root.lstat().st_mode):
+        die(f"Runtime bundle is not a directory: {root}")
+    entries = [root, *root.rglob("*")]
+    for path in entries:
+        metadata = path.lstat()
+        if stat.S_ISLNK(metadata.st_mode):
+            continue
+        mode = stat.S_IMODE(metadata.st_mode)
+        if stat.S_ISDIR(metadata.st_mode):
+            mode |= stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+            mode |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+        elif stat.S_ISREG(metadata.st_mode):
+            mode |= stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+            if mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH):
+                mode |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+        else:
+            die(f"Unsupported special file in runtime bundle: {path}")
+        mode &= ~(
+            stat.S_IWGRP | stat.S_IWOTH
+            | stat.S_ISUID | stat.S_ISGID | stat.S_ISVTX
+        )
+        if mode != stat.S_IMODE(metadata.st_mode):
+            path.chmod(mode)
 
 
 def tree_sha256(root: Path) -> str:
@@ -494,6 +529,7 @@ def provision_native() -> dict[str, Path]:
     blast_root = LOCAL / "blast"
     if blast_root.exists(): shutil.rmtree(blast_root)
     safe_extract_tar(archive, blast_root)
+    service_readable_tree(blast_root)
     candidates = list(blast_root.rglob("blastn"))
     if len(candidates) != 1: die(f"Expected one blastn executable, found {len(candidates)}")
     blastn = executable(candidates[0])
@@ -516,6 +552,7 @@ def provision_native() -> dict[str, Path]:
     safe_extract_tar(archive, mafft_root)
     upstream = next(iter(mafft_root.rglob("mafft.bat")), None)
     if upstream is None: die("MAFFT portable archive does not contain mafft.bat")
+    service_readable_tree(mafft_root)
     executable(upstream)
     mafft_bundle = upstream.parent
     mafft_archive_sha256 = sha256(archive)

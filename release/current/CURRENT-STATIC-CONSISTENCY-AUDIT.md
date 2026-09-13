@@ -1,7 +1,7 @@
 # CURRENT static consistency audit
 
 **Status:** **PASS**
-**Public release:** **v1.0.4** (SemVer 1.0.4)
+**Public release:** **v1.0.5** (SemVer 1.0.5)
 **Platform authority:** Linux x86_64
 **Scope:** deterministic current-tree source/static consistency. Native dependency-backed and container/scientific execution is an explicit separate gate.
 

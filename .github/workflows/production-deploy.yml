@@ -98,6 +98,18 @@ jobs:
             --secret id=next_server_actions_key,src="$key_file" \
             -t "pcrstudio-web:$RELEASE_SHA" -f docker/web.Dockerfile .
 
+      - name: Smoke API and runner images as the service UID before publishing
+        env:
+          RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+          for role in api runner; do
+            docker run --rm --network none --user 10001:10001 \
+              --entrypoint /usr/local/bin/pcrstudio-entrypoint \
+              "pcrstudio-$role:$RELEASE_SHA" \
+              /opt/worker/bin/python /opt/pcrstudio/scripts/container-scientific-smoke.py
+          done
+
       # Keep trusted bundle tooling out of the immutable release source tree
       # until source audits and all Docker build contexts have finished.
       - name: Check out trusted deployment-bundle tooling
