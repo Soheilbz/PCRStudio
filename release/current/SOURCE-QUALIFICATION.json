@@ -74,7 +74,7 @@
     {
       "name": "sbom-generator-check",
       "status": "PASS",
-      "stdout": "SBOM check PASS: 911 components"
+      "stdout": "SBOM check PASS: 914 components"
     },
     {
       "name": "current-static-consistency-generator-check",
@@ -89,7 +89,7 @@
     {
       "name": "high-confidence-secret-scan",
       "status": "PASS",
-      "stdout": "Secret scan: PASS (1068 text files; high-confidence credential formats only)"
+      "stdout": "Secret scan: PASS (1061 text files; high-confidence credential formats only)"
     },
     {
       "name": "linux-bootstrap-source-regression",
@@ -129,7 +129,7 @@
     {
       "name": "focused-source-regression-tests",
       "status": "PASS",
-      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 1.47s"
+      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 0.75s"
     }
   ],
   "hygiene": {
@@ -144,8 +144,8 @@
   },
   "parse": {
     "json": 223,
-    "python": 234,
-    "toml": 23,
+    "python": 242,
+    "toml": 25,
     "typescript_tsx_syntax_parse": 284
   },
   "release_class": "generation-1-unified-engine-linux-current",
@@ -154,7 +154,7 @@
   "scope": "environment-independent-source-qualification",
   "status": "PASS",
   "supply_chain": {
-    "container_images_pinned": 11,
-    "github_actions_sha_pinned": 20
+    "container_images_pinned": 15,
+    "github_actions_sha_pinned": 31
   }
 }

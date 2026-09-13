@@ -5,6 +5,23 @@ import math
 
 from .common import *  # noqa: F403
 
+
+def setup_uv_contract_valid(workflow_texts: tuple[str, ...]) -> bool:
+    """Require one immutable setup-uv revision and the same explicit tool policy."""
+    workflows = "\n".join(workflow_texts)
+    pins = re.findall(
+        r"(?m)^\s*uses:\s*astral-sh/setup-uv@([^\s#]+)\s*$",
+        workflows,
+    )
+    return (
+        len(pins) == 4
+        and len(set(pins)) == 1
+        and all(re.fullmatch(r"[0-9a-f]{40}", pin) is not None for pin in pins)
+        and workflows.count('version: "0.12.10"') == 4
+        and workflows.count("prune-cache: true") == 4
+    )
+
+
 def audit_application_foundation() -> None:
     """Keep full-application hardening from drifting behind scientific source."""
     def text(rel: str) -> str:
@@ -898,8 +915,9 @@ def audit_application_foundation() -> None:
     ):
         if marker not in ci:
             error(f"CI quality/security tool pin drifted: {marker}")
-    if ci.count('uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d') < 3 or ci.count('version: "0.12.10"') < 3:
-        error("CI uv installer/version pin drifted from the release toolchain contract")
+    production = text(".github/workflows/production-deploy.yml")
+    if not setup_uv_contract_valid((ci, production)):
+        error("CI/deployment uv installer, toolchain version, or cache policy drifted")
     if 'uv export --frozen --extra folding --no-emit-project' not in ci:
         error("Python dependency audit no longer covers the production folding extra")
     if "NEXT_PUBLIC_SITE_URL: http://localhost:3000" not in ci or "NEXT_PUBLIC_SITE_URL: http://localhost:3100" not in ci:

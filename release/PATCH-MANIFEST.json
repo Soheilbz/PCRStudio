@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 41169,
+      "bytes": 43887,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "35523fb1a8c6e94e5cb499a055cc8f3f58ee905bbc580d25167592772c05575e"
+      "sha256": "c7eb737a6dd01bc8df42ed59107afd533bfaf58fa296851089a878ddc8708a66"
     },
     {
       "bytes": 4486,
@@ -881,9 +881,9 @@
       "sha256": "79c3569c850975220882b95f650e5748341c9af30d97eee3f4fbbb1ec54612f0"
     },
     {
-      "bytes": 7072,
+      "bytes": 8552,
       "path": "scripts/classify-ci-scope.py",
-      "sha256": "4a24bbbd55a0a13c7c30e59cf896b31e0237f7d0adf4f6eaa33185bf7dfdcd38"
+      "sha256": "e418941ab278db3cdc892ec8ba68a9b8b3636fc7f34b53931de0893bde5746bd"
     },
     {
       "bytes": 1116,
@@ -1767,8 +1767,8 @@
       "path": ".github/dependabot.yml"
     },
     {
-      "after_bytes": 22754,
-      "after_sha256": "fdf68bdfe5454d48454b5d0556403686a2ebae2ea7986dc322b306e692da27c2",
+      "after_bytes": 23071,
+      "after_sha256": "774b4ea3f7ea1c91396e9521e7e899d314a35b101a4e29d39eccc16ff677f9fd",
       "before_bytes": 11287,
       "before_sha256": "b03d7cfbfab67d1b90f231dd7ab9a8eca9ca764c5c612d5e0e3987076cb9cae7",
       "path": ".github/workflows/ci.yml"
@@ -2902,7 +2902,7 @@
     },
     {
       "after_bytes": 5355,
-      "after_sha256": "1e273070615936695147980b9ed4d2acac32db3fa35de7c9ba093bf826455adc",
+      "after_sha256": "c249576366411673204ca6e1843940f117f6f4cfcb9bd16d768b88dc84dfca30",
       "before_bytes": 3630,
       "before_sha256": "60cae79862da151902beb2beb68fa4f4213bd769b2c4d5c93d5a4dd39a1e9ae3",
       "path": "release/current/SOURCE-QUALIFICATION.json"
@@ -2943,8 +2943,8 @@
       "path": "scripts/audit/__init__.py"
     },
     {
-      "after_bytes": 60844,
-      "after_sha256": "2c5b9257a192cc79ac7ff4b6f784025f3406a64f27f150e79c4ea7c9663ce6c7",
+      "after_bytes": 61406,
+      "after_sha256": "481aa90b70e8e9c6ba9b5e02b3c6adcf3698b59a12699159b3097f68bbdce10c",
       "before_bytes": 46359,
       "before_sha256": "40ce1a3dd7f87319198edadd96f09b3e800596d53103e8b2817330612df317a1",
       "path": "scripts/audit/application.py"
@@ -2978,8 +2978,8 @@
       "path": "scripts/audit/lamp.py"
     },
     {
-      "after_bytes": 69990,
-      "after_sha256": "212b9f843c64d579451e31d91d8485b99a543601e32a22b5e0043040da3da59e",
+      "after_bytes": 70212,
+      "after_sha256": "2f3415c0c3a1f02738557007848d31f0205633865f05fbcbf18491da83d64422",
       "before_bytes": 45119,
       "before_sha256": "93d6a42fcd39f5c544bbd589ddfa116939a439b739318842cdb5cbdb6f3b962b",
       "path": "scripts/audit/release.py"
