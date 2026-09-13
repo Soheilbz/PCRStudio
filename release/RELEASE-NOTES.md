@@ -1,5 +1,13 @@
 # CURRENT public source — release notes
 
+## v1.0.3
+
+This maintenance release keeps server storage under active control: temporary
+release files and old backups are cleaned automatically, database backups have
+per-file and total-size limits, and the application is paused before disk
+pressure can threaten the host. Existing user data and scientific methods are
+unchanged.
+
 ## v1.0.2
 
 This maintenance release improves production setup and release reliability,

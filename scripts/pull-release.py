@@ -11,6 +11,7 @@ the normal fail-closed bootstrap.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import gzip
 import hashlib
 import json
@@ -51,17 +52,92 @@ def api_json(url: str) -> dict:
         raise SystemExit(f"GitHub release API request failed: {url}: {error}") from error
 
 
-def download(url: str, destination: Path) -> None:
+def download(url: str, destination: Path, expected_bytes: int) -> None:
     parsed = urlparse(url)
     if parsed.scheme != "https" or parsed.hostname not in ASSET_HOSTS:
         raise SystemExit(f"refusing download from untrusted asset host: {url}")
+    if not 0 < expected_bytes <= 12 * 1024**3:
+        raise SystemExit("release asset has an invalid or excessive declared size")
     request = Request(url, headers={"User-Agent": "PCRStudio-release-puller"})
+    complete = False
     try:
         with urlopen(request, timeout=60) as response, destination.open("wb") as output:
+            final_url = urlparse(response.geturl())
+            if final_url.scheme != "https" or final_url.hostname not in ASSET_HOSTS:
+                raise SystemExit("refusing release download redirected outside the trusted HTTPS asset hosts")
+            written = 0
             while chunk := response.read(1024 * 1024):
+                written += len(chunk)
+                if written > expected_bytes:
+                    raise SystemExit("release asset exceeded its declared size; download aborted")
                 output.write(chunk)
+            if written != expected_bytes:
+                raise SystemExit(
+                    f"release asset size mismatch: expected {expected_bytes} bytes, received {written}"
+                )
+            complete = True
     except (HTTPError, URLError, TimeoutError) as error:
         raise SystemExit(f"release asset download failed: {url}: {error}") from error
+    finally:
+        if not complete:
+            destination.unlink(missing_ok=True)
+
+
+def declared_asset_size(asset: dict, *, maximum: int, label: str) -> int:
+    size = asset.get("size")
+    if not isinstance(size, int) or isinstance(size, bool) or not 0 < size <= maximum:
+        raise SystemExit(f"release {label} has a missing or excessive declared size")
+    return size
+
+
+def prune_release_staging(state_dir: Path) -> int:
+    """Remove only abandoned generated download directories while holding the pull lock."""
+    staging_root = state_dir / ".local" / "release-pull"
+    staging_root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    lock_path = staging_root / ".deploy.lock"
+    with lock_path.open("a", encoding="utf-8") as lock:
+        try:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print("release pull is active; left its staging files untouched")
+            return 0
+        removed = prune_release_staging_locked(staging_root)
+        print(f"removed {removed} abandoned PCRStudio release staging directory(s)")
+        return removed
+
+
+def prune_release_staging_locked(staging_root: Path) -> int:
+    root = staging_root.resolve()
+    removed = 0
+    for entry in staging_root.iterdir():
+        if not entry.name.startswith("current-") or entry.is_symlink() or not entry.is_dir():
+            continue
+        if entry.resolve().parent != root:
+            raise SystemExit(f"refusing to clean staging path outside its root: {entry}")
+        shutil.rmtree(entry)
+        removed += 1
+    return removed
+
+
+def prune_old_release_sources(release_root: Path, current_sha: str, previous_sha: str | None) -> int:
+    """Retain the active and immediately previous source tree; remove only full-SHA release dirs."""
+    if not SHA_RE.fullmatch(current_sha) or (previous_sha and not SHA_RE.fullmatch(previous_sha)):
+        raise SystemExit("refusing source retention cleanup with an invalid release SHA")
+    release_root = release_root.resolve()
+    if not release_root.is_dir():
+        return 0
+    keep = {current_sha}
+    if previous_sha:
+        keep.add(previous_sha)
+    removed = 0
+    for entry in release_root.iterdir():
+        if not SHA_RE.fullmatch(entry.name) or entry.name in keep or entry.is_symlink() or not entry.is_dir():
+            continue
+        if entry.resolve().parent != release_root:
+            raise SystemExit(f"refusing to remove release source outside its root: {entry}")
+        shutil.rmtree(entry)
+        removed += 1
+    return removed
 
 
 def sha256(path: Path) -> str:
@@ -287,6 +363,7 @@ Requires=docker.service
 [Service]
 Type=oneshot
 EnvironmentFile=-/etc/pcrstudio-release-pull.env
+Environment=PCRSTUDIO_HOST_ROOT=/srv/pcrstudio
 ExecStart=/usr/local/libexec/pcrstudio-release-pull.py
 NoNewPrivileges=true
 PrivateTmp=true
@@ -315,7 +392,7 @@ WantedBy=timers.target
     print("installed pcrstudio-release-pull.timer")
 
 
-def deploy(args: argparse.Namespace) -> None:
+def deploy_unlocked(args: argparse.Namespace) -> None:
     repo = args.repo
     release = release_metadata(repo, args.release_ref)
     tag = release["tag_name"]
@@ -328,7 +405,12 @@ def deploy(args: argparse.Namespace) -> None:
     with tempfile.TemporaryDirectory(prefix="current-", dir=staging_root) as temp_name:
         staging = Path(temp_name)
         manifest_path = staging / manifest_names[0]
-        download(assets[manifest_names[0]]["url"], manifest_path)
+        manifest_asset = assets[manifest_names[0]]
+        download(
+            manifest_asset["url"],
+            manifest_path,
+            declared_asset_size(manifest_asset, maximum=1024 * 1024, label="deployment manifest"),
+        )
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         source_sha = manifest.get("source_sha")
         if not isinstance(source_sha, str) or not SHA_RE.fullmatch(source_sha):
@@ -342,10 +424,20 @@ def deploy(args: argparse.Namespace) -> None:
         image_name = manifest["image_archive"]["name"]
         if source_name not in assets or image_name not in assets:
             raise SystemExit("deployment manifest refers to an asset absent from the release")
+        source_asset = assets[source_name]
+        image_asset = assets[image_name]
+        source_size = declared_asset_size(source_asset, maximum=64 * 1024 * 1024, label="source archive")
+        image_size = declared_asset_size(image_asset, maximum=12 * 1024**3, label="image archive")
+        required_staging_bytes = source_size + image_size + manifest_path.stat().st_size
+        available = shutil.disk_usage(staging_root).free
+        if available < required_staging_bytes + 4 * 1024**3:
+            raise SystemExit(
+                "insufficient host free space to stage this release while preserving the 4 GiB emergency reserve"
+            )
         source_path = staging / source_name
         image_path = staging / image_name
-        download(assets[source_name]["url"], source_path)
-        download(assets[image_name]["url"], image_path)
+        download(source_asset["url"], source_path, source_size)
+        download(image_asset["url"], image_path, image_size)
         for key, path in (("source_archive", source_path), ("image_archive", image_path)):
             expected = manifest[key].get("sha256")
             if expected != sha256(path):
@@ -369,14 +461,17 @@ def deploy(args: argparse.Namespace) -> None:
         elif not release_dir.is_dir():
             raise SystemExit(f"release path exists but is not a directory: {release_dir}")
         validate_source_version(release_dir, tag)
-        with gzip.open(image_path, "rb") as image_stream:
-            subprocess.run(["docker", "load"], check=True, stdin=image_stream, text=False)
-        image_ids(manifest)
         state = Path(args.state_dir)
         remove_empty_path(release_dir / ".local")
         remove_empty_path(release_dir / ".env")
         (release_dir / ".local").symlink_to(state / ".local")
         (release_dir / ".env").symlink_to(state / ".env")
+        with gzip.open(image_path, "rb") as image_stream:
+            subprocess.run(["docker", "load"], check=True, stdin=image_stream, text=False)
+        image_ids(manifest)
+        # Measure immediately after image extraction, while archives still take
+        # space, and before bootstrap can create/start additional services.
+        run([sys.executable, str(release_dir / "scripts" / "storage-guard.py"), "--enforce"])
         run(
             [
                 str(release_dir / "bootstrap.sh"),
@@ -393,6 +488,24 @@ def deploy(args: argparse.Namespace) -> None:
         os.replace(state / "current-release.tmp", state / "current-release")
         print(f"deployed {tag} ({source_sha})")
         prune_old_release_images(source_sha, previous_sha)
+        removed_sources = prune_old_release_sources(Path(args.release_root), source_sha, previous_sha)
+        print(f"removed {removed_sources} obsolete PCRStudio release source tree(s)")
+
+
+def deploy(args: argparse.Namespace) -> None:
+    os.environ.setdefault("PCRSTUDIO_HOST_ROOT", str(Path(args.release_root).resolve().parent))
+    staging_root = Path(args.state_dir) / ".local" / "release-pull"
+    staging_root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    lock_path = staging_root / ".deploy.lock"
+    with lock_path.open("a", encoding="utf-8") as lock:
+        try:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise SystemExit("a PCRStudio release pull is already running") from error
+        removed = prune_release_staging_locked(staging_root)
+        if removed:
+            print(f"removed {removed} abandoned PCRStudio release staging directory(s)")
+        deploy_unlocked(args)
 
 
 def main() -> None:
@@ -403,9 +516,14 @@ def main() -> None:
     parser.add_argument("--state-dir", default="/srv/pcrstudio/state")
     parser.add_argument("--release-root", default="/srv/pcrstudio/releases")
     parser.add_argument("--install-systemd", action="store_true")
+    parser.add_argument("--prune-staging", action="store_true", help="remove abandoned, repository-owned partial release downloads")
     args = parser.parse_args()
+    if args.install_systemd and args.prune_staging:
+        parser.error("--install-systemd and --prune-staging are mutually exclusive")
     if args.install_systemd:
         install_systemd()
+    elif args.prune_staging:
+        prune_release_staging(Path(args.state_dir))
     else:
         deploy(args)
 

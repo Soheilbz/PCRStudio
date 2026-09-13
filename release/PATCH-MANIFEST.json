@@ -256,9 +256,9 @@
       "sha256": "6f86ca309f42f2a9d832c2d7b96f1a324ff284ed7ff46a3689d156befaf109f7"
     },
     {
-      "bytes": 3132,
+      "bytes": 3286,
       "path": "contracts/operations.toml",
-      "sha256": "6c959fd1306b415656087afc93e44ab36afcb0dbe250a467c0306127e62a4e9d"
+      "sha256": "20089e5b97694786e03e3a1c6730587ec493e1d730e5d3f3735b6996da152310"
     },
     {
       "bytes": 3332,
@@ -526,14 +526,14 @@
       "sha256": "0fa3085de48bbe53527e11d331d93d3496d158f7cb1e61ddd17818336770618c"
     },
     {
-      "bytes": 6694,
+      "bytes": 6396,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "abeac70fce7e1c0b833ee925d7ecdf92efe18b876e67c18fca0ccc04e7b23e04"
+      "sha256": "fe4741fa6ea8bde3555d9d4ed102c1c91c0106addc44caa5e7f8b01f5d4c69c5"
     },
     {
-      "bytes": 14064,
+      "bytes": 14316,
       "path": "docs/OPERATIONS.md",
-      "sha256": "2a014bceb21eebfbcd82e836723e10f61b0c09eb6ef40825472f7005db573a25"
+      "sha256": "3f1fb07515a06a4c1527d06266e536d36cfc16f51d5f01d5f9497f32b4635115"
     },
     {
       "bytes": 2598,
@@ -681,9 +681,9 @@
       "sha256": "eac451398eb9fac0bae1e2c83ab1d9477c065dc151e3d85eb20843d9c6d33f37"
     },
     {
-      "bytes": 3558,
+      "bytes": 3674,
       "path": "knowledge/runtime/operations.generated.json",
-      "sha256": "84367db87d0b182351c58efe0a43ad962af4819599a5eda54722c0fc77130cbc"
+      "sha256": "71bf2967bc4ad368498cd86b7d48c014eda2b52318b26efb7ee2b238e00323a4"
     },
     {
       "bytes": 6653,
@@ -776,14 +776,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1672,
+      "bytes": 1626,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "4b4b9b81f0d5c729ed52d14adbde8e57ac785d145c946660e5c4c36624a4a65f"
+      "sha256": "1ba0b6a7de7cbd130331ad22a5653dae8390b8106c1af5aea347ae02a67eae2f"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "18e72c858410a0e6beb900a6fd4a808add0a363f74ff3b5f5d464b7a34f103d1"
+      "sha256": "8166ab540761e537b9e45e4dfaafa303e52c9b60d37e6ab2543945041ac06e06"
     },
     {
       "bytes": 40816,
@@ -841,14 +841,14 @@
       "sha256": "b87bb423b4477a64edbac302a517a66cbb2c79bcf04d99d52bca3a28ed8400ee"
     },
     {
-      "bytes": 4816,
+      "bytes": 5400,
       "path": "scripts/audit/operations.py",
-      "sha256": "577673e1fcecbd17b40309fa5cc5f5dcd20432a2d112db41604fa993c7bea5a8"
+      "sha256": "dc07bee74af4fe5075d1c3753a7a8758bc847efeeafe94fc49986b5e444d6eb8"
     },
     {
-      "bytes": 79388,
+      "bytes": 84106,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "cbf3993a09d7fd8391a13fd6117e89867db2b28271d9832caf0b19755809ab9d"
+      "sha256": "699fe85b2dd438bd4239651a564919a1eed19e23604e1862fa80d2a4c1023065"
     },
     {
       "bytes": 17770,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 45244,
+      "bytes": 51174,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "4e1dcdedfdf8a58f7314167f57c26d7e1f7b0852c3e5ff15e3e4bc06a6a7c070"
+      "sha256": "4b41d9225c67fdd63dfeabfdf16cd8f8b6bdb770b231b1d3ede40147d007e164"
     },
     {
       "bytes": 4486,
@@ -881,9 +881,9 @@
       "sha256": "79c3569c850975220882b95f650e5748341c9af30d97eee3f4fbbb1ec54612f0"
     },
     {
-      "bytes": 8851,
+      "bytes": 9619,
       "path": "scripts/classify-ci-scope.py",
-      "sha256": "6b784c493a035a9789e82a4e085d48ffb14ec5dbce5e9f4a0e40af16108d62c3"
+      "sha256": "606d841afbd852c9f0f07281d39dbb6836e2ad89e4a8dd05adc5be721d71a27e"
     },
     {
       "bytes": 1116,
@@ -956,9 +956,9 @@
       "sha256": "0a53dab72406d98cbbd960272e6af1a803bb410351faa0a707a14eb239914c49"
     },
     {
-      "bytes": 6117,
+      "bytes": 6706,
       "path": "scripts/generate-operations-policy.py",
-      "sha256": "74015ad48870df79ab633517cb7644965ca72270c39e7a19131694a8b5e4ff42"
+      "sha256": "8fb65f5a07d46828954581b5e82b4d72c922d11ccd113931f6d73189d07dd608"
     },
     {
       "bytes": 4382,
@@ -986,14 +986,14 @@
       "sha256": "8be2a552ba79bd8ab3b3668d2920e7468136599f6b59a650a5ef0c4df9890c91"
     },
     {
-      "bytes": 827,
+      "bytes": 2694,
       "path": "scripts/prune-backups.sh",
-      "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
+      "sha256": "7d44f8c37be3de02685d7b691162639b240f797ab8dd010c3008e38775fbe7dd"
     },
     {
-      "bytes": 18155,
+      "bytes": 24063,
       "path": "scripts/pull-release.py",
-      "sha256": "ed3199ae8112b09327bdf4ed6aa38841573cb0564db1b6f429adc47777ad7cd1"
+      "sha256": "da15692e59a5a967dcc47f1afb5e6ea17732989681d9e2a9bff657b6297bd1de"
     },
     {
       "bytes": 996,
@@ -1046,9 +1046,9 @@
       "sha256": "1b2dc7c10df0b876555e22dbbbf72633b5ca123514c91c0de660e7e36c7bb93d"
     },
     {
-      "bytes": 6812,
+      "bytes": 10558,
       "path": "scripts/storage-guard.py",
-      "sha256": "7223b7c297cbbb440628bb6cd61972ed693acd2490b944c3fa718a2609a81baa"
+      "sha256": "a4b7f42692254c60ad4a003c4d60a10b9ebd96b2323927cbec24e0a6ec04d484"
     },
     {
       "bytes": 2431,
@@ -1746,15 +1746,15 @@
       "path": ".dockerignore"
     },
     {
-      "after_bytes": 1820,
-      "after_sha256": "ba8130c816ec7130855161892b617d0b3568fbc687571e4445546af622c59764",
+      "after_bytes": 1833,
+      "after_sha256": "4b549180f6e15067e0823b03d57b142d4fbfabf48ca992e4ad806d1f3f83b44f",
       "before_bytes": 1632,
       "before_sha256": "93bd1557b8fedb6816431ef64e1bb14759cacaee8b24719aebb191667b353dab",
       "path": ".env.example"
     },
     {
-      "after_bytes": 1553,
-      "after_sha256": "5bc21f2d79ef556bddc4c04094e7552bc1372d416022b8e712ed93912d09ee8b",
+      "after_bytes": 1696,
+      "after_sha256": "4adc3d44eacb75d815d7dca79155d35c44380a12f1767998bd581a7e45364030",
       "before_bytes": 1591,
       "before_sha256": "d034abf78c768c5abe3a7c4111d89eaba2083c43eac6b7ff3bf278a186b8d90d",
       "path": ".env.vm.example"
@@ -2839,7 +2839,7 @@
     },
     {
       "after_bytes": 1678,
-      "after_sha256": "77a357738972bb9f37bc48d02ec157e3705068cea2c720651f691c68e69ba49c",
+      "after_sha256": "7bca9925a42e1f14188cab342a6ec4e7c7158fec3ef0962b3aa31108d236c0e2",
       "before_bytes": 603,
       "before_sha256": "1d323b3844f8ebf3953a1dd79f479be5abb5dd3b6a35af2bc3ad97471acd3df5",
       "path": "release/INDEX.md"
@@ -2866,8 +2866,8 @@
       "path": "release/PUBLIC-SOURCE.md"
     },
     {
-      "after_bytes": 6700,
-      "after_sha256": "08e540fa426457c68f1579c3febbeb9134ddd399d10e09e54b2be689829f4277",
+      "after_bytes": 7032,
+      "after_sha256": "20ec346c86d6180b722f73148064b6a3fb745992a12fdf80282c191fa2724523",
       "before_bytes": 1111,
       "before_sha256": "e34d1974f2c960513499d801308192e08c6c483f6610abae0b705f69f68f5c31",
       "path": "release/RELEASE-NOTES.md"
@@ -2916,7 +2916,7 @@
     },
     {
       "after_bytes": 532,
-      "after_sha256": "eb7a818b72f7205751d875f0d098db844d6205785356fa85cea27a27884c0bf2",
+      "after_sha256": "3c23e6fde4988ed710ad39017805edbdddc467f177fbd3c3b28799ef8c26bb86",
       "before_bytes": 490,
       "before_sha256": "d63da32f516385bdc88a84d718fa721f632294774845112edaf2197c5b884333",
       "path": "release/release.toml"
@@ -2985,15 +2985,15 @@
       "path": "scripts/audit/scientific.py"
     },
     {
-      "after_bytes": 1324,
-      "after_sha256": "e640ab9f41e1ef8e2fad6132e2926bdf06d2dbcc40d8d81ec3cd5cb6aaa1e104",
+      "after_bytes": 1872,
+      "after_sha256": "ffffd327545bf9f0ec536a1daecd5156cd98d8c82de2d37538d197cba9d4226c",
       "before_bytes": 1046,
       "before_sha256": "1b04c625d2afa752c21743ec6f4f8c01275613a51ceb5921a0ffe7edbb66bae7",
       "path": "scripts/backup-db.sh"
     },
     {
-      "after_bytes": 1601,
-      "after_sha256": "3795e23644f0925562d44e31758196ecf66d56110035ee9ef4c5d722050b16a0",
+      "after_bytes": 1844,
+      "after_sha256": "2a65510da9646342c9f26091e6b7551b014fa6e0e206ef075e19814b3596384d",
       "before_bytes": 1195,
       "before_sha256": "7784aa0a06b041f43c3898def7e281b5fd4a6475cd882f0de7e86a6672ecb7ef",
       "path": "scripts/backup-restore-drill.sh"

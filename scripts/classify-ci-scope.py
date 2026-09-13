@@ -50,6 +50,20 @@ TARGETED_RELEASE_EVIDENCE_FILES = {
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json",
 }
+TARGETED_STORAGE_FILES = {
+    ".env.example",
+    ".env.vm.example",
+    "contracts/operations.toml",
+    "knowledge/runtime/operations.generated.json",
+    "scripts/audit/operations.py",
+    "scripts/backup-db.sh",
+    "scripts/backup-restore-drill.sh",
+    "scripts/bootstrap-linux.py",
+    "scripts/ci-qualification-gate.py",
+    "scripts/generate-operations-policy.py",
+    "scripts/prune-backups.sh",
+    "scripts/storage-guard.py",
+}
 WEB_DEPENDENCY_FILES = {
     ".npmrc",
     "package.json",
@@ -149,6 +163,12 @@ def classify_paths(paths: list[str], *, action_pins_only: bool = False) -> dict[
             # Narrative/evidence-only updates do not alter product execution.
             # The fast contract job still verifies static source and the exact
             # generated release manifests, attestation, and checksums.
+            contracts = True
+            continue
+        if path in TARGETED_STORAGE_FILES:
+            # Dedicated-host storage changes have direct source regression
+            # coverage in check-linux-bootstrap.py and the operations audit.
+            # Keep the Docker/runtime-wide matrix for execution/topology changes.
             contracts = True
             continue
         if path in WEB_DEPENDENCY_FILES:

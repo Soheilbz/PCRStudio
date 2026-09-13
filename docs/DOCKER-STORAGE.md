@@ -14,12 +14,12 @@ gate.
 
 The Linux bootstrap creates/selects this builder before the first expensive
 build, prunes it before work starts, and prunes it again even when a build
-fails. The server's `pcrstudio-storage-guard.timer` runs every 15 minutes and
-re-enforces the same bound. On a developer workstation with a running systemd
-user manager, maintainers can run `python3 scripts/docker-maintenance.py setup`
-once to create the builder and enable a persistent daily, checkout-scoped
-maintenance timer. It logs under that user's journal; a failed maintenance run
-is visible as a failed timer service.
+fails. The server's `pcrstudio-storage-guard.timer` checks every five minutes.
+On a developer workstation with a running systemd user manager, maintainers
+can run `python3 scripts/docker-maintenance.py setup` once to create the
+builder and enable a persistent daily, checkout-scoped maintenance timer. It
+logs under that user's journal; a failed maintenance run is visible as a
+failed timer service.
 
 PCRStudio's supported Linux Compose launcher always selects the dedicated
 `pcrstudio` builder. The plain Docker `default` builder is shared with other
@@ -49,10 +49,10 @@ does not remove images belonging to other projects. Only dangling images that
 carry PCRStudio's `org.pcrstudio.product=PCRStudio` lifecycle label are
 eligible for image cleanup. Old unlabelled images must be reviewed by their
 owning project before removal. After a successful production release switch,
-the release puller also removes only obsolete full-SHA tags for PCRStudio's four
-runtime images, retaining the active and immediately previous release for
-rollback. It never forces removal; if Docker reports an image is still in use,
-that tag is kept and a warning is logged.
+the release puller removes only obsolete full-SHA tags for PCRStudio's four
+runtime images and source trees, retaining the active and immediately previous
+release for rollback. It never forces image removal; if Docker reports an
+image is still in use, that tag is kept and a warning is logged.
 
 CI uses ephemeral runners and runs a final bounded BuildKit prune so a failed
 qualification cannot leave a large cache on a reused runner. Cloud hosts
@@ -61,60 +61,50 @@ checkout rather than using ad-hoc daemon-wide pruning.
 
 The web build uses the official `registry.npmjs.com` endpoint and the exact
 pnpm `11.26.0` package-manager version (Corepack signature/integrity checks).
-Its dependency-fetch steps use the
-dedicated BuildKit builder's explicit `network.host` entitlement because this
-host's Docker bridge cannot complete TLS connections to the Cloudflare-backed
-`registry.npmjs.org` hostname; the entitlement is build-time only and is not
-granted to runtime containers. Frozen lockfile integrity hashes remain
-mandatory.
+Its dependency-fetch steps use the dedicated BuildKit builder's explicit
+`network.host` entitlement because this host's Docker bridge cannot complete
+TLS connections to the Cloudflare-backed `registry.npmjs.org` hostname; the
+entitlement is build-time only and is not granted to runtime containers.
+Frozen lockfile integrity hashes remain mandatory.
 
-The Linux bootstrap also installs `pcrstudio-storage-guard.timer` on systemd
-hosts. Its 20 GiB setting is a **host free-space safety reserve**, with 4 GiB
-of emergency headroom; it is not by itself a per-application 20 GiB disk
-quota. On the current 48 GiB host, it stops new scientific work before free
-space falls below roughly 32 GiB and stops public API/web/edge services before
-it falls below roughly 28 GiB. At each run it prunes only PCRStudio's bounded
-builder cache and expired, owned backup artifacts. It never deletes PostgreSQL
-data or another Compose project's resources. The guard is a last-resort safety
-brake, not a substitute for off-host backups or a larger disk.
-It measures the application root, Docker's reported root, and containerd's
-OCI root; this avoids treating a tiny DockerRootDir as evidence that image
-storage is small.
+## Dedicated-host storage budget
 
-## Hard 20 GiB production boundary
+The dedicated PCRStudio host uses a **20 GiB managed application budget**, not
+a separate partition or kernel directory quota. The budget counts allocated
+storage under `/srv/pcrstudio`, Docker's reported `DockerRootDir`, and
+containerd's configured root. It is an operational budget enforced by
+measurement, cleanup, and service stops; it is not a filesystem-enforced hard
+quota. The host also preserves at least 8 GiB free for normal operation and 4
+GiB as an emergency floor. Bootstrap rejects a host smaller than 32 GiB and
+records the observed storage roots and capacity in deployment evidence.
 
-Production bootstrap now defaults to `PCRSTUDIO_STORAGE_ENFORCEMENT=hard-quota`.
-Before it pulls/builds/starts anything, it requires these three writable roots
-to share one **non-root, dedicated filesystem** whose capacity is no larger
-than `PCRSTUDIO_STORAGE_BUDGET_GIB` (20 by default):
+The systemd guard starts one minute after boot and checks every five minutes.
+Before measuring, it removes only stale PCRStudio release-download staging,
+expired/over-budget PCRStudio backups, and—when storage pressure warrants
+it—the PCRStudio BuildKit cache and dangling PCRStudio-labelled images. It
+pauses the scientific runner at 16 GiB of managed use or below 8 GiB host-free;
+it stops PCRStudio services at 20 GiB managed use or below 4 GiB host-free.
+It never deletes database state, a current/rollback release image, or another
+project's Docker resources. Docker build-cache GC remains capped at 8 GB.
 
-| Ownership | Required root |
-| --- | --- |
-| PCRStudio source, `.local/` scientific data, secrets and backups | `/srv/pcrstudio` |
-| Docker engine data | Docker's reported `DockerRootDir` |
-| OCI content and snapshots | containerd's configured `root` (default `/var/lib/containerd`) |
+Release downloads are serialized, limited by the exact GitHub-declared asset
+size and conservative per-asset ceilings, and removed automatically if a
+transfer fails. Interrupted staging directories are cleaned under the same
+lock on the next maintenance pass. Successful updates retain only the active
+and immediately previous source/image releases. PostgreSQL backups stream
+directly to a file capped at 4 GiB each; retention keeps at most 8 GiB in
+total and 14 days, while preserving the newest usable backup. Restore drills
+preflight space for their temporary duplicate before running. Per-container
+logs remain capped at 10 MiB × 3 files, and scientific scratch remains bounded
+tmpfs rather than persistent disk.
 
-The third row matters on current Docker/Ubuntu installations: OCI layers are
-often stored by containerd even when `docker info` reports a tiny
-`DockerRootDir`. Moving only `/var/lib/docker` is therefore not a quota.
-The verifier fails if a root remains on `/`, if the roots are split, or if the
-shared filesystem exceeds the configured cap. Its result is recorded in the
-bootstrap evidence.
+PCRStudio also applies request and per-account data ceilings in the API. These
+application limits and the periodic host guard reduce growth risk, but the
+20 GiB managed budget is not a kernel quota: unexpected growth can cross a
+threshold between five-minute checks. The emergency free-space floor is the
+independent protection against host exhaustion. Host-local backups are not
+off-host disaster recovery; follow the backup section of `docs/OPERATIONS.md`.
 
-For this host, attach a dedicated 20 GiB block volume (or use an already
-dedicated 20 GiB partition) before production bootstrap. Mount it at a stable
-path such as `/srv/pcrstudio-storage`, place Docker `data-root` and containerd
-`root` below it, and bind or mount the application checkout as
-`/srv/pcrstudio`. Stop Docker/containerd first, migrate existing state with a
-reviewed backup/restore plan, configure mounts to exist before both daemons,
-then restart them and verify `docker info`, `findmnt -T /srv/pcrstudio`, and
-`findmnt -T /var/lib/containerd`. This server currently has only the 48 GiB
-root disk, so it does not satisfy this production precondition.
-
-`--allow-guard-only-storage` is an explicit development escape hatch. It
-records `NOT_REQUIRED` in the evidence and must not be used to describe a
-deployment as hard-capped production.
-
-The prebuilt production deployment verifies those same exact base-image digests
-from the server's local OCI cache and fails closed if any is absent or differs;
-it does not silently substitute a tag, mirror or unpinned image.
+The prebuilt production deployment verifies exact base-image digests from the
+server's local OCI cache and fails closed if any is absent or differs; it does
+not silently substitute a tag, mirror or unpinned image.

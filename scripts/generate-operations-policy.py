@@ -36,16 +36,24 @@ def validate(data: dict[str, Any]) -> None:
     if backup.get("off_host_copy_required_for_host_loss_dr") is not True:
         raise ValueError("host-loss disaster recovery must explicitly require an off-host copy")
     storage = data.get("storage") or {}
-    if storage.get("hard_quota_required") is not True:
-        raise ValueError("operations storage policy must require a hard quota")
-    if storage.get("quota_gib") != 20 or storage.get("minimum_filesystem_gib") != 12:
-        raise ValueError("operations storage quota policy must remain 20 GiB with 12 GiB minimum")
-    if storage.get("enforcement_env") != "PCRSTUDIO_STORAGE_ENFORCEMENT":
-        raise ValueError("operations storage policy lost its explicit enforcement environment key")
+    if storage.get("mode") != "dedicated-host-budget":
+        raise ValueError("operations storage policy must use the dedicated-host budget")
+    if storage.get("application_budget_gib") != 20:
+        raise ValueError("operations storage budget must remain 20 GiB")
+    if storage.get("runner_stop_headroom_gib") != 4:
+        raise ValueError("operations storage policy must reserve 4 GiB before pausing scientific work")
+    if storage.get("minimum_host_free_gib") != 8 or storage.get("critical_host_free_gib") != 4:
+        raise ValueError("operations storage policy must preserve 8 GiB host-free and 4 GiB emergency thresholds")
+    if storage.get("minimum_host_capacity_gib") < (
+        storage["application_budget_gib"] + storage["minimum_host_free_gib"] + storage["critical_host_free_gib"]
+    ):
+        raise ValueError("minimum host capacity must fit the application budget and free-space reserves")
+    if storage.get("buildkit_cache_gib") != 8 or storage.get("backup_total_max_gib") != 8:
+        raise ValueError("storage policy lost its bounded BuildKit/backup retention limits")
+    if storage.get("backup_file_max_gib") != 4:
+        raise ValueError("one PCRStudio database backup must be capped at 4 GiB")
     if storage.get("ownership_roots") != ["application", "docker", "containerd"]:
-        raise ValueError("operations storage policy must include application, Docker and containerd roots")
-    if storage.get("guard_only_nonproduction") is not True:
-        raise ValueError("guard-only storage mode must be explicitly non-production")
+        raise ValueError("operations storage policy must measure application, Docker and containerd roots")
 
     diagnostics = DIAGNOSTICS.read_text(encoding="utf-8")
     seen: set[str] = set()

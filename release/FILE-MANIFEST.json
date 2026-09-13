@@ -13,14 +13,14 @@
       "sha256": "88856e80954692a3488d283b78ce05357cd1c496bfc7dc3f03e330d885364eb4"
     },
     {
-      "bytes": 1820,
+      "bytes": 1833,
       "path": ".env.example",
-      "sha256": "ba8130c816ec7130855161892b617d0b3568fbc687571e4445546af622c59764"
+      "sha256": "4b549180f6e15067e0823b03d57b142d4fbfabf48ca992e4ad806d1f3f83b44f"
     },
     {
-      "bytes": 1553,
+      "bytes": 1696,
       "path": ".env.vm.example",
-      "sha256": "5bc21f2d79ef556bddc4c04094e7552bc1372d416022b8e712ed93912d09ee8b"
+      "sha256": "4adc3d44eacb75d815d7dca79155d35c44380a12f1767998bd581a7e45364030"
     },
     {
       "bytes": 144,
@@ -393,9 +393,9 @@
       "sha256": "cd85edb4f9448eca94b2ced864b32be6bfef8582bc0c2625c901fba72d854ec8"
     },
     {
-      "bytes": 3132,
+      "bytes": 3286,
       "path": "contracts/operations.toml",
-      "sha256": "6c959fd1306b415656087afc93e44ab36afcb0dbe250a467c0306127e62a4e9d"
+      "sha256": "20089e5b97694786e03e3a1c6730587ec493e1d730e5d3f3735b6996da152310"
     },
     {
       "bytes": 951,
@@ -1118,14 +1118,14 @@
       "sha256": "0fa3085de48bbe53527e11d331d93d3496d158f7cb1e61ddd17818336770618c"
     },
     {
-      "bytes": 6694,
+      "bytes": 6396,
       "path": "docs/DOCKER-STORAGE.md",
-      "sha256": "abeac70fce7e1c0b833ee925d7ecdf92efe18b876e67c18fca0ccc04e7b23e04"
+      "sha256": "fe4741fa6ea8bde3555d9d4ed102c1c91c0106addc44caa5e7f8b01f5d4c69c5"
     },
     {
-      "bytes": 14064,
+      "bytes": 14316,
       "path": "docs/OPERATIONS.md",
-      "sha256": "2a014bceb21eebfbcd82e836723e10f61b0c09eb6ef40825472f7005db573a25"
+      "sha256": "3f1fb07515a06a4c1527d06266e536d36cfc16f51d5f01d5f9497f32b4635115"
     },
     {
       "bytes": 2598,
@@ -1753,9 +1753,9 @@
       "sha256": "a4bced233917e3c9c17c0e2a234ca05d846ea6cee8405adba7ec4639e5bf889a"
     },
     {
-      "bytes": 3558,
+      "bytes": 3674,
       "path": "knowledge/runtime/operations.generated.json",
-      "sha256": "84367db87d0b182351c58efe0a43ad962af4819599a5eda54722c0fc77130cbc"
+      "sha256": "71bf2967bc4ad368498cd86b7d48c014eda2b52318b26efb7ee2b238e00323a4"
     },
     {
       "bytes": 6653,
@@ -1870,7 +1870,7 @@
     {
       "bytes": 1678,
       "path": "release/INDEX.md",
-      "sha256": "77a357738972bb9f37bc48d02ec157e3705068cea2c720651f691c68e69ba49c"
+      "sha256": "7bca9925a42e1f14188cab342a6ec4e7c7158fec3ef0962b3aa31108d236c0e2"
     },
     {
       "bytes": 39959,
@@ -1883,9 +1883,9 @@
       "sha256": "6151c759acd52e300c2e6feed8a061ceea1204e7f322a922bd042f26c024bcbc"
     },
     {
-      "bytes": 217593,
+      "bytes": 217595,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "e62738a2334803a3d08800dd7440d934aacbf0735ab5281d180ddf4526c9d9a2"
+      "sha256": "6765e1c71d9aa4ad765440f728baa3358bfa7138dbd6a223fd877a07427577bc"
     },
     {
       "bytes": 2048,
@@ -1893,9 +1893,9 @@
       "sha256": "914cd8c95c0a0438772cc15184a41ab37761e1b32d027f070b3e102bea4e3563"
     },
     {
-      "bytes": 6700,
+      "bytes": 7032,
       "path": "release/RELEASE-NOTES.md",
-      "sha256": "08e540fa426457c68f1579c3febbeb9134ddd399d10e09e54b2be689829f4277"
+      "sha256": "20ec346c86d6180b722f73148064b6a3fb745992a12fdf80282c191fa2724523"
     },
     {
       "bytes": 98937,
@@ -1953,14 +1953,14 @@
       "sha256": "6b72f22001a9108fa83ba8e9e5c14a66e119518b68f939c09c1381bcb468d4b5"
     },
     {
-      "bytes": 1672,
+      "bytes": 1626,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
-      "sha256": "4b4b9b81f0d5c729ed52d14adbde8e57ac785d145c946660e5c4c36624a4a65f"
+      "sha256": "1ba0b6a7de7cbd130331ad22a5653dae8390b8106c1af5aea347ae02a67eae2f"
     },
     {
       "bytes": 1708,
       "path": "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
-      "sha256": "18e72c858410a0e6beb900a6fd4a808add0a363f74ff3b5f5d464b7a34f103d1"
+      "sha256": "8166ab540761e537b9e45e4dfaafa303e52c9b60d37e6ab2543945041ac06e06"
     },
     {
       "bytes": 40816,
@@ -2000,7 +2000,7 @@
     {
       "bytes": 532,
       "path": "release/release.toml",
-      "sha256": "eb7a818b72f7205751d875f0d098db844d6205785356fa85cea27a27884c0bf2"
+      "sha256": "3c23e6fde4988ed710ad39017805edbdddc467f177fbd3c3b28799ef8c26bb86"
     },
     {
       "bytes": 145,
@@ -2078,9 +2078,9 @@
       "sha256": "b87bb423b4477a64edbac302a517a66cbb2c79bcf04d99d52bca3a28ed8400ee"
     },
     {
-      "bytes": 4816,
+      "bytes": 5400,
       "path": "scripts/audit/operations.py",
-      "sha256": "577673e1fcecbd17b40309fa5cc5f5dcd20432a2d112db41604fa993c7bea5a8"
+      "sha256": "dc07bee74af4fe5075d1c3753a7a8758bc847efeeafe94fc49986b5e444d6eb8"
     },
     {
       "bytes": 69453,
@@ -2093,14 +2093,14 @@
       "sha256": "d5a9f5c70f2f582c197f5f1501b8c8c0ce45f6081a87bb5afee67af23608f012"
     },
     {
-      "bytes": 1324,
+      "bytes": 1872,
       "path": "scripts/backup-db.sh",
-      "sha256": "e640ab9f41e1ef8e2fad6132e2926bdf06d2dbcc40d8d81ec3cd5cb6aaa1e104"
+      "sha256": "ffffd327545bf9f0ec536a1daecd5156cd98d8c82de2d37538d197cba9d4226c"
     },
     {
-      "bytes": 1601,
+      "bytes": 1844,
       "path": "scripts/backup-restore-drill.sh",
-      "sha256": "3795e23644f0925562d44e31758196ecf66d56110035ee9ef4c5d722050b16a0"
+      "sha256": "2a65510da9646342c9f26091e6b7551b014fa6e0e206ef075e19814b3596384d"
     },
     {
       "bytes": 6242,
@@ -2108,9 +2108,9 @@
       "sha256": "a65fec5d00dacfb1d269dc2d8b8d797f2cb0c938408763e2a67620a9323d3451"
     },
     {
-      "bytes": 79388,
+      "bytes": 84106,
       "path": "scripts/bootstrap-linux.py",
-      "sha256": "cbf3993a09d7fd8391a13fd6117e89867db2b28271d9832caf0b19755809ab9d"
+      "sha256": "699fe85b2dd438bd4239651a564919a1eed19e23604e1862fa80d2a4c1023065"
     },
     {
       "bytes": 17770,
@@ -2163,9 +2163,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 45244,
+      "bytes": 51174,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "4e1dcdedfdf8a58f7314167f57c26d7e1f7b0852c3e5ff15e3e4bc06a6a7c070"
+      "sha256": "4b41d9225c67fdd63dfeabfdf16cd8f8b6bdb770b231b1d3ede40147d007e164"
     },
     {
       "bytes": 4486,
@@ -2178,9 +2178,9 @@
       "sha256": "79c3569c850975220882b95f650e5748341c9af30d97eee3f4fbbb1ec54612f0"
     },
     {
-      "bytes": 8851,
+      "bytes": 9619,
       "path": "scripts/classify-ci-scope.py",
-      "sha256": "6b784c493a035a9789e82a4e085d48ffb14ec5dbce5e9f4a0e40af16108d62c3"
+      "sha256": "606d841afbd852c9f0f07281d39dbb6836e2ad89e4a8dd05adc5be721d71a27e"
     },
     {
       "bytes": 1116,
@@ -2308,9 +2308,9 @@
       "sha256": "0a53dab72406d98cbbd960272e6af1a803bb410351faa0a707a14eb239914c49"
     },
     {
-      "bytes": 6117,
+      "bytes": 6706,
       "path": "scripts/generate-operations-policy.py",
-      "sha256": "74015ad48870df79ab633517cb7644965ca72270c39e7a19131694a8b5e4ff42"
+      "sha256": "8fb65f5a07d46828954581b5e82b4d72c922d11ccd113931f6d73189d07dd608"
     },
     {
       "bytes": 10703,
@@ -2363,14 +2363,14 @@
       "sha256": "5056e648e6eca02ad14452ae0360d2871589314035aebd2bc852e23bf6b53ee4"
     },
     {
-      "bytes": 827,
+      "bytes": 2694,
       "path": "scripts/prune-backups.sh",
-      "sha256": "4123d2c4f8eda6cadb525c7a874d7a022161f01162c53a090076f7564e390e91"
+      "sha256": "7d44f8c37be3de02685d7b691162639b240f797ab8dd010c3008e38775fbe7dd"
     },
     {
-      "bytes": 18155,
+      "bytes": 24063,
       "path": "scripts/pull-release.py",
-      "sha256": "ed3199ae8112b09327bdf4ed6aa38841573cb0564db1b6f429adc47777ad7cd1"
+      "sha256": "da15692e59a5a967dcc47f1afb5e6ea17732989681d9e2a9bff657b6297bd1de"
     },
     {
       "bytes": 11763,
@@ -2453,9 +2453,9 @@
       "sha256": "42dbe3111fc4f007ff4674d6d496166443988221ac94cd8df79647bccf007ed5"
     },
     {
-      "bytes": 6812,
+      "bytes": 10558,
       "path": "scripts/storage-guard.py",
-      "sha256": "7223b7c297cbbb440628bb6cd61972ed693acd2490b944c3fa718a2609a81baa"
+      "sha256": "a4b7f42692254c60ad4a003c4d60a10b9ebd96b2323927cbec24e0a6ec04d484"
     },
     {
       "bytes": 2431,

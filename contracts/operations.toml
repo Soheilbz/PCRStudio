@@ -17,15 +17,20 @@ local_backup_scope = "host-local"
 off_host_copy_required_for_host_loss_dr = true
 
 [storage]
-# A cleanup timer protects host headroom, but only a dedicated filesystem can
-# constrain every writable PCRStudio owner (application data, Docker and OCI
-# containerd state) as one aggregate budget.
-hard_quota_required = true
-quota_gib = 20
-minimum_filesystem_gib = 12
-enforcement_env = "PCRSTUDIO_STORAGE_ENFORCEMENT"
+# PCRStudio is the only product on its current host. A bounded aggregate
+# budget covers its deployment files, application data, Docker images and OCI
+# content. Host-free thresholds remain independent so OS activity cannot fill
+# the root filesystem unnoticed.
+mode = "dedicated-host-budget"
+application_budget_gib = 20
+runner_stop_headroom_gib = 4
+minimum_host_free_gib = 8
+critical_host_free_gib = 4
+minimum_host_capacity_gib = 32
+buildkit_cache_gib = 8
+backup_total_max_gib = 8
+backup_file_max_gib = 4
 ownership_roots = ["application", "docker", "containerd"]
-guard_only_nonproduction = true
 
 [[alert]]
 id = "PCRStudioNoFreshDurableRunner"
