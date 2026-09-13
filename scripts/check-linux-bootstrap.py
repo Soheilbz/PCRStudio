@@ -131,6 +131,66 @@ def check_docker_save_integration(release_bundle) -> None:
                 )
 
 
+def check_mafft_archive_provenance(provision) -> None:
+    """Keep MAFFT's verified source archive distinct from later tool archives."""
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-mafft-provision-") as temporary:
+        root = Path(temporary)
+        downloads = root / "downloads"
+        downloads.mkdir()
+        archives = {
+            "mfeprimer-4.5.1-linux-amd64.gz": downloads / "mfe.gz",
+            "ncbi-blast-2.17.0-x64-linux.tar.gz": downloads / "blast.tgz",
+            "mafft-7.526-linux.tgz": downloads / "mafft.tgz",
+            "PrimerPooler-v1.89.tar.gz": downloads / "primerpooler.tgz",
+        }
+        with gzip.open(archives["mfeprimer-4.5.1-linux-amd64.gz"], "wb") as stream:
+            stream.write(b"mfeprimer-fixture")
+
+        def write_tar(path: Path, files: dict[str, bytes]) -> None:
+            with tarfile.open(path, "w:gz") as archive:
+                for name, payload in files.items():
+                    member = tarfile.TarInfo(name)
+                    member.size = len(payload)
+                    member.mode = 0o644
+                    archive.addfile(member, io.BytesIO(payload))
+
+        write_tar(archives["ncbi-blast-2.17.0-x64-linux.tar.gz"], {
+            "blast/bin/blastn": b"blastn-fixture",
+            "blast/bin/makeblastdb": b"makeblastdb-fixture",
+        })
+        write_tar(archives["mafft-7.526-linux.tgz"], {
+            "mafft-linux64/mafft.bat": b"#!/bin/bash\nexit 0\n",
+            "mafft-linux64/mafftdir/bin/mafft": b"#!/bin/bash\nexit 0\n",
+        })
+        write_tar(archives["PrimerPooler-v1.89.tar.gz"], {
+            "PrimerPooler/pooler/Makefile": b"all:\n\ttrue\n",
+        })
+
+        names = iter(archives)
+
+        def fake_download(_url, _target, _digest, *, mirror_urls=()):
+            name = next(names)
+            return archives[name]
+
+        def fake_run(*_args, cwd=None, **_kwargs):
+            assert cwd is not None
+            (cwd / "pooler").write_bytes(b"pooler-fixture")
+            return ""
+
+        with (
+            mock.patch.object(provision, "LOCAL", root / "tools"),
+            mock.patch.object(provision, "DOWNLOADS", downloads),
+            mock.patch.object(provision, "download", side_effect=fake_download),
+            mock.patch.object(provision, "run", side_effect=fake_run),
+        ):
+            native = provision.provision_native()
+
+        expected = archives["mafft-7.526-linux.tgz"]
+        assert native["mafft_archive"] == expected
+        assert provision.sha256(native["mafft_archive"]) == provision.sha256(expected)
+        assert native["mafft_archive"] != archives["PrimerPooler-v1.89.tar.gz"]
+
+
 def check_download_retry_contract(provision) -> None:
     payload = b"content-addressed archive fixture\n"
     expected = hashlib.sha256(payload).hexdigest()
@@ -655,6 +715,7 @@ def main() -> int:
     )
     provision.verify_contract_alignment()
     check_download_retry_contract(provision)
+    check_mafft_archive_provenance(provision)
 
     # Public and private bootstrap examples are one configuration contract.
     # Private mode changes values (loopback origin), not the set of supported
@@ -965,6 +1026,11 @@ def main() -> int:
     assert "DPkg::Options::=--path-include=/usr/share/man/*" in api_dockerfile
     assert "rm -rf /usr/share/man /var/lib/apt/lists/*" in api_dockerfile
     assert "build-essential xz-doc" not in api_dockerfile
+    assert "apt-get install --no-install-recommends -y bash ca-certificates libgomp1" in api_dockerfile
+    assert "COPY --from=runtime-assets /bin/bash /bin/bash" in api_dockerfile
+    release_workflow = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    assert "Smoke API and runner images as the service UID before publishing" in release_workflow
+    assert 'docker run --rm --network none --user 10001:10001' in release_workflow
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
     assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"

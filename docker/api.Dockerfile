@@ -29,7 +29,7 @@ WORKDIR /src
 COPY docker/configure-debian-snapshot.sh /usr/local/bin/configure-debian-snapshot
 RUN --network=host configure-debian-snapshot "$DEBIAN_SNAPSHOT" \
     && apt-get update \
-    && apt-get install --no-install-recommends -y ca-certificates libgomp1 \
+    && apt-get install --no-install-recommends -y bash ca-certificates libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # ── Worker + scientific toolchain ──────────────────────────────────────────
@@ -90,10 +90,12 @@ ENV PCRSTUDIO_BUILD_ID=${PCRSTUDIO_BUILD_ID} \
 # ── Scientific runtime shared only by API and durable runner ───────────────
 FROM process-runtime-base AS science-runtime-base
 USER root
-# BusyBox supplies the small POSIX command surface used by the entrypoint and
-# MAFFT wrapper. Python's standard-library HTTP client is used by the API
-# health probe; the glibc/native scientific dependencies are copied from the
-# already-qualified builder without carrying its package database.
+# The official MAFFT 7.526 launcher has a Bash shebang, so copy the snapshot-
+# pinned Bash runtime explicitly rather than silently depending on a missing
+# interpreter. Keep it out of the database-only migrator image. BusyBox still
+# supplies the small POSIX command surface used by the entrypoint; Python's
+# standard-library HTTP client serves the API health probe.
+COPY --from=runtime-assets /bin/bash /bin/bash
 COPY --from=science-builder /usr/local /usr/local
 COPY --from=science-builder /opt/uv /opt/uv
 COPY --from=science-builder /opt/worker /opt/worker

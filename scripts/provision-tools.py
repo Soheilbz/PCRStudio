@@ -541,7 +541,7 @@ def provision_native() -> dict[str, Path]:
     # fetched from both documented project hosts. The alternate host is used
     # only after bounded transient failures and must satisfy the same digest.
     item = ARTIFACTS["mafft"]
-    archive = download(
+    mafft_archive = download(
         item["url"],
         DOWNLOADS / item["archive"],
         item["sha256"],
@@ -549,13 +549,13 @@ def provision_native() -> dict[str, Path]:
     )
     mafft_root = LOCAL / "mafft"
     if mafft_root.exists(): shutil.rmtree(mafft_root)
-    safe_extract_tar(archive, mafft_root)
+    safe_extract_tar(mafft_archive, mafft_root)
     upstream = next(iter(mafft_root.rglob("mafft.bat")), None)
     if upstream is None: die("MAFFT portable archive does not contain mafft.bat")
     service_readable_tree(mafft_root)
     executable(upstream)
     mafft_bundle = upstream.parent
-    mafft_archive_sha256 = sha256(archive)
+    mafft_archive_sha256 = sha256(mafft_archive)
     mafft_bundle_sha256 = tree_sha256(mafft_bundle)
     mafft = mafft_root / "mafft"
     mafft.write_text('#!/bin/sh\nset -eu\nHERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)\nexec "$HERE/mafft-linux64/mafft.bat" "$@"\n', encoding="utf-8")
@@ -583,7 +583,7 @@ def provision_native() -> dict[str, Path]:
         "blastn": blastn,
         "mafft": mafft,
         "mafft_bundle": mafft_bundle,
-        "mafft_archive": archive,
+        "mafft_archive": mafft_archive,
         "primerpooler": pooler,
     }
 
