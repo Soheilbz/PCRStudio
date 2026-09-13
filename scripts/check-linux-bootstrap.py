@@ -292,7 +292,7 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="pcrstudio-release-download-") as temporary:
         download_path = Path(temporary) / "asset.bin"
-        trusted_url = "https://github.com/Soheilbz/PCRStudio/releases/download/v1.0.3/asset.bin"
+        trusted_url = "https://github.com/Soheilbz/PCRStudio/releases/download/v1.0.4/asset.bin"
         with mock.patch.object(
             pull_release_module,
             "urlopen",
@@ -510,6 +510,7 @@ def main() -> int:
     assert_scope(["scripts/release_bundle.py"], full=False, web=False, contracts=True)
     assert_scope(["scripts/check-linux-bootstrap.py"], full=False, web=False, contracts=True)
     assert_scope(["scripts/classify-ci-scope.py"], full=False, web=False, contracts=True)
+    assert_scope(["scripts/provision-tools.py"], full=False, web=False, contracts=True)
     assert_scope(
         ["release/current/ENGINEERING-CLOSURE-REPORT.md", "release/FILE-MANIFEST.json"],
         full=False, web=False, contracts=True,
@@ -564,7 +565,11 @@ def main() -> int:
     )
     assert_scope(["crates/pcr-core/src/lib.rs"], full=True, web=False)
     assert_scope(["web/src/app/page.tsx"], full=True, web=True)
-    assert_scope([".github/workflows/ci.yml"], full=True, web=False)
+    assert_scope([".github/workflows/ci.yml"], full=False, web=False, contracts=True)
+    assert_scope(
+        [".github/workflows/codeql.yml", ".github/workflows/dependency-review.yml"],
+        full=False, web=False, contracts=True,
+    )
     assert_scope(["release/current/README.md"], full=True, web=False)
     assert_scope(["new-unknown-config.toml"], full=True, web=True)
     assert_scope(
@@ -586,7 +591,7 @@ def main() -> int:
         full=False, web=False, docs=True, action_pins=True, action_pins_only=True,
     )
 
-    codeql_pin_diff = """diff --git a/.github/workflows/codeql.yml b/.github/workflows/codeql.yml
+    codeql_pin_diff = """diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
 @@ -1 +1 @@
 -        uses: github/codeql-action/init@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 +        uses: github/codeql-action/init@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
@@ -673,6 +678,11 @@ def main() -> int:
     assert "registry=https://registry.npmjs.com/" in npmrc
     assert "fetch-retries=6" in npmrc
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294" in ci
+    assert "github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938" in ci
+    assert "github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938" in ci
+    assert not (ROOT / ".github/workflows/codeql.yml").exists()
+    assert not (ROOT / ".github/workflows/dependency-review.yml").exists()
     release_contract_step = ci.split("name: Run directly covered maintenance and release contracts", 1)[1].split(
         "\n      - name:", 1
     )[0]
@@ -1040,7 +1050,10 @@ def main() -> int:
         (bundle / "bin").mkdir()
         tool = bundle / "bin" / "tool"
         tool.write_bytes(b"one")
-        tool.chmod(0o755)
+        tool.chmod(0o751)
+        executable_mode = stat.S_IMODE(provision.executable(tool).stat().st_mode)
+        assert executable_mode == 0o755, oct(executable_mode)
+        assert not executable_mode & (stat.S_IWGRP | stat.S_IWOTH)
         first = provision.tree_sha256(bundle)
         assert len(first) == 64
         assert first == provision.tree_sha256(bundle)

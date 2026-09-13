@@ -9,7 +9,7 @@
   },
   "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
   "counts": {
-    "files": 1061,
+    "files": 1059,
     "json": 223,
     "markdown": 114,
     "python": 242,
@@ -17,7 +17,7 @@
     "shell": 14,
     "toml": 25,
     "typescript_tsx": 284,
-    "yaml": 12
+    "yaml": 10
   },
   "linux_hygiene": {
     "active_powershell_cmd_batch_files": [],
@@ -45,8 +45,8 @@
     "modules": 21,
     "stable_modules": 0
   },
-  "public_tag": "v1.0.3",
-  "public_version": "1.0.3",
+  "public_tag": "v1.0.4",
+  "public_version": "1.0.4",
   "release_class": "generation-1-unified-engine-linux-current",
   "release_id": "CURRENT",
   "schema_version": "2.0.0",

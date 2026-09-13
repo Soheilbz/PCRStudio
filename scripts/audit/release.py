@@ -1044,8 +1044,7 @@ def audit_source_release_hardening() -> None:
     ):
         if marker not in api_dockerfile:
             error(f"source release hardening: Docker package provenance marker missing: {marker}")
-    codeql_path = ROOT / ".github/workflows/codeql.yml"
-    codeql_text = codeql_path.read_text(encoding="utf-8") if codeql_path.is_file() else ""
+    codeql_text = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     for marker in (
         "github/codeql-action/init@",
         "github/codeql-action/analyze@",

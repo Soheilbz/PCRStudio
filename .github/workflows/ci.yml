@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 2 * * *"
+    - cron: "23 3 * * 1"
 
 concurrency:
   group: pcrstudio-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
@@ -26,6 +27,51 @@ env:
   PYTHONDONTWRITEBYTECODE: "1"
 
 jobs:
+  dependency-review:
+    name: Dependency review
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294
+        with:
+          fail-on-severity: high
+
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'schedule' && github.event.schedule == '23 3 * * 1') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: rust
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-extended
+      - name: Analyze
+        uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938
+
   changes:
     name: Classify full-qualification scope
     runs-on: ubuntu-24.04

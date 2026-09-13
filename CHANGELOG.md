@@ -3,6 +3,11 @@
 This file summarizes the current public-source milestone. Detailed scientific and
 qualification evidence is maintained under `release/current/`.
 
+## v1.0.4 — 2026-09-13
+
+- Fixed bundled runtime-tool permissions so the unprivileged service account can read and execute them.
+- Kept image identities, scientific behavior, and user data formats unchanged.
+
 ## R17 — current public source — 2026-09-05
 
 - Closed the Generation-1 source/full-stack backlog for Inverse PCR,
