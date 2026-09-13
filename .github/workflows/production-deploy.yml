@@ -38,17 +38,6 @@ jobs:
           ref: ${{ github.event.release.tag_name || inputs.source_ref }}
           fetch-depth: 1
 
-      # Historical tags may predate newer Docker-save config paths. Keep the
-      # release source above immutable, but use the protected default-branch
-      # bundle reader and record its exact commit in the deployment manifest.
-      - name: Check out trusted deployment-bundle tooling
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          path: .release-tooling
-          fetch-depth: 1
-          persist-credentials: false
-
       - name: Materialize locked web verification dependencies
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -109,6 +98,16 @@ jobs:
             --build-arg NEXT_PUBLIC_SITE_URL="https://$PRODUCTION_DOMAIN" \
             --secret id=next_server_actions_key,src="$key_file" \
             -t "pcrstudio-web:$RELEASE_SHA" -f docker/web.Dockerfile .
+
+      # Keep trusted bundle tooling out of the immutable release source tree
+      # until source audits and all Docker build contexts have finished.
+      - name: Check out trusted deployment-bundle tooling
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: .release-tooling
+          fetch-depth: 1
+          persist-credentials: false
 
       - name: Publish the verified HTTPS deployment bundle
         env:
