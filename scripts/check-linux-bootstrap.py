@@ -280,6 +280,71 @@ def main() -> int:
     storage_guard_module = load("pcrstudio_storage_guard", ROOT / "scripts" / "storage-guard.py")
     pull_release_module = load("pcrstudio_pull_release", ROOT / "scripts" / "pull-release.py")
 
+    # Release asset downloads are exact-length, HTTPS-host allow-listed, and
+    # leave no partial file behind when the response is short or redirected.
+    class AssetResponse(io.BytesIO):
+        def __init__(self, payload: bytes, final_url: str):
+            super().__init__(payload)
+            self.final_url = final_url
+
+        def geturl(self) -> str:
+            return self.final_url
+
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-release-download-") as temporary:
+        download_path = Path(temporary) / "asset.bin"
+        trusted_url = "https://github.com/Soheilbz/PCRStudio/releases/download/v1.0.3/asset.bin"
+        with mock.patch.object(
+            pull_release_module,
+            "urlopen",
+            return_value=AssetResponse(b"exact", trusted_url),
+        ):
+            pull_release_module.download(trusted_url, download_path, 5)
+        assert download_path.read_bytes() == b"exact"
+        with mock.patch.object(
+            pull_release_module,
+            "urlopen",
+            return_value=AssetResponse(b"short", trusted_url),
+        ):
+            try:
+                pull_release_module.download(trusted_url, download_path, 6)
+            except SystemExit:
+                pass
+            else:
+                raise AssertionError("short release asset was accepted")
+        assert not download_path.exists()
+        with mock.patch.object(
+            pull_release_module,
+            "urlopen",
+            return_value=AssetResponse(b"exact", "http://attacker.invalid/asset.bin"),
+        ):
+            try:
+                pull_release_module.download(trusted_url, download_path, 5)
+            except SystemExit:
+                pass
+            else:
+                raise AssertionError("untrusted release redirect was accepted")
+        assert not download_path.exists()
+
+        staging_root = Path(temporary) / "state" / ".local" / "release-pull"
+        staging_root.mkdir(parents=True)
+        abandoned = staging_root / "current-abandoned"
+        abandoned.mkdir()
+        (abandoned / "partial").touch()
+        external = Path(temporary) / "outside"
+        external.mkdir()
+        (external / "keep").touch()
+        (staging_root / "current-link").symlink_to(external, target_is_directory=True)
+        assert pull_release_module.prune_release_staging_locked(staging_root) == 1
+        assert not abandoned.exists() and (external / "keep").is_file()
+
+        release_root = Path(temporary) / "releases"
+        current_sha, previous_sha, obsolete_sha = "1" * 40, "2" * 40, "3" * 40
+        for source_sha in (current_sha, previous_sha, obsolete_sha, "not-a-release"):
+            (release_root / source_sha).mkdir(parents=True)
+        assert pull_release_module.prune_old_release_sources(release_root, current_sha, previous_sha) == 1
+        assert (release_root / current_sha).is_dir() and (release_root / previous_sha).is_dir()
+        assert (release_root / "not-a-release").is_dir() and not (release_root / obsolete_sha).exists()
+
     # Developer cache cleanup is deterministic, per-checkout, and limited to
     # PCRStudio's dedicated builder; it must never become a daemon-wide prune.
     service_name, service_unit, timer_name, timer_unit = maintenance.user_timer_units(
@@ -331,17 +396,25 @@ def main() -> int:
         return 1 if len(guard_commands) == 1 else 0
 
     with mock.patch.object(storage_guard_module, "run", side_effect=record_guard_command):
-        assert storage_guard_module.cleanup_owned_artifacts() == [
-            "PCRStudio Docker cache/image cleanup"
+        assert storage_guard_module.cleanup_owned_artifacts(prune_docker=True) == [
+            "abandoned PCRStudio release downloads",
         ]
-    assert len(guard_commands) == 2 and all(not check for _, check in guard_commands)
+    assert len(guard_commands) == 3 and all(not check for _, check in guard_commands)
+    assert "--prune-staging" in guard_commands[0][0]
+    assert "prune" in guard_commands[1][0]
+    assert "prune-backups.sh" in guard_commands[2][0][-1]
     assert all(
         not any(command[index : index + 2] == ["system", "prune"] for index in range(len(command) - 1))
         for command, _ in guard_commands
     )
+    guard_commands.clear()
+    with mock.patch.object(storage_guard_module, "run", side_effect=record_guard_command):
+        storage_guard_module.cleanup_owned_artifacts(prune_docker=False)
+    assert len(guard_commands) == 2
     guard_source = (ROOT / "scripts" / "storage-guard.py").read_text(encoding="utf-8")
     assert "storage cleanup failed:" in guard_source and "or cleanup_failures" in guard_source
-    assert "def containerd_root()" in guard_source and "paths = [ROOT, docker_root(docker), containerd_root()]" in guard_source
+    assert "def containerd_root()" in guard_source and "def managed_usage_bytes(" in guard_source
+    assert "PCRSTUDIO_HOST_ROOT" in guard_source and "PCRSTUDIO_STORAGE_BUDGET_GIB" in guard_source
 
     # Successful release activation retains current + previous rollback tags,
     # and only removes full-SHA tags from PCRStudio's four product images.
@@ -464,7 +537,31 @@ def main() -> int:
     assert_scope([
         ".github/dependabot.yml", "crates/pcr-core/src/lib.rs",
     ], full=True, web=False)
-    assert_scope(["scripts/bootstrap-linux.py"], full=True, web=False)
+    assert_scope(["scripts/bootstrap-linux.py"], full=False, web=False, contracts=True)
+    assert_scope(
+        [
+            ".env.example",
+            ".env.vm.example",
+            "contracts/operations.toml",
+            "knowledge/runtime/operations.generated.json",
+            "scripts/audit/operations.py",
+            "scripts/backup-db.sh",
+            "scripts/backup-restore-drill.sh",
+            "scripts/bootstrap-linux.py",
+            "scripts/check-linux-bootstrap.py",
+            "scripts/generate-operations-policy.py",
+            "scripts/prune-backups.sh",
+            "scripts/pull-release.py",
+            "scripts/storage-guard.py",
+            "release/release.toml",
+            "release/RELEASE-NOTES.md",
+            "release/FILE-MANIFEST.json",
+            "release/current/SOURCE-ATTESTATION.intoto.json",
+        ],
+        full=False,
+        web=False,
+        contracts=True,
+    )
     assert_scope(["crates/pcr-core/src/lib.rs"], full=True, web=False)
     assert_scope(["web/src/app/page.tsx"], full=True, web=True)
     assert_scope([".github/workflows/ci.yml"], full=True, web=False)
@@ -745,31 +842,60 @@ def main() -> int:
     for bad_scratch_size in ("127m", "9g", "0", "two-gigabytes", "2gb"):
         expect_system_exit(bootstrap.validate_runner_scratch_size, bad_scratch_size)
     assert bootstrap.validate_storage_budget("20", "4") == ("20", "4")
-    assert bootstrap.validate_storage_enforcement("HARD-QUOTA") == "hard-quota"
-    assert bootstrap.validate_storage_enforcement("guard-only") == "guard-only"
+    assert bootstrap.validate_host_free_space("8", "4") == ("8", "4")
+    assert bootstrap.validate_backup_limits("4", "8") == ("4", "8")
+    assert bootstrap.validate_storage_enforcement("MANAGED-HOST") == "managed-host"
+    assert bootstrap.validate_storage_enforcement("hard-quota") == "managed-host"
+    assert bootstrap.validate_storage_enforcement("guard-only") == "managed-host"
     expect_system_exit(bootstrap.validate_storage_enforcement, "best-effort")
     gib = 1024 ** 3
-    quota_entries = [
-        ("application", Path("/srv/pcrstudio"), 42, 20 * gib),
-        ("docker", Path("/srv/pcrstudio-storage/docker"), 42, 20 * gib),
-        ("containerd", Path("/srv/pcrstudio-storage/containerd"), 42, 20 * gib),
+    managed_entries = [
+        ("application", Path("/srv/pcrstudio"), 1, 48 * gib),
+        ("docker", Path("/var/lib/docker"), 1, 48 * gib),
+        ("containerd", Path("/var/lib/containerd"), 1, 48 * gib),
     ]
-    quota_layout = bootstrap.evaluate_hard_storage_layout(
-        quota_entries, root_device=1, quota_gib=20
+    managed_layout = bootstrap.evaluate_managed_storage_layout(
+        managed_entries,
+        root_device=1,
+        budget_gib=20,
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=8,
+        critical_host_free_gib=4,
+        filesystem_free_gib=8,
     )
-    assert quota_layout["status"] == "PASS" and quota_layout["failures"] == []
-    assert bootstrap.evaluate_hard_storage_layout(
-        quota_entries, root_device=42, quota_gib=20
-    )["status"] == "FAIL"
-    assert bootstrap.evaluate_hard_storage_layout(
-        [*quota_entries[:2], ("containerd", Path("/var/lib/containerd"), 43, 20 * gib)],
+    assert managed_layout["status"] == "PASS" and managed_layout["failures"] == []
+    assert bootstrap.evaluate_managed_storage_layout(
+        managed_entries,
         root_device=1,
-        quota_gib=20,
+        budget_gib=20,
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=8,
+        critical_host_free_gib=4,
+        filesystem_free_gib=7,
     )["status"] == "FAIL"
-    assert bootstrap.evaluate_hard_storage_layout(
-        [(role, path, device, 21 * gib) for role, path, device, _ in quota_entries],
+    assert bootstrap.evaluate_managed_storage_layout(
+        managed_entries,
+        root_device=42,
+        budget_gib=20,
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=8,
+        critical_host_free_gib=4,
+    )["status"] == "FAIL"
+    assert bootstrap.evaluate_managed_storage_layout(
+        [*managed_entries[:2], ("containerd", Path("/var/lib/containerd"), 2, 48 * gib)],
         root_device=1,
-        quota_gib=20,
+        budget_gib=20,
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=8,
+        critical_host_free_gib=4,
+    )["status"] == "FAIL"
+    assert bootstrap.evaluate_managed_storage_layout(
+        [(role, path, device, 31 * gib) for role, path, device, _ in managed_entries],
+        root_device=1,
+        budget_gib=20,
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=8,
+        critical_host_free_gib=4,
     )["status"] == "FAIL"
     assert bootstrap.systemd_quote(Path("/srv/pcrstudio-current")) == "/srv/pcrstudio-current"
     assert "--control-plane-only" in (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
@@ -785,6 +911,20 @@ def main() -> int:
             pass
         else:
             raise AssertionError(f"invalid storage reserves accepted: {bad_reserves}")
+    for bad_free in (("4", "4"), ("3", "1"), ("65", "4"), ("eight", "4")):
+        try:
+            bootstrap.validate_host_free_space(*bad_free)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(f"invalid host-free thresholds accepted: {bad_free}")
+    for bad_backup_limits in (("5", "8"), ("4", "3"), ("1", "9"), ("four", "8")):
+        try:
+            bootstrap.validate_backup_limits(*bad_backup_limits)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(f"invalid backup limits accepted: {bad_backup_limits}")
 
     pinned = bootstrap.pinned_external_image_refs(ROOT)
     assert len(pinned) == 6, pinned

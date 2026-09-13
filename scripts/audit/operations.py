@@ -38,22 +38,28 @@ def audit_operations_policy() -> None:
     backup = policy.get("backup") or {}
     storage = policy.get("storage") or {}
     bootstrap = _text("scripts/bootstrap-linux.py")
+    guard = _text("scripts/storage-guard.py")
     prune = _text("scripts/prune-backups.sh")
     docs = _text("docs/OPERATIONS.md")
     storage_docs = _text("docs/DOCKER-STORAGE.md")
     if runtime.get("storage") != storage:
         error("generated operations runtime storage policy is stale")
-    if storage.get("hard_quota_required") is not True or storage.get("quota_gib") != 20:
-        error("operations storage policy no longer requires the 20 GiB hard quota")
+    if storage.get("mode") != "dedicated-host-budget" or storage.get("application_budget_gib") != 20:
+        error("operations storage policy no longer enforces the 20 GiB dedicated-host budget")
     for marker in (
-        "PCRSTUDIO_STORAGE_ENFORCEMENT",
-        "verify_hard_storage_layout",
+        "verify_managed_storage_layout",
         "containerd_root_dir",
-        "--allow-guard-only-storage",
     ):
         if marker not in bootstrap:
-            error(f"Linux bootstrap lost hard-storage enforcement marker: {marker}")
-    for marker in ("Hard 20 GiB production boundary", "containerd", "hard-quota"):
+            error(f"Linux bootstrap lost managed-storage preflight marker: {marker}")
+    if "managed_usage_bytes" not in guard:
+        error("storage guard lost its allocated-byte usage measurement")
+    for marker in (
+        "20 GiB managed application budget",
+        "containerd",
+        "8 GiB free",
+        "emergency floor",
+    ):
         if marker not in storage_docs:
             error(f"Docker storage runbook lost hard-storage marker: {marker}")
     for marker in (
@@ -67,6 +73,11 @@ def audit_operations_policy() -> None:
     retention = int(backup.get("default_retention_days") or 0)
     if f'PCRSTUDIO_BACKUP_RETENTION_DAYS:-{retention}' not in prune:
         error("backup-prune default retention drifted from operations policy")
+    if f'PCRSTUDIO_BACKUP_TOTAL_MAX_GIB:-{int(storage.get("backup_total_max_gib") or 0)}' not in prune:
+        error("backup total-size cap drifted from operations storage policy")
+    backup_script = _text("scripts/backup-db.sh")
+    if f'PCRSTUDIO_BACKUP_MAX_GIB:-{int(storage.get("backup_file_max_gib") or 0)}' not in backup_script:
+        error("per-file backup cap drifted from operations storage policy")
     for marker in (
         f"RPO: {int(backup.get('target_rpo_hours') or 0)} hours",
         f"RTO: {int(backup.get('target_rto_hours') or 0)} hours",

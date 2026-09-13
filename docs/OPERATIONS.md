@@ -178,11 +178,14 @@ is recreated, so abandoned scientific temporary files cannot accumulate on
 the server filesystem. Increase it only together with a reviewed runner
 memory/resource profile.
 
-The host storage guard preserves a 20 GiB host free-space reserve with 4 GiB
-emergency headroom. It is installed as `pcrstudio-storage-guard.timer`; it is
-not itself a quota. Production bootstrap separately requires a dedicated,
-shared 20 GiB filesystem for PCRStudio application state, Docker and
-containerd; see `docs/DOCKER-STORAGE.md`. Inspect the guard with:
+The host storage guard manages PCRStudio against a 20 GiB aggregate product
+budget and preserves 8 GiB of normal host free space plus a 4 GiB emergency
+floor. It measures application/release files, Docker, and containerd together;
+it is an operational guard, not a kernel-enforced filesystem quota. It starts
+one minute after boot and rechecks every five minutes. At the 16 GiB budget
+threshold it pauses scientific work; at 20 GiB managed use or 4 GiB free host
+space it stops the application to protect the host. Cache and backup retention
+rules are documented in `docs/DOCKER-STORAGE.md`. Inspect the guard with:
 
 ```bash
 systemctl list-timers pcrstudio-storage-guard.timer

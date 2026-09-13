@@ -82,21 +82,25 @@
     "target_rpo_hours": 25,
     "target_rto_hours": 2
   },
-  "canonical_sha256": "6c959fd1306b415656087afc93e44ab36afcb0dbe250a467c0306127e62a4e9d",
+  "canonical_sha256": "20089e5b97694786e03e3a1c6730587ec493e1d730e5d3f3735b6996da152310",
   "canonical_source": "contracts/operations.toml",
   "generated_policy": "Generated from contracts/operations.toml; do not hand-edit.",
   "release_line": "CURRENT",
   "schema_version": "1.0.0",
   "storage": {
-    "enforcement_env": "PCRSTUDIO_STORAGE_ENFORCEMENT",
-    "guard_only_nonproduction": true,
-    "hard_quota_required": true,
-    "minimum_filesystem_gib": 12,
+    "application_budget_gib": 20,
+    "backup_file_max_gib": 4,
+    "backup_total_max_gib": 8,
+    "buildkit_cache_gib": 8,
+    "critical_host_free_gib": 4,
+    "minimum_host_capacity_gib": 32,
+    "minimum_host_free_gib": 8,
+    "mode": "dedicated-host-budget",
     "ownership_roots": [
       "application",
       "docker",
       "containerd"
     ],
-    "quota_gib": 20
+    "runner_stop_headroom_gib": 4
   }
 }

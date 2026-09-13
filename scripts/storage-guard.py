@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Keep PCRStudio from consuming the host filesystem to exhaustion.
+"""Keep PCRStudio's dedicated host within its managed storage budget.
 
-The guard is intentionally project-scoped. It prunes only PCRStudio's bounded
-BuildKit cache and owned backup artifacts. If the host remains below the
-configured reserve, it stops new scientific work and, at the critical reserve,
-stops the public application services so PostgreSQL data is not written against
-an exhausted filesystem. It never runs a daemon-wide Docker prune.
+The guard accounts for the product tree and both Docker/containerd stores,
+cleans only reconstructible or retention-limited PCRStudio files, pauses
+scientific work before the application budget is reached, and stops the stack
+before host free space reaches the emergency floor. It never prunes another
+project's Docker resources or application/database data.
 """
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ def docker_root(docker: list[str]) -> Path:
 
 
 def containerd_root() -> Path:
-    """Include OCI content/snapshots that DockerRootDir may not contain."""
+    """Include OCI blobs and snapshots that DockerRootDir may not contain."""
     config = Path("/etc/containerd/config.toml")
     try:
         text = config.read_text(encoding="utf-8")
@@ -60,7 +60,7 @@ def containerd_root() -> Path:
     root = Path(match.group(1))
     if not root.is_absolute():
         raise SystemExit("containerd root in /etc/containerd/config.toml must be absolute")
-    return root
+    return root.resolve()
 
 
 def parse_gib(raw: str, name: str) -> int:
@@ -73,11 +73,45 @@ def parse_gib(raw: str, name: str) -> int:
     return value
 
 
-def free_bytes(paths: list[Path]) -> tuple[int, dict[str, int]]:
+def managed_paths(docker: list[str]) -> list[Path]:
+    configured_root = os.environ.get("PCRSTUDIO_HOST_ROOT", "").strip()
+    configured = Path(configured_root).expanduser() if configured_root else ROOT
+    candidates = [configured.resolve(), docker_root(docker), containerd_root()]
+    existing = [path for path in candidates if path.exists()]
+    if not existing:
+        raise SystemExit("none of the PCRStudio storage roots exist")
+    # A child root is already counted by du when its parent is measured.
+    unique: list[Path] = []
+    for path in sorted(set(existing), key=lambda item: len(item.parts)):
+        if not any(path == parent or parent in path.parents for parent in unique):
+            unique.append(path)
+    return unique
+
+
+def managed_usage_bytes(paths: list[Path]) -> tuple[int, dict[str, int]]:
+    """Count allocated bytes, not apparent sizes, without crossing mounts."""
     values: dict[str, int] = {}
     for path in paths:
-        target = path if path.exists() else path.parent
-        values[str(path)] = shutil.disk_usage(target).free
+        result = subprocess.run(
+            ["du", "-sx", "--block-size=1", "--", str(path)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+        if result.returncode:
+            raise SystemExit(f"could not measure managed storage at {path}: {result.stderr.strip()}")
+        try:
+            values[str(path)] = int(result.stdout.split()[0])
+        except (IndexError, ValueError) as exc:
+            raise SystemExit(f"could not parse allocated storage usage for {path}") from exc
+    return sum(values.values()), values
+
+
+def host_free_bytes(paths: list[Path]) -> tuple[int, dict[str, int]]:
+    values: dict[str, int] = {}
+    for path in paths:
+        values[str(path)] = shutil.disk_usage(path).free
     return min(values.values()), values
 
 
@@ -97,74 +131,111 @@ def project_compose() -> Path:
 
 
 def stop_services(docker: list[str], services: list[str]) -> None:
-    # Prefer the canonical launcher so the deployment's persisted project name
-    # and environment are respected. Docker is still passed for a clear guard
-    # failure if Compose cannot be invoked.
     del docker
+    if not (ROOT / ".env").exists():
+        print("PCRStudio has no active deployment environment; no Compose services need stopping")
+        return
     run([str(project_compose()), "stop", *services], check=False)
 
 
-def cleanup_owned_artifacts() -> list[str]:
-    """Prune only repository-owned rebuild/retention artifacts and report failures."""
-    cleanup = (
+def cleanup_owned_artifacts(*, prune_docker: bool) -> list[str]:
+    """Clean scoped staging/backup artifacts; prune builder cache only on pressure."""
+    python = sys.executable
+    configured_root = os.environ.get("PCRSTUDIO_HOST_ROOT", "").strip()
+    state_dir = (Path(configured_root).expanduser() / "state") if configured_root else ROOT
+    cleanup = [
         (
-            "PCRStudio Docker cache/image cleanup",
-            [sys.executable, str(ROOT / "scripts" / "docker-maintenance.py"), "prune"],
+            "abandoned PCRStudio release downloads",
+            [python, str(ROOT / "scripts" / "pull-release.py"), "--prune-staging", "--state-dir", str(state_dir)],
         ),
-        ("expired PCRStudio backup cleanup", [str(ROOT / "scripts" / "prune-backups.sh")]),
-    )
+        ("PCRStudio backup retention", ["/bin/bash", str(ROOT / "scripts" / "prune-backups.sh")]),
+    ]
+    if prune_docker:
+        cleanup.insert(
+            1,
+            (
+                "PCRStudio Docker cache/image cleanup",
+                [python, str(ROOT / "scripts" / "docker-maintenance.py"), "prune"],
+            ),
+        )
     return [label for label, command in cleanup if run(command, check=False)]
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="enforce PCRStudio host storage reserves")
-    parser.add_argument("--enforce", action="store_true", help="prune owned artifacts and apply service stop policy")
+    parser = argparse.ArgumentParser(description="enforce PCRStudio managed storage and host-free reserves")
+    parser.add_argument("--enforce", action="store_true", help="clean owned files and apply service-stop policy")
     parser.add_argument("--budget-gib", default=os.environ.get("PCRSTUDIO_STORAGE_BUDGET_GIB", "20"))
-    parser.add_argument("--emergency-headroom-gib", default=os.environ.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"))
+    parser.add_argument("--runner-stop-headroom-gib", default=os.environ.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"))
+    parser.add_argument("--minimum-host-free-gib", default=os.environ.get("PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB", "8"))
+    parser.add_argument("--critical-host-free-gib", default=os.environ.get("PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB", "4"))
+    parser.add_argument("--preflight-write-gib", help="verify that a bounded file operation fits without consuming the emergency reserve")
     args = parser.parse_args()
     budget = parse_gib(args.budget_gib, "--budget-gib")
-    headroom = parse_gib(args.emergency_headroom_gib, "--emergency-headroom-gib")
-    if headroom >= budget:
-        raise SystemExit("emergency headroom must be lower than the storage budget")
+    runner_headroom = parse_gib(args.runner_stop_headroom_gib, "--runner-stop-headroom-gib")
+    minimum_free = parse_gib(args.minimum_host_free_gib, "--minimum-host-free-gib")
+    critical_free = parse_gib(args.critical_host_free_gib, "--critical-host-free-gib")
+    if runner_headroom >= budget:
+        raise SystemExit("runner stop headroom must be lower than the application storage budget")
+    if critical_free >= minimum_free:
+        raise SystemExit("critical host-free threshold must be lower than the minimum host-free reserve")
 
     docker = docker_prefix()
-    # Modern Docker may keep OCI blobs and overlay snapshots under containerd
-    # rather than DockerRootDir. Monitor both ownership roots so the guard is
-    # still meaningful when an operator uses separate mounts in guard-only
-    # development mode.
-    paths = [ROOT, docker_root(docker), containerd_root()]
-    before, before_by_path = free_bytes(paths)
-    capacities = {str(path): shutil.disk_usage(path if path.exists() else path.parent).total for path in paths}
-    minimum = min((total - (budget - headroom) * GIB) // GIB for total in capacities.values())
-    critical = min((total - budget * GIB) // GIB for total in capacities.values())
-    if args.enforce:
-        # Both operations are scoped to PCRStudio. In particular, never use
-        # `docker system prune`, which could remove another application.
-        cleanup_failures = cleanup_owned_artifacts()
-    else:
-        cleanup_failures = []
-    after, after_by_path = free_bytes(paths)
-    minimum_bytes = min(total - (budget - headroom) * GIB for total in capacities.values())
-    critical_bytes = min(total - budget * GIB for total in capacities.values())
+    paths = managed_paths(docker)
+    before_usage, usage_by_path = managed_usage_bytes(paths)
+    before_free, free_by_path = host_free_bytes(paths)
+    if args.preflight_write_gib is not None:
+        requested = parse_gib(args.preflight_write_gib, "--preflight-write-gib")
+        if before_usage + requested * GIB >= budget * GIB:
+            raise SystemExit(
+                f"operation may use {requested} GiB but PCRStudio is already using "
+                f"{before_usage / GIB:.2f} GiB of its {budget} GiB managed budget"
+            )
+        if before_free < (requested + critical_free) * GIB:
+            raise SystemExit(
+                f"operation needs up to {requested} GiB while preserving {critical_free} GiB emergency host space; "
+                f"only {before_free / GIB:.2f} GiB is free"
+            )
+        print(
+            f"PCRStudio storage preflight PASS: operation allowance={requested}GiB "
+            f"managed={before_usage / GIB:.2f}GiB free={before_free / GIB:.2f}GiB"
+        )
+        return 0
+    pressure = (
+        before_usage >= (budget - runner_headroom) * GIB
+        or before_free <= 2 * minimum_free * GIB
+    )
+    cleanup_failures = cleanup_owned_artifacts(prune_docker=pressure) if args.enforce else []
+    after_usage, usage_after_by_path = managed_usage_bytes(paths)
+    after_free, free_after_by_path = host_free_bytes(paths)
 
     action = "none"
-    if after < critical_bytes:
-        stop_services(docker, ["caddy", "web", "api", "runner"])
-        action = "stopped-public-services-and-runner"
-    elif after < minimum_bytes:
+    critical = after_usage >= budget * GIB or after_free <= critical_free * GIB
+    pause_science = after_usage >= (budget - runner_headroom) * GIB or after_free <= minimum_free * GIB
+    if args.enforce and critical:
+        stop_services(docker, ["caddy", "web", "api", "runner", "migrate", "db"])
+        action = "stopped-application-to-protect-host"
+    elif args.enforce and pause_science:
         stop_services(docker, ["runner"])
-        action = "stopped-runner"
+        action = "stopped-scientific-runner"
 
     print(
         "PCRStudio storage guard: "
-        f"before={before / GIB:.2f}GiB after={after / GIB:.2f}GiB "
-        f"budget={budget}GiB minimum_free={minimum}GiB critical_free={critical}GiB action={action}"
+        f"managed_before={before_usage / GIB:.2f}GiB managed_after={after_usage / GIB:.2f}GiB "
+        f"budget={budget}GiB host_free={after_free / GIB:.2f}GiB "
+        f"runner_threshold={budget - runner_headroom}GiB minimum_host_free={minimum_free}GiB "
+        f"critical_host_free={critical_free}GiB action={action}"
     )
-    print(f"paths_before={before_by_path}")
-    print(f"paths_after={after_by_path}")
+    print(f"managed_paths_before={usage_by_path}")
+    print(f"managed_paths_after={usage_after_by_path}")
+    print(f"host_free_before={free_by_path}")
+    print(f"host_free_after={free_after_by_path}")
     if cleanup_failures:
         print("storage cleanup failed: " + ", ".join(cleanup_failures), file=sys.stderr)
-    return 1 if after < minimum_bytes or cleanup_failures else 0
+    if after_usage > budget * GIB:
+        print("PCRStudio managed storage exceeds its configured budget", file=sys.stderr)
+    if after_free <= minimum_free * GIB:
+        print("host free space is below the minimum configured reserve", file=sys.stderr)
+    return 1 if after_usage >= budget * GIB or after_free <= minimum_free * GIB or cleanup_failures else 0
 
 
 if __name__ == "__main__":

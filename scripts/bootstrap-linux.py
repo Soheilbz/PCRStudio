@@ -493,8 +493,8 @@ def containerd_root_dir() -> Path:
 
     Docker Engine can delegate image and snapshot storage to containerd.  On
     current Ubuntu hosts that state is normally under ``/var/lib/containerd``;
-    it is separate from DockerRootDir and must be included in a hard storage
-    boundary.  A configured containerd ``root =`` takes precedence.
+    it is separate from DockerRootDir and must be included in managed-storage
+    measurements. A configured containerd ``root =`` takes precedence.
     """
     config = Path("/etc/containerd/config.toml")
     try:
@@ -511,44 +511,52 @@ def containerd_root_dir() -> Path:
 
 
 def validate_storage_enforcement(value: str) -> str:
-    """Validate the production storage boundary policy selected by the operator."""
+    """Normalize legacy settings to the current dedicated-host storage policy."""
     mode = value.strip().lower()
-    if mode not in {"hard-quota", "guard-only"}:
-        raise SystemExit("PCRSTUDIO_STORAGE_ENFORCEMENT must be hard-quota or guard-only")
-    return mode
+    if mode not in {"managed-host", "dedicated-host-budget", "hard-quota", "guard-only"}:
+        raise SystemExit("PCRSTUDIO_STORAGE_ENFORCEMENT must be managed-host")
+    return "managed-host"
 
 
-def evaluate_hard_storage_layout(
-    entries: list[tuple[str, Path, int, int]], *, root_device: int, quota_gib: int
+def evaluate_managed_storage_layout(
+    entries: list[tuple[str, Path, int, int]], *, root_device: int,
+    budget_gib: int, minimum_host_capacity_gib: int,
+    minimum_host_free_gib: int, critical_host_free_gib: int,
+    filesystem_free_gib: int | None = None,
 ) -> dict[str, object]:
-    """Evaluate a hard filesystem boundary from already-observed path metadata.
-
-    All writable PCRStudio ownership roots must share one non-root filesystem.
-    Its filesystem capacity, rather than a best-effort cleanup threshold, is
-    the non-bypassable aggregate upper bound for app state, OCI bytes and
-    backups.
-    """
+    """Validate a dedicated-host budget and its independent system free-space reserves."""
     gib = 1024 ** 3
-    allowed = quota_gib * gib
     devices = {device for _, _, device, _ in entries}
     capacities = {capacity for _, _, _, capacity in entries}
     failures: list[str] = []
     if len(devices) != 1:
-        failures.append("PCRStudio application, Docker and containerd roots are not on one filesystem")
-    elif next(iter(devices)) == root_device:
-        failures.append("PCRStudio storage is on the host root filesystem, not a dedicated filesystem")
+        failures.append("PCRStudio application, Docker and containerd roots do not share the dedicated host filesystem")
+    elif next(iter(devices)) != root_device:
+        failures.append("PCRStudio storage roots are not on the host's active root filesystem")
     if len(capacities) != 1:
         failures.append("PCRStudio ownership roots report inconsistent filesystem capacities")
-    elif next(iter(capacities)) > allowed:
+    elif next(iter(capacities)) < minimum_host_capacity_gib * gib:
         failures.append(
-            f"dedicated filesystem is {next(iter(capacities)) / gib:.2f} GiB; "
-            f"it exceeds the configured {quota_gib} GiB hard limit"
+            f"host filesystem is {next(iter(capacities)) / gib:.2f} GiB; "
+            f"the configured 20 GiB application budget and reserves require at least {minimum_host_capacity_gib} GiB"
         )
-    if len(capacities) == 1 and next(iter(capacities)) < 12 * gib:
-        failures.append("dedicated filesystem is below 12 GiB and cannot safely stage the qualified image set")
+    if not 4 <= critical_host_free_gib < minimum_host_free_gib:
+        failures.append("host free-space thresholds must satisfy 4 GiB critical < minimum free-space reserve")
+    if budget_gib <= critical_host_free_gib:
+        failures.append("application budget must exceed the critical host free-space reserve")
+    if filesystem_free_gib is not None and filesystem_free_gib < minimum_host_free_gib:
+        failures.append(
+            f"host filesystem has only {filesystem_free_gib} GiB free; "
+            f"bootstrap requires at least {minimum_host_free_gib} GiB before deployment"
+        )
     return {
         "status": "PASS" if not failures else "FAIL",
-        "quota_gib": quota_gib,
+        "mode": "managed-host",
+        "application_budget_gib": budget_gib,
+        "minimum_host_capacity_gib": minimum_host_capacity_gib,
+        "minimum_host_free_gib": minimum_host_free_gib,
+        "critical_host_free_gib": critical_host_free_gib,
+        "filesystem_free_gib": filesystem_free_gib,
         "paths": [
             {"role": role, "path": str(path), "device": device, "filesystem_bytes": capacity}
             for role, path, device, capacity in entries
@@ -557,10 +565,13 @@ def evaluate_hard_storage_layout(
     }
 
 
-def verify_hard_storage_layout(docker: list[str], *, quota_gib: int) -> dict[str, object]:
-    """Fail closed unless all PCRStudio writable roots share a capped filesystem."""
+def verify_managed_storage_layout(
+    docker: list[str], *, budget_gib: int, minimum_host_capacity_gib: int,
+    minimum_host_free_gib: int, critical_host_free_gib: int,
+) -> dict[str, object]:
+    """Fail before deployment if the dedicated host cannot fit the budget/reserves."""
     roots = {
-        "application": ROOT,
+        "application": Path("/srv/pcrstudio") if Path("/srv/pcrstudio").exists() else ROOT,
         "docker": docker_root_dir(docker),
         "containerd": containerd_root_dir(),
     }
@@ -568,16 +579,22 @@ def verify_hard_storage_layout(docker: list[str], *, quota_gib: int) -> dict[str
     for role, raw_path in roots.items():
         path = nearest_existing_parent(raw_path)
         entries.append((role, path, path.stat().st_dev, shutil.disk_usage(path).total))
-    result = evaluate_hard_storage_layout(
-        entries, root_device=Path("/").stat().st_dev, quota_gib=quota_gib
+    result = evaluate_managed_storage_layout(
+        entries,
+        root_device=Path("/").stat().st_dev,
+        budget_gib=budget_gib,
+        minimum_host_capacity_gib=minimum_host_capacity_gib,
+        minimum_host_free_gib=minimum_host_free_gib,
+        critical_host_free_gib=critical_host_free_gib,
+        filesystem_free_gib=min(shutil.disk_usage(path).free for _, path, _, _ in entries) // 1024**3,
     )
     if result["status"] != "PASS":
         details = "; ".join(result["failures"])
         raise SystemExit(
-            "hard PCRStudio storage quota verification failed: " + details
+            "PCRStudio managed-host storage preflight failed: " + details
             + ". See docs/DOCKER-STORAGE.md before deploying."
         )
-    print(f"hard PCRStudio storage quota PASS: {quota_gib} GiB dedicated filesystem")
+    print(f"PCRStudio storage host PASS: {budget_gib} GiB managed budget on the dedicated host filesystem")
     return result
 
 
@@ -804,7 +821,7 @@ def validate_runner_scratch_size(value: str) -> str:
 
 
 def validate_storage_budget(budget: str, headroom: str) -> tuple[str, str]:
-    """Keep PCRStudio within a bounded host-disk budget with recovery headroom."""
+    """Validate the managed PCRStudio footprint and runner stop margin."""
     try:
         budget_gib = int(budget.strip())
         headroom_gib = int(headroom.strip())
@@ -813,6 +830,30 @@ def validate_storage_budget(budget: str, headroom: str) -> tuple[str, str]:
     if not 4 <= headroom_gib < budget_gib <= 64:
         raise SystemExit("storage budget must satisfy 4 <= emergency_headroom < budget <= 64 GiB")
     return str(budget_gib), str(headroom_gib)
+
+
+def validate_host_free_space(minimum: str, critical: str) -> tuple[str, str]:
+    """Validate independent host-free safety thresholds, in GiB."""
+    try:
+        minimum_gib = int(minimum.strip())
+        critical_gib = int(critical.strip())
+    except ValueError as exc:
+        raise SystemExit("host free-space thresholds must be integer GiB values") from exc
+    if not 2 <= critical_gib < minimum_gib <= 64:
+        raise SystemExit("host free-space thresholds must satisfy 2 <= critical < minimum <= 64 GiB")
+    return str(minimum_gib), str(critical_gib)
+
+
+def validate_backup_limits(file_max: str, total_max: str) -> tuple[str, str]:
+    """Validate per-dump and aggregate backup ceilings, in GiB."""
+    try:
+        file_gib = int(file_max.strip())
+        total_gib = int(total_max.strip())
+    except ValueError as exc:
+        raise SystemExit("backup size limits must be integer GiB values") from exc
+    if not 1 <= file_gib <= 4 or file_gib > total_gib or not 1 <= total_gib <= 8:
+        raise SystemExit("backup limits must satisfy 1 <= file <= 4 GiB and file <= total <= 8 GiB")
+    return str(file_gib), str(total_gib)
 
 
 def validate_image_tag(value: str) -> str:
@@ -1256,8 +1297,12 @@ def systemd_quote(path: Path) -> str:
 
 def install_systemd_automation(
     retention_days: int,
+    backup_file_max_gib: str,
+    backup_total_max_gib: str,
     storage_budget_gib: str,
     storage_emergency_headroom_gib: str,
+    storage_minimum_host_free_gib: str,
+    storage_critical_host_free_gib: str,
 ) -> list[str]:
     if not 1 <= retention_days <= 3650:
         raise SystemExit("backup retention must be between 1 and 3650 days")
@@ -1276,13 +1321,14 @@ def install_systemd_automation(
     qguard = systemd_quote(ROOT / "scripts" / "storage-guard.py")
     qpython = systemd_quote(Path(sys.executable))
     common = f"""[Unit]\nAfter=docker.service network-online.target\nRequires=docker.service\nConditionPathExists={ROOT / '.env'}\n\n[Service]\nType=oneshot\nWorkingDirectory={qroot}\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=full\nProtectKernelTunables=true\nProtectKernelModules=true\nProtectControlGroups=true\nRestrictSUIDSGID=true\n"""
+    guard_common = common.replace(f"ConditionPathExists={ROOT / '.env'}\n", "")
     files = {
-        "pcrstudio-backup.service": common + f"Environment=PCRSTUDIO_BACKUP_RETENTION_DAYS={retention_days}\nExecStart=/bin/bash {qbackup}\nExecStartPost=/bin/bash {qprune}\nTimeoutStartSec=1h\n",
+        "pcrstudio-backup.service": common + f"Environment=PCRSTUDIO_BACKUP_RETENTION_DAYS={retention_days}\nEnvironment=PCRSTUDIO_BACKUP_MAX_GIB={backup_file_max_gib}\nEnvironment=PCRSTUDIO_BACKUP_TOTAL_MAX_GIB={backup_total_max_gib}\nExecStart=/bin/bash {qbackup}\nExecStartPost=/bin/bash {qprune}\nTimeoutStartSec=1h\n",
         "pcrstudio-backup.timer": """[Unit]\nDescription=Daily PCRStudio PostgreSQL backup\n\n[Timer]\nOnCalendar=*-*-* 02:20:00 UTC\nPersistent=true\nRandomizedDelaySec=10m\nUnit=pcrstudio-backup.service\n\n[Install]\nWantedBy=timers.target\n""",
-        "pcrstudio-restore-drill.service": common + f"ExecStart=/bin/bash {qdrill}\nTimeoutStartSec=2h\n",
+        "pcrstudio-restore-drill.service": common + f"Environment=PCRSTUDIO_BACKUP_MAX_GIB={backup_file_max_gib}\nExecStart=/bin/bash {qdrill}\nTimeoutStartSec=2h\n",
         "pcrstudio-restore-drill.timer": """[Unit]\nDescription=Weekly PCRStudio backup restore drill\n\n[Timer]\nOnCalendar=Sun *-*-* 03:20:00 UTC\nPersistent=true\nRandomizedDelaySec=15m\nUnit=pcrstudio-restore-drill.service\n\n[Install]\nWantedBy=timers.target\n""",
-        "pcrstudio-storage-guard.service": common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
-        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage reserve guard\n\n[Timer]\nOnBootSec=5m\nOnUnitActiveSec=15m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
+        "pcrstudio-storage-guard.service": guard_common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nEnvironment=PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB={storage_minimum_host_free_gib}\nEnvironment=PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB={storage_critical_host_free_gib}\nEnvironment=PCRSTUDIO_BACKUP_TOTAL_MAX_GIB={backup_total_max_gib}\nEnvironment=PCRSTUDIO_HOST_ROOT=/srv/pcrstudio\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
+        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage budget guard\n\n[Timer]\nOnBootSec=1m\nOnUnitActiveSec=5m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
     }
     installed: list[str] = []
     for name, content in files.items():
@@ -1299,6 +1345,9 @@ def install_systemd_automation(
 def install_storage_guard_automation(
     storage_budget_gib: str,
     storage_emergency_headroom_gib: str,
+    storage_minimum_host_free_gib: str,
+    storage_critical_host_free_gib: str,
+    backup_total_max_gib: str,
 ) -> list[str]:
     """Install the host storage brake without enabling app-dependent timers."""
     systemctl = shutil.which("systemctl")
@@ -1313,9 +1362,10 @@ def install_storage_guard_automation(
     qguard = systemd_quote(ROOT / "scripts" / "storage-guard.py")
     qpython = systemd_quote(Path(sys.executable))
     common = f"""[Unit]\nAfter=docker.service network-online.target\nRequires=docker.service\nConditionPathExists={ROOT / '.env'}\n\n[Service]\nType=oneshot\nWorkingDirectory={qroot}\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=full\nProtectKernelTunables=true\nProtectKernelModules=true\nProtectControlGroups=true\nRestrictSUIDSGID=true\n"""
+    guard_common = common.replace(f"ConditionPathExists={ROOT / '.env'}\n", "")
     files = {
-        "pcrstudio-storage-guard.service": common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
-        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage reserve guard\n\n[Timer]\nOnBootSec=5m\nOnUnitActiveSec=15m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
+        "pcrstudio-storage-guard.service": guard_common + f"Environment=PCRSTUDIO_STORAGE_BUDGET_GIB={storage_budget_gib}\nEnvironment=PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB={storage_emergency_headroom_gib}\nEnvironment=PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB={storage_minimum_host_free_gib}\nEnvironment=PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB={storage_critical_host_free_gib}\nEnvironment=PCRSTUDIO_BACKUP_TOTAL_MAX_GIB={backup_total_max_gib}\nEnvironment=PCRSTUDIO_HOST_ROOT=/srv/pcrstudio\nExecStart={qpython} {qguard} --enforce\nTimeoutStartSec=10m\n",
+        "pcrstudio-storage-guard.timer": """[Unit]\nDescription=Frequent PCRStudio storage budget guard\n\n[Timer]\nOnBootSec=1m\nOnUnitActiveSec=5m\nPersistent=true\nUnit=pcrstudio-storage-guard.service\n\n[Install]\nWantedBy=timers.target\n""",
     }
     installed: list[str] = []
     for name, content in files.items():
@@ -1366,11 +1416,6 @@ def main() -> int:
     ap.add_argument("--reselect-subnets", action="store_true")
     ap.add_argument("--skip-up", action="store_true", help="build/qualify assets but do not start the services")
     ap.add_argument("--no-systemd-automation", action="store_true", help="do not install daily backup/weekly restore-drill timers")
-    ap.add_argument(
-        "--allow-guard-only-storage",
-        action="store_true",
-        help="explicitly permit the non-production shared-filesystem storage guard instead of a hard quota",
-    )
     ap.add_argument("--backup-retention-days", type=int, default=14, help="days to retain scheduled database backups (default: 14)")
     ap.add_argument(
         "--approve-scientific-environment-change",
@@ -1391,7 +1436,17 @@ def main() -> int:
             host_values.get("PCRSTUDIO_STORAGE_BUDGET_GIB", "20"),
             host_values.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"),
         )
-        install_storage_guard_automation(storage_budget, storage_headroom)
+        storage_min_free, storage_critical_free = validate_host_free_space(
+            host_values.get("PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB", "8"),
+            host_values.get("PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB", "4"),
+        )
+        _, backup_total_max = validate_backup_limits(
+            host_values.get("PCRSTUDIO_BACKUP_MAX_GIB", "4"),
+            host_values.get("PCRSTUDIO_BACKUP_TOTAL_MAX_GIB", "8"),
+        )
+        install_storage_guard_automation(
+            storage_budget, storage_headroom, storage_min_free, storage_critical_free, backup_total_max
+        )
         print("\nPCRStudio host preparation PASS (application build/deployment not run)")
         return 0
 
@@ -1435,13 +1490,23 @@ def main() -> int:
         values.get("PCRSTUDIO_STORAGE_BUDGET_GIB", "20"),
         values.get("PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB", "4"),
     )
+    storage_min_free, storage_critical_free = validate_host_free_space(
+        values.get("PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB", "8"),
+        values.get("PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB", "4"),
+    )
+    backup_file_max, backup_total_max = validate_backup_limits(
+        values.get("PCRSTUDIO_BACKUP_MAX_GIB", "4"),
+        values.get("PCRSTUDIO_BACKUP_TOTAL_MAX_GIB", "8"),
+    )
     values["PCRSTUDIO_STORAGE_BUDGET_GIB"] = storage_budget
     values["PCRSTUDIO_STORAGE_EMERGENCY_HEADROOM_GIB"] = storage_headroom
+    values["PCRSTUDIO_STORAGE_MIN_HOST_FREE_GIB"] = storage_min_free
+    values["PCRSTUDIO_STORAGE_CRITICAL_HOST_FREE_GIB"] = storage_critical_free
+    values["PCRSTUDIO_BACKUP_MAX_GIB"] = backup_file_max
+    values["PCRSTUDIO_BACKUP_TOTAL_MAX_GIB"] = backup_total_max
     storage_enforcement = validate_storage_enforcement(
-        values.get("PCRSTUDIO_STORAGE_ENFORCEMENT", "hard-quota")
+        values.get("PCRSTUDIO_STORAGE_ENFORCEMENT", "managed-host")
     )
-    if args.allow_guard_only_storage:
-        storage_enforcement = "guard-only"
     values["PCRSTUDIO_STORAGE_ENFORCEMENT"] = storage_enforcement
     values.setdefault("PCR_SCIENTIFIC_DB_SCOPE", args.database_scope)
     values.setdefault("RUST_LOG", "pcr_server=info,tower_http=info")
@@ -1457,10 +1522,12 @@ def main() -> int:
         values["SITE_DOMAIN"] = domain; values["SITE_URL"] = f"https://{domain}"
     choose_subnets(docker, values, args.reselect_subnets)
     ensure_secrets(values)
-    hard_storage = (
-        verify_hard_storage_layout(docker, quota_gib=int(storage_budget))
-        if storage_enforcement == "hard-quota"
-        else {"status": "NOT_REQUIRED", "quota_gib": int(storage_budget), "reason": "explicit guard-only override"}
+    managed_storage = verify_managed_storage_layout(
+        docker,
+        budget_gib=int(storage_budget),
+        minimum_host_capacity_gib=32,
+        minimum_host_free_gib=int(storage_min_free),
+        critical_host_free_gib=int(storage_critical_free),
     )
     dbdir = (ROOT / values["PCR_SCIENTIFIC_DB_DIR"]).resolve(); dbdir.mkdir(parents=True, exist_ok=True)
     disk_preflight = preflight_disk_capacity(
@@ -1492,6 +1559,8 @@ def main() -> int:
         verify_prebuilt_images(docker, image_tag)
     else:
         build_compose_images(docker, args.private)
+    if os.environ.get("PCRSTUDIO_HOST_ROOT"):
+        run([sys.executable, "scripts/storage-guard.py", "--enforce"])
     image = api_image_ref(docker, image_tag)
 
     qualification = qualify_image(docker, image)
@@ -1528,6 +1597,8 @@ def main() -> int:
     pre_deploy_backup: Path | None = None
     if not args.skip_up:
         pre_deploy_backup = quiesce_and_backup_if_running(docker, args.private, build_identity)
+        if os.environ.get("PCRSTUDIO_HOST_ROOT"):
+            run([sys.executable, "scripts/storage-guard.py", "--enforce"])
         services = ["db", "migrate", "api", "web", "caddy"] if args.control_plane_only else []
         run([*compose(docker, args.private), "up", "-d", "--wait", *services])
         if args.control_plane_only:
@@ -1539,7 +1610,8 @@ def main() -> int:
                 raise SystemExit("runner scientific environment fingerprint differs from qualified API image")
         if not args.no_systemd_automation:
             installed_automation = install_systemd_automation(
-                args.backup_retention_days, storage_budget, storage_headroom
+                args.backup_retention_days, backup_file_max, backup_total_max,
+                storage_budget, storage_headroom, storage_min_free, storage_critical_free,
             )
 
     DEPLOY.mkdir(parents=True, exist_ok=True)
@@ -1574,7 +1646,7 @@ def main() -> int:
         "storage_budget_gib": storage_budget,
         "storage_emergency_headroom_gib": storage_headroom,
         "storage_enforcement": storage_enforcement,
-        "hard_storage_layout": hard_storage,
+        "managed_storage_layout": managed_storage,
         "pre_deploy_backup": (str(pre_deploy_backup.relative_to(ROOT)) if pre_deploy_backup and pre_deploy_backup.is_relative_to(ROOT) else (str(pre_deploy_backup) if pre_deploy_backup else None)),
         "pre_deploy_backup_sha256": (sha256_file(pre_deploy_backup) if pre_deploy_backup else None),
     }

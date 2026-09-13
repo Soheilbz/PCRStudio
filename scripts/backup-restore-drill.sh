@@ -8,6 +8,12 @@ name="restore-drill-$stamp.dump"
 backup="$root/.local/backups/$name"
 drill_db="pcrstudio_restore_drill_${stamp//-/_}"
 container_dump="/tmp/$name"
+max_gib="${PCRSTUDIO_BACKUP_MAX_GIB:-4}"
+if [[ ! "$max_gib" =~ ^[1-4]$ ]]; then
+  echo "PCRSTUDIO_BACKUP_MAX_GIB must be an integer from 1 to 4" >&2
+  exit 2
+fi
+python3 "$root/scripts/storage-guard.py" --preflight-write-gib "$((max_gib * 2))"
 cleanup() {
   "$compose" exec -T db sh -ceu 'dropdb --if-exists --force -U "${POSTGRES_USER:-pcr}" "$1"' sh "$drill_db" >/dev/null 2>&1 || true
   "$compose" exec -T db rm -f "$container_dump" >/dev/null 2>&1 || true
