@@ -43,6 +43,13 @@ ranking logic must remain distinguishable.
 Generated files are projections. A pull request should change their canonical
 source and regenerate them rather than editing projections to satisfy a check.
 
+## Dependency maintenance
+
+Automated dependency update PRs are disabled. GitHub vulnerability alerts and
+the required pull-request dependency review remain enabled. Update manifests
+and lockfiles together in focused changes, preserve image/action digest pins,
+and review the dependency diff before merging.
+
 ## Code style
 
 - Rust: `cargo fmt` and Clippy with warnings denied.

@@ -287,7 +287,7 @@
       "maturity": "wired-source-tested",
       "public_surface": true,
       "host_qualification_required": true,
-      "evidence_note": "All action references use immutable commit SHA and Dependabot maintains updates."
+      "evidence_note": "All action references use immutable commit SHA; maintainers review action updates through focused dependency changes and the required dependency-review gate."
     },
     {
       "id": 36,
