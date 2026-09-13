@@ -12,11 +12,11 @@ described below.
 Every pull request has one routine `CI` workflow. It runs the fast source and
 contract checks first, then the browser production journey; the expensive
 source and image qualification stages run only when the change scope requires
-them and the browser gate is green. CodeQL and dependency review remain
-separate because they use distinct security permissions and produce independent
-security evidence. Production and staging workflows are manual/release-driven,
-not general pull-request test workflows. Main pushes and the nightly schedule
-retain the full qualification path.
+them and the browser gate is green. CodeQL and dependency review are jobs in
+that same workflow, each with narrowly scoped permissions and independent
+security results. Production and staging workflows remain release/manual-driven,
+not general pull-request test workflows. Main pushes and scheduled runs retain
+the full qualification path.
 
 ## Generated and local state
 

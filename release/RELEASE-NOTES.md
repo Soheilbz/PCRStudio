@@ -1,5 +1,11 @@
 # CURRENT public source — release notes
 
+## v1.0.4
+
+This maintenance release corrects permissions on bundled runtime tools so the
+restricted application account can read and execute them. No image pins,
+scientific outputs, or user data formats change.
+
 ## v1.0.3
 
 This maintenance release keeps server storage under active control: temporary

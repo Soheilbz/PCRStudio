@@ -23,11 +23,15 @@ DOCS_ONLY_ROOT_FILES = {
     "SECURITY.md",
 }
 TARGETED_RELEASE_FILES = {
+    ".github/workflows/ci.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/dependency-review.yml",
     ".github/workflows/production-deploy.yml",
     "release/release.toml",
     "scripts/classify-ci-scope.py",
     "scripts/check-linux-bootstrap.py",
     "scripts/pull-release.py",
+    "scripts/provision-tools.py",
     "scripts/release_bundle.py",
 }
 TARGETED_MAINTENANCE_POLICY_FILES = {

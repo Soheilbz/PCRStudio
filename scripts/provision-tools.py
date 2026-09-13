@@ -253,7 +253,13 @@ def _retry_url_operation(url: str, operation, label: str) -> tuple[bool, object 
 
 
 def executable(path: Path) -> Path:
-    path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    mode = stat.S_IMODE(path.stat().st_mode)
+    mode |= (
+        stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
+        | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    )
+    mode &= ~(stat.S_IWGRP | stat.S_IWOTH)
+    path.chmod(mode)
     return path
 
 
