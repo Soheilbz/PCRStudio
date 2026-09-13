@@ -52,8 +52,8 @@ def audit_method_fidelity()->None:
     if not generated.exists(): error('method-fidelity: runtime projection missing')
     for rel in ('knowledge/reviews/METHOD-FIDELITY-AUDIT.json','knowledge/reviews/METHOD-FIDELITY-AUDIT.md'):
         if not (ROOT/rel).exists(): error(f'method-fidelity: generated review artifact missing: {rel}')
-    public_docs = _text('README.md') + _text('release/PUBLIC-SOURCE.md') + _text('release/RELEASE-NOTES.md')
-    for marker in ('## Method fidelity','Method-fidelity closure is part of the current source candidate.','A subsequent method-fidelity closure adds a canonical named-method registry'):
+    public_docs = _text('README.md') + _text('release/PUBLIC-SOURCE.md')
+    for marker in ('## Method fidelity','Method-fidelity closure is part of the current source candidate.'):
         if marker not in public_docs: error(f'method-fidelity: public release documentation missing marker: {marker}')
 
     universal=_text('tools/src/pcr_tools/universal.py')

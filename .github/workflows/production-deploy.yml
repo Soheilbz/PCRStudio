@@ -1,8 +1,6 @@
 name: Production deployment
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       source_ref:
@@ -19,23 +17,31 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy the published release
-    # Production never follows arbitrary branch pushes. A release publication
-    # or an explicit dispatch of an exact stable SemVer tag is required. The
-    # protected GitHub environment supplies the final human approval gate.
-    if: github.event_name == 'workflow_dispatch' || (github.event.release.prerelease == false && startsWith(github.event.release.tag_name, 'v'))
+    name: Qualify and publish the exact release
+    # Production never follows arbitrary branch pushes. An exact stable tag is
+    # dispatched, kept as a draft during qualification, and published only
+    # after the image and service-UID smoke gates pass.
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     environment: production
     env:
-      RELEASE_REF: ${{ github.event.release.tag_name || inputs.source_ref }}
+      RELEASE_REF: ${{ inputs.source_ref }}
       PRODUCTION_DOMAIN: ${{ secrets.PCRSTUDIO_PRODUCTION_DOMAIN }}
       PYTHONDONTWRITEBYTECODE: "1"
     steps:
+      - name: Validate exact stable release tag input
+        id: requested-release
+        env:
+          SOURCE_REF: ${{ inputs.source_ref }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_REF" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          echo "source_ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
+
       - name: Check out the exact release tag
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ github.event.release.tag_name || inputs.source_ref }}
+          ref: ${{ steps.requested-release.outputs.source_ref }}
           fetch-depth: 1
 
       - name: Materialize locked web verification dependencies
@@ -64,6 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$RELEASE_REF" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          [[ "$(git rev-parse --verify "refs/tags/$RELEASE_REF^{commit}")" == "$(git rev-parse HEAD)" ]]
           python3 -B scripts/validate-release-version.py --tag "$RELEASE_REF"
           [[ "$PRODUCTION_DOMAIN" =~ ^[A-Za-z0-9.-]+$ ]]
           [[ "$PRODUCTION_DOMAIN" != .* && "$PRODUCTION_DOMAIN" != *..* ]]
@@ -77,6 +84,23 @@ jobs:
           python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json
           python3 -B scripts/qualify-source.py --no-write
           python3 -B scripts/verify-release.py --root .
+
+      - name: Prepare an unpublished release draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if draft_state="$(gh release view "$RELEASE_REF" --repo "$GITHUB_REPOSITORY" --json isDraft --jq '.isDraft' 2>/dev/null)"; then
+            if [[ "$draft_state" != true ]]; then
+              echo "refusing to rebuild or mutate published release $RELEASE_REF" >&2
+              exit 1
+            fi
+            echo "reusing unpublished draft for $RELEASE_REF"
+          else
+            gh release create "$RELEASE_REF" --draft --verify-tag \
+              --title "PCRStudio ${RELEASE_REF#v} — Verified production release" \
+              --notes-file release/RELEASE-NOTES.md --repo "$GITHUB_REPOSITORY"
+          fi
 
       - name: Build the qualified runtime image set on GitHub's runner
         env:
@@ -128,7 +152,7 @@ jobs:
           [[ "$source_sha" =~ ^[0-9a-f]{40}$ ]]
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
 
-      - name: Publish the verified HTTPS deployment bundle
+      - name: Upload the verified HTTPS deployment bundle to the draft
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_SHA: ${{ steps.release.outputs.release_sha }}
@@ -153,4 +177,13 @@ jobs:
             --image-archive "$image_archive" \
             --output "$manifest"
           gh release upload "$RELEASE_REF" "$source_archive" "$image_archive" "$manifest" --repo "$GITHUB_REPOSITORY" --clobber
-          echo "published HTTPS deployment assets for $RELEASE_REF ($RELEASE_SHA)"
+          echo "uploaded verified HTTPS deployment assets for $RELEASE_REF ($RELEASE_SHA)"
+
+      - name: Publish only after every release gate passes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release edit "$RELEASE_REF" --draft=false --latest --verify-tag \
+            --repo "$GITHUB_REPOSITORY"
+          echo "published qualified release $RELEASE_REF"

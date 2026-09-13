@@ -131,6 +131,66 @@ def check_docker_save_integration(release_bundle) -> None:
                 )
 
 
+def check_mafft_archive_provenance(provision) -> None:
+    """Keep MAFFT's verified source archive distinct from later tool archives."""
+    with tempfile.TemporaryDirectory(prefix="pcrstudio-mafft-provision-") as temporary:
+        root = Path(temporary)
+        downloads = root / "downloads"
+        downloads.mkdir()
+        archives = {
+            "mfeprimer-4.5.1-linux-amd64.gz": downloads / "mfe.gz",
+            "ncbi-blast-2.17.0-x64-linux.tar.gz": downloads / "blast.tgz",
+            "mafft-7.526-linux.tgz": downloads / "mafft.tgz",
+            "PrimerPooler-v1.89.tar.gz": downloads / "primerpooler.tgz",
+        }
+        with gzip.open(archives["mfeprimer-4.5.1-linux-amd64.gz"], "wb") as stream:
+            stream.write(b"mfeprimer-fixture")
+
+        def write_tar(path: Path, files: dict[str, bytes]) -> None:
+            with tarfile.open(path, "w:gz") as archive:
+                for name, payload in files.items():
+                    member = tarfile.TarInfo(name)
+                    member.size = len(payload)
+                    member.mode = 0o644
+                    archive.addfile(member, io.BytesIO(payload))
+
+        write_tar(archives["ncbi-blast-2.17.0-x64-linux.tar.gz"], {
+            "blast/bin/blastn": b"blastn-fixture",
+            "blast/bin/makeblastdb": b"makeblastdb-fixture",
+        })
+        write_tar(archives["mafft-7.526-linux.tgz"], {
+            "mafft-linux64/mafft.bat": b"#!/bin/bash\nexit 0\n",
+            "mafft-linux64/mafftdir/bin/mafft": b"#!/bin/bash\nexit 0\n",
+        })
+        write_tar(archives["PrimerPooler-v1.89.tar.gz"], {
+            "PrimerPooler/pooler/Makefile": b"all:\n\ttrue\n",
+        })
+
+        names = iter(archives)
+
+        def fake_download(_url, _target, _digest, *, mirror_urls=()):
+            name = next(names)
+            return archives[name]
+
+        def fake_run(*_args, cwd=None, **_kwargs):
+            assert cwd is not None
+            (cwd / "pooler").write_bytes(b"pooler-fixture")
+            return ""
+
+        with (
+            mock.patch.object(provision, "LOCAL", root / "tools"),
+            mock.patch.object(provision, "DOWNLOADS", downloads),
+            mock.patch.object(provision, "download", side_effect=fake_download),
+            mock.patch.object(provision, "run", side_effect=fake_run),
+        ):
+            native = provision.provision_native()
+
+        expected = archives["mafft-7.526-linux.tgz"]
+        assert native["mafft_archive"] == expected
+        assert provision.sha256(native["mafft_archive"]) == provision.sha256(expected)
+        assert native["mafft_archive"] != archives["PrimerPooler-v1.89.tar.gz"]
+
+
 def check_download_retry_contract(provision) -> None:
     payload = b"content-addressed archive fixture\n"
     expected = hashlib.sha256(payload).hexdigest()
@@ -655,6 +715,7 @@ def main() -> int:
     )
     provision.verify_contract_alignment()
     check_download_retry_contract(provision)
+    check_mafft_archive_provenance(provision)
 
     # Public and private bootstrap examples are one configuration contract.
     # Private mode changes values (loopback origin), not the set of supported
@@ -715,6 +776,14 @@ def main() -> int:
     assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
     production = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    production_trigger = production.split("permissions:", 1)[0]
+    assert "workflow_dispatch:" in production_trigger and "release:" not in production_trigger
+    assert "github.event.release" not in production
+    release_input_validation = production.index("name: Validate exact stable release tag input")
+    release_checkout = production.index("name: Check out the exact release tag")
+    assert release_input_validation < release_checkout
+    assert '[[ "$SOURCE_REF" =~ ^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$ ]]' in production
+    assert 'refs/tags/$RELEASE_REF^{commit}' in production
     assert production.count("uses: astral-sh/setup-uv@") == 1
     assert production.count("prune-cache: true") == 1, "production qualification uv cache must prune before saving"
     release_verify = production.split("name: Verify release identity and deployment inputs", 1)[1].split(
@@ -726,14 +795,20 @@ def main() -> int:
     source_check = release_verify.index("scripts/qualify-source.py --no-write")
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
+    draft_prepare = production.index("name: Prepare an unpublished release draft")
     bundle_tool_checkout = production.index("name: Check out trusted deployment-bundle tooling")
     bundle_tool_identity = production.index("name: Record trusted deployment-bundle tooling revision")
     image_build = production.index("name: Build the qualified runtime image set")
     service_image_smoke = production.index("name: Smoke API and runner images as the service UID before publishing")
-    bundle_publish = production.index("name: Publish the verified HTTPS deployment bundle")
-    assert image_build < service_image_smoke < bundle_tool_checkout < bundle_tool_identity < bundle_publish, (
+    bundle_publish = production.index("name: Upload the verified HTTPS deployment bundle to the draft")
+    release_publish = production.index("name: Publish only after every release gate passes")
+    verify_step = production.index("name: Verify release identity and deployment inputs")
+    assert verify_step < draft_prepare < image_build
+    assert image_build < service_image_smoke < bundle_tool_checkout < bundle_tool_identity < bundle_publish < release_publish, (
         "trusted bundle tooling must stay outside release qualification and image build contexts"
     )
+    assert 'gh release create "$RELEASE_REF" --draft --verify-tag' in production
+    assert 'gh release edit "$RELEASE_REF" --draft=false --latest --verify-tag' in production
     service_smoke_block = production.split(
         "name: Smoke API and runner images as the service UID before publishing", 1
     )[1].split("\n      - name:", 1)[0]
@@ -965,6 +1040,23 @@ def main() -> int:
     assert "DPkg::Options::=--path-include=/usr/share/man/*" in api_dockerfile
     assert "rm -rf /usr/share/man /var/lib/apt/lists/*" in api_dockerfile
     assert "build-essential xz-doc" not in api_dockerfile
+    assert "apt-get install --no-install-recommends -y bash ca-certificates libgomp1" in api_dockerfile
+    assert "COPY --from=runtime-assets /bin/bash /bin/bash" in api_dockerfile
+    bootstrap_source = (ROOT / "scripts" / "bootstrap-linux.py").read_text(encoding="utf-8")
+    regular_deploy_start = bootstrap_source.index("# The host storage guard protects even the long image-pull/build phase.")
+    storage_guard_refresh = bootstrap_source.index(
+        "installed_automation = install_storage_guard_automation", regular_deploy_start
+    )
+    external_image_resolution = bootstrap_source.index("if args.offline_pinned_images:", regular_deploy_start)
+    assert storage_guard_refresh < external_image_resolution, (
+        "every ordinary deployment must refresh the host storage guard before expensive image operations"
+    )
+    assert 'systemctl, "restart", "pcrstudio-storage-guard.timer"' in bootstrap_source, (
+        "an already-active timer must reload the current release policy immediately"
+    )
+    release_workflow = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    assert "Smoke API and runner images as the service UID before publishing" in release_workflow
+    assert 'docker run --rm --network none --user 10001:10001' in release_workflow
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
     assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"
