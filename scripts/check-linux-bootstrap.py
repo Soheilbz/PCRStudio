@@ -616,6 +616,12 @@ def main() -> int:
     source_check = release_verify.index("scripts/qualify-source.py --no-write")
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
+    bundle_tool_checkout = production.index("name: Check out trusted deployment-bundle tooling")
+    image_build = production.index("name: Build the qualified runtime image set")
+    bundle_publish = production.index("name: Publish the verified HTTPS deployment bundle")
+    assert image_build < bundle_tool_checkout < bundle_publish, (
+        "trusted bundle tooling must stay outside release qualification and image build contexts"
+    )
     assert "path: .release-tooling" in production
     assert "github.event.repository.default_branch" in production
     assert "persist-credentials: false" in production
