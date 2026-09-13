@@ -24,6 +24,7 @@ DOCS_ONLY_ROOT_FILES = {
 }
 TARGETED_RELEASE_FILES = {
     ".github/workflows/production-deploy.yml",
+    "release/release.toml",
     "scripts/classify-ci-scope.py",
     "scripts/check-linux-bootstrap.py",
     "scripts/pull-release.py",
@@ -31,15 +32,21 @@ TARGETED_RELEASE_FILES = {
 }
 TARGETED_MAINTENANCE_POLICY_FILES = {
     ".github/dependabot.yml",
+    "contracts/capability-maturity.json",
     "contracts/maintenance-exceptions.json",
     "scripts/audit/release.py",
 }
 TARGETED_RELEASE_EVIDENCE_FILES = {
+    "release/INDEX.md",
+    "release/RELEASE-NOTES.md",
     "release/FILE-MANIFEST.json",
     "release/PATCH-MANIFEST.json",
     "release/RUNTIME-CONTRACT-MANIFEST.json",
     "release/SHA256SUMS.txt",
     "release/current/ENGINEERING-CLOSURE-REPORT.md",
+    "release/current/CURRENT-FOUNDATION-CLOSURE.md",
+    "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
+    "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
     "release/current/SBOM.cdx.json",
     "release/current/SOURCE-ATTESTATION.intoto.json",
 }

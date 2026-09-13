@@ -42,7 +42,7 @@ States are maturity claims, not a binary checklist. `WIRED-SOURCE-TESTED` means 
 | 32 | Benchmark before worker pooling | **DONE** | Source benchmark evidence recorded; native Linux baseline is explicitly external before optimization. |
 | 33 | Container hardening | **DONE** | API/Web read-only, tmpfs, cap-drop, no-new-privileges and PID limits; DB/Caddy retain only required write/capability behavior. |
 | 34 | Container digest pinning | **DONE** | Every external Compose/Dockerfile image is tag+sha256 pinned. |
-| 35 | GitHub Action SHA pinning | **DONE** | All action references use immutable commit SHA and Dependabot maintains updates. |
+| 35 | GitHub Action SHA pinning | **DONE** | All action references use immutable commit SHA; maintainers review updates through focused dependency changes and the required dependency-review gate. |
 | 36 | SBOM/signing/attestation | **SOURCE-READY/HOST-GATED** | Deterministic CycloneDX SBOM + in-toto source/archive attestations + cosign signing entrypoints; real signature needs operator/CI identity. |
 | 37 | cargo-deny | **DONE** | License/source/duplicate/banned dependency policy added alongside cargo-audit. |
 | 38 | Linux first-class CI | **SOURCE-READY/HOST-GATED** | Pinned Linux workflow compiles/tests Rust, installs frozen Python/Web environments; native scientific host qualification remains operator gate. |
@@ -120,4 +120,3 @@ A second audit was performed against the previously frozen CURRENT archive rathe
 - CycloneDX SBOM: **902 components** from Rust/Python/npm/scientific-tool authorities.
 - Source-environment cold-start median: **576.785 ms**; dependency-light Foundation import median: **582.297 ms**.
 - Full worker import in this source environment is intentionally **not qualified** because `primer3-py` is absent; this is preserved as evidence rather than converted into a false PASS.
-

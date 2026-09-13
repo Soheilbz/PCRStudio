@@ -441,9 +441,23 @@ def main() -> int:
         ["release/current/ENGINEERING-CLOSURE-REPORT.md", "release/FILE-MANIFEST.json"],
         full=False, web=False, contracts=True,
     )
+    assert_scope(["release/INDEX.md", "release/RELEASE-NOTES.md"], full=False, web=False, contracts=True)
+    assert_scope(["release/release.toml"], full=False, web=False, contracts=True)
+    assert_scope(
+        ["release/current/CURRENT-FOUNDATION-CLOSURE.md"],
+        full=False, web=False, contracts=True,
+    )
+    assert_scope(
+        [
+            "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
+            "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
+        ],
+        full=False, web=False, contracts=True,
+    )
     assert_scope([".github/workflows/production-deploy.yml"], full=False, web=False, contracts=True)
     assert_scope([
         ".github/dependabot.yml",
+        "contracts/capability-maturity.json",
         "contracts/maintenance-exceptions.json",
         "scripts/audit/release.py",
     ], full=False, web=False, contracts=True)

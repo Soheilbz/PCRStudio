@@ -1,5 +1,11 @@
 # CURRENT public source — release notes
 
+## v1.0.2
+
+This maintenance release improves production setup and release reliability,
+and strengthens the safeguards around dependency updates. Existing user data
+and scientific methods are unchanged.
+
 ## v1.0.1
 
 This patch release stabilizes fresh-host production deployment. The pull agent

@@ -749,8 +749,6 @@ def audit_current_release_identity() -> None:
 
     expected = {
         "release_id": "CURRENT",
-        "public_version": "1.0.1",
-        "public_tag": "v1.0.1",
         "versioning_scheme": "semver-2.0.0",
         "release_class": "generation-1-unified-engine-linux-current",
         "archive_prefix": "PCRStudio-CURRENT-PUBLIC-SOURCE",
@@ -763,6 +761,16 @@ def audit_current_release_identity() -> None:
     for key, value in expected.items():
         if identity.get(key) != value:
             error(f"CURRENT release identity drifted for {key}: expected {value!r}, got {identity.get(key)!r}")
+
+    public_version = identity.get("public_version")
+    public_tag = identity.get("public_tag")
+    if not isinstance(public_version, str) or not re.fullmatch(
+        r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)",
+        public_version,
+    ):
+        error("CURRENT public_version must be a stable MAJOR.MINOR.PATCH SemVer")
+    elif public_tag != f"v{public_version}":
+        error("CURRENT public_tag must match the canonical public_version")
 
     report = ROOT / str(identity.get("current_report", ""))
     if not report.is_file():
@@ -785,6 +793,13 @@ def audit_current_release_identity() -> None:
         path = ROOT / rel
         if not path.is_file() or marker.lower() not in path.read_text(encoding="utf-8", errors="replace").lower():
             error(f"CURRENT authority document lost marker {marker!r}: {rel}")
+    if isinstance(public_tag, str):
+        release_index = (ROOT / "release/INDEX.md").read_text(encoding="utf-8")
+        release_notes = (ROOT / "release/RELEASE-NOTES.md").read_text(encoding="utf-8")
+        if f"current public product version is **{public_tag}**" not in release_index:
+            error("CURRENT release index does not identify the canonical public tag")
+        if f"## {public_tag}" not in release_notes:
+            error("CURRENT release notes do not begin with the canonical public tag")
     if not (ROOT / "release/baseline/R15-FILE-MANIFEST.json").is_file():
         error("immutable baseline FILE-MANIFEST authority was not preserved under release/baseline")
 
@@ -1061,50 +1076,12 @@ def audit_dependency_maintenance_exceptions() -> None:
     except (OSError, json.JSONDecodeError) as exc:
         error(f"dependency maintenance exception registry is invalid: {exc}")
         return
-    dependabot = ROOT / ".github/dependabot.yml"
-    dependabot_text = dependabot.read_text(encoding="utf-8") if dependabot.is_file() else ""
-    ecosystem_headers = list(re.finditer(r"(?m)^  - package-ecosystem: ([^\s]+)\s*$", dependabot_text))
-    dependabot_blocks = {
-        match.group(1): dependabot_text[
-            match.start(): ecosystem_headers[index + 1].start()
-            if index + 1 < len(ecosystem_headers)
-            else len(dependabot_text)
-        ]
-        for index, match in enumerate(ecosystem_headers)
-    }
-    if len(dependabot_blocks) != len(ecosystem_headers):
-        error("Dependabot config contains duplicate ecosystem entries")
-
-    expected_dependabot = {
-        "github-actions": ("/", "weekly", "1"),
-        "npm": ("/", "weekly", "0"),
-        "uv": ("/tools", "weekly", "1"),
-        "cargo": ("/", "weekly", "1"),
-        "docker": ("/docker", "monthly", "1"),
-        "docker-compose": ("/", "monthly", "1"),
-    }
-    unexpected_ecosystems = set(dependabot_blocks) - set(expected_dependabot)
-    if unexpected_ecosystems:
-        error(f"Dependabot policy contains unreviewed ecosystems: {sorted(unexpected_ecosystems)}")
-    for ecosystem, (directory, interval, open_limit) in expected_dependabot.items():
-        block = dependabot_blocks.get(ecosystem, "")
-        if not block:
-            error(f"Dependabot policy is missing the {ecosystem} ecosystem")
-            continue
-        if not re.search(rf'(?m)^    directory:\s*["\']?{re.escape(directory)}["\']?\s*$', block):
-            error(f"Dependabot {ecosystem} policy points away from its canonical manifest/lock location")
-        if not re.search(rf"(?m)^      interval:\s*{interval}\s*$", block):
-            error(f"Dependabot {ecosystem} policy has an unexpected update cadence")
-        if not re.search(rf"(?m)^    open-pull-requests-limit:\s*{open_limit}\s*$", block):
-            error(f"Dependabot {ecosystem} proposal limit drifted from the reviewed policy")
-        if not re.search(r"(?m)^    labels:\s*\[dependencies\]\s*$", block):
-            error(f"Dependabot {ecosystem} policy uses an unverified or missing repository label")
-        if ecosystem == "npm" and re.search(r"(?m)^    target-branch:", block):
-            error("Dependabot npm security-update policy must apply to the default branch")
+    if (ROOT / ".github/dependabot.yml").exists():
+        error("automated Dependabot update configuration must remain disabled")
 
     root_package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
     if root_package.get("packageManager") != "pnpm@11.26.0" or not (ROOT / "pnpm-lock.yaml").is_file():
-        error("Dependabot npm policy no longer matches the root pnpm workspace and lockfile")
+        error("the root pnpm workspace and lockfile do not match the reviewed dependency contract")
     web_package = json.loads((ROOT / "web/package.json").read_text(encoding="utf-8"))
     eslint_spec = str(web_package.get("devDependencies", {}).get("eslint", ""))
     today = date.today()
@@ -1142,6 +1119,14 @@ def audit_capability_maturity() -> None:
     for row in items:
         if row.get("maturity") not in allowed:
             error(f"capability maturity item {row.get('id')} has invalid state {row.get('maturity')!r}")
+    action_pinning = next((row for row in items if row.get("id") == 35), {})
+    action_evidence = str(action_pinning.get("evidence_note", ""))
+    if (
+        "Dependabot" in action_evidence
+        or "immutable commit SHA" not in action_evidence
+        or "dependency-review gate" not in action_evidence
+    ):
+        error("GitHub Action pin evidence must describe immutable refs and reviewed manual updates")
     reserved = {row.get("id"): row for row in items if row.get("maturity") == "schema-reserved"}
     if set(reserved) != {44, 45} or any(row.get("public_surface") for row in reserved.values()):
         error("reserved qualification/attachment foundations must remain explicitly non-public")
@@ -1150,7 +1135,12 @@ def audit_capability_maturity() -> None:
         if marker in server_routes:
             error(f"reserved CURRENT capability unexpectedly acquired a public route: {marker}")
     closure = (ROOT / "release/current/CURRENT-FOUNDATION-CLOSURE.md").read_text(encoding="utf-8")
-    for marker in ("SCHEMA-RESERVED", "DEBT-BOUNDED", "contracts/capability-maturity.json"):
+    for marker in (
+        "SCHEMA-RESERVED",
+        "DEBT-BOUNDED",
+        "contracts/capability-maturity.json",
+        "maintainers review updates through focused dependency changes",
+    ):
         if marker not in closure:
             error(f"foundation closure lost maturity marker {marker!r}")
 
