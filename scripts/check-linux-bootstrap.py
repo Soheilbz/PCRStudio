@@ -279,6 +279,7 @@ def main() -> int:
     maintenance = load("pcrstudio_docker_maintenance", ROOT / "scripts" / "docker-maintenance.py")
     storage_guard_module = load("pcrstudio_storage_guard", ROOT / "scripts" / "storage-guard.py")
     pull_release_module = load("pcrstudio_pull_release", ROOT / "scripts" / "pull-release.py")
+    release_utils = load("pcrstudio_release_utils", ROOT / "scripts" / "release_utils.py")
 
     # Release asset downloads are exact-length, HTTPS-host allow-listed, and
     # leave no partial file behind when the response is short or redirected.
@@ -292,7 +293,8 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="pcrstudio-release-download-") as temporary:
         download_path = Path(temporary) / "asset.bin"
-        trusted_url = "https://github.com/Soheilbz/PCRStudio/releases/download/v1.0.4/asset.bin"
+        public_tag = release_utils.load_release_identity(ROOT)["public_tag"]
+        trusted_url = f"https://github.com/Soheilbz/PCRStudio/releases/download/{public_tag}/asset.bin"
         with mock.patch.object(
             pull_release_module,
             "urlopen",
@@ -557,6 +559,7 @@ def main() -> int:
             "release/release.toml",
             "release/RELEASE-NOTES.md",
             "release/FILE-MANIFEST.json",
+            "release/current/SOURCE-QUALIFICATION.json",
             "release/current/SOURCE-ATTESTATION.intoto.json",
         ],
         full=False,
@@ -726,10 +729,21 @@ def main() -> int:
     bundle_tool_checkout = production.index("name: Check out trusted deployment-bundle tooling")
     bundle_tool_identity = production.index("name: Record trusted deployment-bundle tooling revision")
     image_build = production.index("name: Build the qualified runtime image set")
+    service_image_smoke = production.index("name: Smoke API and runner images as the service UID before publishing")
     bundle_publish = production.index("name: Publish the verified HTTPS deployment bundle")
-    assert image_build < bundle_tool_checkout < bundle_tool_identity < bundle_publish, (
+    assert image_build < service_image_smoke < bundle_tool_checkout < bundle_tool_identity < bundle_publish, (
         "trusted bundle tooling must stay outside release qualification and image build contexts"
     )
+    service_smoke_block = production.split(
+        "name: Smoke API and runner images as the service UID before publishing", 1
+    )[1].split("\n      - name:", 1)[0]
+    for marker in (
+        "--network none --user 10001:10001",
+        '"pcrstudio-$role:$RELEASE_SHA"',
+        "/opt/pcrstudio/scripts/container-scientific-smoke.py",
+    ):
+        assert marker in service_smoke_block
+    assert 'for role in api runner; do' in service_smoke_block
     assert "path: .release-tooling" in production
     assert "github.event.repository.default_branch" in production
     assert "persist-credentials: false" in production
@@ -1046,14 +1060,38 @@ def main() -> int:
             bootstrap.PCR_RUNTIME_GID = runtime_gid
 
         bundle = root / "bundle"
-        bundle.mkdir()
-        (bundle / "bin").mkdir()
-        tool = bundle / "bin" / "tool"
+        nested_bin = bundle / "mafftdir" / "bin"
+        nested_bin.mkdir(parents=True)
+        tool = nested_bin / "mafft"
         tool.write_bytes(b"one")
-        tool.chmod(0o751)
+        tool.chmod(0o6751)
         executable_mode = stat.S_IMODE(provision.executable(tool).stat().st_mode)
         assert executable_mode == 0o755, oct(executable_mode)
         assert not executable_mode & (stat.S_IWGRP | stat.S_IWOTH)
+        assert not executable_mode & (stat.S_ISUID | stat.S_ISGID | stat.S_ISVTX)
+        library = nested_bin / "libmafft.so"
+        library.write_bytes(b"library")
+        library.chmod(0o600)
+        libexec = bundle / "mafftdir" / "libexec"
+        libexec.mkdir()
+        helper = libexec / "pairlocalalign"
+        helper.write_bytes(b"helper")
+        helper.chmod(0o751)
+        nested_bin.chmod(0o2710)
+        libexec.chmod(0o710)
+        bundle.chmod(0o700)
+        provision.service_readable_tree(bundle)
+        assert stat.S_IMODE(bundle.stat().st_mode) == 0o755
+        assert stat.S_IMODE(nested_bin.stat().st_mode) == 0o755
+        assert stat.S_IMODE(libexec.stat().st_mode) == 0o755
+        assert stat.S_IMODE(tool.stat().st_mode) == 0o755
+        assert stat.S_IMODE(helper.stat().st_mode) == 0o755
+        assert stat.S_IMODE(library.stat().st_mode) == 0o644
+        assert not any(
+            stat.S_IMODE(path.stat().st_mode)
+            & (stat.S_IWGRP | stat.S_IWOTH | stat.S_ISUID | stat.S_ISGID | stat.S_ISVTX)
+            for path in (bundle, nested_bin, libexec, tool, helper, library)
+        )
         first = provision.tree_sha256(bundle)
         assert len(first) == 64
         assert first == provision.tree_sha256(bundle)

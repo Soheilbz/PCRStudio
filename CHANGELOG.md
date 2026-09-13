@@ -3,10 +3,16 @@
 This file summarizes the current public-source milestone. Detailed scientific and
 qualification evidence is maintained under `release/current/`.
 
+## v1.0.5 — 2026-09-13
+
+- Normalize permissions across complete pinned native-tool trees so nested MAFFT and BLAST helpers are readable/executable by the non-root service.
+- Add regression coverage for nested executables, libraries, directories, and unsafe special/write bits; smoke both API and runner images as the service UID before publishing.
+- Preserve upstream archive digests and bind the generated normalized runtime tree in the image; pinned base images, scientific behavior, and user data formats remain unchanged.
+
 ## v1.0.4 — 2026-09-13
 
 - Fixed bundled runtime-tool permissions so the unprivileged service account can read and execute them.
-- Kept image identities, scientific behavior, and user data formats unchanged.
+- Kept pinned base-image identities, scientific behavior, and user data formats unchanged.
 
 ## R17 — current public source — 2026-09-05
 

@@ -89,7 +89,7 @@
     {
       "name": "high-confidence-secret-scan",
       "status": "PASS",
-      "stdout": "Secret scan: PASS (1061 text files; high-confidence credential formats only)"
+      "stdout": "Secret scan: PASS (1058 text files; high-confidence credential formats only)"
     },
     {
       "name": "linux-bootstrap-source-regression",
@@ -129,7 +129,7 @@
     {
       "name": "focused-source-regression-tests",
       "status": "PASS",
-      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 0.75s"
+      "stdout": "........................................................................ [ 63%]\n.........................................                                [100%]\n113 passed in 0.85s"
     }
   ],
   "hygiene": {

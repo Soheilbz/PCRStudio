@@ -52,6 +52,7 @@ TARGETED_RELEASE_EVIDENCE_FILES = {
     "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.json",
     "release/current/CURRENT-STATIC-CONSISTENCY-AUDIT.md",
     "release/current/SBOM.cdx.json",
+    "release/current/SOURCE-QUALIFICATION.json",
     "release/current/SOURCE-ATTESTATION.intoto.json",
 }
 TARGETED_STORAGE_FILES = {
