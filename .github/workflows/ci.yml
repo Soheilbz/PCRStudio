@@ -85,7 +85,7 @@ jobs:
           python-version: 3.14
       - name: Install uv
         if: ${{ needs.changes.outputs.full == 'true' }}
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
         with:
           version: "0.12.10"
           prune-cache: true
@@ -173,7 +173,7 @@ jobs:
           corepack enable
           corepack install --global pnpm@11.26.0
       - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
         with:
           version: "0.12.10"
           prune-cache: true
@@ -261,7 +261,7 @@ jobs:
       - name: Create build-only Server Actions secret
         run: python3 -c 'import base64, secrets; print(base64.b64encode(secrets.token_bytes(32)).decode())' > "$RUNNER_TEMP/next-server-actions-key"
       - name: Install uv for image tooling
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
         with:
           version: "0.12.10"
           prune-cache: true
