@@ -5388,7 +5388,7 @@
     "tools/src/pcr_tools/scientific_authority.py": "e4bb66e24f7495b3a01cd7af46196bd1390e6880eef29b1889842a2609c4205a",
     "scripts/generate-scientific-authority-registry.py": "71477eb3e49a3ede063960795a0e8a629119236ca83466d0a4380838802654f1",
     "scripts/generate-flanking-source-snapshots.py": "c811fa9eec2fce82bee18637ee74f99ae2e9d16efa7bb475bbc89d9901ca8de0",
-    "contracts/capability-truth.json": "eb2a1335b3f0c24cc4de64700c151ad7f4539c943eb15b335cf82f066a3cccb1"
+    "contracts/capability-truth.json": "7e6de5588144749c360514d9dd8231f838ddb4e0ba47a8685bfc7bdaa6adf3a5"
   },
   "generator_sha256": "3338c5f2831d6c5e4a480600985961ed701599a27061d0152816af9b71820d8e"
 }

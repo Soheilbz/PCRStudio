@@ -9,7 +9,6 @@
       "files": [
         "README.md",
         "release/PUBLIC-SOURCE.md",
-        "release/RELEASE-NOTES.md",
         "scripts/generate-expert-audit-artifacts.py",
         "knowledge/reviews/EXPERT-MODULE-AUDIT.md"
       ],

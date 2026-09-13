@@ -119,9 +119,12 @@ internal cleanup do not create a new public version until the operator decides
 to publish one. `CURRENT` remains the internal foundation/current-state
 identity and is not a public version.
 
-The `production-deploy.yml` workflow handles only a published `vMAJOR.MINOR.PATCH`
-release tag, or the same exact tag when an operator starts the workflow
-manually. The GitHub `production` environment should require approval and
+The `production-deploy.yml` workflow is started manually for an exact
+`vMAJOR.MINOR.PATCH` tag. It creates or reuses a draft release, verifies and
+builds the release, runs image startup checks, uploads the verified bundle, and
+publishes only after every gate succeeds. Failed attempts remain unpublished
+drafts and can be retried without changing the immutable source tag. The GitHub
+`production` environment should require approval and
 contain only:
 
 - `PCRSTUDIO_PRODUCTION_DOMAIN`
@@ -146,8 +149,9 @@ journalctl -u pcrstudio-release-pull.service
 ```
 
 The release workflow builds the qualified runtime image set on an ephemeral
-runner and publishes the source plus OCI bundle only after release verification.
-The server's agent performs the deployment and readiness checks locally. The
+runner and publishes the source plus OCI bundle only after release verification
+and startup smoke tests. The server's agent performs the deployment and
+readiness checks locally. The
 server still verifies pinned base images, image presence, migrations, public
 readiness and bounded Docker cleanup. Scientific readiness and the durable
 runner remain intentionally withheld until the approved reference database is

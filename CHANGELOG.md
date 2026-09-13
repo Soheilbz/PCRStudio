@@ -3,11 +3,14 @@
 This file summarizes the current public-source milestone. Detailed scientific and
 qualification evidence is maintained under `release/current/`.
 
-## v1.0.5 — 2026-09-13
+## v1.0.5 — superseded before deployment — 2026-09-13
 
-- Normalize permissions across complete pinned native-tool trees so nested MAFFT and BLAST helpers are readable/executable by the non-root service.
-- Add regression coverage for nested executables, libraries, directories, and unsafe special/write bits; smoke both API and runner images as the service UID before publishing.
-- Preserve upstream archive digests and bind the generated normalized runtime tree in the image; pinned base images, scientific behavior, and user data formats remain unchanged.
+- Its source changes normalized permissions across pinned native-tool trees, but the final runtime smoke exposed a missing launcher interpreter before the deployment bundle was published. Use v1.0.6 for a deployable release; no production rollout occurred from v1.0.5.
+
+## v1.0.6 — 2026-09-13
+
+- Fix production startup in the restricted runtime without changing pinned product images or user data.
+- Publish production releases only after image startup qualification passes, so an incomplete build cannot become the public Latest release.
 
 ## v1.0.4 — 2026-09-13
 

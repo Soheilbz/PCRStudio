@@ -776,6 +776,14 @@ def main() -> int:
     assert "def remove_empty_path(path: Path) -> None" in pull_agent
     assert "if source != target:" in pull_agent
     production = (ROOT / ".github" / "workflows" / "production-deploy.yml").read_text(encoding="utf-8")
+    production_trigger = production.split("permissions:", 1)[0]
+    assert "workflow_dispatch:" in production_trigger and "release:" not in production_trigger
+    assert "github.event.release" not in production
+    release_input_validation = production.index("name: Validate exact stable release tag input")
+    release_checkout = production.index("name: Check out the exact release tag")
+    assert release_input_validation < release_checkout
+    assert '[[ "$SOURCE_REF" =~ ^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$ ]]' in production
+    assert 'refs/tags/$RELEASE_REF^{commit}' in production
     assert production.count("uses: astral-sh/setup-uv@") == 1
     assert production.count("prune-cache: true") == 1, "production qualification uv cache must prune before saving"
     release_verify = production.split("name: Verify release identity and deployment inputs", 1)[1].split(
@@ -787,14 +795,20 @@ def main() -> int:
     source_check = release_verify.index("scripts/qualify-source.py --no-write")
     release_check = release_verify.index("scripts/verify-release.py --root .")
     assert manifest_before_attestation < attestation < manifest_after_attestation < source_check < release_check
+    draft_prepare = production.index("name: Prepare an unpublished release draft")
     bundle_tool_checkout = production.index("name: Check out trusted deployment-bundle tooling")
     bundle_tool_identity = production.index("name: Record trusted deployment-bundle tooling revision")
     image_build = production.index("name: Build the qualified runtime image set")
     service_image_smoke = production.index("name: Smoke API and runner images as the service UID before publishing")
-    bundle_publish = production.index("name: Publish the verified HTTPS deployment bundle")
-    assert image_build < service_image_smoke < bundle_tool_checkout < bundle_tool_identity < bundle_publish, (
+    bundle_publish = production.index("name: Upload the verified HTTPS deployment bundle to the draft")
+    release_publish = production.index("name: Publish only after every release gate passes")
+    verify_step = production.index("name: Verify release identity and deployment inputs")
+    assert verify_step < draft_prepare < image_build
+    assert image_build < service_image_smoke < bundle_tool_checkout < bundle_tool_identity < bundle_publish < release_publish, (
         "trusted bundle tooling must stay outside release qualification and image build contexts"
     )
+    assert 'gh release create "$RELEASE_REF" --draft --verify-tag' in production
+    assert 'gh release edit "$RELEASE_REF" --draft=false --latest --verify-tag' in production
     service_smoke_block = production.split(
         "name: Smoke API and runner images as the service UID before publishing", 1
     )[1].split("\n      - name:", 1)[0]
