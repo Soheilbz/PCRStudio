@@ -727,7 +727,9 @@ def main() -> int:
         assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in database_compose
         assert "--locale=C --encoding=UTF8" in database_compose
     api_dockerfile = (ROOT / "docker" / "api.Dockerfile").read_text(encoding="utf-8")
-    assert "apt-get install --no-install-recommends -y build-essential xz-doc" in api_dockerfile
+    assert "DPkg::Options::=--path-include=/usr/share/man/*" in api_dockerfile
+    assert "rm -rf /usr/share/man /var/lib/apt/lists/*" in api_dockerfile
+    assert "build-essential xz-doc" not in api_dockerfile
     assert bootstrap.registry_error_class("dial tcp: lookup auth.docker.io: no such host") == "dns"
     assert bootstrap.registry_error_class("denied: requested access to the resource is denied") == "auth"
     assert bootstrap.registry_error_class("toomanyrequests: rate limit exceeded") == "rate-limit"

@@ -786,9 +786,9 @@
       "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 39824,
+      "bytes": 40816,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "bbb07d34d4b3333d5fbe0cec86589d44db1ac28619d76cfd6561d1bff1bf1c10"
+      "sha256": "79202d824f0d764a8c3aec5e111c8f3e04e267801117e9c42f11bfdc82ffaf77"
     },
     {
       "bytes": 1792,
@@ -866,9 +866,9 @@
       "sha256": "a7504c6eaf55c3224306d0b6ae7509567f9d5c9703c9236aee73d97fb9f51a34"
     },
     {
-      "bytes": 41055,
+      "bytes": 41169,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "1d52ad07081cd134c8ce395f53641bc112f1d50cf2b116cdeed18ee891208c55"
+      "sha256": "35523fb1a8c6e94e5cb499a055cc8f3f58ee905bbc580d25167592772c05575e"
     },
     {
       "bytes": 4486,
@@ -2376,8 +2376,8 @@
       "path": "docker/Caddyfile.http"
     },
     {
-      "after_bytes": 7859,
-      "after_sha256": "d4e8dc88fcff15279f78e379b16a6e79ac62063beea5c4a09e636f3712287ec9",
+      "after_bytes": 8153,
+      "after_sha256": "b8f775700c787b917f3a85dbd6f7899ae7f6981dc8d8b8ec405f2d5a5a8ab5ce",
       "before_bytes": 4368,
       "before_sha256": "27c093cd42c7e18a6ce02bcb86159551df953039d1b1c2fc90003a5007a0639a",
       "path": "docker/api.Dockerfile"

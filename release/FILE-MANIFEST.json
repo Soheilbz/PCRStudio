@@ -1093,9 +1093,9 @@
       "sha256": "f92c323b9d74936de252e96a1ad6fb64089acd558d1e18246bf637ddc2a42e1b"
     },
     {
-      "bytes": 7859,
+      "bytes": 8153,
       "path": "docker/api.Dockerfile",
-      "sha256": "d4e8dc88fcff15279f78e379b16a6e79ac62063beea5c4a09e636f3712287ec9"
+      "sha256": "b8f775700c787b917f3a85dbd6f7899ae7f6981dc8d8b8ec405f2d5a5a8ab5ce"
     },
     {
       "bytes": 520,
@@ -1890,7 +1890,7 @@
     {
       "bytes": 217710,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "c1c4c7a79616036ef24436d86b3532aba35517888199c460d1cc6902bae72aaf"
+      "sha256": "1a7c3d6cc6a6c2a16a933c58300aa20391f8046fd5325dd3b47b6c4f6ff4aba9"
     },
     {
       "bytes": 2048,
@@ -1968,9 +1968,9 @@
       "sha256": "b5cb96717913f9fd2f8a189373a8a8a7c899833074b915200b83cc92444b61f2"
     },
     {
-      "bytes": 39824,
+      "bytes": 40816,
       "path": "release/current/ENGINEERING-CLOSURE-REPORT.md",
-      "sha256": "bbb07d34d4b3333d5fbe0cec86589d44db1ac28619d76cfd6561d1bff1bf1c10"
+      "sha256": "79202d824f0d764a8c3aec5e111c8f3e04e267801117e9c42f11bfdc82ffaf77"
     },
     {
       "bytes": 507,
@@ -2168,9 +2168,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 41055,
+      "bytes": 41169,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "1d52ad07081cd134c8ce395f53641bc112f1d50cf2b116cdeed18ee891208c55"
+      "sha256": "35523fb1a8c6e94e5cb499a055cc8f3f58ee905bbc580d25167592772c05575e"
     },
     {
       "bytes": 4486,

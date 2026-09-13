@@ -26,6 +26,14 @@ candidate or a live deployment is green.
   Fast feedback, Web, Linux images, source/Rust/Python, aggregate qualification,
   dependency review, and CodeQL all completed successfully. The 1,167-test
   Python suite passed with the bounded xdist configuration.
+- Follow-up commit
+  [`2f2a616`](https://github.com/Soheilbz/PCRStudio/commit/2f2a616) was
+  exercised by [run 34726146362](https://github.com/Soheilbz/PCRStudio/actions/runs/34726146362).
+  Fast feedback, Web production/browser, and Dependency Review passed, but its
+  Linux image job failed at API image build because `xz-doc` is absent from the
+  pinned Debian snapshot. This is a repository Dockerfile error, not registry
+  instability. The next source commit removes that nonexistent package and
+  restores the missing manpage targets only for the build transaction.
 - Root causes were corrected: the Rust test now matches Rust 1.94.1
   formatting; the aggregate job has a read-only checkout with persisted
   credentials disabled; and a dependency-free regression check protects that
@@ -60,10 +68,12 @@ candidate or a live deployment is green.
   custom-format dump/restore, and warning-free startup passed locally in both
   a tmpfs probe and an isolated devdb Compose project (including cleanup of
   its test volume). The current PR's hosted checks are the qualification
-  boundary for this changed pin. The
-  Docker build's Debian `xz-utils` post-install also warned about omitted man
-  pages; `xz-doc` is now explicit in the disposable builder stage and does not
-  enter any runtime image. The MFEprimer compiler/security findings remain
+  boundary for this changed pin. An attempted `xz-doc` install in the next
+  image run failed because that package is absent from the pinned Debian
+  snapshot. The source fix now temporarily re-includes the existing xz
+  manpages during dpkg's package-configuration transaction, then removes them
+  from the disposable builder; it does not install an extra package or affect
+  runtime images. The MFEprimer compiler/security findings remain
   visible under the existing time-bounded exception and were not modified.
 - The active `Protect main` ruleset currently requires only
   `Fast feedback and targeted contracts` and `Web production and browser
@@ -135,7 +145,7 @@ candidate or a live deployment is green.
 | E-017 | GitHub Actions persisted the full uv cache without pruning | P2 CI storage hygiene | VERIFIED | All four pinned setup-uv uses prune before saving, guarded by `check-linux-bootstrap.py`; the cache-size effect has not been separately measured |
 | E-018 | Transient GitHub HTTPS timeout during initial remote verification | P2 external connectivity | RESOLVED | Follow-up direct HTTPS requests returned HTTP 200, `git ls-remote` returned the exact remote branch SHA, and authenticated PR/ruleset reads succeeded; no continuing network or credential issue was observed |
 | E-019 | Pinned Alpine PostgreSQL emitted `no usable system locales` during bootstrap | P2 qualification signal | IMPLEMENTED; HOSTED CHECKS TRACKED ON PR | Reproduced against the exact previous digest; the warning came from the absent `locale` utility. Production, CI, and devdb now use the official PostgreSQL 18.6 Bookworm image at a fixed index digest with explicit C/UTF-8/SCRAM settings. Exact pull, readiness, write, backup/restore, and zero-warning startup passed locally in tmpfs and the isolated devdb Compose path; its temporary volume was removed after the test |
-| E-020 | Debian `xz-utils` post-install warned because documentation pages were omitted | P3 build hygiene | IMPLEMENTED; HOSTED CHECKS TRACKED ON PR | Added `xz-doc` only to the disposable science-builder stage; it does not enter runtime images. The current PR image/build qualification verifies the clean build output |
+| E-020 | Debian `xz-utils` post-install warned because base-image dpkg filters omitted its manpage targets | P3 build hygiene | IMPLEMENTED; PR QUALIFICATION TRACKED LIVE | Run 34726146362 confirmed `xz-doc` is unavailable in the frozen Trixie snapshot. The corrected Dockerfile re-includes `/usr/share/man/*` only for dpkg during the builder dependency transaction and deletes those manuals in the same layer. The live required PR check is the hosted verification boundary for that source correction |
 
 At the 2026-09-09 checkpoint, no unresolved repository-owned defect remained
 in the exercised non-biological scope. That statement does not cover the
@@ -335,17 +345,18 @@ gates pass on it.
 
 The runs `34399728139`, `34399728117`, `34399728175`, and `34399728242` and
 PR #19 are historical evidence from the 2026-09-09 candidate, not the current
-GitHub state. Current PR #39 and its failing run are recorded at the top of
-this report. The pinned MFEprimer 4.5.1 findings, including
+GitHub state. PR #39 and its current qualification state are recorded at the
+top of this report. The pinned MFEprimer 4.5.1 findings, including
 `CVE-2026-33818`, remain visible under the exact time-bounded exception. No
 image identity, digest, TLS, provenance, or scan policy was weakened.
 
 The earlier run 34723668864 exposed a PostgreSQL `no usable system locales`
 warning from the pinned Alpine image's missing `locale` utility and Debian
-package post-install manpage notices. E-019 and E-020 record the repository
-remediations in the current candidate. Trivy's vendor-severity notice and the
-upstream `genome.c` compiler warning remain visible; the latter is within the
-biological code explicitly excluded from this work.
+package post-install manpage notices. The first follow-up image build then
+exposed the unavailable `xz-doc` package; the failure and its correction are
+recorded under E-020. Trivy's vendor-severity notice and the upstream
+`genome.c` compiler warning remain visible; the latter is within the biological
+code explicitly excluded from this work.
 
 ## Architecture fitness functions
 
