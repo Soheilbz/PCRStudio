@@ -2,8 +2,8 @@
 """Classify a pull request into stable, testable PCRStudio CI scopes.
 
 Unknown paths deliberately select every broad gate. Narrow exceptions are
-limited to documentation, release-bundle tooling, and dependency-maintenance
-policy files with direct, always-run contract coverage.
+limited to documentation, current release evidence, release-bundle tooling,
+and dependency-maintenance policy files with direct, always-run coverage.
 """
 from __future__ import annotations
 
@@ -33,6 +33,15 @@ TARGETED_MAINTENANCE_POLICY_FILES = {
     ".github/dependabot.yml",
     "contracts/maintenance-exceptions.json",
     "scripts/audit/release.py",
+}
+TARGETED_RELEASE_EVIDENCE_FILES = {
+    "release/FILE-MANIFEST.json",
+    "release/PATCH-MANIFEST.json",
+    "release/RUNTIME-CONTRACT-MANIFEST.json",
+    "release/SHA256SUMS.txt",
+    "release/current/ENGINEERING-CLOSURE-REPORT.md",
+    "release/current/SBOM.cdx.json",
+    "release/current/SOURCE-ATTESTATION.intoto.json",
 }
 WEB_DEPENDENCY_FILES = {
     ".npmrc",
@@ -129,6 +138,12 @@ def classify_paths(paths: list[str], *, action_pins_only: bool = False) -> dict[
         if path in TARGETED_MAINTENANCE_POLICY_FILES:
             contracts = True
             continue
+        if path in TARGETED_RELEASE_EVIDENCE_FILES:
+            # Narrative/evidence-only updates do not alter product execution.
+            # The fast contract job still verifies static source and the exact
+            # generated release manifests, attestation, and checksums.
+            contracts = True
+            continue
         if path in WEB_DEPENDENCY_FILES:
             full = True
             web = True
@@ -169,6 +184,28 @@ def classify_paths(paths: list[str], *, action_pins_only: bool = False) -> dict[
     }
 
 
+def full_scope() -> dict[str, bool]:
+    return {
+        "full": True,
+        "web": True,
+        "contracts": False,
+        "docs": False,
+        "action_pins": False,
+    }
+
+
+def classify_event_paths(
+    event: str,
+    paths: list[str] | None,
+    *,
+    action_pins_only: bool = False,
+) -> dict[str, bool]:
+    """Use the tested path scope for PRs and pushes; fail closed otherwise."""
+    if event not in {"pull_request", "push"} or paths is None:
+        return full_scope()
+    return classify_paths(paths, action_pins_only=action_pins_only)
+
+
 def changed_paths(base: str, head: str) -> list[str]:
     result = subprocess.run(
         ["git", "diff", "--name-only", f"{base}...{head}"],
@@ -187,20 +224,21 @@ def main() -> int:
     parser.add_argument("--output", default=os.environ.get("GITHUB_OUTPUT", ""))
     args = parser.parse_args()
 
-    if args.event != "pull_request":
-        scope = {
-            "full": True,
-            "web": True,
-            "contracts": False,
-            "docs": False,
-            "action_pins": False,
-        }
-    else:
+    if args.event == "pull_request":
         if not args.base or not args.head:
             parser.error("pull_request scope requires --base and --head SHAs")
         paths = changed_paths(args.base, args.head)
         action_pins_only = action_pin_only_change(args.base, args.head)
-        scope = classify_paths(paths, action_pins_only=action_pins_only)
+        scope = classify_event_paths(args.event, paths, action_pins_only=action_pins_only)
+    elif args.event == "push":
+        if not args.base or args.base == "0" * 40 or not args.head:
+            scope = full_scope()
+        else:
+            paths = changed_paths(args.base, args.head)
+            action_pins_only = action_pin_only_change(args.base, args.head)
+            scope = classify_event_paths(args.event, paths, action_pins_only=action_pins_only)
+    else:
+        scope = full_scope()
 
     for name, enabled in scope.items():
         print(f"{name}={str(enabled).lower()}")

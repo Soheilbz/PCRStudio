@@ -20,6 +20,8 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
+from audit.application import setup_uv_contract_valid
+
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -418,11 +420,27 @@ def main() -> int:
         }
 
     assert_scope([], full=True, web=True)
+    assert ci_scope.classify_event_paths("push", [".github/workflows/codeql.yml"], action_pins_only=True) == {
+        "full": False, "web": False, "contracts": False, "docs": False, "action_pins": True,
+    }
+    assert ci_scope.classify_event_paths("push", ["crates/pcr-core/src/lib.rs"]) == {
+        "full": True, "web": False, "contracts": False, "docs": False, "action_pins": False,
+    }
+    assert ci_scope.classify_event_paths("push", None) == {
+        "full": True, "web": True, "contracts": False, "docs": False, "action_pins": False,
+    }
+    assert ci_scope.classify_event_paths("workflow_dispatch", ["README.md"]) == {
+        "full": True, "web": True, "contracts": False, "docs": False, "action_pins": False,
+    }
     assert_scope(["README.md"], full=False, web=False, docs=True)
     assert_scope(["docs/OPERATIONS.md"], full=False, web=False, docs=True)
     assert_scope(["scripts/release_bundle.py"], full=False, web=False, contracts=True)
     assert_scope(["scripts/check-linux-bootstrap.py"], full=False, web=False, contracts=True)
     assert_scope(["scripts/classify-ci-scope.py"], full=False, web=False, contracts=True)
+    assert_scope(
+        ["release/current/ENGINEERING-CLOSURE-REPORT.md", "release/FILE-MANIFEST.json"],
+        full=False, web=False, contracts=True,
+    )
     assert_scope([".github/workflows/production-deploy.yml"], full=False, web=False, contracts=True)
     assert_scope([
         ".github/dependabot.yml",
@@ -463,6 +481,23 @@ def main() -> int:
 +        uses: github/codeql-action/init@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 """
     assert ci_scope.is_action_pin_only_diff_text(codeql_pin_diff)
+    old_uv_action = "20cfd1bf945f4377ade1205e4dbc17946fc9a30d"
+    updated_uv_action = "bec219d24cd3e171d82865faccec33120bb574f4"
+    uv_ci_fixture = "\n".join(
+        f'uses: astral-sh/setup-uv@{old_uv_action}\nversion: "0.12.10"\nprune-cache: true'
+        for _ in range(3)
+    )
+    uv_production_fixture = (
+        f'uses: astral-sh/setup-uv@{old_uv_action}\n'
+        'version: "0.12.10"\nprune-cache: true'
+    )
+    updated_uv_ci_fixture = uv_ci_fixture.replace(old_uv_action, updated_uv_action)
+    updated_uv_production_fixture = uv_production_fixture.replace(old_uv_action, updated_uv_action)
+    assert setup_uv_contract_valid((uv_ci_fixture, uv_production_fixture))
+    assert setup_uv_contract_valid((updated_uv_ci_fixture, updated_uv_production_fixture))
+    assert not setup_uv_contract_valid((updated_uv_ci_fixture, uv_production_fixture))
+    assert not setup_uv_contract_valid((uv_ci_fixture.replace(old_uv_action, "v10.1.0"), uv_production_fixture))
+    assert not setup_uv_contract_valid((uv_ci_fixture.replace('version: "0.12.10"', 'version: "latest"'), uv_production_fixture))
     assert not ci_scope.is_action_pin_only_diff_text(
         codeql_pin_diff + "+        timeout-minutes: 30\n"
     )
@@ -527,8 +562,20 @@ def main() -> int:
     assert "registry=https://registry.npmjs.com/" in npmrc
     assert "fetch-retries=6" in npmrc
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    release_contract_step = ci.split("name: Run directly covered maintenance and release contracts", 1)[1].split(
+        "\n      - name:", 1
+    )[0]
+    for marker in (
+        "scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json --check",
+        "scripts/generate-source-attestation.py --check",
+        "scripts/verify-release.py --root .",
+    ):
+        assert marker in release_contract_step
     assert ci.count("uses: astral-sh/setup-uv@") == 3
     assert ci.count("prune-cache: true") == 3, "every CI uv cache must prune before saving"
+    assert "github.event.pull_request.base.sha || github.event.before" in ci
+    assert "github.event.pull_request.head.sha || github.sha" in ci
+    assert "--event \"$EVENT_NAME\"" in ci and "--base \"$BASE_SHA\"" in ci
     assert "postgres:18.6-bookworm@sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af" in ci
     assert "--locale=C --encoding=UTF8" in ci
     assert ci.count("--allow network.host") == 4, "every direct CI image build must allow the build-only host network entitlement"

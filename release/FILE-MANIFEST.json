@@ -33,9 +33,9 @@
       "sha256": "4d88dcd57476d709621e9a14221c806438af5af0d9f0178e3277d26f93855100"
     },
     {
-      "bytes": 22754,
+      "bytes": 23071,
       "path": ".github/workflows/ci.yml",
-      "sha256": "fdf68bdfe5454d48454b5d0556403686a2ebae2ea7986dc322b306e692da27c2"
+      "sha256": "774b4ea3f7ea1c91396e9521e7e899d314a35b101a4e29d39eccc16ff677f9fd"
     },
     {
       "bytes": 1221,
@@ -1890,7 +1890,7 @@
     {
       "bytes": 217710,
       "path": "release/PATCH-MANIFEST.json",
-      "sha256": "1a7c3d6cc6a6c2a16a933c58300aa20391f8046fd5325dd3b47b6c4f6ff4aba9"
+      "sha256": "f0782bc7bf9131bbdaef4ce8594e25287dbfc8b10cfa59d17e6b833c36073048"
     },
     {
       "bytes": 2048,
@@ -1990,7 +1990,7 @@
     {
       "bytes": 5355,
       "path": "release/current/SOURCE-QUALIFICATION.json",
-      "sha256": "1e273070615936695147980b9ed4d2acac32db3fa35de7c9ba093bf826455adc"
+      "sha256": "c249576366411673204ca6e1843940f117f6f4cfcb9bd16d768b88dc84dfca30"
     },
     {
       "bytes": 974,
@@ -2028,9 +2028,9 @@
       "sha256": "2713aed79b0b67ea1059dbce444d9fc750a89dcfc83b066503ae7d66ff3a5871"
     },
     {
-      "bytes": 60844,
+      "bytes": 61406,
       "path": "scripts/audit/application.py",
-      "sha256": "2c5b9257a192cc79ac7ff4b6f784025f3406a64f27f150e79c4ea7c9663ce6c7"
+      "sha256": "481aa90b70e8e9c6ba9b5e02b3c6adcf3698b59a12699159b3097f68bbdce10c"
     },
     {
       "bytes": 15430,
@@ -2088,9 +2088,9 @@
       "sha256": "577673e1fcecbd17b40309fa5cc5f5dcd20432a2d112db41604fa993c7bea5a8"
     },
     {
-      "bytes": 69990,
+      "bytes": 70212,
       "path": "scripts/audit/release.py",
-      "sha256": "212b9f843c64d579451e31d91d8485b99a543601e32a22b5e0043040da3da59e"
+      "sha256": "2f3415c0c3a1f02738557007848d31f0205633865f05fbcbf18491da83d64422"
     },
     {
       "bytes": 29813,
@@ -2168,9 +2168,9 @@
       "sha256": "7aae660e33bda20a1e43e187e704a57df1f31b69ea3517f25d5d96ba654f0cb9"
     },
     {
-      "bytes": 41169,
+      "bytes": 43887,
       "path": "scripts/check-linux-bootstrap.py",
-      "sha256": "35523fb1a8c6e94e5cb499a055cc8f3f58ee905bbc580d25167592772c05575e"
+      "sha256": "c7eb737a6dd01bc8df42ed59107afd533bfaf58fa296851089a878ddc8708a66"
     },
     {
       "bytes": 4486,
@@ -2183,9 +2183,9 @@
       "sha256": "79c3569c850975220882b95f650e5748341c9af30d97eee3f4fbbb1ec54612f0"
     },
     {
-      "bytes": 7072,
+      "bytes": 8552,
       "path": "scripts/classify-ci-scope.py",
-      "sha256": "4a24bbbd55a0a13c7c30e59cf896b31e0237f7d0adf4f6eaa33185bf7dfdcd38"
+      "sha256": "e418941ab278db3cdc892ec8ba68a9b8b3636fc7f34b53931de0893bde5746bd"
     },
     {
       "bytes": 1116,

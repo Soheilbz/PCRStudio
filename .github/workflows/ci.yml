@@ -44,8 +44,8 @@ jobs:
         id: scope
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           GITHUB_SHA: ${{ github.sha }}
         run: >-
           python3 -B scripts/classify-ci-scope.py
@@ -72,6 +72,9 @@ jobs:
         run: |
           python3 -B scripts/audit-source.py
           python3 -B scripts/check-linux-bootstrap.py
+          python3 -B scripts/generate-release-manifests.py --baseline-manifest release/baseline/R15-FILE-MANIFEST.json --check
+          python3 -B scripts/generate-source-attestation.py --check
+          python3 -B scripts/verify-release.py --root .
       - name: Verify workflow action-pin-only changes
         if: ${{ needs.changes.outputs.action_pins == 'true' && needs.changes.outputs.contracts != 'true' }}
         run: python3 -B scripts/audit-source.py
@@ -295,6 +298,7 @@ jobs:
       - name: Scan API image
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
+          version: "v0.74.0"
           image-ref: pcrstudio-api:ci
           format: json
           output: trivy-api-image.json

@@ -995,6 +995,9 @@ def audit_source_release_hardening() -> None:
             error(f"source release hardening: API/Web hardening marker missing or incomplete: {service_marker}")
 
     ci_text = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    trivy_step = ci_text.split("name: Scan API image", 1)[1].split("\n      - name:", 1)[0]
+    if 'version: "v0.74.0"' not in trivy_step:
+        error("image vulnerability scan must pin the qualified Trivy CLI version")
     for marker in (
         "scripts/scan-secrets.py",
         "aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25",
