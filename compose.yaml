@@ -1,0 +1,170 @@
+x-app-environment: &app-environment
+  DJANGO_SECRET_KEY_FILE: /run/secrets/django_secret_key
+  MFA_ENCRYPTION_KEY_FILE: /run/secrets/mfa_encryption_key
+  DJANGO_DEBUG: "0"
+  DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,api,caddy
+  FRONTEND_URL: http://localhost:8080
+  CSRF_TRUSTED_ORIGINS: http://localhost:8080,http://127.0.0.1:8080,http://caddy:8080
+  PGHOST: postgres
+  PGPORT: "5432"
+  PGDATABASE: pcrstudio
+  PGUSER: pcrstudio_runtime
+  POSTGRES_PASSWORD_FILE: /run/secrets/db_runtime_password
+  VALKEY_URL: redis://valkey:6379/0
+  EMAIL_HOST: mailpit
+  EMAIL_PORT: "1025"
+  DEFAULT_FROM_EMAIL: noreply@localhost
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: ops/Dockerfile
+    target: api
+    network: ${PCRSTUDIO_BUILD_NETWORK:-host}
+    args:
+      OFFICIAL_IMAGE_REGISTRY: ${PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY:-public.ecr.aws/docker}
+  image: ${COMPOSE_PROJECT_NAME}-api:local
+  read_only: true
+  tmpfs:
+    - /tmp:size=64m,mode=1777
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  group_add: ["${LOCAL_GID}"]
+  networks: [edge, data, cache, mail]
+  secrets: [django_secret_key, mfa_encryption_key, db_runtime_password]
+
+services:
+  postgres:
+    image: ${PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY:-public.ecr.aws/docker}/library/postgres:18.6-alpine3.24@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    # Start directly as the image's database identity so entrypoint gosu does not
+    # discard the explicitly granted secret-file group during first initialization.
+    user: 70:70
+    group_add: ["${LOCAL_GID}"]
+    command:
+      - postgres
+      - -c
+      - log_statement=none
+      - -c
+      - log_min_error_statement=panic
+      - -c
+      - log_min_messages=fatal
+      - -c
+      - log_error_verbosity=terse
+      - -c
+      - log_parameter_max_length=0
+      - -c
+      - log_parameter_max_length_on_error=0
+      - -c
+      - log_min_duration_statement=-1
+      - -c
+      - log_min_duration_sample=-1
+      - -c
+      - log_transaction_sample_rate=0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: pcrstudio
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_admin_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    secrets: [db_admin_password, db_migrator_password, db_runtime_password, db_test_password]
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./ops/postgres/10-roles.sh:/docker-entrypoint-initdb.d/10-roles.sh:ro
+    networks: [data]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d pcrstudio]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    logging: &bounded-log
+      driver: json-file
+      options: {max-size: 10m, max-file: "3"}
+
+  valkey:
+    image: ghcr.io/valkey-io/valkey:9.1.2-alpine@sha256:48332870af354a799964c0012ae1194a0bf2bf894eb508f945810596dc2d8d11
+    command: [valkey-server, /etc/valkey/valkey.conf]
+    volumes:
+      - valkey_data:/data
+      - ./ops/valkey.conf:/etc/valkey/valkey.conf:ro
+    networks: [cache]
+    healthcheck:
+      test: [CMD, valkey-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    logging: *bounded-log
+
+  migrate:
+    <<: *app
+    environment:
+      <<: *app-environment
+      PGUSER: pcrstudio_migrator
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_migrator_password
+    secrets: [django_secret_key, mfa_encryption_key, db_migrator_password]
+    command: [python, manage.py, migrate, --noinput]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: "no"
+    logging: *bounded-log
+
+  api:
+    <<: *app
+    environment: *app-environment
+    depends_on:
+      postgres: {condition: service_healthy}
+      valkey: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live/', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    logging: *bounded-log
+
+  caddy:
+    build:
+      context: .
+      dockerfile: ops/Dockerfile
+      target: edge
+      network: ${PCRSTUDIO_BUILD_NETWORK:-host}
+      args:
+        OFFICIAL_IMAGE_REGISTRY: ${PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY:-public.ecr.aws/docker}
+    image: ${COMPOSE_PROJECT_NAME}-edge:local
+    ports: [127.0.0.1:8080:8080]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+      - /config:uid=10001,gid=10001,size=16m
+      - /data:uid=10001,gid=10001,size=16m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [edge]
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://127.0.0.1:8080/health/edge/]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+    logging: *bounded-log
+
+networks:
+  edge:
+  data: {internal: true}
+  cache: {internal: true}
+  mail: {internal: true}
+volumes:
+  postgres_data:
+  valkey_data:
+secrets:
+  django_secret_key: {file: .local/secrets/django_secret_key}
+  mfa_encryption_key: {file: .local/secrets/mfa_encryption_key}
+  db_admin_password: {file: .local/secrets/db_admin_password}
+  db_migrator_password: {file: .local/secrets/db_migrator_password}
+  db_runtime_password: {file: .local/secrets/db_runtime_password}
+  db_test_password: {file: .local/secrets/db_test_password}

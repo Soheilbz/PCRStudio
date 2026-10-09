@@ -1,0 +1,15 @@
+.local/
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/*.pyc
+frontend/node_modules/
+frontend/build/
+frontend/.react-router/
+frontend/test-results/
+frontend/playwright-report/
+.coverage
+coverage.xml
+.DS_Store

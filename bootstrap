@@ -1,0 +1,68 @@
+#!/bin/sh
+# Project-scoped local orchestration. No host language toolchain is installed.
+set -eu
+ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+cd "$ROOT"
+# Local networks may require the official ECR mirror; CI uses canonical Docker Hub.
+# This selection is process-local and never replaces the persisted namespace or secrets.
+case ${PCRSTUDIO_IMAGE_REGISTRY:-ecr} in
+  ecr) PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY=public.ecr.aws/docker ;;
+  dockerhub) PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY=docker.io ;;
+  *) echo 'PCRSTUDIO_IMAGE_REGISTRY must be ecr or dockerhub.' >&2; exit 2 ;;
+esac
+export PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY
+# Build downloads use host networking on the local ISP and ordinary networking in CI.
+case ${PCRSTUDIO_BUILD_NETWORK:-host} in
+  host|default) PCRSTUDIO_BUILD_NETWORK=${PCRSTUDIO_BUILD_NETWORK:-host} ;;
+  *) echo 'PCRSTUDIO_BUILD_NETWORK must be host or default.' >&2; exit 2 ;;
+esac
+export PCRSTUDIO_BUILD_NETWORK
+PYTHON_IMAGE="$PCRSTUDIO_OFFICIAL_IMAGE_REGISTRY/library/python:3.13.16-slim-bookworm@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641"
+command -v docker >/dev/null 2>&1 || { echo 'Docker Engine and Compose are required.' >&2; exit 1; }
+docker compose version >/dev/null
+docker info >/dev/null 2>&1 || { echo 'Docker is unavailable. Start Docker and retry.' >&2; exit 1; }
+umask 077
+mkdir -p .local
+LOCAL_UID=$(id -u)
+LOCAL_GID=$(id -g)
+NAMESPACE=$(printf '%s' "$ROOT" | cksum | awk '{print $1}')
+docker run --rm --user "$LOCAL_UID:$LOCAL_GID" \
+  -e LOCAL_UID="$LOCAL_UID" -e LOCAL_GID="$LOCAL_GID" -e PROJECT_NAMESPACE="pcrstudio_$NAMESPACE" \
+  -v "$ROOT/.local:/state" -v "$ROOT/scripts/init_local.py:/init_local.py:ro" \
+  "$PYTHON_IMAGE" python /init_local.py
+compose() { docker compose --env-file .local/compose.env -f compose.yaml -f compose.local.yaml "$@"; }
+command=${1:-up}
+[ "$#" -eq 0 ] || shift
+case "$command" in
+  up)
+    compose build api migrate caddy tools
+    compose up -d --wait --wait-timeout 120 postgres valkey mailpit
+    compose run --rm --no-deps migrate
+    compose up -d --wait --wait-timeout 120 api caddy
+    compose run --rm --no-deps tools python /workspace/scripts/wait_ready.py
+    printf '\nPCRStudio: http://localhost:8080\nDevelopment inbox: http://localhost:8025\n'
+    ;;
+  stop) compose stop ;;
+  status) compose ps --all ;;
+  doctor)
+    docker version --format 'Docker server {{.Server.Version}}'
+    docker compose version
+    compose --profile tools config --quiet
+    compose ps --all
+    ;;
+  check)
+    profile=${1:-deep}
+    compose --profile tools config --format json > .local/artifacts/compose.resolved.json
+    sh -n "$ROOT/bootstrap"
+    compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+    compose run --rm --no-deps tools python /workspace/scripts/verify_database_log_privacy.py probe
+    compose logs --no-color postgres > .local/artifacts/postgres-current.log
+    compose run --rm --no-deps tools python /workspace/scripts/project_gate.py "$profile"
+    ;;
+  tools)
+    [ "$#" -gt 0 ] || { echo 'Usage: ./bootstrap tools COMMAND [ARG ...]' >&2; exit 2; }
+    compose run --rm --no-deps tools "$@"
+    ;;
+  logs) compose logs --tail=100 "$@" ;;
+  *) echo 'Usage: ./bootstrap [up|stop|status|doctor|check [deep]|tools COMMAND|logs [SERVICE]]' >&2; exit 2 ;;
+esac

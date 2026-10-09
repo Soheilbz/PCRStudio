@@ -1,0 +1,36 @@
+{
+	admin off
+	auto_https off
+	log default {
+		output discard
+	}
+}
+
+:8080 {
+	encode zstd gzip
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Frame-Options DENY
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; script-src 'self' @@SCRIPT_HASHES@@; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+	}
+	handle /health/edge/ {
+		respond "ok" 200
+	}
+	@backend path /api/* /_allauth/* /health/live/ /health/ready/
+	handle @backend {
+		header Cache-Control "no-store"
+		reverse_proxy api:8000
+	}
+	handle {
+		root * /srv
+		route {
+			try_files {path} /index.html
+			@document path /index.html
+			header @document Cache-Control "no-cache"
+			file_server
+		}
+	}
+}

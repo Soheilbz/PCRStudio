@@ -1,0 +1,28 @@
+name: Foundation quality
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  deep:
+    name: Required PCRStudio qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      # Canonical official images avoid ECR's shared-runner anonymous quota.
+      PCRSTUDIO_IMAGE_REGISTRY: dockerhub
+      # Standard build networking needs no host-network privilege entitlement.
+      PCRSTUDIO_BUILD_NETWORK: default
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6 tag verified 2026-10-06
+      - name: Start isolated local foundation
+        run: ./bootstrap
+      - name: Run all deterministic checks and browser journeys
+        run: ./bootstrap check deep
+      - name: Stop project services while preserving diagnostic state
+        if: always()
+        run: ./bootstrap stop

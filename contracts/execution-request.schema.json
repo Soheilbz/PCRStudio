@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pcrstudio:execution-request:v1",
+  "title": "PCRStudio isolated execution request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "run_id", "attempt_id", "capability_id", "capability_version", "input", "files", "limits"],
+  "properties": {
+    "contract_version": {"const": "pcrstudio.execution.v1"},
+    "run_id": {"type": "string", "format": "uuid"},
+    "attempt_id": {"type": "string", "format": "uuid"},
+    "capability_id": {"type": "string", "pattern": "^[a-z][a-z0-9_.-]{0,127}$"},
+    "capability_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "input": {"type": "object"},
+    "files": {
+      "type": "array", "maxItems": 128,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "version", "sha256", "size_bytes"],
+        "properties": {
+          "id": {"type": "string", "format": "uuid"},
+          "version": {"type": "integer", "minimum": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["wall_seconds", "memory_bytes", "input_bytes", "output_bytes"],
+      "properties": {
+        "wall_seconds": {"type": "integer", "minimum": 1},
+        "memory_bytes": {"type": "integer", "minimum": 1},
+        "input_bytes": {"type": "integer", "minimum": 1},
+        "output_bytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

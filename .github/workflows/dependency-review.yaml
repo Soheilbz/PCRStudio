@@ -1,0 +1,24 @@
+name: Dependency review
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: dependency-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified 2026-10-09
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0, verified 2026-10-09
+        with:
+          # Feature pushes compare against the default branch; PRs use their target base.
+          base-ref: ${{ github.event.pull_request.base.sha || github.event.repository.default_branch }}
+          head-ref: ${{ github.sha }}
+          fail-on-severity: low
+          fail-on-scopes: runtime, development, unknown
