@@ -2,6 +2,8 @@
 
 A fresh private workspace and project platform. Scientific computation, file uploads, billing and cloud release are later slices. The preserved source archive above this directory is a prototype reference.
 
+PCRStudio-specific code and documentation are **All rights reserved**, as described in [LICENSE](LICENSE). Public visibility does not grant a general reuse license. GitHub's viewing/forking rights and third-party licenses remain unaffected. The setup instructions below are for the owner and authorized contributors.
+
 Install Docker Engine with Docker Compose, then run one command from this directory:
 
 ```sh
